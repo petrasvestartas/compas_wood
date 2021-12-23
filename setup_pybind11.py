@@ -51,11 +51,10 @@ def get_library_dirs():
 
 ext_modules = [
     Extension(
-        'joinery_solver',
+        'pybind11_test_module',
         sorted([
-            'src/xxx_interop_python.cpp',
-            'src/clipper.cpp',
-            'src/connection_zones.cpp',
+            
+            'src/pybind11_test.cpp',
         ]),
         include_dirs=[
             './include',
