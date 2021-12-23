@@ -28,7 +28,7 @@ optional_requirements = {}
 
 setup(
     name="compas_wood",
-    version="0.1.0",
+    version="0.1.1",
     description="Joinery Solver",
     long_description=long_description,
     long_description_content_type="text/markdown",
