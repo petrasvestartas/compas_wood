@@ -395,32 +395,34 @@ inline std::vector<compas::RowMatrixXd> compas::result_from_polylinesVector(std:
 	}
 
 	//  printf("CPP number of points: %i ", pointsets.size());
-
-	if (debug) {
+	/*
+	if (debug)
+	{
 		std::ofstream myfile;
 		myfile.open("C:\\IBOIS57\\_Code\\Software\\Python\\Pybind11Example\\vsstudio\\Release\\output.txt");
 
+		for (auto i = polylines.begin(); i != polylines.end(); i++)
+		{
 
-		for (auto i = polylines.begin(); i != polylines.end(); i++) {
-
-			const CGAL_Polyline& poly = *i;
+			const CGAL_Polyline &poly = *i;
 			int n = poly.size();
 			compas::RowMatrixXd points(n, 3);
 
-			for (int k = 0; k < n; k++) {
+			for (int k = 0; k < n; k++)
+			{
 				points(k, 0) = (double)poly[k].hx();
 				points(k, 1) = (double)poly[k].hy();
 				points(k, 2) = (double)poly[k].hz();
 			}
 
-
 			for (int k = 0; k < n; k++)
-				myfile << poly[k].hx() << " " << poly[k].hy() << " " << poly[k].hz() << " " << "\n";
+				myfile << poly[k].hx() << " " << poly[k].hy() << " " << poly[k].hz() << " "
+					   << "\n";
 			myfile << ("\n");
 		}
 		myfile.close();
 	}
-
+	*/
 	return pointsets;
 }
 
@@ -458,7 +460,7 @@ inline std::vector<compas::RowMatrixXd> compas::result_from_polylinesVector(std:
 		}
 	}
 	//  printf("CPP number of points: %i ", pointsets.size());
-
+	/*
 	if (debug) {
 		std::ofstream myfile;
 		myfile.open("C:\\IBOIS57\\_Code\\Software\\Python\\Pybind11Example\\vsstudio\\Release\\output.txt");
@@ -485,7 +487,7 @@ inline std::vector<compas::RowMatrixXd> compas::result_from_polylinesVector(std:
 		}
 		myfile.close();
 	}
-
+	*/
 	return pointsets;
 }
 
