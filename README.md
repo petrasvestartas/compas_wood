@@ -2,7 +2,6 @@
 
 Joinery Solver
 
-___
 
 ## Create Package
 
@@ -57,5 +56,8 @@ Delete env
 conda env remove --name bio-env
 
 
-https://user-images.githubusercontent.com/18013985/147421047-0b44824f-1180-4d9f-8807-eaf37cb89a56.mp4
+
+https://user-images.githubusercontent.com/18013985/147421244-b1aaa4bb-9b8b-429a-b9c8-4335cc853cd9.mp4
+
+## Pybind11 C++/Python CGAL
 
