@@ -13,7 +13,9 @@ Git for windows, apple has by default
 
 ### Step 1
 //Create new environment:
-% conda create -n wood python=3.8 --yes
+```
+conda create -n wood python=3.8 --yes
+```
 //or
 windows
 % conda create -n wood python=3.8 mpir mpfr boost-cpp eigen=3.3 cgal-cpp=5.2 pybind11 compas compas_view2 --yes
