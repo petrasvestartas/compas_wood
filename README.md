@@ -15,40 +15,57 @@ Git for windows, apple has by default
 Create new environment:
 ```
 conda create -n wood python=3.8 --yes
+conda activate wood
 ```
 windows
 ``` 
 conda create -n wood python=3.8 mpir mpfr boost-cpp eigen=3.3 cgal-cpp=5.2 pybind11 compas compas_view2 --yes 
+conda activate wood
 ```
 mac
 ```
 conda create -n wood python=3.8 gmp mpfr boost-cpp eigen=3.3 cgal-cpp=5.2 pybind11 compas compas_view2 --yes
+conda activate wood
 ```
-conda activate wood or wood-dev
+
 
 ### Step 2
+
+Install CookieCutter
+```
 pip install cookiecutter
-//Default documentation from template using sphynx
+```
+Default documentation from template using sphynx
+```
 cookiecutter gh:compas-dev/tpl-extension
-//Fill basic infom
-//Rename current branch
+```
+Fill basic form and rename current branch
+```
 cd compas_wood
 git branch -m main
 git add .
 git commit -m "Initial commit"
-//Install 
+```
+Install - build project in the correct environment and cd must be the good directory
+```
 pip install -r requirements-dev.txt
 invoke docs
 pip install -e .
+```
 
 ### Step 3
-#Instal Compas
+Instal Compas
+```
 conda install compas
 invoke docs
+```
 
 ### Step 4
 invoke release patch or minor major 0.0.1 (new version / backwards compatible / bugs fixes)
-Build project in the correct environment and cd must be the good directory
+```
+invoke release patch 
+```
+
 
 
 
