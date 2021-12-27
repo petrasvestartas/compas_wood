@@ -76,10 +76,14 @@ https://user-images.githubusercontent.com/18013985/147421244-b1aaa4bb-9b8b-429a-
 ## Pybind11 C++/Python CGAL
 
 Part1
+
+
 https://user-images.githubusercontent.com/18013985/147499175-f53dc798-2e96-4f05-8482-03b58136f786.mp4
 
 
 Part2
+
+
 https://user-images.githubusercontent.com/18013985/147499189-e45a4160-94dd-4d66-849f-5cfedd8f5e7d.mp4
 
 
