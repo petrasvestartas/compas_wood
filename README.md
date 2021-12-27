@@ -1,10 +1,11 @@
 # compas_wood
 
-Joinery Solver
+
 
 ___
 ___
 ___
+
 ## Part 1 Create Package
 
 ### Software needed:
@@ -13,7 +14,7 @@ ___
 * Github Desktop
 * Git for windows, mac has git installed by default
 
-### Step 1
+### 1.0
 Create new environment:
 ```
 conda create -n wood python=3.8 --yes
@@ -31,7 +32,7 @@ conda activate wood
 ```
 
 
-### Step 2
+### 1.1
 
 Install CookieCutter
 ```
@@ -58,14 +59,14 @@ invoke docs
 pip install -e .
 ```
 
-### Step 3
+### 1.2
 Install Compas, if not installed before. And build documentataion.
 ```
 conda install compas
 invoke docs
 ```
 
-### Step 4
+### 1.3
 Create a release 0.0.x (new version / backwards compatible / bugs fixes)
 
 ```
@@ -80,16 +81,17 @@ or x.0.0
 invoke release major
 ```
 
-
-
-
-
+Video recording:
 
 https://user-images.githubusercontent.com/18013985/147421244-b1aaa4bb-9b8b-429a-b9c8-4335cc853cd9.mp4
 
+___
+___
+___
+
 ## Part 2 Pybind11 C++/Python CGAL
 
-### Part 2.1 [pybind11_hello_world.zip](https://github.com/petrasvestartas/compas_wood/files/7781554/pybind11_hello_world.zip)
+### 2.0 [pybind11_hello_world.zip](https://github.com/petrasvestartas/compas_wood/files/7781554/pybind11_hello_world.zip)
 
 Test simple pybind11 example to check the connection between C++ and Python.
 Files attached contain: 
@@ -103,7 +105,7 @@ Following video explains how to change default files with the ones above:
 https://user-images.githubusercontent.com/18013985/147499175-f53dc798-2e96-4f05-8482-03b58136f786.mp4
 
 
-### Part 2.2 [pybind11_joinery_solver.zip](https://github.com/petrasvestartas/compas_wood/files/7781555/pybind11_joinery_solver.zip)
+### 2.1 [pybind11_joinery_solver.zip](https://github.com/petrasvestartas/compas_wood/files/7781555/pybind11_joinery_solver.zip)
 
 Joinery Solver C++ project that includes pybind11 bindings in xxx_interop_python source files.
 Similarly to the part 1, change
@@ -116,7 +118,9 @@ Following video explains how to change default files with the ones above:
 
 https://user-images.githubusercontent.com/18013985/147499189-e45a4160-94dd-4d66-849f-5cfedd8f5e7d.mp4
 
-
+___
+___
+___
 ## Part 3 Clone Github repository in another computer
 
 ```
