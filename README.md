@@ -6,16 +6,17 @@ ___
 ___
 ___
 
-## Part 1 Create Package
+## Part 1 - Create Package
 
-### Software needed:
+### Part 1.0 - Install Software:
 * Anaconda
 * VSCode
 * Github Desktop
 * Git for windows, mac has git installed by default
 
-### 1.0
-Create new environment:
+### Part 1.1 - Create new environment:
+
+simple case
 ```
 conda create -n wood python=3.8 --yes
 conda activate wood
@@ -32,7 +33,7 @@ conda activate wood
 ```
 
 
-### 1.1
+### Part 1.2 - Install Documentation
 
 Install CookieCutter
 ```
@@ -59,16 +60,15 @@ invoke docs
 pip install -e .
 ```
 
-### 1.2
-Install Compas, if not installed before. And build documentataion.
+### Part 1.3 - Check if Compas is installed
+Install Compas, if not installed before
 ```
 conda install compas
-invoke docs
 ```
 
-### 1.3
-Create a release 0.0.x (new version / backwards compatible / bugs fixes)
+### Part 1.4 - Create a release (new version / backwards compatible / bugs fixes)
 
+0.0.x 
 ```
 invoke release patch 
 ```
@@ -89,9 +89,9 @@ ___
 ___
 ___
 
-## Part 2 Pybind11 C++/Python CGAL
+## Part 2  -  Pybind11 C++/Python CGAL
 
-### 2.0 [pybind11_hello_world.zip](https://github.com/petrasvestartas/compas_wood/files/7781554/pybind11_hello_world.zip)
+### Part 2.0 - Simple Pybind11 and setuptools example [pybind11_hello_world.zip](https://github.com/petrasvestartas/compas_wood/files/7781554/pybind11_hello_world.zip)
 
 Test simple pybind11 example to check the connection between C++ and Python.
 Files attached contain: 
@@ -105,7 +105,7 @@ Following video explains how to change default files with the ones above:
 https://user-images.githubusercontent.com/18013985/147499175-f53dc798-2e96-4f05-8482-03b58136f786.mp4
 
 
-### 2.1 [pybind11_joinery_solver.zip](https://github.com/petrasvestartas/compas_wood/files/7781555/pybind11_joinery_solver.zip)
+### Part 2.1 - Actual project in the repository [pybind11_joinery_solver.zip](https://github.com/petrasvestartas/compas_wood/files/7781555/pybind11_joinery_solver.zip)
 
 Joinery Solver C++ project that includes pybind11 bindings in xxx_interop_python source files.
 Similarly to the part 1, change
@@ -121,7 +121,7 @@ https://user-images.githubusercontent.com/18013985/147499189-e45a4160-94dd-4d66-
 ___
 ___
 ___
-## Part 3 Clone Github repository in another computer
+## Part 3 - Clone Github repository in another computer
 
 ```
 conda activate wood
@@ -131,6 +131,14 @@ pip install -e .
 ```
 
 ___
-Other Resources:
-Good python repos: Open Cascade, OCC, GMesh
+___
+___
+
+## Other Resources:
+Good python repos
+* Open Cascade
+* OCC
+* GMesh
+
+Conda helpers
 Delete env ```conda env remove --name bio-env ```
