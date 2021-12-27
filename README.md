@@ -90,7 +90,10 @@ https://user-images.githubusercontent.com/18013985/147421244-b1aaa4bb-9b8b-429a-
 ### Part1 [pybind11_hello_world.zip](https://github.com/petrasvestartas/compas_wood/files/7781554/pybind11_hello_world.zip)
 
 Test simple pybind11 example to check the connection between C++ and Python.
-Files attached contain: a) setup file, b) C++ file in a src folder and c) python file in a test folder.
+Files attached contain: 
+- [x] setup file
+- [x] C++ file in a src folder
+- [x] python file in a test folder.
 
 
 Following video explains how to change default files with the ones above:
@@ -101,7 +104,10 @@ https://user-images.githubusercontent.com/18013985/147499175-f53dc798-2e96-4f05-
 ### Part2 [pybind11_joinery_solver.zip](https://github.com/petrasvestartas/compas_wood/files/7781555/pybind11_joinery_solver.zip)
 
 Joinery Solver C++ project that includes pybind11 bindings in xxx_interop_python source files.
-Similarly to the part 1, change: a) setup file, b) source folder with C++ files and c) test folder with python files.
+Similarly to the part 1, change
+- [x] setup file
+- [x] source folder with C++ files
+- [x] test folder with python files.
 
 
 Following video explains how to change default files with the ones above:
