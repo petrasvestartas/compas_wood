@@ -6,10 +6,10 @@ Joinery Solver
 ## Create Package
 
 ### Software needed:
-Anaconda
-VSCode
-Github Desktop
-Git for windows, apple has by default
+- [x] Anaconda
+- [x] VSCode
+- [x] Github Desktop
+- [x] Git for windows, mac has git installed by default
 
 ### Step 1
 Create new environment:
@@ -35,18 +35,21 @@ Install CookieCutter
 ```
 pip install cookiecutter
 ```
-Default documentation from template using sphynx
+
+Install compas form for documentation template using spynx,  fill the basic form with your credentials
 ```
 cookiecutter gh:compas-dev/tpl-extension
 ```
-Fill basic form and rename current branch
+
+Rename current branch to main and perform first commit
 ```
 cd compas_wood
 git branch -m main
 git add .
 git commit -m "Initial commit"
 ```
-Install - build project in the correct environment and cd must be the good directory
+
+Build project (in the correct environment and cd must be in the good directory)
 ```
 pip install -r requirements-dev.txt
 invoke docs
@@ -54,7 +57,7 @@ pip install -e .
 ```
 
 ### Step 3
-Install Compas
+Install Compas, if not installed before
 ```
 conda install compas
 invoke docs
