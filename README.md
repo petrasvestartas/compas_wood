@@ -6,10 +6,10 @@ Joinery Solver
 ## Create Package
 
 ### Software needed:
-- [x] Anaconda
-- [x] VSCode
-- [x] Github Desktop
-- [x] Git for windows, mac has git installed by default
+* Anaconda
+* VSCode
+* Github Desktop
+* Git for windows, mac has git installed by default
 
 ### Step 1
 Create new environment:
@@ -91,9 +91,9 @@ https://user-images.githubusercontent.com/18013985/147421244-b1aaa4bb-9b8b-429a-
 
 Test simple pybind11 example to check the connection between C++ and Python.
 Files attached contain: 
-- [x] setuptools instructions (setup.py file)
-- [x] C++ source code (src folder) with C++ files
-- [x] python example files (test folder).
+* setuptools instructions (setup.py file)
+* C++ source code (src folder) with C++ files
+* python example files (test folder).
 
 
 Following video explains how to change default files with the ones above:
@@ -105,9 +105,9 @@ https://user-images.githubusercontent.com/18013985/147499175-f53dc798-2e96-4f05-
 
 Joinery Solver C++ project that includes pybind11 bindings in xxx_interop_python source files.
 Similarly to the part 1, change
-- [x] setuptools instructions (setup.py file)
-- [x] C++ source code (src folder) with C++ files. Pybind11 files are xxx_interop_python.cpp and xxx_interop_python.h files.
-- [x] python example files (test folder). Simple import case in test_compas_wood.py, full wrapper in connection_detection.py and its test in test_connectionDetection.py.
+* setuptools instructions (setup.py file)
+* C++ source code (src folder) with C++ files. Pybind11 files are xxx_interop_python.cpp and xxx_interop_python.h files.
+* python example files (test folder). Simple import case in test_compas_wood.py, full wrapper in connection_detection.py and its test in test_connectionDetection.py.
 
 
 Following video explains how to change default files with the ones above:
