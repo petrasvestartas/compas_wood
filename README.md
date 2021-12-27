@@ -90,7 +90,7 @@ https://user-images.githubusercontent.com/18013985/147421244-b1aaa4bb-9b8b-429a-
 ### Part1 [pybind11_hello_world.zip](https://github.com/petrasvestartas/compas_wood/files/7781554/pybind11_hello_world.zip)
 
 Test simple pybind11 example to check the connection between C++ and Python.
-Files attached bellow contains: a) setup file, b) C++ file in a src folder and c) python file in a test folder.
+Files attached contain: a) setup file, b) C++ file in a src folder and c) python file in a test folder.
 
 
 Following video explains how to change default files with the ones above:
