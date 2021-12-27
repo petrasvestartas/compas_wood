@@ -54,16 +54,25 @@ pip install -e .
 ```
 
 ### Step 3
-Instal Compas
+Install Compas
 ```
 conda install compas
 invoke docs
 ```
 
 ### Step 4
-invoke release patch or minor major 0.0.1 (new version / backwards compatible / bugs fixes)
+Create a release 0.0.x (new version / backwards compatible / bugs fixes)
+
 ```
 invoke release patch 
+```
+or  0.x.0
+```
+invoke release minor
+```
+or x.0.0
+```
+invoke release major
 ```
 
 
