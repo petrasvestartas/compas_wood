@@ -3,7 +3,7 @@
 Joinery Solver
 
 
-## Create Package
+## Part 1 Create Package
 
 ### Software needed:
 * Anaconda
@@ -85,9 +85,9 @@ invoke release major
 
 https://user-images.githubusercontent.com/18013985/147421244-b1aaa4bb-9b8b-429a-b9c8-4335cc853cd9.mp4
 
-## Pybind11 C++/Python CGAL
+## Part 2 Pybind11 C++/Python CGAL
 
-### Part1 [pybind11_hello_world.zip](https://github.com/petrasvestartas/compas_wood/files/7781554/pybind11_hello_world.zip)
+### Part 2.1 [pybind11_hello_world.zip](https://github.com/petrasvestartas/compas_wood/files/7781554/pybind11_hello_world.zip)
 
 Test simple pybind11 example to check the connection between C++ and Python.
 Files attached contain: 
@@ -101,7 +101,7 @@ Following video explains how to change default files with the ones above:
 https://user-images.githubusercontent.com/18013985/147499175-f53dc798-2e96-4f05-8482-03b58136f786.mp4
 
 
-### Part2 [pybind11_joinery_solver.zip](https://github.com/petrasvestartas/compas_wood/files/7781555/pybind11_joinery_solver.zip)
+### Part 2.2 [pybind11_joinery_solver.zip](https://github.com/petrasvestartas/compas_wood/files/7781555/pybind11_joinery_solver.zip)
 
 Joinery Solver C++ project that includes pybind11 bindings in xxx_interop_python source files.
 Similarly to the part 1, change
@@ -115,7 +115,7 @@ Following video explains how to change default files with the ones above:
 https://user-images.githubusercontent.com/18013985/147499189-e45a4160-94dd-4d66-849f-5cfedd8f5e7d.mp4
 
 
-## Clone Repository
+## Part 3 Clone Github repository in another computer
 
 ```
 conda activate wood
