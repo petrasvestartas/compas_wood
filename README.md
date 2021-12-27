@@ -77,6 +77,9 @@ https://user-images.githubusercontent.com/18013985/147421244-b1aaa4bb-9b8b-429a-
 
 Part1
 
+[pybind11_setuptools_hello_world.zip](https://github.com/petrasvestartas/compas_wood/files/7781414/pybind11_setuptools_hello_world.zip)
+
+
 
 https://user-images.githubusercontent.com/18013985/147499175-f53dc798-2e96-4f05-8482-03b58136f786.mp4
 
