@@ -57,7 +57,7 @@ pip install -e .
 ```
 
 ### Step 3
-Install Compas, if not installed before
+Install Compas, if not installed before. And build documentataion.
 ```
 conda install compas
 invoke docs
