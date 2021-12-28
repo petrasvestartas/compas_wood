@@ -123,7 +123,7 @@ ___
 ___
 ## Part 3 - Clone Github repository in another computer
 
-Be sure that you activate ```wood-dev``` after installation and you are in compas_wood folder before writing ```pip install -e .```
+Be sure that you activate ```wood-dev``` after installation and you are in ```compas_wood``` folder before writing ```pip install -e .```
 
 Windows
 
