@@ -12,13 +12,13 @@ import time
 
 
 @plugin(category='compas_wood_cpp', pluggable_name='compas_wood_cpp_test')
-def WrapperTest():
+def wrapper_test():
     joinery_solver.test()
 
 
 
 @plugin(category='compas_wood_cpp', pluggable_name='compas_wood_cpp_test_joinery_solver')
-def GetConnectionZones(
+def get_connection_zones(
     polylines_vertices_XYZ,
     face_vectors_XYZ=None,
     face_joints_types_int=None,
@@ -143,6 +143,6 @@ def GetConnectionZones(
     print("Number of Polylines " , len(polylines))
 
 
-    return [polylines]
+    return polylines
 
 
