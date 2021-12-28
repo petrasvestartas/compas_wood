@@ -154,10 +154,4 @@ ___
 ___
 
 ## Other Resources:
-Good python repos
-* Open Cascade
-* OCC
-* GMesh
-
-Conda helpers
 Delete env ```conda env remove --name bio-env ```
