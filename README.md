@@ -53,7 +53,7 @@ git add .
 git commit -m "Initial commit"
 ```
 
-Build project (in the correct environment and cd must be in the good directory)
+Install documentation and build it (in the correct environment and cd must be in the good directory)
 ```
 pip install -r requirements-dev.txt
 invoke docs
