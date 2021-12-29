@@ -153,5 +153,12 @@ ___
 ___
 ___
 
+## ToDo:
+* Generate documentation on Github instead of local
+* Push repository to ```conda-forge```
+___
+___
+___
+
 ## Other Resources:
 Delete env ```conda env remove --name bio-env ```
