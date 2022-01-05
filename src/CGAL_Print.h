@@ -1,8 +1,9 @@
 #pragma once
 
-#include "compas.h"
+#include "cgal.h"
 #include <float.h>
 #include <inttypes.h>
+
 static int Digs = DECIMAL_DIG;
 
 inline void CGAL_Debug() {

@@ -18,8 +18,10 @@ joinery_solver
     :toctree: generated/
     :nosignatures:
 
-    joinery.wrapper_test
+    joinery.test
     joinery.get_connection_zones
+    joinery.closed_mesh_from_polylines
+
 
 
 """

@@ -2,17 +2,14 @@
 import numpy as np
 from compas.plugins import plugin
 from compas.geometry import Point
-from compas.geometry import Vector
-from compas.geometry import Plane
 from compas.geometry import Polyline
-from compas.geometry import Box
-from compas.geometry import bounding_box
-import joinery_solver
+from compas.datastructures import Mesh, mesh
+import pybind11_joinery_solver
 import time
 
 
 @plugin(category='compas_wood_cpp', pluggable_name='compas_wood_cpp_test')
-def wrapper_test():
+def test():
     """Test if C++ code works
 
     Parameters
@@ -26,7 +23,7 @@ def wrapper_test():
 
     """
 
-    joinery_solver.test()
+    pybind11_joinery_solver.pybind11_test()
 
 
 
@@ -141,9 +138,9 @@ def get_connection_zones(
 
 
     start_time = time.time()
-    pointsets, pointsets_group_ids = joinery_solver.connectionzonesCGAL.get_connection_zones_compas( V, F, D, J, X, P, search_type,division_distance,shift,output_type,triangulate )
+    pointsets, pointsets_group_ids = pybind11_joinery_solver.pybind11_get_connection_zones( V, F, D, J, X, P, search_type,division_distance,shift,output_type,triangulate )
     print("==================================== %s ms ====================================" %  round((time.time() - start_time)*1000.0) )
-    print(type(pointsets))
+    #print(type(pointsets))
     # ==============================================================================
     # Process output
     # ==============================================================================
@@ -174,5 +171,86 @@ def get_connection_zones(
 
 
     return polylines
+
+
+
+@plugin(category='compas_wood_cpp', pluggable_name='compas_wood_cpp_closed_mesh_from_poylylines')
+def closed_mesh_from_polylines(
+    polylines_vertices_XYZ,
+    ):
+    """Compute joinery
+
+    Parameters
+    ----------
+    polylines_vertices_XYZ : pairs of polylines
+
+    Returns
+    -------
+    Mesh
+        from the pairs of polylines
+
+    """
+
+    # ==============================================================================
+    # Prepare input
+    # ==============================================================================
+    flat_list_of_points = []
+    vertex_count_per_polyline = []
+   
+
+
+    for i in range(0, (int)(len(polylines_vertices_XYZ)*0.5)):
+        flat_list_of_points.extend(polylines_vertices_XYZ[i*2])
+        flat_list_of_points.extend(polylines_vertices_XYZ[i*2+1])
+        vertex_count_per_polyline.append(len(polylines_vertices_XYZ[i*2]))
+        vertex_count_per_polyline.append(len(polylines_vertices_XYZ[i*2+1]))
+
+
+
+
+    # ==============================================================================
+    # Convert to Numpy
+    # ==============================================================================
+    V = np.asarray(flat_list_of_points, dtype=np.float64)
+    F = np.asarray(vertex_count_per_polyline, dtype=np.int32)
+
+
+    # ==============================================================================
+    # Test CPP module
+    # ==============================================================================
+ 
+    print("Input")
+    print("flat_list_of_points " + str(V.size))
+    print("vertex_count_per_polyline " + str(F.size))
+    print("============================================================================== CPP +")
+
+    # ==============================================================================
+    # Execute main CPP method
+    # ==============================================================================
+
+
+    start_time = time.time()
+    output_V, output_F = pybind11_joinery_solver.pybind11_closed_mesh_from_polylines( V, F )
+    print("V")
+    for i in output_V:
+        print(i)
+    print("F")
+    for i in output_F:
+        print(i)
+    print("==================================== %s ms ====================================" %  round((time.time() - start_time)*1000.0) )
+    # ==============================================================================
+    # Process output
+    # ==============================================================================
+    print("Number of Mesh Vertices " , len(output_V))
+    print("Number of Mesh Faces " , len(output_F))
+    mesh = Mesh.from_vertices_and_faces(output_V,output_F)
+    print("Is Mesh Valid " + (str)(mesh.is_valid()) )
+    
+
+    print("============================================================================== CPP -")
+    print("Output")
+    return mesh
+
+
 
 

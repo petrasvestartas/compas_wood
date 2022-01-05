@@ -1,5 +1,5 @@
 #compas_wood
-from compas_wood.joinery import wrapper_test
+from compas_wood.joinery import test
 from compas_wood.joinery import get_connection_zones
 from compas_wood.data.joinery_solver_data_set import *
 
@@ -26,5 +26,5 @@ def test_connection_detection():
 # ==============================================================================
 #call the compas_wood methods
 # ==============================================================================
-wrapper_test()
+test()
 test_connection_detection()

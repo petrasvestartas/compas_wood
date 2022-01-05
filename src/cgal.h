@@ -1,0 +1,61 @@
+
+#include <CGAL/Exact_predicates_inexact_constructions_kernel.h>
+#include <CGAL/Exact_predicates_exact_constructions_kernel.h>
+#include <CGAL/Intersections.h>
+#include <CGAL/Bbox_2.h>
+#include <CGAL/Bbox_3.h>
+#include <CGAL/Plane_3.h>
+#include <iostream>
+#include <fstream>
+#include <CGAL/Boolean_set_operations_2.h>
+#include <list>
+
+
+using IK = CGAL::Exact_predicates_inexact_constructions_kernel;
+using EK = CGAL::Exact_predicates_exact_constructions_kernel;
+typedef CGAL::Cartesian_converter<IK, EK> IK_to_EK;
+typedef CGAL::Cartesian_converter<EK, IK> EK_to_IK;
+using CGAL_Polyline = std::vector<IK::Point_3>;
+using CGAL_Polylines = std::list<CGAL_Polyline>;
+
+
+static  double GlobalTolerance = 0.01;
+static  double GlobalToleranceSquare = 0.0001;
+static  double GlobalClipperScale = 1000000.0;
+static  double GlobalClipperAreaTolerance = 0.0001;
+static  double GlobalExtend[5] = { 0.0,0.0,0,0,0 };
+
+#define ON_IS_FINITE(x) (0x7FF0 != (*((unsigned short*)(&x) + 3) & 0x7FF0))
+#define ON_DBL_MIN 2.22507385850720200e-308
+#define ON_EPSILON 2.2204460492503131e-16
+#define ON_SQRT_EPSILON 1.490116119385000000e-8
+#define ON_ZERO_TOLERANCE 2.3283064365386962890625e-10
+#define ON_DBL_MAX 1.7976931348623158e+308
+
+//meshing 2D
+#include <CGAL/Constrained_Delaunay_triangulation_2.h>
+#pragma once
+
+#include <CGAL/Triangulation_face_base_with_info_2.h>
+#include <CGAL/Polygon_2.h>
+
+struct FaceInfo2 {
+	FaceInfo2() {}
+	int nesting_level;
+	bool in_domain() {
+		return nesting_level % 2 == 1;
+	}
+};
+
+typedef CGAL::Triangulation_vertex_base_2<IK>                      Vb;
+typedef CGAL::Triangulation_face_base_with_info_2<FaceInfo2, IK>    Fbb;
+typedef CGAL::Constrained_triangulation_face_base_2<IK, Fbb>        Fb;
+typedef CGAL::Triangulation_data_structure_2<Vb, Fb>               TDS;
+typedef CGAL::Exact_predicates_tag                                Itag;
+typedef CGAL::Constrained_Delaunay_triangulation_2<IK, TDS, Itag>  CDT;
+typedef CDT::Point                                                Point;
+typedef CGAL::Polygon_2<IK>                                        Polygon_2;
+typedef CDT::Face_handle                                          Face_handle;
+
+using RowMatrixXd = Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor>;
+using RowMatrixXi = Eigen::Matrix<int, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor>;
