@@ -156,7 +156,7 @@ inline void get_elements(
 		}
 
 		//Edge initialization, total number of edge top,bottom + all sides + undefined not lying on face
-		elements[count].j_mf = std::vector< std::vector<std::tuple<int, bool,double>>>( (pp[i].size()-1) + 2 + 1);//(side id, false, parameter on edge)
+		elements[count].j_mf = std::vector< std::vector<std::tuple<int, bool, double>>>((pp[i].size() - 1) + 2 + 1);//(side id, false, parameter on edge)
 
 
 		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -167,7 +167,7 @@ inline void get_elements(
 				elements[count].edge_vectors = insertion_vectors[count];
 				//This was very nasty bug, because polylines are reverse based on orientation fix | also only shift +2 must be reversed (edges, skip top and bottom)
 				if (reverse_poylines)
-					std::reverse(elements[count].edge_vectors.begin()+2, elements[count].edge_vectors.end());
+					std::reverse(elements[count].edge_vectors.begin() + 2, elements[count].edge_vectors.end());
 			}
 
 		if (joint_types.size() > 0)
@@ -175,7 +175,7 @@ inline void get_elements(
 				elements[count].joint_types = joint_types[count];
 				//This was very nasty bug, because polylines are reverse based on orientation fix | also only shift +2 must be reversed (edges, skip top and bottom)
 				if (reverse_poylines)
-					std::reverse(elements[count].joint_types.begin()+2, elements[count].joint_types.end());
+					std::reverse(elements[count].joint_types.begin() + 2, elements[count].joint_types.end());
 			}
 
 		count++;
@@ -242,7 +242,7 @@ inline bool intersection_2D(CGAL_Polyline& p0, CGAL_Polyline& p1, IK::Plane_3& p
 		//CleanPolygon(C[0], GlobalTolerance * scale);//clean polygons
 
 		//if (C[0].size() > 3 && Area(C[0]) > GlobalClipperAreaTolerance * scale * scale) {//skip triangles and very small polygons
-		if (C[0].size() > 3 && std::abs(Area(C[0])) > std::abs(Area(pathA) * GlobalClipperAreaTolerance) ) {//skip triangles and very small polygons
+		if (C[0].size() > 3 && std::abs(Area(C[0])) > std::abs(Area(pathA) * GlobalClipperAreaTolerance)) {//skip triangles and very small polygons
 
 		/*	CGAL_Debug(Area(pathA));*/
 			//CGAL_Debug(Area(C[0])/ (scale* scale));
@@ -257,14 +257,12 @@ inline bool intersection_2D(CGAL_Polyline& p0, CGAL_Polyline& p1, IK::Plane_3& p
 			//CGAL_Debug(999999);
 			c[C[0].size()] = c[0];//Close
 
-		}
-		else {
+		} else {
 			return false;
 		}
 
 
-	}
-	else {
+	} else {
 		return false;
 	}
 
@@ -382,37 +380,37 @@ inline bool plane_to_face(std::vector<
 	if (!CGAL_PolylineUtil::PlanePolyline(*cx1, *cy1, *px1, *py1, cx1_py1__cy1_px1, edge_pair_e0_1__e1_1)) return false;//,cx1_py1__cy1_px1_Max
 
 
-	e0_0 = edge_pair_e0_0__e1_0.first +2;
+	e0_0 = edge_pair_e0_0__e1_0.first + 2;
 	e1_0 = edge_pair_e0_0__e1_0.second + 2;
 	e0_1 = edge_pair_e0_1__e1_1.first + 2;
 	e1_1 = edge_pair_e0_1__e1_1.second + 2;
-//	std::ofstream myfile;
-//	myfile.open("C:\\IBOIS57\\_Code\\Software\\Python\\Pybind11Example\\vsstudio\\Release\\output3.txt");
-//	myfile << e0_0;
-//	myfile << e1_0;
-//	myfile << e0_1;
-//	myfile << e1_1;
-//
-//
-//myfile.close();
-	//e0_0 = -1;
-	//e1_0 = -1;
-	//e0_1 = -1;
-	//e1_1 = -1;
-	//CGAL_Debug(e0_0, e0_1, e1_0, e1_1);
+	//	std::ofstream myfile;
+	//	myfile.open("C:\\IBOIS57\\_Code\\Software\\Python\\Pybind11Example\\vsstudio\\Release\\output3.txt");
+	//	myfile << e0_0;
+	//	myfile << e1_0;
+	//	myfile << e0_1;
+	//	myfile << e1_1;
+	//
+	//
+	//myfile.close();
+		//e0_0 = -1;
+		//e1_0 = -1;
+		//e0_1 = -1;
+		//e1_1 = -1;
+		//CGAL_Debug(e0_0, e0_1, e1_0, e1_1);
 
 
-	//e0_0 = edge_pair_e0_0__e1_1.first;
-	//e1_0 = edge_pair_e0_1__e1_0.second;
-	//e0_1 = edge_pair_e0_1__e1_0.first;
-	//e1_1 = edge_pair_e0_0__e1_1.second;
-	//CGAL_Debug(e0_0, e0_1, e1_0, e1_1);
-	//printf("D");
-	//printf("_\n");
+		//e0_0 = edge_pair_e0_0__e1_1.first;
+		//e1_0 = edge_pair_e0_1__e1_0.second;
+		//e0_1 = edge_pair_e0_1__e1_0.first;
+		//e1_1 = edge_pair_e0_0__e1_1.second;
+		//CGAL_Debug(e0_0, e0_1, e1_0, e1_1);
+		//printf("D");
+		//printf("_\n");
 
-	//////////////////////////////////////////////////////////////////////////////
-	//Sort Lines
-	//////////////////////////////////////////////////////////////////////////////
+		//////////////////////////////////////////////////////////////////////////////
+		//Sort Lines
+		//////////////////////////////////////////////////////////////////////////////
 	if (CGAL::approximate_angle(cx0_py0__cy0_px0.to_vector(), cx0_py1__cy1_px0.to_vector()) > CGAL::approximate_angle(cx0_py0__cy0_px0.to_vector(), -cx0_py1__cy1_px0.to_vector()))
 		cx0_py1__cy1_px0 = cx0_py1__cy1_px0.opposite();
 	if (CGAL::approximate_angle(cx0_py0__cy0_px0.to_vector(), cx1_py0__cy0_px1.to_vector()) > CGAL::approximate_angle(cx0_py0__cy0_px0.to_vector(), -cx1_py0__cy0_px1.to_vector()))
@@ -665,7 +663,7 @@ inline bool face_to_face(
 					//Get Line: Option A(0) - Side-Side i>2 && i > 2, Option B(1) - Side-Top i>2, C(2) Top-Top
 
 					//jointArea1 = jointArea0;//default case (Top-top)
-					IK::Segment_3 joint_line0 (IK::Point_3(0, 0, 0), IK::Point_3(0, 0, 0));
+					IK::Segment_3 joint_line0(IK::Point_3(0, 0, 0), IK::Point_3(0, 0, 0));
 					IK::Plane_3 averagePlane0(CGAL::midpoint(Polyline0[0][0], Polyline0[1][0]), Plane0[0].orthogonal_vector());//Center Plane
 					CGAL_Polyline joint_quads0;
 					if (i > 1) {//Side-Top  or Side-Side
@@ -684,7 +682,7 @@ inline bool face_to_face(
 							//joint_quads0.push_back(Polyline0[0][0]);
 							//joint_quads0.push_back(Polyline0[1][0]);
 							//joint_quads0.push_back(Plane0[i].point());
-						}else {
+						} else {
 							CGAL_Debug(joint_quads0.size());
 							return false;
 						}
@@ -706,8 +704,8 @@ inline bool face_to_face(
 
 						//Planes to get a quad
 						if (isLine && joint_line1.squared_length() > GlobalTolerance) {//
-							bool isQuad = CGAL_IntersectionUtil::QuadFromLineAndTopBottomPlanes(Plane1[j], joint_line1, Plane1[0], Plane1[1],  joint_quads1);
-	  					    //joint_volumes_pairA_pairB[0] = joint_quads1;
+							bool isQuad = CGAL_IntersectionUtil::QuadFromLineAndTopBottomPlanes(Plane1[j], joint_line1, Plane1[0], Plane1[1], joint_quads1);
+							//joint_volumes_pairA_pairB[0] = joint_quads1;
 							//joint_volumes_pairA_pairB[1] = joint_quads1;
 						} else {
 							CGAL_Debug(joint_quads1.size());
@@ -727,7 +725,7 @@ inline bool face_to_face(
 					//ToDo set edge direction - Check Insertion angle if �dge axis is assigned
 					//Applies for both elements
 					////////////////////////////////////////////////////////////////////////////////
-					IK::Vector_3 dir(0,0,0);
+					IK::Vector_3 dir(0, 0, 0);
 					bool dirSet = false;
 					if (insertion_vectors0.size() > 0) {
 						//////Take priority for male
@@ -771,10 +769,10 @@ inline bool face_to_face(
 							////////////////////////////////////////////////////////////////////////////////
 							//Create Plane to XY transformation matrix
 							////////////////////////////////////////////////////////////////////////////////
-							IK::Vector_3 o (average_segment[0].hx(), average_segment[0].hy(), average_segment[0].hz());
+							IK::Vector_3 o(average_segment[0].hx(), average_segment[0].hy(), average_segment[0].hz());
 							IK::Vector_3 x = average_segment.to_vector();//CGAL_VectorUtil::Unitize(x);
 							IK::Vector_3 z = Plane0[i].orthogonal_vector();//CGAL_VectorUtil::Unitize(z);
-							IK::Vector_3 y = CGAL::cross_product(x,z);//CGAL_VectorUtil::Unitize(y);
+							IK::Vector_3 y = CGAL::cross_product(x, z);//CGAL_VectorUtil::Unitize(y);
 							CGAL::Aff_transformation_3<IK> xform = CGAL_XFormUtil::VectorsToXY(o, x, y, z);
 
 							////////////////////////////////////////////////////////////////////////////////
@@ -816,18 +814,18 @@ inline bool face_to_face(
 							}
 
 							CGAL_VectorUtil::Unitize(offset_vector);
-							double d0 = 0.5*std::sqrt(CGAL::squared_distance(Plane0[0].point(), Plane0[1].projection(Plane0[0].point())));
+							double d0 = 0.5 * std::sqrt(CGAL::squared_distance(Plane0[0].point(), Plane0[1].projection(Plane0[0].point())));
 							offset_vector *= d0;
 
-							joint_volumes_pairA_pairB[0] =  {  average_rectangle[3] + offset_vector, average_rectangle[3] - offset_vector, average_rectangle[0] - offset_vector, average_rectangle[0] + offset_vector, average_rectangle[0] + offset_vector };
-							joint_volumes_pairA_pairB[1] = {average_rectangle[2] + offset_vector,average_rectangle[2] - offset_vector,average_rectangle[1] - offset_vector,average_rectangle[1] + offset_vector,  average_rectangle[1] + offset_vector };
+							joint_volumes_pairA_pairB[0] = { average_rectangle[3] + offset_vector, average_rectangle[3] - offset_vector, average_rectangle[0] - offset_vector, average_rectangle[0] + offset_vector, average_rectangle[0] + offset_vector };
+							joint_volumes_pairA_pairB[1] = { average_rectangle[2] + offset_vector,average_rectangle[2] - offset_vector,average_rectangle[1] - offset_vector,average_rectangle[1] + offset_vector,  average_rectangle[1] + offset_vector };
 							//joint_volumes_pairA_pairB[2] = joint_volumes_pairA_pairB[0];
 							//joint_volumes_pairA_pairB[3] = joint_volumes_pairA_pairB[1];
 							type = 10;
 
-						////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-						//Elements are parallel
-						////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+							////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+							//Elements are parallel
+							////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 						} else {
 
 
@@ -872,8 +870,7 @@ inline bool face_to_face(
 								return false;
 
 
-							}
-							else if (dihedralAngle <= 150) {//OUT-OF-PLANE // && jointArea0.size()>0
+							} else if (dihedralAngle <= 150) {//OUT-OF-PLANE // && jointArea0.size()>0
 								//CGAL_Debug(150);
 							 ////////////////////////////////////////////////////////////////////////////////
 							 //Rotate line-joint 90 degrees and intersect with adjacent element top and bottom planes
@@ -898,8 +895,7 @@ inline bool face_to_face(
 									planes[2] = Plane1[0];
 									planes[3] = Plane0[1];
 									planes[0] = Plane1[1];
-								}
-								else {
+								} else {
 									planes[2] = Plane1[1];
 									planes[3] = Plane0[1];
 									planes[0] = Plane1[0];
@@ -915,8 +911,7 @@ inline bool face_to_face(
 
 								type = 11;
 
-							}
-							else {//IN-PLANE
+							} else {//IN-PLANE
 								//CGAL_Debug(-150);
 							//joint_lines[0] = { joint_line0[0], joint_line0[1] };
 							//joint_lines[1] = { joint_line1[0], joint_line1[1] };
@@ -924,7 +919,7 @@ inline bool face_to_face(
 							 ////////////////////////////////////////////////////////////////////////////////
 							 //Intersect current top and bottom element planes, including the offseted joint face planes with |......................| end planes
 							 ////////////////////////////////////////////////////////////////////////////////
-								double d0 = 0.5*std::sqrt(CGAL::squared_distance(Plane0[0].point(), Plane0[1].projection(Plane0[0].point())));
+								double d0 = 0.5 * std::sqrt(CGAL::squared_distance(Plane0[0].point(), Plane0[1].projection(Plane0[0].point())));
 								IK::Plane_3 offset_plane_0 = CGAL_PlaneUtil::offset(Plane0[i], -d0);
 								IK::Plane_3 offset_plane_1 = CGAL_PlaneUtil::offset(Plane0[i], d0);
 
@@ -934,19 +929,18 @@ inline bool face_to_face(
 								////////////////////////////////////////////////////////////////////////////////
 								//Intersect End plane |-----------------------| with top and bottom planes
 								////////////////////////////////////////////////////////////////////////////////
-								  CGAL_IntersectionUtil::plane_4_planes(plEnd0, loopOfPlanes0, joint_volumes_pairA_pairB[0]);
-							 CGAL_IntersectionUtil::plane_4_planes(plEnd1, loopOfPlanes0, joint_volumes_pairA_pairB[1]);
-								  CGAL_IntersectionUtil::plane_4_planes(plEnd0, loopOfPlanes1, joint_volumes_pairA_pairB[2]);
-							  CGAL_IntersectionUtil::plane_4_planes(plEnd1, loopOfPlanes1, joint_volumes_pairA_pairB[3]);
-							  type = 12;
+								CGAL_IntersectionUtil::plane_4_planes(plEnd0, loopOfPlanes0, joint_volumes_pairA_pairB[0]);
+								CGAL_IntersectionUtil::plane_4_planes(plEnd1, loopOfPlanes0, joint_volumes_pairA_pairB[1]);
+								CGAL_IntersectionUtil::plane_4_planes(plEnd0, loopOfPlanes1, joint_volumes_pairA_pairB[2]);
+								CGAL_IntersectionUtil::plane_4_planes(plEnd1, loopOfPlanes1, joint_volumes_pairA_pairB[3]);
+								type = 12;
 							}
 
 
 						}
 
 
-					}
-					else if (type == 1) {//top-side
+					} else if (type == 1) {//top-side
 
 
 
@@ -981,13 +975,13 @@ inline bool face_to_face(
 						//	f1_1 = f1_0;
 						//}
 
-						joint_lines[0] = male_or_female ? CGAL_Polyline({joint_line0[0], joint_line0[1]}) : CGAL_Polyline({ joint_line1[0], joint_line1[1] });
+						joint_lines[0] = male_or_female ? CGAL_Polyline({ joint_line0[0], joint_line0[1] }) : CGAL_Polyline({ joint_line1[0], joint_line1[1] });
 						joint_lines[1] = joint_lines[0];
 
 						IK::Plane_3* plane0_0 = male_or_female ? &Plane0[0] : &Plane1[0];
 						//IK::Plane_3* plane0_1 = male_or_female ? &Plane0[1] : &Plane1[1];
 						IK::Plane_3* plane1_0 = !male_or_female ? &Plane0[i] : &Plane1[j];//female collision plane
-						IK::Plane_3* plane1_1 = !male_or_female ? &Plane0[std::abs(i-1)] : &Plane1[std::abs(j-1)];
+						IK::Plane_3* plane1_1 = !male_or_female ? &Plane0[std::abs(i - 1)] : &Plane1[std::abs(j - 1)];
 
 						//CGAL_Polyline* pline0 = male_or_female ? &Polyline0[0] : &Polyline1[0];
 						//CGAL_Polyline* pline1 = !male_or_female ? &Polyline0[1] : &Polyline1[1];
@@ -1022,7 +1016,7 @@ inline bool face_to_face(
 						//////////////////////////////////////////////////////////////////////////////////
 						//Create Connection rectangles
 						//////////////////////////////////////////////////////////////////////////////////
-						joint_volumes_pairA_pairB[0] = { (*quad_0)[0], (*quad_0)[1], (*quad_0)[1]+offset_vector, (*quad_0)[0] + offset_vector, (*quad_0)[0] };
+						joint_volumes_pairA_pairB[0] = { (*quad_0)[0], (*quad_0)[1], (*quad_0)[1] + offset_vector, (*quad_0)[0] + offset_vector, (*quad_0)[0] };
 						joint_volumes_pairA_pairB[1] = { (*quad_0)[3], (*quad_0)[2], (*quad_0)[2] + offset_vector, (*quad_0)[3] + offset_vector, (*quad_0)[3] };
 						//joint_area = joint_volumes_pairA_pairB[0];
 						//joint_volumes_pairA_pairB[2] = joint_volumes_pairA_pairB[0];
@@ -1030,8 +1024,7 @@ inline bool face_to_face(
 
 						type = 20;
 						return true;
-					}
-					else {
+					} else {
 						type = 40;
 						joint_volumes_pairA_pairB[0] = joint_area;
 						joint_volumes_pairA_pairB[1] = joint_area;
@@ -1156,7 +1149,8 @@ inline void rtree_search(
 	for (int i = 0; i < elements.size(); i++) {//AABB.size()
 
 		//std::vector<int> result;
-		auto callback = [&result, i, &elements](int foundValue) -> bool {
+		auto callback = [&result, i, &elements](int foundValue) -> bool
+		{
 
 			if (i < foundValue && CGAL_BoxUtil::GetCollision(elements[i].oob, elements[foundValue].oob)) {
 				result.push_back(i);
@@ -1195,7 +1189,7 @@ inline void rtree_search(
 				found_type = plane_to_face(elements[result[i]].polylines, elements[result[i + 1]].polylines, elements[result[i]].planes, elements[result[i + 1]].planes, elements[result[i]].edge_vectors, elements[result[i + 1]].edge_vectors, f0_0, f1_0, f0_1, f1_1, joint_area, joint_lines, joint_volumes_pairA_pairB, type) ? 2 : 0;
 				break;
 			case(2):
-				bool flag0 = face_to_face(elements[result[i]].polylines, elements[result[i + 1]].polylines, elements[result[i]].planes, elements[result[i + 1]].planes, elements[result[i]].edge_vectors, elements[result[i + 1]].edge_vectors, f0_0, f1_0, f0_1, f1_1, joint_area, joint_lines, joint_volumes_pairA_pairB, type) ;
+				bool flag0 = face_to_face(elements[result[i]].polylines, elements[result[i + 1]].polylines, elements[result[i]].planes, elements[result[i + 1]].planes, elements[result[i]].edge_vectors, elements[result[i + 1]].edge_vectors, f0_0, f1_0, f0_1, f1_1, joint_area, joint_lines, joint_volumes_pairA_pairB, type);
 				if (flag0) {
 					found_type = 3;
 					break;
@@ -1231,7 +1225,7 @@ inline void rtree_search(
 
 
 			//CGAL_Debug(1);
-			joints_map.emplace(CGAL_MathUtil::unique_from_two_int(result[i], result[i + 1]),jointID);
+			joints_map.emplace(CGAL_MathUtil::unique_from_two_int(result[i], result[i + 1]), jointID);
 
 			//CGAL_Debug(e1);
 			////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1251,13 +1245,11 @@ inline void rtree_search(
 					if ((f1_0 < 2 && f0_0>1)) {
 						elements[result[i + 0]].j_mf[f0_0].push_back(std::tuple<int, bool, double>(jointID, true, 0));
 						elements[result[i + 1]].j_mf[f1_0].push_back(std::tuple<int, bool, double>(jointID, false, 0));
-					}
-					else {
+					} else {
 						elements[result[i + 0]].j_mf[f0_0].push_back(std::tuple<int, bool, double>(jointID, false, 0));
 						elements[result[i + 1]].j_mf[f1_0].push_back(std::tuple<int, bool, double>(jointID, true, 0));
 					}
-				}
-				else {
+				} else {
 					elements[result[i + 0]].j_mf[f0_0].push_back(std::tuple<int, bool, double>(jointID, true, 0));
 					elements[result[i + 1]].j_mf[f1_0].push_back(std::tuple<int, bool, double>(jointID, false, 0));
 
@@ -1422,7 +1414,7 @@ inline void three_valence_joint_alignment(
 	std::unordered_map<uint64_t, int>& joints_map,
 	//std::vector<std::vector<CGAL_Polyline>>& plines,
 	double division_length
-	) {
+) {
 
 	//CGAL_Debug(0);
 	//////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1439,7 +1431,7 @@ inline void three_valence_joint_alignment(
 	//}
 	//CGAL_Debug();
 
-	for (int i = 0; i < out_three_valence_element_indices_and_instruction.size(); i ++) {
+	for (int i = 0; i < out_three_valence_element_indices_and_instruction.size(); i++) {
 
 
 
@@ -1460,7 +1452,7 @@ inline void three_valence_joint_alignment(
 			: IK::Segment_3(joints[id_1].joint_lines[0][1], joints[id_1].joint_lines[0][0]);
 
 		IK::Segment_3 l;
-		CGAL_PolylineUtil::line_line_overlap_average_segments(l0,l1, l);
+		CGAL_PolylineUtil::line_line_overlap_average_segments(l0, l1, l);
 
 		//plines.push_back({ l[0] ,l[1] });
 
@@ -1511,7 +1503,7 @@ inline void three_valence_joint_alignment(
 			IK::Segment_3 s3(joints[id_0].joint_volumes[j + 0][3], joints[id_0].joint_volumes[j + 1][3]);
 
 			CGAL_IntersectionUtil::Plane4LinesIntersection(plane0_0, s0, s1, s2, s3, joints[id_0].joint_volumes[j]);
-			CGAL_IntersectionUtil::Plane4LinesIntersection(plane0_1, s0, s1, s2, s3, joints[id_0].joint_volumes[j+1]);
+			CGAL_IntersectionUtil::Plane4LinesIntersection(plane0_1, s0, s1, s2, s3, joints[id_0].joint_volumes[j + 1]);
 			//plines.push_back(joints[id_0].joint_volumes[j]);
 			//plines.push_back(joints[id_0].joint_volumes[j+1]);
 		}
@@ -1525,7 +1517,7 @@ inline void three_valence_joint_alignment(
 			IK::Segment_3 s3(joints[id_1].joint_volumes[j + 0][3], joints[id_1].joint_volumes[j + 1][3]);
 
 			CGAL_IntersectionUtil::Plane4LinesIntersection(plane1_0, s0, s1, s2, s3, joints[id_1].joint_volumes[j]);
-			CGAL_IntersectionUtil::Plane4LinesIntersection(plane1_1, s0, s1, s2, s3, joints[id_1].joint_volumes[j+1]);
+			CGAL_IntersectionUtil::Plane4LinesIntersection(plane1_1, s0, s1, s2, s3, joints[id_1].joint_volumes[j + 1]);
 
 		}
 
@@ -1572,9 +1564,9 @@ inline void three_valence_joint_alignment(
 //    return true;
 //}
 
-void get_connection_zones_test();
 
-void get_connection_zones(
+
+inline void get_connection_zones(
 	std::vector<CGAL_Polyline>& input_polyline_pairs,
 	std::vector<std::vector<IK::Vector_3>>& input_insertion_vectors,
 	std::vector<std::vector<int>>& input_joint_types,
@@ -1593,18 +1585,86 @@ void get_connection_zones(
 	int output_type = 4,
 	int triangulate = 0
 
-);
+) {
 
-std::vector<compas::RowMatrixXd> get_connection_zones_compas(
+	const int n = input_polyline_pairs.size() * 0.5;
+
+	//////////////////////////////////////////////////////////////////////////////
+	//Create elements, AABB, OBB, P, Pls, thickness
+	//////////////////////////////////////////////////////////////////////////////
+	std::vector<element> elements;
+	get_elements(input_polyline_pairs, input_insertion_vectors, input_joint_types, elements);
+
+
+	//////////////////////////////////////////////////////////////////////////////
+	//Create joints, Perform Joint Area Search
+	//////////////////////////////////////////////////////////////////////////////
+	auto joints = std::vector<joint>();
+	auto joints_map = std::unordered_map<uint64_t, int>();
+	rtree_search(elements, search_type, joints, joints_map);
+
+	//////////////////////////////////////////////////////////////////////////////
+	//3-valence joints
+	//////////////////////////////////////////////////////////////////////////////
+	if (input_three_valence_element_indices_and_instruction.size() > 0)
+		three_valence_joint_alignment(input_three_valence_element_indices_and_instruction, elements, joints, joints_map, division_distance);//plines, 
+
+	////////////////////////////////////////////////////////////////////////////////
+	////Create and Align Joints 1. Iterate type 2. Select joint based on not/given user joint_type
+	////////////////////////////////////////////////////////////////////////////////
+	joint_library::construct_joint_by_index(elements, joints, division_distance, shift, default_parameters_for_joint_types);
+
+	//////////////////////////////////////////////////////////////////////////////
+	//Iterate joint address
+	//////////////////////////////////////////////////////////////////////////////
+
+	plines = std::vector<std::vector<CGAL_Polyline>>(elements.size());
+	//CGAL_Debug(joints.size());
+	for (int i = 0; i < elements.size(); i++) {//takes 30-50 ms just to copy past polyline geometry
+
+		switch (output_type) {
+			case(0):
+				elements[i].get_joints_geometry(joints, plines, 0);
+				break;
+			case(1):
+				elements[i].get_joints_geometry(joints, plines, 1);
+				break;
+			case(2):
+				elements[i].get_joints_geometry(joints, plines, 2);
+				break;
+			default:
+			case(3):
+				elements[i].get_joints_geometry(joints, plines, 3);
+				break;
+			case(4):
+				//elements[i].get_joints_geometry_as_closed_polylines_replacing_edges(joints, plines);
+				elements[i].get_joints_geometry_as_closed_polylines_performing_intersection(joints, plines);
+				break;
+		}
+
+	}
+
+	//////////////////////////////////////////////////////////////////////////////
+	//Create Mesh Triangulation for top face
+	//////////////////////////////////////////////////////////////////////////////
+	if (triangulate) {
+		top_face_triangulation = std::vector<std::vector<int>>(elements.size());
+		for (int i = 0; i < elements.size(); i++) {
+			CGAL_MeshUtil::mesh_from_polylines(plines[i], elements[i].planes[0], top_face_triangulation[i]);
+
+		}
+	}
+
+
+}
+
+inline  std::tuple< std::vector<compas::RowMatrixXd>, std::vector<int>>  get_connection_zones_compas(
 	Eigen::Ref<const compas::RowMatrixXd>& polylines_vertices_XYZ,
 	Eigen::Ref<const compas::RowMatrixXi>& polylines_vertices_count_int,
 	Eigen::Ref<const compas::RowMatrixXd>& face_vectors_XYZ,
 	Eigen::Ref<const compas::RowMatrixXi>& face_joints_types_int,
 	Eigen::Ref<const compas::RowMatrixXi>& three_valence_element_indices_and_instruction,
-
-	//output
 	Eigen::Ref<const compas::RowMatrixXd>& default_parameters_for_joint_types_matrix,
-	//Eigen::Ref<const compas::RowMatrixXi>& top_face_triangulation_matrix,
 
 	int search_type = 1,
 	double division_distance = 300,
@@ -1612,5 +1672,65 @@ std::vector<compas::RowMatrixXd> get_connection_zones_compas(
 	int output_type = 4,
 	int triangulate = 0
 
-);
+) {
+
+
+	//////////////////////////////////////////////////////////////////////////////
+	//Convert Raw data to list of Polyline
+	//////////////////////////////////////////////////////////////////////////////
+	//std::vector<element> elements;
+	//std::vector<CGAL_Polyline> polyline_pairs = compas::polylines_from_vertices_and_faces(polylines_vertices_XYZ, polylines_vertices_count_int);
+	std::vector<CGAL_Polyline> out_polyline_pairs;
+	std::vector<std::vector<IK::Vector_3>> out_insertion_vectors;
+	std::vector<std::vector<int>> out_joint_types;
+	std::vector<std::vector<int>> out_three_valence_element_indices_and_instruction;
+	std::vector<double> out_default_parameters_for_joint_types;
+
+
+	compas::polylines_from_vertices_and_faces_and_properties(
+
+		polylines_vertices_XYZ,
+		polylines_vertices_count_int,
+		face_vectors_XYZ,
+		face_joints_types_int,
+		three_valence_element_indices_and_instruction,
+		default_parameters_for_joint_types_matrix,
+
+		out_polyline_pairs,
+		out_insertion_vectors,
+		out_joint_types,
+		out_three_valence_element_indices_and_instruction,
+		out_default_parameters_for_joint_types
+	);
+
+	std::vector<std::vector<CGAL_Polyline>> output;
+	std::vector<std::vector<int>> top_face_triangulation;
+	get_connection_zones(
+		out_polyline_pairs,
+		out_insertion_vectors,
+		out_joint_types,
+		out_three_valence_element_indices_and_instruction,
+
+		output,
+		top_face_triangulation,
+
+		out_default_parameters_for_joint_types,
+		search_type,
+		division_distance,
+		shift,
+		output_type,
+		triangulate
+
+	);
+
+	//////////////////////////////////////////////////////////////////////////////
+	//Convert Output to Raw Data
+	//////////////////////////////////////////////////////////////////////////////
+
+	return compas::result_tuple_from_polylinesVector(output, true);
+
+
+
+
+}
 

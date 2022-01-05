@@ -13,6 +13,19 @@ import time
 
 @plugin(category='compas_wood_cpp', pluggable_name='compas_wood_cpp_test')
 def wrapper_test():
+    """Test if C++ code works
+
+    Parameters
+    ----------
+
+
+    Returns
+    -------
+    Prints 
+        Hello from CPP Wood
+
+    """
+
     joinery_solver.test()
 
 
@@ -25,7 +38,8 @@ def get_connection_zones(
     three_valance_element_indices_and_instruction=None,
     default_joint_parameters=None
     ):
-    """Compute joinery.
+    """Compute joinery
+
     Parameters
     ----------
     polylines_vertices_XYZ : pairs of polylines
@@ -35,7 +49,9 @@ def get_connection_zones(
 
     Returns
     -------
-    nothing for now
+    List of Polylines 
+        with added joints
+
     """
 
     # ==============================================================================
@@ -125,19 +141,33 @@ def get_connection_zones(
 
 
     start_time = time.time()
-    pointsets = joinery_solver.connectionzonesCGAL.get_connection_zones_compas( V, F, D, J, X, P, search_type,division_distance,shift,output_type,triangulate )
+    pointsets, pointsets_group_ids = joinery_solver.connectionzonesCGAL.get_connection_zones_compas( V, F, D, J, X, P, search_type,division_distance,shift,output_type,triangulate )
     print("==================================== %s ms ====================================" %  round((time.time() - start_time)*1000.0) )
-
+    print(type(pointsets))
     # ==============================================================================
     # Process output
     # ==============================================================================
 
     polylines = []
-    for points in pointsets:
-        points = [Point(*point) for point in points]
-        polyline = Polyline(points)
-        polylines.append(polyline)
+    
+    temp_collection = []
+    last_id=pointsets_group_ids[0]
 
+    for i in range (len(pointsets)) :
+        points = [Point(*point) for point in pointsets[i]]
+        polyline = Polyline(points)
+        
+
+        if(last_id != pointsets_group_ids[i]):
+            polylines.append(temp_collection)
+            temp_collection = []
+            #print("Hi")
+
+        temp_collection.append(polyline)
+        last_id = pointsets_group_ids[i]
+        #print(pointsets_group_ids[i])
+
+    polylines.append(temp_collection)
     print("============================================================================== CPP -")
     print("Output")
     print("Number of Polylines " , len(polylines))

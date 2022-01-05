@@ -9,6 +9,18 @@ compas_wood
 .. toctree::
     :maxdepth: 1
 
+Functions
+=========
+
+joinery_solver
+----------------
+.. autosummary::
+    :toctree: generated/
+    :nosignatures:
+
+    joinery.wrapper_test
+    joinery.get_connection_zones
+
 
 """
 
@@ -30,6 +42,10 @@ HOME = os.path.abspath(os.path.join(HERE, "../../"))
 DATA = os.path.abspath(os.path.join(HOME, "data"))
 DOCS = os.path.abspath(os.path.join(HOME, "docs"))
 TEMP = os.path.abspath(os.path.join(HOME, "temp"))
+
+__all_plugins__ = [
+    'compas_cgal.joinery',
+]
 
 
 __all__ = ["HOME", "DATA", "DOCS", "TEMP"]

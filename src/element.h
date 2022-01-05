@@ -53,8 +53,8 @@ public:
 	void get_joints_geometry(std::vector<joint>& joints, std::vector <std::vector <CGAL_Polyline>>& output, int what_to_expose);
 	void get_joints_geometry_as_closed_polylines_replacing_edges(std::vector<joint>& joints, std::vector <std::vector <CGAL_Polyline>>& output);
 	bool intersection_closed_and_open_paths_2D(
-		CGAL_Polyline& closed_pline_cutter, CGAL_Polyline& pline_to_cut, IK::Plane_3& plane, CGAL_Polyline& c,  
-		int (&edge_pair)[2], std::pair<double, double>& cp_pair);
+		CGAL_Polyline& closed_pline_cutter, CGAL_Polyline& pline_to_cut, IK::Plane_3& plane, CGAL_Polyline& c,
+		int(&edge_pair)[2], std::pair<double, double>& cp_pair);
 	void get_joints_geometry_as_closed_polylines_performing_intersection(std::vector<joint>& joints, std::vector <std::vector <CGAL_Polyline>>& output);
 };
 
@@ -369,8 +369,8 @@ inline void element::get_joints_geometry_as_closed_polylines_replacing_edges(std
 
 //inline bool element::intersection_closed_and_open_paths_2D(CGAL_Polyline& closed_pline_cutter, std::pair<int, int>& edge_pair, CGAL_Polyline& pline_to_cut, IK::Plane_3& plane, CGAL_Polyline& c, CGAL_Polyline& output, std::pair<double, double>& cp_pair) {
 inline bool element::intersection_closed_and_open_paths_2D(
-	CGAL_Polyline& closed_pline_cutter, CGAL_Polyline& pline_to_cut, IK::Plane_3& plane, CGAL_Polyline& c, 
-	int(&edge_pair)[2], std::pair<double, double>&cp_pair) {
+	CGAL_Polyline& closed_pline_cutter, CGAL_Polyline& pline_to_cut, IK::Plane_3& plane, CGAL_Polyline& c,
+	int(&edge_pair)[2], std::pair<double, double>& cp_pair) {
 
 	/////////////////////////////////////////////////////////////////////////////////////
 	//Orient from 3D to 2D
@@ -417,7 +417,7 @@ inline bool element::intersection_closed_and_open_paths_2D(
 	std::vector< ClipperLib::IntPoint > pathA(a.size());
 	std::vector< ClipperLib::IntPoint > pathB(b.size() - 1);
 
-	for (int i = 0; i < a.size() ; i++) {
+	for (int i = 0; i < a.size(); i++) {
 		pathA[i] = ClipperLib::IntPoint(a[i].x() * scale, a[i].y() * scale);
 		//printf("%f,%f,%f \n", a[i].x(), a[i].y(), a[i].z());
 	}
@@ -430,7 +430,7 @@ inline bool element::intersection_closed_and_open_paths_2D(
 
 
 	ClipperLib::Clipper clipper;
-	
+
 	clipper.AddPath(pathA, ClipperLib::ptSubject, false);
 	clipper.AddPath(pathB, ClipperLib::ptClip, true);
 	//ClipperLib::Paths C;
@@ -479,7 +479,7 @@ inline bool element::intersection_closed_and_open_paths_2D(
 
 				//Check if insertable curve end is closest to the main curve end, if not reverse
 				if (CGAL::squared_distance(c.back(), pts.front()) > CGAL::squared_distance(c.back(), pts.back()))
-					std::reverse(pts.begin(),pts.end());
+					std::reverse(pts.begin(), pts.end());
 
 				for (size_t j = 1; j < pts.size(); j++)
 					c.emplace_back(pts[j]);
@@ -489,12 +489,12 @@ inline bool element::intersection_closed_and_open_paths_2D(
 			//			c.emplace_back(polynode->Contour[j].X / scale, polynode->Contour[j].Y / scale, 0);
 			//}
 
-		
+
 			polynode = polynode->GetNext();
 			count++;
 			//break;
 		}
-	
+
 
 
 		//Transform to 3D space
@@ -507,13 +507,13 @@ inline bool element::intersection_closed_and_open_paths_2D(
 		///////////////////////////////////////////////////////////////////////////////
 		double t0_, t1_;
 		//for (int k = edge_pair[0]; k <= edge_pair[1]; k++) {
-		for (int k = 0; k <= closed_pline_cutter.size()-1; k++) {
+		for (int k = 0; k <= closed_pline_cutter.size() - 1; k++) {
 			IK::Segment_3 s(closed_pline_cutter[k], closed_pline_cutter[k + 1]);
 			double t0;
 			CGAL_PolylineUtil::ClosestPointTo(c.front(), s, t0);
 			if (t0 < 0 || t0>1) continue;
 			if (CGAL::squared_distance(CGAL_PolylineUtil::PointAt(s, t0), c.front()) < GlobalToleranceSquare) {
-				t0_ = k+t0;
+				t0_ = k + t0;
 				break;
 			}
 		}
@@ -525,7 +525,7 @@ inline bool element::intersection_closed_and_open_paths_2D(
 			CGAL_PolylineUtil::ClosestPointTo(c.back(), s, t1);
 			if (t1 < 0 || t1>1) continue;
 			if (CGAL::squared_distance(CGAL_PolylineUtil::PointAt(s, t1), c.back()) < GlobalToleranceSquare) {
-				t1_ = k+t1;
+				t1_ = k + t1;
 				break;
 			}
 		}
@@ -533,7 +533,7 @@ inline bool element::intersection_closed_and_open_paths_2D(
 		cp_pair = std::pair<double, double>(t0_, t1_);
 		if (t0_ > t1_) {
 			std::swap(cp_pair.first, cp_pair.second);
-			std::reverse(c.begin(),c.end());
+			std::reverse(c.begin(), c.end());
 		}
 
 	} else {
@@ -549,16 +549,17 @@ inline bool element::intersection_closed_and_open_paths_2D(
 
 inline void element::get_joints_geometry_as_closed_polylines_performing_intersection(std::vector<joint>& joints, std::vector <std::vector <CGAL_Polyline>>& output) {
 
-	//�PTIMIZE CASE(5) BECASE EDGE ARE KNOWN, BUT CHECK ALSO CROSS JOINT ENSURE THAT YOU TAKE CROSSING EDGES
+	//OPTIMIZE CASE(5) BECAUSE EDGE ARE KNOWN, BUT CHECK ALSO CROSS JOINT ENSURE THAT YOU TAKE CROSSING EDGES
 	//CHANGE TO 2D METHOD, TO AVOID MULTIPLE THE SAME MATRIX CREATION FOR ORIENTATION TO 2D I.E. CLIPPER AND LINELINE3D
 	//you are in a loop
 	//only for objects that has one element as a joint and edges to insert are known
+	//List order: top0 bottom0 top1 bottom1 ... topN bottomN
 
 	CGAL_Polyline pline0 = this->polylines[0];
 	CGAL_Polyline pline1 = this->polylines[1];
 
-	std::map< double,   std::pair<std::pair<double, double>,CGAL_Polyline>      > sorted_segments_or_points_0;
-	std::map< double,   std::pair<std::pair<double, double>, CGAL_Polyline>     > sorted_segments_or_points_1;
+	std::map< double, std::pair<std::pair<double, double>, CGAL_Polyline>      > sorted_segments_or_points_0;
+	std::map< double, std::pair<std::pair<double, double>, CGAL_Polyline>     > sorted_segments_or_points_1;
 
 	std::vector<bool> flags0(pline0.size() - 1);
 	std::vector<bool> flags1(pline1.size() - 1);
@@ -570,19 +571,19 @@ inline void element::get_joints_geometry_as_closed_polylines_performing_intersec
 	IK::Segment_3 last_segment1;
 	int lastID = -1;
 	for (int i = 2; i < this->j_mf.size(); i++) {
-		
+
 		for (int j = 0; j < this->j_mf[i].size(); j++) {//
 
 			///////////////////////////////////////////////////////////////////////////////
 			//Skip undefined names and if tiles has more than 1 polyline to insert
 			///////////////////////////////////////////////////////////////////////////////
 			bool male_or_female = std::get<1>(j_mf[i][j]);
-			if (joints[std::get<0>(j_mf[i][j])].name == "" ) continue;
+			if (joints[std::get<0>(j_mf[i][j])].name == "") continue;
 			if (joints[std::get<0>(j_mf[i][j])](male_or_female, true).size() != 2) continue;
 			//if (!(joints[std::get<0>(j_mf[i][j])].get_first_cutting_type(male_or_female) == '1' || joints[std::get<0>(j_mf[i][j])].get_first_cutting_type(male_or_female) == '3')) continue;
 
-	
-				
+
+
 			///////////////////////////////////////////////////////////////////////////////
 			//Take last lines Element outline can be not in the same order as joint outlines Take joint segment and measure its point to the plane
 			///////////////////////////////////////////////////////////////////////////////
@@ -594,8 +595,8 @@ inline void element::get_joints_geometry_as_closed_polylines_performing_intersec
 			if (flag)
 				joints[std::get<0>(j_mf[i][j])].reverse(std::get<1>(j_mf[i][j]));
 
-			
-		
+
+
 
 			///////////////////////////////////////////////////////////////////////////////
 			//Intersect rectangle or line
@@ -604,7 +605,7 @@ inline void element::get_joints_geometry_as_closed_polylines_performing_intersec
 
 				case(2):
 				{//Reposition end points
-				
+
 					int id = i - 2;
 					int n = pline0.size() - 1;
 
@@ -623,7 +624,7 @@ inline void element::get_joints_geometry_as_closed_polylines_performing_intersec
 					IK::Segment_3 prev_segment_0(pline0[next], pline0[nextnext]);
 					IK::Segment_3 next_segment_1(pline1[prev], pline1[id]);
 					IK::Segment_3 prev_segment_1(pline1[next], pline1[nextnext]);
-			
+
 
 					///////////////////////////////////////////////////////////////////////////////
 					//Intersect them with side lines, same principle must work on both polygons
@@ -655,13 +656,13 @@ inline void element::get_joints_geometry_as_closed_polylines_performing_intersec
 							p2_int = p1;
 						}
 					}
-		
+
 
 					if (flag0) pline0[id] = p0_int;
 					if (flag1) pline0[next] = p1_int;
 					if (flag2) pline1[id] = p2_int;
 					if (flag3) pline1[next] = p3_int;
-					
+
 
 
 					last_segment0 = joint_line_0;
@@ -683,7 +684,7 @@ inline void element::get_joints_geometry_as_closed_polylines_performing_intersec
 						joints[std::get<0>(j_mf[id + 2][j])](std::get<1>(j_mf[id + 2][j]), !flag)[0].front(),
 						joints[std::get<0>(j_mf[id + 2][j])](std::get<1>(j_mf[id + 2][j]), !flag)[0].back()
 					);
-					
+
 					if (!flip) {
 
 						//bottom
@@ -713,7 +714,7 @@ inline void element::get_joints_geometry_as_closed_polylines_performing_intersec
 				case(5):
 				{//two edges
 
-				
+
 					int edge_pair[2];
 					joints[std::get<0>(j_mf[i][j])].get_edge_ids(std::get<1>(j_mf[i][j]), edge_pair[0], edge_pair[1]);
 					if (edge_pair[0] > edge_pair[1])
@@ -729,13 +730,13 @@ inline void element::get_joints_geometry_as_closed_polylines_performing_intersec
 						std::pair<double, double> cp_pair_0(0, 0);
 						CGAL_Polyline joint_pline_0;
 						intersection_closed_and_open_paths_2D(pline0, joints[std::get<0>(j_mf[i][j])](std::get<1>(j_mf[i][j]), true).front(), this->planes[0], joint_pline_0, edge_pair, cp_pair_0);
-						sorted_segments_or_points_0.insert(std::make_pair((cp_pair_0.first + cp_pair_0.first) * 0.5, std::pair<std::pair<double,double>,CGAL_Polyline>{ cp_pair_0,joint_pline_0 } ));
+						sorted_segments_or_points_0.insert(std::make_pair((cp_pair_0.first + cp_pair_0.first) * 0.5, std::pair<std::pair<double, double>, CGAL_Polyline>{ cp_pair_0, joint_pline_0 }));
 
 						std::pair<double, double> cp_pair_1(0, 0);
 						CGAL_Polyline joint_pline_1;
 						intersection_closed_and_open_paths_2D(pline1, joints[std::get<0>(j_mf[i][j])](std::get<1>(j_mf[i][j]), false).front(), this->planes[1], joint_pline_1, edge_pair, cp_pair_1);
 						sorted_segments_or_points_1.insert(std::make_pair((cp_pair_1.first + cp_pair_1.first) * 0.5, std::pair<std::pair<double, double>, CGAL_Polyline>{ cp_pair_1, joint_pline_1 }));
-						
+
 						point_count += joint_pline_1.size();
 						//pairs0.push_back(cp_pair_0);
 						//pairs1.push_back(cp_pair_1);
@@ -745,7 +746,7 @@ inline void element::get_joints_geometry_as_closed_polylines_performing_intersec
 					}
 
 
-				
+
 					break;
 				}
 				default:
@@ -754,7 +755,7 @@ inline void element::get_joints_geometry_as_closed_polylines_performing_intersec
 			}
 
 		}
-		
+
 	}
 
 
@@ -769,7 +770,7 @@ inline void element::get_joints_geometry_as_closed_polylines_performing_intersec
 			point_count--;
 		}
 	point_flags_0[point_flags_0.size() - 1] = false;//ignore last
-	
+
 	//CGAL_Debug(std::floor(sorted_segments_or_points_0.begin()->second.first.first), sorted_segments_or_points_0.begin()->second.first.second);
 
 
@@ -784,7 +785,7 @@ inline void element::get_joints_geometry_as_closed_polylines_performing_intersec
 		std::reverse(sorted_segments_or_points_0.begin()->second.second.begin(), sorted_segments_or_points_0.begin()->second.second.end());
 		point_flags_0[0] = false;
 		point_count--;
-	} 
+	}
 
 	if (std::floor(sorted_segments_or_points_1.begin()->second.first.first) < 1 && std::ceil(sorted_segments_or_points_1.begin()->second.first.second) == (pline1.size() - 1)) {
 		std::reverse(sorted_segments_or_points_1.begin()->second.second.begin(), sorted_segments_or_points_1.begin()->second.second.end());
@@ -799,7 +800,7 @@ inline void element::get_joints_geometry_as_closed_polylines_performing_intersec
 
 	//CGAL_Debug(99999);
 	for (size_t i = 0; i < point_flags_0.size(); i++)
-		if (point_flags_0[i]) 
+		if (point_flags_0[i])
 			sorted_segments_or_points_0.insert(std::make_pair(i, std::pair< std::pair<double, double>, CGAL_Polyline>{ std::pair<double, double>(i, i), CGAL_Polyline{ pline0[i] } }));
 
 	//	
@@ -827,7 +828,7 @@ inline void element::get_joints_geometry_as_closed_polylines_performing_intersec
 		for (size_t j = 0; j < x.second.second.size(); j++)
 			pline1_new.emplace_back(x.second.second[j]);
 	}
-	
+
 
 
 	///////////////////////////////////////////////////////////////////////////////

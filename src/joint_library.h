@@ -321,7 +321,7 @@ namespace joint_library {
 		int start = 0;
 
 		IK::Vector_3 v = shift == 0 ? IK::Vector_3(0, 0, 0) : IK::Vector_3(0, 0, RemapNumbers(shift, 0, 1.0, -0.5, 0.5) / (divisions + 1));
-		
+
 		for (int i = start; i < 4; i += 1) {
 
 			int mid = (int)(arrays[i].size() * 0.5);
@@ -450,7 +450,7 @@ namespace joint_library {
 		if (joint.tile_parameters.size() > 0)
 			divisions = joint.tile_parameters[0];
 
-		divisions += divisions % 2+2;
+		divisions += divisions % 2 + 2;
 		////////////////////////////////////////////////////////////////////
 		//Interpolate points
 		////////////////////////////////////////////////////////////////////
@@ -472,7 +472,7 @@ namespace joint_library {
 			int mid = (int)(arrays[i].size() * 0.5);
 
 			for (int j = 0; j < arrays[i].size(); j++) {
-			
+
 				//int flip = (j % 2 == 0) ? 1 : -1;
 				//flip = i < 2 ? flip : flip * -1;
 				bool flip = j % 2 == 0;
@@ -496,12 +496,12 @@ namespace joint_library {
 
 				/*bool flip = j % 2 == 0;
 				flip = i < 2 ? flip : !flip;*/
-				
+
 				bool flip = j % 2 == 0;
 				flip = i < 2 ? flip : !flip;
-				
-				
-			
+
+
+
 
 				if (flip) {
 					pline.push_back(arrays[i + 0][j]);
@@ -681,7 +681,7 @@ namespace joint_library {
 		////////////////////////////////////////////////////////////////////
 		int start = 0;
 
-		
+
 		IK::Vector_3 v = shift == 0 ? IK::Vector_3(0, 0, 0) : IK::Vector_3(0, 0, RemapNumbers(shift, 0, 1.0, -0.5, 0.5) / (divisions + 1));
 		for (int i = start; i < 4; i++) {
 
@@ -895,16 +895,16 @@ namespace joint_library {
 
 		double scale = 1;
 		joint.f[0] = {
-		
+
 			{	IK::Point_3(-0.5,0.5,scale),IK::Point_3(-0.5,-0.5,scale),IK::Point_3(-0.5,-0.5,0),IK::Point_3(-0.5,0.5,0),IK::Point_3(-0.5,0.5,scale) },
 			{	IK::Point_3(-0.5,0.5,scale),IK::Point_3(-0.5,-0.5,scale),IK::Point_3(-0.5,-0.5,0),IK::Point_3(-0.5,0.5,0),IK::Point_3(-0.5,0.5,scale) }
-	
+
 		};
 
 		joint.f[1] = {
 			{  IK::Point_3(0.5, 0.5, scale), IK::Point_3(0.5, -0.5, scale),  IK::Point_3(0.5, -0.5, 0), IK::Point_3(0.5, 0.5, 0), IK::Point_3(0.5, 0.5, scale)  },
 			{  IK::Point_3(0.5, 0.5, scale), IK::Point_3(0.5, -0.5, scale),  IK::Point_3(0.5, -0.5, 0), IK::Point_3(0.5, 0.5, 0), IK::Point_3(0.5, 0.5, scale) }
-			
+
 
 		};
 
@@ -953,10 +953,10 @@ namespace joint_library {
 		//Construct polylines from points
 		joint.f[0] = {
 
-		  { p[0]+v0, p[1]-v0,p[2]-v0,p[3] + v0,p[0]+v0 },//Center
+		  { p[0] + v0, p[1] - v0,p[2] - v0,p[3] + v0,p[0] + v0 },//Center
 
-		  { p[1]-v0, p[0]+v0,p[0 + 8]+v0,p[1 + 8] - v0,p[1] - v0 },//TopSide0
-		  { p[3]+v0, p[2]-v0,p[2 + 8]-v0,p[3 + 8] + v0,p[3] + v0 },//TopSide1
+		  { p[1] - v0, p[0] + v0,p[0 + 8] + v0,p[1 + 8] - v0,p[1] - v0 },//TopSide0
+		  { p[3] + v0, p[2] - v0,p[2 + 8] - v0,p[3 + 8] + v0,p[3] + v0 },//TopSide1
 		  { p[2], p[1],p[1 + 12],p[2 + 12],p[2] },//BotSide0
 		  { p[0], p[3],p[3 + 12],p[0 + 12],p[0] },//BotSide1
 
@@ -1072,7 +1072,7 @@ namespace joint_library {
 		//myfile << joints.size()<< " \n";
 		for (auto& joint : joints) {
 
-		
+
 			//Select user given type
 			//types0+265 
 			int id_representing_joing_name = -1;
@@ -1081,21 +1081,20 @@ namespace joint_library {
 				int b = elements[joint.v1].joint_types[joint.f1_0];
 				id_representing_joing_name = (a > b) ? a : b;
 
-			/*	for (auto& o : elements[joint.v0].joint_types)
-					myfile << o << " ";
-				myfile << "\n";
+				/*	for (auto& o : elements[joint.v0].joint_types)
+						myfile << o << " ";
+					myfile << "\n";
 
-				for (auto& o : elements[joint.v1].joint_types)
-					myfile << o << " ";
-				myfile << "\n";
-				
-				myfile << joint.f0_0 << "\n";
-				myfile << joint.f1_0 << "\n";
-				myfile << a << "\n";
-				myfile << b << "\n";
-				myfile << id_representing_joing_name <<"\n";*/
-			}
-			else if (elements[joint.v0].joint_types.size())
+					for (auto& o : elements[joint.v1].joint_types)
+						myfile << o << " ";
+					myfile << "\n";
+
+					myfile << joint.f0_0 << "\n";
+					myfile << joint.f1_0 << "\n";
+					myfile << a << "\n";
+					myfile << b << "\n";
+					myfile << id_representing_joing_name <<"\n";*/
+			} else if (elements[joint.v0].joint_types.size())
 				id_representing_joing_name = elements[joint.v0].joint_types[joint.f0_0];
 			else if (elements[joint.v1].joint_types.size())
 				id_representing_joing_name = elements[joint.v1].joint_types[joint.f1_0];
@@ -1103,7 +1102,7 @@ namespace joint_library {
 
 			//myfile << joint.f0_0 << " " << joint.f0_1 << " \n";
 			//myfile << elements[joint.v0].joint_types[joint.f0_0] << " " << elements[joint.v1].joint_types[joint.f1_0] << " \n";
-		
+
 
 			//When users gives an input -> default_parameters_for_four_types
 			int number_of_types = 6;//side-side in-plane | side-side out-of-plane | top-side | cross | top-top | side-side rotated
@@ -1130,7 +1129,7 @@ namespace joint_library {
 					int group = 0;
 					division_distance = default_parameters_for_four_types[number_of_parameters * group + 0];
 					shift = default_parameters_for_four_types[number_of_parameters * group + 1];
-					if(id_representing_joing_name == -1)//for cases when joint types per each edge are not defined
+					if (id_representing_joing_name == -1)//for cases when joint types per each edge are not defined
 						id_representing_joing_name = default_parameters_for_four_types[number_of_parameters * group + 2];
 				}
 
@@ -1226,7 +1225,7 @@ namespace joint_library {
 						id_representing_joing_name = default_parameters_for_four_types[number_of_parameters * group + 2];
 				}
 
-				
+
 
 				switch (id_representing_joing_name) {
 

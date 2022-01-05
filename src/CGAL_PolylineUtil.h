@@ -10,8 +10,7 @@ namespace CGAL_PolylineUtil {
 
 
 
-	inline IK::Point_3 PointAt(const IK::Segment_3& l, double t)
-	{
+	inline IK::Point_3 PointAt(const IK::Segment_3& l, double t) {
 
 		//s[0].z()
 		// 26 Feb 2003 Dale Lear
@@ -33,8 +32,7 @@ namespace CGAL_PolylineUtil {
 
 
 
-	inline bool ClosestPointTo(const IK::Point_3& point, const IK::Segment_3& s, double& t)
-	{
+	inline bool ClosestPointTo(const IK::Point_3& point, const IK::Segment_3& s, double& t) {
 		bool rc = false;
 
 		const IK::Vector_3 D = s.to_vector();
@@ -42,16 +40,16 @@ namespace CGAL_PolylineUtil {
 
 		if (DoD > 0.0) {
 
-			if ((point - s[0]).squared_length() <= (point - s[1]).squared_length()) 
+			if ((point - s[0]).squared_length() <= (point - s[1]).squared_length())
 				t = ((point - s[0]) * D) / DoD;
-			else 
+			else
 				t = 1.0 + ((point - s[1]) * D) / DoD;
 
 			rc = true;
 
-		}else {// (GBA) Closest point to a degenerate line works as well
+		} else {// (GBA) Closest point to a degenerate line works as well
 			t = 0.0;
-			rc = true;			
+			rc = true;
 		}
 
 		return rc;
@@ -71,8 +69,7 @@ namespace CGAL_PolylineUtil {
 
 	}
 
-	inline void LineLineOverlapAverage(const IK::Segment_3& l0, const IK::Segment_3& l1, IK::Segment_3& result)
-	{
+	inline void LineLineOverlapAverage(const IK::Segment_3& l0, const IK::Segment_3& l1, IK::Segment_3& result) {
 		IK::Segment_3 lA;
 		LineLineOverlap(l0, l1, lA);
 		IK::Segment_3 lB;
@@ -86,8 +83,7 @@ namespace CGAL_PolylineUtil {
 
 	}
 
-	inline void LineLineOverlapAverage(const CGAL_Polyline& l0_, const CGAL_Polyline& l1_, IK::Segment_3& result)
-	{
+	inline void LineLineOverlapAverage(const CGAL_Polyline& l0_, const CGAL_Polyline& l1_, IK::Segment_3& result) {
 
 		IK::Segment_3 l0(l0_[0], l0_[1]);
 		IK::Segment_3 l1(l1_[0], l1_[1]);
@@ -106,8 +102,7 @@ namespace CGAL_PolylineUtil {
 
 	}
 
-	inline void line_line_overlap_average_segments(const IK::Segment_3& l0, const IK::Segment_3& l1, IK::Segment_3& result)
-	{
+	inline void line_line_overlap_average_segments(const IK::Segment_3& l0, const IK::Segment_3& l1, IK::Segment_3& result) {
 
 
 
@@ -200,8 +195,7 @@ namespace CGAL_PolylineUtil {
 		return closestDistance;
 	}
 
-	inline IK::Segment_3 LineLineOverlap(IK::Segment_3& l0, IK::Segment_3& l1)
-	{
+	inline IK::Segment_3 LineLineOverlap(IK::Segment_3& l0, IK::Segment_3& l1) {
 
 		double t[4];
 		t[0] = 0;
@@ -219,8 +213,7 @@ namespace CGAL_PolylineUtil {
 
 
 
-	inline bool IsClosed(CGAL_Polyline& input, double tolerance = 0.0001)
-	{
+	inline bool IsClosed(CGAL_Polyline& input, double tolerance = 0.0001) {
 		return CGAL_VectorUtil::DistanceSquare(input.front(), input.back()) < tolerance;
 		// IK::Point_3 p0(0, 0, 0);
 		// IK::Point_3 p1(0, 0, 0);
@@ -343,7 +336,7 @@ namespace CGAL_PolylineUtil {
 	}
 
 
-	
+
 
 	inline bool PlanePolylineIntersection(CGAL_Polyline& polyline, IK::Plane_3& plane, std::vector<IK::Point_3>& points, std::vector<int>& edge_ids) {
 
@@ -369,9 +362,9 @@ namespace CGAL_PolylineUtil {
 			}
 
 			//if(  CGAL::squared_distance(plane.projection(segment[0]), segment[0])  )
-			
+
 			const auto result = CGAL::intersection(segment, plane);
-			
+
 			//CGAL_Debug(3);
 			if (result) {
 				if (const IK::Point_3* p = boost::get<IK::Point_3>(&*result)) {
@@ -387,7 +380,7 @@ namespace CGAL_PolylineUtil {
 	}
 
 	inline int IsPointPairInside(
-		CGAL_Polyline& polyline, IK::Plane_3& plane, 
+		CGAL_Polyline& polyline, IK::Plane_3& plane,
 		std::vector<IK::Point_3>& testPoints, std::vector<int>& testPointsID, double scale = 100000.0) {
 
 		/////////////////////////////////////////////////////////////////////////////////////
@@ -459,27 +452,27 @@ namespace CGAL_PolylineUtil {
 
 	}
 
-	inline bool PlanePolyline(CGAL_Polyline& c0, CGAL_Polyline& c1, 
+	inline bool PlanePolyline(CGAL_Polyline& c0, CGAL_Polyline& c1,
 		IK::Plane_3& p0, IK::Plane_3& p1,
-		IK::Segment_3& line, std::pair<int,int>& pair) {//, IK::Segment_3& cornerMaxLine
+		IK::Segment_3& line, std::pair<int, int>& pair) {//, IK::Segment_3& cornerMaxLine
 
 		//printf("H");
 		bool debug = false;
-		
+
 		/////////////////////////////////////////////////////////////////////////////////////////////////////////
 		//Perform both events 
 		/////////////////////////////////////////////////////////////////////////////////////////////////////////
 		std::vector<IK::Point_3> pts0;
 		std::vector<int> edge_ids_0;
-		if(!PlanePolylineIntersection(c0, p1, pts0, edge_ids_0)) return false;
-		
+		if (!PlanePolylineIntersection(c0, p1, pts0, edge_ids_0)) return false;
+
 		std::vector<IK::Point_3> pts1;
 		std::vector<int> edge_ids_1;
 		if (!PlanePolylineIntersection(c1, p0, pts1, edge_ids_1)) return false;
 		//printf(" %zi ", pts0.size());
 		//printf(" %zi ", pts1.size());
 
-	
+
 		/////////////////////////////////////////////////////////////////////////////////////////////////////////
 		//Check1: if there are 2 intersections
 		/////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -511,23 +504,20 @@ namespace CGAL_PolylineUtil {
 
 		if (count0 == 0 && count1 == 0) {
 			return false;
-		}
-		else if (std::abs(count0 - count1) == 2) {//rectangle curve inside a rectangle curve
+		} else if (std::abs(count0 - count1) == 2) {//rectangle curve inside a rectangle curve
 
 			line = count0 == 2 ? IK::Segment_3(pts0[0], pts0[1]) : IK::Segment_3(pts1[0], pts1[1]);
-			pair = count0 == 2 ? std::pair<int,int>(edge_ids_0[0], edge_ids_0[1]) : std::pair<int, int>(edge_ids_1[0], edge_ids_1[1]);
+			pair = count0 == 2 ? std::pair<int, int>(edge_ids_0[0], edge_ids_0[1]) : std::pair<int, int>(edge_ids_1[0], edge_ids_1[1]);
 
 			return true;
 
 
-		}
-		else if (count0 == 1 && count1 == 1) {
+		} else if (count0 == 1 && count1 == 1) {
 			line = IK::Segment_3(pts0[ID0[0]], pts1[ID1[0]]);
 			pair = std::pair<int, int>(edge_ids_0[ID0[0]], edge_ids_1[ID1[0]]);
 			//CGAL_Debug(4444);
 			return true;
-		}
-		else if (count0 > 1 || count1 > 1) {
+		} else if (count0 > 1 || count1 > 1) {
 
 			std::vector<IK::Point_3> pts(ID0.size() + ID1.size());
 			for (int i = 0; i < ID0.size(); i++)
@@ -539,7 +529,7 @@ namespace CGAL_PolylineUtil {
 			CGAL::Bbox_3 AABB = CGAL::bbox_3(pts.begin(), pts.end(), IK());
 			auto p0 = IK::Point_3(AABB.xmin(), AABB.ymin(), AABB.zmin());
 			auto p1 = IK::Point_3(AABB.xmax(), AABB.ymax(), AABB.zmax());
-			line = IK::Segment_3(p0,p1);
+			line = IK::Segment_3(p0, p1);
 			int e0, e1;
 
 			//Find edge ID - not optimized...
@@ -556,8 +546,8 @@ namespace CGAL_PolylineUtil {
 					break;
 				}
 			}
-			pair = std::pair<int, int>(e0,e1);
-			
+			pair = std::pair<int, int>(e0, e1);
+
 			return true;
 		}
 
@@ -628,8 +618,7 @@ namespace CGAL_PolylineUtil {
 		if (proportion0 != 0 || proportion1 != 0) {
 			p0 += v * proportion0;
 			p1 -= v * proportion1;
-		}
-		else {
+		} else {
 			CGAL_VectorUtil::Unitize(v);
 			p0 += v * dist0;
 			p1 -= v * dist1;

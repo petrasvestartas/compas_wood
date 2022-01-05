@@ -115,6 +115,9 @@ namespace compas {
 
 	std::vector<compas::RowMatrixXd> result_from_polylinesVector(std::vector < CGAL_Polyline>& polylines, bool debug);
 	std::vector<compas::RowMatrixXd> result_from_polylinesVector(std::vector < std::vector < CGAL_Polyline>>& polylines, bool debug);
+
+	std::tuple< std::vector<compas::RowMatrixXd>, std::vector<int>  > result_tuple_from_polylinesVector(std::vector < std::vector < CGAL_Polyline>>& polylines_vector, bool debug);
+
 }
 
 
@@ -327,7 +330,7 @@ inline void compas::polylines_from_vertices_and_faces_and_properties(
 		out_default_parameters_for_joint_types.reserve(default_parameters_for_joint_types_matrix.size());
 
 
-		for (int i = 0; i < default_parameters_for_joint_types_matrix.size(); i ++) {
+		for (int i = 0; i < default_parameters_for_joint_types_matrix.size(); i++) {
 			out_default_parameters_for_joint_types.push_back(default_parameters_for_joint_types_matrix(i, 0));
 
 		}
@@ -426,26 +429,24 @@ inline std::vector<compas::RowMatrixXd> compas::result_from_polylinesVector(std:
 	return pointsets;
 }
 
-inline std::vector<compas::RowMatrixXd> compas::result_from_polylinesVector(std::vector < std::vector < CGAL_Polyline>>& polylines_vector, bool debug) {
+inline std::tuple< std::vector<compas::RowMatrixXd>, std::vector<int>  > compas::result_tuple_from_polylinesVector(std::vector < std::vector < CGAL_Polyline>>& polylines_vector, bool debug) {
 
 	std::vector<compas::RowMatrixXd> pointsets;
+	std::vector<int> pointsets_groups_ids;
 
-	int kk = 0;
+
+	int i = 0;
 	for (auto& polylines : polylines_vector) {
 
-		kk++;
 
-		//if (kk % 2 == 1) {
-		//	continue;
-		//}
-
-		for (auto i = polylines.begin(); i != polylines.end(); i++) {
+		for (auto j = polylines.begin(); j != polylines.end(); j++) {
 
 
 
-			const CGAL_Polyline& poly = *i;
+			const CGAL_Polyline& poly = *j;
 			int n = poly.size();
 			compas::RowMatrixXd points(n, 3);
+
 
 			for (int k = 0; k < n; k++) {
 				points(k, 0) = (double)poly[k].hx();
@@ -456,8 +457,11 @@ inline std::vector<compas::RowMatrixXd> compas::result_from_polylinesVector(std:
 			}
 
 			pointsets.push_back(points);
+			pointsets_groups_ids.push_back(i);
 
 		}
+
+		i++;
 	}
 	//  printf("CPP number of points: %i ", pointsets.size());
 	/*
@@ -483,12 +487,12 @@ inline std::vector<compas::RowMatrixXd> compas::result_from_polylinesVector(std:
 					myfile << poly[k].hx() << " " << poly[k].hy() << " " << poly[k].hz() << " " << "\n";
 				myfile << ("\n");
 			}
-		
+
 		}
 		myfile.close();
 	}
 	*/
-	return pointsets;
+	return std::make_tuple(pointsets, pointsets_groups_ids);
 }
 
 

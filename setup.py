@@ -55,7 +55,6 @@ ext_modules = [
         sorted([
             'src/xxx_interop_python.cpp',
             'src/clipper.cpp',
-            'src/connection_zones.cpp',
         ]),
         include_dirs=[
             './include',

@@ -6,12 +6,28 @@ from compas.datastructures import Mesh
 from compas_view2.app import App
 from compas_view2.objects import Collection
 import compas_view2.objects as w
+from compas_view2.views import view
 
-def display(input, result):
-    viewer = App(show_grid=False, width = 3840,height = 2160-250)  
-    DisplayPolylines(viewer,input,0.01,0.5, 0.5, 0.5,1,True) #polylines without joints
-    DisplayPolylines(viewer,result,0.01, 1.0, 0.0, 0.0,3,False) #polylines with joints
+#python
+from random import random, randrange
+
+def display(input, result, scale = 0.01, moveX = 1.25):
+    viewer = App(show_grid=False, width = 3840,height = 2160-250, enable_sidebar=True,version= '120')  
+    
+    
+        
+    #preview
+    DisplayPolylines(viewer,input,scale,1.0, 0.0, 0.0,3,True,moveX) #polylines without joints
+    
+    for i in range(len(result)):
+        if(len(result)>0):
+        #print("local count " + (str)(len(result[i])))
+        #DisplayPolylines(viewer,result[i],scale, 206/255.0, 0, 88/255.0,3,False,0) #polylines with joints
+            DisplayPolylines(viewer,result[i],scale,randrange(0,206)/255.0,0,randrange(0,88)/255.0, 3,False,0) #polylines with joints
     viewer.run()
+  
+
+
 
 
 
@@ -46,8 +62,11 @@ def DisplayPolylinesAsMesh(viewer, polylines, type, scale=0.01):
         if(len(outPolylines[i])>0):
             viewer.add(Collection(outPolylines[i]),color = outPolylinesColors[i],opacity=0.75)
 
-def DisplayPolylines(viewer, polylines, scale=0.00,r = 0.0, g = 0.0, b = 0.0, t = 1, collection = True):
+def DisplayPolylines(viewer, polylines, scale=0.00,r = 0.0, g = 0.0, b = 0.0, t = 1, collection = True, movex = 1.25):
+
+
     polylinesScaled = []
+    colors = []
     for i in polylines:
         #print(i)
         if(len(i)>1):
@@ -55,15 +74,41 @@ def DisplayPolylines(viewer, polylines, scale=0.00,r = 0.0, g = 0.0, b = 0.0, t 
             polylinesScaled.append(a)
             if collection==False:
                 if(len(i)==4):
-                    viewer.add(a,color=(0,0,255),linewidth = 1)
+                    viewer.add(a,color=(0,0,1),linewidth = 1)
                 elif(len(i)==2):
-                    viewer.add(a,color=(0,255,0),linewidth =10)
+                    viewer.add(a,color=(0,1,0),linewidth =10)
                 else:
                     viewer.add(a,color=(r,g,b), linewidth = t)
 
+            if collection==True:
+                colors.append((r,g,b))
+                #colors.append((1,0,0))
+
+                
+
+
+    #Translation within function, because there is scaling
+    #translate input data
+    if(movex>1):
+        points = []
+        for i in range (len(polylinesScaled)):
+            points.extend(polylinesScaled[i])
+
+        bbox = cg.bounding_box(points)
+        xmin = bbox[0][0]
+        xmax = bbox[1][0]
+        offset_dist = abs(xmax-xmin)
+
+        T = cg.transformations.Translation.from_vector([-offset_dist*movex, 0, 0])
+        for i in range (len(polylinesScaled)):
+            
+            polylinesScaled[i].transform(T)
+    
+
     if collection:
         if(len(polylinesScaled)):
-            viewer.add(Collection(polylinesScaled),color=(r,g,b), linewidth = t)
+            viewer.add(Collection(polylinesScaled), linewidth = t,colors = colors, color = (r,g,b))
+
         else:
             print("Nothing is displayed")
 
