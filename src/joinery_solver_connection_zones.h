@@ -1650,7 +1650,8 @@ inline void get_connection_zones(
 	if (triangulate) {
 		top_face_triangulation = std::vector<std::vector<int>>(elements.size());
 		for (int i = 0; i < elements.size(); i++) {
-			cgal_mesh_util::mesh_from_polylines(plines[i], elements[i].planes[0], top_face_triangulation[i]);
+            int v, f;
+			cgal_mesh_util::mesh_from_polylines(plines[i], elements[i].planes[0], top_face_triangulation[i],v,f);
 
 		}
 	}

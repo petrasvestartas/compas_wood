@@ -85,7 +85,7 @@ namespace cgal_mesh_util {
 
 
 
-    inline void mesh_from_polylines(std::vector<CGAL_Polyline>& polylines_with_holes, IK::Plane_3& base_plane, std::vector<int>& top_outline_face_vertex_indices) {
+    inline void mesh_from_polylines(std::vector<CGAL_Polyline>& polylines_with_holes, IK::Plane_3& base_plane, std::vector<int>& top_outline_face_vertex_indices, int& v, int& f) {
 
         //////////////////////////////////////////////////////////////////////////////
         //Create Transformation | Orient to 2D 
@@ -128,6 +128,17 @@ namespace cgal_mesh_util {
             vertex_index[it] = k;
             k++;
         }
+        v = k;
+
+        //count vertices to check if there are same number of points as in polyline
+        int vertex_count = 0;
+        for (int i = 0; i < polylines_with_holes.size(); i += 2)
+            vertex_count += polylines_with_holes[i].size() - 1;
+
+        if (v != vertex_count) {
+            top_outline_face_vertex_indices = std::vector<int>(0);
+            return;
+        }
 
 
         int number_of_faces = 0;
@@ -136,6 +147,7 @@ namespace cgal_mesh_util {
                 number_of_faces += 3;
             }
         }
+        f = number_of_faces / 3;
 
         top_outline_face_vertex_indices.reserve(number_of_faces);
         for (Face_handle f : cdt.finite_face_handles()) {
@@ -146,6 +158,7 @@ namespace cgal_mesh_util {
             }
         }
 
+        
 
 
     }
@@ -171,7 +184,9 @@ namespace cgal_mesh_util {
         //Create a mesh for top outlines
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         std::vector<int>  top_outline_face_vertex_indices;
-        cgal_mesh_util::mesh_from_polylines(polylines, base_plane, top_outline_face_vertex_indices);
+        int v, f;
+        cgal_mesh_util::mesh_from_polylines(polylines, base_plane, top_outline_face_vertex_indices, v, f);
+      
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         //Create mesh for the full plate
@@ -184,6 +199,15 @@ namespace cgal_mesh_util {
         int vertex_count = 0;
         for (int i = 0; i < polylines.size(); i += 2)
             vertex_count += polylines[i].size() - 1;
+
+        if (v != vertex_count) {
+            //CGAL_Debug(v);
+            //CGAL_Debug(vertex_count);
+            RowMatrixXd vv(0, 3);
+            RowMatrixXi ff(0, 3);
+            return std::make_tuple(vv, ff);
+
+        }
 
         int face_count = top_outline_face_vertex_indices.size() / 3;
 

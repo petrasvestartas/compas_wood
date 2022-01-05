@@ -16,23 +16,25 @@ def test_connection_detection():
     # Generate connections
     result = get_connection_zones(ss_2())
 
-    """
+
+    
     result = get_connection_zones(
     annen_small_polylines(),
     annen_small_edge_directions(),
     annen_small_edge_joints(),
     annen_small_three_valance_element_indices_and_instruction()
     )
-    """
-
+    
+   
     # Mesh Polylines
     meshes = []
     for i in range(len(result)):
         mesh_result = closed_mesh_from_polylines(result[i])
         meshes.append(mesh_result)
+    
 
     # Display via Compas_View2
-    display(None, None,meshes, 0.01,2,0)
+    display(None, result,meshes, 0.01,2,0)
 
     #output
     return result

@@ -231,12 +231,14 @@ def closed_mesh_from_polylines(
 
     start_time = time.time()
     output_V, output_F = pybind11_joinery_solver.pybind11_closed_mesh_from_polylines( V, F )
+    """
     print("V")
     for i in output_V:
         print(i)
     print("F")
     for i in output_F:
         print(i)
+    """
     print("==================================== %s ms ====================================" %  round((time.time() - start_time)*1000.0) )
     # ==============================================================================
     # Process output
