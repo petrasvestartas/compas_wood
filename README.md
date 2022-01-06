@@ -164,14 +164,14 @@ ___
 Delete env ```conda env remove --name bio-env ```
 
 ## Git:
-//Create branch
-git branch gh-pages
+Create branch
+* git branch gh-pages
 
-//Switch to branch
-git checkout gh-pages
+Switch to branch
+* git checkout gh-pages
 
-//Check with branch
-git branch
+Check with branch
+* git branch
 
-//delete branch, get out of this branch first
-git branch -d <branch-name> 
+delete branch, get out of this branch first
+* git branch -d <branch-name> 
