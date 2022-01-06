@@ -173,5 +173,5 @@ Switch to branch
 Check with branch
 * git branch
 
-delete branch, get out of this branch first
+Delete branch, get out of this branch first
 * git branch -d <branch-name> 
