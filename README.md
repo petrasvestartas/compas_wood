@@ -175,3 +175,8 @@ Check with branch
 
 Delete branch, get out of this branch first
 * git branch -d <branch-name> 
+    
+Create an empty branch and push to github
+* git switch --orphan <new branch>
+* git commit --allow-empty -m "Initial commit on orphan branch"
+* git push -u origin <new branch>
