@@ -1,3 +1,6 @@
+import os
+os.system('cls' if os.name == 'nt' else 'clear')
+
 #compas_wood
 from compas_wood.joinery import test
 from compas_wood.joinery import get_connection_zones
