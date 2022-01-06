@@ -165,18 +165,33 @@ Delete env ```conda env remove --name bio-env ```
 
 ## Git:
 Create branch
-* git branch gh-pages
+
+```
+git branch gh-pages
+```
 
 Switch to branch
-* git checkout gh-pages
+
+```
+git checkout gh-pages
+```
 
 Check with branch
-* git branch
+
+```
+git branch
+```
 
 Delete branch, get out of this branch first
-* git branch -d <branch-name> 
-    
+
+```
+git branch -d <branch-name> 
+```
+
 Create an empty branch and push to github
-* git switch --orphan new_branch
-* git commit --allow-empty -m "Initial commit on orphan branch"
-* git push -u origin new_branch
+
+```
+git switch --orphan new_branch
+git commit --allow-empty -m "Initial commit on orphan branch"
+git push -u origin new_branch
+```
