@@ -6,6 +6,13 @@ closed_mesh_from_polylines
 * **Output:** a list of polylines with added joints
 * **Tests:** for testing purpose the polylines are stored in compas_wood.data files. Input and output geomety is visualized below.
 
+Be sure to input the correctly order outlines as image below, if not the side mesh face winding will be inconsistent. And you would need to clean the mesh afterwards (Rhino only, COMPAS does not have good clean up methods).
+
+Input: List of Polylines Order and Winding:
+""""""""""""""""""""""""""""
+.. figure:: /_images/closed_mesh_from_polylines_input.jpg
+    :figclass: figure
+    :class: figure-img img-fluid 
 
 
 Data-set: ss_24

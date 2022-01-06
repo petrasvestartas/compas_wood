@@ -93,6 +93,15 @@ namespace cgal_mesh_util {
         CGAL::Aff_transformation_3<IK> xform_toXY = plane_to_XY_mesh(polylines_with_holes[0][0], base_plane);
         CGAL::Aff_transformation_3<IK> xform_toXY_Inv = xform_toXY.inverse();
 
+        //for (int i = 0; i < polylines_with_holes.size(); i += 2) {
+
+        //    for (int j = 0; j < polylines_with_holes[i+1].size() - 1; j++) {
+        //        IK::Point_3 p = polylines_with_holes[i+1][j].transform(xform_toXY);
+        //        CGAL_Debug(p.hz());
+        //   }
+        //}
+
+
         CDT cdt;
         for (int i = 0; i < polylines_with_holes.size(); i += 2) {
 
@@ -168,17 +177,21 @@ namespace cgal_mesh_util {
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         //Compute average normal and create a plane
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        //CGAL_Debug("Polyline Length");
+        //for (int i = 0; i < polylines.size(); i += 2)
+        //    CGAL_Debug(cgal_polyline_util::polyline_length(polylines[i]));
 
-        int len = polylines[0].size() - 1;
+        int lastID = polylines.size() - 2;
+        int len = polylines[lastID].size() - 1;
         IK::Vector_3 average_normal = IK::Vector_3(0, 0, 0);
 
         for (int i = 0; i < len; i++) {
             int prev = ((i - 1) + len) % len;
             int next = ((i + 1) + len) % len;
-            average_normal = average_normal + CGAL::cross_product(polylines[0][i] - polylines[0][prev], polylines[0][next] - polylines[0][i]);
+            average_normal = average_normal + CGAL::cross_product(polylines[lastID][i] - polylines[lastID][prev], polylines[lastID][next] - polylines[lastID][i]);
         }
 
-        IK::Plane_3 base_plane(polylines[0][0], average_normal);
+        IK::Plane_3 base_plane(polylines[lastID][0], average_normal);
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         //Create a mesh for top outlines
@@ -225,7 +238,17 @@ namespace cgal_mesh_util {
         std::vector<std::array<int, 4>> sides;
         sides.reserve(vertex_count);
 
+        bool holes = polylines.size() > 2;
+      
+
         for (int i = 0; i < polylines.size(); i += 2) {
+
+            bool last = i == (polylines.size() - 2);
+            
+            //CGAL_Debug(last);
+            //CGAL_Debug(i );
+            //CGAL_Debug(polylines.size() - 2);
+
             for (int j = 0; j < polylines[i].size() - 1; j++) {
 
                 //vertices
@@ -233,17 +256,78 @@ namespace cgal_mesh_util {
                 vertices(vid, 1) = polylines[i][j].hy();
                 vertices(vid, 2) = polylines[i][j].hz();
 
+               
 
-                //faces
-                if (j == polylines[i].size() - 2) {//take vertices from beggining
-                    int n = polylines[i].size() - 2;
-                    std::array<int, 4> side{ vid, vid - n, vid - n + vertex_count, vid + 0 + vertex_count };
-                    sides.emplace_back(side);
-                } else {//take next vertices
-                    std::array<int, 4> side{ vid, vid + 1, vid + 1 + vertex_count, vid + 0 + vertex_count };
-                    sides.emplace_back(side);
+                //last faces
+                    if (j == polylines[i].size() - 2) {//take vertices from beggining
+                        int n = polylines[i].size() - 2;
+                        std::array<int, 4> side{ vid, vid - n, vid - n + vertex_count, vid + 0 + vertex_count };
 
-                }
+
+                        if (holes) {
+                            sides.emplace_back(side);
+                            //if (last) {
+                            //    sides.emplace_back(side);
+                            //} else {
+                            //    side = {
+                            //        vid + 0 + vertex_count,
+                            //        vid - n + vertex_count,
+                            //        vid - n,
+                            //        vid
+                            //    };
+                            //    sides.emplace_back(side);
+                            //}
+                        } else {
+
+
+
+                            sides.emplace_back(side);
+                        }
+
+
+                    //iterated faces
+                    } else {//take next vertices
+
+
+                        std::array<int, 4> side = {
+                            vid + 0 + vertex_count,
+                            vid + 1 + vertex_count,
+                            vid + 1,
+                            vid,
+                       };
+
+                        if (holes) {
+                       
+                          
+                            //if (last) {
+                                side = {
+                                vid,
+                                vid + 1,
+                                vid + 1 + vertex_count,
+                                vid + 0 + vertex_count,
+                                };
+                                sides.emplace_back(side);
+                            //}
+                           // else {
+                            //    sides.emplace_back(side);
+                            //}
+
+                        } else {
+
+                            side = {
+                                vid,
+                                vid + 1,
+                                vid + 1 + vertex_count,
+                                vid + 0 + vertex_count,
+                            };
+                           sides.emplace_back(side);
+                           
+                        }
+
+                            
+
+                    }
+
 
 
                 //RhinoApp().Print("Vertices flag %i index %i vertices %f %f %f \n", flag0, vid, polylines[i][j].hx(), polylines[i][j].hy(), polylines[i][j].hz());
@@ -302,15 +386,36 @@ namespace cgal_mesh_util {
         // -> Side face indices
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+        //CGAL_Debug(sides.size());
         for (int i = 0; i < sides.size(); i++) {
 
-            faces(face_count * 2 + 2 * i + 0, 0) = sides[i][3];
-            faces(face_count * 2 + 2 * i + 0, 1) = sides[i][2];
-            faces(face_count * 2 + 2 * i + 0, 2) = sides[i][1];
+                 faces(face_count * 2 + 2 * i + 0, 0) = sides[i][3];
+                 faces(face_count * 2 + 2 * i + 0, 1) = sides[i][2];
+                 faces(face_count * 2 + 2 * i + 0, 2) = sides[i][1];
 
-            faces(face_count * 2 + 2 * i + 1, 0) = sides[i][3];
-            faces(face_count * 2 + 2 * i + 1, 1) = sides[i][1];
-            faces(face_count * 2 + 2 * i + 1, 2) = sides[i][0];
+                 faces(face_count * 2 + 2 * i + 1, 0) = sides[i][3];
+                faces(face_count * 2 + 2 * i + 1, 1) = sides[i][1];
+                 faces(face_count * 2 + 2 * i + 1, 2) = sides[i][0];
+
+           //if (polylines.size() == 2) {
+
+           //     faces(face_count * 2 + 2 * i + 0, 0) = sides[i][3];
+           //     faces(face_count * 2 + 2 * i + 0, 1) = sides[i][2];
+           //     faces(face_count * 2 + 2 * i + 0, 2) = sides[i][1];
+
+           //     faces(face_count * 2 + 2 * i + 1, 0) = sides[i][3];
+           //     faces(face_count * 2 + 2 * i + 1, 1) = sides[i][1];
+           //     faces(face_count * 2 + 2 * i + 1, 2) = sides[i][0];
+           // } else {
+
+           //     faces(face_count * 2 + 2 * i + 0, 0) = sides[i][1];
+           //     faces(face_count * 2 + 2 * i + 0, 1) = sides[i][2];
+           //     faces(face_count * 2 + 2 * i + 0, 2) = sides[i][3];
+
+           //     faces(face_count * 2 + 2 * i + 1, 0) = sides[i][0];
+           //     faces(face_count * 2 + 2 * i + 1, 1) = sides[i][1];
+           //     faces(face_count * 2 + 2 * i + 1, 2) = sides[i][3];
+           // }
 
 
             //bool flag = output.SetQuad(face_count * 2 + i, sides[i][3], sides[i][2], sides[i][1], sides[i][0]);

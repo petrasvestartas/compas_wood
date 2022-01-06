@@ -3,7 +3,8 @@ import numpy as np
 from compas.plugins import plugin
 from compas.geometry import Point
 from compas.geometry import Polyline
-from compas.datastructures import Mesh, mesh
+from compas.datastructures import Mesh
+from compas.datastructures import meshes_join_and_weld
 import pybind11_joinery_solver
 import time
 
@@ -153,6 +154,13 @@ def get_connection_zones(
     for i in range (len(pointsets)) :
         points = [Point(*point) for point in pointsets[i]]
         polyline = Polyline(points)
+
+        """
+        print(" ")
+        for j in polyline:
+            print( (str)(j[0]) +" "+ (str)(j[1])+" " + (str)(j[2]) )
+        """
+        
         
 
         if(last_id != pointsets_group_ids[i]):
@@ -218,39 +226,55 @@ def closed_mesh_from_polylines(
     # ==============================================================================
     # Test CPP module
     # ==============================================================================
- 
+    """
     print("Input")
     print("flat_list_of_points " + str(V.size))
     print("vertex_count_per_polyline " + str(F.size))
     print("============================================================================== CPP +")
-
+    """
     # ==============================================================================
     # Execute main CPP method
     # ==============================================================================
 
-
+    
     start_time = time.time()
     output_V, output_F = pybind11_joinery_solver.pybind11_closed_mesh_from_polylines( V, F )
     """
+    print("F")
+    output_F_ = []
+    for i in output_F:
+        if( abs(i[0]) < len(output_V) and abs(i[1]) < len(output_V) and abs(i[2]) < len(output_V)  ):
+            output_F_.append(i)
+        #print(i)
+    
+    
     print("V")
     for i in output_V:
         print(i)
-    print("F")
-    for i in output_F:
-        print(i)
-    """
+    
+    
+
+  
+   
     print("==================================== %s ms ====================================" %  round((time.time() - start_time)*1000.0) )
     # ==============================================================================
     # Process output
     # ==============================================================================
     print("Number of Mesh Vertices " , len(output_V))
     print("Number of Mesh Faces " , len(output_F))
-    mesh = Mesh.from_vertices_and_faces(output_V,output_F)
-    print("Is Mesh Valid " + (str)(mesh.is_valid()) )
+      """
+
     
+    mesh = Mesh.from_vertices_and_faces(output_V,output_F)
+    #mesh = meshes_join_and_weld([mesh],0.001)
+    #Mesh.cull_vertices(mesh)
+    #Mesh.remove_unused_vertices(mesh)
+    #Mesh.unify_cycles(mesh)
+    print("Is Mesh Valid " + (str)(mesh.is_valid()) )
+    #Mesh.to_obj(mesh,"C:\IBOIS57\_Code\Software\Python\compas_wood\docs\examples\mesh.obj")
 
     print("============================================================================== CPP -")
-    print("Output")
+    #print("Output")
     return mesh
 
 

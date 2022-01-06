@@ -573,6 +573,7 @@ inline void element::get_joints_geometry_as_closed_polylines_performing_intersec
 	IK::Segment_3 last_segment0;
 	IK::Segment_3 last_segment1;
 	int lastID = -1;
+
 	for (int i = 2; i < this->j_mf.size(); i++) {
 
 		for (int j = 0; j < this->j_mf[i].size(); j++) {//
@@ -759,6 +760,9 @@ inline void element::get_joints_geometry_as_closed_polylines_performing_intersec
 
 		}
 
+
+        //Unify windings of polylines
+
 	}
 
 
@@ -849,7 +853,8 @@ inline void element::get_joints_geometry_as_closed_polylines_performing_intersec
 	pline1_new.emplace_back(pline1_new.front());
 
 	///////////////////////////////////////////////////////////////////////////////
-	//Add loose elements from top and bottom outlines
+	//Add loose elements from top and bottom outlines also
+    //Also check the winding 
 	///////////////////////////////////////////////////////////////////////////////
 
 
@@ -873,6 +878,23 @@ inline void element::get_joints_geometry_as_closed_polylines_performing_intersec
 				joints[std::get<0>(j_mf[i][j])].reverse(std::get<1>(j_mf[i][j]));
 
 			for (int k = 0; k < joints[std::get<0>(j_mf[i][j])](std::get<1>(j_mf[i][j]), true).size() - 1; k++) {
+
+                //Orient to 2D and check the winding
+                bool is_clockwise = cgal_polyline_util::is_clockwise(joints[std::get<0>(j_mf[i][j])](std::get<1>(j_mf[i][j]), true)[k], planes[0]);
+
+                if (!is_clockwise) {
+                    std::reverse(
+                        std::begin(joints[std::get<0>(j_mf[i][j])](std::get<1>(j_mf[i][j]), true)[k]),
+                        std::end(joints[std::get<0>(j_mf[i][j])](std::get<1>(j_mf[i][j]), true)[k])
+                    );
+
+                    std::reverse(
+                        std::begin(joints[std::get<0>(j_mf[i][j])](std::get<1>(j_mf[i][j]), false)[k]),
+                        std::end(joints[std::get<0>(j_mf[i][j])](std::get<1>(j_mf[i][j]), false)[k])
+                    );
+                }
+
+
 				output[this->id].emplace_back(joints[std::get<0>(j_mf[i][j])](std::get<1>(j_mf[i][j]), true)[k]);
 				output[this->id].emplace_back(joints[std::get<0>(j_mf[i][j])](std::get<1>(j_mf[i][j]), false)[k]);
 			}

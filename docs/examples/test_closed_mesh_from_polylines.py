@@ -17,7 +17,7 @@ def test_connection_detection():
 
 
     # Generate connections
-    result = get_connection_zones(ts_0())
+    result = get_connection_zones(c_15())
 
 
     """
@@ -31,13 +31,18 @@ def test_connection_detection():
    
     # Mesh Polylines
     meshes = []
-    """
+    
+    count = 0
+    
     for i in range(len(result)):
         mesh_result = closed_mesh_from_polylines(result[i])
         meshes.append(mesh_result)
-    """
-    meshes = [closed_mesh_from_polylines(result[1])]
-
+        print("Mesh" + (str)(count))
+        count+=1
+    
+    
+    #meshes = [closed_mesh_from_polylines(result[21])]
+   
     # Display via Compas_View2
     display(None, None,meshes, 0.01,2,0)
 

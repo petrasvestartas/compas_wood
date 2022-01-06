@@ -6,6 +6,18 @@
 
 namespace cgal_polyline_util {
 
+   
+
+    inline double polyline_length(CGAL_Polyline& pline) {
+
+        double l = 0;
+        for (int i = 0; i < pline.size(); i++) {
+            l+=std::sqrt(CGAL::squared_distance(pline[i + 0], pline[i + 1]));
+        }
+
+        return l;
+    }
+
 
 	inline IK::Point_3 PointAt(const IK::Segment_3& l, double t) {
 
@@ -626,6 +638,37 @@ namespace cgal_polyline_util {
 		Transform(polyline, T);
 	}
 
+
+    inline bool is_clockwise(CGAL_Polyline& polyline, IK::Plane_3 plane) {
+
+        //copy
+        CGAL_Polyline cp;
+        Duplicate(polyline, cp);
+
+        //transform
+        CGAL::Aff_transformation_3<IK> xform_toXY = cgal_xform_util::PlaneToXY(polyline[0], plane);
+        Transform(cp, xform_toXY);
+
+        //check if closed
+        if (!IsClosed(polyline)) {
+            cp.emplace_back(cp[0]);
+        }
+
+        //check windind, negative anti-clockwise
+        double num = 0;
+        for (int i = 0; i < cp.size() - 1; i++) {
+            auto item = cp[i + 1];
+            double x = item.hx();
+            item = cp[i];
+            double x1 = x - item.hx();
+            item = cp[i + 1];
+            double y = item.hy();
+            item = cp[i];
+            double y1 = y + item.hy();
+            num = num + x1 * y1;
+        }
+        return num > 0;
+    }
 }
 
 
