@@ -163,7 +163,7 @@ namespace cgal_mesh_util {
 
     }
 
-    std::tuple< RowMatrixXd, RowMatrixXi>  closed_mesh_from_polylines(std::vector<CGAL_Polyline>& polylines) {
+    inline std::tuple<RowMatrixXd, RowMatrixXi>  closed_mesh_from_polylines(std::vector<CGAL_Polyline>& polylines) {
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         //Compute average normal and create a plane
@@ -302,20 +302,20 @@ namespace cgal_mesh_util {
         // -> Side face indices
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        for (int i = 0; i < sides.size(); i++) {
+        //for (int i = 0; i < sides.size(); i++) {
 
-            faces(face_count * 2 + 2 * i + 0, 0) = sides[i][3];
-            faces(face_count * 2 + 2 * i + 0, 1) = sides[i][2];
-            faces(face_count * 2 + 2 * i + 0, 2) = sides[i][1];
+        //    faces(face_count * 2 + 2 * i + 0, 0) = sides[i][3];
+        //    faces(face_count * 2 + 2 * i + 0, 1) = sides[i][2];
+        //    faces(face_count * 2 + 2 * i + 0, 2) = sides[i][1];
 
-            faces(face_count * 2 + 2 * i + 1, 0) = sides[i][3];
-            faces(face_count * 2 + 2 * i + 1, 1) = sides[i][1];
-            faces(face_count * 2 + 2 * i + 1, 2) = sides[i][0];
+        //    faces(face_count * 2 + 2 * i + 1, 0) = sides[i][3];
+        //    faces(face_count * 2 + 2 * i + 1, 1) = sides[i][1];
+        //    faces(face_count * 2 + 2 * i + 1, 2) = sides[i][0];
 
 
-            //bool flag = output.SetQuad(face_count * 2 + i, sides[i][3], sides[i][2], sides[i][1], sides[i][0]);
-            //	RhinoApp().Print("Triangulation flag %i",flag);
-        }
+        //    //bool flag = output.SetQuad(face_count * 2 + i, sides[i][3], sides[i][2], sides[i][1], sides[i][0]);
+        //    //	RhinoApp().Print("Triangulation flag %i",flag);
+        //}
 
 
         return std::make_tuple(vertices, faces);
