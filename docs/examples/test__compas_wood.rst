@@ -10,7 +10,7 @@ compas_wood package import
 
 
 
-.. literalinclude:: test_compas_wood.py
+.. literalinclude:: test__compas_wood.py
     :language: python
 
 

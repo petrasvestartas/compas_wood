@@ -33,6 +33,16 @@ namespace cgal_box_util {
 
 		corners = CGAL_Polyline(8);
 
+        //corners[0] = PointAt(box, -box[4].x(), -box[4].y(), -box[4].z());
+        //corners[1] = PointAt(box, -box[4].x(), -box[4].y(), box[4].z());
+        //corners[3] = PointAt(box, -box[4].x(), box[4].y(), box[4].z());
+        //corners[2] = PointAt(box, -box[4].x(), box[4].y(), -box[4].z());
+
+        //corners[4] = PointAt(box, box[4].x(), -box[4].y(), -box[4].z());
+        //corners[5] = PointAt(box, box[4].x(), -box[4].y(), box[4].z());
+        //corners[7] = PointAt(box, box[4].x(), box[4].y(), box[4].z());
+        //corners[6] = PointAt(box, box[4].x(), box[4].y(), -box[4].z());
+
 		corners[0] = PointAt(box, box[4].x(), box[4].y(), -box[4].z());
 		corners[1] = PointAt(box, -box[4].x(), box[4].y(), -box[4].z());
 		corners[3] = PointAt(box, box[4].x(), -box[4].y(), -box[4].z());

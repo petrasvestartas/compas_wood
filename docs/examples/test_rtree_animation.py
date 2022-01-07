@@ -1,6 +1,7 @@
-#compas
+# compas
 import compas.geometry as cg
 from compas.datastructures import Mesh
+
 
 #viewer
 from compas_view2.app import App
@@ -11,38 +12,15 @@ from compas_view2.views import view
 #python
 from random import random, randrange
 
+#compas_wood
+from compas_wood.joinery import test
+from compas_wood.joinery import rtree
+from compas_wood.data.joinery_solver_data_set import *
 
-def display(
-    input=None, result=None, meshes = None,  
-    scale = 0.01,
-    movex_0 = 1.25, movex_1 = 0, movex_2 = 0,
-    color_first = False):
-    viewer = App(show_grid=False, width = 3840,height = 2160-250, enable_sidebar=True,version= '120')  
-    
+#viewer
+from compas_wood.viewer_helpers import display
 
-    #preview
-    if(input != None):
-        display_polylines(viewer,input,scale,1.0, 0.0, 0.0,3,True,movex_0) #polylines without joints
-    
-    if(result != None):
-        for i in range(len(result)):
-            if(len(result)>0):
-                display_polylines(viewer,result[i],scale,206/255,0,88/255.0, 3,False,movex_1) #polylines with joints
-                #display_polylines(viewer,result[i],scale,randrange(0,206)/255.0,0,randrange(0,88)/255.0, 3,False,movex_1) #polylines with joints
-
-    if(meshes != None):
-        for i in range(len(meshes)):
-            if(i == 0 and color_first):
-                display_mesh(viewer,meshes[i], scale,206/255,0,88/255.0, 3)
-            else:
-                display_mesh(viewer,meshes[i], scale,0.9,0.9,0.9,3)
-
-    viewer.run()
-  
-
-
-
-
+viewer = App(show_grid=False, width = 3840,height = 2160-250, enable_sidebar=True,version= '120')  
 
 
 def display_lines(viewer, lines, scale=0.01):
@@ -131,8 +109,84 @@ def display_polyline(viewer, polyline, scale=0.01,r = 0.0, g = 0.0, b = 0.0, t =
         viewer.add(y,color=(r,g,b), linewidth = t)
 
 
-def display_mesh(viewer, input, scale=0.01,r = 0.0, g = 0.0, b = 0.0, t = 1):
+def display_mesh(viewer, input, scale=0.01,r = 0.0, g = 0.0, b = 0.0, t = 1, show_faces = True):
 
     y = input.transformed(cg.transformations.scale.matrix_from_scale_factors([scale,scale,scale]))
-    viewer.add(y,facecolor = (r,g,b), linecolor=(0,0,0), show_edges = True, opacity = 0.5, linewidth = 1,hide_coplanaredges = False)
+    viewer.add(y,facecolor = (r,g,b), linecolor=(0,0,0), show_edges = True, opacity = 0.75, linewidth = 1,hide_coplanaredges = False, show_faces = show_faces)
+
+selected_id = 0
+
+
+@viewer.on(interval=500)
+def test_rtree(selected_id):
+
+   
+
+    viewer.view.objects.clear()
+
+    
+    # Get a list of polyline pairs
+    #input = ss_0()
+    input = annen_small_polylines()
+    #input = annen_polylines()
+  
+
+    # Generate connections
+    neighbours, boxes_AABB, boxes_OOBB = rtree(input)
+
+    #selected_id = 10
+    boxes_selected = [] 
+    boxes_AABB_or_boxes_OOBB = False
+
+    selected_id = selected_id % (len(boxes_OOBB)-1)
+    #print("selected ID " + (str)(selected_id))
+
+    if(boxes_AABB_or_boxes_OOBB== False):
+        boxes_selected.append(boxes_OOBB[selected_id])
+        for i in neighbours[selected_id]:
+            for j in i : 
+                boxes_selected.append(boxes_OOBB[j])
+    else :
+        boxes_selected.append(boxes_AABB[selected_id])
+        for i in neighbours[selected_id]:
+            for j in i : 
+                boxes_selected.append(boxes_AABB[j])
+
+    # Display via Compas_View2
+    #display(input, None,boxes_selected,0.01,0,0,0,True)
+
+    #preview
+    scale = 0.01
+    color_first = True
+
+    #preview
+    if(input != None):
+        display_polylines(viewer,input,scale,1.0, 0.0, 0.0,1,True,0) #polylines without joints
+
+
+
+    if(boxes_selected != None):
+        for i in range(len(boxes_selected)):
+            if(i == 0 and color_first):
+                display_mesh(viewer,boxes_selected[i], scale,206/255,0,88/255.0, 3)
+            else:
+                display_mesh(viewer,boxes_selected[i], scale,0.9,0.9,0.9,3)
+
+    """
+    if(boxes_selected != None):
+        for i in range(len(boxes_AABB)):
+            if(boxes_AABB_or_boxes_OOBB==False):
+                display_mesh(viewer,boxes_OOBB[i], scale,206/255,0,88/255.0, 3,False)
+            else:
+                display_mesh(viewer,boxes_AABB[i], scale,0.9,0.9,0.9,3,False)
+    """
+
+    selected_id+=1
+    
+ 
+    #output
+    #return neighbours
+
+
+viewer.run()
 

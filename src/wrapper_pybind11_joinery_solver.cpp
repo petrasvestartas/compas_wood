@@ -466,8 +466,185 @@ std::tuple< std::vector<RowMatrixXd>, std::vector<int>>  pybind11_get_connection
 }
 
 
-std::tuple< RowMatrixXd, RowMatrixXi> pybind11_closed_mesh_from_polylines(const RowMatrixXd& V, const RowMatrixXi& F) {
+std::tuple< RowMatrixXd, RowMatrixXi> pybind11_closed_mesh_from_polylines(Eigen::Ref<const RowMatrixXd>& V, Eigen::Ref<const RowMatrixXi>& F) {
     std::vector<CGAL_Polyline> polylines =  polylines_from_vertices_and_faces(V, F);
     return cgal_mesh_util::closed_mesh_from_polylines(polylines);
 }
 
+std::tuple< std::vector<RowMatrixXi>, RowMatrixXd, RowMatrixXd > pybind11_rtree(Eigen::Ref<const RowMatrixXd>& V, Eigen::Ref<const RowMatrixXi>& F)//neihgbours per element, aabb, oobb
+{
+    //Do you need to delete the vector?
+    //[0] [5, 6, 7]
+    //[1] [4]
+    // 
+    //////////////////////////////////////////////////////////////////////////////
+    //Convert raw-data to list of Polylines
+    //////////////////////////////////////////////////////////////////////////////
+    std::vector<CGAL_Polyline> input_polyline_pairs;
+    input_polyline_pairs.reserve(F.size());
+
+    CGAL_Polyline pline;
+    int counter = 0;
+    int lastCount = F(counter, 0);
+    for (int i = 0; i < V.size() / 3; i++) {
+
+        CGAL::Epick::Point_3 p(V(i, 0), V(i, 1), V(i, 2));
+        pline.push_back(p);
+
+        if (pline.size() == lastCount) {
+            input_polyline_pairs.push_back(pline);
+            pline.clear();//Clear points from the polyline
+            lastCount = F(++counter, 0); //Take next polyline Count
+        }
+    }
+
+
+    const int n = input_polyline_pairs.size() * 0.5;
+
+    //////////////////////////////////////////////////////////////////////////////
+    //Create elements, AABB, OBB, P, Pls, thickness
+    //////////////////////////////////////////////////////////////////////////////
+    std::vector<element> elements;
+    std::vector< std::vector<IK::Vector_3>> input_insertion_vectors;
+    std::vector< std::vector<int>> input_joint_types;
+    get_elements(input_polyline_pairs, input_insertion_vectors, input_joint_types, elements);
+
+
+    //////////////////////////////////////////////////////////////////////////////
+    //Create joints, Perform Joint Area Search
+    //////////////////////////////////////////////////////////////////////////////
+
+    //////////////////////////////////////////////////////////////////////////////
+    // Create RTree
+    //////////////////////////////////////////////////////////////////////////////
+
+    RTree<int, double, 3> tree;
+
+    //////////////////////////////////////////////////////////////////////////////
+    // Insert AABB
+    //////////////////////////////////////////////////////////////////////////////
+
+    for (int i = 0; i < elements.size(); i++) {
+        double min[3] = { elements[i].aabb.xmin(), elements[i].aabb.ymin(), elements[i].aabb.zmin() };
+        double max[3] = { elements[i].aabb.xmax(), elements[i].aabb.ymax(), elements[i].aabb.zmax() };
+        tree.Insert(min, max, i);
+    }
+
+    //////////////////////////////////////////////////////////////////////////////
+    // Search Closest Boxes | Skip duplicates pairs | Perform callback with OBB
+    //////////////////////////////////////////////////////////////////////////////
+    std::vector<RowMatrixXi> elements_neigbhours;
+    elements_neigbhours.reserve(elements.size());
+
+    for (int i = 0; i < elements.size(); i++) {
+        //CGAL_Debug("_____");
+
+        std::vector<int> element_neigbhours;
+
+        //std::vector<int> result;
+        auto callback = [&element_neigbhours, i, &elements](int foundValue) -> bool
+        {
+            if (cgal_box_util::GetCollision(elements[i].oob, elements[foundValue].oob)) {
+            //if (i < foundValue && cgal_box_util::GetCollision(elements[i].oob, elements[foundValue].oob)) {
+                //element_neigbhours.push_back(i);
+                element_neigbhours.push_back(foundValue);
+            }
+            return true;
+        };
+
+        double min[3] = { elements[i].aabb.xmin(), elements[i].aabb.ymin(), elements[i].aabb.zmin() };
+        double max[3] = { elements[i].aabb.xmax(), elements[i].aabb.ymax(), elements[i].aabb.zmax() };
+        int nhits = tree.Search(min, max, callback);//callback in this method call callback above
+
+        //elements_neigbhours.push_back(element_neigbhours);
+
+        //Convert vector to matrix
+        RowMatrixXi element_neigbhours_matrix(1, element_neigbhours.size());
+
+        for (int j = 0; j < element_neigbhours.size(); j ++) {
+            //CGAL_Debug(element_neigbhours[j]);
+            element_neigbhours_matrix(0, j) = element_neigbhours[j];
+        }
+     
+        elements_neigbhours.push_back(element_neigbhours_matrix);
+    }
+
+
+
+
+    ////////////////////////////////////////////////////////////////////////////////
+    //// Output AABB
+    ////////////////////////////////////////////////////////////////////////////////
+    RowMatrixXd elements_AABB(elements.size(),24);
+
+    for (int i = 0; i < elements.size(); i++) {
+
+
+        elements_AABB(i, 0) = elements[i].aabb.xmin();
+        elements_AABB(i, 1) = elements[i].aabb.ymin();
+        elements_AABB(i, 2) = elements[i].aabb.zmin();
+
+        elements_AABB(i, 3) = elements[i].aabb.xmin();
+        elements_AABB(i, 4) = elements[i].aabb.ymin();
+        elements_AABB(i, 5) = elements[i].aabb.zmax();
+
+        elements_AABB(i, 6) = elements[i].aabb.xmin();
+        elements_AABB(i, 7) = elements[i].aabb.ymax();
+        elements_AABB(i, 8) = elements[i].aabb.zmax();
+
+        elements_AABB(i, 9) = elements[i].aabb.xmin();
+        elements_AABB(i, 10) = elements[i].aabb.ymax();
+        elements_AABB(i, 11) = elements[i].aabb.zmin();
+
+
+        elements_AABB(i, 12) = elements[i].aabb.xmax();
+        elements_AABB(i, 13) = elements[i].aabb.ymin();
+        elements_AABB(i, 14) = elements[i].aabb.zmin();
+
+        elements_AABB(i, 15) = elements[i].aabb.xmax();
+        elements_AABB(i, 16) = elements[i].aabb.ymin();
+        elements_AABB(i, 17) = elements[i].aabb.zmax();
+
+        elements_AABB(i, 18) = elements[i].aabb.xmax();
+        elements_AABB(i, 19) = elements[i].aabb.ymax();
+        elements_AABB(i, 20) = elements[i].aabb.zmax();
+
+        elements_AABB(i, 21) = elements[i].aabb.xmax();
+        elements_AABB(i, 22) = elements[i].aabb.ymax();
+        elements_AABB(i, 23) = elements[i].aabb.zmin();
+
+
+
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////
+    //// Output OOBB
+    ////////////////////////////////////////////////////////////////////////////////
+
+    RowMatrixXd elements_OOBB(elements.size(), 24);
+
+    for (int i = 0; i < elements.size(); i++) {
+
+        CGAL_Polyline corners;
+        cgal_box_util::GetCorners(elements[i].oob, corners);
+
+      for (int j = 0; j < 8; j++) {
+          //int a = j * 3 + 0;
+          //int b = j * 3 + 1;
+          //int c = j * 3 + 2;
+          //CGAL_Debug(j * 3 + 0);
+          //CGAL_Debug(j * 3 + 1);
+          //CGAL_Debug(j * 3 + 2);
+          //CGAL_Debug(corners.size());
+            elements_OOBB(i, j * 3 + 0) = corners[j].hx();
+            elements_OOBB(i, j * 3 + 1) = corners[j].hy();
+            elements_OOBB(i, j * 3 + 2) = corners[j].hz();
+        }
+
+    }
+
+    //////////////////////////////////////////////////////////////////////////////
+    // Output Tuple
+    //////////////////////////////////////////////////////////////////////////////
+    return std::make_tuple(elements_neigbhours, elements_AABB, elements_OOBB);
+}

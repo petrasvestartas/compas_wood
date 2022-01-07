@@ -1,5 +1,5 @@
 ********************************************************************************
-ss_24
+get_connection_zones ss_24
 ********************************************************************************
 
 * **Description:** generates joints for elements connected side-to-side. Input and output images are shown below.

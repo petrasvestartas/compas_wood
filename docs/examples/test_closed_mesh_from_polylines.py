@@ -17,8 +17,8 @@ def test_connection_detection():
 
 
     # Generate connections
-    result = get_connection_zones(c_15())
-
+    #result = get_connection_zones(c_15())
+    result = get_connection_zones(ss_0())
 
     """
     result = get_connection_zones(

@@ -2,8 +2,11 @@
 import numpy as np
 from compas.plugins import plugin
 from compas.geometry import Point
+from compas.geometry import Vector
 from compas.geometry import Polyline
 from compas.datastructures import Mesh
+from compas.geometry import Box
+from compas.geometry import Frame
 from compas.datastructures import meshes_join_and_weld
 import pybind11_joinery_solver
 import time
@@ -160,8 +163,6 @@ def get_connection_zones(
         for j in polyline:
             print( (str)(j[0]) +" "+ (str)(j[1])+" " + (str)(j[2]) )
         """
-        
-        
 
         if(last_id != pointsets_group_ids[i]):
             polylines.append(temp_collection)
@@ -276,6 +277,143 @@ def closed_mesh_from_polylines(
     print("============================================================================== CPP -")
     #print("Output")
     return mesh
+
+
+
+
+
+@plugin(category='compas_wood_cpp', pluggable_name='compas_wood_cpp_rtee')
+def rtree(
+    polylines_vertices_XYZ,
+    ):
+    """Compute joinery
+
+    Parameters
+    ----------
+    polylines_vertices_XYZ : pairs of polylines
+
+    Returns
+    -------
+    Neighbours
+        List of element indices
+    AABB
+        List of element axis aligned bounding-boxes corners
+    OOBB
+        List of element object oriented boxes corners
+
+    """
+
+    # ==============================================================================
+    # Prepare input
+    # ==============================================================================
+    flat_list_of_points = []
+    vertex_count_per_polyline = []
+   
+
+
+    for i in range(0, (int)(len(polylines_vertices_XYZ)*0.5)):
+        flat_list_of_points.extend(polylines_vertices_XYZ[i*2])
+        flat_list_of_points.extend(polylines_vertices_XYZ[i*2+1])
+        vertex_count_per_polyline.append(len(polylines_vertices_XYZ[i*2]))
+        vertex_count_per_polyline.append(len(polylines_vertices_XYZ[i*2+1]))
+
+
+
+
+    # ==============================================================================
+    # Convert to Numpy
+    # ==============================================================================
+    V = np.asarray(flat_list_of_points, dtype=np.float64)
+    F = np.asarray(vertex_count_per_polyline, dtype=np.int32)
+
+
+    # ==============================================================================
+    # Test CPP module
+    # ==============================================================================
+   
+    #print("Input")
+    #print("flat_list_of_points " + str(V.size))
+    #print("vertex_count_per_polyline " + str(F.size))
+    print("============================================================================== CPP +")
+    
+    # ==============================================================================
+    # Execute main CPP method
+    # ==============================================================================
+
+    start_time = time.time()
+    neighbours, AABB_corners, OOBB_corners = pybind11_joinery_solver.pybind11_rtree( V, F )
+   
+    print("==================================== %s ms ====================================" %  round((time.time() - start_time)*1000.0) )
+    # ==============================================================================
+    # Process output
+    # ==============================================================================
+    #print("Number of Neighbours " , len(neighbours))
+    #print("Number of AABB Corners " , len(AABB_corners))
+    #print("Number of OOBB Corners " , len(OOBB_corners))
+
+    """
+    for i in range (len(pointsets)) :
+        points = [Point(*point) for point in pointsets[i]]
+        polyline = Polyline(points)
+    
+    
+    for i in range (len(neighbours)) :
+        print("New")
+        for j in neighbours[i]:
+            print(*j)
+        #points = [Point(*point) for point in pointsets[i]]
+        #polyline = Polyline(points)
+    """
+   
+    boxes_AABB = []
+    for i in range(len(AABB_corners)):
+
+        points = []
+        for j in range(0,len(AABB_corners[i]),3):
+            p = Point(AABB_corners[i][j],AABB_corners[i][j+1],AABB_corners[i][j+2])
+            points.append(p)
+            
+        point_center = (points[0] + points[6])*0.5
+
+        xaxis = points[0]-points[4]
+        yaxis = points[0]-points[3]
+        zaxis = points[0]-points[1]
+        frame = Frame(point_center,xaxis,yaxis)
+        
+        box = Box(frame,xaxis.length,yaxis.length,zaxis.length)
+        V,F = box.to_vertices_and_faces()
+        mesh_box = Mesh.from_vertices_and_faces(V,F)
+        boxes_AABB.append(mesh_box)
+
+
+    boxes_OOBB = []
+    for i in range(len(OOBB_corners)):
+
+        points = []
+        for j in range(0,len(OOBB_corners[i]),3):
+            p = Point(OOBB_corners[i][j],OOBB_corners[i][j+1],OOBB_corners[i][j+2])
+            points.append(p)
+            
+        point_center = (points[0] + points[6])*0.5
+
+        xaxis = points[0]-points[4]
+        yaxis = points[0]-points[3]
+        zaxis = points[0]-points[1]
+        frame = Frame(point_center,xaxis,yaxis)
+        
+        box = Box(frame,xaxis.length,yaxis.length,zaxis.length)
+        V,F = box.to_vertices_and_faces()
+        mesh_box = Mesh.from_vertices_and_faces(V,F)
+        boxes_OOBB.append(mesh_box)
+
+
+
+        
+
+
+    print("============================================================================== CPP -")
+    #print("Output")
+    return neighbours, boxes_AABB, boxes_OOBB
 
 
 

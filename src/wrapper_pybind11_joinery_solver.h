@@ -78,7 +78,9 @@ std::tuple< std::vector<RowMatrixXd>, std::vector<int>>  pybind11_get_connection
 
 );
 
-std::tuple< RowMatrixXd, RowMatrixXi> pybind11_closed_mesh_from_polylines(const RowMatrixXd& V, const RowMatrixXi& F);
+std::tuple< RowMatrixXd, RowMatrixXi> pybind11_closed_mesh_from_polylines(Eigen::Ref<const RowMatrixXd>& V, Eigen::Ref<const RowMatrixXi>& F);
+
+std::tuple< std::vector<RowMatrixXi>, RowMatrixXd, RowMatrixXd > pybind11_rtree(Eigen::Ref<const RowMatrixXd>& V, Eigen::Ref<const RowMatrixXi>& F);//indices, aabb, oobb
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //Wrapped package joinery_solver
@@ -131,6 +133,14 @@ PYBIND11_MODULE(pybind11_joinery_solver, m) {
     m.def(
         "pybind11_closed_mesh_from_polylines",
         &pybind11_closed_mesh_from_polylines,
+        pybind11::arg("V").noconvert(),
+        pybind11::arg("F").noconvert()
+    );
+
+
+    m.def(
+        "pybind11_rtree",
+        &pybind11_rtree,
         pybind11::arg("V").noconvert(),
         pybind11::arg("F").noconvert()
     );
