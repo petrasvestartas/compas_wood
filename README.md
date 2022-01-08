@@ -1,5 +1,4 @@
-# C++ Project joinery_solver
-Build directory: https://github.com/ibois-epfl/Raccoon_Litter_Box/tree/main/joinery_solver/build
+# C++ Project for Generating Timber Joints
 
 ________________________________________________________
 ## Interface compas_wood
