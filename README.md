@@ -103,7 +103,8 @@ ________________________________________________________
 
 ## Search Methods
 ### Global
-- [x] Closest Object Query + OOB and ABB collision - :put_litter_in_its_place: show geometry with boxes by printing from fill of rtree
+- [x] Closest Object Query + OOB and ABB collision - 
+- [ ] Visualize RTree - show geometry with boxes by printing from fill of rtree
 - [ ] no search by user given index (must have input in the beginning) 
 
 ### Local
