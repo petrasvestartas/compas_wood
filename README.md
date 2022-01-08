@@ -28,7 +28,7 @@ Mac
 * Be sure that you activate ```wood-dev``` after installation and you are in ```compas_wood``` folder before writing ```pip install -e .```
 * For more detailed instructions please follow  `ReadMe <https://github.com/petrasvestartas/compas_wood>`_.
 
-- [x] pybind11 + CGAL - get_connection_zones
+- [x] pybind11 - get_connection_zones
 - [x] pybind11 - closed_mesh_from_polylines
 - [x] pybind11 - rtree
 - [x] pybind11 - joints (joint_area output)
