@@ -38,6 +38,9 @@ Mac
 - [ ] interface - R-Tree for joint types
 - [ ] interface - edge vector display
 - [ ] interface - beam polyline detection
+- [ ] documentation 
+- [ ] publish documentation gh-pages
+- [ ] publish conda
 
 
 ## Interface Rhino C++ Plugin
