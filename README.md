@@ -41,10 +41,6 @@ ____
 - [ ] interface - beam polyline detection
 
 
-## Interface Rhino C++ Grasshopper
-- [ ] C# (Wrapper) + CGAL
-- [ ] Grasshopper components (integration with NGon)
-
 ## Interface Rhino C++ Plugin
 
 ### Build from scratch, linking:
@@ -87,6 +83,10 @@ ____
 
 - [x] Loft polyline groups with holes, 2d cgal constrained delaunay triangulations
 - [ ] MAC - only possible through NET or CPython wrappers
+
+## Interface Rhino C++ Grasshopper
+- [ ] Python or C# wrappers 
+- [ ] Grasshopper components 
 
 ## Interface Stand-alone
 - [ ] C++ Visualizer
