@@ -86,7 +86,7 @@ Mac
 - [x] Loft polyline groups with holes, 2d cgal constrained delaunay triangulations
 - [ ] MAC - only possible through NET or CPython wrappers
 
-## Interface Rhino C++ Grasshopper
+## Interface Rhino, Grasshopper
 - [ ] Python or C# wrappers 
 - [ ] Grasshopper components 
 
