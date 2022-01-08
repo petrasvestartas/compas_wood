@@ -83,14 +83,15 @@ C:\IBOIS57\_Code\Software\CPP\CGAL\CGAL-5.3\auxiliary\gmp\lib\libmpfr-4.lib;
 - [x] Menu 3 : Skip not needed joints, by dots 
 - [x] Menu 4 : search type | division distance | shift | 
 - [x] Menu 5 : Joint parameters per category 
+- [x] Separate command: Loft polyline groups with holes, 2d cgal constrained delaunay triangulations
+- [ ] MAC - only possible through NET or CPython wrappers
 
  [Video](https://vimeo.com/650968401 "Crash test")
 
 
 ![rhino_command_line](https://github.com/ibois-epfl/Raccoon_Litter_Box/blob/main/joinery_solver/documentation/rhino_interface_1.gif)
 
-- [x] Loft polyline groups with holes, 2d cgal constrained delaunay triangulations
-- [ ] MAC - only possible through NET or CPython wrappers
+
 
 ## Interface Rhino, Grasshopper
 - [ ] Python or C# wrappers 
