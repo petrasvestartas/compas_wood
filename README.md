@@ -1,4 +1,4 @@
-# Project for Generating Timber 
+# Project for Generating Timber Joints
 ____
 ## Interface compas_wood
 
