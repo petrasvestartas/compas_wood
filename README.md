@@ -53,7 +53,7 @@
 
 - [ ] transfer plugin code from raccoonlitterbox
 
-'''
+```
 $(RhinoIncDir); \
 C:\IBOIS57\_Code\Software\Python\Pybind11Example\externals\pybind11\include; \
 C:\IBOIS57\_Code\Software\Python\Pybind11Example\source\module; \
@@ -66,15 +66,15 @@ C:\IBOIS57\_Code\Software\Raccoon_Litter_Box\joinery_solver; \
 C:\IBOIS57\_Code\Software\Raccoon_Litter_Box\joinery_solver\joinery_solver_rhino7; \
 C:\IBOIS57\_Code\Software\Raccoon_Litter_Box\joinery_solver\joinery_solver_rhino6; \
 %(AdditionalIncludeDirectories)
-'''
+```
 
 - (Libraries) Linker -> Input -> Additional Dependencies :
 
-'''
+```
 C:\Users\petra\AppData\Local\Programs\Python\Python38\libs\python38.lib; \
 C:\IBOIS57\_Code\Software\CPP\CGAL\CGAL-5.3\auxiliary\gmp\lib\libgmp-10.lib; \
 C:\IBOIS57\_Code\Software\CPP\CGAL\CGAL-5.3\auxiliary\gmp\lib\libmpfr-4.lib; 
-'''
+```
 
 -  Also, add .cpp files clipper.cpp and connection_zones.cpp as existing items to the new project
 -  CGAL Builds with C++14, not 17 
