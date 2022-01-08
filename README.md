@@ -4,9 +4,9 @@
 
 ### Installation
 
-### Clone Github Repository
+#### Clone Github Repository
 
-Windows
+##### Windows
 
     conda create -n wood-dev python=3.8 mpir mpfr boost-cpp eigen=3.3 cgal-cpp=5.2 pybind11 compas compas_view2 --yes
     conda activate wood-dev
@@ -14,7 +14,7 @@ Windows
     cd compas_wood
     pip install -e .
 
-Mac
+##### Mac
 
 
     conda create -n wood-dev python=3.8 gmp mpfr boost-cpp eigen=3.3 cgal-cpp=5.2 pybind11 compas compas_view2 --yes
@@ -50,23 +50,31 @@ Mac
 - And underfine following variables in rhino stdafx.h file, #define NOMINMAX #undef min #undef max.
 - (Headers) C/C++ -> General -> Additional Include Directions :
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$(RhinoIncDir); \
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;C:\IBOIS57\_Code\Software\Python\Pybind11Example\externals\pybind11\include; \
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;C:\IBOIS57\_Code\Software\Python\Pybind11Example\source\module; \
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;C:\Users\petra\AppData\Local\Programs\Python\Python38\include; \
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;C:\IBOIS57\_Code\Software\CPP\CGAL\CGAL-5.3\include; \
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;C:\IBOIS57\_Code\Software\CPP\CGAL\CGAL-5.3\auxiliary\gmp\include; \
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;C:\IBOIS57\_Code\Software\CPP\Eigen\eigen-3.3.9; \
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;C:\IBOIS57\_Code\Software\CPP\Boost\;C:\IBOIS57\_Code\Software\Raccoon_Litter_Box\joinery_solver; \
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;C:\IBOIS57\_Code\Software\Raccoon_Litter_Box\joinery_solver\joinery_solver_rhino7; \
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;C:\IBOIS57\_Code\Software\Raccoon_Litter_Box\joinery_solver\joinery_solver_rhino6; \
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;%(AdditionalIncludeDirectories)
+
+- [ ] transfer plugin code from raccoonlitterbox
+
+'''
+$(RhinoIncDir); \
+C:\IBOIS57\_Code\Software\Python\Pybind11Example\externals\pybind11\include; \
+C:\IBOIS57\_Code\Software\Python\Pybind11Example\source\module; \
+C:\Users\petra\AppData\Local\Programs\Python\Python38\include; \
+C:\IBOIS57\_Code\Software\CPP\CGAL\CGAL-5.3\include; \
+C:\IBOIS57\_Code\Software\CPP\CGAL\CGAL-5.3\auxiliary\gmp\include; 
+C:\IBOIS57\_Code\Software\CPP\Eigen\eigen-3.3.9; \
+C:\IBOIS57\_Code\Software\CPP\Boost\;
+C:\IBOIS57\_Code\Software\Raccoon_Litter_Box\joinery_solver; \
+C:\IBOIS57\_Code\Software\Raccoon_Litter_Box\joinery_solver\joinery_solver_rhino7; \
+C:\IBOIS57\_Code\Software\Raccoon_Litter_Box\joinery_solver\joinery_solver_rhino6; \
+%(AdditionalIncludeDirectories)
+'''
 
 - (Libraries) Linker -> Input -> Additional Dependencies :
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;C:\Users\petra\AppData\Local\Programs\Python\Python38\libs\python38.lib; \
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;C:\IBOIS57\_Code\Software\CPP\CGAL\CGAL-5.3\auxiliary\gmp\lib\libgmp-10.lib; \
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;C:\IBOIS57\_Code\Software\CPP\CGAL\CGAL-5.3\auxiliary\gmp\lib\libmpfr-4.lib; 
+'''
+C:\Users\petra\AppData\Local\Programs\Python\Python38\libs\python38.lib; \
+C:\IBOIS57\_Code\Software\CPP\CGAL\CGAL-5.3\auxiliary\gmp\lib\libgmp-10.lib; \
+C:\IBOIS57\_Code\Software\CPP\CGAL\CGAL-5.3\auxiliary\gmp\lib\libmpfr-4.lib; 
+'''
 
 -  Also, add .cpp files clipper.cpp and connection_zones.cpp as existing items to the new project
 -  CGAL Builds with C++14, not 17 
