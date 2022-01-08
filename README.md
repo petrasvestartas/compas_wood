@@ -2,11 +2,17 @@
 
 ________________________________________________________
 ## Interface compas_wood
-- [x] pybind11 + CGAL
-- [ ] output: polylines, polylines vertex count, polylines ids (minus are joints), cut types (milling, drilling, cut, notches)
-- [ ] simplify conversion (instead of creation of polyline vector, create directly elements)
-- [ ] compas_wood C++ repository :tomato: 
-- [ ] Meshing in COMPAS
+- [x] pybind11 + CGAL - get_connection_zones
+- [x] pybind11 - closed_mesh_from_polylines
+- [x] pybind11 - rtree
+- [x] pybind11 - joints (joint_area output)
+- [ ] pybind11 - preview hard-coded joint library
+- [ ] pybind11 - mesh difference give a set of meshes
+- [ ] interface - groups
+- [ ] interface - R-Tree for joint types
+- [ ] interface - edge vector display
+- [ ] interface - beam polyline detection
+
 
 ## Interface Rhino C++ Grasshopper
 - [ ] C# (Wrapper) + CGAL
@@ -81,7 +87,7 @@ Description: a vector on an element edge that is equal to a plane normal on an e
 ![Tenon-mortise Annen2](https://github.com/ibois-epfl/Raccoon_Litter_Box/blob/main/joinery_solver/documentation/insertion_vectors_2.jpg) 
 
 - [ ] side-side connection, not finished for out of plane connections
-- [ ] side-side connection in rotaiton insertion vector not tested 
+- [ ] side-side connection in rotaton insertion vector not tested 
 - [ ] top-top connection
 
 ________________________________________________________
@@ -142,6 +148,7 @@ ________________________________________________________
 - [ ] tenon-mortise beams
 - [ ] tenon-mortise half beam
 - [ ] scarf
+- [ ] screws
 
 ## Joints Parameters
 
@@ -165,13 +172,17 @@ ________________________________________________________
 ### Tool-path using Joint Parameters
 - [x] Flipping case :tomato: 
 
+### BLT
+- [ ] Read
+- [ ] Write
+
 ________________________________________________________
 
-### Examples
+### Data-sets: 
 - [x] Small samples 
-- [x] Annen :tomato:
+- [x] Annen 1) Create a C# mesh from nubrs, output a list of V,F 2) C++ create plates, vectors of insertions, joint types
 - [ ] CR 
 - [ ] VDA 
 - [ ] Vidy 
-- [ ] Students 
+- [ ] Zollinger
 
