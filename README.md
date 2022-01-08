@@ -3,32 +3,12 @@
 ________________________________________________________
 ## Interface compas_wood
 
-********************************************************************************
-Installation
-********************************************************************************
+### Installation
 
+###Clone Github Repository
 
+#Windows
 
-.. _header1:
-
-Clone Github Repository
-========
-
-.. Header 1.1
-.. ----------
-
-.. Header 1.1.1
-.. ~~~~~~~~~~~~
-
-.. Header 1.1.1.1
-.. """"""""""""""
-
-.. Documentation cheatsheet https://docs.typo3.org/m/typo3/docs-how-to-document/main/en-us/WritingReST/CheatSheet.html
-
-
-
-Windows
-""""""""""""""
 
 .. code-block:: bash
 
@@ -39,8 +19,8 @@ Windows
     pip install -e .
 
 
-Mac
-""""""""""""""
+#Mac
+
 
 .. code-block:: bash
 
@@ -52,10 +32,9 @@ Mac
 
 
 
-Notes
-""""""""""""""
-* Be sure that you activate ```wood-dev``` after installation and you are in ```compas_wood``` folder before writing ```pip install -e .```
+###Notes
 
+* Be sure that you activate ```wood-dev``` after installation and you are in ```compas_wood``` folder before writing ```pip install -e .```
 * For more detailed instructions please follow  `ReadMe <https://github.com/petrasvestartas/compas_wood>`_.
 
 - [x] pybind11 + CGAL - get_connection_zones
