@@ -1,5 +1,3 @@
-# compas_wood
-
 # C++ Project joinery_solver
 Build directory: https://github.com/ibois-epfl/Raccoon_Litter_Box/tree/main/joinery_solver/build
 
