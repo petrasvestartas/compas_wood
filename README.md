@@ -6,7 +6,7 @@ ____
 
 ### Clone Github Repository
 
-### Windows
+* Windows
 
     conda create -n wood-dev python=3.8 mpir mpfr boost-cpp eigen=3.3 cgal-cpp=5.2 pybind11 compas compas_view2 --yes
     conda activate wood-dev
@@ -15,7 +15,7 @@ ____
     pip install -e .
 
 
-### Mac
+* Mac
 
 
     conda create -n wood-dev python=3.8 gmp mpfr boost-cpp eigen=3.3 cgal-cpp=5.2 pybind11 compas compas_view2 --yes
