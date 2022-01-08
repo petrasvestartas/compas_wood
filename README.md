@@ -8,8 +8,6 @@ ____
 
 ### Windows
 
-.. code-block:: bash
-
     conda create -n wood-dev python=3.8 mpir mpfr boost-cpp eigen=3.3 cgal-cpp=5.2 pybind11 compas compas_view2 --yes
     conda activate wood-dev
     git clone https://github.com/petrasvestartas/compas_wood
@@ -19,7 +17,6 @@ ____
 
 ### Mac
 
-.. code-block:: bash
 
     conda create -n wood-dev python=3.8 gmp mpfr boost-cpp eigen=3.3 cgal-cpp=5.2 pybind11 compas compas_view2 --yes
     conda activate wood-dev
@@ -49,7 +46,8 @@ ____
 - [ ] Grasshopper components (integration with NGon)
 
 ## Interface Rhino C++ Plugin
-### Installation Steps:
+
+### Build from scratch, linking:
 - Rhino requires stdafx files referenced to .cpp files. If you are using another project for building this one, create stdafx.h in that project to stop complaining.
 - And underfine following variables in rhino stdafx.h file, #define NOMINMAX #undef min #undef max.
 - (Headers) C/C++ -> General -> Additional Include Directions :
