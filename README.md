@@ -46,13 +46,14 @@
 ## Interface Rhino C++ Plugin
 
 ### Build from scratch, linking:
-- Rhino requires stdafx files referenced to .cpp files. If you are using another project for building this one, create stdafx.h in that project to stop complaining.
-- And underfine following variables in rhino stdafx.h file, #define NOMINMAX #undef min #undef max.
-- (Headers) C/C++ -> General -> Additional Include Directions :
-
 
 - [ ] transfer plugin code from raccoonlitterbox
 
+- Rhino requires ```stdafx.h``` linked in all .cpp files. Therefore in the source file there is a stdafx.h to compile for both cases. If you are using Rhino skip the the stafx.h, if not just add this empty file.
+- In Rhino ```stdafx.h``` , write to run CGAL ```#define NOMINMAX #undef min #undef max```
+-  Add all .cpp files such as ```clipper.cpp``` to the new project, since they cannot be linked like header files.
+-  CGAL Builds with C++14, not C++17 
+- (Headers) C/C++ -> General -> Additional Include Directions :
 ```
 $(RhinoIncDir); \
 C:\IBOIS57\_Code\Software\Python\Pybind11Example\externals\pybind11\include; \
@@ -67,17 +68,14 @@ C:\IBOIS57\_Code\Software\Raccoon_Litter_Box\joinery_solver\joinery_solver_rhino
 C:\IBOIS57\_Code\Software\Raccoon_Litter_Box\joinery_solver\joinery_solver_rhino6; \
 %(AdditionalIncludeDirectories)
 ```
-
 - (Libraries) Linker -> Input -> Additional Dependencies :
-
 ```
 C:\Users\petra\AppData\Local\Programs\Python\Python38\libs\python38.lib; \
 C:\IBOIS57\_Code\Software\CPP\CGAL\CGAL-5.3\auxiliary\gmp\lib\libgmp-10.lib; \
 C:\IBOIS57\_Code\Software\CPP\CGAL\CGAL-5.3\auxiliary\gmp\lib\libmpfr-4.lib; 
 ```
 
--  Also, add .cpp files clipper.cpp and connection_zones.cpp as existing items to the new project
--  CGAL Builds with C++14, not 17 
+
  
 ### Command-line interface:
 - [x] Menu 1 : Select Polylines pairs
