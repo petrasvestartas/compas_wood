@@ -1,14 +1,12 @@
-# Project for Generating Timber Joints
-
-________________________________________________________
+# Project for Generating Timber 
+____
 ## Interface compas_wood
 
 ### Installation
 
-###Clone Github Repository
+### Clone Github Repository
 
-#Windows
-
+### Windows
 
 .. code-block:: bash
 
@@ -19,8 +17,7 @@ ________________________________________________________
     pip install -e .
 
 
-#Mac
-
+### Mac
 
 .. code-block:: bash
 
@@ -30,9 +27,7 @@ ________________________________________________________
     cd compas_wood 
     pip install -e . 
 
-
-
-###Notes
+### Notes
 
 * Be sure that you activate ```wood-dev``` after installation and you are in ```compas_wood``` folder before writing ```pip install -e .```
 * For more detailed instructions please follow  `ReadMe <https://github.com/petrasvestartas/compas_wood>`_.
