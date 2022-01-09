@@ -1,5 +1,6 @@
 # Project for Generating Timber Joints
-Author: Petras Vestartas
+Author: [Petras Vestartas](https://petrasvestartas.com/About-Petras-Vestartas)
+
 
 ## Interface compas_wood
 
