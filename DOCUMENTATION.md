@@ -148,6 +148,43 @@ pip install -e .
 
 https://user-images.githubusercontent.com/18013985/147587822-cfb43c96-4a81-4b89-987f-8d201ec2e5ba.mp4
 
+## Conda:
+Delete env ```conda env remove --name bio-env ```
+
+## Git:
+Create branch
+
+```
+git branch gh-pages
+```
+
+Switch to branch
+
+```
+git checkout gh-pages
+```
+
+Check with branch
+
+```
+git branch
+```
+
+Delete branch, get out of this branch first
+
+```
+git branch -d <branch-name> 
+```
+
+Create an empty branch and push to github
+
+```
+git switch --orphan new_branch
+git commit --allow-empty -m "Initial commit on orphan branch"
+git push -u origin new_branch
+```
+
+
 
 
 
