@@ -23,7 +23,9 @@
     cd compas_wood 
     pip install -e . 
 
+##### Video
 https://user-images.githubusercontent.com/18013985/147587822-cfb43c96-4a81-4b89-987f-8d201ec2e5ba.mp4
+
 ### Notes
 
 * Be sure that you activate ```wood-dev``` after installation and you are in ```compas_wood``` folder before writing ```pip install -e .```
