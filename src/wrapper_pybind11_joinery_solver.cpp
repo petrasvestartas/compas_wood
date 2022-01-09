@@ -569,33 +569,65 @@ std::tuple< std::vector<RowMatrixXi>, RowMatrixXd, RowMatrixXd > pybind11_rtree(
         elements_neigbhours.push_back(element_neigbhours_matrix);
     }
 
-    ////////////////////////////////////////////////////////////////////////////////
-    //// Display Rtree hierarchy
-    ////////////////////////////////////////////////////////////////////////////////
-
-    // Iterator test 
-    //RTree<int, double, 3>::Iterator it;
-
-    //
-
-    //for (tree.GetFirst(it); !tree.IsNull(it); tree.GetNext(it)) {
-    //    int value = tree.GetAt(it);
-
-    //    double boundsMin[3] = { 0,0,0 };
-    //    double boundsMax[3] = { 0,0,0 };
-    //    it.GetBounds(boundsMin, boundsMax);
-
-    //    CGAL_Debug(boundsMin[0], boundsMin[1], boundsMin[2]);
-    //    CGAL_Debug(boundsMax[0], boundsMax[1], boundsMax[2]);
 
 
-    //    //cout << "it[" << itIndex++ << "] " << value << " = (" << boundsMin[0] << "," << boundsMin[1] << "," << boundsMax[0] << "," << boundsMax[1] << ")\n"; 
+    //////////////////////////////////////////////////////////////////////////////////
+    ////// Display Rtree hierarchy
+    //////////////////////////////////////////////////////////////////////////////////
+   
+    //auto list = tree.ListTree();
+    //RowMatrixXd elements_AABB(list.size(), 24);
+
+    //int count = 0;
+    //for (auto aabb : list) {
+    //    //IK::Point_3 p0(aabb.m_min[0], aabb.m_min[1], aabb.m_min[2]);
+    //    //IK::Point_3 p1(aabb.m_max[0], aabb.m_max[1], aabb.m_max[2]);
+    //    //std::vector<IK::Point_3> pts{ p0 ,p1};
+    //    CGAL::Bbox_3 aabb(aabb.m_min[0], aabb.m_min[1], aabb.m_min[2], aabb.m_max[0], aabb.m_max[1], aabb.m_max[2]);
+    //    //CGAL_Debug(aabb.m_min[0], aabb.m_min[1], aabb.m_min[2]);
+    //    //CGAL_Debug(aabb.m_max[0], aabb.m_max[1], aabb.m_max[2]);
+
+    //    elements_AABB(count, 0) = aabb.xmin();
+    //    elements_AABB(count, 1) = aabb.ymin();
+    //    elements_AABB(count, 2) = aabb.zmin();
+
+    //    elements_AABB(count, 3) = aabb.xmin();
+    //    elements_AABB(count, 4) = aabb.ymin();
+    //    elements_AABB(count, 5) = aabb.zmax();
+
+    //    elements_AABB(count, 6) = aabb.xmin();
+    //    elements_AABB(count, 7) = aabb.ymax();
+    //    elements_AABB(count, 8) = aabb.zmax();
+
+    //    elements_AABB(count, 9) = aabb.xmin();
+    //    elements_AABB(count, 10) = aabb.ymax();
+    //    elements_AABB(count, 11) = aabb.zmin();
+
+
+    //    elements_AABB(count, 12) = aabb.xmax();
+    //    elements_AABB(count, 13) = aabb.ymin();
+    //    elements_AABB(count, 14) = aabb.zmin();
+
+    //    elements_AABB(count, 15) = aabb.xmax();
+    //    elements_AABB(count, 16) = aabb.ymin();
+    //    elements_AABB(count, 17) = aabb.zmax();
+
+    //    elements_AABB(count, 18) = aabb.xmax();
+    //    elements_AABB(count, 19) = aabb.ymax();
+    //    elements_AABB(count, 20) = aabb.zmax();
+
+    //    elements_AABB(count, 21) = aabb.xmax();
+    //    elements_AABB(count, 22) = aabb.ymax();
+    //    elements_AABB(count, 23) = aabb.zmin();
+
+    //    count++;
     //}
 
 
-    ////////////////////////////////////////////////////////////////////////////////
-    //// Output AABB
-    ////////////////////////////////////////////////////////////////////////////////
+
+    //////////////////////////////////////////////////////////////////////////////
+    // Output AABB
+    //////////////////////////////////////////////////////////////////////////////
     RowMatrixXd elements_AABB(elements.size(),24);
 
     for (int i = 0; i < elements.size(); i++) {

@@ -18,8 +18,17 @@ Data-set: ss_0
 .. literalinclude:: test_rtree.py
     :language: python
 
+
+
+
 Data-set: annen_small_polylines
-""""""""""""""""""""""""""""
+""""""""""""""""""""""""""""""""""""""""
 .. figure:: /_images/rtree.gif
+    :figclass: figure
+    :class: figure-img img-fluid
+
+Data-set: c_15
+""""""""""""""""""""""""""""
+.. figure:: /_images/rtree_hierarchy.gif
     :figclass: figure
     :class: figure-img img-fluid

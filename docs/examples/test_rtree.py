@@ -14,13 +14,16 @@ def test_rtree():
 
 
     # Get a list of polyline pairs
-    input = ss_0()
+    input = ss_24()
 
     #Compute Rtree
     neighbours, boxes_AABB, boxes_OOBB = rtree(input)
 
     selected_id = 22
     boxes_selected = [] 
+
+
+    """
     boxes_AABB_or_boxes_OOBB = False
 
     if(boxes_AABB_or_boxes_OOBB):
@@ -33,9 +36,10 @@ def test_rtree():
         for i in neighbours[selected_id]:
             for j in i : 
                 boxes_selected.append(boxes_AABB[j])
+    """
 
     # Display via Compas_View2
-    display(input, None,boxes_OOBB,0.01,0,0,0,False)
+    display(input, None,boxes_AABB,0.01,0,0,0,False)
 
 
     #output

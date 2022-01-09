@@ -159,5 +159,5 @@ def display_polyline(viewer, polyline, scale=0.01,r = 0.0, g = 0.0, b = 0.0, t =
 def display_mesh(viewer, input, scale=0.01,r = 0.0, g = 0.0, b = 0.0, t = 1):
 
     y = input.transformed(cg.transformations.scale.matrix_from_scale_factors([scale,scale,scale]))
-    viewer.add(y,facecolor = (r,g,b), linecolor=(0,0,0), show_edges = True, opacity = 0.5, linewidth = 1,hide_coplanaredges = False)
+    viewer.add(y,facecolor = (r,g,b), linecolor=(0,0,0), show_edges = True, opacity = 1.0, linewidth = 1,hide_coplanaredges = False,show_faces = False)
 
