@@ -569,7 +569,28 @@ std::tuple< std::vector<RowMatrixXi>, RowMatrixXd, RowMatrixXd > pybind11_rtree(
         elements_neigbhours.push_back(element_neigbhours_matrix);
     }
 
+    ////////////////////////////////////////////////////////////////////////////////
+    //// Display Rtree hierarchy
+    ////////////////////////////////////////////////////////////////////////////////
 
+    // Iterator test 
+    //RTree<int, double, 3>::Iterator it;
+
+    //
+
+    //for (tree.GetFirst(it); !tree.IsNull(it); tree.GetNext(it)) {
+    //    int value = tree.GetAt(it);
+
+    //    double boundsMin[3] = { 0,0,0 };
+    //    double boundsMax[3] = { 0,0,0 };
+    //    it.GetBounds(boundsMin, boundsMax);
+
+    //    CGAL_Debug(boundsMin[0], boundsMin[1], boundsMin[2]);
+    //    CGAL_Debug(boundsMax[0], boundsMax[1], boundsMax[2]);
+
+
+    //    //cout << "it[" << itIndex++ << "] " << value << " = (" << boundsMin[0] << "," << boundsMin[1] << "," << boundsMax[0] << "," << boundsMax[1] << ")\n"; 
+    //}
 
 
     ////////////////////////////////////////////////////////////////////////////////

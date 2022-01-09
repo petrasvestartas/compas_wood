@@ -251,7 +251,7 @@ template<class DATATYPE, class ELEMTYPE, int NUMDIMS,
 		/// Get object at iterator position
 		DATATYPE& GetAt(Iterator& a_it) { return *a_it; }
 
-	protected:
+	public:
 
 		/// Minimal bounding rectangle (n-dimensional)
 		struct Rect {
