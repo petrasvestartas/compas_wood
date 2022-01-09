@@ -648,3 +648,99 @@ std::tuple< std::vector<RowMatrixXi>, RowMatrixXd, RowMatrixXd > pybind11_rtree(
     //////////////////////////////////////////////////////////////////////////////
     return std::make_tuple(elements_neigbhours, elements_AABB, elements_OOBB);
 }
+
+//element_pairs, joint areas and joint types
+std::tuple< RowMatrixXi, std::vector<RowMatrixXd>, RowMatrixXi > pybind11_joints(Eigen::Ref<const RowMatrixXd>& V, Eigen::Ref<const RowMatrixXi>& F, int& search_type)
+{
+
+//////////////////////////////////////////////////////////////////////////////
+//Convert raw-data to list of Polylines
+//////////////////////////////////////////////////////////////////////////////
+    std::vector<CGAL_Polyline> input_polyline_pairs;
+    input_polyline_pairs.reserve(F.size());
+
+    CGAL_Polyline pline;
+    int counter = 0;
+    int lastCount = F(counter, 0);
+    for (int i = 0; i < V.size() / 3; i++) {
+
+        CGAL::Epick::Point_3 p(V(i, 0), V(i, 1), V(i, 2));
+        pline.push_back(p);
+
+        if (pline.size() == lastCount) {
+            input_polyline_pairs.push_back(pline);
+            pline.clear();//Clear points from the polyline
+            lastCount = F(++counter, 0); //Take next polyline Count
+        }
+    }
+
+
+    const int n = input_polyline_pairs.size() * 0.5;
+
+    //////////////////////////////////////////////////////////////////////////////
+    //Create elements, AABB, OBB, P, Pls, thickness
+    //////////////////////////////////////////////////////////////////////////////
+    std::vector<element> elements;
+    std::vector< std::vector<IK::Vector_3>> input_insertion_vectors;
+    std::vector< std::vector<int>> input_joint_types;
+    get_elements(input_polyline_pairs, input_insertion_vectors, input_joint_types, elements);
+
+
+    //////////////////////////////////////////////////////////////////////////////
+    //Create joints, Perform Joint Area Search
+    //////////////////////////////////////////////////////////////////////////////
+
+    auto joints = std::vector<joint>();
+    auto joints_map = std::unordered_map<uint64_t, int>();
+    rtree_search(elements, search_type, joints, joints_map);
+
+    //////////////////////////////////////////////////////////////////////////////
+    //Get element pairs, joint areas, join types
+    //////////////////////////////////////////////////////////////////////////////
+    RowMatrixXi element_pairs(joints.size(), 2);
+    std::vector<RowMatrixXd> joint_areas;
+    joint_areas.reserve(joints.size());
+    RowMatrixXi joint_types(joints.size(),1);
+
+
+   
+
+
+    for (int i = 0; i < joints.size(); i++) {
+
+        //element pairs
+        element_pairs(i, 0) = joints[i].v0;
+        element_pairs(i, 1) = joints[i].v1;
+
+
+        //CGAL_Debug(" ");
+        //for (auto& pp : joints[i].joint_area)
+        //    CGAL_Debug(pp.hx(), pp.hy(), pp.hz());
+
+        //joint areas
+        RowMatrixXd current_joint_areas(joints[i].joint_area.size(),3);
+
+        for (size_t j = 0; j < joints[i].joint_area.size(); j++) {
+            current_joint_areas(j, 0) = joints[i].joint_area[j].hx();
+            current_joint_areas(j, 1) = joints[i].joint_area[j].hy();
+            current_joint_areas(j, 2) = joints[i].joint_area[j].hz();
+        }
+        joint_areas.emplace_back(current_joint_areas);
+
+        //joint types
+        joint_types(i, 0) = joints[i].type;
+       
+
+
+    }
+
+
+
+
+
+
+    //////////////////////////////////////////////////////////////////////////////
+    // Output Tuple
+    //////////////////////////////////////////////////////////////////////////////
+    return std::make_tuple(element_pairs, joint_areas, joint_types);
+}

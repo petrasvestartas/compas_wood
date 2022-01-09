@@ -1,9 +1,9 @@
 ********************************************************************************
 closed_mesh_from_polylines
 ********************************************************************************
-* **Description:** generates joints for elements connected side-to-side and top-to-side. Input and output images are shown below. The example show multiple different joint selection, insertio vector direction and three valence joint selection.
+* **Description:** Create a mesh from a top and bottom outlines
 * **Input:** a list of polylines (the list of top and bottom outlines are stored sequentially (0-top, 0-bottom, 1-top, 1-bottom ... N-top, N-bottom))
-* **Output:** a single mesh
+* **Output:** closed valid mesh
 * **Tests:** for testing purpose the polylines are stored in compas_wood.data files. Input and output geomety is visualized below.
 
 Be sure to input the correctly order outlines as image below, if not the side mesh face winding will be inconsistent. And you would need to clean the mesh afterwards (Rhino only, COMPAS does not have good clean up methods).

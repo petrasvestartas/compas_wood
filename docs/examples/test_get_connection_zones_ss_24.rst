@@ -13,5 +13,5 @@ get_connection_zones ss_24
     :class: figure-img img-fluid
 
 
-.. literalinclude:: test_ss_24.py
+.. literalinclude:: test_get_connection_zones_ss_24.py
     :language: python

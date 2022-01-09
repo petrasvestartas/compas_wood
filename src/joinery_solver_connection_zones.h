@@ -645,6 +645,10 @@ inline bool face_to_face(
 				//Perform 2D Intersection 20 ms
 				bool hasIntersection = intersection_2D(Polyline0[i], Polyline1[j], Plane0[i], joint_area, GlobalClipperScale);// +20 ms 10000.0; GlobalClipperScale
 
+                //CGAL_Debug(" ");
+                //for (auto& pp : joint_area)
+                //    CGAL_Debug(pp.hx(), pp.hy(), pp.hz() );
+
 			   //////////////////////////////////////////////////////////////////////////////////////////////////
 			   //Intersection lines and rectangles
 			   //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -714,6 +718,8 @@ inline bool face_to_face(
 						}
 
 					}
+
+     
 
 					//CGAL_Debug(type);
 					//if (type == 1)
@@ -941,25 +947,6 @@ inline bool face_to_face(
 
 
 					} else if (type == 1) {//top-side
-
-
-
-					//double len0 = 0;
-					//auto a = joint_line0[0];
-					//auto b = joint_line0[1];
-					//auto c = joint_line1[0];
-					//auto d = joint_line1[1];
-
-					//double len1 = cgal_vector_util::Distance(a, b);
-					//double len2 = cgal_vector_util::Distance(c, d);
-					//for (int k = 0; k < joint_area.size() - 1; k++) {
-					//	len0+=cgal_vector_util::Distance(joint_area[k], joint_area[k+1]);
-					//}
-					//CGAL_Debug(len0, len1, len2);
-					////if (len1 > 0.001 && len2 > 0.001)
-					//	return false;
-
-
 
 
 
@@ -1200,6 +1187,10 @@ inline void rtree_search(
 
 				break;
 		}
+
+        //CGAL_Debug(" ");
+        //for (auto& pp : joint_area)
+        //    CGAL_Debug(pp.hx(), pp.hy(), pp.hz());
 
 		if (!found_type) continue;
 

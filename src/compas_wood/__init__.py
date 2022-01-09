@@ -21,6 +21,9 @@ joinery_solver
     joinery.test
     joinery.get_connection_zones
     joinery.closed_mesh_from_polylines
+    joinery.rtree
+    joinery.joints
+    
 
 
 

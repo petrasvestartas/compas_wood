@@ -195,3 +195,8 @@ git switch --orphan new_branch
 git commit --allow-empty -m "Initial commit on orphan branch"
 git push -u origin new_branch
 ```
+
+windows command line rebuild .pyd
+```
+ cd C:\IBOIS57\_Code\Software\Python\compas_wood> && del /F /Q C:\IBOIS57\_Code\Software\Python\compas_wood\build\lib.win-amd64-3.8 && pip install -e .
+ ```

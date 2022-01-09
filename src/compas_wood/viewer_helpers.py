@@ -16,7 +16,8 @@ def display(
     input=None, result=None, meshes = None,  
     scale = 0.01,
     movex_0 = 1.25, movex_1 = 0, movex_2 = 0,
-    color_first = False):
+    color_first = False,
+    display_polylines_as_mesh_types = None):
     viewer = App(show_grid=False, width = 3840,height = 2160-250, enable_sidebar=True,version= '120')  
     
 
@@ -25,10 +26,18 @@ def display(
         display_polylines(viewer,input,scale,1.0, 0.0, 0.0,3,True,movex_0) #polylines without joints
     
     if(result != None):
-        for i in range(len(result)):
+
+        flag = False
+        if(display_polylines_as_mesh_types != None):
+            if(len(display_polylines_as_mesh_types) == len(result)):
+                flag = True
+        
+        if(flag):
+            display_polylines_as_mesh(viewer,result,display_polylines_as_mesh_types,scale)
+        else:
             if(len(result)>0):
-                display_polylines(viewer,result[i],scale,206/255,0,88/255.0, 3,False,movex_1) #polylines with joints
-                #display_polylines(viewer,result[i],scale,randrange(0,206)/255.0,0,randrange(0,88)/255.0, 3,False,movex_1) #polylines with joints
+                    display_polylines(viewer,result,scale,206/255,0,88/255.0, 3,False,movex_1) #polylines with joints
+                    #display_polylines(viewer,result[i],scale,randrange(0,206)/255.0,0,randrange(0,88)/255.0, 3,False,movex_1) #polylines with joints
 
     if(meshes != None):
         for i in range(len(meshes)):
@@ -53,13 +62,16 @@ def display_lines(viewer, lines, scale=0.01):
     viewer.add(Collection(linesScaled),color = (0, 0, 0), linewidth = 2)
 
 
-def display_polylines_as_mesh(viewer, polylines, type, scale=0.01):
-    outPolylines = [[],[],[],[]]
-    outPolylinesColors = [
+def display_polylines_as_mesh(viewer, polylines, types, scale=0.01, t = 3):
+    #10 - SS Rotate 11 - SS OUT OF PLANE 12 - SS IN Plane,  20 Top-Side, 30 - Cross
+    my_dict = {10:0, 11:1, 12:2, 20:3, 30:4}
+    out_mesh = [[],[],[],[],[]]
+    out_mesh_colors = [
         (255/255.0,0/255.0,0/255.0),
-        (255/255.0,165/255.0,0/255.0),
-        (200/255.0,200/255.0,200/255.0),
-        (8/255.0,96/255.0,168/255.0)
+        (255/255.0,0/255.0,100/255.0),
+        (206/255,0,88/255.0),
+        (0/255.0,146/255.0,210/255.0),
+        (200/255.0, 174/255.0, 102/255.0)
         ]
     #0 Red Side-Side 1 Yellow Top-Side 2 Grey Top-Top 3 Blue Cross
 
@@ -67,19 +79,32 @@ def display_polylines_as_mesh(viewer, polylines, type, scale=0.01):
         polyline = polylines[i]
         polyline.transform(cg.transformations.scale.matrix_from_scale_factors([scale,scale,scale]))
         mesh = Mesh.from_polygons([polyline])
-        outPolylines[type[i]].append(mesh)
+        #print(types[i])
+        out_mesh[my_dict[types[i]]].append(mesh)
 
 
-    for i in range (len(outPolylines)):
+    for i in range (len(out_mesh)):
         #print(len(outPolylines[i]))
-        if(len(outPolylines[i])>0):
-            viewer.add(Collection(outPolylines[i]),color = outPolylinesColors[i],opacity=0.75)
+        if(len(out_mesh[i])>0):
+            #for j in outPolylines[i]:
+            #    viewer.add(j,color = outPolylinesColors[i],opacity=0.75)
+            colors_mesh = []
+            for j in range(len(out_mesh[i])):
+                colors_mesh.append(out_mesh_colors[i])
+                viewer.add(out_mesh[i][j],color =out_mesh_colors[i],show_edges  = True, opacity = 0.75)
+                
+
+            #viewer.add(Collection(out_mesh[i]),colors =colors_mesh)
+    viewer.add(Collection(polylines),linewidth = t)
+            
 
 def display_polylines(viewer, polylines, scale=0.00,r = 0.0, g = 0.0, b = 0.0, t = 1, collection = True, movex = 1.25):
 
 
     polylinesScaled = []
     colors = []
+
+
     for i in polylines:
         #print(i)
         if(len(i)>1):

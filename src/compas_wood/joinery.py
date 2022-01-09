@@ -1,4 +1,5 @@
 #from _typeshed import NoneType
+from compas.geometry.primitives import polyline
 import numpy as np
 from compas.plugins import plugin
 from compas.geometry import Point
@@ -183,11 +184,11 @@ def get_connection_zones(
 
 
 
-@plugin(category='compas_wood_cpp', pluggable_name='compas_wood_cpp_closed_mesh_from_poylylines')
+@plugin(category='compas_wood_cpp', pluggable_name='compas_wood_cpp_closed_mesh_from_polylines')
 def closed_mesh_from_polylines(
     polylines_vertices_XYZ,
     ):
-    """Compute joinery
+    """Create a mesh from a top and bottom outlines
 
     Parameters
     ----------
@@ -286,7 +287,7 @@ def closed_mesh_from_polylines(
 def rtree(
     polylines_vertices_XYZ,
     ):
-    """Compute joinery
+    """Find neighbors of polyline pairs using the R-Tree search
 
     Parameters
     ----------
@@ -414,6 +415,110 @@ def rtree(
     print("============================================================================== CPP -")
     #print("Output")
     return neighbours, boxes_AABB, boxes_OOBB
+
+
+
+@plugin(category='compas_wood_cpp', pluggable_name='compas_wood_cpp_joints')
+def joints(
+    polylines_vertices_XYZ,
+    search_type
+    ):
+    """Find joints using face_to_face or plane_to_face search
+
+    Parameters
+    ----------
+    polylines_vertices_XYZ : pairs of polylines
+    search_type : int 0 - face_to_face, 1 - plane_to_face, 2 - all
+
+    Returns
+    -------
+    element_pairs
+        List of element indices
+    joint_areas
+        List of joint areas as polylines
+    joint_types
+        List of joint types as int
+
+    """
+
+
+
+    # ==============================================================================
+    # Prepare input
+    # ==============================================================================
+    flat_list_of_points = []
+    vertex_count_per_polyline = []
+   
+
+
+    for i in range(0, (int)(len(polylines_vertices_XYZ)*0.5)):
+        flat_list_of_points.extend(polylines_vertices_XYZ[i*2])
+        flat_list_of_points.extend(polylines_vertices_XYZ[i*2+1])
+        vertex_count_per_polyline.append(len(polylines_vertices_XYZ[i*2]))
+        vertex_count_per_polyline.append(len(polylines_vertices_XYZ[i*2+1]))
+
+
+
+
+    # ==============================================================================
+    # Convert to Numpy
+    # ==============================================================================
+    V = np.asarray(flat_list_of_points, dtype=np.float64)
+    F = np.asarray(vertex_count_per_polyline, dtype=np.int32)
+
+
+    # ==============================================================================
+    # Test CPP module
+    # ==============================================================================
+   
+    #print("Input")
+    #print("flat_list_of_points " + str(V.size))
+    #print("vertex_count_per_polyline " + str(F.size))
+    print("============================================================================== CPP +")
+    
+    # ==============================================================================
+    # Execute main CPP method
+    # ==============================================================================
+
+    start_time = time.time()
+    element_pairs, joint_areas, joint_types = pybind11_joinery_solver.pybind11_joints( V, F, search_type )
+   
+
+    print("==================================== %s ms ====================================" %  round((time.time() - start_time)*1000.0) )
+    # ==============================================================================
+    # Process output
+    # ==============================================================================
+    #print("Number of Neighbours " , len(neighbours))
+    #print("Number of AABB Corners " , len(AABB_corners))
+    #print("Number of OOBB Corners " , len(OOBB_corners))
+
+    """
+    for i in element_pairs:
+        print(i[0])
+        print(i[1])
+    """
+
+    element_pairs_list = []
+    for id in element_pairs:
+            element_pairs_list.append([id[0],id[1]])
+
+    joint_areas_polylines = []
+    for points_coord in joint_areas :
+        points = [Point(*point) for point in points_coord]
+        polyline =  Polyline(points)
+        joint_areas_polylines.append(polyline )
+    
+    
+    joint_types_list = []
+    for id in joint_types:
+            joint_types_list.append(id[0])
+    #print("Number of polylines " + str(len(joint_areas_polylines)))
+
+
+    print("============================================================================== CPP -")
+    #print("Output")
+    return element_pairs_list, joint_areas_polylines,  joint_types_list
+
 
 
 
