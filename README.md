@@ -61,17 +61,20 @@ https://user-images.githubusercontent.com/18013985/147587822-cfb43c96-4a81-4b89-
 - (Headers) C/C++ -> General -> Additional Include Directions :
 ```
 $(RhinoIncDir); \
-C:\IBOIS57\_Code\Software\Python\Pybind11Example\externals\pybind11\include; \
-C:\IBOIS57\_Code\Software\Python\Pybind11Example\source\module; \
-C:\Users\petra\AppData\Local\Programs\Python\Python38\include; \
-C:\IBOIS57\_Code\Software\CPP\CGAL\CGAL-5.3\include; \
-C:\IBOIS57\_Code\Software\CPP\CGAL\CGAL-5.3\auxiliary\gmp\include; 
-C:\IBOIS57\_Code\Software\CPP\Eigen\eigen-3.3.9; \
+C:\Users\petra\AppData\Local\Programs\Python\Python38\include;
+C:\IBOIS57\_Code\Software\CPP\pybind11-2.9.0\include;
+C:\IBOIS57\_Code\Software\CPP\CGAL\CGAL-5.3\include;
+C:\IBOIS57\_Code\Software\CPP\CGAL\CGAL-5.3\auxiliary\gmp\include;
+C:\IBOIS57\_Code\Software\CPP\Eigen\eigen-3.3.9;
 C:\IBOIS57\_Code\Software\CPP\Boost\;
+
 C:\IBOIS57\_Code\Software\Raccoon_Litter_Box\joinery_solver; \
 C:\IBOIS57\_Code\Software\Raccoon_Litter_Box\joinery_solver\joinery_solver_rhino7; \
-C:\IBOIS57\_Code\Software\Raccoon_Litter_Box\joinery_solver\joinery_solver_rhino6; \
 %(AdditionalIncludeDirectories)
+
+![image](https://user-images.githubusercontent.com/18013985/148752197-b05ebef9-709d-4fbb-ac55-9e905aaaddcf.png)
+
+
 ```
 - (Libraries) Linker -> Input -> Additional Dependencies :
 ```
@@ -79,6 +82,7 @@ C:\Users\petra\AppData\Local\Programs\Python\Python38\libs\python38.lib; \
 C:\IBOIS57\_Code\Software\CPP\CGAL\CGAL-5.3\auxiliary\gmp\lib\libgmp-10.lib; \
 C:\IBOIS57\_Code\Software\CPP\CGAL\CGAL-5.3\auxiliary\gmp\lib\libmpfr-4.lib; 
 ```
+![image](https://user-images.githubusercontent.com/18013985/148752247-8d0cacbe-55de-461c-9a4c-429974fb151d.png)
 
 
  
