@@ -60,6 +60,7 @@ https://user-images.githubusercontent.com/18013985/147587822-cfb43c96-4a81-4b89-
 -  CGAL Builds with C++14, not C++17 
 - (Headers) C/C++ -> General -> Additional Include Directions :
 ```
+
 $(RhinoIncDir); \
 C:\Users\petra\AppData\Local\Programs\Python\Python38\include;
 C:\IBOIS57\_Code\Software\CPP\pybind11-2.9.0\include;
@@ -71,11 +72,12 @@ C:\IBOIS57\_Code\Software\CPP\Boost\;
 C:\IBOIS57\_Code\Software\Raccoon_Litter_Box\joinery_solver; \
 C:\IBOIS57\_Code\Software\Raccoon_Litter_Box\joinery_solver\joinery_solver_rhino7; \
 %(AdditionalIncludeDirectories)
+```
 
 ![image](https://user-images.githubusercontent.com/18013985/148752197-b05ebef9-709d-4fbb-ac55-9e905aaaddcf.png)
 
 
-```
+
 - (Libraries) Linker -> Input -> Additional Dependencies :
 ```
 C:\Users\petra\AppData\Local\Programs\Python\Python38\libs\python38.lib; \
