@@ -40,7 +40,7 @@ def get_pybind_include():
 def get_eigen_include():
     if windows:
         text = (str)(os.path.join(conda_prefix, 'Library', 'include', 'eigen3'))
-        return = text
+        return text
     return os.path.join(conda_prefix, 'include', 'eigen3')
 
 
