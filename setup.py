@@ -145,7 +145,7 @@ setup(
     description="Joinery",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/petrasvestartas/compas_wood",
+    url="https://github.com/ibois-epfl/compas_wood",
     author="Petras Vestartas",
     author_email="petrasvestartas@gmail.com",
     license="GPL-3 License",
