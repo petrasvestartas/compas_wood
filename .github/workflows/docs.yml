@@ -23,7 +23,7 @@ jobs:
       - uses: conda-incubator/setup-miniconda@v2.0.0
         with:
           miniconda-version: "latest"
-          activate-environment: cgal
+          activate-environment: wood
           channels: conda-forge
           python-version: 3.7
 
