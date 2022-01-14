@@ -266,7 +266,6 @@ def closed_mesh_from_polylines(
     print("Input")
     print("flat_list_of_points " + str(V.size))
     print("vertex_count_per_polyline " + str(F.size))
-    
     """
     # ==============================================================================
     # Execute main CPP method
@@ -289,17 +288,9 @@ def closed_mesh_from_polylines(
         if( abs(i[0]) < len(output_V) and abs(i[1]) < len(output_V) and abs(i[2]) < len(output_V)  ):
             output_F_.append(i)
         #print(i)
-    
-    
     print("V")
     for i in output_V:
         print(i)
-    
-    
-
-  
-   
-    
     # ==============================================================================
     # Process output
     # ==============================================================================
@@ -399,8 +390,6 @@ def rtree(
     for i in range (len(pointsets)) :
         points = [Point(*point) for point in pointsets[i]]
         polyline = Polyline(points)
-    
-    
     for i in range (len(neighbours)) :
         print("New")
         for j in neighbours[i]:
