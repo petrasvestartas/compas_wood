@@ -36,6 +36,7 @@ conda_prefix = os.getenv('CONDA_PREFIX')
 windows = os.name == 'nt'
 
 def get_pybind_include():
+    print(conda_prefix)
     if windows:
         return os.path.join(conda_prefix, 'Library', 'include')
     return os.path.join(conda_prefix, 'include')
