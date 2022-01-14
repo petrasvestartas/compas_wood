@@ -8,8 +8,6 @@ from __future__ import print_function
 import io
 import os
 
-
-
 from os import path
 
 from setuptools import setup, Extension
