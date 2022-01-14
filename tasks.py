@@ -250,7 +250,7 @@ def release(ctx, release_type):
         )
 
     # Run checks
-    # ctx.run('invoke check test')
+    ctx.run("invoke check test")
 
     # Bump version and git tag it
     ctx.run("bump2version %s --verbose" % release_type)
