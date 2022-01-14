@@ -50,7 +50,7 @@ def get_library_dirs():
 
 ext_modules = [
     Extension(
-        "joinery_solver",
+        "pybind11_joinery_solver",
         sorted(
             [
                 "src/clipper.cpp",
@@ -91,6 +91,7 @@ def has_flag(compiler, flagname):
 
 def cpp_flag(compiler):
     """Return the -std=c++[11/14/17] compiler flag.
+
     The newer version is prefered over c++11 (when it is available).
     """
     # flags = ['-std=c++17', '-std=c++14', '-std=c++11']
@@ -142,11 +143,11 @@ class BuildExt(build_ext):
 setup(
     name="compas_wood",
     version="0.1.1",
-    description="Joinery",
+    description="Joinery Solver",
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/ibois-epfl/compas_wood",
-    author="Petras Vestartas",
+    author="petras vestartas",
     author_email="petrasvestartas@gmail.com",
     license="GPL-3 License",
     classifiers=[
