@@ -1,22 +1,24 @@
-# flake8: noqa
-cython <= 0.29.23
-ezdxf
-imageio <= 2.6; python_version < '3.5'
-imageio >= 2.7; python_version >= '3.5'
-jsonschema
-laspy
 matplotlib >= 2.2, < 3.0; python_version >= '2.7' and python_version < '3.0'
 matplotlib >= 2.2, < 3.1; python_version >= '3.5' and python_version <= '3.7' and sys_platform == 'win32'
 matplotlib >= 3.1; python_version >= '3.8' and sys_platform == 'win32'
 matplotlib >= 2.2; python_version >= '3.5' and sys_platform != 'win32'
-networkx
-numba
-numpy >= 1.15.4
-pillow
-planarity ; sys_platform != 'win32'
-pycollada
-schema
-scipy >= 1.1
-sympy
-typing_extensions
-watchdog
+autopep8
+attrs >=17.4
+bump2version >=1.0.1
+check-manifest >=0.36
+doc8
+flake8
+graphviz
+invoke >=0.14
+ipykernel
+ipython >=5.8
+isort
+m2r
+nbsphinx
+pydocstyle
+pytest >=3.2
+sphinx_compas_theme >=0.14.2
+sphinx >=3.4
+twine
+wheel
+-e .
