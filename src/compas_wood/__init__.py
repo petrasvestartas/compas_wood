@@ -23,10 +23,6 @@ joinery_solver
     joinery.closed_mesh_from_polylines
     joinery.rtree
     joinery.joints
-    
-
-
-
 """
 
 from __future__ import print_function
@@ -49,7 +45,7 @@ DOCS = os.path.abspath(os.path.join(HOME, "docs"))
 TEMP = os.path.abspath(os.path.join(HOME, "temp"))
 
 __all_plugins__ = [
-    'compas_cgal.joinery',
+    "compas_cgal.joinery",
 ]
 
 
