@@ -541,3 +541,89 @@ def joints(polylines_vertices_XYZ, search_type):
     )
     # print("Output")
     return element_pairs_list, joint_areas_polylines, joint_types_list
+
+
+@plugin(
+    category="compas_wood_cpp",
+    pluggable_name="compas_wood_cpp_intersecting_sequences_of_dD_iso_oriented_boxes",
+)
+def closest_polylines(polylines, segment_radii, min_distance):
+    """Find closest polylines within given distance
+
+    Parameters
+    ----------
+    polylines : list of polylines
+    segment_radii : radius per each polyline segment, used to construct boxes around segments
+    min_distance : distance until which search is valid
+
+    Returns
+    -------
+    neighbours_list
+        List of element indices of polyline0_id_segment0_id_polyline1_id_segment1_id
+    pair_points_list
+        a list of 2 points
+
+    """
+
+    # ==============================================================================
+    # Prepare input
+    # ==============================================================================
+    flat_list_of_points = []
+    flat_list_radii = []
+    vertex_count_per_polyline = []
+
+    for i in range(len(polylines)):
+        flat_list_of_points.extend(polylines[i])
+        vertex_count_per_polyline.append(len(polylines[i]))
+        flat_list_radii.extend(segment_radii[i])
+
+    # ==============================================================================
+    # Convert to Numpy
+    # ==============================================================================
+    V = np.asarray(flat_list_of_points, dtype=np.float64)
+    S_R = np.asarray(flat_list_radii, dtype=np.float64)
+    F = np.asarray(vertex_count_per_polyline, dtype=np.int32)
+
+    # ==============================================================================
+    # Test CPP module
+    # ==============================================================================
+    print(
+        "============================================================================== CPP +"
+    )
+
+    # ==============================================================================
+    # Execute main CPP method
+    # ==============================================================================
+
+    start_time = time.time()
+    (
+        neighbours,
+        point_pairs,
+    ) = pybind11_joinery_solver.pybind11_intersecting_sequences_of_dD_iso_oriented_boxes(
+        V, S_R, F, min_distance
+    )
+    # print(point_pairs)
+    print(
+        "==================================== %s ms ===================================="
+        % round((time.time() - start_time) * 1000.0)
+    )
+
+    print(
+        "============================================================================== CPP -"
+    )
+
+    # ==============================================================================
+    # Process output
+    # ==============================================================================
+    neighbours_list = []
+    for i in neighbours:
+        neighbours_list.extend([i[0], i[1], i[2], i[3]])
+
+    pair_points_list = []
+    for i in point_pairs:
+        p0 = Point(i[0], i[1], i[2])
+        p1 = Point(i[3], i[4], i[5])
+        pair_points_list.append(Polyline([p0, p1]))
+
+    # print("Output")
+    return neighbours_list, pair_points_list

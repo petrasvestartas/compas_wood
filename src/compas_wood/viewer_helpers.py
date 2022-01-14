@@ -129,7 +129,11 @@ def display_polylines(
                 if len(i) == 4:
                     viewer.add(a, color=(0, 0, 1), linewidth=1)
                 elif len(i) == 2:
-                    viewer.add(a, color=(0, 1, 0), linewidth=10)
+
+                    if a[0].distance_to_point(a[1]) < 0.001:
+                        viewer.add(a[0], color=(206 / 255, 0, 88 / 255.0), size=15)
+                    else:
+                        viewer.add(a, color=(206 / 255, 0, 88 / 255.0), linewidth=10)
                 else:
                     viewer.add(a, color=(r, g, b), linewidth=t)
 
