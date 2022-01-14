@@ -8,8 +8,8 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 #pragma region converter
 
-
-struct Result {
+struct Result
+{
     RowMatrixXd vertices;
     RowMatrixXi faces;
 };
@@ -22,39 +22,35 @@ struct Result {
 
 std::vector<RowMatrixXd> result_from_polylines(CGAL_Polylines polylines);
 
-std::vector<RowMatrixXd> result_from_vector(IK::Vector_3* v);
+std::vector<RowMatrixXd> result_from_vector(IK::Vector_3 *v);
 
 std::vector<RowMatrixXd> result_from_bbox(std::vector<CGAL::Bbox_3> boxes);
 
-std::vector<CGAL_Polyline> polylines_from_vertices_and_faces(const RowMatrixXd& V, const RowMatrixXi& F);
+std::vector<CGAL_Polyline> polylines_from_vertices_and_faces(const RowMatrixXd &V, const RowMatrixXi &F);
 
 void polylines_from_vertices_and_faces_and_properties(
-    const RowMatrixXd& polylines_vertices_XYZ,
-    const RowMatrixXi& polylines_vertices_count_int,
-    const RowMatrixXd& face_vectors_XYZ,
-    const RowMatrixXi& face_joints_types_int,
-    const RowMatrixXi& three_valence_element_indices_and_instruction,
-    const RowMatrixXd& default_parameters_for_joint_types_matrix,
+    const RowMatrixXd &polylines_vertices_XYZ,
+    const RowMatrixXi &polylines_vertices_count_int,
+    const RowMatrixXd &face_vectors_XYZ,
+    const RowMatrixXi &face_joints_types_int,
+    const RowMatrixXi &three_valence_element_indices_and_instruction,
+    const RowMatrixXd &default_parameters_for_joint_types_matrix,
 
-    std::vector<CGAL_Polyline>& out_polyline_pairs,
-    std::vector<std::vector<IK::Vector_3>>& out_insertion_vectors,
-    std::vector<std::vector<int>>& out_joint_types,
-    std::vector<std::vector<int>>& out_three_valence_element_indices_and_instruction,
-    std::vector<double>& out_default_parameters_for_joint_types
-);
+    std::vector<CGAL_Polyline> &out_polyline_pairs,
+    std::vector<std::vector<IK::Vector_3>> &out_insertion_vectors,
+    std::vector<std::vector<int>> &out_joint_types,
+    std::vector<std::vector<int>> &out_three_valence_element_indices_and_instruction,
+    std::vector<double> &out_default_parameters_for_joint_types);
 
+std::vector<RowMatrixXd> result_from_polylinesVectorVector(std::vector<std::vector<CGAL_Polyline>> polylines);
 
-std::vector<RowMatrixXd> result_from_polylinesVectorVector(std::vector < std::vector < CGAL_Polyline>> polylines);
+std::vector<RowMatrixXd> result_from_polylinesVector(std::vector<CGAL_Polyline> &polylines, bool debug);
 
-std::vector<RowMatrixXd> result_from_polylinesVector(std::vector < CGAL_Polyline>& polylines, bool debug);
+std::vector<RowMatrixXd> result_from_polylinesVector(std::vector<std::vector<CGAL_Polyline>> &polylines, bool debug);
 
-std::vector<RowMatrixXd> result_from_polylinesVector(std::vector < std::vector < CGAL_Polyline>>& polylines, bool debug);
-
-std::tuple< std::vector<RowMatrixXd>, std::vector<int>  > result_tuple_from_polylinesVector(std::vector < std::vector < CGAL_Polyline>>& polylines_vector, bool debug);
-
+std::tuple<std::vector<RowMatrixXd>, std::vector<int>> result_tuple_from_polylinesVector(std::vector<std::vector<CGAL_Polyline>> &polylines_vector, bool debug);
 
 #pragma endregion converter
-
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //Wrapped methods with inputs
@@ -62,13 +58,13 @@ std::tuple< std::vector<RowMatrixXd>, std::vector<int>  > result_tuple_from_poly
 
 void pybind11_test();
 
-std::tuple< std::vector<RowMatrixXd>, std::vector<int>>  pybind11_get_connection_zones(
-    Eigen::Ref<const RowMatrixXd>& polylines_vertices_XYZ,
-    Eigen::Ref<const RowMatrixXi>& polylines_vertices_count_int,
-    Eigen::Ref<const RowMatrixXd>& face_vectors_XYZ,
-    Eigen::Ref<const RowMatrixXi>& face_joints_types_int,
-    Eigen::Ref<const RowMatrixXi>& three_valence_element_indices_and_instruction,
-    Eigen::Ref<const RowMatrixXd>& default_parameters_for_joint_types_matrix,
+std::tuple<std::vector<RowMatrixXd>, std::vector<int>> pybind11_get_connection_zones(
+    Eigen::Ref<const RowMatrixXd> &polylines_vertices_XYZ,
+    Eigen::Ref<const RowMatrixXi> &polylines_vertices_count_int,
+    Eigen::Ref<const RowMatrixXd> &face_vectors_XYZ,
+    Eigen::Ref<const RowMatrixXi> &face_joints_types_int,
+    Eigen::Ref<const RowMatrixXi> &three_valence_element_indices_and_instruction,
+    Eigen::Ref<const RowMatrixXd> &default_parameters_for_joint_types_matrix,
 
     int search_type,
     double division_distance,
@@ -78,16 +74,19 @@ std::tuple< std::vector<RowMatrixXd>, std::vector<int>>  pybind11_get_connection
 
 );
 
-std::tuple< RowMatrixXd, RowMatrixXi> pybind11_closed_mesh_from_polylines(Eigen::Ref<const RowMatrixXd>& V, Eigen::Ref<const RowMatrixXi>& F);
+std::tuple<RowMatrixXd, RowMatrixXi> pybind11_closed_mesh_from_polylines(Eigen::Ref<const RowMatrixXd> &V, Eigen::Ref<const RowMatrixXi> &F);
 
-std::tuple< std::vector<RowMatrixXi>, RowMatrixXd, RowMatrixXd > pybind11_rtree(Eigen::Ref<const RowMatrixXd>& V, Eigen::Ref<const RowMatrixXi>& F);//indices, aabb, oobb
+std::tuple<std::vector<RowMatrixXi>, RowMatrixXd, RowMatrixXd> pybind11_rtree(Eigen::Ref<const RowMatrixXd> &V, Eigen::Ref<const RowMatrixXi> &F); //indices, aabb, oobb
 
-std::tuple< RowMatrixXi, std::vector<RowMatrixXd>, RowMatrixXi > pybind11_joints(Eigen::Ref<const RowMatrixXd>& V, Eigen::Ref<const RowMatrixXi>& F, int& search_type);
+std::tuple<RowMatrixXi, std::vector<RowMatrixXd>, RowMatrixXi> pybind11_joints(Eigen::Ref<const RowMatrixXd>& V, Eigen::Ref<const RowMatrixXi>& F, int& search_type);
+
+std::tuple<RowMatrixXi, RowMatrixXd> pybind11_intersecting_sequences_of_dD_iso_oriented_boxes(Eigen::Ref<const RowMatrixXd>& V, Eigen::Ref<const RowMatrixXd>& E_R, Eigen::Ref<const RowMatrixXi>& F, double& min_distance);
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //Wrapped package joinery_solver
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-PYBIND11_MODULE(pybind11_joinery_solver, m) {
+PYBIND11_MODULE(pybind11_joinery_solver, m)
+{
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //pybind11 module "pybind11_joinery_solver" description
@@ -103,7 +102,6 @@ PYBIND11_MODULE(pybind11_joinery_solver, m) {
            pybind11_connectionzones
     )pbdoc";
 
-
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //Exposed structs
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -112,7 +110,7 @@ PYBIND11_MODULE(pybind11_joinery_solver, m) {
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //Exposed methods
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    m.def("pybind11_test", &pybind11_test);//Function reference
+    m.def("pybind11_test", &pybind11_test); //Function reference
 
     m.def(
         "pybind11_get_connection_zones",
@@ -128,32 +126,32 @@ PYBIND11_MODULE(pybind11_joinery_solver, m) {
         pybind11::arg("division_distance"),
         pybind11::arg("shift"),
         pybind11::arg("output_type"),
-        pybind11::arg("triangulation")
-    );
+        pybind11::arg("triangulation"));
 
     m.def(
         "pybind11_closed_mesh_from_polylines",
         &pybind11_closed_mesh_from_polylines,
         pybind11::arg("V").noconvert(),
-        pybind11::arg("F").noconvert()
-    );
-
+        pybind11::arg("F").noconvert());
 
     m.def(
         "pybind11_rtree",
         &pybind11_rtree,
         pybind11::arg("V").noconvert(),
-        pybind11::arg("F").noconvert()
-    );
+        pybind11::arg("F").noconvert());
 
     m.def(
         "pybind11_joints",
         &pybind11_joints,
         pybind11::arg("V").noconvert(),
         pybind11::arg("F").noconvert(),
-        pybind11::arg("search_type")
-    );
+        pybind11::arg("search_type"));
 
-
-
+    m.def(
+        "pybind11_intersecting_sequences_of_dD_iso_oriented_boxes",
+        &pybind11_intersecting_sequences_of_dD_iso_oriented_boxes,
+        pybind11::arg("V").noconvert(),
+        pybind11::arg("E_R").noconvert(),
+        pybind11::arg("F").noconvert(),
+        pybind11::arg("min_distance"));
 }
