@@ -1,11 +1,14 @@
 #!/usr/bin/env python
 # -*- encoding: utf-8 -*-
 # flake8: noqa
-import io
-import os
 
 from __future__ import absolute_import
 from __future__ import print_function
+
+import io
+import os
+
+
 
 from os import path
 
