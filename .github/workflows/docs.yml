@@ -23,7 +23,7 @@ jobs:
       - uses: conda-incubator/setup-miniconda@v2.0.0
         with:
           miniconda-version: "latest"
-          activate-environment: wood
+          activate-environment: cgal
           channels: conda-forge
           python-version: 3.7
 
@@ -53,7 +53,7 @@ jobs:
     outputs:
       commit_type: ${{ steps.docs.outputs.commit_type }}
       current_version: ${{ steps.docs.outputs.current_version }}
-  
+
   docVersions:
     needs: build
     if: needs.build.outputs.commit_type == 'tag'
@@ -64,7 +64,7 @@ jobs:
         with:
           ref: gh-pages
 
-      - uses: compas-dev/compas-actions.docversions@v1.2.1
+      - uses: compas-dev/compas-actions.docversions@v1.0.1
         with:
           current_version: ${{ needs.build.outputs.current_version }}
 
