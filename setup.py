@@ -61,8 +61,8 @@ ext_modules = [
         ]),
         include_dirs=[
             './include',
-            get_eigen_include(),
-            get_pybind_include()
+            get_pybind_include(),
+            get_eigen_include()
         ],
         library_dirs=[
             get_library_dirs(),
