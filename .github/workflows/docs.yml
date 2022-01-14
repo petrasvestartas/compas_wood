@@ -13,15 +13,32 @@ on:
 jobs:
   build:
     name: build and deploy docs
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
+    defaults:
+      run:
+        shell: bash -l {0}
     steps:
       - uses: actions/checkout@v2
 
-      - uses: compas-dev/compas-actions.docs@v1.2.1
+      - uses: conda-incubator/setup-miniconda@v2.0.0
+        with:
+          miniconda-version: "latest"
+          activate-environment: wood
+          channels: conda-forge
+          python-version: 3.7
+
+      - name: build (windows)
+        run: |
+          conda install eigen=3.3 boost-cpp mpir mpfr cgal-cpp=5.2 pybind11 compas -y
+          pip install -r requirements-dev.txt
+          invoke docs
+      - uses: compas-dev/compas-actions.docs@v1.0.2
         id: docs
         with:
           dest: deploy
           build_to_subfolder: true
+          install_dependencies: false
+          build_docs: false
 
       - name: Deploy docs
         if: success() && steps.docs.outputs.commit_type != 'pull'
@@ -32,7 +49,7 @@ jobs:
           keep_history: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    
+
     outputs:
       commit_type: ${{ steps.docs.outputs.commit_type }}
       current_version: ${{ steps.docs.outputs.current_version }}
