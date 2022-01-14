@@ -5,11 +5,6 @@ from compas.datastructures import Mesh
 # viewer
 from compas_view2.app import App
 from compas_view2.objects import Collection
-import compas_view2.objects as w
-from compas_view2.views import view
-
-# python
-from random import random, randrange
 
 
 def display(
@@ -32,15 +27,15 @@ def display(
     )
 
     # preview
-    if input != None:
+    if input is not None:
         display_polylines(
             viewer, input, scale, 1.0, 0.0, 0.0, 3, True, movex_0
         )  # polylines without joints
 
-    if result != None:
+    if result is not None:
 
         flag = False
-        if display_polylines_as_mesh_types != None:
+        if display_polylines_as_mesh_types is not None:
             if len(display_polylines_as_mesh_types) == len(result):
                 flag = True
 
@@ -55,7 +50,7 @@ def display(
                 )  # polylines with joints
                 # display_polylines(viewer,result[i],scale,randrange(0,206)/255.0,0,randrange(0,88)/255.0, 3,False,movex_1) #polylines with joints
 
-    if meshes != None:
+    if meshes is not None:
         for i in range(len(meshes)):
             if i == 0 and color_first:
                 display_mesh(viewer, meshes[i], scale, 206 / 255, 0, 88 / 255.0, 3)
@@ -68,8 +63,8 @@ def display(
 def display_lines(viewer, lines, scale=0.01):
     linesScaled = []
     for i in lines:
-        l = cg.Line(i[0] * scale, i[1] * scale)
-        linesScaled.append(l)
+        line = cg.Line(i[0] * scale, i[1] * scale)
+        linesScaled.append(line)
     viewer.add(Collection(linesScaled), color=(0, 0, 0), linewidth=2)
 
 
@@ -130,7 +125,7 @@ def display_polylines(
                 )
             )
             polylinesScaled.append(a)
-            if collection == False:
+            if collection is False:
                 if len(i) == 4:
                     viewer.add(a, color=(0, 0, 1), linewidth=1)
                 elif len(i) == 2:
@@ -138,7 +133,7 @@ def display_polylines(
                 else:
                     viewer.add(a, color=(r, g, b), linewidth=t)
 
-            if collection == True:
+            if collection is True:
                 colors.append((r, g, b))
                 # colors.append((1,0,0))
 

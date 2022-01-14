@@ -1,14 +1,11 @@
 # from _typeshed import NoneType
-from compas.geometry.primitives import polyline
 import numpy as np
 from compas.plugins import plugin
 from compas.geometry import Point
-from compas.geometry import Vector
 from compas.geometry import Polyline
 from compas.datastructures import Mesh
 from compas.geometry import Box
 from compas.geometry import Frame
-from compas.datastructures import meshes_join_and_weld
 import pybind11_joinery_solver
 import time
 
@@ -86,12 +83,12 @@ def get_connection_zones(
         50,
     ]
 
-    flag0 = face_vectors_XYZ != None
+    flag0 = face_vectors_XYZ is not None
     if flag0:
         flag0 = len(face_vectors_XYZ) == len(polylines_vertices_XYZ) * 0.5
     print(flag0)
 
-    flag1 = face_joints_types_int != None
+    flag1 = face_joints_types_int is not None
     if flag1:
         flag1 = len(face_joints_types_int) == len(polylines_vertices_XYZ) * 0.5
 
@@ -100,9 +97,9 @@ def get_connection_zones(
     # print(len(face_joints_types_int))
     # print(len(polylines_vertices_XYZ))
 
-    flag2 = three_valance_element_indices_and_instruction != None
+    flag2 = three_valance_element_indices_and_instruction is not None
 
-    if default_joint_parameters != None:
+    if default_joint_parameters is not None:
         if len(default_joint_parameters) == 6 * 3:
             flat_list_default_joint_paramters = default_joint_parameters
 
@@ -141,7 +138,6 @@ def get_connection_zones(
     P = np.asarray(flat_list_default_joint_paramters, dtype=np.float64)
 
     search_type = 2
-    show_plane_normals = True
     division_distance = 300
     shift = 0.6
     output_type = 4
@@ -270,15 +266,21 @@ def closed_mesh_from_polylines(
     print("Input")
     print("flat_list_of_points " + str(V.size))
     print("vertex_count_per_polyline " + str(F.size))
-    print("============================================================================== CPP +")
+    
     """
     # ==============================================================================
     # Execute main CPP method
     # ==============================================================================
-
+    print(
+        "============================================================================== CPP +"
+    )
     start_time = time.time()
     output_V, output_F = pybind11_joinery_solver.pybind11_closed_mesh_from_polylines(
         V, F
+    )
+    print(
+        "==================================== %s ms ===================================="
+        % round((time.time() - start_time) * 1000.0)
     )
     """
     print("F")
@@ -297,7 +299,7 @@ def closed_mesh_from_polylines(
 
   
    
-    print("==================================== %s ms ====================================" %  round((time.time() - start_time)*1000.0) )
+    
     # ==============================================================================
     # Process output
     # ==============================================================================
@@ -366,7 +368,9 @@ def rtree(
     # print("Input")
     # print("flat_list_of_points " + str(V.size))
     # print("vertex_count_per_polyline " + str(F.size))
-    # print("============================================================================== CPP +")
+    print(
+        "============================================================================== CPP +"
+    )
 
     # ==============================================================================
     # Execute main CPP method
@@ -377,7 +381,13 @@ def rtree(
         V, F
     )
 
-    # print("==================================== %s ms ====================================" %  round((time.time() - start_time)*1000.0) )
+    print(
+        "==================================== %s ms ===================================="
+        % round((time.time() - start_time) * 1000.0)
+    )
+    print(
+        "============================================================================== CPP -"
+    )
     # ==============================================================================
     # Process output
     # ==============================================================================
@@ -443,7 +453,6 @@ def rtree(
         mesh_box = Mesh.from_vertices_and_faces(V, F)
         boxes_OOBB.append(mesh_box)
 
-    # print("============================================================================== CPP -")
     # print("Output")
     return neighbours, boxes_AABB, boxes_OOBB
 
