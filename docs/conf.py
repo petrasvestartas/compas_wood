@@ -51,19 +51,6 @@ extensions = [
 
 # autodoc options
 
-autodoc_mock_imports = [
-    "System",
-    "clr",
-    "Eto",
-    "Rhino",
-    "Grasshopper",
-    "scriptcontext",
-    "rhinoscriptsyntax",
-    "bpy",
-    "bmesh",
-    "mathutils"
-]
-
 autodoc_default_options = {
     "undoc-members": True,
     "show-inheritance": True,
