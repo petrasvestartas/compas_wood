@@ -627,3 +627,111 @@ def closest_polylines(polylines, segment_radii, min_distance):
 
     # print("Output")
     return neighbours_list, pair_points_list
+
+
+def beam_volumes(
+    polylines,
+    segment_radii,
+    segment_normals,
+    min_distance,
+    volume_length,
+    cross_or_side_to_end,
+    flip_male,
+):
+    """Find closest polylines within given distance
+
+    Parameters
+    ----------
+    polylines : list of polylines
+    segment_radii : radius per each polyline segment, used to construct boxes around segments
+    segment_vectors : radius per each polyline segment, used to construct boxes around segments
+    min_distance : double distance until which search is valid
+    volume_length : double length of beam volumes
+    cross_or_side_to_end : double type0_type1_parameter_00_05
+    flip_male : property for side-to-end volumes, 0 - no shift, -1 shift to right, 1 shift to left
+
+    Returns
+    -------
+    neighbours_list
+        List of element indices of polyline0_id_segment0_id_polyline1_id_segment1_id
+    pair_points_list
+        a list of 2 points
+    pair_volumes_list
+        a list of 4 polyline
+
+    """
+
+    # ==============================================================================
+    # Prepare input
+    # ==============================================================================
+    flat_list_of_points = []
+    flat_list_radii = []
+    flat_list_normals = []
+    vertex_count_per_polyline = []
+
+    for i in range(len(polylines)):
+        flat_list_of_points.extend(polylines[i])
+        vertex_count_per_polyline.append(len(polylines[i]))
+        flat_list_radii.extend(segment_radii[i])
+        if segment_normals is not None:
+            flat_list_normals.extend(segment_normals[i])
+
+    # ==============================================================================
+    # Convert to Numpy
+    # ==============================================================================
+    V = np.asarray(flat_list_of_points, dtype=np.float64)
+    S_R = np.asarray(flat_list_radii, dtype=np.float64)
+    S_N = np.asarray(flat_list_normals, dtype=np.float64)
+    F = np.asarray(vertex_count_per_polyline, dtype=np.int32)
+
+    # ==============================================================================
+    # Test CPP module
+    # ==============================================================================
+    print(
+        "============================================================================== CPP +"
+    )
+
+    # ==============================================================================
+    # Execute main CPP method
+    # ==============================================================================
+
+    start_time = time.time()
+    (
+        neighbours,
+        point_pairs,
+        volume_pairs,
+    ) = pybind11_joinery_solver.pybind11_beam_volumes(
+        V, S_R, S_N, F, min_distance, volume_length, cross_or_side_to_end, flip_male
+    )
+    # print(point_pairs)
+    print(
+        "==================================== %s ms ===================================="
+        % round((time.time() - start_time) * 1000.0)
+    )
+
+    print(
+        "============================================================================== CPP -"
+    )
+
+    # ==============================================================================
+    # Process output
+    # ==============================================================================
+    neighbours_list = []
+    for i in neighbours:
+        neighbours_list.extend([i[0], i[1], i[2], i[3]])
+
+    pair_points_list = []
+    for i in point_pairs:
+        p0 = Point(i[0], i[1], i[2])
+        p1 = Point(i[3], i[4], i[5])
+        pair_points_list.append(Polyline([p0, p1]))
+
+    pair_volumes_list = []
+    for points_coord in volume_pairs:
+        points = [Point(*point) for point in points_coord]
+        pline = Polyline(points)
+        pair_volumes_list.append(pline)
+        #pair_volumes_list.append(Polyline([pline[0], pline[1]]))
+
+    # print("Output")
+    return neighbours_list, pair_points_list, pair_volumes_list

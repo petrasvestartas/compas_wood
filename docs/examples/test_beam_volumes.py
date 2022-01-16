@@ -4,8 +4,7 @@ from compas.geometry import scale_vector
 
 from compas.geometry import Point
 from compas.geometry import Polyline
-from compas_wood.joinery import test
-from compas_wood.joinery import closest_polylines
+from compas_wood.joinery import beam_volumes, test
 import data_set_beams
 
 # viewer
@@ -20,17 +19,21 @@ os.system("cls" if os.name == "nt" else "clear")
 # ==============================================================================
 
 
-def test_closest_polylines():
+def test_beam_volumes():
 
     polylines = data_set_beams.polylines_5()
     segment_radii = data_set_beams.polylines_radii_5()
 
-    segment_normals = data_set_beams.polylines_vector_3()
+    segment_normals = data_set_beams.polylines_vector_6()
 
-    # Generate connections
-    neighbours, pair_points = closest_polylines(polylines, segment_radii, 20)
+    # Generate connections x<0 - all cross, x > 1.0 all side-end, 0 <= x <= 1 flipping value between cross and side-to-end
+
+    neighbours, pair_points, volume_pairs = beam_volumes(
+        polylines, segment_radii, None, 20, 35, 0.1, 1
+    )
 
     # Display normals
+    """
     normals = []
     for i in range(len(polylines)):
         p0 = midpoint_point_point(polylines[i][0], polylines[i][1])
@@ -39,13 +42,13 @@ def test_closest_polylines():
         pline = Polyline([p0, p1])
         normals.append(pline)
     polylines.extend(normals)
-
+    """
     # Display via Compas_View2
-    display(polylines, pair_points, None, 0.01, 0, 0)
+    display(polylines, volume_pairs, None, 0.01, 0, 0)
 
 
 # ==============================================================================
 # call the compas_wood methods
 # ==============================================================================
 test()
-test_closest_polylines()
+test_beam_volumes()
