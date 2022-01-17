@@ -768,7 +768,7 @@ std::tuple<RowMatrixXi, RowMatrixXd> pybind11_intersecting_sequences_of_dD_iso_o
     return std::make_tuple(neighbours, points);
 }
 
-std::tuple<RowMatrixXi, RowMatrixXd, std::vector<RowMatrixXd>> pybind11_beam_volumes(Eigen::Ref<const RowMatrixXd>& V, Eigen::Ref<const RowMatrixXd>& E_R, Eigen::Ref<const RowMatrixXd>& E_N, Eigen::Ref<const RowMatrixXi>& F, double& min_distance, double& volume_length, double& cross_or_side_to_end, int& flip_male) {
+std::tuple<RowMatrixXi, RowMatrixXd, std::vector<RowMatrixXd>> pybind11_beam_volumes(Eigen::Ref<const RowMatrixXd>& V, Eigen::Ref<const RowMatrixXd>& E_R, Eigen::Ref<const RowMatrixXd>& E_N, Eigen::Ref<const RowMatrixXi>& F, Eigen::Ref<const RowMatrixXi>& F_T, double& min_distance, double& volume_length, double& cross_or_side_to_end, int& flip_male) {
     //////////////////////////////////////////////////////////////////////////////
     //Convert raw-data to list of Polylines
     //////////////////////////////////////////////////////////////////////////////
@@ -814,6 +814,7 @@ std::tuple<RowMatrixXi, RowMatrixXd, std::vector<RowMatrixXd>> pybind11_beam_vol
     for (int i = 0; i < E_N.size(); i++) {
         CGAL::Epick::Vector_3 n(E_N(i, 0), E_N(i, 1), E_N(i, 2));
         one_segment_normals.emplace_back(n);
+        //CGAL_Debug(n);
 
         if (one_segment_normals.size() == lastCount) {
             segment_normals.emplace_back(one_segment_normals);
@@ -822,13 +823,35 @@ std::tuple<RowMatrixXi, RowMatrixXd, std::vector<RowMatrixXd>> pybind11_beam_vol
         }
     }
 
+    //CGAL_Debug(false);
+    //for (size_t i = 0; i < segment_normals.size(); i++) {
+    //    for (size_t j = 0; j < segment_normals[i].size(); j++) {
+    //        CGAL_Debug(segment_normals[i][j]);
+    //    }
+    //}
+    //CGAL_Debug(false);
+    //for (size_t i = 0; i < polylines.size(); i++) {
+    //    CGAL_Debug(false);
+    //    for (size_t j = 0; j < polylines[i].size(); j++) {
+    //        CGAL_Debug(polylines[i][j]);
+    //    }
+    //}
+
+    std::vector<int> face_types;
+    face_types.reserve(F_T.size());
+
+    for (int i = 0; i < F_T.size(); i++) {
+        face_types.emplace_back(F_T(i, 0));
+        //CGAL_Debug(F_T(i, 0));
+    }
+
     //////////////////////////////////////////////////////////////////////////////
     //Perform search
     //////////////////////////////////////////////////////////////////////////////
     std::vector<std::array<int, 4>> polyline0_id_segment0_id_polyline1_id_segment1_id;
     std::vector<std::array<IK::Point_3, 2>> point_pairs;
     std::vector<std::array<CGAL_Polyline, 4>> volume_pairs;
-    cgal_box_search::beam_volumes(polylines, segment_radii, segment_normals, min_distance, volume_length, cross_or_side_to_end, flip_male,
+    cgal_box_search::beam_volumes(polylines, segment_radii, segment_normals, face_types, min_distance, volume_length, cross_or_side_to_end, flip_male,
         polyline0_id_segment0_id_polyline1_id_segment1_id, point_pairs, volume_pairs);
 
     //////////////////////////////////////////////////////////////////////////////

@@ -633,6 +633,7 @@ def beam_volumes(
     polylines,
     segment_radii,
     segment_normals,
+    allowed_types,
     min_distance,
     volume_length,
     cross_or_side_to_end,
@@ -645,6 +646,7 @@ def beam_volumes(
     polylines : list of polylines
     segment_radii : radius per each polyline segment, used to construct boxes around segments
     segment_vectors : radius per each polyline segment, used to construct boxes around segments
+    allowed_types : -1 - all possible types, 0 - end-to-end, 1 - cross or side-to-end, this option is needed because multiple joint can be made in one intersection
     min_distance : double distance until which search is valid
     volume_length : double length of beam volumes
     cross_or_side_to_end : double type0_type1_parameter_00_05
@@ -667,6 +669,11 @@ def beam_volumes(
     flat_list_of_points = []
     flat_list_radii = []
     flat_list_normals = []
+    flat_list_allowed_types = []
+
+    if allowed_types is not None:
+        flat_list_allowed_types.extend(allowed_types)
+
     vertex_count_per_polyline = []
 
     for i in range(len(polylines)):
@@ -677,12 +684,15 @@ def beam_volumes(
             flat_list_normals.extend(segment_normals[i])
 
     # ==============================================================================
-    # Convert to Numpy
+    # Convert to Numpy, points are lists, therefore, some of these will be nested
     # ==============================================================================
     V = np.asarray(flat_list_of_points, dtype=np.float64)
     S_R = np.asarray(flat_list_radii, dtype=np.float64)
     S_N = np.asarray(flat_list_normals, dtype=np.float64)
     F = np.asarray(vertex_count_per_polyline, dtype=np.int32)
+    F_T = np.asarray(flat_list_allowed_types, dtype=np.int32)
+    # print(V)
+    # print(S_N)
 
     # ==============================================================================
     # Test CPP module
@@ -701,7 +711,15 @@ def beam_volumes(
         point_pairs,
         volume_pairs,
     ) = pybind11_joinery_solver.pybind11_beam_volumes(
-        V, S_R, S_N, F, min_distance, volume_length, cross_or_side_to_end, flip_male
+        V,
+        S_R,
+        S_N,
+        F,
+        F_T,
+        min_distance,
+        volume_length,
+        cross_or_side_to_end,
+        flip_male,
     )
     # print(point_pairs)
     print(
@@ -731,7 +749,7 @@ def beam_volumes(
         points = [Point(*point) for point in points_coord]
         pline = Polyline(points)
         pair_volumes_list.append(pline)
-        #pair_volumes_list.append(Polyline([pline[0], pline[1]]))
+        # pair_volumes_list.append(Polyline([pline[0], pline[1]]))
 
     # print("Output")
     return neighbours_list, pair_points_list, pair_volumes_list

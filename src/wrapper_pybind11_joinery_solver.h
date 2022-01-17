@@ -83,7 +83,7 @@ std::tuple<RowMatrixXi, std::vector<RowMatrixXd>, RowMatrixXi> pybind11_joints(E
 
 std::tuple<RowMatrixXi, RowMatrixXd> pybind11_intersecting_sequences_of_dD_iso_oriented_boxes(Eigen::Ref<const RowMatrixXd>& V, Eigen::Ref<const RowMatrixXd>& E_R, Eigen::Ref<const RowMatrixXi>& F, double& min_distance);
 
-std::tuple<RowMatrixXi, RowMatrixXd, std::vector<RowMatrixXd>> pybind11_beam_volumes(Eigen::Ref<const RowMatrixXd>& V, Eigen::Ref<const RowMatrixXd>& E_R, Eigen::Ref<const RowMatrixXd>& E_N, Eigen::Ref<const RowMatrixXi>& F, double& min_distance, double& volume_length, double& cross_or_side_to_end, int& flip_male);
+std::tuple<RowMatrixXi, RowMatrixXd, std::vector<RowMatrixXd>> pybind11_beam_volumes(Eigen::Ref<const RowMatrixXd>& V, Eigen::Ref<const RowMatrixXd>& E_R, Eigen::Ref<const RowMatrixXd>& E_N, Eigen::Ref<const RowMatrixXi>& F, Eigen::Ref<const RowMatrixXi>& F_T, double& min_distance, double& volume_length, double& cross_or_side_to_end, int& flip_male);
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //Wrapped package joinery_solver
@@ -164,6 +164,7 @@ PYBIND11_MODULE(pybind11_joinery_solver, m) {
         pybind11::arg("E_R").noconvert(),
         pybind11::arg("E_N").noconvert(),
         pybind11::arg("F").noconvert(),
+        pybind11::arg("F_T").noconvert(),
         pybind11::arg("min_distance"),
         pybind11::arg("volume_length"),
         pybind11::arg("cross_or_side_to_end"),

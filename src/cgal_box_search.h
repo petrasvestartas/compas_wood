@@ -133,6 +133,7 @@ namespace cgal_box_search {
         CGAL_Polyline& rect0, CGAL_Polyline& rect1) {
         IK::Vector_3 x_axis = zaxis;
         IK::Vector_3 y_axis = CGAL::cross_product(zaxis, segment_vector);//CGAL::cross_product(x_axis, zaxis);
+        x_axis = CGAL::cross_product(y_axis, segment_vector);//CGAL::cross_product(x_axis, zaxis);
         unitize(x_axis);
         unitize(y_axis);
         x_axis *= radius;
@@ -234,7 +235,7 @@ namespace cgal_box_search {
     inline bool line_line_intersection_with_properties(
         IK::Segment_3& s0, IK::Segment_3& s1,
         int number_of_polyline_segments0, int number_of_polyline_segments1, int current_polyline_segment0, int current_polyline_segment1,
-        double type0_type1_parameter_00_05,
+        double above_closer_to_edge,
 
         IK::Point_3& p0, IK::Point_3& p1, IK::Vector_3& v0, IK::Vector_3& v1, IK::Vector_3& normal,
         bool& type0, bool& type1,
@@ -417,30 +418,43 @@ namespace cgal_box_search {
             t1 += current_polyline_segment1;
             t0 = remap(t0, 0.0, number_of_polyline_segments0 * 1.0, 0.0, 1.0);
             t1 = remap(t1, 0.0, number_of_polyline_segments1 * 1.0, 0.0, 1.0);
-            double diff0 = 2 * std::abs(0.5 - t0);
-            double diff1 = 2 * std::abs(0.5 - t1);
+            double how_close_to_line_end_0 = 2 * std::abs(0.5 - t0);
+            double how_close_to_line_end_1 = 2 * std::abs(0.5 - t1);
 
             //decide what type it is
             //CGAL_Debug(diff0);
             //CGAL_Debug(diff1);
             //cross
-            if (type0_type1_parameter_00_05 < 0.0) {
+            if (above_closer_to_edge < 0.0) {
                 type0 = 1;
                 type1 = 1;
 
                 //side-to-end sorted
-            } else if (type0_type1_parameter_00_05 > 1.0) {
+            } else if (above_closer_to_edge > 1.0) {
                 type0 = t0 < t1 ? 0 : 1;
                 type1 = t0 < t1 ? 1 : 0;
 
                 //according to parameter
             } else {
-                type0 = diff0 > type0_type1_parameter_00_05 ? 0 : 1;
-                type1 = diff1 > type0_type1_parameter_00_05 ? 0 : 1;
-                if (type0 == 0)
-                    type1 = 1;
-                if (type1 == 0)
-                    type0 = 1;
+                type0 = how_close_to_line_end_0 > above_closer_to_edge ? 0 : 1;
+                type1 = how_close_to_line_end_1 > above_closer_to_edge ? 0 : 1;
+
+                //sort types
+                if (how_close_to_line_end_0 > how_close_to_line_end_1 && type0 == 0 && type1 == 0) {
+                    type0 == 0;
+                    type1 == 1;
+                } else if (how_close_to_line_end_0 < how_close_to_line_end_1 && type0 == 0 && type1 == 0) {
+                    type0 == 1;
+                    type1 == 0;
+                }
+
+                //CGAL_Debug(type0);
+                //CGAL_Debug(type1);
+                //CGAL_Debug(diff1);
+                //if (type0 == 0)
+                //    type1 = 1;
+                //if (type1 == 0)
+                //    type0 = 1;
                 //orient vectors
             }
 
@@ -740,6 +754,7 @@ namespace cgal_box_search {
         std::vector<CGAL_Polyline>& polylines,
         std::vector<std::vector<double>>& polylines_segment_radii,
         std::vector<std::vector<IK::Vector_3>>& polylines_segment_direction,
+        std::vector<int>& allowed_types,
         double& min_distance,
         double& volume_length,
         double& cross_or_side_to_end,
@@ -893,6 +908,7 @@ namespace cgal_box_search {
             IK::Vector_3 normal;
             bool type0, type1;
             bool is_parallel = false;
+
             bool r = line_line_intersection_with_properties(
                 s0, s1,
                 polylines[std::get<1>(v)].size() - 1, polylines[std::get<3>(v)].size() - 1,
@@ -903,6 +919,34 @@ namespace cgal_box_search {
             );
 
             if (!r) continue;
+
+            ///////////////////////////////////////////////////////////////////////
+            //Check the assigned types
+            ///////////////////////////////////////////////////////////////////////
+
+            auto is_valid_type = [](int sum_of_type0_type1, int allowed_type)
+            {
+                switch (allowed_type) {
+                    case(0):
+                        return sum_of_type0_type1 == 0;
+                    case(1):
+                        return sum_of_type0_type1 == 1 || sum_of_type0_type1 == 2;
+                    case(-1):
+                        return true;
+                }
+            };
+
+            if (allowed_types.size() > 0) {
+                if (allowed_types.size() == 1) {
+                    if (!(is_valid_type(type0 + type1, allowed_types[0])))
+                        continue;
+                } else if (allowed_types.size() == polylines.size()) {
+                    bool allowed_0 = is_valid_type(type0 + type1, allowed_types[std::get<1>(v)]);
+                    bool allowed_1 = is_valid_type(type0 + type1, allowed_types[std::get<3>(v)]);
+                    if (!(allowed_0 && allowed_1))
+                        continue;
+                }
+            }
 
             point_pairs.emplace_back(std::array<IK::Point_3, 2>{p0, p1});
 
