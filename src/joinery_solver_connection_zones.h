@@ -1002,6 +1002,66 @@ inline bool face_to_face(
 //}
 //
 
+inline void pair_search(
+
+    //Input
+    std::array<CGAL_Polyline, 4>& beam_volumes,
+    int polyline_id0, int polyline_id1,
+    int search_type,
+    int joint_id,
+
+    //Output
+    std::vector<joint>& joints
+
+) {
+    //////////////////////////////////////////////////////////////////////////////
+    // construct elements, with planes and side polylines
+    //////////////////////////////////////////////////////////////////////////////
+    std::vector<CGAL_Polyline> input_polyline_pairs(std::begin(beam_volumes), std::end(beam_volumes));
+    std::vector<std::vector<IK::Vector_3>> input_insertion_vectors;
+    std::vector<std::vector<int>> input_joint_types;
+    std::vector<element> elements;
+    get_elements(input_polyline_pairs, input_insertion_vectors, input_joint_types, elements);
+
+    //////////////////////////////////////////////////////////////////////////////
+    // search
+    //////////////////////////////////////////////////////////////////////////////
+    CGAL_Polyline joint_area;
+    CGAL_Polyline joint_quads[2];
+    CGAL_Polyline joint_lines[2];
+    CGAL_Polyline joint_volumes_pairA_pairB[4];
+    int f0_0, f1_0, f0_1, f1_1, type;
+
+    bool found_type;
+    switch (search_type) {
+        case (0):
+            found_type = face_to_face(elements[0].polylines, elements[1].polylines, elements[0].planes, elements[1].planes, elements[0].edge_vectors, elements[1].edge_vectors, f0_0, f1_0, f0_1, f1_1, joint_area, joint_lines, joint_volumes_pairA_pairB, type) ? 1 : 0;
+            break;
+        case (1):
+            found_type = plane_to_face(elements[0].polylines, elements[1].polylines, elements[0].planes, elements[1].planes, elements[0].edge_vectors, elements[1].edge_vectors, f0_0, f1_0, f0_1, f1_1, joint_area, joint_lines, joint_volumes_pairA_pairB, type) ? 2 : 0;
+            break;
+    }
+
+    if (!found_type)
+        return;
+
+    //////////////////////////////////////////////////////////////////////////////
+    //create and joints
+    //////////////////////////////////////////////////////////////////////////////
+
+    if (joint_area.size() > 0) {
+        joints.emplace_back(
+            joint_id,
+            polyline_id0,
+            polyline_id1,
+            f0_0, f1_0, f0_1, f1_1,
+            joint_area,
+            joint_lines,
+            joint_volumes_pairA_pairB,
+            type);
+    }
+}
+
 inline void rtree_search(
 
     //Input

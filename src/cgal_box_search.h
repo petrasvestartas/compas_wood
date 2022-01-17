@@ -441,21 +441,12 @@ namespace cgal_box_search {
 
                 //sort types
                 if (how_close_to_line_end_0 > how_close_to_line_end_1 && type0 == 0 && type1 == 0) {
-                    type0 == 0;
-                    type1 == 1;
+                    type0 = 0;
+                    type1 = 1;
                 } else if (how_close_to_line_end_0 < how_close_to_line_end_1 && type0 == 0 && type1 == 0) {
-                    type0 == 1;
-                    type1 == 0;
+                    type0 = 1;
+                    type1 = 0;
                 }
-
-                //CGAL_Debug(type0);
-                //CGAL_Debug(type1);
-                //CGAL_Debug(diff1);
-                //if (type0 == 0)
-                //    type1 = 1;
-                //if (type1 == 0)
-                //    type0 = 1;
-                //orient vectors
             }
 
             //cross or female edge direction does not matter?
@@ -698,7 +689,7 @@ namespace cgal_box_search {
                     if (b2.info().first > b1.info().first) {
                         flipped = true;
                         id = (uint64_t)b2.info().first << 32 | b1.info().first;
-                    } else {
+                } else {
                         flipped = false;
                         id = (uint64_t)b1.info().first << 32 | b2.info().first;
                     }
@@ -717,9 +708,9 @@ namespace cgal_box_search {
                         pair_collisionslist.push_back(dist_and_segment_ids);
                     }
                     //}
-                }//check if lines closer than the given distance
-            }//check if boxes do not belong to the same group b.info().first
-        };
+            }//check if lines closer than the given distance
+        }//check if boxes do not belong to the same group b.info().first
+    };
 
         /////////////////////////////////////////////////////////////////////
         //self intersection
@@ -748,7 +739,7 @@ namespace cgal_box_search {
             CGAL_Debug(p1);
 #endif
         }
-    }
+}
 
     inline void beam_volumes(
         std::vector<CGAL_Polyline>& polylines,
@@ -858,7 +849,7 @@ namespace cgal_box_search {
                     if (b2.info().first > b1.info().first) {
                         flipped = true;
                         id = (uint64_t)b2.info().first << 32 | b1.info().first;
-                    } else {
+                } else {
                         flipped = false;
                         id = (uint64_t)b1.info().first << 32 | b2.info().first;
                     }
@@ -877,9 +868,9 @@ namespace cgal_box_search {
                         pair_collisionslist.push_back(dist_and_segment_ids);
                     }
                     //}
-                }//check if lines closer than the given distance
-            }//check if boxes do not belong to the same group b.info().first
-        };
+            }//check if lines closer than the given distance
+        }//check if boxes do not belong to the same group b.info().first
+    };
 
         /////////////////////////////////////////////////////////////////////
         //self intersection
@@ -985,10 +976,6 @@ namespace cgal_box_search {
                     int shift = lid == 0 ? 0 : 2;
                     IK::Plane_3 cut_plane_ = lid == 0 ? cut_plane0 : cut_plane1;
 
-                    //CGAL_Debug(p);
-                    //CGAL_Debug(p + cut_plane_.orthogonal_vector() * 10);
-                    //CGAL_Debug(is_parallel);
-
                     //Intersect segments with plane
                     IK::Segment_3 s0(beam_volume[0 + shift][0], beam_volume[0 + shift][1]);
                     IK::Segment_3 s1(beam_volume[0 + shift][3], beam_volume[0 + shift][2]);
@@ -999,12 +986,7 @@ namespace cgal_box_search {
                     result = line_plane(s0, cut_plane_, intersection_points[2]);
                     result = line_plane(s1, cut_plane_, intersection_points[3]);
 
-                    /*  CGAL_Debug(beam_volume[0 + shift][0]);
-                      CGAL_Debug(beam_volume[0 + shift][1]);*/
-                      /*              CGAL_Debug(intersection_points[2]);
-                                    CGAL_Debug(intersection_points[3]);*/
-
-                                    //points on positive side must be moved
+                    //points on positive side must be moved
                     if (cut_plane_.has_on_negative_side(beam_volume[0 + shift][0])) {
                         beam_volume[0 + shift][0] = intersection_points[0];
                         beam_volume[0 + shift][3] = intersection_points[1];
@@ -1059,14 +1041,6 @@ namespace cgal_box_search {
                 result = line_plane(s0, cut_plane, intersection_points[2]);
                 result = line_plane(s1, cut_plane, intersection_points[3]);
 
-                //CGAL_Debug(intersection_points[0]);
-                //CGAL_Debug(intersection_points[1]);
-                //CGAL_Debug(intersection_points[2]);
-                //CGAL_Debug(intersection_points[3]);
-                //CGAL_Debug(beam_volume[closer_rect][0]);
-                ////Replace point position
-                //beam_volume[0 + shift] = CGAL_Polyline{ IK::Point_3(0, 0, 0) ,IK::Point_3(0, 0, 1) };
-                //beam_volume[1 + shift] = CGAL_Polyline{ IK::Point_3(0, 0, 0) ,IK::Point_3(0, 0, 1) };
                 if (cut_plane.has_on_negative_side(beam_volume[0 + shift][0])) {
                     beam_volume[0 + shift][0] = intersection_points[0];
                     beam_volume[0 + shift][3] = intersection_points[1];
@@ -1083,6 +1057,15 @@ namespace cgal_box_search {
                     beam_volume[1 + shift][2] = intersection_points[3];
                 }
             }
+
+            //////////////////////////////////////////////////////////////////////////////
+            // Construct element properties, side polylines and planes
+            //////////////////////////////////////////////////////////////////////////////
+
+            //////////////////////////////////////////////////////////////////////////////
+            // Search Contact zones
+            //////////////////////////////////////////////////////////////////////////////
+
             volume_pairs.emplace_back(beam_volume);
 #ifdef DEBUG
             CGAL_Debug(p0);
