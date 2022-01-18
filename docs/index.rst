@@ -1,7 +1,7 @@
 .. figure:: /_images/compas_wood_logo.jpg
     :figclass: figure
     :class: figure-img img-fluid 
-    :width: 400
+    :width: 200
 
 
 .. rst-class:: lead
@@ -22,6 +22,7 @@ Table of Contents
    :titlesonly:
 
    Introduction <self>
+   description
    installation
    examples
    api
