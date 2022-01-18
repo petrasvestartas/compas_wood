@@ -1,14 +1,17 @@
-********************************************************************************
-compas_wood
-********************************************************************************
+.. figure:: /_images/compas_wood_logo.jpg
+    :figclass: figure
+    :class: figure-img img-fluid 
+    :width: 400
+
 
 .. rst-class:: lead
-
-Joinery Solver
 
 .. .. figure:: /_images/
      :figclass: figure
      :class: figure-img img-fluid
+
+
+Author: `Petras Vestartas <http://www.petrasvestartas.com/>`_.
 
 
 Table of Contents
@@ -20,14 +23,10 @@ Table of Contents
 
    Introduction <self>
    installation
-   tutorial
    examples
    api
    license
+   citation
 
 
-Indices and tables
-==================
 
-* :ref:`genindex`
-* :ref:`modindex`

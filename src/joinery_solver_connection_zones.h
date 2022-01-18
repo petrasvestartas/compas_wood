@@ -1559,3 +1559,337 @@ inline void get_connection_zones(
         }
     }
 }
+
+inline void beam_volumes(
+    std::vector<CGAL_Polyline>& polylines,
+    std::vector<std::vector<double>>& polylines_segment_radii,
+    std::vector<std::vector<IK::Vector_3>>& polylines_segment_direction,
+    std::vector<int>& allowed_types,
+    double& min_distance,
+    double& volume_length,
+    double& cross_or_side_to_end,
+    int& flip_male,
+
+    std::vector<std::array<int, 4>>& polyline0_id_segment0_id_polyline1_id_segment1_id,
+    std::vector<std::array<IK::Point_3, 2>>& point_pairs,
+    std::vector<std::array<CGAL_Polyline, 4>>& volume_pairs
+) {
+#ifdef DEBUG
+    CGAL_Debug(polylines.size(), polylines_segment_radii.size());
+#endif
+
+    //CGAL_Debug(polylines.size());
+    std::vector<joint> joints;
+    /////////////////////////////////////////////////////////////////////
+    //Segment callback
+    /////////////////////////////////////////////////////////////////////
+
+    auto segment = [&polylines](std::size_t pid, std::size_t sid)
+    {
+        return IK::Segment_3(polylines[pid][sid], polylines[pid][sid + 1]);
+        //return EK::Segment_3(
+        //    EK::Point_3(polylines[pid][sid][0], polylines[pid][sid][1], polylines[pid][sid][2]),
+        //    EK::Point_3(polylines[pid + 1][sid][0], polylines[pid][sid + 1][1], polylines[pid][sid + 1][2])
+        //);
+    };
+
+    auto segment_inflated = [&polylines, &polylines_segment_radii](std::size_t pid, std::size_t sid)
+    {
+        IK::Segment_3 segment(polylines[pid][sid], polylines[pid][sid + 1]);
+
+        //IK::Vector_3 v0 = segment.to_vector();
+        //segment = IK::Segment_3(segment[0] - v0*1, segment[1] + v0*1);
+
+        double radius = polylines_segment_radii[pid][sid];
+
+        IK::Vector_3 zaxis = segment.to_vector();
+        IK::Plane_3 plane(segment[0], zaxis);
+        IK::Vector_3 x_axis = plane.base1();
+        IK::Vector_3 y_axis = plane.base2();//CGAL::cross_product(x_axis, zaxis);
+
+        cgal_box_search::unitize(x_axis);
+        cgal_box_search::unitize(y_axis);
+        //x_axis = cgal_vector_util::Unit(x_axis);
+        //y_axis = cgal_vector_util::Unit(y_axis);
+        x_axis *= radius;
+        y_axis *= radius;
+
+        std::array<IK::Point_3, 8> pts = {
+            segment[0] + x_axis + y_axis,
+            segment[0] - x_axis + y_axis,
+            segment[0] - x_axis - y_axis,
+            segment[0] + x_axis - y_axis,
+
+            segment[1] + x_axis + y_axis,
+            segment[1] - x_axis + y_axis,
+            segment[1] - x_axis - y_axis,
+            segment[1] + x_axis - y_axis,
+        };
+
+        CGAL::Bbox_3 box = CGAL::bbox_3(pts.begin(), pts.end(), IK());
+        IK::Segment_3 segment_inflated(IK::Point_3(box.xmin(), box.ymin(), box.zmin()), IK::Point_3(box.xmax(), box.ymax(), box.zmax()));
+        //CGAL_Debug(box.xmin(), box.ymin(), box.zmin());
+        //CGAL_Debug(box.xmax(), box.ymax(), box.zmax());
+
+        return segment_inflated;
+    };
+
+    /////////////////////////////////////////////////////////////////////
+    // Create the corresponding vector of bounding boxes
+    /////////////////////////////////////////////////////////////////////
+    std::vector<Box> boxes;
+    for (std::size_t pid = 0; pid < polylines.size(); ++pid)
+        for (std::size_t sid = 0; sid < polylines[pid].size() - 1; ++sid)
+            boxes.push_back(Box(segment_inflated(pid, sid).bbox(), std::make_pair(pid, sid)));
+
+    /////////////////////////////////////////////////////////////////////
+    //do_interesect call_back
+    /////////////////////////////////////////////////////////////////////
+
+    std::map<uint64_t, std::tuple<double, int, int, int, int >> pair_collisions;
+    std::vector< std::tuple<double, int, int, int, int >>pair_collisionslist;
+    auto callback = [&segment, &min_distance, &pair_collisions, &pair_collisionslist](const Box& b1, const Box& b2)
+    {
+        if (b1.info().first != b2.info().first) {
+            IK::Segment_3 s0 = segment(b1.info().first, b1.info().second);
+            IK::Segment_3 s1 = segment(b2.info().first, b2.info().second);
+            //IK::Vector_3 v0 = s0.to_vector();
+            // IK::Vector_3 v1 = s1.to_vector();
+            // s0 = IK::Segment_3(s0[0] - v0, s0[1] + v0);
+            // s1 = IK::Segment_3(s1[0] - v1, s1[1] + v1);
+            double distance = CGAL::squared_distance(s0, s1);
+#ifdef DEBUG
+            CGAL_Debug(b1.info().first, b2.info().first, distance);
+#endif
+
+            if (distance < min_distance * min_distance) {
+                size_t first_0, first_1;
+                bool flipped = false;
+                uint64_t id;
+                if (b2.info().first > b1.info().first) {
+                    flipped = true;
+                    id = (uint64_t)b2.info().first << 32 | b1.info().first;
+                } else {
+                    flipped = false;
+                    id = (uint64_t)b1.info().first << 32 | b2.info().first;
+                }
+
+                auto dist_and_segment_ids = flipped ? std::make_tuple(distance, b1.info().first, b1.info().second, b2.info().first, b2.info().second) : std::make_tuple(distance, b2.info().first, b2.info().second, b1.info().first, b1.info().second);
+
+                //Add elements to std::map
+                if (pair_collisions.find(id) == pair_collisions.end()) {
+                    //not found
+                    pair_collisions.insert(std::make_pair(id, dist_and_segment_ids));
+                    pair_collisionslist.push_back(dist_and_segment_ids);
+                } else if (distance < std::get<0>(pair_collisions[id])) {
+                    pair_collisions.insert(std::make_pair(id, dist_and_segment_ids));
+                    // found and distance is smaller that before found
+                    pair_collisions[id] = dist_and_segment_ids;
+                    pair_collisionslist.push_back(dist_and_segment_ids);
+                }
+                //}
+            }//check if lines closer than the given distance
+        }//check if boxes do not belong to the same group b.info().first
+    };
+
+    /////////////////////////////////////////////////////////////////////
+    //self intersection
+    /////////////////////////////////////////////////////////////////////
+    CGAL::box_self_intersection_d(boxes.begin(), boxes.end(), callback);
+
+    /////////////////////////////////////////////////////////////////////
+    //Iterate the result, get insertion points and parameter on the lines
+    /////////////////////////////////////////////////////////////////////
+    polyline0_id_segment0_id_polyline1_id_segment1_id.reserve(pair_collisions.size() * 4);
+    point_pairs.reserve(point_pairs.size() * 2);
+
+    for (auto const& x : pair_collisions) {
+        auto& v = x.second;
+
+        ///////////////////////////////////////////////////////////////////////
+        //line line intersection and type detection 0-0 0-1 1-1
+        ///////////////////////////////////////////////////////////////////////
+        IK::Segment_3 s0 = segment(std::get<1>(v), std::get<2>(v));
+        IK::Segment_3 s1 = segment(std::get<3>(v), std::get<4>(v));
+
+        IK::Point_3 p0;
+        IK::Point_3 p1;
+        IK::Vector_3 v0;
+        IK::Vector_3 v1;
+        IK::Vector_3 normal;
+        bool type0, type1;
+        bool is_parallel = false;
+
+        bool r = cgal_box_search::line_line_intersection_with_properties(
+            s0, s1,
+            polylines[std::get<1>(v)].size() - 1, polylines[std::get<3>(v)].size() - 1,
+            std::get<2>(v), std::get<4>(v), cross_or_side_to_end,
+            p0, p1, v0, v1, normal,
+            type0, type1,
+            is_parallel
+        );
+
+        if (!r) continue;
+
+        ///////////////////////////////////////////////////////////////////////
+        //Check the assigned types
+        ///////////////////////////////////////////////////////////////////////
+
+        auto is_valid_type = [](int sum_of_type0_type1, int allowed_type)
+        {
+            switch (allowed_type) {
+                case(0):
+                    return sum_of_type0_type1 == 0;
+                case(1):
+                    return sum_of_type0_type1 == 1 || sum_of_type0_type1 == 2;
+                case(-1):
+                    return true;
+            }
+        };
+
+        if (allowed_types.size() > 0) {
+            if (allowed_types.size() == 1) {
+                if (!(is_valid_type(type0 + type1, allowed_types[0])))
+                    continue;
+            } else if (allowed_types.size() == polylines.size()) {
+                bool allowed_0 = is_valid_type(type0 + type1, allowed_types[std::get<1>(v)]);
+                bool allowed_1 = is_valid_type(type0 + type1, allowed_types[std::get<3>(v)]);
+                if (!(allowed_0 && allowed_1))
+                    continue;
+            }
+        }
+
+        point_pairs.emplace_back(std::array<IK::Point_3, 2>{p0, p1});
+
+        ///////////////////////////////////////////////////////////////////////
+        //draw rectangles volumes around intersection points
+        ///////////////////////////////////////////////////////////////////////
+        IK::Vector_3 segment_normal0 = polylines_segment_direction.size() == 0 ? normal : polylines_segment_direction[std::get<1>(v)][std::get<2>(v)];
+        IK::Vector_3 segment_normal1 = polylines_segment_direction.size() == 0 ? normal : polylines_segment_direction[std::get<3>(v)][std::get<4>(v)];
+        //CGAL_Debug(polylines_segment_direction.size() == 0);
+        //CGAL_Debug(segment_normal0);
+        //CGAL_Debug(segment_normal1);
+        std::array<CGAL_Polyline, 4> beam_volume;
+        cgal_box_search::two_rect_from_point_vector_and_zaxis(p0, v0, segment_normal0, type0, polylines_segment_radii[std::get<1>(v)][std::get<2>(v)], volume_length, flip_male, beam_volume[0], beam_volume[1]);
+        cgal_box_search::two_rect_from_point_vector_and_zaxis(p1, v1, segment_normal1, type1, polylines_segment_radii[std::get<3>(v)][std::get<4>(v)], volume_length, flip_male, beam_volume[2], beam_volume[3]);
+
+        ///////////////////////////////////////////////////////////////////////
+        //Cut rectangles by planes, 0-0 bisector, 0-1 or 1-0 be closer female side
+        //orient cross joint closer to female
+        ///////////////////////////////////////////////////////////////////////
+        std::array<IK::Point_3, 4> intersection_points;
+        if (type0 + type1 == 0) {
+            //if v0,v1 are oriented from intersection point the plane normal is v0+v1
+
+            //Get cutting planes
+
+            IK::Point_3 p = CGAL::midpoint(p0, p1);
+            IK::Point_3 p0_ = p + v0;
+            IK::Point_3 p1_ = p + v1;
+            IK::Plane_3 cut_plane = is_parallel ? IK::Plane_3(p, v0) : IK::Plane_3(p, v0 - v1);
+
+            bool oriented_towards_v0 = cut_plane.has_on_positive_side(p0_);
+            IK::Plane_3 cut_plane0 = oriented_towards_v0 ? IK::Plane_3(p, cut_plane.orthogonal_vector()) : IK::Plane_3(p, -cut_plane.orthogonal_vector());
+            IK::Plane_3 cut_plane1 = !oriented_towards_v0 ? IK::Plane_3(p, cut_plane.orthogonal_vector()) : IK::Plane_3(p, -cut_plane.orthogonal_vector());
+
+            for (size_t lid = 0; lid < 2; lid++) {
+                int shift = lid == 0 ? 0 : 2;
+                IK::Plane_3 cut_plane_ = lid == 0 ? cut_plane0 : cut_plane1;
+
+                //Intersect segments with plane
+                IK::Segment_3 s0(beam_volume[0 + shift][0], beam_volume[0 + shift][1]);
+                IK::Segment_3 s1(beam_volume[0 + shift][3], beam_volume[0 + shift][2]);
+                bool result = cgal_box_search::line_plane(s0, cut_plane_, intersection_points[0]);
+                result = cgal_box_search::line_plane(s1, cut_plane_, intersection_points[1]);
+                s0 = IK::Segment_3(beam_volume[1 + shift][0], beam_volume[1 + shift][1]);
+                s1 = IK::Segment_3(beam_volume[1 + shift][3], beam_volume[1 + shift][2]);
+                result = cgal_box_search::line_plane(s0, cut_plane_, intersection_points[2]);
+                result = cgal_box_search::line_plane(s1, cut_plane_, intersection_points[3]);
+
+                //points on positive side must be moved
+                if (cut_plane_.has_on_negative_side(beam_volume[0 + shift][0])) {
+                    beam_volume[0 + shift][0] = intersection_points[0];
+                    beam_volume[0 + shift][3] = intersection_points[1];
+                    beam_volume[0 + shift][4] = beam_volume[0 + shift][0];
+
+                    beam_volume[1 + shift][0] = intersection_points[2];
+                    beam_volume[1 + shift][3] = intersection_points[3];
+                    beam_volume[1 + shift][4] = beam_volume[1 + shift][0];
+                } else {
+                    beam_volume[0 + shift][1] = intersection_points[0];
+                    beam_volume[0 + shift][2] = intersection_points[1];
+
+                    beam_volume[1 + shift][1] = intersection_points[2];
+                    beam_volume[1 + shift][2] = intersection_points[3];
+                }
+            }
+
+            //beam_volume[0] = CGAL_Polyline{ p + v0 ,p + 2 * v0,p + 3 * v0 ,p + 4 * v0,p + 4 * v0 + IK::Vector_3(0,0,10) };
+            //beam_volume[2] = CGAL_Polyline{ p + v1 ,p + 2 * v1,p + 3 * v1,p + 4 * v1,p + 4 * v1 + IK::Vector_3(0,0,10) };
+        } else if (type0 + type1 == 1) {
+            //CGAL_Debug(1000);
+            //if male vector is oriented from intersection point, the p+v closer rectangle is the cutting plane
+            int closer_rect;
+            int farrer_rect;
+            if (type0 == 0) {
+                bool closer = CGAL::has_smaller_distance_to_point(p0 + v0, beam_volume[2][0], beam_volume[3][0]);
+                closer_rect = closer ? 2 : 3;
+                farrer_rect = closer ? 3 : 2;
+            } else {
+                bool closer = CGAL::has_smaller_distance_to_point(p1 + v1, beam_volume[0][0], beam_volume[1][0]);
+                closer_rect = closer ? 0 : 1;
+                farrer_rect = closer ? 1 : 0;
+            }
+
+            IK::Vector_3 rect_v0 = beam_volume[closer_rect][1] - beam_volume[closer_rect][0];
+            IK::Vector_3 rect_v1 = beam_volume[closer_rect][2] - beam_volume[closer_rect][0];
+            IK::Vector_3 rect_normal = CGAL::cross_product(rect_v0, rect_v1);
+
+            IK::Plane_3 cut_plane(beam_volume[closer_rect][0], rect_normal);
+            if (cut_plane.has_on_positive_side(beam_volume[farrer_rect][0]))
+                cut_plane = IK::Plane_3(beam_volume[closer_rect][0], -rect_normal);
+
+            //Get intersection points
+
+            int shift = type0 == 0 ? 0 : 2;
+            IK::Segment_3 s0(beam_volume[0 + shift][0], beam_volume[0 + shift][1]);
+            IK::Segment_3 s1(beam_volume[0 + shift][3], beam_volume[0 + shift][2]);
+            bool result = cgal_box_search::line_plane(s0, cut_plane, intersection_points[0]);
+            result = cgal_box_search::line_plane(s1, cut_plane, intersection_points[1]);
+            s0 = IK::Segment_3(beam_volume[1 + shift][0], beam_volume[1 + shift][1]);
+            s1 = IK::Segment_3(beam_volume[1 + shift][3], beam_volume[1 + shift][2]);
+            result = cgal_box_search::line_plane(s0, cut_plane, intersection_points[2]);
+            result = cgal_box_search::line_plane(s1, cut_plane, intersection_points[3]);
+
+            if (cut_plane.has_on_negative_side(beam_volume[0 + shift][0])) {
+                beam_volume[0 + shift][0] = intersection_points[0];
+                beam_volume[0 + shift][3] = intersection_points[1];
+                beam_volume[0 + shift][4] = beam_volume[0 + shift][0];
+
+                beam_volume[1 + shift][0] = intersection_points[2];
+                beam_volume[1 + shift][3] = intersection_points[3];
+                beam_volume[1 + shift][4] = beam_volume[1 + shift][0];
+            } else {
+                beam_volume[0 + shift][1] = intersection_points[0];
+                beam_volume[0 + shift][2] = intersection_points[1];
+
+                beam_volume[1 + shift][1] = intersection_points[2];
+                beam_volume[1 + shift][2] = intersection_points[3];
+            }
+        }
+
+        //////////////////////////////////////////////////////////////////////////////
+        // Construct element properties, side polylines and planes
+        //////////////////////////////////////////////////////////////////////////////
+        pair_search(beam_volume, std::get<1>(v), std::get<3>(v), !(type0 + type1 == 2), volume_pairs.size(), joints);
+        //////////////////////////////////////////////////////////////////////////////
+        // Search Contact zones
+        //////////////////////////////////////////////////////////////////////////////
+
+        volume_pairs.emplace_back(beam_volume);
+#ifdef DEBUG
+        CGAL_Debug(p0);
+        CGAL_Debug(p1);
+#endif
+    }
+}

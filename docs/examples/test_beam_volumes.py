@@ -54,7 +54,6 @@ def test_beam_volumes():
 
     polylines = [polylines[temp_id], pline]
 
-    
     normals = []
     for i in range(len(polylines)):
         p0 = midpoint_point_point(polylines[i][0], polylines[i][1])
