@@ -851,8 +851,9 @@ std::tuple<RowMatrixXi, RowMatrixXd, std::vector<RowMatrixXd>> pybind11_beam_vol
     std::vector<std::array<int, 4>> polyline0_id_segment0_id_polyline1_id_segment1_id;
     std::vector<std::array<IK::Point_3, 2>> point_pairs;
     std::vector<std::array<CGAL_Polyline, 4>> volume_pairs;
+    std::vector<CGAL_Polyline> joints_preview;
     beam_volumes(polylines, segment_radii, segment_normals, face_types, min_distance, volume_length, cross_or_side_to_end, flip_male,
-        polyline0_id_segment0_id_polyline1_id_segment1_id, point_pairs, volume_pairs);
+        polyline0_id_segment0_id_polyline1_id_segment1_id, point_pairs, volume_pairs, joints_preview);
 
     //////////////////////////////////////////////////////////////////////////////
     //Convert to output

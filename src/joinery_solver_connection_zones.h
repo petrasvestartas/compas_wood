@@ -1006,7 +1006,8 @@ inline void pair_search(
 
     //Input
     std::array<CGAL_Polyline, 4>& beam_volumes,
-    int polyline_id0, int polyline_id1,
+    int polyline_id0,
+    int polyline_id1,
     int search_type,
 
     //Output
@@ -1047,10 +1048,10 @@ inline void pair_search(
     //////////////////////////////////////////////////////////////////////////////
     //create and joints
     //////////////////////////////////////////////////////////////////////////////
-
+    int joint_id = joints.size();
     if (joint_area.size() > 0) {
         joints.emplace_back(
-            joints.size(),
+            joint_id,
             polyline_id0,
             polyline_id1,
             f0_0, f1_0, f0_1, f1_1,
@@ -1571,7 +1572,8 @@ inline void beam_volumes(
 
     std::vector<std::array<int, 4>>& polyline0_id_segment0_id_polyline1_id_segment1_id,
     std::vector<std::array<IK::Point_3, 2>>& point_pairs,
-    std::vector<std::array<CGAL_Polyline, 4>>& volume_pairs
+    std::vector<std::array<CGAL_Polyline, 4>>& volume_pairs,
+    std::vector<CGAL_Polyline>& joints_preview
 ) {
 #ifdef DEBUG
     CGAL_Debug(polylines.size(), polylines_segment_radii.size());
@@ -1880,7 +1882,7 @@ inline void beam_volumes(
         //////////////////////////////////////////////////////////////////////////////
         // Construct element properties, side polylines and planes
         //////////////////////////////////////////////////////////////////////////////
-        pair_search(beam_volume, std::get<1>(v), std::get<3>(v), !(type0 + type1 == 2), volume_pairs.size(), joints);
+        pair_search(beam_volume, std::get<1>(v), std::get<3>(v), !(type0 + type1 == 2), joints);
         //////////////////////////////////////////////////////////////////////////////
         // Search Contact zones
         //////////////////////////////////////////////////////////////////////////////
