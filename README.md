@@ -45,8 +45,7 @@ https://user-images.githubusercontent.com/18013985/147587822-cfb43c96-4a81-4b89-
 - [ ] interface - R-Tree for joint types
 - [ ] interface - edge vector display
 - [ ] interface - beam polyline detection
-- [ ] documentation 
-- [ ] publish documentation gh-pages
+- [x] publish documentation gh-pages
 - [ ] publish conda
 
 
