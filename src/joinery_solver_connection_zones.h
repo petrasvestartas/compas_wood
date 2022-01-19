@@ -1008,7 +1008,6 @@ inline void pair_search(
     std::array<CGAL_Polyline, 4>& beam_volumes,
     int polyline_id0, int polyline_id1,
     int search_type,
-    int joint_id,
 
     //Output
     std::vector<joint>& joints
@@ -1051,7 +1050,7 @@ inline void pair_search(
 
     if (joint_area.size() > 0) {
         joints.emplace_back(
-            joint_id,
+            joints.size(),
             polyline_id0,
             polyline_id1,
             f0_0, f1_0, f0_1, f1_1,

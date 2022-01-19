@@ -1,4 +1,4 @@
-.. figure:: /_images/compas_wood_logo.jpg
+.. figure:: /_images/compas_wood_website_logo.jpg
     :figclass: figure
     :class: figure-img img-fluid 
     :width: 200
