@@ -19,10 +19,13 @@ joinery_solver
     :nosignatures:
 
     joinery.test
-    joinery.get_connection_zones
-    joinery.closed_mesh_from_polylines
     joinery.rtree
     joinery.joints
+    joinery.get_connection_zones
+    joinery.closed_mesh_from_polylines
+    joinery.closest_polylines
+    joinery.beam_volumes
+
 """
 
 from __future__ import print_function
