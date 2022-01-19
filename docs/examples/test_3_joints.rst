@@ -1,5 +1,5 @@
 ********************************************************************************
-joints
+3_joints
 ********************************************************************************
 * **Description:** Find joints using face_to_face or plane_to_face search
 * **Input:** a list of polylines (the list of top and bottom outlines are stored sequentially (0-top, 0-bottom, 1-top, 1-bottom ... N-top, N-bottom))
@@ -46,5 +46,5 @@ Data-set: annen_small_polylines
 
 
 
-.. literalinclude:: test_joints.py
+.. literalinclude:: test_3_joints.py
     :language: python

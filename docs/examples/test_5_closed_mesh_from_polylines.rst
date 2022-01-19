@@ -1,5 +1,5 @@
 ********************************************************************************
-closed_mesh_from_polylines
+5_closed_mesh_from_polylines
 ********************************************************************************
 * **Description:** Create a mesh from a top and bottom outlines
 * **Input:** a list of polylines (the list of top and bottom outlines are stored sequentially (0-top, 0-bottom, 1-top, 1-bottom ... N-top, N-bottom))
@@ -91,5 +91,5 @@ Data-set: c_16
 
 
 
-.. literalinclude:: test_closed_mesh_from_polylines.py
+.. literalinclude:: test_5_closed_mesh_from_polylines.py
     :language: python

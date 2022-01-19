@@ -1,5 +1,5 @@
 ********************************************************************************
-compas_wood package import
+1_compas_wood
 ********************************************************************************
 * **Description:** Test if compas_wood works
 * **Input:** package and function import
@@ -10,7 +10,7 @@ compas_wood package import
 
 
 
-.. literalinclude:: test__compas_wood.py
+.. literalinclude:: test_1_compas_wood.py
     :language: python
 
 

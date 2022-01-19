@@ -1,5 +1,5 @@
 ********************************************************************************
-closest_polylines
+6_closest_polylines
 ********************************************************************************
 * **Description:** Find closest polylines within given distance
 * **Input:** polylines : list of polylines, segment_radii : radius per each polyline segment, used to construct boxes around segments, min_distance : distance until which search is valid
@@ -33,5 +33,5 @@ Data-set: polylines_4 :
 
 
 
-.. literalinclude:: test_closest_polylines.py
+.. literalinclude:: test_6_closest_polylines.py
     :language: python

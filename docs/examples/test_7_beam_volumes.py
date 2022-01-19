@@ -1,9 +1,4 @@
 # compas_wood
-from compas.geometry import midpoint_point_point
-from compas.geometry import scale_vector
-
-from compas.geometry import Point
-from compas.geometry import Polyline
 from compas_wood.joinery import beam_volumes, test
 import data_set_beams
 
@@ -48,7 +43,9 @@ def test_beam_volumes():
         volume_pairs,
         joint_areas_list,
         joint_types_list,
-    ) = beam_volumes(polylines, segment_radii, segment_normals, None, 20, 30, 0.91, 1)
+    ) = beam_volumes(
+        polylines, segment_radii, segment_normals, allowed_types, 20, 30, 0.91, 1
+    )
     """
     # Display normals
     temp_id = 27

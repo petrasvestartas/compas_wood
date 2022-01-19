@@ -660,7 +660,10 @@ def beam_volumes(
         a list of 2 points
     pair_volumes_list
         a list of 4 polyline
-
+    joint_areas_list
+        a list of closed polylines within local connection detection
+    joint_types_list
+        a list of integers of joint area types
     """
 
     # ==============================================================================

@@ -1,5 +1,5 @@
 ********************************************************************************
-get_connection_zones ss_24
+4_get_connection_zones ss_24
 ********************************************************************************
 
 * **Description:** generates joints for elements connected side-to-side. Input and output images are shown below.
@@ -13,5 +13,5 @@ get_connection_zones ss_24
     :class: figure-img img-fluid
 
 
-.. literalinclude:: test_get_connection_zones_ss_24.py
+.. literalinclude:: test_4_get_connection_zones_ss_24.py
     :language: python

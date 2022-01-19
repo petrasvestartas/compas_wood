@@ -1,5 +1,5 @@
 ********************************************************************************
-rtree
+2_rtree
 ********************************************************************************
 * **Description:** Find neighbors of polyline pairs using the R-Tree search
 * **Input:** a list of polylines (the list of top and bottom outlines are stored sequentially (0-top, 0-bottom, 1-top, 1-bottom ... N-top, N-bottom))
@@ -15,7 +15,7 @@ Data-set: ss_0
     :class: figure-img img-fluid
 
 
-.. literalinclude:: test_rtree.py
+.. literalinclude:: test_2_rtree.py
     :language: python
 
 
