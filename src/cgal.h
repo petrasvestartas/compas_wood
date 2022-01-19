@@ -1,5 +1,5 @@
 #pragma once
-
+#define DEBUG
 #include <CGAL/Exact_predicates_inexact_constructions_kernel.h>
 #include <CGAL/Exact_predicates_exact_constructions_kernel.h>
 #include <CGAL/Intersections.h>
@@ -42,7 +42,7 @@ static double GlobalTolerance = 0.01;
 static double GlobalToleranceSquare = 0.0001;
 static double GlobalClipperScale = 1000000.0;
 static double GlobalClipperAreaTolerance = 0.0001;
-static double GlobalExtend[5] = {0.0, 0.0, 0, 0, 0};
+static double GlobalExtend[5] = { 0.0, 0.0, 0, 0, 0 };
 
 #define ON_IS_FINITE(x) (0x7FF0 != (*((unsigned short *)(&x) + 3) & 0x7FF0))
 #define ON_DBL_MIN 2.22507385850720200e-308
@@ -51,18 +51,12 @@ static double GlobalExtend[5] = {0.0, 0.0, 0, 0, 0};
 #define ON_ZERO_TOLERANCE 2.3283064365386962890625e-10
 #define ON_DBL_MAX 1.7976931348623158e+308
 
-
-
-
-
-struct FaceInfo2
-{
-	FaceInfo2() {}
-	int nesting_level;
-	bool in_domain()
-	{
-		return nesting_level % 2 == 1;
-	}
+struct FaceInfo2 {
+    FaceInfo2() {}
+    int nesting_level;
+    bool in_domain() {
+        return nesting_level % 2 == 1;
+    }
 };
 
 typedef CGAL::Triangulation_vertex_base_2<IK> Vb;

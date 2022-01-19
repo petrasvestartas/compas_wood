@@ -97,7 +97,7 @@ inline void get_elements(
             //printf("CPP Transformed Point %d %d %d \n", it->x(), it->y(), it->z());
         }
 
-        //Compute bounding box, get center point, and contruct 5 size vector, where 5th dimension is halfsite,  then transform box back to 3D by an inverse matrix
+        //Compute bounding box, get center point, and construct 5 size vector, where 5th dimension is half site,  then transform box back to 3D by an inverse matrix
         CGAL::Bbox_3 AABBXY = CGAL::bbox_3(twoPolylines.begin(), twoPolylines.end(), IK());
         double scale = 10;
         IK::Vector_3 box[5] = {
@@ -147,11 +147,17 @@ inline void get_elements(
             elements[count].polylines[2 + j] = { pp[i][j], pp[i][j + 1], pp[i + 1][j + 1], pp[i + 1][j], pp[i][j] };
         }
 
+        //for (auto& k : elements[count].polylines) {
+        //    CGAL_Debug(false);
+        //    for (auto& kk : k)
+        //        CGAL_Debug(kk);
+        //}
+
         //Edge initialization, total number of edge top,bottom + all sides + undefined not lying on face
         elements[count].j_mf = std::vector<std::vector<std::tuple<int, bool, double>>>((pp[i].size() - 1) + 2 + 1); //(side id, false, parameter on edge)
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        //User given properties, Other prperties such as insertion vectors or joint tapes
+        //User given properties, Other properties such as insertion vectors or joint tapes
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         if (insertion_vectors.size() > 0)
             if (insertion_vectors[count].size() > 0) {
@@ -271,7 +277,7 @@ inline bool plane_to_face(std::vector<
     //////////////////////////////////////////////////////////////////////////////
     //Check
     //1. Vector angles if they are not close to parallel
-    //2. Are polylines overlapping (usually skipped within first except if stucture is planar) 3. Check overlay between center lines
+    //2. Are polylines overlapping (usually skipped within first except if structure is planar) 3. Check overlay between center lines
     //////////////////////////////////////////////////////////////////////////////
 
     double angle = 90.0 - fabs(CGAL::approximate_angle(Plane0[0].orthogonal_vector(), Plane1[0].orthogonal_vector()) - 90);
@@ -570,17 +576,28 @@ inline bool face_to_face(
     int& type) {
     //printf("CPP StartIndersection \n");
 
+#ifdef DEBUG
+
+    printf("\nCPP face_to_face \nCPP planes %i, %i  \n", Plane0.size(), Plane1.size());
+#endif
+
     for (int i = 0; i < Plane0.size(); i++) {
         for (int j = 0; j < Plane1.size(); j++) {
             //Check if polygons are co-planar
             bool coplanar = cgal_plane_util::IsCoplanar(Plane0[i], Plane1[j], false, GlobalTolerance); //O(n*n) +10 ms
 
-            //CGAL_Debug(coplanar);
+#ifdef DEBUG
+            if (coplanar)
+                printf("CPP Coplanar %i\n", coplanar);
+#endif
 
             if (coplanar) {
                 //Perform 2D Intersection 20 ms
                 bool hasIntersection = intersection_2D(Polyline0[i], Polyline1[j], Plane0[i], joint_area, GlobalClipperScale); // +20 ms 10000.0; GlobalClipperScale
 
+#ifdef DEBUG
+                printf("CPP hasIntersection %i\n", hasIntersection);
+#endif
                 //CGAL_Debug(" ");
                 //for (auto& pp : joint_area)
                 //    CGAL_Debug(pp.hx(), pp.hy(), pp.hz() );
@@ -606,6 +623,10 @@ inline bool face_to_face(
                     CGAL_Polyline joint_quads0;
                     if (i > 1) { //Side-Top  or Side-Side
                         //Middle line for alignment
+#ifdef DEBUG
+                        printf("CPP i>1 \n");
+#endif
+
                         IK::Segment_3 alignmentSegment(CGAL::midpoint(Polyline0[0][i - 2], Polyline0[1][i - 2]), CGAL::midpoint(Polyline0[0][i - 1], Polyline0[1][i - 1]));
 
                         //Intersect: a) clipper region, b) center plane
@@ -615,11 +636,11 @@ inline bool face_to_face(
                         //Planes to get a quad
                         if (isLine && joint_line0.squared_length() > GlobalTolerance) { //
                             bool isQuad = cgal_intersection_util::QuadFromLineAndTopBottomPlanes(Plane0[i], joint_line0, Plane0[0], Plane0[1], joint_quads0);
-                            //joint_quads0.push_back(Polyline0[0][0]);
-                            //joint_quads0.push_back(Polyline0[1][0]);
-                            //joint_quads0.push_back(Plane0[i].point());
                         } else {
-                            CGAL_Debug(joint_quads0.size());
+#ifdef DEBUG
+                            printf("CPP   IsLine %i joint_line0.squared_length() %f \n", isLine, joint_line0.squared_length());
+#endif
+
                             return false;
                         }
                     }
@@ -632,6 +653,11 @@ inline bool face_to_face(
 
                     if (j > 1) { //Side-Side
                         //Middle line for alignment
+
+#ifdef DEBUG
+                        printf("CPP j>1 \n");
+#endif
+
                         IK::Segment_3 alignmentSegment(CGAL::midpoint(Polyline1[0][i - 2], Polyline1[1][i - 2]), CGAL::midpoint(Polyline1[0][i - 1], Polyline1[1][i - 1]));
 
                         bool isLine = cgal_intersection_util::PolylinePlane(joint_area, averagePlane1, alignmentSegment, joint_line1);
@@ -639,10 +665,10 @@ inline bool face_to_face(
                         //Planes to get a quad
                         if (isLine && joint_line1.squared_length() > GlobalTolerance) { //
                             bool isQuad = cgal_intersection_util::QuadFromLineAndTopBottomPlanes(Plane1[j], joint_line1, Plane1[0], Plane1[1], joint_quads1);
-                            //joint_volumes_pairA_pairB[0] = joint_quads1;
-                            //joint_volumes_pairA_pairB[1] = joint_quads1;
                         } else {
-                            CGAL_Debug(joint_quads1.size());
+#ifdef DEBUG
+                            printf("CPP   IsLine %i joint_line1.squared_length() %f \n", isLine, joint_line1.squared_length());
+#endif
                             return false;
                             continue;
                         }
@@ -667,10 +693,14 @@ inline bool face_to_face(
                     }
 
                     //////////////////////////////////////////////////////////////////////////////////////////////////
-                    //Indentify connection volumes
+                    //Identify connection volumes
                     //////////////////////////////////////////////////////////////////////////////////////////////////
                     //CGAL_Debug(type);
                     if (type == 0) { //side-side
+#ifdef DEBUG
+                        printf("Type0 %i");
+#endif
+
                         joint_lines[0] = { joint_line0[0], joint_line0[1] };
                         joint_lines[1] = { joint_line1[0], joint_line1[1] };
 
@@ -686,6 +716,10 @@ inline bool face_to_face(
                         auto v1 = joint_line1[0] - joint_line1[1];
 
                         if (cgal_vector_util::IsParallelTo(v0, v1, GlobalTolerance) == 0) {
+#ifdef DEBUG
+                            printf("Elements Are rotated");
+#endif
+
                             //joint_lines[0] = { joint_line0[0], joint_line0[1] };
                             //joint_lines[1] = { joint_line1[0], joint_line1[1] };
 
@@ -754,6 +788,10 @@ inline bool face_to_face(
                             //Elements are parallel
                             ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
                         } else {
+#ifdef DEBUG
+                            printf("Elements are parallel");
+#endif
+
                             ////////////////////////////////////////////////////////////////////////////////
                             //Get Overlap-Line // scale it down ?
                             ////////////////////////////////////////////////////////////////////////////////
@@ -764,7 +802,7 @@ inline bool face_to_face(
                             joint_lines[1] = joint_lines[0];
 
                             ////////////////////////////////////////////////////////////////////////////////
-                            //Get Plane perpedicular to overlap-axis //with or without insertion vector |-----------|
+                            //Get Plane perpendicular to overlap-axis //with or without insertion vector |-----------|
                             ////////////////////////////////////////////////////////////////////////////////
 
                             IK::Plane_3 plEnd0 = IK::Plane_3(lJ[0], lJ.to_vector()); // averagePlane0.orthogonal_vector(), CGAL::cross_product(lJ.to_vector(), averagePlane0.orthogonal_vector()));
@@ -790,6 +828,9 @@ inline bool face_to_face(
                                 //CGAL_Debug(20);
                                 return false;
                             } else if (dihedralAngle <= 150) { //OUT-OF-PLANE // && jointArea0.size()>0
+#ifdef DEBUG
+                                printf("Out-of-plane");
+#endif
                                 //CGAL_Debug(150);
                                 ////////////////////////////////////////////////////////////////////////////////
                                 //Rotate line-joint 90 degrees and intersect with adjacent element top and bottom planes
@@ -830,6 +871,9 @@ inline bool face_to_face(
 
                                 type = 11;
                             } else { //IN-PLANE
+#ifdef DEBUG
+                                printf("In-Plane");
+#endif
                                 //CGAL_Debug(-150);
                                 //joint_lines[0] = { joint_line0[0], joint_line0[1] };
                                 //joint_lines[1] = { joint_line1[0], joint_line1[1] };
@@ -865,6 +909,9 @@ inline bool face_to_face(
                             }
                         }
                     } else if (type == 1) { //top-side
+#ifdef DEBUG
+                        printf("CPP Top-side \n");
+#endif
                         //////////////////////////////////////////////////////////////////////////////////
                         //Which element is male or female?
                         //////////////////////////////////////////////////////////////////////////////////
@@ -921,6 +968,10 @@ inline bool face_to_face(
                         type = 20;
                         return true;
                     } else {
+#ifdef DEBUG
+
+                        printf("CPP Type40\n");
+#endif
                         type = 40;
                         joint_volumes_pairA_pairB[0] = joint_area;
                         joint_volumes_pairA_pairB[1] = joint_area;
@@ -1002,7 +1053,7 @@ inline bool face_to_face(
 //}
 //
 
-inline void pair_search(
+inline bool pair_search(
 
     //Input
     std::array<CGAL_Polyline, 4>& beam_volumes,
@@ -1035,15 +1086,36 @@ inline void pair_search(
     bool found_type;
     switch (search_type) {
         case (0):
-            found_type = face_to_face(elements[0].polylines, elements[1].polylines, elements[0].planes, elements[1].planes, elements[0].edge_vectors, elements[1].edge_vectors, f0_0, f1_0, f0_1, f1_1, joint_area, joint_lines, joint_volumes_pairA_pairB, type) ? 1 : 0;
+
+            found_type = face_to_face(
+                elements[0].polylines, elements[1].polylines,
+                elements[0].planes, elements[1].planes,
+                elements[0].edge_vectors, elements[1].edge_vectors,
+                f0_0, f1_0, f0_1, f1_1, joint_area, joint_lines, joint_volumes_pairA_pairB, type) ? 1 : 0;
+
+#ifdef DEBUG
+            printf("CPP Found_Type %i\n", found_type);
+#endif
+
             break;
+
         case (1):
-            found_type = plane_to_face(elements[0].polylines, elements[1].polylines, elements[0].planes, elements[1].planes, elements[0].edge_vectors, elements[1].edge_vectors, f0_0, f1_0, f0_1, f1_1, joint_area, joint_lines, joint_volumes_pairA_pairB, type) ? 2 : 0;
+
+            found_type = plane_to_face(
+                elements[0].polylines, elements[1].polylines,
+                elements[0].planes, elements[1].planes,
+                elements[0].edge_vectors, elements[1].edge_vectors,
+                f0_0, f1_0, f0_1, f1_1, joint_area, joint_lines, joint_volumes_pairA_pairB, type) ? 2 : 0;
+
+#ifdef DEBUG
+
+            printf("CPP Found_Type %i\n", found_type);
+#endif
             break;
     }
 
     if (!found_type)
-        return;
+        return false;
 
     //////////////////////////////////////////////////////////////////////////////
     //create and joints
@@ -1059,7 +1131,9 @@ inline void pair_search(
             joint_lines,
             joint_volumes_pairA_pairB,
             type);
+        return true;
     }
+    return false;
 }
 
 inline void rtree_search(
@@ -1573,7 +1647,8 @@ inline void beam_volumes(
     std::vector<std::array<int, 4>>& polyline0_id_segment0_id_polyline1_id_segment1_id,
     std::vector<std::array<IK::Point_3, 2>>& point_pairs,
     std::vector<std::array<CGAL_Polyline, 4>>& volume_pairs,
-    std::vector<CGAL_Polyline>& joints_preview
+    std::vector<CGAL_Polyline>& joints_preview,
+    std::vector<int>& joints_types
 ) {
 #ifdef DEBUG
     CGAL_Debug(polylines.size(), polylines_segment_radii.size());
@@ -1659,9 +1734,6 @@ inline void beam_volumes(
             // s0 = IK::Segment_3(s0[0] - v0, s0[1] + v0);
             // s1 = IK::Segment_3(s1[0] - v1, s1[1] + v1);
             double distance = CGAL::squared_distance(s0, s1);
-#ifdef DEBUG
-            CGAL_Debug(b1.info().first, b2.info().first, distance);
-#endif
 
             if (distance < min_distance * min_distance) {
                 size_t first_0, first_1;
@@ -1767,9 +1839,7 @@ inline void beam_volumes(
         ///////////////////////////////////////////////////////////////////////
         IK::Vector_3 segment_normal0 = polylines_segment_direction.size() == 0 ? normal : polylines_segment_direction[std::get<1>(v)][std::get<2>(v)];
         IK::Vector_3 segment_normal1 = polylines_segment_direction.size() == 0 ? normal : polylines_segment_direction[std::get<3>(v)][std::get<4>(v)];
-        //CGAL_Debug(polylines_segment_direction.size() == 0);
-        //CGAL_Debug(segment_normal0);
-        //CGAL_Debug(segment_normal1);
+
         std::array<CGAL_Polyline, 4> beam_volume;
         cgal_box_search::two_rect_from_point_vector_and_zaxis(p0, v0, segment_normal0, type0, polylines_segment_radii[std::get<1>(v)][std::get<2>(v)], volume_length, flip_male, beam_volume[0], beam_volume[1]);
         cgal_box_search::two_rect_from_point_vector_and_zaxis(p1, v1, segment_normal1, type1, polylines_segment_radii[std::get<3>(v)][std::get<4>(v)], volume_length, flip_male, beam_volume[2], beam_volume[3]);
@@ -1882,15 +1952,25 @@ inline void beam_volumes(
         //////////////////////////////////////////////////////////////////////////////
         // Construct element properties, side polylines and planes
         //////////////////////////////////////////////////////////////////////////////
-        pair_search(beam_volume, std::get<1>(v), std::get<3>(v), !(type0 + type1 == 2), joints);
+#ifdef DEBUG
+        printf("\nCPP -------------> beam_volumes Type %i %i \n", type0, type1);
+#endif
+
+        bool found_joint = pair_search(beam_volume, std::get<1>(v), std::get<3>(v), (type0 + type1 == 2), joints);
+
+#ifdef DEBUG
+        printf("CPP pair_search %i \n", found_joint);
+#endif
+
+        if (found_joint) {
+            joints_preview.emplace_back(joints[joints.size() - 1].joint_area);
+            joints_types.emplace_back(joints[joints.size() - 1].type);
+        }
+
         //////////////////////////////////////////////////////////////////////////////
         // Search Contact zones
         //////////////////////////////////////////////////////////////////////////////
 
         volume_pairs.emplace_back(beam_volume);
-#ifdef DEBUG
-        CGAL_Debug(p0);
-        CGAL_Debug(p1);
-#endif
     }
 }

@@ -41,9 +41,14 @@ def test_beam_volumes():
     # possible output: when both are above, the smaller is female, other is male 0.75
     # possible output: when both are below, then cross, e.g. 0.0001
 
-    neighbours, pair_points, volume_pairs = beam_volumes(
-        polylines, segment_radii, segment_normals, allowed_types, 20, 35, 0.91, 1
-    )
+    # segment_normals
+    (
+        neighbours,
+        pair_points,
+        volume_pairs,
+        joint_areas_list,
+        joint_types_list,
+    ) = beam_volumes(polylines, segment_radii, segment_normals, None, 20, 30, 0.91, 1)
     """
     # Display normals
     temp_id = 27
@@ -63,9 +68,18 @@ def test_beam_volumes():
         normals.append(pline)
     polylines.extend(normals)
     """
-
+    # print(joint_preview_list)
     # Display via Compas_View2
-    display(polylines, volume_pairs, None, 0.01, 0, 0)
+    """
+    types = []
+    for i in joint_areas_list:
+        types.append(11)
+    """
+
+    volume_pairs.extend(polylines)
+    display(
+        volume_pairs, joint_areas_list, None, 0.01, 0, 0, 0, False, joint_types_list
+    )
 
 
 # ==============================================================================

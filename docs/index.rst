@@ -1,7 +1,7 @@
 .. figure:: /_images/compas_wood_website_logo.jpg
     :figclass: figure
     :class: figure-img img-fluid 
-    :width: 200
+    :width: 300
 
 
 .. rst-class:: lead

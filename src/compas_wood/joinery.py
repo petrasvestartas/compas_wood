@@ -710,6 +710,8 @@ def beam_volumes(
         neighbours,
         point_pairs,
         volume_pairs,
+        joint_areas,
+        joint_types,
     ) = pybind11_joinery_solver.pybind11_beam_volumes(
         V,
         S_R,
@@ -751,5 +753,21 @@ def beam_volumes(
         pair_volumes_list.append(pline)
         # pair_volumes_list.append(Polyline([pline[0], pline[1]]))
 
+    joint_areas_list = []
+    for points_coord in joint_areas:
+        points = [Point(*point) for point in points_coord]
+        pline = Polyline(points)
+        joint_areas_list.append(pline)
+
+    joint_types_list = []
+    for points_coord in joint_types:
+        joint_types_list.append(points_coord[0])
+
     # print("Output")
-    return neighbours_list, pair_points_list, pair_volumes_list
+    return (
+        neighbours_list,
+        pair_points_list,
+        pair_volumes_list,
+        joint_areas_list,
+        joint_types_list,
+    )

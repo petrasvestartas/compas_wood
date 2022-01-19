@@ -768,7 +768,7 @@ std::tuple<RowMatrixXi, RowMatrixXd> pybind11_intersecting_sequences_of_dD_iso_o
     return std::make_tuple(neighbours, points);
 }
 
-std::tuple<RowMatrixXi, RowMatrixXd, std::vector<RowMatrixXd>> pybind11_beam_volumes(Eigen::Ref<const RowMatrixXd>& V, Eigen::Ref<const RowMatrixXd>& E_R, Eigen::Ref<const RowMatrixXd>& E_N, Eigen::Ref<const RowMatrixXi>& F, Eigen::Ref<const RowMatrixXi>& F_T, double& min_distance, double& volume_length, double& cross_or_side_to_end, int& flip_male) {
+std::tuple<RowMatrixXi, RowMatrixXd, std::vector<RowMatrixXd>, std::vector<RowMatrixXd>, RowMatrixXi > pybind11_beam_volumes(Eigen::Ref<const RowMatrixXd>& V, Eigen::Ref<const RowMatrixXd>& E_R, Eigen::Ref<const RowMatrixXd>& E_N, Eigen::Ref<const RowMatrixXi>& F, Eigen::Ref<const RowMatrixXi>& F_T, double& min_distance, double& volume_length, double& cross_or_side_to_end, int& flip_male) {
     //////////////////////////////////////////////////////////////////////////////
     //Convert raw-data to list of Polylines
     //////////////////////////////////////////////////////////////////////////////
@@ -851,9 +851,10 @@ std::tuple<RowMatrixXi, RowMatrixXd, std::vector<RowMatrixXd>> pybind11_beam_vol
     std::vector<std::array<int, 4>> polyline0_id_segment0_id_polyline1_id_segment1_id;
     std::vector<std::array<IK::Point_3, 2>> point_pairs;
     std::vector<std::array<CGAL_Polyline, 4>> volume_pairs;
-    std::vector<CGAL_Polyline> joints_preview;
+    std::vector<CGAL_Polyline> joints_areas;
+    std::vector<int> joints_types;
     beam_volumes(polylines, segment_radii, segment_normals, face_types, min_distance, volume_length, cross_or_side_to_end, flip_male,
-        polyline0_id_segment0_id_polyline1_id_segment1_id, point_pairs, volume_pairs, joints_preview);
+        polyline0_id_segment0_id_polyline1_id_segment1_id, point_pairs, volume_pairs, joints_areas, joints_types);
 
     //////////////////////////////////////////////////////////////////////////////
     //Convert to output
@@ -861,7 +862,10 @@ std::tuple<RowMatrixXi, RowMatrixXd, std::vector<RowMatrixXd>> pybind11_beam_vol
     RowMatrixXi neighbours(polyline0_id_segment0_id_polyline1_id_segment1_id.size(), 4);
     RowMatrixXd points(point_pairs.size(), 6);
     std::vector<RowMatrixXd> volumes;
+    std::vector<RowMatrixXd> output_joint_areas;
     volumes.reserve(point_pairs.size() * 4);
+    output_joint_areas.reserve(joints_areas.size());
+    RowMatrixXi output_joint_types(joints_types.size(), 1);
 
     for (size_t i = 0; i < polyline0_id_segment0_id_polyline1_id_segment1_id.size(); i++) {
         neighbours(i, 0) = polyline0_id_segment0_id_polyline1_id_segment1_id[i][0];
@@ -884,5 +888,14 @@ std::tuple<RowMatrixXi, RowMatrixXd, std::vector<RowMatrixXd>> pybind11_beam_vol
         }
     }
 
-    return std::make_tuple(neighbours, points, volumes);
+    for (size_t i = 0; i < joints_areas.size(); i++) {
+        RowMatrixXd rect = result_from_polyline(joints_areas[i]);
+        output_joint_areas.push_back(rect);
+    }
+
+    for (size_t i = 0; i < joints_types.size(); i++) {
+        output_joint_types(i, 0) = joints_types[i];
+    }
+
+    return std::make_tuple(neighbours, points, volumes, output_joint_areas, output_joint_types);
 }
