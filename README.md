@@ -44,7 +44,7 @@ https://user-images.githubusercontent.com/18013985/147587822-cfb43c96-4a81-4b89-
 - [ ] interface - groups
 - [ ] interface - R-Tree for joint types
 - [ ] interface - edge vector display
-- [ ] interface - beam polyline detection
+- [ ] interface - beam polyline detection, 1) check what that not clean if statement does, do you need add joints to elements, if there are no elements just central line? 2) try generate tenon-mortise joint 3) cut using mesh boolean
 - [x] publish documentation gh-pages
 - [ ] publish conda
 
