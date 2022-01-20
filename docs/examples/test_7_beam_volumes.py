@@ -19,6 +19,7 @@ def test_beam_volumes():
     polylines = data_set_beams.polylines_3()
     segment_radii = data_set_beams.polylines_radii_3()
     segment_normals = data_set_beams.polylines_vector_3()
+
     # print(segment_normals)
 
     allowed_types = []

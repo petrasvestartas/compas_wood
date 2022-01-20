@@ -12,7 +12,7 @@
 #include "cgal_mesh_util.h"
 #include "cgal_box_search.h"
 
-#include "clipper.h"
+#include "clipper_util.h"
 #include "rtree.h"
 
 #include <algorithm>
@@ -24,6 +24,8 @@
 #include "joinery_solver_element.h"
 #include "joinery_solver_joint.h"
 #include "joinery_solver_joint_library.h"
+
+#pragma region GET ELEMENTS
 
 inline void get_elements(
     std::vector<CGAL_Polyline>& pp,
@@ -179,78 +181,9 @@ inline void get_elements(
     }
 }
 
-inline bool intersection_2D(CGAL_Polyline& p0, CGAL_Polyline& p1, IK::Plane_3& plane, CGAL_Polyline& c, double scale = 100000.0) {
-    /////////////////////////////////////////////////////////////////////////////////////
-    //Orient from 3D to 2D
-    /////////////////////////////////////////////////////////////////////////////////////
-    CGAL_Polyline a;
-    CGAL_Polyline b;
-    cgal_polyline_util::Duplicate(p0, a);
-    cgal_polyline_util::Duplicate(p1, b);
+#pragma endregion
 
-    /////////////////////////////////////////////////////////////////////////////////////
-    //Create Transformation
-    /////////////////////////////////////////////////////////////////////////////////////
-    CGAL::Aff_transformation_3<IK> xform_toXY = cgal_xform_util::PlaneToXY(p0[0], plane);
-    CGAL::Aff_transformation_3<IK> xform_toXY_Inv = xform_toXY.inverse();
-    cgal_polyline_util::Transform(a, xform_toXY);
-    cgal_polyline_util::Transform(b, xform_toXY);
-
-    /////////////////////////////////////////////////////////////////////////////////////
-    //Convert to Clipper
-    /////////////////////////////////////////////////////////////////////////////////////
-    std::vector<ClipperLib::IntPoint> pathA(a.size() - 1);
-    std::vector<ClipperLib::IntPoint> pathB(b.size() - 1);
-    for (int i = 0; i < a.size() - 1; i++) {
-        pathA[i] = ClipperLib::IntPoint(a[i].x() * scale, a[i].y() * scale);
-        //printf("%f,%f,%f \n", a[i].x(), a[i].y(), a[i].z());
-    }
-    //printf("\n");
-    for (int i = 0; i < b.size() - 1; i++) {
-        pathB[i] = ClipperLib::IntPoint(b[i].x() * scale, b[i].y() * scale);
-        //printf("%f,%f,%f \n", b[i].x(), b[i].y(), b[i].z());
-    }
-
-    //printf("\n");
-    //printf("\n");
-
-    ClipperLib::Clipper clipper;
-    clipper.AddPath(pathA, ClipperLib::ptSubject, true);
-    clipper.AddPath(pathB, ClipperLib::ptClip, true);
-    ClipperLib::Paths C;
-    clipper.Execute(ClipperLib::ctIntersection, C, ClipperLib::pftNonZero, ClipperLib::pftNonZero);
-
-    if (C.size() > 0) {
-        //CGAL_Debug(C[0].size());
-
-        //CleanPolygon(C[0], GlobalTolerance * scale);//clean polygons
-
-        //if (C[0].size() > 3 && Area(C[0]) > GlobalClipperAreaTolerance * scale * scale) {//skip triangles and very small polygons
-        if (C[0].size() > 3 && std::abs(Area(C[0])) > std::abs(Area(pathA) * GlobalClipperAreaTolerance)) { //skip triangles and very small polygons
-            /*	CGAL_Debug(Area(pathA));*/
-            //CGAL_Debug(Area(C[0])/ (scale* scale));
-            c.resize(C[0].size() + 1);
-
-            for (int i = 0; i < C[0].size(); i++) {
-                IK::Point_3 p(C[0][i].X / scale, C[0][i].Y / scale, 0);
-                p = p.transform(xform_toXY_Inv); //Rotate back to 3D
-                c[i] = p;
-                //CGAL_Debug(c[i],true);
-            }
-            //CGAL_Debug(999999);
-            c[C[0].size()] = c[0]; //Close
-        } else {
-            return false;
-        }
-    } else {
-        return false;
-    }
-
-    /////////////////////////////////////////////////////////////////////////////////////
-    //Output
-    /////////////////////////////////////////////////////////////////////////////////////
-    return true;
-}
+#pragma region SEARCH LOCAL METHODS
 
 inline bool plane_to_face(std::vector<
     CGAL_Polyline>& Polyline0,
@@ -593,7 +526,7 @@ inline bool face_to_face(
 
             if (coplanar) {
                 //Perform 2D Intersection 20 ms
-                bool hasIntersection = intersection_2D(Polyline0[i], Polyline1[j], Plane0[i], joint_area, GlobalClipperScale); // +20 ms 10000.0; GlobalClipperScale
+                bool hasIntersection = clipper_util::intersection_2D(Polyline0[i], Polyline1[j], Plane0[i], joint_area, GlobalClipperScale); // +20 ms 10000.0; GlobalClipperScale
 
 #ifdef DEBUG
                 printf("CPP hasIntersection %i\n", hasIntersection);
@@ -987,6 +920,10 @@ inline bool face_to_face(
     return false;
 }
 
+#pragma endregion
+
+#pragma region SEARCH GLOBAL METHODS
+
 //inline void search(
 //
 //	//Input
@@ -1270,140 +1207,9 @@ inline void rtree_search(
     //CGAL_Debug(joints.size());
 }
 
-//inline void get_obb_and_planes(
-//	//Input
-//	std::vector<CGAL_Polyline>& pp,
-//	//Output
-//	std::vector< CGAL::Bbox_3>& AABBs,
-//	std::vector<IK::Vector_3[5]>& OOBs,
-//	std::vector< std::vector<CGAL_Polyline>>& P,
-//	std::vector< std::vector<IK::Plane_3>>& Pls) {
-//
-//	int n = pp.size() * 0.5;
-//
-//	AABBs = std::vector<CGAL::Bbox_3>(n);
-//	OOBs = std::vector<IK::Vector_3[5]>(n);
-//	P = std::vector<std::vector<CGAL_Polyline>>(n);
-//	Pls = std::vector<std::vector<IK::Plane_3>>(n);
-//
-//
-//
-//	for (int i = 0; i < pp.size(); i += 2) {
-//
-//		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//		//Get BoundingBox - AABB
-//		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//		//Create copy of a polyline and transform points
-//		CGAL_Polyline twoPolylines;
-//		twoPolylines.resize(pp[i].size() + pp[i + 1].size());
-//		std::copy(pp[i].begin(), pp[i].end(), twoPolylines.begin());
-//		std::copy(pp[i + 1].begin(), pp[i + 1].end(), twoPolylines.begin() + pp[i].size());
-//
-//		//auto t = cgal_xform_util::Scale(cgal_polyline_util::Center(twoPolylines), 1+ GlobalTolerance);//change when dilate works
-//		//cgal_polyline_util::Transform(twoPolylines, t);//change when dilate works
-//
-//		CGAL::Bbox_3 AABB = CGAL::bbox_3(twoPolylines.begin(), twoPolylines.end(), IK());
-//
-//		CGAL_Polyline AABB_Min_Max = {
-//			IK::Point_3(AABB.xmin() - 1 * GlobalTolerance, AABB.ymin() - 1 * GlobalTolerance, AABB.zmin() - 1 * GlobalTolerance),
-//			IK::Point_3(AABB.xmax() + 1 * GlobalTolerance, AABB.ymax() + 1 * GlobalTolerance, AABB.zmax() + 1 * GlobalTolerance),
-//		};
-//
-//		AABB = CGAL::bbox_3(AABB_Min_Max.begin(), AABB_Min_Max.end(), IK());
-//
-//		//CGAL_Debug(AABB.zmax());
-//		//AABB.dilate(1E34);
-//		//CGAL_Debug(AABB.zmax());
-//		//AABB = CGAL::bbox_3()
-//		//AABB.dilate(GlobalTolerance);//Does not work
-//		AABBs[i * 0.5] = AABB;
-//
-//		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//		//Get Object Oriented BoundingBox - OOB -> transform to XY and back to 3D
-//		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//		//Create Planes
-//		IK::Vector_3 planeAxes[4];
-//		cgal_polyline_util::AveragePlane(pp[i], planeAxes);
-//
-//		//Create Transformation
-//		CGAL::Aff_transformation_3<IK> xform_toXY = cgal_xform_util::VectorsToXY(planeAxes[0], planeAxes[1], planeAxes[2], planeAxes[3]);
-//		CGAL::Aff_transformation_3<IK> xform_toXY_Inv = xform_toXY.inverse();
-//
-//		//Transform the merged polyline to xy and compute xyBounding Box
-//
-//		for (auto it = twoPolylines.begin(); it != twoPolylines.end(); ++it) {
-//			*it = it->transform(xform_toXY);
-//			//printf("CPP Transformed Point %d %d %d \n", it->x(), it->y(), it->z());
-//		}
-//
-//		//Compute bounding box, get center point, and contruct 5 size vector, where 5th dimension is halfsite,  then transform box back to 3D by an inverse matrix
-//		CGAL::Bbox_3 AABBXY = CGAL::bbox_3(twoPolylines.begin(), twoPolylines.end(), IK());
-//		double scale = 10;
-//		IK::Vector_3 box[5] = {
-//			IK::Vector_3(
-//				(AABBXY.xmin() + AABBXY.xmax()) * 0.5,
-//				(AABBXY.ymin() + AABBXY.ymax()) * 0.5,
-//				(AABBXY.zmin() + AABBXY.zmax()) * 0.5),
-//			IK::Vector_3(1,0,0),
-//			IK::Vector_3(0,1,0),
-//			IK::Vector_3(0,0,1),
-//			IK::Vector_3(
-//			fabs((1.0 + GlobalTolerance * 1) * (AABBXY.xmax() - AABBXY.xmin()) * 0.5),//0.00001
-//			fabs((1.0 + GlobalTolerance * 1) * (AABBXY.ymax() - AABBXY.ymin()) * 0.5),
-//			fabs((1.0 + GlobalTolerance * 1) * (AABBXY.zmax() - AABBXY.zmin()) * 0.5))
-//		};
-//		//CGAL_Debug(1.0 + GlobalTolerance * 0.00001);
-//
-//
-//
-//
-//		cgal_box_util::TransformPlaneOrPlane(box, xform_toXY_Inv);
-//		cgal_box_util::Assign(box, OOBs[i * 0.5], 5);
-//
-//		//CGAL_Debug(box[0]);
-//		//CGAL_Debug(box[1]);
-//		//CGAL_Debug(box[2]);
-//		//CGAL_Debug(box[3]);
-//		//CGAL_Debug(box[4]);
-//
-//
-//		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//		//Check orientation of polylines and reverse if needed
-//		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//		if (twoPolylines.back().z() > 0) {
-//			std::reverse(pp[i].begin(), pp[i].end());
-//			std::reverse(pp[i + 1].begin(), pp[i + 1].end());
-//		}
-//
-//
-//		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//		//Get Side Polylines and Planes
-//		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//		P[i * 0.5] = std::vector<CGAL_Polyline>(1 + pp[i].size());
-//		P[i * 0.5][0] = pp[i];
-//		P[i * 0.5][1] = pp[i + 1];
-//
-//		Pls[i * 0.5] = std::vector<IK::Plane_3>(1 + pp[i].size());
-//
-//
-//		//IK::Point_3 origin = cgal_polyline_util::Center(pp[i]);
-//		IK::Vector_3 normal;
-//		cgal_vector_util::AverageNormal(pp[i], normal,true,false);
-//		Pls[i * 0.5][0] = IK::Plane_3(cgal_polyline_util::Center(pp[i]), normal);
-//		Pls[i * 0.5][1] = IK::Plane_3(cgal_polyline_util::Center(pp[i + 1]), -normal);
-//
-//		for (int j = 0; j < pp[i].size() - 1; j++) {
-//			Pls[i * 0.5][2 + j] = IK::Plane_3(pp[i][j + 1], pp[i][j], pp[i + 1][j + 1]);
-//			P[i * 0.5][2 + j] = { pp[i][j],  pp[i][j + 1], pp[i + 1][j + 1], pp[i + 1][j], pp[i][j] };
-//		}
-//
-//
-//	}
-//
-//
-//
-//}
+#pragma endregion
 
+#pragma region CUSTOM IMPLEMENTATIONS: 3-VALENCE
 inline void three_valence_joint_alignment(
     std::vector<std::vector<int>>& out_three_valence_element_indices_and_instruction,
     std::vector<element>& elements,
@@ -1516,38 +1322,9 @@ inline void three_valence_joint_alignment(
     }
 }
 
-//inline bool OrientTile(CGAL_Polyline &rect0, CGAL_Polyline &rect1, std::vector<std::vector<CGAL_Polyline>> &orientedTiles, int tileType = 0) {
-//
-//    if (rect0.size() != 5 || rect1.size() != 5)
-//        return false;
-//
-//    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//    //Get a Tile
-//    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//    std::vector<CGAL_Polyline> tile = cgal_polyline_util::Cross_Simple();
-//
-//    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//    //Transform a tile
-//    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//    for (int i = 0; i < tile.size(); i++) {
-//        CGAL::Aff_transformation_3<IK> X;
-//
-//        cgal_xform_util::ChangeBasis(
-//            IK::Point_3(-0.5, -0.5, -0.5), IK::Vector_3(1, 0, 0), IK::Vector_3(0, 1, 0), IK::Vector_3(0, 0, 1),
-//            rect0[0], (rect0[1] - rect0[0]), (rect0[3] - rect0[0]), (rect1[0] - rect0[0]),
-//            X
-//        );
-//
-//        cgal_polyline_util::Transform(tile[i], X);
-//
-//    }
-//
-//    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//    //Output
-//    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//    orientedTiles.push_back(tile);
-//    return true;
-//}
+#pragma endregion
+
+#pragma region MAIN METHODS
 
 inline void get_connection_zones(
     std::vector<CGAL_Polyline>& input_polyline_pairs,
@@ -1974,3 +1751,5 @@ inline void beam_volumes(
         volume_pairs.emplace_back(beam_volume);
     }
 }
+
+#pragma endregion
