@@ -155,7 +155,7 @@ inline void get_elements(
         //        CGAL_Debug(kk);
         //}
 
-        //Edge initialization, total number of edge top,bottom + all sides + undefined not lying on face
+        //Edge initialization, total number of edge all sides + top,bottom  + undefined not lying on face for beams
         elements[count].j_mf = std::vector<std::vector<std::tuple<int, bool, double>>>((pp[i].size() - 1) + 2 + 1); //(side id, false, parameter on edge)
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -192,19 +192,21 @@ inline bool plane_to_face(std::vector<
     std::vector<IK::Plane_3>& Plane1,
     std::vector<IK::Vector_3>& insertion_vectors0,
     std::vector<IK::Vector_3>& insertion_vectors1,
-    int& e0_0, int& e1_0,
-    int& e0_1, int& e1_1,
+    std::pair<int, int>& el_ids,
+    std::pair<std::array<int, 2>, std::array<int, 2>>& face_ids,
+    int& type,
     CGAL_Polyline& joint_area,
-    //CGAL_Polyline(&joint_quads)[2],
     CGAL_Polyline(&joint_lines)[2],
     CGAL_Polyline(&joint_volumes_pairA_pairB)[4],
 
-    int& type,
-
     double angleTol = 16,
-    bool checkOverlap = false) {
-    e0_0 = -1;
-    e1_1 = -1;
+    bool checkOverlap = false
+
+) {
+    face_ids.first[0] = -1;
+    face_ids.first[1] = -1;
+    face_ids.second[0] = -1;
+    face_ids.second[1] = -1;
     type = 30;
 
     //////////////////////////////////////////////////////////////////////////////
@@ -285,10 +287,10 @@ inline bool plane_to_face(std::vector<
     if (!cgal_polyline_util::PlanePolyline(*cx1, *cy1, *px1, *py1, cx1_py1__cy1_px1, edge_pair_e0_1__e1_1))
         return false; //,cx1_py1__cy1_px1_Max
 
-    e0_0 = edge_pair_e0_0__e1_0.first + 2;
-    e1_0 = edge_pair_e0_0__e1_0.second + 2;
-    e0_1 = edge_pair_e0_1__e1_1.first + 2;
-    e1_1 = edge_pair_e0_1__e1_1.second + 2;
+    face_ids.first[0] = edge_pair_e0_0__e1_0.first + 2;
+    face_ids.second[0] = edge_pair_e0_0__e1_0.second + 2;
+    face_ids.first[1] = edge_pair_e0_1__e1_1.first + 2;
+    face_ids.second[1] = edge_pair_e0_1__e1_1.second + 2;
     //	std::ofstream myfile;
     //	myfile.open("C:\\IBOIS57\\_Code\\Software\\Python\\Pybind11Example\\vsstudio\\Release\\output3.txt");
     //	myfile << e0_0;
@@ -501,17 +503,18 @@ inline bool face_to_face(
     std::vector<IK::Plane_3>& Plane1,
     std::vector<IK::Vector_3>& insertion_vectors0,
     std::vector<IK::Vector_3>& insertion_vectors1,
-    int& f0_0, int& f1_0,
-    int& f0_1, int& f1_1,
+    std::pair<int, int>& el_ids,
+    std::pair<std::array<int, 2>, std::array<int, 2>>& face_ids,
+    int& type,
     CGAL_Polyline& joint_area,
     CGAL_Polyline(&joint_lines)[2],
-    CGAL_Polyline(&joint_volumes_pairA_pairB)[4],
-    int& type) {
+    CGAL_Polyline(&joint_volumes_pairA_pairB)[4]
+) {
     //printf("CPP StartIndersection \n");
 
 #ifdef DEBUG
 
-    printf("\nCPP face_to_face \nCPP planes %i, %i  \n", Plane0.size(), Plane1.size());
+    printf("\nCPP face_to_face \nCPP planes %zi, %zi  \n", Plane0.size(), Plane1.size());
 #endif
 
     for (int i = 0; i < Plane0.size(); i++) {
@@ -539,10 +542,10 @@ inline bool face_to_face(
                 //Intersection lines and rectangles
                 //////////////////////////////////////////////////////////////////////////////////////////////////
                 if (hasIntersection) {
-                    f0_0 = i; //Do not add +2, because planes are iterated
-                    f1_0 = j; //Do not add +2, because planes are iterated
-                    f0_1 = i; //Do not add +2, because planes are iterated
-                    f1_1 = j; //Do not add +2, because planes are iterated
+                    face_ids.first[0] = i; //Do not add +2, because planes are iterated
+                    face_ids.second[0] = j; //Do not add +2, because planes are iterated
+                    face_ids.first[1] = i; //Do not add +2, because planes are iterated
+                    face_ids.second[1] = j; //Do not add +2, because planes are iterated
 
                     int type0 = i > 1 ? 0 : 1;
                     int type1 = j > 1 ? 0 : 1;
@@ -631,7 +634,7 @@ inline bool face_to_face(
                     //CGAL_Debug(type);
                     if (type == 0) { //side-side
 #ifdef DEBUG
-                        printf("Type0 %i");
+                        printf("Type0");
 #endif
 
                         joint_lines[0] = { joint_line0[0], joint_line0[1] };
@@ -850,30 +853,18 @@ inline bool face_to_face(
                         //////////////////////////////////////////////////////////////////////////////////
                         bool male_or_female = i > j;
 
-                        //if (!male_or_female) {
-                        //	f0_0 = j;
-                        //	f1_0 = i;
-                        //	f0_1 = f0_0;
-                        //	f1_1 = f1_0;
-                        //}
-
                         joint_lines[0] = male_or_female ? CGAL_Polyline({ joint_line0[0], joint_line0[1] }) : CGAL_Polyline({ joint_line1[0], joint_line1[1] });
                         joint_lines[1] = joint_lines[0];
 
                         IK::Plane_3* plane0_0 = male_or_female ? &Plane0[0] : &Plane1[0];
-                        //IK::Plane_3* plane0_1 = male_or_female ? &Plane0[1] : &Plane1[1];
                         IK::Plane_3* plane1_0 = !male_or_female ? &Plane0[i] : &Plane1[j]; //female collision plane
                         IK::Plane_3* plane1_1 = !male_or_female ? &Plane0[std::abs(i - 1)] : &Plane1[std::abs(j - 1)];
 
-                        //CGAL_Polyline* pline0 = male_or_female ? &Polyline0[0] : &Polyline1[0];
-                        //CGAL_Polyline* pline1 = !male_or_female ? &Polyline0[1] : &Polyline1[1];
-
-                        //IK::Segment_3* line_0 = male_or_female ? &joint_line0 : &joint_line1;//male, female does not exist int top-side
                         CGAL_Polyline* quad_0 = male_or_female ? &joint_quads0 : &joint_quads1; //male, female does not exist int top-side
 
                         //////////////////////////////////////////////////////////////////////////////////////
                         //Two possibilities: if dir is unset move it perpendicularly else move by element direction
-                        //This case will only work for top-side connection when elements are parallell
+                        //This case will only work for top-side connection when elements are parallel
                         //For other cases you need to find a way to get opposite plane i.e. mesh intersection
                         //////////////////////////////////////////////////////////////////////////////////////
                         IK::Vector_3 offset_vector;
@@ -889,14 +880,23 @@ inline bool face_to_face(
                                 offset_vector = offset_vector_;
                         }
 
+                        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                        //OUTPUT: IMPORTANT Switch if first one is not side
+                        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                        if (!male_or_female) {
+                            // el_ids = std::pair(0, 0);
+
+                            el_ids = std::make_pair(el_ids.second, el_ids.first);
+                            face_ids = std::make_pair(std::array<int, 2>{face_ids.second[0], face_ids.second[1]}, std::array<int, 2>{face_ids.first[0], face_ids.first[1]});
+                        }
+
                         //////////////////////////////////////////////////////////////////////////////////
-                        //Create Connection rectangles
+                        //OUTPUT: Create Connection rectangles, IMPORTANT based on order
                         //////////////////////////////////////////////////////////////////////////////////
-                        joint_volumes_pairA_pairB[0] = { (*quad_0)[0], (*quad_0)[1], (*quad_0)[1] + offset_vector, (*quad_0)[0] + offset_vector, (*quad_0)[0] };
-                        joint_volumes_pairA_pairB[1] = { (*quad_0)[3], (*quad_0)[2], (*quad_0)[2] + offset_vector, (*quad_0)[3] + offset_vector, (*quad_0)[3] };
-                        //joint_area = joint_volumes_pairA_pairB[0];
-                        //joint_volumes_pairA_pairB[2] = joint_volumes_pairA_pairB[0];
-                        //joint_volumes_pairA_pairB[3] = joint_volumes_pairA_pairB[1];
+                        int m_id = male_or_female ? 0 : 1;
+                        int f_id = male_or_female ? 1 : 0;
+                        joint_volumes_pairA_pairB[m_id] = { (*quad_0)[0], (*quad_0)[1], (*quad_0)[1] + offset_vector, (*quad_0)[0] + offset_vector, (*quad_0)[0] };
+                        joint_volumes_pairA_pairB[f_id] = { (*quad_0)[3], (*quad_0)[2], (*quad_0)[2] + offset_vector, (*quad_0)[3] + offset_vector, (*quad_0)[3] };
 
                         type = 20;
                         return true;
@@ -993,13 +993,16 @@ inline bool face_to_face(
 inline bool pair_search(
 
     //Input
-    std::array<CGAL_Polyline, 4>& beam_volumes,
-    int polyline_id0,
-    int polyline_id1,
+    std::vector<element>& elements,//real element
+    std::array<CGAL_Polyline, 4>& beam_volumes,//joint volumes
+    const int& polyline_id_0,
+    const int& polyline_id_1,
+
     int search_type,
 
     //Output
-    std::vector<joint>& joints
+    std::vector<joint>& joints,
+    std::unordered_map<uint64_t, int>& joints_map
 
 ) {
     //////////////////////////////////////////////////////////////////////////////
@@ -1008,27 +1011,32 @@ inline bool pair_search(
     std::vector<CGAL_Polyline> input_polyline_pairs(std::begin(beam_volumes), std::end(beam_volumes));
     std::vector<std::vector<IK::Vector_3>> input_insertion_vectors;
     std::vector<std::vector<int>> input_joint_types;
-    std::vector<element> elements;
-    get_elements(input_polyline_pairs, input_insertion_vectors, input_joint_types, elements);
+    std::vector<element> beam_volumes_elements;
+    get_elements(input_polyline_pairs, input_insertion_vectors, input_joint_types, beam_volumes_elements);
 
     //////////////////////////////////////////////////////////////////////////////
     // search
     //////////////////////////////////////////////////////////////////////////////
+
     CGAL_Polyline joint_area;
     CGAL_Polyline joint_quads[2];
     CGAL_Polyline joint_lines[2];
     CGAL_Polyline joint_volumes_pairA_pairB[4];
-    int f0_0, f1_0, f0_1, f1_1, type;
 
-    bool found_type;
+    std::pair<int, int> el_ids(polyline_id_0, polyline_id_1);
+    std::pair<std::array<int, 2>, std::array<int, 2>> face_ids;
+    int type;
+
+    int found_type = 0;
     switch (search_type) {
         case (0):
 
             found_type = face_to_face(
-                elements[0].polylines, elements[1].polylines,
-                elements[0].planes, elements[1].planes,
-                elements[0].edge_vectors, elements[1].edge_vectors,
-                f0_0, f1_0, f0_1, f1_1, joint_area, joint_lines, joint_volumes_pairA_pairB, type) ? 1 : 0;
+                beam_volumes_elements[0].polylines, beam_volumes_elements[1].polylines,
+                beam_volumes_elements[0].planes, beam_volumes_elements[1].planes,
+                beam_volumes_elements[0].edge_vectors, beam_volumes_elements[1].edge_vectors,
+                el_ids, face_ids, type,
+                joint_area, joint_lines, joint_volumes_pairA_pairB) ? 1 : 0;
 
 #ifdef DEBUG
             printf("CPP Found_Type %i\n", found_type);
@@ -1039,10 +1047,11 @@ inline bool pair_search(
         case (1):
 
             found_type = plane_to_face(
-                elements[0].polylines, elements[1].polylines,
-                elements[0].planes, elements[1].planes,
-                elements[0].edge_vectors, elements[1].edge_vectors,
-                f0_0, f1_0, f0_1, f1_1, joint_area, joint_lines, joint_volumes_pairA_pairB, type) ? 2 : 0;
+                beam_volumes_elements[0].polylines, beam_volumes_elements[1].polylines,
+                beam_volumes_elements[0].planes, beam_volumes_elements[1].planes,
+                beam_volumes_elements[0].edge_vectors, beam_volumes_elements[1].edge_vectors,
+                el_ids, face_ids, type,
+                joint_area, joint_lines, joint_volumes_pairA_pairB) ? 2 : 0;
 
 #ifdef DEBUG
 
@@ -1051,7 +1060,7 @@ inline bool pair_search(
             break;
     }
 
-    if (!found_type)
+    if (found_type == 0)
         return false;
 
     //////////////////////////////////////////////////////////////////////////////
@@ -1061,15 +1070,29 @@ inline bool pair_search(
     if (joint_area.size() > 0) {
         joints.emplace_back(
             joint_id,
-            polyline_id0,
-            polyline_id1,
-            f0_0, f1_0, f0_1, f1_1,
+            el_ids.first,
+            el_ids.second,
+            face_ids.first[0], face_ids.second[0], face_ids.first[1], face_ids.second[1],
             joint_area,
             joint_lines,
             joint_volumes_pairA_pairB,
             type);
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
+        //Map element0-element1 to joint_id
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
+        joints_map.emplace(cgal_math_util::unique_from_two_int(el_ids.first, el_ids.second), joint_id);
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
+        //Place joint ids and male or female flags to joint list
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
+        //elements[el_ids.first].j_mf[face_ids.first[0]].push_back(std::tuple<int, bool, double>(joint_id, true, 0));
+        //elements[el_ids.second].j_mf[face_ids.second[0]].push_back(std::tuple<int, bool, double>(joint_id, false, 0));
+        elements[el_ids.first].j_mf.back().push_back(std::tuple<int, bool, double>(joint_id, true, 0));
+        elements[el_ids.second].j_mf.back().push_back(std::tuple<int, bool, double>(joint_id, false, 0));
         return true;
     }
+
     return false;
 }
 
@@ -1123,31 +1146,67 @@ inline void rtree_search(
     //////////////////////////////////////////////////////////////////////////////
     // Search Contact zones
     //////////////////////////////////////////////////////////////////////////////
-    int jointID = 0;
+    int joint_id = 0;
     for (int i = 0; i < result.size(); i += 2) {
         CGAL_Polyline joint_area;
         CGAL_Polyline joint_quads[2];
         CGAL_Polyline joint_lines[2];
         CGAL_Polyline joint_volumes_pairA_pairB[4];
-        int f0_0, f1_0, f0_1, f1_1, type;
+
+        std::pair<int, int> el_ids(result[i], result[i + 1]);
+        std::pair<std::array<int, 2>, std::array<int, 2>> face_ids;
+        int type;
 
         int found_type = 0;
         switch (search_type) {
             case (0):
-                found_type = face_to_face(elements[result[i]].polylines, elements[result[i + 1]].polylines, elements[result[i]].planes, elements[result[i + 1]].planes, elements[result[i]].edge_vectors, elements[result[i + 1]].edge_vectors, f0_0, f1_0, f0_1, f1_1, joint_area, joint_lines, joint_volumes_pairA_pairB, type) ? 1 : 0;
+                found_type = face_to_face(
+                    elements[el_ids.first].polylines, elements[el_ids.second].polylines,
+                    elements[el_ids.first].planes, elements[el_ids.second].planes,
+                    elements[el_ids.first].edge_vectors, elements[el_ids.second].edge_vectors,
+                    el_ids, face_ids, type,
+                    joint_area,
+                    joint_lines,
+                    joint_volumes_pairA_pairB
+
+                ) ? 1 : 0;
+
                 break;
+
             case (1):
-                found_type = plane_to_face(elements[result[i]].polylines, elements[result[i + 1]].polylines, elements[result[i]].planes, elements[result[i + 1]].planes, elements[result[i]].edge_vectors, elements[result[i + 1]].edge_vectors, f0_0, f1_0, f0_1, f1_1, joint_area, joint_lines, joint_volumes_pairA_pairB, type) ? 2 : 0;
+                found_type = plane_to_face(
+                    elements[result[i]].polylines, elements[result[i + 1]].polylines,
+                    elements[result[i]].planes, elements[result[i + 1]].planes,
+                    elements[result[i]].edge_vectors, elements[result[i + 1]].edge_vectors,
+                    el_ids, face_ids, type,
+                    joint_area, joint_lines, joint_volumes_pairA_pairB
+                ) ? 2 : 0;
                 break;
+
             case (2):
-                bool flag0 = face_to_face(elements[result[i]].polylines, elements[result[i + 1]].polylines, elements[result[i]].planes, elements[result[i + 1]].planes, elements[result[i]].edge_vectors, elements[result[i + 1]].edge_vectors, f0_0, f1_0, f0_1, f1_1, joint_area, joint_lines, joint_volumes_pairA_pairB, type);
-                if (flag0) {
+
+                bool found_type_temp = face_to_face(
+                    elements[el_ids.first].polylines, elements[el_ids.second].polylines,
+                    elements[el_ids.first].planes, elements[el_ids.second].planes,
+                    elements[el_ids.first].edge_vectors, elements[el_ids.second].edge_vectors,
+                    el_ids, face_ids, type,
+                    joint_area,
+                    joint_lines,
+                    joint_volumes_pairA_pairB
+                );
+
+                if (found_type_temp) {
                     found_type = 3;
                     break;
                 }
 
-                found_type = plane_to_face(elements[result[i]].polylines, elements[result[i + 1]].polylines, elements[result[i]].planes, elements[result[i + 1]].planes, elements[result[i]].edge_vectors, elements[result[i + 1]].edge_vectors, f0_0, f1_0, f0_1, f1_1, joint_area, joint_lines, joint_volumes_pairA_pairB, type) ? 3 : 0;
-
+                found_type = plane_to_face(
+                    elements[el_ids.first].polylines, elements[el_ids.second].polylines,
+                    elements[el_ids.first].planes, elements[el_ids.second].planes,
+                    elements[el_ids.first].edge_vectors, elements[el_ids.second].edge_vectors,
+                    el_ids, face_ids, type,
+                    joint_area, joint_lines, joint_volumes_pairA_pairB
+                ) ? 3 : 0;
                 break;
         }
 
@@ -1161,45 +1220,47 @@ inline void rtree_search(
         //CGAL_Debug(joint_area.size());
         if (joint_area.size() > 0) {
             //
+            int joint_id = joints.size();
 
             joints.emplace_back(
-                jointID,
-                result[i], result[i + 1],
-                f0_0, f1_0, f0_1, f1_1,
+                joint_id,
+                el_ids.first, el_ids.second,
+                face_ids.first[0], face_ids.second[0], face_ids.first[1], face_ids.second[1],
                 joint_area,
                 joint_lines,
                 joint_volumes_pairA_pairB,
                 type);
 
             //CGAL_Debug(1);
-            joints_map.emplace(cgal_math_util::unique_from_two_int(result[i], result[i + 1]), jointID);
+            joints_map.emplace(cgal_math_util::unique_from_two_int(el_ids.first, el_ids.second), joint_id);
 
-            //CGAL_Debug(e1);
-            ////////////////////////////////////////////////////////////////////////////////////////////////////////
+            //////////////////////////////////////////////////////////////////////////////////////////////////////
             //Place joint ids and male or female flags to joint list
-            ////////////////////////////////////////////////////////////////////////////////////////////////////////
-            if (f1_0 == -1) {
-                //CGAL_Debug(3);
-                elements[result[i + 0]].j_mf.back().push_back(std::tuple<int, bool, double>(jointID, true, 0));
-                elements[result[i + 1]].j_mf.back().push_back(std::tuple<int, bool, double>(jointID, false, 0));
-                //CGAL_Debug(4);
-            } else {
-                //CGAL_Debug((double)f0_0, (double)f1_0);
-                if ((f1_0 < 2 || f0_0 < 2) && type != 30 && type != 40) { //side-top connection weirdo, clean this up
-                    if ((f1_0 < 2 && f0_0 > 1)) {
-                        elements[result[i + 0]].j_mf[f0_0].push_back(std::tuple<int, bool, double>(jointID, true, 0));
-                        elements[result[i + 1]].j_mf[f1_0].push_back(std::tuple<int, bool, double>(jointID, false, 0));
-                    } else {
-                        elements[result[i + 0]].j_mf[f0_0].push_back(std::tuple<int, bool, double>(jointID, false, 0));
-                        elements[result[i + 1]].j_mf[f1_0].push_back(std::tuple<int, bool, double>(jointID, true, 0));
-                    }
-                } else {
-                    elements[result[i + 0]].j_mf[f0_0].push_back(std::tuple<int, bool, double>(jointID, true, 0));
-                    elements[result[i + 1]].j_mf[f1_0].push_back(std::tuple<int, bool, double>(jointID, false, 0));
-                }
-            }
+            //////////////////////////////////////////////////////////////////////////////////////////////////////
+            elements[el_ids.first].j_mf[face_ids.first[0]].push_back(std::tuple<int, bool, double>(joint_id, true, 0));
+            elements[el_ids.second].j_mf[face_ids.second[0]].push_back(std::tuple<int, bool, double>(joint_id, false, 0));
+            //if (face_ids.second[0] == -1) {
+            //    //CGAL_Debug(3);
+            //    elements[el_ids.first].j_mf.back().push_back(std::tuple<int, bool, double>(jointID, true, 0));
+            //    elements[el_ids.second].j_mf.back().push_back(std::tuple<int, bool, double>(jointID, false, 0));
+            //    //CGAL_Debug(4);
+            //} else {
+            //    //CGAL_Debug((double)f0_0, (double)f1_0);
+            //    if (type == 20) { //side-top connection weirdo, clean this up
+            //        if ((face_ids.second[0] < 2 && face_ids.first[0] > 1)) {
+            //            elements[el_ids.first].j_mf[face_ids.first[0]].push_back(std::tuple<int, bool, double>(jointID, true, 0));
+            //            elements[el_ids.second].j_mf[face_ids.second[0]].push_back(std::tuple<int, bool, double>(jointID, false, 0));
+            //        } else {
+            //            elements[el_ids.first].j_mf[face_ids.first[0]].push_back(std::tuple<int, bool, double>(jointID, false, 0));
+            //            elements[el_ids.second].j_mf[face_ids.second[0]].push_back(std::tuple<int, bool, double>(jointID, true, 0));
+            //        }
+            //    } else {
+            //        elements[el_ids.first].j_mf[face_ids.first[0]].push_back(std::tuple<int, bool, double>(jointID, true, 0));
+            //        elements[el_ids.second].j_mf[face_ids.second[0]].push_back(std::tuple<int, bool, double>(jointID, false, 0));
+            //    }
+            //}
 
-            jointID++;
+            //jointID++;
         }
     }
 
@@ -1431,8 +1492,19 @@ inline void beam_volumes(
     CGAL_Debug(polylines.size(), polylines_segment_radii.size());
 #endif
 
+    /////////////////////////////////////////////////////////////////////
+    //elements, joints, joints_map
+    /////////////////////////////////////////////////////////////////////
     //CGAL_Debug(polylines.size());
+    std::vector<element> elements;
+    elements.reserve(polylines.size());
+    for (int i = 0; i < elements.size(); i++) {
+        elements.emplace_back(i);
+        elements.back().central_polyline = polylines[i];
+    }
     std::vector<joint> joints;
+    std::unordered_map<uint64_t, int> joints_map;
+
     /////////////////////////////////////////////////////////////////////
     //Segment callback
     /////////////////////////////////////////////////////////////////////
@@ -1594,6 +1666,8 @@ inline void beam_volumes(
                     return sum_of_type0_type1 == 1 || sum_of_type0_type1 == 2;
                 case(-1):
                     return true;
+                default:
+                    return false;
             }
         };
 
@@ -1733,7 +1807,7 @@ inline void beam_volumes(
         printf("\nCPP -------------> beam_volumes Type %i %i \n", type0, type1);
 #endif
 
-        bool found_joint = pair_search(beam_volume, std::get<1>(v), std::get<3>(v), (type0 + type1 == 2), joints);
+        bool found_joint = pair_search(elements, beam_volume, std::get<1>(v), std::get<3>(v), (type0 + type1 == 2), joints, joints_map);
 
 #ifdef DEBUG
         printf("CPP pair_search %i \n", found_joint);
@@ -1748,8 +1822,13 @@ inline void beam_volumes(
         // Search Contact zones
         //////////////////////////////////////////////////////////////////////////////
 
+        //this is wrong because after joints must be distributed to elements that is why you need joints list
         volume_pairs.emplace_back(beam_volume);
     }
+
+    //////////////////////////////////////////////////////////////////////////////
+    // Apply joints using elements, joints, joints_map
+    //////////////////////////////////////////////////////////////////////////////
 }
 
 #pragma endregion

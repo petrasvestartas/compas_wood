@@ -37,6 +37,11 @@ def get_connection_zones(
     face_joints_types_int=None,
     three_valance_element_indices_and_instruction=None,
     default_joint_parameters=None,
+    search_type=2,
+    division_distance=300,
+    shift=0.6,
+    output_type=4,
+    triangulate=0,
 ):
     """Compute joinery
 
@@ -46,6 +51,11 @@ def get_connection_zones(
     face_vectors_XYZ : vectors to orient a joint
     face_joints_types_int : joint id, existing in the code
     three_valance_element_indices_and_instruction : special case e.g. alignment of rectangles
+    search_type : 0 - face-to-face, 1 - plane-to-face (cross), 2 - all
+    division_distance : division parameter if tile allows this
+    shift : distance value if tile allows this
+    output_type : 0 - top outlines and one joint_area, 1 - top outlines and two joint lines, 2 - top outlines and joint volumes first and third, 3 - top outlines and joint polylines, 4 - get_joints_geometry_as_closed_polylines_performing_intersection
+    triangulate : 0 - not output as mesh, 1 - output as mesh, currently not supported in python
 
     Returns
     -------
@@ -136,12 +146,6 @@ def get_connection_zones(
         flat_list_of_three_valance_element_indices_and_instruction, dtype=np.int32
     )
     P = np.asarray(flat_list_default_joint_paramters, dtype=np.float64)
-
-    search_type = 2
-    division_distance = 300
-    shift = 0.6
-    output_type = 4
-    triangulate = 0
 
     # ==============================================================================
     # Test CPP module

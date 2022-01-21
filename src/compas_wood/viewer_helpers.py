@@ -102,7 +102,7 @@ def display_polylines_as_mesh(viewer, polylines, types, scale=0.01, t=3):
                     out_mesh[i][j],
                     color=out_mesh_colors[i],
                     show_edges=True,
-                    opacity=0.75,
+                    opacity=0.5,
                 )
 
             # viewer.add(Collection(out_mesh[i]),colors =colors_mesh)
@@ -186,8 +186,8 @@ def display_mesh(viewer, input, scale=0.01, r=0.0, g=0.0, b=0.0, t=1):
         facecolor=(r, g, b),
         linecolor=(0, 0, 0),
         show_edges=True,
-        opacity=1.0,
+        opacity=0.5,
         linewidth=1,
         hide_coplanaredges=False,
-        show_faces=False,
+        show_faces=True,
     )
