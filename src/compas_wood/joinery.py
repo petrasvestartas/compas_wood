@@ -54,7 +54,9 @@ def get_connection_zones(
     search_type : 0 - face-to-face, 1 - plane-to-face (cross), 2 - all
     division_distance : division parameter if tile allows this
     shift : distance value if tile allows this
-    output_type : 0 - top outlines and one joint_area, 1 - top outlines and two joint lines, 2 - top outlines and joint volumes first and third, 3 - top outlines and joint polylines, 4 - get_joints_geometry_as_closed_polylines_performing_intersection
+    output_type : 0 - top outlines and one joint_area, 1 - top outlines and two joint lines,
+    2 - top outlines and joint volumes first and third, 3 - top outlines and joint polylines,
+    4 - get_joints_geometry_as_closed_polylines_performing_intersection
     triangulate : 0 - not output as mesh, 1 - output as mesh, currently not supported in python
 
     Returns
@@ -642,6 +644,11 @@ def beam_volumes(
     volume_length,
     cross_or_side_to_end,
     flip_male,
+    joint_parameters,
+    compute_joints=True,
+    division_distance=300,
+    shift=0.6,
+    output_type=3,
 ):
     """Find closest polylines within given distance
 
@@ -655,6 +662,10 @@ def beam_volumes(
     volume_length : double length of beam volumes
     cross_or_side_to_end : double type0_type1_parameter_00_05
     flip_male : property for side-to-end volumes, 0 - no shift, -1 shift to right, 1 shift to left
+    joint_parameters_list : division distance, shift, type - 1000, 0.5, 1, 1000, 0.5, 10, 1000, 0.5, 20, 1000, 0.5, 30, 1000, 0.5, 40, 1000, 0.5, 50,
+    compute_joints : true or false
+    shift : parameter of a joint
+    output type: 0 - 1 - 2 -3
 
     Returns
     -------
@@ -668,6 +679,8 @@ def beam_volumes(
         a list of closed polylines within local connection detection
     joint_types_list
         a list of integers of joint area types
+    joint_geometry
+        oriented joint geometry if joints are computed
     """
 
     # ==============================================================================
@@ -677,6 +690,31 @@ def beam_volumes(
     flat_list_radii = []
     flat_list_normals = []
     flat_list_allowed_types = []
+
+    flat_list_default_joint_paramters = [
+        1000,
+        0.5,
+        1,
+        1000,
+        0.5,
+        10,
+        1000,
+        0.5,
+        20,
+        1000,
+        0.5,
+        30,
+        1000,
+        0.5,
+        40,
+        1000,
+        0.5,
+        50,
+    ]
+
+    if joint_parameters is not None:
+        if len(joint_parameters) == len(flat_list_default_joint_paramters):
+            flat_list_default_joint_paramters = joint_parameters
 
     if allowed_types is not None:
         flat_list_allowed_types.extend(allowed_types)
@@ -698,6 +736,7 @@ def beam_volumes(
     S_N = np.asarray(flat_list_normals, dtype=np.float64)
     F = np.asarray(vertex_count_per_polyline, dtype=np.int32)
     F_T = np.asarray(flat_list_allowed_types, dtype=np.int32)
+    P = np.asarray(flat_list_default_joint_paramters, dtype=np.float64)
     # print(V)
     # print(S_N)
 
@@ -719,6 +758,7 @@ def beam_volumes(
         volume_pairs,
         joint_areas,
         joint_types,
+        joint_geometry,
     ) = pybind11_joinery_solver.pybind11_beam_volumes(
         V,
         S_R,
@@ -729,6 +769,11 @@ def beam_volumes(
         volume_length,
         cross_or_side_to_end,
         flip_male,
+        P,
+        compute_joints,
+        division_distance,
+        shift,
+        output_type,
     )
     # print(point_pairs)
     print(
@@ -770,6 +815,13 @@ def beam_volumes(
     for points_coord in joint_types:
         joint_types_list.append(points_coord[0])
 
+    joint_geometry_list = []
+    for points_coord in joint_geometry:
+        points = [Point(*point) for point in points_coord]
+        pline = Polyline(points)
+        joint_geometry_list.append(pline)
+
+    print(len(joint_geometry))
     # print("Output")
     return (
         neighbours_list,
@@ -777,4 +829,5 @@ def beam_volumes(
         pair_volumes_list,
         joint_areas_list,
         joint_types_list,
+        joint_geometry_list,
     )

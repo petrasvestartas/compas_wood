@@ -16,9 +16,9 @@ os.system("cls" if os.name == "nt" else "clear")
 
 def test_beam_volumes():
 
-    polylines = data_set_beams.polylines_3()
-    segment_radii = data_set_beams.polylines_radii_3()
-    segment_normals = data_set_beams.polylines_vector_3()
+    polylines = data_set_beams.polylines_4()
+    segment_radii = data_set_beams.polylines_radii_4()
+    segment_normals = data_set_beams.polylines_vector_4()
 
     # print(segment_normals)
 
@@ -44,8 +44,9 @@ def test_beam_volumes():
         volume_pairs,
         joint_areas_list,
         joint_types_list,
+        joint_geometry_list,
     ) = beam_volumes(
-        polylines, segment_radii, segment_normals, allowed_types, 20, 30, 0.91, 1
+        polylines, segment_radii, segment_normals, allowed_types, 20, 30, 0.91, 1, None
     )
     """
     # Display normals
@@ -76,7 +77,15 @@ def test_beam_volumes():
 
     volume_pairs.extend(polylines)
     display(
-        volume_pairs, joint_areas_list, None, 0.01, 0, 0, 0, False, joint_types_list
+        joint_geometry_list,
+        joint_areas_list,
+        None,
+        0.01,
+        0,
+        0,
+        0,
+        False,
+        joint_types_list,
     )
 
 

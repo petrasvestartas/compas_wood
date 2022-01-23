@@ -1088,6 +1088,11 @@ inline bool pair_search(
         //////////////////////////////////////////////////////////////////////////////////////////////////////
         //elements[el_ids.first].j_mf[face_ids.first[0]].push_back(std::tuple<int, bool, double>(joint_id, true, 0));
         //elements[el_ids.second].j_mf[face_ids.second[0]].push_back(std::tuple<int, bool, double>(joint_id, false, 0));
+#ifdef DEBUG
+        printf("CPP Number of elements %zi polyline id_0 %i polyline id_1  %i \n", elements.size(), el_ids.first, el_ids.second);
+#endif
+        //auto a = elements[el_ids.first];
+        //auto b = elements[el_ids.second];
         elements[el_ids.first].j_mf.back().push_back(std::tuple<int, bool, double>(joint_id, true, 0));
         elements[el_ids.second].j_mf.back().push_back(std::tuple<int, bool, double>(joint_id, false, 0));
         return true;
@@ -1406,19 +1411,21 @@ inline void get_connection_zones(
     int triangulate = 0
 
 ) {
-    const int n = input_polyline_pairs.size() * 0.5;
+    //////////////////////////////////////////////////////////////////////////////
+    //Main Properties: elements, joints, joints_map
+    //////////////////////////////////////////////////////////////////////////////
+    std::vector<element> elements;
+    auto joints = std::vector<joint>();
+    auto joints_map = std::unordered_map<uint64_t, int>();
 
     //////////////////////////////////////////////////////////////////////////////
     //Create elements, AABB, OBB, P, Pls, thickness
     //////////////////////////////////////////////////////////////////////////////
-    std::vector<element> elements;
     get_elements(input_polyline_pairs, input_insertion_vectors, input_joint_types, elements);
 
     //////////////////////////////////////////////////////////////////////////////
     //Create joints, Perform Joint Area Search
     //////////////////////////////////////////////////////////////////////////////
-    auto joints = std::vector<joint>();
-    auto joints_map = std::unordered_map<uint64_t, int>();
     rtree_search(elements, search_type, joints, joints_map);
 
     //////////////////////////////////////////////////////////////////////////////
@@ -1428,16 +1435,14 @@ inline void get_connection_zones(
         three_valence_joint_alignment(input_three_valence_element_indices_and_instruction, elements, joints, joints_map, division_distance); //plines,
 
     ////////////////////////////////////////////////////////////////////////////////
-    ////Create and Align Joints 1. Iterate type 2. Select joint based on not/given user joint_type
+    //Create and Align Joints 1. Iterate type 2. Select joint based on not/given user joint_type
     ////////////////////////////////////////////////////////////////////////////////
     joint_library::construct_joint_by_index(elements, joints, division_distance, shift, default_parameters_for_joint_types);
 
     //////////////////////////////////////////////////////////////////////////////
     //Iterate joint address
     //////////////////////////////////////////////////////////////////////////////
-
     plines = std::vector<std::vector<CGAL_Polyline>>(elements.size());
-    //CGAL_Debug(joints.size());
     for (int i = 0; i < elements.size(); i++) { //takes 30-50 ms just to copy past polyline geometry
         switch (output_type) {
             case (0):
@@ -1482,26 +1487,42 @@ inline void beam_volumes(
     double& cross_or_side_to_end,
     int& flip_male,
 
+    //output of joint areas
     std::vector<std::array<int, 4>>& polyline0_id_segment0_id_polyline1_id_segment1_id,
     std::vector<std::array<IK::Point_3, 2>>& point_pairs,
     std::vector<std::array<CGAL_Polyline, 4>>& volume_pairs,
-    std::vector<CGAL_Polyline>& joints_preview,
-    std::vector<int>& joints_types
+    std::vector<CGAL_Polyline>& joints_areas,
+    std::vector<int>& joints_types,
+
+    //Global Parameters and output joint selection and orientation
+    std::vector<double>& default_parameters_for_joint_types,
+    std::vector<std::vector<CGAL_Polyline>>& joints_oriented_polylines,
+    bool compute_joints = false,
+    double division_distance = 300,
+    double shift = 0.6,
+    int output_type = 3
+
 ) {
 #ifdef DEBUG
     CGAL_Debug(polylines.size(), polylines_segment_radii.size());
 #endif
 
-    /////////////////////////////////////////////////////////////////////
-    //elements, joints, joints_map
-    /////////////////////////////////////////////////////////////////////
-    //CGAL_Debug(polylines.size());
+    //////////////////////////////////////////////////////////////////////////////
+    //Main Properties: elements, joints, joints_map
+    //////////////////////////////////////////////////////////////////////////////
+
     std::vector<element> elements;
     elements.reserve(polylines.size());
-    for (int i = 0; i < elements.size(); i++) {
+    for (int i = 0; i < polylines.size(); i++) {
         elements.emplace_back(i);
         elements.back().central_polyline = polylines[i];
+        elements.back().j_mf = std::vector<std::vector<std::tuple<int, bool, double>>>(1);
     }
+
+#ifdef DEBUG
+    printf("CPP Number of elements %zi   \n", elements.size());
+#endif
+
     std::vector<joint> joints;
     std::unordered_map<uint64_t, int> joints_map;
 
@@ -1512,10 +1533,6 @@ inline void beam_volumes(
     auto segment = [&polylines](std::size_t pid, std::size_t sid)
     {
         return IK::Segment_3(polylines[pid][sid], polylines[pid][sid + 1]);
-        //return EK::Segment_3(
-        //    EK::Point_3(polylines[pid][sid][0], polylines[pid][sid][1], polylines[pid][sid][2]),
-        //    EK::Point_3(polylines[pid + 1][sid][0], polylines[pid][sid + 1][1], polylines[pid][sid + 1][2])
-        //);
     };
 
     auto segment_inflated = [&polylines, &polylines_segment_radii](std::size_t pid, std::size_t sid)
@@ -1578,10 +1595,6 @@ inline void beam_volumes(
         if (b1.info().first != b2.info().first) {
             IK::Segment_3 s0 = segment(b1.info().first, b1.info().second);
             IK::Segment_3 s1 = segment(b2.info().first, b2.info().second);
-            //IK::Vector_3 v0 = s0.to_vector();
-            // IK::Vector_3 v1 = s1.to_vector();
-            // s0 = IK::Segment_3(s0[0] - v0, s0[1] + v0);
-            // s1 = IK::Segment_3(s1[0] - v1, s1[1] + v1);
             double distance = CGAL::squared_distance(s0, s1);
 
             if (distance < min_distance * min_distance) {
@@ -1814,7 +1827,7 @@ inline void beam_volumes(
 #endif
 
         if (found_joint) {
-            joints_preview.emplace_back(joints[joints.size() - 1].joint_area);
+            joints_areas.emplace_back(joints[joints.size() - 1].joint_area);
             joints_types.emplace_back(joints[joints.size() - 1].type);
         }
 
@@ -1826,9 +1839,48 @@ inline void beam_volumes(
         volume_pairs.emplace_back(beam_volume);
     }
 
+    if (!compute_joints)
+        return;
+
+    //////////////////////////////////////////////////////////////////////////////////
+    ////Create and Align Joints 1. Iterate type 2. Select joint based on not/given user joint_type
+    //////////////////////////////////////////////////////////////////////////////////
+#ifdef DEBUG
+    printf("CPP finish pair search\n");
+#endif
+    joint_library::construct_joint_by_index(elements, joints, division_distance, shift, default_parameters_for_joint_types);
+#ifdef DEBUG
+    printf("CPP construct_joint_by_index\n");
+#endif
     //////////////////////////////////////////////////////////////////////////////
-    // Apply joints using elements, joints, joints_map
+    //Iterate joint address
     //////////////////////////////////////////////////////////////////////////////
+
+    joints_oriented_polylines = std::vector<std::vector<CGAL_Polyline>>(elements.size());
+    for (int i = 0; i < elements.size(); i++) { //takes 30-50 ms just to copy past polyline geometry
+        switch (output_type) {
+            case (0):
+                elements[i].get_joints_geometry(joints, joints_oriented_polylines, 0);
+                break;
+            case (1):
+                elements[i].get_joints_geometry(joints, joints_oriented_polylines, 1);
+                break;
+            case (2):
+                elements[i].get_joints_geometry(joints, joints_oriented_polylines, 2);
+                break;
+            default:
+            case (3):
+                elements[i].get_joints_geometry(joints, joints_oriented_polylines, 3);
+                break;
+            case (4):
+                //This does not exist here because boolean cuts are made
+                //elements[i].get_joints_geometry_as_closed_polylines_performing_intersection(joints, plines);
+                break;
+        }
+    }
+#ifdef DEBUG
+    printf("CPP get_joints_geometry\n");
+#endif
 }
 
 #pragma endregion

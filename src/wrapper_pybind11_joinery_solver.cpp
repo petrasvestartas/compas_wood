@@ -768,7 +768,9 @@ std::tuple<RowMatrixXi, RowMatrixXd> pybind11_intersecting_sequences_of_dD_iso_o
     return std::make_tuple(neighbours, points);
 }
 
-std::tuple<RowMatrixXi, RowMatrixXd, std::vector<RowMatrixXd>, std::vector<RowMatrixXd>, RowMatrixXi > pybind11_beam_volumes(Eigen::Ref<const RowMatrixXd>& V, Eigen::Ref<const RowMatrixXd>& E_R, Eigen::Ref<const RowMatrixXd>& E_N, Eigen::Ref<const RowMatrixXi>& F, Eigen::Ref<const RowMatrixXi>& F_T, double& min_distance, double& volume_length, double& cross_or_side_to_end, int& flip_male) {
+std::tuple<RowMatrixXi, RowMatrixXd, std::vector<RowMatrixXd>, std::vector<RowMatrixXd>, RowMatrixXi, std::vector<RowMatrixXd> > pybind11_beam_volumes(Eigen::Ref<const RowMatrixXd>& V, Eigen::Ref<const RowMatrixXd>& E_R, Eigen::Ref<const RowMatrixXd>& E_N, Eigen::Ref<const RowMatrixXi>& F, Eigen::Ref<const RowMatrixXi>& F_T, double& min_distance, double& volume_length, double& cross_or_side_to_end, int& flip_male,
+    Eigen::Ref <const RowMatrixXd>& input_default_parameters_for_joint_types, bool compute_joints, double division_distance, double shift, int output_type) {
+    //default_parameters_for_joint_types, joints_oriented_polylines, true, 300, 0.6, 3
     //////////////////////////////////////////////////////////////////////////////
     //Convert raw-data to list of Polylines
     //////////////////////////////////////////////////////////////////////////////
@@ -845,16 +847,31 @@ std::tuple<RowMatrixXi, RowMatrixXd, std::vector<RowMatrixXd>, std::vector<RowMa
         //CGAL_Debug(F_T(i, 0));
     }
 
+    std::vector<double> default_parameters_for_joint_types;
+
+    if (input_default_parameters_for_joint_types.size() > 0) {
+        default_parameters_for_joint_types.reserve(input_default_parameters_for_joint_types.size());
+
+        for (int i = 0; i < input_default_parameters_for_joint_types.size(); i++)
+            default_parameters_for_joint_types.emplace_back(input_default_parameters_for_joint_types(i, 0));
+    }
+
     //////////////////////////////////////////////////////////////////////////////
     //Perform search
     //////////////////////////////////////////////////////////////////////////////
+
+    //joint volume and area
     std::vector<std::array<int, 4>> polyline0_id_segment0_id_polyline1_id_segment1_id;
     std::vector<std::array<IK::Point_3, 2>> point_pairs;
     std::vector<std::array<CGAL_Polyline, 4>> volume_pairs;
     std::vector<CGAL_Polyline> joints_areas;
     std::vector<int> joints_types;
+
+    //joint selection
+    std::vector<std::vector<CGAL_Polyline>> joints_oriented_polylines;
     beam_volumes(polylines, segment_radii, segment_normals, face_types, min_distance, volume_length, cross_or_side_to_end, flip_male,
-        polyline0_id_segment0_id_polyline1_id_segment1_id, point_pairs, volume_pairs, joints_areas, joints_types);
+        polyline0_id_segment0_id_polyline1_id_segment1_id, point_pairs, volume_pairs, joints_areas, joints_types,
+        default_parameters_for_joint_types, joints_oriented_polylines, compute_joints, division_distance, shift, output_type);
 
     //////////////////////////////////////////////////////////////////////////////
     //Convert to output
@@ -897,5 +914,7 @@ std::tuple<RowMatrixXi, RowMatrixXd, std::vector<RowMatrixXd>, std::vector<RowMa
         output_joint_types(i, 0) = joints_types[i];
     }
 
-    return std::make_tuple(neighbours, points, volumes, output_joint_areas, output_joint_types);
+    std::tuple<std::vector<RowMatrixXd>, std::vector<int>> joint_geometry_and_index = result_tuple_from_polylinesVector(joints_oriented_polylines, true);
+
+    return std::make_tuple(neighbours, points, volumes, output_joint_areas, output_joint_types, std::get<0>(joint_geometry_and_index));
 }
