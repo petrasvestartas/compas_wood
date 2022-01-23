@@ -202,6 +202,10 @@ ________________________________________________________
 
 ## Joints Parameters
 
+    //side-to-side parallel in-plane |  side-to-side parallel | side-to-side out-of-plane |  top-to-side | cross | top-to-top |  side-to-side non-parallel
+    std::vector<double> joint_parameters = { 1000, 0.5, 1,  1000, 0.5, 10 ,  1000, 0.5, 20 ,  1000, 0.5, 30 ,  1000, 0.5, 40 ,  1000, 0.5, 50 };
+
+
     nothing = '0',
 
     //plates
