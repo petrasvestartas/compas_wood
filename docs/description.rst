@@ -33,33 +33,31 @@ Algorithm Structure
 Joint Types
 ################################################################################
 
-Code implementation:
-    * |check| joint class that stores adjacency information
-    * |check| change-basis transformation from unit tile to joint volume defined by two rectangles
-    * |check| assignment of joints based and search categories and connection types
-    * |uncheck| store each parameterized joint inside std::unordered_map<string, joint> that is not remapped yet
-    * assignment of joints based and search categories and connection types
-    * joint parameters are given in a list side-to-side parallel in-plane |  side-to-side parallel | side-to-side out-of-plane |  top-to-side | cross | top-to-top |  side-to-side non-parallel joint_parameters = { 1000, 0.5, 1,  1000, 0.5, 10 ,  1000, 0.5, 20 ,  1000, 0.5, 30 ,  1000, 0.5, 40 ,  1000, 0.5, 50 }
 
 
-.. list-table:: **Use only indexing in the first line of the table**:
-   :widths: 25 25 25 25 25 25 25
+Joint parameters are given in a list following this order:
+    * side-to-side parallel in-plane |  side-to-side parallel | side-to-side out-of-plane |  top-to-side | cross | top-to-top |  side-to-side non-parallel 
+    * | division length | shift | type | 
+    * { 1000, 0.5, 1,  1000, 0.5, 10 ,  1000, 0.5, 20 ,  1000, 0.5, 30 ,  1000, 0.5, 40 ,  1000, 0.5, 50 }
+
+
+
+
+**Joints in the Joint Library:**
+
+.. rst-class:: table table-bordered
+
+.. list-table::
+   :widths: auto
    :header-rows: 1
 
-   * - Types 0 
-     - Types 1-9
-     - Types 10-19
-     - Types 20-29
-     - Types 30-39
-     - Types 40-49
-     - Types 50-59
-   * - 0 
-     - 12
-     - 11
-     - 20
-     - 30
-     - 40
-     - 50
+   * - Types_0 
+     - Types_1-9
+     - Types_10-19
+     - Types_20-29
+     - Types_30-39
+     - Types_40-49
+     - Types_50-59
    * - **skip**
      - **side-to-side**
      - **side-to-side**
@@ -167,6 +165,8 @@ Joints have two properties m_boolean_type and f_boolean_type to guide the fabric
     :class: figure-img img-fluid
 
 
+
+
 To-do joints types:
     * |uncheck| snap-fit joint
     * |uncheck| keys
@@ -179,6 +179,12 @@ To-do joints types:
 To-do others:
     * |uncheck| flipping case
     * |uncheck|  BLT
+
+Code implementation:
+    * |check| joint class that stores adjacency information
+    * |check| change-basis transformation from unit tile to joint volume defined by two rectangles
+    * |check| assignment of joints based and search categories and connection types
+    * |uncheck| store each parameterized joint inside std::unordered_map<string, joint> that is not remapped yet
 
 
 ################################################################################
@@ -220,6 +226,37 @@ Local:
     *  |check| plane_to_face cross | **joinery_library 30-39** | type 30
     *  |uncheck| face_to_face top_to_top | **joinery_library 40-49** |  type 40  currently only output joint_area with 0 local search
     *  |uncheck| face_to_face side-to-side | **joinery_library non-parallel 50-59** |  type 50 
+
+
+
+.. rst-class:: table table-bordered
+
+.. list-table::
+   :widths: auto
+   :header-rows: 1
+
+   * - **skip**
+     - **side-to-side**
+     - **side-to-side**
+     - **top-to-side**
+     - **cross**
+     - **top-to-top**
+     - **side-to-side**
+   * -  
+     - **in-plane**
+     - **out-of-plane**
+     - 
+     - 
+     - 
+     - **rotated**
+   * - 0 
+     - 12
+     - 11
+     - 20
+     - 30
+     - 40
+     - 50
+
 
 Local Search and Insertion Vector:
     *  Description: a vector on an element edge that is equal to a plane normal on an edge.
