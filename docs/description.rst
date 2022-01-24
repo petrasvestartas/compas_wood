@@ -2,8 +2,16 @@
 Description
 ********************************************************************************
 
+.. |check| raw:: html
+
+    <input checked=""  type="checkbox">
+
+.. |uncheck| raw:: html
+
+    <input type="checkbox">
+
 ################################################################################
-Algorithm Structure
+Scope - Pair-wise Connections
 ################################################################################
 
 
@@ -12,9 +20,223 @@ Algorithm Structure
     :figclass: figure
     :class: figure-img img-fluid
 
+################################################################################
+Algorithm Structure
+################################################################################
+
 .. figure:: /_images/Slide8.jpg
     :figclass: figure
     :class: figure-img img-fluid
+
+
+################################################################################
+Joint Types
+################################################################################
+
+Code implementation:
+    * |check| joint class that stores adjacency information
+    * |check| change-basis transformation from unit tile to joint volume defined by two rectangles
+    * |check| assignment of joints based and search categories and connection types
+    * |uncheck| store each parameterized joint inside std::unordered_map<string, joint> that is not remapped yet
+    * assignment of joints based and search categories and connection types
+    * joint parameters are given in a list side-to-side parallel in-plane |  side-to-side parallel | side-to-side out-of-plane |  top-to-side | cross | top-to-top |  side-to-side non-parallel joint_parameters = { 1000, 0.5, 1,  1000, 0.5, 10 ,  1000, 0.5, 20 ,  1000, 0.5, 30 ,  1000, 0.5, 40 ,  1000, 0.5, 50 }
+
+
+.. list-table:: **Use only indexing in the first line of the table**:
+   :widths: 25 25 25 25 25 25 25
+   :header-rows: 1
+
+   * - Types 0 
+     - Types 1-9
+     - Types 10-19
+     - Types 20-29
+     - Types 30-39
+     - Types 40-49
+     - Types 50-59
+   * - 0 
+     - 12
+     - 11
+     - 20
+     - 30
+     - 40
+     - 50
+   * - **skip**
+     - **side-to-side**
+     - **side-to-side**
+     - **top-to-side**
+     - **cross**
+     - **top-to-top**
+     - **side-to-side**
+   * -  
+     - **in-plane**
+     - **out-of-plane**
+     - 
+     - 
+     - 
+     - **rotated**
+   * - default 
+     - default ss_e_ip_1
+     - default ss_e_op_1
+     - default ts_e_p_3
+     - default cr_c_ip_0
+     - default 
+     - default 
+   * - 
+     - 1 - (ss_e_ip_1)
+     - 10 - (ss_e_op_1)
+     - 20 - (ts_e_p_1)
+     - 30 - (cr_c_ip_0)
+     - 
+     -
+   * - 
+     - 2 - (ss_e_ip_0)
+     - 11 - (ss_e_op_2)
+     - 21 - (ts_e_p_2) 
+     - 31 - (cr_c_ip_1)
+     - 
+     - 
+   * - 
+     - 
+     - 12 - (ss_e_op_0)
+     - 22 - (ts_e_p_3)
+     - 
+     - 
+     - 
+   * - 
+     - 
+     - 
+     - 23 - (ts_e_p_0)
+     - 
+     - 
+     - 
+
+Joints have two properties m_boolean_type and f_boolean_type to guide the fabrication process:
+    * **Default** nothing = '0'
+    * **Plates** edge_insertion = '1'
+    * **Plates** hole = '2',
+    * **Plates** insert_between_multiple_edges = '3'
+    * **Beams** slice = '4' //project and make rectangle
+    * **Beams** mill = '5',
+    * **Beams** mill_project = '6' //project
+    * **Beams** cut = '7'
+    * **Beams** cut_project = '8' //project
+    * **Beams** binary_slice_mill = '9' //project and make rectangle
+
+
+
+**Joint: ss_e_op_1 Nejiri Arigata**
+
+.. figure:: /_images/joint_documentation_0.jpg
+    :figclass: figure
+    :class: figure-img img-fluid
+
+**Joint: ss_e_op_2 Dovetail**
+
+.. figure:: /_images/joint_documentation_1.jpg
+    :figclass: figure
+    :class: figure-img img-fluid
+
+**Joint: ss_e_ip_0 Dovetail**
+
+.. figure:: /_images/joint_documentation_2.jpg
+    :figclass: figure
+    :class: figure-img img-fluid
+
+**Joint: tenon mortise ts_e_p_2 (ts_e_p_0 - original) (start and end point of the joint line are skipped)**
+
+.. figure:: /_images/joint_documentation_3.jpg
+    :figclass: figure
+    :class: figure-img img-fluid
+
+**Joint: Annen joint - ts_e_p_3 (ts_e_p_2 - original)**
+
+.. figure:: /_images/joint_documentation_4.jpg
+    :figclass: figure
+    :class: figure-img img-fluid
+
+**Joint: cr_c_ip_0 cross**
+
+.. figure:: /_images/joint_documentation_5.jpg
+    :figclass: figure
+    :class: figure-img img-fluid
+
+**Joint: cr_c_ip_1 conic cross**
+
+.. figure:: /_images/joint_documentation_6.jpg
+    :figclass: figure
+    :class: figure-img img-fluid
+
+
+To-do joints types:
+    * |uncheck| snap-fit joint
+    * |uncheck| keys
+    * |uncheck| tenon-mortise beams
+    * |uncheck| tenon-mortise half beam
+    * |uncheck| scarf
+    * |uncheck| screws
+
+
+To-do others:
+    * |uncheck| flipping case
+    * |uncheck|  BLT
+
+
+################################################################################
+Element
+################################################################################
+
+Code Implementation:
+    *  Element is specified as a pair of polylines, with planes for each side, in a beam case it is only a central polylines
+    *  |check| j_mf property track joints (joint id, male/female, parameter on edge)    
+    *  |uncheck| mesh boolean: a) reference shapes, b) joints polygon pairs
+
+Merge:
+    * plate geometry can be merged, for beams boolean difference must be performed
+    * |check| Insert face joints inside edge
+    * |check| Insert between multiple edges (open polylines + closed polygons)
+    * |uncheck| Cut projection and insert in polygon (case when side-side joints are rotated e.g. butterfly)
+    * |uncheck| Mesh boolean: a) reference shapes, b) joints polygon pairs
+
+.. figure:: /_images/merge_1.jpg
+    :figclass: figure
+    :class: figure-img img-fluid
+
+Grouping:
+    * |uncheck| Introduce unordered_map to track grouping like sorted lists x;x;x 
+
+################################################################################
+Search Methods
+################################################################################
+
+Global:
+    *  |check| Closest Object Query + OOB and ABB collision
+    *  |check| no search by user given index (must have input in the beginning) 
+    *  |check| Polyline Search 
+
+Local:
+    *  |check| face_to_face side-to-side parallel in-plane | **joinery_library 1-9** | type 12
+    *  |check| face_to_face side-to-side parallel out-of-plane | **joinery_library 10-19** | type 11
+    *  |check| face_to_face top-to-side | **joinery_library 20-29** | type 20
+    *  |check| plane_to_face cross | **joinery_library 30-39** | type 30
+    *  |uncheck| face_to_face top_to_top | **joinery_library 40-49** |  type 40  currently only output joint_area with 0 local search
+    *  |uncheck| face_to_face side-to-side | **joinery_library non-parallel 50-59** |  type 50 
+
+Local Search and Insertion Vector:
+    *  Description: a vector on an element edge that is equal to a plane normal on an edge.
+    *  |check| side-top connection insertion vector is currently defined by plane normals, not insertion direction because it is equal what is inside code
+    *  |uncheck| side-side connection, not finished for out of plane connections
+    *  |uncheck| side-side connection in rotaton insertion vector not tested 
+    *  |uncheck| top-top connection
+
+.. figure:: /_images/insertion_vectors_0.jpg
+    :figclass: figure
+    :class: figure-img img-fluid
+
+.. figure:: /_images/insertion_vectors_2.jpg
+    :figclass: figure
+    :class: figure-img img-fluid
+
+
 
 
 ################################################################################
