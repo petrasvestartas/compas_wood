@@ -2,6 +2,170 @@
 #include "cgal.h"
 #include "joinery_solver_joint.h"
 
+//XML Reader
+#include <iostream>
+#include <fstream>
+//#include <cstdint>
+
+//
+#include <vector>
+#include <boost/property_tree/ptree.hpp>
+#include <boost/property_tree/xml_parser.hpp>
+
+namespace joint_library_xml_parser {
+    inline bool exists_test0(const std::string& name) {
+        std::ifstream f(name.c_str());
+        return f.good();
+    }
+
+    inline bool exists_test3(const std::string& name) {
+        struct stat buffer;
+        return (stat(name.c_str(), &buffer) == 0);
+    }
+
+    //https://zipproth.de/cheat-sheets/cpp-boost/
+    inline bool read_xml(joint& joint, int type = 0) {
+        std::string name = "";//custom
+
+        switch (type) {
+            case(12):
+            case(0):
+                name = "ss_e_ip_9";
+                break;
+            case(11):
+            case(1):
+                name = "ss_e_op_9";
+                break;
+            case(20):
+            case(2):
+                name = "ts_e_p_9";
+                break;
+            case(30):
+            case(3):
+                name = "cr_c_ip_9";
+                break;
+            case(40):
+            case(4):
+                name = "tt_e_p_9";
+                break;
+            case(50):
+            case(5):
+                name = "ss_e_r_9";
+                break;
+        }
+
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        //Check if XML file exists, path_and_file_for_joints is a global path
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+#ifdef DEBUG
+        printf("\nCPP File path %s ", path_and_file_for_joints.c_str());
+        printf("\nCPP Joint Type %i %s ", type, name.c_str());
+#endif
+        if (!exists_test3(path_and_file_for_joints)) {
+#ifdef DEBUG
+            printf("\nCPP File does not exist %s ", path_and_file_for_joints.c_str());
+
+#endif
+            return false;
+        }
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        //Read XML
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        boost::property_tree::ptree tree;
+        boost::property_tree::xml_parser::read_xml(path_and_file_for_joints, tree);
+
+#ifdef DEBUG
+        printf("\nCPP tree size %zi ", tree.size());
+#endif
+
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        //Get Property to find the right joint parameters and keys of XML file properties
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Traverse property tree example
+        std::string xml_joint_name = "custom_joints." + name;
+        std::array<std::string, 6> keys = { "m0", "m1","f0","f1", "m_boolean_type","f_boolean_type" };
+        std::array<int, 6> array_id = { 0,1,0,1,0,1 };
+
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        //Get properties from XML and add to joint
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        try {
+            for (boost::property_tree::ptree::value_type& v : tree.get_child(xml_joint_name)) {
+#ifdef DEBUG
+                printf("\nCPP %s", v.first.c_str());
+#endif
+                for (int i = 0; i < 4; i++) {
+                    if (v.first == keys[i]) {
+                        //std::cout << v.first << "\n";
+
+                        CGAL_Polyline polyline;
+                        for (boost::property_tree::ptree::value_type& point : v.second) {
+                            double x = point.second.get<double>("x");
+                            double y = point.second.get<double>("y");
+                            double z = point.second.get<double>("z");
+                            polyline.emplace_back(x, y, z);
+
+#ifdef DEBUG
+                            printf("\nCPP Vector %.17g %.17g %.17g", x, y, z);
+#endif
+                        }
+
+                        //Assign to array
+                        switch (i) {
+                            case(0):
+                                joint.m[0].emplace_back(polyline);
+                                break;
+
+                            case(1):
+                                joint.m[1].emplace_back(polyline);
+                                break;
+
+                            case(2):
+                                joint.f[0].emplace_back(polyline);
+                                break;
+
+                            case(3):
+                                joint.f[1].emplace_back(polyline);
+                                break;
+                        }
+                    }
+                }
+
+                for (int i = 4; i < 6; i++) {
+                    std::vector<char> boolean_type;
+                    if (v.first == keys[i]) {
+                        //std::cout << v.first << "\n";
+
+                        for (boost::property_tree::ptree::value_type& index : v.second) {
+                            char id = index.second.get_value<char>();
+
+#ifdef DEBUG
+                            printf("\nCPP id %c ", id);
+#endif
+                            if (i == 5) {
+                                joint.m_boolean_type.emplace_back(id);
+                                //emplace to female joint.m_boolean_type
+                            } else {
+                                joint.f_boolean_type.emplace_back(id);
+                                //emplace to female joint.f_boolean_type
+                            }
+                        }
+
+                        //Assign to array
+                    }
+                }
+            }
+        } catch (std::exception& e) {
+#ifdef DEBUG
+            printf("\nCPP Wrong property ");
+#endif
+            return false;
+        }
+        return true;
+    }
+}
+
 namespace joint_library {
     inline CGAL::Aff_transformation_3<IK> to_plane(IK::Vector_3 X1, IK::Vector_3 Y1, IK::Vector_3 Z1) {
         CGAL::Aff_transformation_3<IK> F1(
@@ -100,7 +264,8 @@ namespace joint_library {
     //0 - do not merge, 1 - edge insertion, 2 - hole 3 - insert between multiple edges hole
 
     //1-9
-    inline void ss_e_ip_0(joint& joint) {
+
+    inline void ss_e_ip_0(joint& joint, bool orient_to_connection_zone = true) {
         joint.name = "ss_e_ip_0";
 
         //Joint lines, always the last line or rectangle is not a joint but an cutting element
@@ -123,10 +288,11 @@ namespace joint_library {
         joint.f_boolean_type = { '1', '1' };
         joint.m_boolean_type = { '1', '1' };
 
-        joint.orient_to_connection_area();
+        if (orient_to_connection_zone)
+            joint.orient_to_connection_area();
     }
 
-    inline void ss_e_ip_1(joint& joint, const double& division_distance, const double& shift) {
+    inline void ss_e_ip_1(joint& joint, const double& division_distance, const double& shift, bool orient_to_connection_zone = true) {
         joint.name = "ss_e_ip_1";
 
         //Resize arrays
@@ -140,7 +306,7 @@ namespace joint_library {
         //Input joint line (its lengths)
         //Input distance for division
         ////////////////////////////////////////////////////////////////////
-        double joint_length = CGAL::squared_distance(joint.joint_lines[0][0], joint.joint_lines[0][1]); // Math.Abs(500);
+        double joint_length = orient_to_connection_zone ? CGAL::squared_distance(joint.joint_lines[0][0], joint.joint_lines[0][1]) : 1000000; // Math.Abs(500);
         int divisions = (int)std::ceil(joint_length / (division_distance * division_distance));
         divisions = (int)std::max(2, std::min(100, divisions));
         divisions += divisions % 2;
@@ -207,11 +373,12 @@ namespace joint_library {
         joint.f_boolean_type = { '1', '1' };
         joint.m_boolean_type = { '1', '1' };
 
-        joint.orient_to_connection_area();
+        if (orient_to_connection_zone)
+            joint.orient_to_connection_area();
     }
 
     //10-19
-    inline void ss_e_op_0(joint& joint) {
+    inline void ss_e_op_0(joint& joint, bool orient_to_connection_zone = true) {
         joint.name = "ss_e_op_0";
 
         //Joint lines, always the last line or rectangle is not a joint but an cutting element
@@ -230,10 +397,11 @@ namespace joint_library {
         joint.f_boolean_type = { '1', '1' };
         joint.m_boolean_type = { '1', '1' };
 
-        joint.orient_to_connection_area();
+        if (orient_to_connection_zone)
+            joint.orient_to_connection_area();
     }
 
-    inline void ss_e_op_2(joint& joint, const double& division_distance, const double& shift) {
+    inline void ss_e_op_2(joint& joint, const double& division_distance, const double& shift, bool orient_to_connection_zone = true) {
         joint.name = "ss_e_op_2";
 
         //Resize arrays
@@ -247,7 +415,7 @@ namespace joint_library {
         //Input joint line (its lengths)
         //Input distance for division
         ////////////////////////////////////////////////////////////////////
-        double joint_length = CGAL::squared_distance(joint.joint_lines[0][0], joint.joint_lines[0][1]); // Math.Abs(500);
+        double joint_length = orient_to_connection_zone ? CGAL::squared_distance(joint.joint_lines[0][0], joint.joint_lines[0][1]) : 1000000; // Math.Abs(500);
         int divisions = (int)std::ceil(joint_length / (division_distance * division_distance));
         divisions = (int)std::max(4, std::min(20, divisions));
         divisions += divisions % 2;
@@ -353,10 +521,11 @@ namespace joint_library {
         joint.f_boolean_type = { '1', '1' };
         joint.m_boolean_type = { '1', '1' };
 
-        joint.orient_to_connection_area();
+        if (orient_to_connection_zone)
+            joint.orient_to_connection_area();
     }
 
-    inline void ss_e_op_1(joint& joint, const double& division_distance, const double& shift) {
+    inline void ss_e_op_1(joint& joint, const double& division_distance, const double& shift, bool orient_to_connection_zone = true) {
         joint.name = "ss_e_op_1";
 
         //Resize arrays
@@ -370,7 +539,7 @@ namespace joint_library {
         //Input joint line (its lengths)
         //Input distance for division
         ////////////////////////////////////////////////////////////////////
-        double joint_length = CGAL::squared_distance(joint.joint_lines[0][0], joint.joint_lines[0][1]); // Math.Abs(500);
+        double joint_length = orient_to_connection_zone ? CGAL::squared_distance(joint.joint_lines[0][0], joint.joint_lines[0][1]) : 1000000; // Math.Abs(500);
         int divisions = (int)std::ceil(joint_length / (division_distance * division_distance));
         divisions = (int)std::max(2, std::min(20, divisions));
         if (joint.tile_parameters.size() > 0)
@@ -477,11 +646,12 @@ namespace joint_library {
         joint.f_boolean_type = { '1', '1' };
         joint.m_boolean_type = { '1', '1' };
 
-        joint.orient_to_connection_area();
+        if (orient_to_connection_zone)
+            joint.orient_to_connection_area();
     }
 
     //20-29
-    inline void ts_e_p_0(joint& joint) {
+    inline void ts_e_p_0(joint& joint, bool orient_to_connection_zone = true) {
         joint.name = "ts_e_p_0";
 
         joint.f[0] = { {IK::Point_3(-0.5, -0.5, 0.357142857142857), IK::Point_3(0.5, -0.5, 0.357142857142857), IK::Point_3(0.5, -0.5, 0.214285714285714), IK::Point_3(-0.5, -0.5, 0.214285714285714), IK::Point_3(-0.5, -0.5, 0.357142857142857)},
@@ -504,10 +674,11 @@ namespace joint_library {
         joint.f_boolean_type = { '2', '2', '2', '2' };
         joint.m_boolean_type = { '1', '1' };
 
-        joint.orient_to_connection_area();
+        if (orient_to_connection_zone)
+            joint.orient_to_connection_area();
     }
 
-    inline void ts_e_p_1(joint& joint) {
+    inline void ts_e_p_1(joint& joint, bool orient_to_connection_zone = true) {
         joint.name = "ts_e_p_1"; //Annen
 
         joint.f[0] = { {IK::Point_3(-0.5, -0.5, -0.277777777777778), IK::Point_3(0.5, -0.5, -0.277777777777778), IK::Point_3(0.5, -0.5, -0.388888888888889), IK::Point_3(-0.5, -0.5, -0.388888888888889), IK::Point_3(-0.5, -0.5, -0.277777777777778)},
@@ -528,10 +699,11 @@ namespace joint_library {
         joint.f_boolean_type = { '2', '2', '2', '2' };
         joint.m_boolean_type = { '1', '1' };
 
-        joint.orient_to_connection_area();
+        if (orient_to_connection_zone)
+            joint.orient_to_connection_area();
     }
 
-    inline void ts_e_p_2(joint& joint, const double& division_distance, const double& shift) {
+    inline void ts_e_p_2(joint& joint, const double& division_distance, const double& shift, bool orient_to_connection_zone = true) {
         joint.name = "ts_e_p_2";
 
         ////////////////////////////////////////////////////////////////////
@@ -539,7 +711,7 @@ namespace joint_library {
         //Input joint line (its lengths)
         //Input distance for division
         ////////////////////////////////////////////////////////////////////
-        double joint_length = CGAL::squared_distance(joint.joint_lines[0][0], joint.joint_lines[0][1]); // Math.Abs(500);
+        double joint_length = orient_to_connection_zone ? CGAL::squared_distance(joint.joint_lines[0][0], joint.joint_lines[0][1]) : 1000000; // Math.Abs(500);
         int divisions = (int)std::ceil(joint_length / (division_distance * division_distance));
         divisions = (int)std::max(2, std::min(20, divisions));
         divisions += divisions % 2;
@@ -624,10 +796,11 @@ namespace joint_library {
         joint.f_boolean_type = std::vector<char>(size, '2');
         joint.m_boolean_type = { '1', '1' };
 
-        joint.orient_to_connection_area();
+        if (orient_to_connection_zone)
+            joint.orient_to_connection_area();
     }
 
-    inline void ts_e_p_3(joint& joint, const double& division_distance, const double& shift) {
+    inline void ts_e_p_3(joint& joint, const double& division_distance, const double& shift, bool orient_to_connection_zone = true) {
         joint.name = "ts_e_p_3";
 
         ////////////////////////////////////////////////////////////////////
@@ -635,7 +808,7 @@ namespace joint_library {
         //Input joint line (its lengths)
         //Input distance for division
         ////////////////////////////////////////////////////////////////////
-        double joint_length = CGAL::squared_distance(joint.joint_lines[0][0], joint.joint_lines[0][1]); // Math.Abs(500);
+        double joint_length = orient_to_connection_zone ? CGAL::squared_distance(joint.joint_lines[0][0], joint.joint_lines[0][1]) : 1000000; // Math.Abs(500);
         int divisions = (int)std::ceil(joint_length / (division_distance * division_distance));
         divisions = (int)std::max(4, std::min(100, divisions));
         if (joint.tile_parameters.size() > 0)
@@ -725,11 +898,12 @@ namespace joint_library {
         joint.f_boolean_type = std::vector<char>(size, '2');
         joint.m_boolean_type = { '1', '1' };
 
-        joint.orient_to_connection_area();
+        if (orient_to_connection_zone)
+            joint.orient_to_connection_area();
     }
 
     //30-39
-    inline void cr_c_ip_0(joint& joint) {
+    inline void cr_c_ip_0(joint& joint, bool orient_to_connection_zone = true) {
         //printf("cr_c_ip_0");
 
         joint.name = "cr_c_ip_0";
@@ -757,10 +931,11 @@ namespace joint_library {
         joint.f_boolean_type = { '3', '3' };
 
         //Orient to 3D
-        joint.orient_to_connection_area();
+        if (orient_to_connection_zone)
+            joint.orient_to_connection_area();
     }
 
-    inline void cr_c_ip_1(joint& joint, const double& shift) {
+    inline void cr_c_ip_1(joint& joint, const double& shift, bool orient_to_connection_zone = true) {
         joint.name = "cr_c_ip_1";
 
         //double shift = 0.5;
@@ -879,7 +1054,8 @@ namespace joint_library {
         joint.f_boolean_type = { '6', '6', '6', '4', '4', '4', '4', '9', '9' };
 
         //Orient to 3D
-        joint.orient_to_connection_area();
+        if (orient_to_connection_zone)
+            joint.orient_to_connection_area();
     }
 
     inline void construct_joint_by_index(std::vector<element>& elements, std::vector<joint>& joints, const double& division_distance_, const double& shift_, std::vector<double>& default_parameters_for_four_types) {
@@ -888,6 +1064,10 @@ namespace joint_library {
         //std::ofstream myfile;
         //myfile.open("C:\\IBOIS57\\_Code\\Software\\Python\\Pybind11Example\\vsstudio\\Release\\output2.txt");
         //myfile << joints.size()<< " \n";
+
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        //Iterate joints constructed during search methods
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         for (auto& joint : joints) {
             //Select user given type
             //types0+265
@@ -954,6 +1134,10 @@ namespace joint_library {
                     case (2):
                         ss_e_ip_0(joint);
                         break;
+                    case (9):
+                        //wont work, because not oriented to connection zones, need additional layer e.g. std::map of all joints
+                        joint_library_xml_parser::read_xml(joint, joint.type);//is it 0 or 12 ?
+                        break;
                     default:
                         ss_e_ip_1(joint, division_distance, shift);
                         //ss_e_ip_0(joint);
@@ -983,7 +1167,10 @@ namespace joint_library {
                     case (12):
                         ss_e_op_0(joint);
                         break;
-
+                    case (19):
+                        //wont work, because not oriented to connection zones, need additional layer e.g. std::map of all joints
+                        joint_library_xml_parser::read_xml(joint, joint.type);//is it 0 or 12 ?
+                        break;
                     default:
                         ss_e_op_1(joint, division_distance, shift);
                         //ss_e_op_0(joint);
@@ -1016,6 +1203,10 @@ namespace joint_library {
                     case (23):
                         ts_e_p_0(joint);
                         break;
+                    case (29):
+                        //wont work, because not oriented to connection zones, need additional layer e.g. std::map of all joints
+                        joint_library_xml_parser::read_xml(joint, joint.type);//is it 0 or 12 ?
+                        break;
                     default:
                         ts_e_p_3(joint, division_distance, 0);
                         break;
@@ -1039,6 +1230,10 @@ namespace joint_library {
                         //cr_c_ip_0(joint);
                         cr_c_ip_1(joint, shift);
                         break;
+                    case (39):
+                        //wont work, because not oriented to connection zones, need additional layer e.g. std::map of all joints
+                        joint_library_xml_parser::read_xml(joint, joint.type);//is it 0 or 12 ?
+                        break;
                     default:
                         cr_c_ip_0(joint);
                         //cr_c_ip_0(joint);
@@ -1053,6 +1248,13 @@ namespace joint_library {
                     if (id_representing_joing_name == -1) //for cases when joint types per each edge are not defined
                         id_representing_joing_name = default_parameters_for_four_types[number_of_parameters * group + 2];
                 }
+
+                switch (id_representing_joing_name) {
+                    case (49):
+                        //wont work, because not oriented to connection zones, need additional layer e.g. std::map of all joints
+                        joint_library_xml_parser::read_xml(joint, joint.type);//is it 0 or 12 ?
+                        break;
+                }
             } else if (joint.type == 50 && ((id_representing_joing_name > 49 && id_representing_joing_name < 60) || id_representing_joing_name == -1)) { //side-side rotated
                 if (default_parameters_given) {
                     int group = 5;
@@ -1060,6 +1262,13 @@ namespace joint_library {
                     shift = default_parameters_for_four_types[number_of_parameters * group + 1];
                     if (id_representing_joing_name == -1) //for cases when joint types per each edge are not defined
                         id_representing_joing_name = default_parameters_for_four_types[number_of_parameters * group + 2];
+                }
+
+                switch (id_representing_joing_name) {
+                    case (59):
+                        //wont work, because not oriented to connection zones, need additional layer e.g. std::map of all joints
+                        joint_library_xml_parser::read_xml(joint, joint.type);//is it 0 or 12 ?
+                        break;
                 }
             }
         }

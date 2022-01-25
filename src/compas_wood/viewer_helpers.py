@@ -7,6 +7,38 @@ from compas_view2.app import App
 from compas_view2.objects import Collection
 
 
+def disply_joint(
+    male_plines_polylines,
+    female_plines_polylines,
+    male_boolean_types,
+    female_boolean_types,
+):
+
+    viewer = App(
+        show_grid=False,
+        width=3840,
+        height=2160 - 250,
+        enable_sidebar=True,
+        version="120",
+    )
+
+    if male_plines_polylines is not None:
+        for i in range(0, len(male_plines_polylines)):
+            if i % 2 == 0:
+                display_polyline(viewer, male_plines_polylines[i], 1, 1, 0, 0, 3)
+            else:
+                display_polyline(viewer, male_plines_polylines[i], 1, 1, 0, 0, 1)
+
+    if female_plines_polylines is not None:
+        for i in range(0, len(female_plines_polylines)):
+            if i % 2 == 0:
+                display_polyline(viewer, female_plines_polylines[i], 1, 0, 0, 1, 3)
+            else:
+                display_polyline(viewer, female_plines_polylines[i], 1, 0, 0, 1, 1)
+
+    viewer.run()
+
+
 def display(
     input=None,
     result=None,

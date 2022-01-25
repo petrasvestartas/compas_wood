@@ -8,6 +8,7 @@ from compas.geometry import Box
 from compas.geometry import Frame
 import pybind11_joinery_solver
 import time
+import os
 
 
 @plugin(category="compas_wood_cpp", pluggable_name="compas_wood_cpp_test")
@@ -635,6 +636,10 @@ def closest_polylines(polylines, segment_radii, min_distance):
     return neighbours_list, pair_points_list
 
 
+@plugin(
+    category="compas_wood_cpp",
+    pluggable_name="compas_wood_cpp_beam_volumes",
+)
 def beam_volumes(
     polylines,
     segment_radii,
@@ -750,7 +755,10 @@ def beam_volumes(
     # ==============================================================================
     # Execute main CPP method
     # ==============================================================================
-
+    folder = os.path.join(
+        os.path.dirname(os.path.abspath(__file__)), "joinery_library.xml"
+    )
+    # folder = ""
     start_time = time.time()
     (
         neighbours,
@@ -760,6 +768,7 @@ def beam_volumes(
         joint_types,
         joint_geometry,
     ) = pybind11_joinery_solver.pybind11_beam_volumes(
+        folder,
         V,
         S_R,
         S_N,
@@ -821,7 +830,7 @@ def beam_volumes(
         pline = Polyline(points)
         joint_geometry_list.append(pline)
 
-    print(len(joint_geometry))
+    print(os.getcwd())
     # print("Output")
     return (
         neighbours_list,
@@ -830,4 +839,81 @@ def beam_volumes(
         joint_areas_list,
         joint_types_list,
         joint_geometry_list,
+    )
+
+
+@plugin(
+    category="compas_wood_cpp",
+    pluggable_name="compas_wood_cpp_check_joinery_library_xml",
+)
+def check_joinery_library_xml(type=1, division_dist=1000, shift=0.6):
+    """Find closest polylines within given distance
+
+    Parameters
+    ----------
+    type of a joint : list of polylines
+
+    Returns
+    -------
+    just prints a meesage
+        nothing
+
+    """
+
+    # ==============================================================================
+    # Prepare input
+    # ==============================================================================
+    folder = os.path.join(
+        os.path.dirname(os.path.abspath(__file__)), "joinery_library.xml"
+    )
+
+    # ==============================================================================
+    # Test CPP module
+    # ==============================================================================
+    print(
+        "============================================================================== CPP +"
+    )
+
+    # ==============================================================================
+    # Execute main CPP method
+    # ==============================================================================
+
+    (
+        male_plines,
+        female_plines,
+        m_boolean_type,
+        f_boolean_type,
+    ) = pybind11_joinery_solver.pybind11_check_joinery_library_xml(
+        folder, type, division_dist, shift
+    )
+
+    print(
+        "============================================================================== CPP -"
+    )
+
+    male_plines_polylines = []
+    for points_coord in male_plines:
+        points = [Point(*point) for point in points_coord]
+        polyline = Polyline(points)
+        male_plines_polylines.append(polyline)
+
+    female_plines_polylines = []
+    for points_coord in female_plines:
+        points = [Point(*point) for point in points_coord]
+        polyline = Polyline(points)
+        female_plines_polylines.append(polyline)
+
+    male_boolean_types = []
+    for i in m_boolean_type[0]:
+        male_boolean_types.append(i)
+
+    female_boolean_types = []
+    for i in f_boolean_type[0]:
+        female_boolean_types.append(i)
+
+    return (
+        male_plines_polylines,
+        female_plines_polylines,
+        male_boolean_types,
+        female_boolean_types,
     )

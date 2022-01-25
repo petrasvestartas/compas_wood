@@ -1,6 +1,6 @@
 # compas_wood
 from compas_wood.joinery import joints
-import data_set
+import data_set_plates
 
 # viewer
 from compas_wood.viewer_helpers import display
@@ -13,7 +13,7 @@ from compas_wood.viewer_helpers import display
 def test_joints():
 
     # Get a list of polyline pairs
-    input = data_set.c_15()
+    input = data_set_plates.c_15()
 
     # Compute joint polylines
     element_pairs_list, joint_areas_polylines, joint_types = joints(input, 2)

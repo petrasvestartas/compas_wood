@@ -1881,6 +1881,9 @@ inline void beam_volumes(
 #ifdef DEBUG
     printf("CPP get_joints_geometry\n");
 #endif
+
+    joint jj;
+    joint_library_xml_parser::read_xml(jj, 0);
 }
 
 #pragma endregion

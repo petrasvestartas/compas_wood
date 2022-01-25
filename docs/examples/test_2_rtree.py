@@ -1,6 +1,6 @@
 # compas_wood
 from compas_wood.joinery import rtree
-import data_set
+import data_set_plates
 
 # viewer
 from compas_wood.viewer_helpers import display
@@ -13,7 +13,7 @@ from compas_wood.viewer_helpers import display
 def test_rtree():
 
     # Get a list of polyline pairs
-    input = data_set.ss_24()
+    input = data_set_plates.ss_24()
 
     # Compute Rtree
     neighbours, boxes_AABB, boxes_OOBB = rtree(input)

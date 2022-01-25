@@ -6,6 +6,7 @@
 
 static int Digs = DECIMAL_DIG;
 
+//https://www.cplusplus.com/reference/cstdio/printf/
 inline void CGAL_Debug() {
     printf("\n");
 }
@@ -16,8 +17,8 @@ inline void CGAL_Debug() {
 //}
 
 inline void CGAL_Debug(size_t v) {
-    printf("%" PRIu64 "\n", v);
-    //printf("CPP size %zi\n", v);
+    //printf("%" PRIu64 "\n", v);
+    printf("CPP size %zi\n", v);
 }
 
 inline void CGAL_Debug(bool v) {

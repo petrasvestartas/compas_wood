@@ -1,5 +1,5 @@
 # compas_wood
-from compas_wood.joinery import beam_volumes, test
+from compas_wood.joinery import beam_volumes
 import data_set_beams
 
 # viewer
@@ -92,5 +92,5 @@ def test_beam_volumes():
 # ==============================================================================
 # call the compas_wood methods
 # ==============================================================================
-test()
+
 test_beam_volumes()

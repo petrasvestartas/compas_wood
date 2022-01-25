@@ -2,7 +2,7 @@
 from compas_wood.joinery import test
 from compas_wood.joinery import get_connection_zones
 from compas_wood.joinery import closed_mesh_from_polylines
-import data_set
+import data_set_plates
 
 # viewer
 from compas_wood.viewer_helpers import display
@@ -20,7 +20,7 @@ def test_connection_detection():
 
     # Generate connections
     # result = get_connection_zones(c_15())
-    result = get_connection_zones(data_set.ss_0())
+    result = get_connection_zones(data_set_plates.ss_0())
 
     """
     result = get_connection_zones(

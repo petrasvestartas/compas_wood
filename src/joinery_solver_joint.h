@@ -51,6 +51,7 @@ public:
     /////////////////////////////////////////////////////////////////////////////////////////
     //Constructors
     /////////////////////////////////////////////////////////////////////////////////////////
+    joint();
     joint(int, int, int, int, int, int, int, CGAL_Polyline(&)[4]);
     joint(int, int, int, int, int, int, int, CGAL_Polyline(&), CGAL_Polyline(&)[2], CGAL_Polyline(&)[4], int);
 
@@ -103,6 +104,9 @@ public:
     void transform(CGAL::Aff_transformation_3<IK>& xform0, CGAL::Aff_transformation_3<IK>& xform1); //Custom user transformation
     bool orient_to_connection_area();																//Orient to connection area if rectangles are set
 };
+
+inline joint::joint() {
+}
 
 inline joint::joint(int _id, int _v0, int _v1, int _f0_0, int _f1_0, int _f0_1, int _f1_1, CGAL_Polyline(&_joint_volumes)[4]) : id(_id), v0(_v0), v1(_v1), f0_0(_f0_0), f1_0(_f1_0), f0_1(_f0_1), f1_1(_f1_1), type(-1) {
     for (int i = 0; i < 4; i++)

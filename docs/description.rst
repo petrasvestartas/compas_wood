@@ -40,6 +40,17 @@ Joint parameters are given in a list following this order:
     * | division length | shift | type | 
     * { 1000, 0.5, 1,  1000, 0.5, 10 ,  1000, 0.5, 20 ,  1000, 0.5, 30 ,  1000, 0.5, 40 ,  1000, 0.5, 50 }
 
+Code implementation:
+    * how to a custom construct joint
+        *   string, name of a joint e.g. "ss_e_ip_0"
+        *   std::vector<CGAL_Polyline> m[2] - 2 plines lists, where 1st list are bottom and 2nd are top plines
+        *   std::vector<CGAL_Polyline> f[2] - 2 plines lists, where 1st list are bottom and 2nd are top plines
+        *   std::vector<char> - list of boolean types for the "m" array, length matches m list length
+        *   std::vector<char> - list of boolean types for the "f" array, length matches f list length
+    * |check| joint class that stores adjacency information
+    * |check| change-basis transformation from unit tile to joint volume defined by two rectangles
+    * |check| assignment of joints based and search categories and connection types
+    * |uncheck| store each parameterized joint inside std::unordered_map<string, joint> that is not remapped yet
 
 
 
@@ -72,13 +83,13 @@ Joint parameters are given in a list following this order:
      - 
      - 
      - **rotated**
-   * - default 
-     - default ss_e_ip_1
-     - default ss_e_op_1
-     - default ts_e_p_3
-     - default cr_c_ip_0
-     - default 
-     - default 
+   * -  
+     - **default** ss_e_ip_1
+     - **default** ss_e_op_1
+     - **default** ts_e_p_3
+     - **default** cr_c_ip_0
+     - **default** 
+     - **default** 
    * - 
      - 1 - (ss_e_ip_1)
      - 10 - (ss_e_op_1)
@@ -107,6 +118,13 @@ Joint parameters are given in a list following this order:
      - 
      - 
      - 
+   * - 
+     - **custom** 9   ss_e_ip_9
+     - **custom** 19   ss_e_op_9
+     - **custom** 29   ts_e_p_9
+     - **custom** 39   cr_c_ip_9
+     - **custom** 49   tt_e_p_9 
+     - **custom** 59   ss_e_r_9 
 
 Joints have two properties m_boolean_type and f_boolean_type to guide the fabrication process:
     * **Default** nothing = '0'
@@ -180,11 +198,6 @@ To-do others:
     * |uncheck| flipping case
     * |uncheck|  BLT
 
-Code implementation:
-    * |check| joint class that stores adjacency information
-    * |check| change-basis transformation from unit tile to joint volume defined by two rectangles
-    * |check| assignment of joints based and search categories and connection types
-    * |uncheck| store each parameterized joint inside std::unordered_map<string, joint> that is not remapped yet
 
 
 ################################################################################

@@ -1,7 +1,7 @@
 # compas_wood
 from compas_wood.joinery import test
 from compas_wood.joinery import get_connection_zones
-import data_set
+import data_set_plates
 
 # viewer
 from compas_wood.viewer_helpers import display
@@ -15,10 +15,10 @@ def test_connection_detection():
 
     # Generate connections
     result = get_connection_zones(
-        data_set.annen_small_polylines(),
-        data_set.annen_small_edge_directions(),
-        data_set.annen_small_edge_joints(),
-        data_set.annen_small_three_valance_element_indices_and_instruction(),
+        data_set_plates.annen_small_polylines(),
+        data_set_plates.annen_small_edge_directions(),
+        data_set_plates.annen_small_edge_joints(),
+        data_set_plates.annen_small_three_valance_element_indices_and_instruction(),
     )
 
     result_flat_list = [item for sublist in result for item in sublist]

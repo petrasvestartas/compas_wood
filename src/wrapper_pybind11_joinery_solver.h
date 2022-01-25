@@ -23,6 +23,8 @@ RowMatrixXd result_from_polyline(CGAL_Polyline poly);
 
 std::vector<RowMatrixXd> result_from_polylines(CGAL_Polylines polylines);
 
+std::vector<RowMatrixXd> result_from_polylines(std::vector<CGAL_Polyline> polylines);
+
 std::vector<RowMatrixXd> result_from_vector(IK::Vector_3* v);
 
 std::vector<RowMatrixXd> result_from_bbox(std::vector<CGAL::Bbox_3> boxes);
@@ -83,9 +85,10 @@ std::tuple<RowMatrixXi, std::vector<RowMatrixXd>, RowMatrixXi> pybind11_joints(E
 
 std::tuple<RowMatrixXi, RowMatrixXd> pybind11_intersecting_sequences_of_dD_iso_oriented_boxes(Eigen::Ref<const RowMatrixXd>& V, Eigen::Ref<const RowMatrixXd>& E_R, Eigen::Ref<const RowMatrixXi>& F, double& min_distance);
 
-std::tuple<RowMatrixXi, RowMatrixXd, std::vector<RowMatrixXd>, std::vector<RowMatrixXd>, RowMatrixXi, std::vector<RowMatrixXd> > pybind11_beam_volumes(Eigen::Ref<const RowMatrixXd>& V, Eigen::Ref<const RowMatrixXd>& E_R, Eigen::Ref<const RowMatrixXd>& E_N, Eigen::Ref<const RowMatrixXi>& F, Eigen::Ref<const RowMatrixXi>& F_T, double& min_distance, double& volume_length, double& cross_or_side_to_end, int& flip_male,
+std::tuple<RowMatrixXi, RowMatrixXd, std::vector<RowMatrixXd>, std::vector<RowMatrixXd>, RowMatrixXi, std::vector<RowMatrixXd> > pybind11_beam_volumes(std::string& file_path, Eigen::Ref<const RowMatrixXd>& V, Eigen::Ref<const RowMatrixXd>& E_R, Eigen::Ref<const RowMatrixXd>& E_N, Eigen::Ref<const RowMatrixXi>& F, Eigen::Ref<const RowMatrixXi>& F_T, double& min_distance, double& volume_length, double& cross_or_side_to_end, int& flip_male,
     Eigen::Ref <const RowMatrixXd>& input_default_parameters_for_joint_types, bool compute_joints = true, double division_distance = 300, double shift = 0.6, int output_type = 3);
 
+std::tuple < std::vector<RowMatrixXd>, std::vector<RowMatrixXd>, RowMatrixXi, RowMatrixXi> pybind11_check_joinery_library_xml(std::string& file_path, int type, double division_dist, double shift);
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //Wrapped package joinery_solver
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -161,6 +164,7 @@ PYBIND11_MODULE(pybind11_joinery_solver, m) {
     m.def(
         "pybind11_beam_volumes",
         &pybind11_beam_volumes,
+        pybind11::arg("file_path"),
         pybind11::arg("V").noconvert(),
         pybind11::arg("E_R").noconvert(),
         pybind11::arg("E_N").noconvert(),
@@ -177,4 +181,12 @@ PYBIND11_MODULE(pybind11_joinery_solver, m) {
         pybind11::arg("output_type")
 
     );
+
+    m.def(
+        "pybind11_check_joinery_library_xml",
+        &pybind11_check_joinery_library_xml,
+        pybind11::arg("file_path"),
+        pybind11::arg("type"),
+        pybind11::arg("division_dist"),
+        pybind11::arg("shift"));
 }

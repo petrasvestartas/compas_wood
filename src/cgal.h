@@ -29,6 +29,7 @@
 #include <boost/graph/properties.hpp>
 
 #include <cmath>
+#include <string>
 
 using IK = CGAL::Exact_predicates_inexact_constructions_kernel;
 using EK = CGAL::Exact_predicates_exact_constructions_kernel;
@@ -43,6 +44,7 @@ static double GlobalToleranceSquare = 0.0001;
 static double GlobalClipperScale = 1000000.0;
 static double GlobalClipperAreaTolerance = 0.0001;
 static double GlobalExtend[5] = { 0.0, 0.0, 0, 0, 0 };
+static std::string path_and_file_for_joints = "";
 
 #define ON_IS_FINITE(x) (0x7FF0 != (*((unsigned short *)(&x) + 3) & 0x7FF0))
 #define ON_DBL_MIN 2.22507385850720200e-308

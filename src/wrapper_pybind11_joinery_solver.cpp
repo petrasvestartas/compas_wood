@@ -1,7 +1,7 @@
 #include "wrapper_pybind11_joinery_solver.h"
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//Converter methods, where np.asarray are mapped to Eigner matrix
+//Converter methods, where np.asarray are mapped to Eiger matrix
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 #pragma region converter
@@ -19,6 +19,26 @@ RowMatrixXd result_from_polyline(CGAL_Polyline poly) {
 }
 
 std::vector<RowMatrixXd> result_from_polylines(CGAL_Polylines polylines) {
+    std::vector<RowMatrixXd> pointsets;
+
+    for (auto i = polylines.begin(); i != polylines.end(); i++) {
+        const CGAL_Polyline& poly = *i;
+        int n = poly.size();
+        RowMatrixXd points(n, 3);
+
+        for (int j = 0; j < n; j++) {
+            points(j, 0) = (double)poly[j].x();
+            points(j, 1) = (double)poly[j].y();
+            points(j, 2) = (double)poly[j].z();
+        }
+
+        pointsets.emplace_back(points);
+    }
+
+    return pointsets;
+}
+
+std::vector<RowMatrixXd> result_from_polylines(std::vector<CGAL_Polyline> polylines) {
     std::vector<RowMatrixXd> pointsets;
 
     for (auto i = polylines.begin(); i != polylines.end(); i++) {
@@ -768,8 +788,13 @@ std::tuple<RowMatrixXi, RowMatrixXd> pybind11_intersecting_sequences_of_dD_iso_o
     return std::make_tuple(neighbours, points);
 }
 
-std::tuple<RowMatrixXi, RowMatrixXd, std::vector<RowMatrixXd>, std::vector<RowMatrixXd>, RowMatrixXi, std::vector<RowMatrixXd> > pybind11_beam_volumes(Eigen::Ref<const RowMatrixXd>& V, Eigen::Ref<const RowMatrixXd>& E_R, Eigen::Ref<const RowMatrixXd>& E_N, Eigen::Ref<const RowMatrixXi>& F, Eigen::Ref<const RowMatrixXi>& F_T, double& min_distance, double& volume_length, double& cross_or_side_to_end, int& flip_male,
+std::tuple<RowMatrixXi, RowMatrixXd, std::vector<RowMatrixXd>, std::vector<RowMatrixXd>, RowMatrixXi, std::vector<RowMatrixXd> > pybind11_beam_volumes(std::string& file_path, Eigen::Ref<const RowMatrixXd>& V, Eigen::Ref<const RowMatrixXd>& E_R, Eigen::Ref<const RowMatrixXd>& E_N, Eigen::Ref<const RowMatrixXi>& F, Eigen::Ref<const RowMatrixXi>& F_T, double& min_distance, double& volume_length, double& cross_or_side_to_end, int& flip_male,
     Eigen::Ref <const RowMatrixXd>& input_default_parameters_for_joint_types, bool compute_joints, double division_distance, double shift, int output_type) {
+    //////////////////////////////////////////////////////////////////////////////
+    //Set directory for joint file path .XML
+    //////////////////////////////////////////////////////////////////////////////
+    path_and_file_for_joints = file_path;
+
     //default_parameters_for_joint_types, joints_oriented_polylines, true, 300, 0.6, 3
     //////////////////////////////////////////////////////////////////////////////
     //Convert raw-data to list of Polylines
@@ -917,4 +942,133 @@ std::tuple<RowMatrixXi, RowMatrixXd, std::vector<RowMatrixXd>, std::vector<RowMa
     std::tuple<std::vector<RowMatrixXd>, std::vector<int>> joint_geometry_and_index = result_tuple_from_polylinesVector(joints_oriented_polylines, true);
 
     return std::make_tuple(neighbours, points, volumes, output_joint_areas, output_joint_types, std::get<0>(joint_geometry_and_index));
+}
+
+std::tuple < std::vector<RowMatrixXd>, std::vector<RowMatrixXd>, RowMatrixXi, RowMatrixXi> pybind11_check_joinery_library_xml(std::string& file_path, int type, double division_dist, double shift) {
+#define DEBUG
+    path_and_file_for_joints = file_path;
+    joint empty_joint;
+    CGAL_Debug(type);
+    CGAL_Debug(division_dist);
+    CGAL_Debug(shift);
+    switch (type) {
+        case(1):
+            joint_library::ss_e_ip_0(empty_joint, false);
+            break;
+        case(2):
+            joint_library::ss_e_ip_1(empty_joint, division_dist, shift, false);
+            break;
+        case(9):
+            joint_library_xml_parser::read_xml(empty_joint, 0);
+            break;
+
+        case(10):
+            joint_library::ss_e_op_0(empty_joint, false);
+            break;
+        case(11):
+            joint_library::ss_e_op_1(empty_joint, division_dist, shift, false);
+            break;
+        case(12):
+            joint_library::ss_e_op_2(empty_joint, division_dist, shift, false);
+            break;
+        case(19):
+            joint_library_xml_parser::read_xml(empty_joint, 1);
+            break;
+
+        case(20):
+            joint_library::ts_e_p_0(empty_joint, false);
+            break;
+        case(21):
+            joint_library::ts_e_p_1(empty_joint, false);
+            break;
+        case(22):
+            joint_library::ts_e_p_2(empty_joint, division_dist, shift, false);
+            break;
+        case(23):
+            joint_library::ts_e_p_3(empty_joint, division_dist, shift, false);
+            break;
+        case(29):
+            joint_library_xml_parser::read_xml(empty_joint, 2);
+            break;
+
+        case(30):
+            joint_library::cr_c_ip_0(empty_joint, false);
+            break;
+        case(31):
+            joint_library::cr_c_ip_1(empty_joint, shift, false);
+            break;
+        case(39):
+            joint_library_xml_parser::read_xml(empty_joint, 3);
+            break;
+
+        case(49):
+            joint_library_xml_parser::read_xml(empty_joint, 4);
+            break;
+
+        case(59):
+            joint_library_xml_parser::read_xml(empty_joint, 5);
+            break;
+
+        default:
+            joint_library::ss_e_ip_0(empty_joint, false);
+    }
+
+    /* CGAL_Debug(empty_joint.m[0].size());
+     for (auto& pline : empty_joint.m[0]) {
+         printf("CPP Polyline\n");
+         for (auto& p : pline)
+             CGAL_Debug(p);
+     }
+     CGAL_Debug(empty_joint.m[1].size());
+     for (auto& pline : empty_joint.m[1]) {
+         printf("CPP Polyline\n");
+         for (auto& p : pline)
+             CGAL_Debug(p);
+     }
+     CGAL_Debug(empty_joint.f[0].size());
+     for (auto& pline : empty_joint.f[0]) {
+         printf("CPP Polyline\n");
+         for (auto& p : pline)
+             CGAL_Debug(p);
+     }
+     CGAL_Debug(empty_joint.f[1].size());
+     for (auto& pline : empty_joint.f[1]) {
+         printf("CPP Polyline\n");
+         for (auto& p : pline)
+             CGAL_Debug(p);
+     }
+     CGAL_Debug(empty_joint.m_boolean_type.size());
+     for (auto& c : empty_joint.m_boolean_type) {
+         printf("CPP char %c\n", c);
+     }
+     CGAL_Debug(empty_joint.f_boolean_type.size());
+     for (auto& c : empty_joint.f_boolean_type) {
+         printf("CPP char %c\n", c);
+     }*/
+
+    std::vector<CGAL_Polyline> m;
+    m.reserve(empty_joint.m[0].size() * 2);
+    std::vector<CGAL_Polyline> f;
+    f.reserve(empty_joint.f[0].size() * 2);
+    for (int i = 0; i < empty_joint.m[0].size(); i++) {
+        m.emplace_back(empty_joint.m[0][i]);
+        m.emplace_back(empty_joint.m[1][i]);
+    }
+
+    for (int i = 0; i < empty_joint.f[0].size(); i++) {
+        f.emplace_back(empty_joint.f[0][i]);
+        f.emplace_back(empty_joint.f[1][i]);
+    }
+
+    auto output0 = result_from_polylines(m);
+    auto output1 = result_from_polylines(f);
+    RowMatrixXi output2(1, empty_joint.m_boolean_type.size());
+    for (int i = 0; i < empty_joint.m_boolean_type.size(); i++)
+        output2(0, i) = empty_joint.m_boolean_type[i] - 48;
+
+    RowMatrixXi output3(1, empty_joint.f_boolean_type.size());
+    for (int i = 0; i < empty_joint.f_boolean_type.size(); i++)
+        output2(0, i) = empty_joint.f_boolean_type[i] - 48;
+
+    return std::make_tuple(output0, output1, output2, output3);
 }

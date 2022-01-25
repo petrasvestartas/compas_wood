@@ -9,7 +9,7 @@ from compas_view2.objects import Collection
 
 # compas_wood
 from compas_wood.joinery import rtree
-import data_set
+import data_set_plates
 
 
 viewer = App(
@@ -140,7 +140,7 @@ def test_rtree(selected_id):
 
     # Get a list of polyline pairs
     # input = ss_0()
-    input = data_set.annen_small_polylines()
+    input = data_set_plates.annen_small_polylines()
     # input = annen_polylines()
 
     # Generate connections
