@@ -65,7 +65,6 @@ namespace joint_library_xml_parser {
         if (!exists_test3(path_and_file_for_joints)) {
 #ifdef DEBUG
             printf("\nCPP File does not exist %s ", path_and_file_for_joints.c_str());
-
 #endif
             return false;
         }
@@ -823,6 +822,10 @@ namespace joint_library {
         joint.m[0].reserve(2);
         joint.m[1].reserve(2);
 
+#ifdef DEBUG
+        printf("\nCPP <<File>> joinery_solver_joint_library.h <<Method>> ts_e_p_3 <<Description>> Joint Main Parameters");
+#endif
+
         ////////////////////////////////////////////////////////////////////
         //Interpolate points
         ////////////////////////////////////////////////////////////////////
@@ -832,6 +835,10 @@ namespace joint_library {
         interpolate_points(IK::Point_3(-0.5, -0.5, -0.5), IK::Point_3(-0.5, -0.5, 0.5), divisions, false, arrays[0]);
         interpolate_points(IK::Point_3(-0.5, 0.5, -0.5), IK::Point_3(-0.5, 0.5, 0.5), divisions, false, arrays[1]);
         interpolate_points(IK::Point_3(0.5, 0.5, -0.5), IK::Point_3(0.5, 0.5, 0.5), divisions, false, arrays[2]);
+
+#ifdef DEBUG
+        printf("\nCPP <<File>> joinery_solver_joint_library.h <<Method>> ts_e_p_3 <<Description> Interpolate Points");
+#endif
 
         ////////////////////////////////////////////////////////////////////
         //Move segments
@@ -849,6 +856,10 @@ namespace joint_library {
                 arrays[i][j] += v * flip;
             }
         }
+
+#ifdef DEBUG
+        printf("\nCPP <<File>> joinery_solver_joint_library.h <<Method>> ts_e_p_3 <<Description> Move Segments");
+#endif
 
         ////////////////////////////////////////////////////////////////////
         //Create Polylines
@@ -900,6 +911,10 @@ namespace joint_library {
 
         if (orient_to_connection_zone)
             joint.orient_to_connection_area();
+
+#ifdef DEBUG
+        printf("\nCPP <<File>> joinery_solver_joint_library.h <<Method>> ts_e_p_3 <<Description> Create Polylines");
+#endif
     }
 
     //30-39

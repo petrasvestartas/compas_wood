@@ -945,12 +945,10 @@ std::tuple<RowMatrixXi, RowMatrixXd, std::vector<RowMatrixXd>, std::vector<RowMa
 }
 
 std::tuple < std::vector<RowMatrixXd>, std::vector<RowMatrixXd>, RowMatrixXi, RowMatrixXi> pybind11_check_joinery_library_xml(std::string& file_path, int type, double division_dist, double shift) {
-#define DEBUG
+    //#define DEBUG
     path_and_file_for_joints = file_path;
     joint empty_joint;
-    CGAL_Debug(type);
-    CGAL_Debug(division_dist);
-    CGAL_Debug(shift);
+
     switch (type) {
         case(1):
             joint_library::ss_e_ip_0(empty_joint, false);
@@ -1062,13 +1060,26 @@ std::tuple < std::vector<RowMatrixXd>, std::vector<RowMatrixXd>, RowMatrixXi, Ro
 
     auto output0 = result_from_polylines(m);
     auto output1 = result_from_polylines(f);
+
+#ifdef DEBUG
+    printf("\nCPP   FILE %s    METHOD %s   LINE %i     WHAT %s ", __FILE__, __FUNCTION__, __LINE__, "Output Polylines");
+    CGAL_Debug(m.size());
+    CGAL_Debug(f.size());
+#endif
+
     RowMatrixXi output2(1, empty_joint.m_boolean_type.size());
     for (int i = 0; i < empty_joint.m_boolean_type.size(); i++)
         output2(0, i) = empty_joint.m_boolean_type[i] - 48;
 
     RowMatrixXi output3(1, empty_joint.f_boolean_type.size());
     for (int i = 0; i < empty_joint.f_boolean_type.size(); i++)
-        output2(0, i) = empty_joint.f_boolean_type[i] - 48;
+        output3(0, i) = empty_joint.f_boolean_type[i] - 48;
+
+#ifdef DEBUG
+    printf("\nCPP   FILE %s    METHOD %s   LINE %i     WHAT %s ", __FILE__, __FUNCTION__, __LINE__, "Output Boolean Types");
+    CGAL_Debug(empty_joint.m_boolean_type.size());
+    CGAL_Debug(empty_joint.f_boolean_type.size());
+#endif
 
     return std::make_tuple(output0, output1, output2, output3);
 }
