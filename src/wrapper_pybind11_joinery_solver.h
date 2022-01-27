@@ -62,6 +62,7 @@ std::tuple<std::vector<RowMatrixXd>, std::vector<int>> result_tuple_from_polylin
 void pybind11_test();
 
 std::tuple<std::vector<RowMatrixXd>, std::vector<int>> pybind11_get_connection_zones(
+    std::string& file_path,
     Eigen::Ref<const RowMatrixXd>& polylines_vertices_XYZ,
     Eigen::Ref<const RowMatrixXi>& polylines_vertices_count_int,
     Eigen::Ref<const RowMatrixXd>& face_vectors_XYZ,
@@ -121,6 +122,7 @@ PYBIND11_MODULE(pybind11_joinery_solver, m) {
     m.def(
         "pybind11_get_connection_zones",
         &pybind11_get_connection_zones,
+        pybind11::arg("file_path").noconvert(),
         pybind11::arg("V").noconvert(),
         pybind11::arg("F").noconvert(),
         pybind11::arg("D").noconvert(),

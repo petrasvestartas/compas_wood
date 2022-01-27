@@ -143,6 +143,7 @@ inline void get_elements(
         elements[count].planes[0] = IK::Plane_3(cgal_polyline_util::Center(pp[i]), normal);
         elements[count].planes[1] = IK::Plane_3(cgal_polyline_util::Center(pp[i + 1]), -normal);
         elements[count].thickness = std::sqrt(CGAL::squared_distance(pp[i][0], elements[count].planes[1].projection(pp[i][0])));
+        //CGAL_Debug(elements[count].thickness);
 
         for (int j = 0; j < pp[i].size() - 1; j++) {
             elements[count].planes[2 + j] = IK::Plane_3(pp[i][j + 1], pp[i][j], pp[i + 1][j + 1]);

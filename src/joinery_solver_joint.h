@@ -48,6 +48,10 @@ public:
     std::vector<CGAL_Polyline> f[2];
     std::vector<char> f_boolean_type; //0 - do not merge, 1 - edge insertion, 2 - hole 3 - insert between multiple edges hole
 
+    //if this property is enable, joint volume rectangles are moved within unit_scale_distance, this property is equal to first element thickness
+    bool unit_scale = false;
+    double unit_scale_distance = 0;
+
     /////////////////////////////////////////////////////////////////////////////////////////
     //Constructors
     /////////////////////////////////////////////////////////////////////////////////////////
@@ -297,6 +301,35 @@ inline void joint::transform(CGAL::Aff_transformation_3<IK>& xform0, CGAL::Aff_t
 }
 
 inline bool joint::orient_to_connection_area() {
+    //CGAL_Debug(thickness);
+    //Change the distance between two rectangles
+
+    if (unit_scale && unit_scale_distance > 0) {
+        IK::Segment_3 volume_segment(joint_volumes[0][0], joint_volumes[1][0]);
+        IK::Vector_3 vec = volume_segment.to_vector() * 0.5;
+        IK::Vector_3 vec_unit = volume_segment.to_vector();
+        cgal_vector_util::Unitize(vec_unit);
+        vec_unit *= (unit_scale_distance * 0.5);
+        //CGAL_Debug(thickness);
+        cgal_polyline_util::move(joint_volumes[0], vec);
+        cgal_polyline_util::move(joint_volumes[1], -vec);
+        cgal_polyline_util::move(joint_volumes[0], -vec_unit);
+        cgal_polyline_util::move(joint_volumes[1], vec_unit);
+
+        if (joint_volumes[2].size() > 0) {
+            IK::Segment_3 volume_segment(joint_volumes[2][0], joint_volumes[3][0]);
+            vec = volume_segment.to_vector() * 0.5;
+            vec_unit = volume_segment.to_vector();
+            cgal_vector_util::Unitize(vec_unit);
+            vec_unit *= (unit_scale_distance * 0.5);
+            //CGAL_Debug(thickness);
+            cgal_polyline_util::move(joint_volumes[2], vec);
+            cgal_polyline_util::move(joint_volumes[3], -vec);
+            cgal_polyline_util::move(joint_volumes[2], -vec_unit);
+            cgal_polyline_util::move(joint_volumes[3], vec_unit);
+        }
+    }
+
     CGAL::Aff_transformation_3<IK> xform0;
     bool flag0 = change_basis(joint_volumes[0], joint_volumes[1], xform0);
 

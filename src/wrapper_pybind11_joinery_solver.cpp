@@ -356,6 +356,7 @@ void pybind11_test() {
 }
 
 std::tuple<std::vector<RowMatrixXd>, std::vector<int>> pybind11_get_connection_zones(
+    std::string& file_path,
     Eigen::Ref<const RowMatrixXd>& polylines_vertices_XYZ,
     Eigen::Ref<const RowMatrixXi>& polylines_vertices_count_int,
     Eigen::Ref<const RowMatrixXd>& face_vectors_XYZ,
@@ -370,6 +371,11 @@ std::tuple<std::vector<RowMatrixXd>, std::vector<int>> pybind11_get_connection_z
     int triangulate = 0
 
 ) {
+    //////////////////////////////////////////////////////////////////////////////
+    //Set File Path for XML joints 9 19 29 39 49 59
+    //////////////////////////////////////////////////////////////////////////////
+    path_and_file_for_joints = file_path;
+
     //////////////////////////////////////////////////////////////////////////////
     //Convert Raw data to list of Polyline
     //////////////////////////////////////////////////////////////////////////////
@@ -398,6 +404,13 @@ std::tuple<std::vector<RowMatrixXd>, std::vector<int>> pybind11_get_connection_z
 
     std::vector<std::vector<CGAL_Polyline>> output;
     std::vector<std::vector<int>> top_face_triangulation;
+
+    //for (int i = 0; i < 18; i++) {
+    //    CGAL_Debug(default_parameters_for_joint_types_matrix(0, i));
+    //}
+    // for (double t : out_default_parameters_for_joint_types)//out_default_parameters_for_joint_types
+      //   CGAL_Debug(t);
+
     get_connection_zones(
         out_polyline_pairs,
         out_insertion_vectors,

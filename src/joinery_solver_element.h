@@ -97,9 +97,9 @@ inline void element::get_joints_geometry(std::vector<joint>& joints, std::vector
                     }
 
                     output[this->id].emplace_back(joints[std::get<0>(j_mf[i][j])].joint_volumes[0]);
-                    //output[this->id].emplace_back(joints[std::get<0>(j_mf[i][j])].joint_volumes[1]);
+                    output[this->id].emplace_back(joints[std::get<0>(j_mf[i][j])].joint_volumes[1]);
                     output[this->id].emplace_back(joints[std::get<0>(j_mf[i][j])].joint_volumes[2]);
-                    //output[this->id].emplace_back(joints[std::get<0>(j_mf[i][j])].joint_volumes[3]);
+                    output[this->id].emplace_back(joints[std::get<0>(j_mf[i][j])].joint_volumes[3]);
                     break;
                 case (3):
 
@@ -534,9 +534,13 @@ inline void element::get_joints_geometry_as_closed_polylines_performing_intersec
             bool male_or_female = std::get<1>(j_mf[i][j]);
             if (joints[std::get<0>(j_mf[i][j])].name == "")
                 continue;
+
+#ifdef DEBUG
+            printf("\nCPP   FILE %s    METHOD %s   LINE %i     WHAT %s num of elements %zi ", __FILE__, __FUNCTION__, __LINE__, "Good Name", joints[std::get<0>(j_mf[i][j])](male_or_female, true).size());
+#endif
+
             if (joints[std::get<0>(j_mf[i][j])](male_or_female, true).size() != 2)
                 continue;
-            //if (!(joints[std::get<0>(j_mf[i][j])].get_first_cutting_type(male_or_female) == '1' || joints[std::get<0>(j_mf[i][j])].get_first_cutting_type(male_or_female) == '3')) continue;
 
             ///////////////////////////////////////////////////////////////////////////////
             //Take last lines Element outline can be not in the same order as joint outlines Take joint segment and measure its point to the plane
@@ -548,12 +552,19 @@ inline void element::get_joints_geometry_as_closed_polylines_performing_intersec
             if (flag)
                 joints[std::get<0>(j_mf[i][j])].reverse(std::get<1>(j_mf[i][j]));
 
+#ifdef DEBUG
+            printf("\nCPP   FILE %s    METHOD %s   LINE %i     WHAT %s %zi ", __FILE__, __FUNCTION__, __LINE__, "Intersect rectangle or line", joints[std::get<0>(j_mf[i][j])](std::get<1>(j_mf[i][j]), true).back().size());
+#endif
+
             ///////////////////////////////////////////////////////////////////////////////
             //Intersect rectangle or line
             ///////////////////////////////////////////////////////////////////////////////
             switch (joints[std::get<0>(j_mf[i][j])](std::get<1>(j_mf[i][j]), true).back().size()) {
                 case (2):
                 { //Reposition end points
+#ifdef DEBUG
+                    printf("\nCPP   FILE %s    METHOD %s   LINE %i     WHAT %s ", __FILE__, __FUNCTION__, __LINE__, "Intersect rectangle or line CASE 2 ");
+#endif
                     int id = i - 2;
                     int n = pline0.size() - 1;
 
@@ -652,6 +663,9 @@ inline void element::get_joints_geometry_as_closed_polylines_performing_intersec
                 }
                 case (5):
                 { //two edges
+#ifdef DEBUG
+                    printf("\nCPP   FILE %s    METHOD %s   LINE %i     WHAT %s ", __FILE__, __FUNCTION__, __LINE__, "Intersect rectangle or line CASE 5 ");
+#endif
                     int edge_pair[2];
                     joints[std::get<0>(j_mf[i][j])].get_edge_ids(std::get<1>(j_mf[i][j]), edge_pair[0], edge_pair[1]);
                     if (edge_pair[0] > edge_pair[1])
@@ -702,6 +716,10 @@ inline void element::get_joints_geometry_as_closed_polylines_performing_intersec
             point_count--;
         }
     point_flags_0[point_flags_0.size() - 1] = false; //ignore last
+
+#ifdef DEBUG
+    printf("\nCPP   FILE %s    METHOD %s   LINE %i     WHAT %s ", __FILE__, __FUNCTION__, __LINE__, "Iterate pairs and mark skipped points ids ");
+#endif
 
     //CGAL_Debug(std::floor(sorted_segments_or_points_0.begin()->second.first.first), sorted_segments_or_points_0.begin()->second.first.second);
 
@@ -757,6 +775,9 @@ inline void element::get_joints_geometry_as_closed_polylines_performing_intersec
             pline1_new.emplace_back(x.second.second[j]);
     }
 
+#ifdef DEBUG
+    printf("\nCPP   FILE %s    METHOD %s   LINE %i     WHAT %s ", __FILE__, __FUNCTION__, __LINE__, "Add polygons including points to sorted map and merge ");
+#endif
     ///////////////////////////////////////////////////////////////////////////////
     //Close
     ///////////////////////////////////////////////////////////////////////////////
@@ -770,6 +791,10 @@ inline void element::get_joints_geometry_as_closed_polylines_performing_intersec
     }
     pline0_new.emplace_back(pline0_new.front());
     pline1_new.emplace_back(pline1_new.front());
+
+#ifdef DEBUG
+    printf("\nCPP   FILE %s    METHOD %s   LINE %i     WHAT %s ", __FILE__, __FUNCTION__, __LINE__, "Close ");
+#endif
 
     ///////////////////////////////////////////////////////////////////////////////
     //Add loose elements from top and bottom outlines also
@@ -809,6 +834,10 @@ inline void element::get_joints_geometry_as_closed_polylines_performing_intersec
             }
         }
     }
+
+#ifdef DEBUG
+    printf("\nCPP   FILE %s    METHOD %s   LINE %i     WHAT %s ", __FILE__, __FUNCTION__, __LINE__, "Add loose elements from top and bottom outlines also check winding ");
+#endif
 
     ///////////////////////////////////////////////////////////////////////////////
     //Output

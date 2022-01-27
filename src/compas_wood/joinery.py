@@ -113,8 +113,12 @@ def get_connection_zones(
     flag2 = three_valance_element_indices_and_instruction is not None
 
     if default_joint_parameters is not None:
+        print("COMPAS_WOOD Number of params: " + (str)((len)(default_joint_parameters)))
         if len(default_joint_parameters) == 6 * 3:
             flat_list_default_joint_paramters = default_joint_parameters
+            print("COMPAS_WOOD default_parameters_changed")
+    else:
+        print("COMPAS_WOOD Default Parameters")
 
     for i in range(0, (int)(len(polylines_vertices_XYZ) * 0.5)):
         flat_list_of_points.extend(polylines_vertices_XYZ[i * 2])
@@ -154,12 +158,15 @@ def get_connection_zones(
     # Test CPP module
     # ==============================================================================
 
-    print("Input")
-    print("flat_list_of_points " + str(V.size))
-    print("vertex_count_per_polyline " + str(F.size))
-    print("flat_list_of_face_vectors_XYZ " + str(D.size))
-    print("flat_list_of_face_joints_types_int " + str(J.size))
-    print("flat_list_of_three_valance_element_indices_and_instruction " + str(X.size))
+    print("COMPAS_WOOD Input")
+    print("COMPAS_WOOD flat_list_of_points " + str(V.size))
+    print("COMPAS_WOOD vertex_count_per_polyline " + str(F.size))
+    print("COMPAS_WOOD flat_list_of_face_vectors_XYZ " + str(D.size))
+    print("COMPAS_WOOD flat_list_of_face_joints_types_int " + str(J.size))
+    print(
+        "COMPAS_WOOD flat_list_of_three_valance_element_indices_and_instruction "
+        + str(X.size)
+    )
     print(
         "============================================================================== CPP +"
     )
@@ -167,12 +174,15 @@ def get_connection_zones(
     # ==============================================================================
     # Execute main CPP method
     # ==============================================================================
-
+    folder = os.path.join(
+        os.path.dirname(os.path.abspath(__file__)), "joinery_library.xml"
+    )
     start_time = time.time()
     (
         pointsets,
         pointsets_group_ids,
     ) = pybind11_joinery_solver.pybind11_get_connection_zones(
+        folder,
         V,
         F,
         D,
@@ -186,7 +196,7 @@ def get_connection_zones(
         triangulate,
     )
     print(
-        "==================================== %s ms ===================================="
+        "COMPAS_WOOD ==================================== %s ms ===================================="
         % round((time.time() - start_time) * 1000.0)
     )
     # print(type(pointsets))
@@ -220,10 +230,10 @@ def get_connection_zones(
 
     polylines.append(temp_collection)
     print(
-        "============================================================================== CPP -"
+        "COMPAS_WOOD ============================================================================== CPP -"
     )
-    print("Output")
-    print("Number of Polylines ", len(polylines))
+    print("COMPAS_WOOD Output")
+    print("COMPAS_WOOD Number of Polylines ", len(polylines))
 
     return polylines
 
@@ -235,7 +245,7 @@ def get_connection_zones(
 def closed_mesh_from_polylines(
     polylines_vertices_XYZ,
 ):
-    """Create a mesh from a top and bottom outlines
+    """Create a mesh from a top and bottom outlines, may return empty or invalid mesh when no mesh is create or input is bad
 
     Parameters
     ----------
@@ -277,17 +287,12 @@ def closed_mesh_from_polylines(
     # ==============================================================================
     # Execute main CPP method
     # ==============================================================================
-    print(
-        "============================================================================== CPP +"
-    )
+    # print("============================================================================== CPP +"   )
     start_time = time.time()
     output_V, output_F = pybind11_joinery_solver.pybind11_closed_mesh_from_polylines(
         V, F
     )
-    print(
-        "==================================== %s ms ===================================="
-        % round((time.time() - start_time) * 1000.0)
-    )
+    # print("==================================== %s ms ====================================" % round((time.time() - start_time) * 1000.0) )
     """
     print("F")
     output_F_ = []
@@ -306,17 +311,11 @@ def closed_mesh_from_polylines(
       """
 
     mesh = Mesh.from_vertices_and_faces(output_V, output_F)
-    # mesh = meshes_join_and_weld([mesh],0.001)
-    # Mesh.cull_vertices(mesh)
-    # Mesh.remove_unused_vertices(mesh)
-    # Mesh.unify_cycles(mesh)
-    print("Is Mesh Valid " + (str)(mesh.is_valid()))
+    # print("Is Mesh Valid " + (str)(mesh.is_valid()))
+
     # Mesh.to_obj(mesh,"C:\IBOIS57\_Code\Software\Python\compas_wood\docs\examples\mesh.obj")
 
-    print(
-        "============================================================================== CPP -"
-    )
-    # print("Output")
+    # print("============================================================================== CPP -")
     return mesh
 
 
