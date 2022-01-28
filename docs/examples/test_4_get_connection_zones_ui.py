@@ -5,10 +5,8 @@ from compas_wood.joinery import closed_mesh_from_polylines
 
 
 # compas_view2
-from compas.geometry import Point, Polyline
-import compas.geometry as cg
 from compas_view2.app import App
-
+from compas_view2.collections import Collection
 
 viewer = App(viewmode="shaded", enable_sidebar=True, width=3840, height=2160 - 250)
 viewer.view.camera.distance = 2000
@@ -27,7 +25,7 @@ type_id = 23
 shift = 0.5
 divisions_distance = 1000
 result = []
-meshes = []
+
 """
 @viewer.slider(text="S", minval=0, maxval=100, value=50, step=1)
 def slide1(value):
@@ -59,26 +57,25 @@ def slide0(value):
 def click_mesh():
 
     count = 0
-
-    listOfGlobals = globals()
-    # listOfGlobals["result"] = id
+    meshes = []
     global result
 
     for i in range(len(result)):
         mesh_result = closed_mesh_from_polylines(result[i])
-        meshes.append(mesh_result)
 
         # print("Mesh" + (str)(count))
         count += 1
         if mesh_result.is_valid() and len(list(mesh_result.vertices())) > 0:
+            meshes.append(mesh_result)
 
-            viewer.add(
-                mesh_result,
-                hide_coplanaredges=True,
-                opacity=0.75,
-                # color=(104 / 255, 219 / 255, 3),
-                color=(0.95, 0.95, 0.95),
-            )
+    if len(meshes) > 0:
+        viewer.add(
+            Collection(meshes),
+            hide_coplanaredges=False,
+            opacity=0.9,
+            # color=(104 / 255, 219 / 255, 3),
+            color=(0.95, 0.95, 0.95),
+        )
 
     viewer.view.update()
 
@@ -138,6 +135,10 @@ available_joints = {
     50: "ts_4",
     51: "ts_5",
     52: "ts_6",
+    53: "vda_0",
+    54: "vda_1",
+    55: "vda_2",
+    56: "bad_input_0",
 }
 for i, text in available_joints.items():
 
@@ -410,7 +411,18 @@ def add_joint_geometry(type, division_dist=1000, shift=0.6):
     elif type == 52:
         input = data_set_plates.ts_6()
         result = get_connection_zones(input, None, None, None, None, 0)
-
+    elif type == 53:
+        input = data_set_plates.vda_0()
+        result = get_connection_zones(input, None, None, None, None, 1)
+    elif type == 54:
+        input = data_set_plates.vda_1()
+        result = get_connection_zones(input, None, None, None, None, 1)
+    elif type == 55:
+        input = data_set_plates.vda_2()
+        result = get_connection_zones(input, None, None, None, None, 1)
+    elif type == 56:
+        input = data_set_plates.bad_input_0()
+        result = get_connection_zones(input, None, None, None, None, 1)
     result_flat_list = [item for sublist in result for item in sublist]
 
     # Generate connections
@@ -430,16 +442,27 @@ def add_joint_geometry(type, division_dist=1000, shift=0.6):
     listOfGlobals = globals()
     listOfGlobals["result"] = result
 
+    if len(result_flat_list) == 0:
+        return
+
+    plines0 = []
+    plines1 = []
+
     if result_flat_list is not None:
         for i in range(0, len(result_flat_list)):
             if i % 2 == 0:
-                display_polyline(
-                    viewer, result_flat_list[i], 1, 0, 104 / 255, 219 / 255, 3
-                )
+                plines0.append(result_flat_list[i])
+                # display_polyline(        viewer, result_flat_list[i], 1, 0, 104 / 255, 219 / 255, 3)
+
             else:
-                display_polyline(
-                    viewer, result_flat_list[i], 1, 0, 104 / 255, 219 / 255, 1
-                )
+                plines1.append(result_flat_list[i])
+                # display_polyline(    viewer, result_flat_list[i], 1, 0, 104 / 255, 219 / 255, 1   )
+
+    plines0_collection = Collection(plines0)
+    plines1_collection = Collection(plines1)
+
+    viewer.add(plines0_collection, linewidth=4, color=[0, 104 / 255, 219 / 255])
+    viewer.add(plines1_collection, linewidth=2, color=[0, 104 / 255, 219 / 255])
 
     # 1 2 9   10 11 12 19   20 21 22 23 29   30 31 39    49    59
     # 1 - weird intersecting segment low distances issues - 22 23

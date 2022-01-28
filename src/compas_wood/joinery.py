@@ -196,15 +196,19 @@ def get_connection_zones(
         triangulate,
     )
     print(
-        "COMPAS_WOOD ==================================== %s ms ===================================="
-        % round((time.time() - start_time) * 1000.0)
+        "\nCOMPAS_WOOD ==================================== %s ms ===================================="
+        % round((time.time() - start_time) * 1000.0, 2)
     )
     # print(type(pointsets))
     # ==============================================================================
     # Process output
     # ==============================================================================
-
     polylines = []
+
+    if len(pointsets) == 0 or len(pointsets_group_ids) == 0:
+        return polylines
+    # print(len(pointsets))
+    # print(len(pointsets_group_ids))
 
     temp_collection = []
     last_id = pointsets_group_ids[0]
@@ -212,12 +216,6 @@ def get_connection_zones(
     for i in range(len(pointsets)):
         points = [Point(*point) for point in pointsets[i]]
         polyline = Polyline(points)
-
-        """
-        print(" ")
-        for j in polyline:
-            print( (str)(j[0]) +" "+ (str)(j[1])+" " + (str)(j[2]) )
-        """
 
         if last_id != pointsets_group_ids[i]:
             polylines.append(temp_collection)
@@ -230,7 +228,7 @@ def get_connection_zones(
 
     polylines.append(temp_collection)
     print(
-        "COMPAS_WOOD ============================================================================== CPP -"
+        "\nCOMPAS_WOOD ============================================================================== CPP -"
     )
     print("COMPAS_WOOD Output")
     print("COMPAS_WOOD Number of Polylines ", len(polylines))
@@ -288,7 +286,7 @@ def closed_mesh_from_polylines(
     # Execute main CPP method
     # ==============================================================================
     # print("============================================================================== CPP +"   )
-    start_time = time.time()
+    # start_time = time.time()
     output_V, output_F = pybind11_joinery_solver.pybind11_closed_mesh_from_polylines(
         V, F
     )

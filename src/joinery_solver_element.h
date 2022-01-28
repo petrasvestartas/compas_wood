@@ -59,7 +59,7 @@ public:
     bool intersection_closed_and_open_paths_2D(
         CGAL_Polyline& closed_pline_cutter, CGAL_Polyline& pline_to_cut, IK::Plane_3& plane, CGAL_Polyline& c,
         int(&edge_pair)[2], std::pair<double, double>& cp_pair);
-    void get_joints_geometry_as_closed_polylines_performing_intersection(std::vector<joint>& joints, std::vector<std::vector<CGAL_Polyline>>& output);
+    void merge_joints(std::vector<joint>& joints, std::vector<std::vector<CGAL_Polyline>>& output);
 };
 
 inline element::element() {}
@@ -353,6 +353,16 @@ inline bool element::intersection_closed_and_open_paths_2D(
     cgal_polyline_util::Transform(b, xform_toXY);
 
     /////////////////////////////////////////////////////////////////////////////////////
+    //Polylines will not be exactly on the origin due to rounding errors, so make z = 0
+    /////////////////////////////////////////////////////////////////////////////////////
+
+    for (int i = 0; i < a.size(); i++)
+        a[i] = IK::Point_3(a[i].hx(), a[i].hy(), 0);
+
+    for (int i = 0; i < b.size(); i++)
+        b[i] = IK::Point_3(b[i].hx(), b[i].hy(), 0);
+
+    /////////////////////////////////////////////////////////////////////////////////////
     //Find Max Coordinate to get Scale factor
     /////////////////////////////////////////////////////////////////////////////////////
 
@@ -373,7 +383,7 @@ inline bool element::intersection_closed_and_open_paths_2D(
             max_coordinate = std::abs(b[i].hy());
     }
 
-    double scale = std::pow(10, 17 - cgal_math_util::count_digits(max_coordinate));
+    double scale = std::pow(10, 16 - cgal_math_util::count_digits(max_coordinate));
     //CGAL_Debug(scale);
     /////////////////////////////////////////////////////////////////////////////////////
     //Convert to Clipper
@@ -391,110 +401,125 @@ inline bool element::intersection_closed_and_open_paths_2D(
         //printf("%f,%f,%f \n", b[i].x(), b[i].y(), b[i].z());
     }
 
-    ClipperLib::Clipper clipper;
+    try {
+        //elements[i].get_joints_geometry_as_closed_polylines_replacing_edges(joints, plines);
 
-    clipper.AddPath(pathA, ClipperLib::ptSubject, false);
-    clipper.AddPath(pathB, ClipperLib::ptClip, true);
-    //ClipperLib::Paths C;
-    ClipperLib::PolyTree C;
-    clipper.Execute(ClipperLib::ctIntersection, C, ClipperLib::pftEvenOdd, ClipperLib::pftEvenOdd);
+        ClipperLib::Clipper clipper;
 
-    //CGAL_Debug(C.ChildCount());
-    if (C.ChildCount() > 0) {
-        //Calculate number of points
-        int count = 0;
-        ClipperLib::PolyNode* polynode = C.GetFirst();
-        while (polynode) {
-            //do stuff with polynode here
-            if (polynode->Contour.size() <= 1)
-                continue;
-            count += polynode->Contour.size();
-            polynode = polynode->GetNext();
+        clipper.AddPath(pathA, ClipperLib::ptSubject, false);
+        clipper.AddPath(pathB, ClipperLib::ptClip, true);
+        //ClipperLib::Paths C;
+        ClipperLib::PolyTree C;
+        clipper.Execute(ClipperLib::ctIntersection, C, ClipperLib::pftEvenOdd, ClipperLib::pftEvenOdd);
 
-            break;
-        }
-        c.reserve(count);
-        //CGAL_Debug(count);
+        //CGAL_Debug(C.ChildCount());
+        if (C.ChildCount() > 0) {
+            //Calculate number of points
+            int count = 0;
+            ClipperLib::PolyNode* polynode = C.GetFirst();
+            while (polynode) {
+                //do stuff with polynode here
+                if (polynode->Contour.size() <= 1)
+                    continue;
+                count += polynode->Contour.size();
+                polynode = polynode->GetNext();
 
-        polynode = C.GetFirst();
-        count = 0;
-        while (polynode) {
-            //do stuff with polynode here
-            if (polynode->Contour.size() <= 1)
-                continue;
-
-            //Check if seam is correctly placed
-            if (count == 0) {
-                for (size_t j = 0; j < polynode->Contour.size(); j++)
-                    c.emplace_back(polynode->Contour[j].X / scale, polynode->Contour[j].Y / scale, 0);
-            } else { //if there are multiple segments
-                std::vector<IK::Point_3> pts;
-                pts.reserve(polynode->Contour.size());
-                for (size_t j = 0; j < polynode->Contour.size(); j++)
-                    pts.emplace_back(polynode->Contour[j].X / scale, polynode->Contour[j].Y / scale, 0);
-
-                //Check if curve is closest to new pline if not reverse
-                if (CGAL::squared_distance(c.back(), pts.front()) > GlobalToleranceSquare && CGAL::squared_distance(c.back(), pts.back()) > GlobalToleranceSquare)
-                    std::reverse(c.begin(), c.end());
-
-                //Check if insertable curve end is closest to the main curve end, if not reverse
-                if (CGAL::squared_distance(c.back(), pts.front()) > CGAL::squared_distance(c.back(), pts.back()))
-                    std::reverse(pts.begin(), pts.end());
-
-                for (size_t j = 1; j < pts.size(); j++)
-                    c.emplace_back(pts[j]);
-            }
-            //if (count >0) {
-            //		for (size_t j = 0; j < polynode->Contour.size(); j++)
-            //			c.emplace_back(polynode->Contour[j].X / scale, polynode->Contour[j].Y / scale, 0);
-            //}
-
-            polynode = polynode->GetNext();
-            count++;
-            //break;
-        }
-
-        //Transform to 3D space
-        for (int i = 0; i < c.size(); i++)
-            c[i] = c[i].transform(xform_toXY_Inv);
-
-        ///////////////////////////////////////////////////////////////////////////////
-        //Get closest parameters (Find closest parameters to edges) and add to pairs
-        ///////////////////////////////////////////////////////////////////////////////
-        double t0_, t1_;
-        //for (int k = edge_pair[0]; k <= edge_pair[1]; k++) {
-        for (int k = 0; k <= closed_pline_cutter.size() - 1; k++) {
-            IK::Segment_3 s(closed_pline_cutter[k], closed_pline_cutter[k + 1]);
-            double t0;
-            cgal_polyline_util::ClosestPointTo(c.front(), s, t0);
-            if (t0 < 0 || t0 > 1)
-                continue;
-            if (CGAL::squared_distance(cgal_polyline_util::PointAt(s, t0), c.front()) < GlobalToleranceSquare) {
-                t0_ = k + t0;
                 break;
             }
-        }
+            c.reserve(count);
+            //CGAL_Debug(count);
 
-        //for (int k = edge_pair[0]; k <= edge_pair[1]; k++) {
-        for (int k = 0; k <= closed_pline_cutter.size() - 1; k++) {
-            IK::Segment_3 s(closed_pline_cutter[k], closed_pline_cutter[k + 1]);
-            double t1;
-            cgal_polyline_util::ClosestPointTo(c.back(), s, t1);
-            if (t1 < 0 || t1 > 1)
-                continue;
-            if (CGAL::squared_distance(cgal_polyline_util::PointAt(s, t1), c.back()) < GlobalToleranceSquare) {
-                t1_ = k + t1;
-                break;
+            polynode = C.GetFirst();
+            count = 0;
+            while (polynode) {
+                //do stuff with polynode here
+                if (polynode->Contour.size() <= 1)
+                    continue;
+
+                //Check if seam is correctly placed
+                if (count == 0) {
+                    for (size_t j = 0; j < polynode->Contour.size(); j++)
+                        c.emplace_back(polynode->Contour[j].X / scale, polynode->Contour[j].Y / scale, 0);
+                } else { //if there are multiple segments
+                    std::vector<IK::Point_3> pts;
+                    pts.reserve(polynode->Contour.size());
+                    for (size_t j = 0; j < polynode->Contour.size(); j++)
+                        pts.emplace_back(polynode->Contour[j].X / scale, polynode->Contour[j].Y / scale, 0);
+
+                    //Check if curve is closest to new pline if not reverse
+                    if (CGAL::squared_distance(c.back(), pts.front()) > GlobalToleranceSquare && CGAL::squared_distance(c.back(), pts.back()) > GlobalToleranceSquare)
+                        std::reverse(c.begin(), c.end());
+
+                    //Check if insert able curve end is closest to the main curve end, if not reverse
+                    if (CGAL::squared_distance(c.back(), pts.front()) > CGAL::squared_distance(c.back(), pts.back()))
+                        std::reverse(pts.begin(), pts.end());
+
+                    for (size_t j = 1; j < pts.size(); j++)
+                        c.emplace_back(pts[j]);
+                }
+                //if (count >0) {
+                //		for (size_t j = 0; j < polynode->Contour.size(); j++)
+                //			c.emplace_back(polynode->Contour[j].X / scale, polynode->Contour[j].Y / scale, 0);
+                //}
+
+                polynode = polynode->GetNext();
+                count++;
+                //break;
             }
+
+            ///////////////////////////////////////////////////////////////////////////////
+            //Get closest parameters (Find closest parameters to edges) and add to pairs
+            ///////////////////////////////////////////////////////////////////////////////
+            double t0_, t1_;
+            bool assigned_t0_ = false;
+            bool assigned_t1_ = false;
+            //for (int k = edge_pair[0]; k <= edge_pair[1]; k++) {
+            for (int k = 0; k <= b.size() - 1; k++) {
+                IK::Segment_3 s(b[k], b[k + 1]);
+                double t0;
+                cgal_polyline_util::ClosestPointTo(c.front(), s, t0);
+                //CGAL_Debug(t0);
+                if (t0 < 0 || t0 > 1)
+                    continue;
+                if (CGAL::squared_distance(cgal_polyline_util::PointAt(s, t0), c.front()) < GlobalToleranceSquare) {
+                    t0_ = k + t0;
+                    assigned_t0_ = true;
+                    break;
+                }
+            }
+
+            for (int k = 0; k <= b.size() - 1; k++) {
+                IK::Segment_3 s(b[k], b[k + 1]);
+                double t1;
+                cgal_polyline_util::ClosestPointTo(c.back(), s, t1);
+                //CGAL_Debug(t1);
+                if (t1 < 0 || t1 > 1)
+                    continue;
+                if (CGAL::squared_distance(cgal_polyline_util::PointAt(s, t1), c.back()) < GlobalToleranceSquare) {
+                    assigned_t1_ = true;
+                    t1_ = k + t1;
+                    break;
+                }
+            }
+
+            //CGAL_Debug(assigned_t0_ && assigned_t1_);
+            cp_pair = std::pair<double, double>(t0_, t1_);
+            if (t0_ > t1_) {
+                std::swap(cp_pair.first, cp_pair.second);
+                std::reverse(c.begin(), c.end());
+            }
+            //Transform to 3D space
+            for (int i = 0; i < c.size(); i++)
+                c[i] = c[i].transform(xform_toXY_Inv);
+
+            return assigned_t0_ && assigned_t1_;
+        } else {
+            return false;
         }
-        //CGAL_Debug(t0_,t1_);
-        cp_pair = std::pair<double, double>(t0_, t1_);
-        if (t0_ > t1_) {
-            std::swap(cp_pair.first, cp_pair.second);
-            std::reverse(c.begin(), c.end());
-        }
-    } else {
-        return false;
+    } catch (const  std::exception& ex) {
+        CGAL_Debug(scale);
+        CGAL_Debug(max_coordinate);
+        printf("\nCPP   FILE %s    METHOD %s   LINE %i     WHAT %s  %i ", __FILE__, __FUNCTION__, __LINE__, ex.what());
     }
 
     /////////////////////////////////////////////////////////////////////////////////////
@@ -503,7 +528,7 @@ inline bool element::intersection_closed_and_open_paths_2D(
     return true;
 }
 
-inline void element::get_joints_geometry_as_closed_polylines_performing_intersection(std::vector<joint>& joints, std::vector<std::vector<CGAL_Polyline>>& output) {
+inline void element::merge_joints(std::vector<joint>& joints, std::vector<std::vector<CGAL_Polyline>>& output) {
     //OPTIMIZE CASE(5) BECAUSE EDGE ARE KNOWN, BUT CHECK ALSO CROSS JOINT ENSURE THAT YOU TAKE CROSSING EDGES
     //CHANGE TO 2D METHOD, TO AVOID MULTIPLE THE SAME MATRIX CREATION FOR ORIENTATION TO 2D I.E. CLIPPER AND LINELINE3D
     //you are in a loop
@@ -526,6 +551,10 @@ inline void element::get_joints_geometry_as_closed_polylines_performing_intersec
     IK::Segment_3 last_segment1;
     int lastID = -1;
 
+#ifdef DEBUG_JOINERY_SOLVER_ELEMENT
+    printf("\nCPP   FILE %s    METHOD %s   LINE %i     WHAT %s ", __FILE__, __FUNCTION__, __LINE__, "Loops starts");
+#endif
+
     for (int i = 2; i < this->j_mf.size(); i++) {
         for (int j = 0; j < this->j_mf[i].size(); j++) { //
             ///////////////////////////////////////////////////////////////////////////////
@@ -535,7 +564,7 @@ inline void element::get_joints_geometry_as_closed_polylines_performing_intersec
             if (joints[std::get<0>(j_mf[i][j])].name == "")
                 continue;
 
-#ifdef DEBUG
+#ifdef DEBUG_JOINERY_SOLVER_ELEMENT
             printf("\nCPP   FILE %s    METHOD %s   LINE %i     WHAT %s num of elements %zi ", __FILE__, __FUNCTION__, __LINE__, "Good Name", joints[std::get<0>(j_mf[i][j])](male_or_female, true).size());
 #endif
 
@@ -552,19 +581,20 @@ inline void element::get_joints_geometry_as_closed_polylines_performing_intersec
             if (flag)
                 joints[std::get<0>(j_mf[i][j])].reverse(std::get<1>(j_mf[i][j]));
 
-#ifdef DEBUG
+#ifdef DEBUG_JOINERY_SOLVER_ELEMENT
             printf("\nCPP   FILE %s    METHOD %s   LINE %i     WHAT %s %zi ", __FILE__, __FUNCTION__, __LINE__, "Intersect rectangle or line", joints[std::get<0>(j_mf[i][j])](std::get<1>(j_mf[i][j]), true).back().size());
 #endif
 
             ///////////////////////////////////////////////////////////////////////////////
             //Intersect rectangle or line
             ///////////////////////////////////////////////////////////////////////////////
+
             switch (joints[std::get<0>(j_mf[i][j])](std::get<1>(j_mf[i][j]), true).back().size()) {
                 case (2):
                 { //Reposition end points
-#ifdef DEBUG
-                    printf("\nCPP   FILE %s    METHOD %s   LINE %i     WHAT %s ", __FILE__, __FUNCTION__, __LINE__, "Intersect rectangle or line CASE 2 ");
-#endif
+//#ifdef DEBUG_JOINERY_SOLVER_ELEMENT
+//                    printf("\nCPP   FILE %s    METHOD %s   LINE %i     WHAT %s ", __FILE__, __FUNCTION__, __LINE__, "Intersect rectangle or line CASE 2 ");
+//#endif
                     int id = i - 2;
                     int n = pline0.size() - 1;
 
@@ -663,14 +693,14 @@ inline void element::get_joints_geometry_as_closed_polylines_performing_intersec
                 }
                 case (5):
                 { //two edges
-#ifdef DEBUG
-                    printf("\nCPP   FILE %s    METHOD %s   LINE %i     WHAT %s ", __FILE__, __FUNCTION__, __LINE__, "Intersect rectangle or line CASE 5 ");
-#endif
                     int edge_pair[2];
                     joints[std::get<0>(j_mf[i][j])].get_edge_ids(std::get<1>(j_mf[i][j]), edge_pair[0], edge_pair[1]);
                     if (edge_pair[0] > edge_pair[1])
                         std::swap(edge_pair[0], edge_pair[1]);
 
+#ifdef DEBUG_JOINERY_SOLVER_ELEMENT
+                    printf("\nCPP   FILE %s    METHOD %s   LINE %i     WHAT %s ", __FILE__, __FUNCTION__, __LINE__, "Intersect rectangle or line CASE 5 ");
+#endif
                     if (false) { //split by line, in this case you need to know which side is inside
                     } else { //split by full polygon
                         ///////////////////////////////////////////////////////////////////////////////
@@ -678,20 +708,46 @@ inline void element::get_joints_geometry_as_closed_polylines_performing_intersec
                         ///////////////////////////////////////////////////////////////////////////////
                         std::pair<double, double> cp_pair_0(0, 0);
                         CGAL_Polyline joint_pline_0;
-                        intersection_closed_and_open_paths_2D(pline0, joints[std::get<0>(j_mf[i][j])](std::get<1>(j_mf[i][j]), true).front(), this->planes[0], joint_pline_0, edge_pair, cp_pair_0);
-                        sorted_segments_or_points_0.insert(std::make_pair((cp_pair_0.first + cp_pair_0.first) * 0.5, std::pair<std::pair<double, double>, CGAL_Polyline>{cp_pair_0, joint_pline_0}));
+                        bool result0 = intersection_closed_and_open_paths_2D(pline0, joints[std::get<0>(j_mf[i][j])](std::get<1>(j_mf[i][j]), true).front(), this->planes[0], joint_pline_0, edge_pair, cp_pair_0);
+                        if (!result0) continue;
+
+#ifdef DEBUG_JOINERY_SOLVER_ELEMENT
+                        printf("\nCPP   FILE %s    METHOD %s   LINE %i     WHAT %s ", __FILE__, __FUNCTION__, __LINE__, "First Intersection ");
+#endif
+
+                        //CGAL_Debug(joint_pline_0.size());
+                        //for (size_t i = 0; i < joint_pline_0.size(); i++) {
+                        //    CGAL_Debug(joint_pline_0[i]);
+                        //}
 
                         std::pair<double, double> cp_pair_1(0, 0);
                         CGAL_Polyline joint_pline_1;
-                        intersection_closed_and_open_paths_2D(pline1, joints[std::get<0>(j_mf[i][j])](std::get<1>(j_mf[i][j]), false).front(), this->planes[1], joint_pline_1, edge_pair, cp_pair_1);
+                        bool result1 = intersection_closed_and_open_paths_2D(pline1, joints[std::get<0>(j_mf[i][j])](std::get<1>(j_mf[i][j]), false).front(), this->planes[1], joint_pline_1, edge_pair, cp_pair_1);
+                        if (!result1) continue;
+#ifdef DEBUG_JOINERY_SOLVER_ELEMENT
+                        printf("\nCPP   FILE %s    METHOD %s   LINE %i     WHAT %s ", __FILE__, __FUNCTION__, __LINE__, "Second Intersection ");
+#endif
+
+                        sorted_segments_or_points_0.insert(
+                            std::make_pair(
+                                (cp_pair_0.first + cp_pair_0.first) * 0.5,
+                                std::pair<std::pair<double, double>, CGAL_Polyline>{cp_pair_0, joint_pline_0}
+                        )
+                        );
                         sorted_segments_or_points_1.insert(std::make_pair((cp_pair_1.first + cp_pair_1.first) * 0.5, std::pair<std::pair<double, double>, CGAL_Polyline>{cp_pair_1, joint_pline_1}));
 
                         point_count += joint_pline_1.size();
-                        //pairs0.push_back(cp_pair_0);
-                        //pairs1.push_back(cp_pair_1);
+#ifdef DEBUG_JOINERY_SOLVER_ELEMENT
+                        printf("\nCPP   FILE %s    METHOD %s   LINE %i     WHAT %s ", __FILE__, __FUNCTION__, __LINE__, "Output of Case 5 ");
+#endif
 
-                        /*				output[this->id].emplace_back(joint_pline_0);
-                            output[this->id].emplace_back(joint_pline_1);*/
+                        //CGAL_Debug((cp_pair_0.first + cp_pair_0.first) * 0.5, cp_pair_0.first, cp_pair_0.second);
+                        //CGAL_Debug((cp_pair_1.first + cp_pair_1.first) * 0.5, cp_pair_1.first, cp_pair_1.second);
+
+                        //CGAL_Debug(joint_pline_1.size());
+                        //for (size_t i = 0; i < joint_pline_1.size(); i++) {
+                        //    CGAL_Debug(joint_pline_1[i]);
+                        //}
                     }
 
                     break;
@@ -704,7 +760,7 @@ inline void element::get_joints_geometry_as_closed_polylines_performing_intersec
 
         //Unify windings of polylines
     }
-
+    //return;
     ///////////////////////////////////////////////////////////////////////////////
     //Iterate pairs and mark skipped points ids
     //first is key, second - value (pair of cpt (first) and polyline (second))
@@ -717,7 +773,7 @@ inline void element::get_joints_geometry_as_closed_polylines_performing_intersec
         }
     point_flags_0[point_flags_0.size() - 1] = false; //ignore last
 
-#ifdef DEBUG
+#ifdef DEBUG_JOINERY_SOLVER_ELEMENT
     printf("\nCPP   FILE %s    METHOD %s   LINE %i     WHAT %s ", __FILE__, __FUNCTION__, __LINE__, "Iterate pairs and mark skipped points ids ");
 #endif
 
@@ -729,7 +785,7 @@ inline void element::get_joints_geometry_as_closed_polylines_performing_intersec
             point_flags_1[j] = false;
     point_flags_1[point_flags_1.size() - 1] = false; //ignore last
 
-    //Skip first incase there is a cut on the corner
+    //Skip first in case there is a cut on the corner
     if (std::floor(sorted_segments_or_points_0.begin()->second.first.first) < 1 && std::ceil(sorted_segments_or_points_0.begin()->second.first.second) == (pline0.size() - 1)) {
         std::reverse(sorted_segments_or_points_0.begin()->second.second.begin(), sorted_segments_or_points_0.begin()->second.second.end());
         point_flags_0[0] = false;
@@ -775,7 +831,7 @@ inline void element::get_joints_geometry_as_closed_polylines_performing_intersec
             pline1_new.emplace_back(x.second.second[j]);
     }
 
-#ifdef DEBUG
+#ifdef DEBUG_JOINERY_SOLVER_ELEMENT
     printf("\nCPP   FILE %s    METHOD %s   LINE %i     WHAT %s ", __FILE__, __FUNCTION__, __LINE__, "Add polygons including points to sorted map and merge ");
 #endif
     ///////////////////////////////////////////////////////////////////////////////
@@ -792,14 +848,14 @@ inline void element::get_joints_geometry_as_closed_polylines_performing_intersec
     pline0_new.emplace_back(pline0_new.front());
     pline1_new.emplace_back(pline1_new.front());
 
-#ifdef DEBUG
-    printf("\nCPP   FILE %s    METHOD %s   LINE %i     WHAT %s ", __FILE__, __FUNCTION__, __LINE__, "Close ");
-#endif
+    //#ifdef DEBUG_JOINERY_SOLVER_ELEMENT
+    //    printf("\nCPP   FILE %s    METHOD %s   LINE %i     WHAT %s ", __FILE__, __FUNCTION__, __LINE__, "Close ");
+    //#endif
 
-    ///////////////////////////////////////////////////////////////////////////////
-    //Add loose elements from top and bottom outlines also
-    //Also check the winding
-    ///////////////////////////////////////////////////////////////////////////////
+        ///////////////////////////////////////////////////////////////////////////////
+        //Add loose elements from top and bottom outlines also
+        //Also check the winding
+        ///////////////////////////////////////////////////////////////////////////////
 
     for (int i = 0; i < 2; i++) { //iterate top only
         for (size_t j = 0; j < j_mf[i].size(); j++) {
@@ -835,13 +891,14 @@ inline void element::get_joints_geometry_as_closed_polylines_performing_intersec
         }
     }
 
-#ifdef DEBUG
-    printf("\nCPP   FILE %s    METHOD %s   LINE %i     WHAT %s ", __FILE__, __FUNCTION__, __LINE__, "Add loose elements from top and bottom outlines also check winding ");
+#ifdef DEBUG_JOINERY_SOLVER_ELEMENT
+    printf("\nCPP   FILE %s    METHOD %s   LINE %i     WHAT %s %i %i %i %i ", __FILE__, __FUNCTION__, __LINE__, "Add elements  ", pline0_new.size(), pline1_new.size(), this->id, output.size());
 #endif
-
     ///////////////////////////////////////////////////////////////////////////////
     //Output
     ///////////////////////////////////////////////////////////////////////////////
-    output[this->id].emplace_back(pline0_new);
-    output[this->id].emplace_back(pline1_new);
+    if (output.size() > this->id) { //else the input is bad
+        output[this->id].emplace_back(pline0_new);
+        output[this->id].emplace_back(pline1_new);
+    }
 }

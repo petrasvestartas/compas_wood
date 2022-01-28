@@ -1,5 +1,16 @@
 #pragma once
 //#define DEBUG
+
+//Debugging
+#define DEBUG_JOINERY_SOLVER_MAIN
+//#define DEBUG_JOINERY_SOLVER_ELEMENT
+#define DEBUG_JOINERY_SOLVER_MAIN_LOCAL_SEARCH
+#include <exception>
+#include <typeinfo>
+#include <stdexcept>
+#include <boost/exception/diagnostic_information.hpp>
+
+//CGAL
 #include <CGAL/Exact_predicates_inexact_constructions_kernel.h>
 #include <CGAL/Exact_predicates_exact_constructions_kernel.h>
 #include <CGAL/Intersections.h>

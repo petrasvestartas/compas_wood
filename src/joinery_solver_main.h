@@ -200,7 +200,7 @@ inline bool plane_to_face(std::vector<
     CGAL_Polyline(&joint_lines)[2],
     CGAL_Polyline(&joint_volumes_pairA_pairB)[4],
 
-    double angleTol = 16,
+    double angleTol = 30,
     bool checkOverlap = false
 
 ) {
@@ -217,8 +217,10 @@ inline bool plane_to_face(std::vector<
     //////////////////////////////////////////////////////////////////////////////
 
     double angle = 90.0 - fabs(CGAL::approximate_angle(Plane0[0].orthogonal_vector(), Plane1[0].orthogonal_vector()) - 90);
+
     if (angle < angleTol)
         return false;
+    //CGAL_Debug(angle);
 
     //if (checkOverlap) if (Polylines0Center.plines[0].ToNurbsCurve().CurvesOverlap(Polylines1Center.plines[0].ToNurbsCurve())) return; //Happens very rarely if elements are planar
 
@@ -513,8 +515,7 @@ inline bool face_to_face(
 ) {
     //printf("CPP StartIndersection \n");
 
-#ifdef DEBUG
-
+#ifdef DEBUG_JOINERY_SOLVER_MAIN_LOCAL_SEARCH
     printf("\nCPP face_to_face \nCPP planes %zi, %zi  \n", Plane0.size(), Plane1.size());
 #endif
 
@@ -523,7 +524,7 @@ inline bool face_to_face(
             //Check if polygons are co-planar
             bool coplanar = cgal_plane_util::IsCoplanar(Plane0[i], Plane1[j], false, GlobalTolerance); //O(n*n) +10 ms
 
-#ifdef DEBUG
+#ifdef DEBUG_JOINERY_SOLVER_MAIN_LOCAL_SEARCH
             if (coplanar)
                 printf("CPP Coplanar %i\n", coplanar);
 #endif
@@ -532,7 +533,7 @@ inline bool face_to_face(
                 //Perform 2D Intersection 20 ms
                 bool hasIntersection = clipper_util::intersection_2D(Polyline0[i], Polyline1[j], Plane0[i], joint_area, GlobalClipperScale); // +20 ms 10000.0; GlobalClipperScale
 
-#ifdef DEBUG
+#ifdef DEBUG_JOINERY_SOLVER_MAIN_LOCAL_SEARCH
                 printf("CPP hasIntersection %i\n", hasIntersection);
 #endif
                 //CGAL_Debug(" ");
@@ -560,7 +561,7 @@ inline bool face_to_face(
                     CGAL_Polyline joint_quads0;
                     if (i > 1) { //Side-Top  or Side-Side
                         //Middle line for alignment
-#ifdef DEBUG
+#ifdef DEBUG_JOINERY_SOLVER_MAIN_LOCAL_SEARCH
                         printf("CPP i>1 \n");
 #endif
 
@@ -574,7 +575,7 @@ inline bool face_to_face(
                         if (isLine && joint_line0.squared_length() > GlobalTolerance) { //
                             bool isQuad = cgal_intersection_util::QuadFromLineAndTopBottomPlanes(Plane0[i], joint_line0, Plane0[0], Plane0[1], joint_quads0);
                         } else {
-#ifdef DEBUG
+#ifdef DEBUG_JOINERY_SOLVER_MAIN_LOCAL_SEARCH
                             printf("CPP   IsLine %i joint_line0.squared_length() %f \n", isLine, joint_line0.squared_length());
 #endif
 
@@ -591,7 +592,7 @@ inline bool face_to_face(
                     if (j > 1) { //Side-Side
                         //Middle line for alignment
 
-#ifdef DEBUG
+#ifdef DEBUG_JOINERY_SOLVER_MAIN_LOCAL_SEARCH
                         printf("CPP j>1 \n");
 #endif
 
@@ -603,7 +604,7 @@ inline bool face_to_face(
                         if (isLine && joint_line1.squared_length() > GlobalTolerance) { //
                             bool isQuad = cgal_intersection_util::QuadFromLineAndTopBottomPlanes(Plane1[j], joint_line1, Plane1[0], Plane1[1], joint_quads1);
                         } else {
-#ifdef DEBUG
+#ifdef DEBUG_JOINERY_SOLVER_MAIN_LOCAL_SEARCH
                             printf("CPP   IsLine %i joint_line1.squared_length() %f \n", isLine, joint_line1.squared_length());
 #endif
                             return false;
@@ -634,7 +635,7 @@ inline bool face_to_face(
                     //////////////////////////////////////////////////////////////////////////////////////////////////
                     //CGAL_Debug(type);
                     if (type == 0) { //side-side
-#ifdef DEBUG
+#ifdef DEBUG_JOINERY_SOLVER_MAIN_LOCAL_SEARCH
                         printf("Type0");
 #endif
 
@@ -653,7 +654,7 @@ inline bool face_to_face(
                         auto v1 = joint_line1[0] - joint_line1[1];
 
                         if (cgal_vector_util::IsParallelTo(v0, v1, GlobalTolerance) == 0) {
-#ifdef DEBUG
+#ifdef DEBUG_JOINERY_SOLVER_MAIN_LOCAL_SEARCH
                             printf("Elements Are rotated");
 #endif
 
@@ -725,7 +726,7 @@ inline bool face_to_face(
                             //Elements are parallel
                             ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
                         } else {
-#ifdef DEBUG
+#ifdef DEBUG_JOINERY_SOLVER_MAIN_LOCAL_SEARCH
                             printf("Elements are parallel");
 #endif
 
@@ -765,7 +766,7 @@ inline bool face_to_face(
                                 //CGAL_Debug(20);
                                 return false;
                             } else if (dihedralAngle <= 150) { //OUT-OF-PLANE // && jointArea0.size()>0
-#ifdef DEBUG
+#ifdef DEBUG_JOINERY_SOLVER_MAIN_LOCAL_SEARCH
                                 printf("Out-of-plane");
 #endif
                                 //CGAL_Debug(150);
@@ -808,7 +809,7 @@ inline bool face_to_face(
 
                                 type = 11;
                             } else { //IN-PLANE
-#ifdef DEBUG
+#ifdef DEBUG_JOINERY_SOLVER_MAIN_LOCAL_SEARCH
                                 printf("In-Plane");
 #endif
                                 //CGAL_Debug(-150);
@@ -846,7 +847,7 @@ inline bool face_to_face(
                             }
                         }
                     } else if (type == 1) { //top-side
-#ifdef DEBUG
+#ifdef DEBUG_JOINERY_SOLVER_MAIN_LOCAL_SEARCH
                         printf("CPP Top-side \n");
 #endif
                         //////////////////////////////////////////////////////////////////////////////////
@@ -902,8 +903,7 @@ inline bool face_to_face(
                         type = 20;
                         return true;
                     } else {
-#ifdef DEBUG
-
+#ifdef DEBUG_JOINERY_SOLVER_MAIN_LOCAL_SEARCH
                         printf("CPP Type40\n");
 #endif
                         type = 40;
@@ -1419,15 +1419,27 @@ inline void get_connection_zones(
     auto joints = std::vector<joint>();
     auto joints_map = std::unordered_map<uint64_t, int>();
 
+#ifdef DEBUG_JOINERY_SOLVER_MAIN
+    printf("\nCPP   FILE %s    METHOD %s   LINE %i     WHAT %s ", __FILE__, __FUNCTION__, __LINE__, "Create elements from pair of polylines");
+#endif
+
     //////////////////////////////////////////////////////////////////////////////
     //Create elements, AABB, OBB, P, Pls, thickness
     //////////////////////////////////////////////////////////////////////////////
     get_elements(input_polyline_pairs, input_insertion_vectors, input_joint_types, elements);
 
+#ifdef DEBUG_JOINERY_SOLVER_MAIN
+    printf("\nCPP   FILE %s    METHOD %s   LINE %i     WHAT %s %zi ", __FILE__, __FUNCTION__, __LINE__, "Number of elements", elements.size());
+#endif
+
     //////////////////////////////////////////////////////////////////////////////
     //Create joints, Perform Joint Area Search
     //////////////////////////////////////////////////////////////////////////////
     rtree_search(elements, search_type, joints, joints_map);
+
+#ifdef DEBUG_JOINERY_SOLVER_MAIN
+    printf("\nCPP   FILE %s    METHOD %s   LINE %i     WHAT %s %zi ", __FILE__, __FUNCTION__, __LINE__, "Joints", joints.size());
+#endif
 
     //////////////////////////////////////////////////////////////////////////////
     //3-valence joints
@@ -1439,6 +1451,10 @@ inline void get_connection_zones(
     //Create and Align Joints 1. Iterate type 2. Select joint based on not/given user joint_type
     ////////////////////////////////////////////////////////////////////////////////
     joint_library::construct_joint_by_index(elements, joints, division_distance, shift, default_parameters_for_joint_types);
+
+#ifdef DEBUG_JOINERY_SOLVER_MAIN
+    printf("\nCPP   FILE %s    METHOD %s   LINE %i     WHAT %s  ", __FILE__, __FUNCTION__, __LINE__, "construct_joint_by_index");
+#endif
 
     //////////////////////////////////////////////////////////////////////////////
     //Iterate joint address
@@ -1460,11 +1476,20 @@ inline void get_connection_zones(
                 elements[i].get_joints_geometry(joints, plines, 3);
                 break;
             case (4):
-                //elements[i].get_joints_geometry_as_closed_polylines_replacing_edges(joints, plines);
-                elements[i].get_joints_geometry_as_closed_polylines_performing_intersection(joints, plines);
+
+                try {
+                    elements[i].merge_joints(joints, plines);
+                    //elements[i].get_joints_geometry_as_closed_polylines_replacing_edges(joints, plines);
+                } catch (...) {
+                    printf("\nCPP   FILE %s    METHOD %s   LINE %i     WHAT %s  %i ", __FILE__, __FUNCTION__, __LINE__, "boost::current_exception_diagnostic_information()", i);
+                }
                 break;
         }
     }
+
+#ifdef DEBUG_JOINERY_SOLVER_MAIN
+    printf("\nCPP   FILE %s    METHOD %s   LINE %i     WHAT %s  ", __FILE__, __FUNCTION__, __LINE__, "merge_joints");
+#endif
 
     //////////////////////////////////////////////////////////////////////////////
     //Create Mesh Triangulation for top face

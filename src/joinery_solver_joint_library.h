@@ -1095,11 +1095,19 @@ namespace joint_library {
     }
 
     inline void construct_joint_by_index(std::vector<element>& elements, std::vector<joint>& joints, const double& division_distance_, const double& shift_, std::vector<double>& default_parameters_for_four_types) {
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        //Most joints are often the same
+        //Store parameters as a string: "joint_type ; divisions, not dist ; shift"
+        //If this dictionary already has joints, fill parameters: f, m, booleans, with existing ones.
+        // This joint is not oriented, orientation happens at the end of the loop
+        // if unique_joints.contains(string)
+        //  replace parameters
+        // else joint = createnewjoint()
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        std::map<std::string, int> unique_joints;
+
         double division_distance = division_distance_;
         double shift = shift_;
-        //std::ofstream myfile;
-        //myfile.open("C:\\IBOIS57\\_Code\\Software\\Python\\Pybind11Example\\vsstudio\\Release\\output2.txt");
-        //myfile << joints.size()<< " \n";
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         //Iterate joints constructed during search methods
@@ -1109,7 +1117,6 @@ namespace joint_library {
             //Set unit distance, this value is a distance between joint volume rectangles, in case this property is set -> unit_scale = true
             /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
             joint.unit_scale_distance = elements[joint.v0].thickness;
-            CGAL_Debug(joint.unit_scale_distance);
 
             //Select user given type
             //types0+265
@@ -1118,41 +1125,15 @@ namespace joint_library {
                 int a = elements[joint.v0].joint_types[joint.f0_0];
                 int b = elements[joint.v1].joint_types[joint.f1_0];
                 id_representing_joing_name = (a > b) ? a : b;
-
-                /*	for (auto& o : elements[joint.v0].joint_types)
-                        myfile << o << " ";
-                    myfile << "\n";
-
-                    for (auto& o : elements[joint.v1].joint_types)
-                        myfile << o << " ";
-                    myfile << "\n";
-
-                    myfile << joint.f0_0 << "\n";
-                    myfile << joint.f1_0 << "\n";
-                    myfile << a << "\n";
-                    myfile << b << "\n";
-                    myfile << id_representing_joing_name <<"\n";*/
             } else if (elements[joint.v0].joint_types.size())
                 id_representing_joing_name = elements[joint.v0].joint_types[joint.f0_0];
             else if (elements[joint.v1].joint_types.size())
                 id_representing_joing_name = elements[joint.v1].joint_types[joint.f1_0];
 
-            //myfile << joint.f0_0 << " " << joint.f0_1 << " \n";
-            //myfile << elements[joint.v0].joint_types[joint.f0_0] << " " << elements[joint.v1].joint_types[joint.f1_0] << " \n";
-
             //When users gives an input -> default_parameters_for_four_types
             int number_of_types = 6;	  //side-side in-plane | side-side out-of-plane | top-side | cross | top-top | side-side rotated
             int number_of_parameters = 3; //division_dist | shift | type
             bool default_parameters_given = default_parameters_for_four_types.size() == number_of_types * number_of_parameters;
-            //for (int i = 0; i < default_parameters_for_four_types.size(); i+=3)
-            //CGAL_Debug(default_parameters_for_four_types[i], default_parameters_for_four_types[i+1], default_parameters_for_four_types[i+2]);
-
-            //CGAL_Debug(joint.type);
-            //CGAL_Debug(id_representing_joing_name);
-            //CGAL_Debug(joint.type == 30);
-            //CGAL_Debug((id_representing_joing_name > 39 && id_representing_joing_name < 50));
-            //CGAL_Debug(id_representing_joing_name == -1);
-            //CGAL_Debug(joint.type == 30 && ((id_representing_joing_name > 39 && id_representing_joing_name < 50) || id_representing_joing_name == -1));
 
             //Select first by local search, only then by user given index, or by default
             if (id_representing_joing_name == 0) {
@@ -1193,10 +1174,6 @@ namespace joint_library {
                     shift = default_parameters_for_four_types[number_of_parameters * group + 1];
                     if (id_representing_joing_name == -1) //for cases when joint types per each edge are not defined
                         id_representing_joing_name = default_parameters_for_four_types[number_of_parameters * group + 2];
-
-                    //CGAL_Debug(division_distance);
-                    //CGAL_Debug(shift);
-                    //CGAL_Debug(id_representing_joing_name);
                 }
 
                 //CGAL_Debug(77777);

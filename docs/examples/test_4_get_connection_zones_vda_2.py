@@ -15,7 +15,7 @@ from compas_wood.viewer_helpers import display
 def test_connection_detection():
 
     # Input pairs of polylines
-    input = data_set_plates.c_0()
+    input = data_set_plates.vda_2()
 
     # Generate connections
     result = get_connection_zones(input, None, None, None, None, 1, 300, 0.6, 4)
