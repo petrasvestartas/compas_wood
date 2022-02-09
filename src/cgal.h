@@ -2,9 +2,11 @@
 //#define DEBUG
 
 //Debugging
-#define DEBUG_JOINERY_SOLVER_MAIN
+//#define DEBUG_MEASURE_TIME
+//#define DEBUG_JOINERY_LIBRARY
+//#define DEBUG_JOINERY_SOLVER_MAIN
 //#define DEBUG_JOINERY_SOLVER_ELEMENT
-#define DEBUG_JOINERY_SOLVER_MAIN_LOCAL_SEARCH
+//#define DEBUG_JOINERY_SOLVER_MAIN_LOCAL_SEARCH
 #include <exception>
 #include <typeinfo>
 #include <stdexcept>
@@ -41,6 +43,7 @@
 
 #include <cmath>
 #include <string>
+#include <chrono>
 
 using IK = CGAL::Exact_predicates_inexact_constructions_kernel;
 using EK = CGAL::Exact_predicates_exact_constructions_kernel;

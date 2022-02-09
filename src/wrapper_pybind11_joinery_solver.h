@@ -68,6 +68,7 @@ std::tuple<std::vector<RowMatrixXd>, std::vector<int>> pybind11_get_connection_z
     Eigen::Ref<const RowMatrixXd>& face_vectors_XYZ,
     Eigen::Ref<const RowMatrixXi>& face_joints_types_int,
     Eigen::Ref<const RowMatrixXi>& three_valence_element_indices_and_instruction,
+    Eigen::Ref<const RowMatrixXi>& adjacency,
     Eigen::Ref<const RowMatrixXd>& default_parameters_for_joint_types_matrix,
 
     int search_type,
@@ -128,6 +129,7 @@ PYBIND11_MODULE(pybind11_joinery_solver, m) {
         pybind11::arg("D").noconvert(),
         pybind11::arg("J").noconvert(),
         pybind11::arg("X").noconvert(),
+        pybind11::arg("A").noconvert(),
         pybind11::arg("P").noconvert(),
 
         pybind11::arg("search_type"),

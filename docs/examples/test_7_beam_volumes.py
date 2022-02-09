@@ -7,6 +7,8 @@ from compas_wood.viewer_helpers import display
 
 import os
 
+from data_set_beams import polylines_0
+
 os.system("cls" if os.name == "nt" else "clear")
 
 # ==============================================================================
@@ -16,9 +18,9 @@ os.system("cls" if os.name == "nt" else "clear")
 
 def test_beam_volumes():
 
-    polylines = data_set_beams.polylines_4()
-    segment_radii = data_set_beams.polylines_radii_4()
-    segment_normals = data_set_beams.polylines_vector_4()
+    polylines = data_set_beams.polylines_1()
+    segment_radii = data_set_beams.polylines_radii_1()
+    #segment_normals = data_set_beams.polylines_vector_0()
 
     # print(segment_normals)
 
@@ -37,6 +39,28 @@ def test_beam_volumes():
     # possible output: when both are above, the smaller is female, other is male 0.75
     # possible output: when both are below, then cross, e.g. 0.0001
 
+    division_length = 300
+    joint_parameters = [
+        division_length,
+        0.5,
+        9,
+        division_length * 1.5,
+        0.65,
+        10,
+        division_length,
+        0.5,
+        29,
+        division_length,
+        0.5,
+        30,
+        division_length,
+        0.5,
+        40,
+        division_length,
+        0.5,
+        15,
+    ]
+
     # segment_normals
     (
         neighbours,
@@ -46,8 +70,18 @@ def test_beam_volumes():
         joint_types_list,
         joint_geometry_list,
     ) = beam_volumes(
-        polylines, segment_radii, segment_normals, allowed_types, 20, 30, 0.91, 1, None
+        polylines,
+        segment_radii,
+        None,
+        allowed_types,
+        20,
+        30,
+        0.91,
+        1,
+        joint_parameters,
     )
+    joint_areas_list.extend(polylines)
+
     """
     # Display normals
     temp_id = 27

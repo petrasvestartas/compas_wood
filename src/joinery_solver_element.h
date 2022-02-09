@@ -72,7 +72,7 @@ inline void element::get_joints_geometry(std::vector<joint>& joints, std::vector
     for (int i = 0; i < j_mf.size(); i++) { //loop joint id
         for (size_t j = 0; j < j_mf[i].size(); j++) { //loop joints per each face + 1 undefined
             switch (what_to_expose) {
-                case (0):
+                case (0)://Plate outlines
                     if (this->polylines.size() > 1) {
                         output[this->id].emplace_back(this->polylines[0]); //cut
                         output[this->id].emplace_back(this->polylines[1]); //cut
@@ -80,7 +80,7 @@ inline void element::get_joints_geometry(std::vector<joint>& joints, std::vector
 
                     output[this->id].emplace_back(joints[std::get<0>(j_mf[i][j])].joint_area);
                     break;
-                case (1):
+                case (1)://joint lines
                     if (this->polylines.size() > 1) {
                         output[this->id].emplace_back(this->polylines[0]); //cut
                         output[this->id].emplace_back(this->polylines[1]); //cut
@@ -89,7 +89,7 @@ inline void element::get_joints_geometry(std::vector<joint>& joints, std::vector
                     output[this->id].emplace_back(joints[std::get<0>(j_mf[i][j])].joint_lines[0]);
                     output[this->id].emplace_back(joints[std::get<0>(j_mf[i][j])].joint_lines[1]);
                     break;
-                case (2):
+                case (2)://joint volumes
 
                     if (this->polylines.size() > 1) {
                         output[this->id].emplace_back(this->polylines[0]); //cut
@@ -570,10 +570,12 @@ inline void element::merge_joints(std::vector<joint>& joints, std::vector<std::v
 
             if (joints[std::get<0>(j_mf[i][j])](male_or_female, true).size() != 2)
                 continue;
-
+            if (joints[std::get<0>(j_mf[i][j])](male_or_female, false).size() == 0)
+                continue;
             ///////////////////////////////////////////////////////////////////////////////
             //Take last lines Element outline can be not in the same order as joint outlines Take joint segment and measure its point to the plane
             ///////////////////////////////////////////////////////////////////////////////
+
             bool flag =
                 CGAL::squared_distance(planes[0].projection(joints[std::get<0>(j_mf[i][j])](male_or_female, true).back()[0]), joints[std::get<0>(j_mf[i][j])](male_or_female, true).back()[0]) >
                 CGAL::squared_distance(planes[0].projection(joints[std::get<0>(j_mf[i][j])](male_or_female, false).back()[0]), joints[std::get<0>(j_mf[i][j])](male_or_female, false).back()[0]);
@@ -801,13 +803,12 @@ inline void element::merge_joints(std::vector<joint>& joints, std::vector<std::v
     //Add polygons including points to sorted map and merge
     ///////////////////////////////////////////////////////////////////////////////
 
-    //CGAL_Debug(99999);
     for (size_t i = 0; i < point_flags_0.size(); i++)
         if (point_flags_0[i])
             sorted_segments_or_points_0.insert(std::make_pair(i, std::pair<std::pair<double, double>, CGAL_Polyline>{std::pair<double, double>(i, i), CGAL_Polyline{ pline0[i] }}));
 
     //
-    ////CGAL_Debug(99999);
+
     for (size_t i = 0; i < point_flags_1.size(); i++)
         if (point_flags_1[i])
             sorted_segments_or_points_1.insert(std::make_pair(i, std::pair<std::pair<double, double>, CGAL_Polyline>{std::pair<double, double>(i, i), CGAL_Polyline{ pline1[i] }}));
@@ -845,6 +846,7 @@ inline void element::merge_joints(std::vector<joint>& joints, std::vector<std::v
             pline1_new[0] = p1;
         }
     }
+
     pline0_new.emplace_back(pline0_new.front());
     pline1_new.emplace_back(pline1_new.front());
 
@@ -861,7 +863,9 @@ inline void element::merge_joints(std::vector<joint>& joints, std::vector<std::v
         for (size_t j = 0; j < j_mf[i].size(); j++) {
             if (joints[std::get<0>(j_mf[i][j])].name == "")
                 continue;
-            //if (joints[std::get<0>(j_mf[i][j])].get_first_cutting_type(std::get<1>(j_mf[i][j])) != '2') continue;
+
+            if (joints[std::get<0>(j_mf[i][j])](std::get<1>(j_mf[i][j]), true).size() == 0) continue;
+            if (joints[std::get<0>(j_mf[i][j])](std::get<1>(j_mf[i][j]), false).size() == 0)continue;
 
             //Check hole position
             bool flag =

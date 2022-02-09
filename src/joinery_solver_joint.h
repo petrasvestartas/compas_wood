@@ -1,6 +1,7 @@
 #pragma once
 #include "cgal.h"
 #include <string>
+#include <sstream>
 
 enum cut_types : char {
     nothing = '0',
@@ -42,15 +43,21 @@ public:
     int id_of_global_joint_list = -1;	 //Directs which joint applies where, -1 all cases
     std::vector<double> tile_parameters; //For rebuilding
 
-    std::vector<CGAL_Polyline> m[2];
+    std::array< std::vector<CGAL_Polyline>, 2> m;
     std::vector<char> m_boolean_type; //0 - do not merge, 1 - edge insertion, 2 - hole 3 - insert between multiple edges hole
 
-    std::vector<CGAL_Polyline> f[2];
+    std::array < std::vector<CGAL_Polyline>, 2> f;
     std::vector<char> f_boolean_type; //0 - do not merge, 1 - edge insertion, 2 - hole 3 - insert between multiple edges hole
 
     //if this property is enable, joint volume rectangles are moved within unit_scale_distance, this property is equal to first element thickness
     bool unit_scale = false;
     double unit_scale_distance = 0;
+
+    //Geometrical divisions
+    double shift = 0.5;
+    int divisions = 1;
+    double length = 1;
+    bool compute_geometrical_divisions = true;
 
     /////////////////////////////////////////////////////////////////////////////////////////
     //Constructors
@@ -105,8 +112,57 @@ public:
             std::swap(f[0], f[1]);
     }
 
+    std::string get_key() {
+        std::string key_0 = name;
+        std::string key_1 = std::to_string((shift + 0.000000001));
+        key_1 = key_1.substr(0, key_1.find(".") + 3);
+        std::string key_2 = std::to_string((divisions + 0.000000001));
+        key_2 = key_2.substr(0, key_2.find(".") + 3);
+        std::string joining = ";";
+        std::string key;
+
+        key.reserve(key_0.size() + joining.size() + key_1.size() + joining.size() + key_2.size() + 1);
+        key += key_0;
+        key += joining;
+        key += key_1;
+        key += joining;
+        key += key_2;
+
+        //std::stringstream ss;
+        //ss << key_0 << key_1 << key_2;
+        //std::string key = ss.str();
+
+        //printf("\n%s", key_0);
+        //printf("\n%s", key_1);
+        //printf("\n%s", key_2);
+        //printf("\n%s\n", key.c_str());
+
+        return key;
+    }
+
     void transform(CGAL::Aff_transformation_3<IK>& xform0, CGAL::Aff_transformation_3<IK>& xform1); //Custom user transformation
-    bool orient_to_connection_area();																//Orient to connection area if rectangles are set
+
+    bool orient_to_connection_area();	//Orient to connection area if rectangles are set
+
+    void duplicate_geometry(joint&);
+
+    void transfer_geometry(joint&);
+
+    void get_divisions(double& division_distance) {
+        if (compute_geometrical_divisions) {
+            if (joint_lines[0].size() > 0) {//if joint line exists, we can use that line for the length of the joint
+                length = CGAL::squared_distance(joint_lines[0][0], joint_lines[0][1]); // Math.Abs(500);
+                //printf("\n EDGE LENGTH\n");
+                //CGAL_Debug(length);
+                //printf("\n EDGE LENGTH\n");
+                //CGAL_Debug(length);
+                divisions = (int)std::ceil(length / (division_distance * division_distance));
+                //CGAL_Debug(divisions);
+                divisions = (int)std::max(1, std::min(100, divisions));
+                //CGAL_Debug(divisions);
+            }
+        }
+    }
 };
 
 inline joint::joint() {
@@ -339,4 +395,82 @@ inline bool joint::orient_to_connection_area() {
     transform(xform0, xform1);
 
     return flag0 && flag1;
+}
+
+inline void joint::duplicate_geometry(joint& new_joint) {
+    //Transfer geometrical information from current to new_joint
+    //Duplicate is needed to store geometrical data, not adjacency, to reduce creation time
+    new_joint.name = this->name;
+    new_joint.shift = this->shift;
+    new_joint.divisions = this->divisions;
+    new_joint.length = this->length;
+
+    new_joint.m = this->m;
+    new_joint.f = this->f;
+    new_joint.m_boolean_type = this->m_boolean_type;
+    new_joint.f_boolean_type = this->f_boolean_type;
+
+    /* for (int i = 0; i < m.size(); i++) {
+         for (int j = 0; j < m[i].size(); j++) {
+             new_joint.m[i].emplace_back(CGAL_Polyline());
+             new_joint.m[i].back().reserve(this->m[i].size());
+             for (auto& p : this->m[i][j])
+                 new_joint.m[i].back().emplace_back(p);
+         }
+     }
+
+     for (int i = 0; i < f.size(); i++) {
+         for (int j = 0; j < f[i].size(); j++) {
+             new_joint.f[i].emplace_back(CGAL_Polyline());
+             new_joint.f[i].back().reserve(this->f[i].size());
+             for (auto& p : this->f[i][j])
+                 new_joint.f[i].back().emplace_back(p);
+         }
+     }
+
+     new_joint.m_boolean_type.reserve(m_boolean_type.size());
+     for (size_t i = 0; i < m_boolean_type.size(); i++)
+         new_joint.m_boolean_type.emplace_back(this->m_boolean_type[i]);
+
+     new_joint.f_boolean_type.reserve(f_boolean_type.size());
+     for (size_t i = 0; i < f_boolean_type.size(); i++)
+         new_joint.f_boolean_type.emplace_back(this->f_boolean_type[i]);*/
+}
+
+inline void joint::transfer_geometry(joint& geo_joint) {
+    //Transfer geometrical information from geo_joint to this joint
+    this->name = geo_joint.name;
+    this->shift = geo_joint.shift;
+    this->divisions = geo_joint.divisions;
+    this->length = geo_joint.length;
+    this->m = geo_joint.m;
+    this->f = geo_joint.f;
+    this->m_boolean_type = geo_joint.m_boolean_type;
+    this->f_boolean_type = geo_joint.f_boolean_type;
+
+    /*for (int i = 0; i < geo_joint.m.size(); i++) {
+        for (int j = 0; j < geo_joint.m[i].size(); j++) {
+            this->m[i].emplace_back(CGAL_Polyline());
+            this->m[i].back().reserve(geo_joint.m[i].size());
+            for (auto& p : geo_joint.m[i][j])
+                this->m[i].back().emplace_back(p);
+        }
+    }
+
+    for (int i = 0; i < geo_joint.f.size(); i++) {
+        for (int j = 0; j < geo_joint.f[i].size(); j++) {
+            this->f[i].emplace_back(CGAL_Polyline());
+            this->f[i].back().reserve(geo_joint.f[i].size());
+            for (auto& p : geo_joint.f[i][j])
+                this->f[i].back().emplace_back(p);
+        }
+    }
+
+    this->m_boolean_type.reserve(geo_joint.m_boolean_type.size());
+    for (size_t i = 0; i < geo_joint.m_boolean_type.size(); i++)
+        this->m_boolean_type.emplace_back(geo_joint.m_boolean_type[i]);
+
+    this->f_boolean_type.reserve(geo_joint.f_boolean_type.size());
+    for (size_t i = 0; i < geo_joint.f_boolean_type.size(); i++)
+        this->f_boolean_type.emplace_back(geo_joint.f_boolean_type[i]);*/
 }

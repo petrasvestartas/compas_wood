@@ -156,6 +156,14 @@ namespace cgal_mesh_util {
 
         if (v != vertex_count) {
             top_outline_face_vertex_indices = std::vector<int>(0);
+
+            //for (int i = 0; i < polylines_with_holes.size(); i += 2) {
+            //    CGAL_Debug(999);
+            //    for (int j = 0; j < polylines_with_holes[i].size() - 1; j++) {
+            //        CGAL_Debug(polylines_with_holes[i][j]);
+            //    }
+            //}
+
             return;
         }
 

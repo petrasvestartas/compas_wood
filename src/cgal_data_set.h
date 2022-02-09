@@ -5,9 +5,7 @@
 //https://doc.cgal.org/latest/Box_intersection_d/index.html#Chapter_Intersecting_Sequences_of_dD_Iso-oriented_Boxes
 //https://gist.github.com/afabri/827106024fd6b89fbacd6b2bbb7b3f94
 
-inline std::vector<CGAL_Polyline> list_of_polyline_curves()
-{
-
+inline std::vector<CGAL_Polyline> list_of_polyline_curves() {
     std::vector<CGAL_Polyline> polylines;
 
     CGAL_Polyline p0{

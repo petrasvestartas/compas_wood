@@ -1109,8 +1109,9 @@ inline void rtree_search(
     int search_type,
 
     //Output
-    std::vector<joint>& joints,
-    std::unordered_map<uint64_t, int>& joints_map) {
+    std::vector<int>& result) {
+    //std::vector<joint>& joints,
+    //std::unordered_map<uint64_t, int>& joints_map) {
     //////////////////////////////////////////////////////////////////////////////
     // Create RTree
     //////////////////////////////////////////////////////////////////////////////
@@ -1130,7 +1131,7 @@ inline void rtree_search(
     //////////////////////////////////////////////////////////////////////////////
     // Search Closest Boxes | Skip duplicates pairs | Perform callback with OBB
     //////////////////////////////////////////////////////////////////////////////
-    std::vector<int> result;
+
     for (int i = 0; i < elements.size(); i++) { //AABB.size()
         //std::vector<int> result;
         auto callback = [&result, i, &elements](int foundValue) -> bool
@@ -1146,6 +1147,26 @@ inline void rtree_search(
         double max[3] = { elements[i].aabb.xmax(), elements[i].aabb.ymax(), elements[i].aabb.zmax() };
         int nhits = tree.Search(min, max, callback); //callback in this method call callback above
     }
+}
+
+inline void adjacency_search(
+    //Input
+    std::vector<element>& elements,
+    int search_type,
+    std::vector<int>& result,
+    //Output
+    std::vector<joint>& joints,
+    std::unordered_map<uint64_t, int>& joints_map)
+
+{
+    //////////////////////////////////////////////////////////////////////////////
+    // Perform Adjacency Search in result is empty
+    //////////////////////////////////////////////////////////////////////////////
+    if (result.size() == 0)
+        rtree_search(elements, search_type, result);
+    //CGAL_Debug(99999999);
+    //CGAL_Debug(result.size());
+    //CGAL_Debug(99999999);
     joints.reserve(result.size());
     joints_map.reserve(result.size());
 
@@ -1239,6 +1260,11 @@ inline void rtree_search(
 
             //CGAL_Debug(1);
             joints_map.emplace(cgal_math_util::unique_from_two_int(el_ids.first, el_ids.second), joint_id);
+            //if ((el_ids.first == 1044 || el_ids.second == 1044) == 1047) {
+            //    CGAL_Debug(el_ids.first);
+            //    CGAL_Debug(el_ids.second);
+            //    CGAL_Debug(cgal_math_util::unique_from_two_int(el_ids.first, el_ids.second));
+            //}
 
             //////////////////////////////////////////////////////////////////////////////////////////////////////
             //Place joint ids and male or female flags to joint list
@@ -1269,9 +1295,6 @@ inline void rtree_search(
             //jointID++;
         }
     }
-
-    //CGAL_Debug(9999999);
-    //CGAL_Debug(joints.size());
 }
 
 #pragma endregion
@@ -1281,9 +1304,12 @@ inline void three_valence_joint_alignment(
     std::vector<std::vector<int>>& out_three_valence_element_indices_and_instruction,
     std::vector<element>& elements,
     std::vector<joint>& joints,
-    std::unordered_map<uint64_t, int>& joints_map,
+    std::unordered_map<uint64_t, int>& joints_map
+    //std::vector<double>& default_parameters_for_four_types,
     //std::vector<std::vector<CGAL_Polyline>>& plines,
-    double division_length) {
+    //double division_distance
+
+) {
     //CGAL_Debug(0);
     //////////////////////////////////////////////////////////////////////////////////////////////////
     //For solving multiple valences (Specific case Annen), only works when only one joint is possible between two unique plates (wont work for plates with subdivided edges)
@@ -1302,29 +1328,78 @@ inline void three_valence_joint_alignment(
 
     for (int i = 0; i < out_three_valence_element_indices_and_instruction.size(); i++) {
         //////////////////////////////////////////////////////////////////////////////////////////////////
-        //get unique key
+        //get unique key, if key does not exist throw out of range exception
         //////////////////////////////////////////////////////////////////////////////////////////////////
-        int id_0 = joints_map[cgal_math_util::unique_from_two_int(out_three_valence_element_indices_and_instruction[i][0], out_three_valence_element_indices_and_instruction[i][1])];
-        int id_1 = joints_map[cgal_math_util::unique_from_two_int(out_three_valence_element_indices_and_instruction[i][2], out_three_valence_element_indices_and_instruction[i][3])];
+        int id_0, id_1;
+        try {
+            id_0 = joints_map.at(cgal_math_util::unique_from_two_int(out_three_valence_element_indices_and_instruction[i][0], out_three_valence_element_indices_and_instruction[i][1]));
+            id_1 = joints_map.at(cgal_math_util::unique_from_two_int(out_three_valence_element_indices_and_instruction[i][2], out_three_valence_element_indices_and_instruction[i][3]));
+        } catch (const std::out_of_range& oor) {
+            printf("\nCPP   FILE %s    METHOD %s   LINE %i     WHAT %s  ", __FILE__, __FUNCTION__, __LINE__, "Out of Range error:", oor.what());
+            continue;
+        }
+
+        //CGAL_Debug(999999);
+        //CGAL_Debug(cgal_math_util::unique_from_two_int(out_three_valence_element_indices_and_instruction[i][2], out_three_valence_element_indices_and_instruction[i][3]));
+
+        //CGAL_Debug(999999);
+        //CGAL_Debug(out_three_valence_element_indices_and_instruction[i][0]);
+        //CGAL_Debug(out_three_valence_element_indices_and_instruction[i][1]);
+        //CGAL_Debug(out_three_valence_element_indices_and_instruction[i][2]);
+        //CGAL_Debug(out_three_valence_element_indices_and_instruction[i][3]);
+
+        //CGAL_Debug(999999);
+        //CGAL_Debug(joints[id_0].v0);
+        //CGAL_Debug(joints[id_0].v1);
+
+        //CGAL_Debug(999999);
+        //CGAL_Debug(joints[id_1].v0);
+        //CGAL_Debug(joints[id_1].v1);
+        //CGAL_Debug(999999);
 
         //////////////////////////////////////////////////////////////////////////////////////////////////
         //Get overlap segment and plane within its normal
         //////////////////////////////////////////////////////////////////////////////////////////////////
         IK::Segment_3 l0(joints[id_0].joint_lines[0][0], joints[id_0].joint_lines[0][1]);
+        //CGAL_Debug(l0[0]);
+        //CGAL_Debug(l0[1]);
 
         IK::Segment_3 l1 = CGAL::has_smaller_distance_to_point(joints[id_0].joint_lines[0][0], joints[id_1].joint_lines[0][0], joints[id_1].joint_lines[0][1])
             ? IK::Segment_3(joints[id_1].joint_lines[0][0], joints[id_1].joint_lines[0][1])
             : IK::Segment_3(joints[id_1].joint_lines[0][1], joints[id_1].joint_lines[0][0]);
 
+        //CGAL_Debug(l1[0]);
+        //CGAL_Debug(l1[1]);
+
         IK::Segment_3 l;
         cgal_polyline_util::line_line_overlap_average_segments(l0, l1, l);
+        double thickness = elements[joints[id_0].v0].thickness;
+        cgal_polyline_util::ExtendLine(l, -thickness, -thickness);
+
+        //CGAL_Debug(l[0]);
+        //CGAL_Debug(l[1]);
 
         //plines.push_back({ l[0] ,l[1] });
+        //////////////////////////////////////////////////////////////////////////////////////////////////
+        //Both sides of joints must have the same alignment else there will be a collision
+        //////////////////////////////////////////////////////////////////////////////////////////////////
+        //double length = l.squared_length();
 
-        double divisions = std::ceil(l.squared_length() / (division_length * division_length));
-        joints[id_0].tile_parameters = { divisions };
-        joints[id_1].tile_parameters = { divisions };
+        //int divisions = (int)std::ceil(length / (division_distance * division_distance));
+        //divisions = (int)std::max(1, std::min(100, divisions));
+        if (joints[id_0].joint_lines->size() > 0) {
+            joints[id_0].joint_lines[0] = CGAL_Polyline{ l[0] ,l[1] };
+            joints[id_1].joint_lines[0] = CGAL_Polyline{ l[0] ,l[1] };
+        }
 
+        //joints[id_0].tile_parameters = { (double)divisions };
+        //joints[id_1].tile_parameters = { (double)divisions };
+        //joints[id_0].length = length;
+        //joints[id_1].length = length;
+        //joints[id_0].divisions = divisions;
+        //joints[id_1].divisions = divisions;
+        //joints[id_0].compute_geometrical_divisions = false;
+        //joints[id_1].compute_geometrical_divisions = false;
         //////////////////////////////////////////////////////////////////////////////////////////////////
         //Construct plane from exisiting joint volume edges
         //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1343,21 +1418,10 @@ inline void three_valence_joint_alignment(
         //Intersect lines with planes
         //////////////////////////////////////////////////////////////////////////////////////////////////
 
-        //CGAL_Debug(cross0);
-        //CGAL_Debug(cross1);
-
-        //if (!CGAL::has_smaller_distance_to_point(IK::Point_3(cross0.hx(), cross0.hy(), cross0.hz()), IK::Point_3(cross1.hx(), cross1.hy(), cross1.hz()), IK::Point_3(-cross1.hx(), -cross1.hy(), -cross1.hz())))
-        //	cross1 = IK::Vector_3(-cross1.hx(), -cross1.hy(), -cross1.hz());
-
         IK::Plane_3 plane0_0(l[0], cross0);
         IK::Plane_3 plane0_1(l[1], cross0);
         IK::Plane_3 plane1_0(l[1], cross1);
         IK::Plane_3 plane1_1(l[0], cross1);
-
-        //plines.push_back({ l[0], l[0] + cross0 });
-        //plines.push_back({ l[1], l[1] + cross0 });
-        //plines.push_back({ l[0], l[0] + cross1 });
-        //plines.push_back({ l[1], l[1] + cross1 });
 
         for (int j = 0; j < 4; j += 2) {
             if (joints[id_0].joint_volumes[j].size() == 0)
@@ -1370,8 +1434,6 @@ inline void three_valence_joint_alignment(
 
             cgal_intersection_util::Plane4LinesIntersection(plane0_0, s0, s1, s2, s3, joints[id_0].joint_volumes[j]);
             cgal_intersection_util::Plane4LinesIntersection(plane0_1, s0, s1, s2, s3, joints[id_0].joint_volumes[j + 1]);
-            //plines.push_back(joints[id_0].joint_volumes[j]);
-            //plines.push_back(joints[id_0].joint_volumes[j+1]);
         }
 
         for (int j = 0; j < 4; j += 2) {
@@ -1398,6 +1460,7 @@ inline void get_connection_zones(
     std::vector<std::vector<IK::Vector_3>>& input_insertion_vectors,
     std::vector<std::vector<int>>& input_joint_types,
     std::vector<std::vector<int>>& input_three_valence_element_indices_and_instruction,
+    std::vector<int>& input_adjacency,
 
     //output
     std::vector<std::vector<CGAL_Polyline>>& plines,
@@ -1412,6 +1475,10 @@ inline void get_connection_zones(
     int triangulate = 0
 
 ) {
+#ifdef DEBUG_MEASURE_TIME
+    auto begin = std::chrono::high_resolution_clock::now();
+#endif
+
     //////////////////////////////////////////////////////////////////////////////
     //Main Properties: elements, joints, joints_map
     //////////////////////////////////////////////////////////////////////////////
@@ -1428,6 +1495,13 @@ inline void get_connection_zones(
     //////////////////////////////////////////////////////////////////////////////
     get_elements(input_polyline_pairs, input_insertion_vectors, input_joint_types, elements);
 
+#ifdef DEBUG_MEASURE_TIME
+    auto end = std::chrono::high_resolution_clock::now();
+    auto elapsed = std::chrono::duration_cast<std::chrono::nanoseconds>(end - begin);
+    printf("Time measured get_elements : %.3f seconds.\n", elapsed.count() * 1e-6);
+    begin = std::chrono::high_resolution_clock::now();
+#endif
+
 #ifdef DEBUG_JOINERY_SOLVER_MAIN
     printf("\nCPP   FILE %s    METHOD %s   LINE %i     WHAT %s %zi ", __FILE__, __FUNCTION__, __LINE__, "Number of elements", elements.size());
 #endif
@@ -1435,22 +1509,51 @@ inline void get_connection_zones(
     //////////////////////////////////////////////////////////////////////////////
     //Create joints, Perform Joint Area Search
     //////////////////////////////////////////////////////////////////////////////
-    rtree_search(elements, search_type, joints, joints_map);
+    //std::vector<int> neighbours;
+
+    adjacency_search(elements, search_type, input_adjacency, joints, joints_map);
+
+#ifdef DEBUG_MEASURE_TIME
+    end = std::chrono::high_resolution_clock::now();
+    elapsed = std::chrono::duration_cast<std::chrono::nanoseconds>(end - begin);
+    printf("Time measured adjacency_search : %.3f seconds.\n", elapsed.count() * 1e-6);
+    begin = std::chrono::high_resolution_clock::now();
+#endif
+
+    //printf("\nCPP   FILE %s    METHOD %s   LINE %i     WHAT     input_adjacency %zi Joints %zi \n", __FILE__, __FUNCTION__, __LINE__, input_adjacency.size(), joints.size());
+    //CGAL_Debug(99999);
+    //for (auto& id : input_adjacency)
+    //    CGAL_Debug(id);
+    //CGAL_Debug(99999);
 
 #ifdef DEBUG_JOINERY_SOLVER_MAIN
-    printf("\nCPP   FILE %s    METHOD %s   LINE %i     WHAT %s %zi ", __FILE__, __FUNCTION__, __LINE__, "Joints", joints.size());
+    printf("\nCPP   FILE %s    METHOD %s   LINE %i     WHAT %s %zi  %s output_type %i", __FILE__, __FUNCTION__, __LINE__, "Joints", joints.size(), "Output_type", output_type);
 #endif
 
     //////////////////////////////////////////////////////////////////////////////
     //3-valence joints
     //////////////////////////////////////////////////////////////////////////////
     if (input_three_valence_element_indices_and_instruction.size() > 0)
-        three_valence_joint_alignment(input_three_valence_element_indices_and_instruction, elements, joints, joints_map, division_distance); //plines,
+        three_valence_joint_alignment(input_three_valence_element_indices_and_instruction, elements, joints, joints_map);// default_parameters_for_joint_types); //plines,
+
+#ifdef DEBUG_MEASURE_TIME
+    end = std::chrono::high_resolution_clock::now();
+    elapsed = std::chrono::duration_cast<std::chrono::nanoseconds>(end - begin);
+    printf("Time measured three_valence_joint_alignment: %.3f seconds.\n", elapsed.count() * 1e-6);
+    begin = std::chrono::high_resolution_clock::now();
+#endif
 
     ////////////////////////////////////////////////////////////////////////////////
     //Create and Align Joints 1. Iterate type 2. Select joint based on not/given user joint_type
     ////////////////////////////////////////////////////////////////////////////////
     joint_library::construct_joint_by_index(elements, joints, division_distance, shift, default_parameters_for_joint_types);
+
+#ifdef DEBUG_MEASURE_TIME
+    end = std::chrono::high_resolution_clock::now();
+    elapsed = std::chrono::duration_cast<std::chrono::nanoseconds>(end - begin);
+    printf("Time measured construct_joint_by_index: %.3f seconds.\n", elapsed.count() * 1e-6);
+    begin = std::chrono::high_resolution_clock::now();
+#endif
 
 #ifdef DEBUG_JOINERY_SOLVER_MAIN
     printf("\nCPP   FILE %s    METHOD %s   LINE %i     WHAT %s  ", __FILE__, __FUNCTION__, __LINE__, "construct_joint_by_index");
@@ -1479,13 +1582,29 @@ inline void get_connection_zones(
 
                 try {
                     elements[i].merge_joints(joints, plines);
-                    //elements[i].get_joints_geometry_as_closed_polylines_replacing_edges(joints, plines);
-                } catch (...) {
-                    printf("\nCPP   FILE %s    METHOD %s   LINE %i     WHAT %s  %i ", __FILE__, __FUNCTION__, __LINE__, "boost::current_exception_diagnostic_information()", i);
-                }
+                } catch (const std::overflow_error& e) {
+                    printf("\nCPP   FILE %s    METHOD %s   LINE %i     WHAT %s  ", __FILE__, __FUNCTION__, __LINE__, "this executes if f() throws std::overflow_error(same type rule)");
+                } // this executes if f() throws std::overflow_error (same type rule)
+                catch (const std::runtime_error& e) {
+                    printf("\nCPP   FILE %s    METHOD %s   LINE %i     WHAT %s  ", __FILE__, __FUNCTION__, __LINE__, "this executes if f() throws std::underflow_error (base class rule)");
+                } // this executes if f() throws std::underflow_error (base class rule)
+                catch (const std::exception& e) {
+                    printf("\nCPP   FILE %s    METHOD %s   LINE %i     WHAT %s  ", __FILE__, __FUNCTION__, __LINE__, " this executes if f() throws std::logic_error (base class rule)");
+                } // this executes if f() throws std::logic_error (base class rule)
+                catch (...) {
+                    printf("\nCPP   FILE %s    METHOD %s   LINE %i     WHAT %s  ", __FILE__, __FUNCTION__, __LINE__, " // this executes if f() throws std::string or int or any other unrelated type");
+                } // this executes if f() throws std::string or int or any other unrelated type
+
                 break;
         }
     }
+
+#ifdef DEBUG_MEASURE_TIME
+    end = std::chrono::high_resolution_clock::now();
+    elapsed = std::chrono::duration_cast<std::chrono::nanoseconds>(end - begin);
+    printf("Time measured merge joints: %.3f seconds.\n", elapsed.count() * 1e-6);
+    begin = std::chrono::high_resolution_clock::now();
+#endif
 
 #ifdef DEBUG_JOINERY_SOLVER_MAIN
     printf("\nCPP   FILE %s    METHOD %s   LINE %i     WHAT %s  ", __FILE__, __FUNCTION__, __LINE__, "merge_joints");

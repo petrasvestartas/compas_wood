@@ -58,6 +58,8 @@ def display(
         version="120",
     )
 
+    viewer.view.camera.fov = 10
+
     # preview
     if input is not None:
         display_polylines(
@@ -213,6 +215,8 @@ def display_mesh(viewer, input, scale=0.01, r=0.0, g=0.0, b=0.0, t=1):
     y = input.transformed(
         cg.transformations.scale.matrix_from_scale_factors([scale, scale, scale])
     )
+    # viewer.add(y, hide_coplanaredges=False)
+
     viewer.add(
         y,
         facecolor=(r, g, b),
@@ -220,6 +224,6 @@ def display_mesh(viewer, input, scale=0.01, r=0.0, g=0.0, b=0.0, t=1):
         show_edges=True,
         opacity=0.5,
         linewidth=1,
-        hide_coplanaredges=False,
+        hide_coplanaredges=True,
         show_faces=True,
     )

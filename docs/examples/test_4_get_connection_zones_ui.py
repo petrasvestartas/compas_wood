@@ -21,7 +21,7 @@ viewer.view.camera.far = 100000
 # viewer.view.camera.tz = -10
 # viewer.view.camera.rz = 0
 # viewer.view.camera.rx = -20
-type_id = 23
+type_id = 43
 shift = 0.5
 divisions_distance = 1000
 result = []
@@ -139,6 +139,7 @@ available_joints = {
     54: "vda_1",
     55: "vda_2",
     56: "bad_input_0",
+    57: "annen_three_boxes",
 }
 for i, text in available_joints.items():
 
@@ -378,11 +379,39 @@ def add_joint_geometry(type, division_dist=1000, shift=0.6):
         input = data_set_plates.ss_24()
         result = get_connection_zones(input, None, None, None, None, 0)
     elif type == 43:
+
+        division_length = 300
+        joint_parameters = [
+            division_length,
+            0.5,
+            9,
+            division_length * 1.5,
+            0.65,
+            10,
+            division_length,
+            0.5,
+            21,
+            division_length,
+            0.5,
+            30,
+            division_length,
+            0.5,
+            40,
+            division_length,
+            0.5,
+            15,
+        ]
+
         result = get_connection_zones(
             data_set_plates.annen_small_polylines(),
             data_set_plates.annen_small_edge_directions(),
             data_set_plates.annen_small_edge_joints(),
             data_set_plates.annen_small_three_valance_element_indices_and_instruction(),
+            joint_parameters,
+            0,
+            300,
+            0.6,
+            4,
         )
     elif type == 44:
         input = data_set_plates.ss_25()
@@ -423,6 +452,33 @@ def add_joint_geometry(type, division_dist=1000, shift=0.6):
     elif type == 56:
         input = data_set_plates.bad_input_0()
         result = get_connection_zones(input, None, None, None, None, 1)
+    elif type == 57:
+        input = data_set_plates.annen_three_boxes()
+
+        division_length = 300
+        joint_parameters = [
+            division_length,
+            0.5,
+            9,
+            division_length * 1.5,
+            0.65,
+            10,
+            division_length,
+            0.5,
+            21,
+            division_length,
+            0.5,
+            30,
+            division_length,
+            0.5,
+            40,
+            division_length,
+            0.5,
+            15,
+        ]
+        result = get_connection_zones(
+            input, None, None, None, joint_parameters, 0, 20, 0.6, 4
+        )
     result_flat_list = [item for sublist in result for item in sublist]
 
     # Generate connections
@@ -461,7 +517,7 @@ def add_joint_geometry(type, division_dist=1000, shift=0.6):
     plines0_collection = Collection(plines0)
     plines1_collection = Collection(plines1)
 
-    viewer.add(plines0_collection, linewidth=4, color=[0, 104 / 255, 219 / 255])
+    viewer.add(plines0_collection, linewidth=3, color=[0, 104 / 255, 219 / 255])
     viewer.add(plines1_collection, linewidth=2, color=[0, 104 / 255, 219 / 255])
 
     # 1 2 9   10 11 12 19   20 21 22 23 29   30 31 39    49    59
@@ -474,7 +530,7 @@ def display_polyline(viewer, polyline, scale=0.01, r=0.0, g=0.0, b=0.0, t=1):
 
 
 viewer.view.objects.clear()
-add_joint_geometry(1)
+add_joint_geometry(43)
 
 viewer.view.update()
 viewer.run()

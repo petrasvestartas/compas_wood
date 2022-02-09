@@ -37,6 +37,7 @@ def get_connection_zones(
     face_vectors_XYZ=None,
     face_joints_types_int=None,
     three_valance_element_indices_and_instruction=None,
+    adjacency=None,
     default_joint_parameters=None,
     search_type=2,
     division_distance=300,
@@ -52,6 +53,7 @@ def get_connection_zones(
     face_vectors_XYZ : vectors to orient a joint
     face_joints_types_int : joint id, existing in the code
     three_valance_element_indices_and_instruction : special case e.g. alignment of rectangles
+    adjacency : a list of plate id integer pairs
     search_type : 0 - face-to-face, 1 - plane-to-face (cross), 2 - all
     division_distance : division parameter if tile allows this
     shift : distance value if tile allows this
@@ -75,6 +77,7 @@ def get_connection_zones(
     flat_list_of_face_vectors_XYZ = []
     flat_list_of_face_joints_types_int = []
     flat_list_of_three_valance_element_indices_and_instruction = []
+    flat_list_adjacency = []
     flat_list_default_joint_paramters = [
         1000,
         0.5,
@@ -83,10 +86,10 @@ def get_connection_zones(
         0.5,
         10,
         1000,
-        0.5,
+        0.6,
         20,
         1000,
-        0.5,
+        0.6,
         30,
         1000,
         0.5,
@@ -109,8 +112,6 @@ def get_connection_zones(
     # print(len(face_vectors_XYZ))
     # print(len(face_joints_types_int))
     # print(len(polylines_vertices_XYZ))
-
-    flag2 = three_valance_element_indices_and_instruction is not None
 
     if default_joint_parameters is not None:
         print("COMPAS_WOOD Number of params: " + (str)((len)(default_joint_parameters)))
@@ -136,11 +137,15 @@ def get_connection_zones(
         ):
             flat_list_of_face_joints_types_int.extend(face_joints_types_int[i])
 
-    if flag2:
+    if three_valance_element_indices_and_instruction is not None:
         for i in range(0, len(three_valance_element_indices_and_instruction)):
             flat_list_of_three_valance_element_indices_and_instruction.extend(
                 three_valance_element_indices_and_instruction[i]
             )
+
+    if adjacency is not None:
+        for i in range(0, len(adjacency)):
+            flat_list_adjacency.extend(adjacency[i])
 
     # ==============================================================================
     # Convert to Numpy
@@ -152,6 +157,7 @@ def get_connection_zones(
     X = np.asarray(
         flat_list_of_three_valance_element_indices_and_instruction, dtype=np.int32
     )
+    A = np.asarray(flat_list_adjacency, dtype=np.int32)
     P = np.asarray(flat_list_default_joint_paramters, dtype=np.float64)
 
     # ==============================================================================
@@ -188,6 +194,7 @@ def get_connection_zones(
         D,
         J,
         X,
+        A,
         P,
         search_type,
         division_distance,
