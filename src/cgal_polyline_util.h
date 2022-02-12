@@ -545,7 +545,7 @@ namespace cgal_polyline_util {
             pline[0] = pline[pline.size() - 1];
     }
 
-    inline void move(CGAL_Polyline& polyline, IK::Vector_3& v) {
+    inline void move(CGAL_Polyline& polyline, const IK::Vector_3& v) {
         CGAL::Aff_transformation_3<IK> T(CGAL::TRANSLATION, v);
         Transform(polyline, T);
     }

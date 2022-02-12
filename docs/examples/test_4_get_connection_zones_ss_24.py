@@ -48,14 +48,14 @@ def test_connection_detection():
         0.5,
         21,
         division_length,
-        0.5,
+        0.95,
         30,
         division_length,
-        0.5,
+        0.95,
         40,
         division_length,
-        0.5,
-        15,
+        0.95,
+        50,
     ]
     # division_length * 1.5,
     result = get_connection_zones(

@@ -1267,7 +1267,9 @@ namespace joint_library {
                     break;
                 case(1):
                     switch (id_representing_joint_name) {
+                        //printf("\nss_e_op_1");
                         case (10):
+
                             ss_e_op_1(jo);
                             break;
                         case (11):

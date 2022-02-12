@@ -1175,12 +1175,18 @@ inline void adjacency_search(
     //////////////////////////////////////////////////////////////////////////////
     int joint_id = 0;
     for (int i = 0; i < result.size(); i += 2) {
+        //CGAL_Debug(result[i], result[i + 1]);
+        if (result[i] > (elements.size() - 1) || result[i + 1] > (elements.size() - 1))
+            continue;
+        //CGAL_Debug(99999999);
+
         CGAL_Polyline joint_area;
         CGAL_Polyline joint_quads[2];
         CGAL_Polyline joint_lines[2];
         CGAL_Polyline joint_volumes_pairA_pairB[4];
 
         std::pair<int, int> el_ids(result[i], result[i + 1]);
+
         std::pair<std::array<int, 2>, std::array<int, 2>> face_ids;
         int type;
 

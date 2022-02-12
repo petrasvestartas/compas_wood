@@ -519,7 +519,7 @@ inline bool element::intersection_closed_and_open_paths_2D(
     } catch (const  std::exception& ex) {
         CGAL_Debug(scale);
         CGAL_Debug(max_coordinate);
-        printf("\nCPP   FILE %s    METHOD %s   LINE %i     WHAT %s  %i ", __FILE__, __FUNCTION__, __LINE__, ex.what());
+        printf("\nCPP   FILE %s    METHOD %s   LINE %i     WHAT %s   ", __FILE__, __FUNCTION__, __LINE__, ex.what());
     }
 
     /////////////////////////////////////////////////////////////////////////////////////

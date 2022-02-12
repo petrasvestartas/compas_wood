@@ -32,17 +32,20 @@ std::vector<RowMatrixXd> result_from_bbox(std::vector<CGAL::Bbox_3> boxes);
 std::vector<CGAL_Polyline> polylines_from_vertices_and_faces(const RowMatrixXd& V, const RowMatrixXi& F);
 
 void polylines_from_vertices_and_faces_and_properties(
+
     const RowMatrixXd& polylines_vertices_XYZ,
     const RowMatrixXi& polylines_vertices_count_int,
     const RowMatrixXd& face_vectors_XYZ,
     const RowMatrixXi& face_joints_types_int,
     const RowMatrixXi& three_valence_element_indices_and_instruction,
+    const RowMatrixXi& adjacency,
     const RowMatrixXd& default_parameters_for_joint_types_matrix,
 
     std::vector<CGAL_Polyline>& out_polyline_pairs,
     std::vector<std::vector<IK::Vector_3>>& out_insertion_vectors,
     std::vector<std::vector<int>>& out_joint_types,
     std::vector<std::vector<int>>& out_three_valence_element_indices_and_instruction,
+    std::vector<int>& out_adjacency,
     std::vector<double>& out_default_parameters_for_joint_types);
 
 std::vector<RowMatrixXd> result_from_polylinesVectorVector(std::vector<std::vector<CGAL_Polyline>> polylines);

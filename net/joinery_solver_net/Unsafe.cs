@@ -1,0 +1,43 @@
+using System;
+using System.Runtime.InteropServices;
+
+namespace joinery_solver_net {
+
+    internal class Unsafe {
+
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        //Basic Method and Examples for PInvoke
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        private const string dllName = "joinery_solver_pinvoke.dll";
+
+        [DllImport(dllName, CallingConvention = CallingConvention.Cdecl)]
+        internal static extern int test_get_square(int n);
+
+        [DllImport(dllName, CallingConvention = CallingConvention.Cdecl)]
+        internal static extern void release_double(IntPtr arr, bool is_array); // release input coordinates
+
+        [DllImport(dllName, CallingConvention = CallingConvention.Cdecl)]
+        internal static extern void release_int(IntPtr arr, bool is_array); //release output indices array
+
+        [DllImport(dllName, CallingConvention = CallingConvention.Cdecl)]
+        internal static extern void test_set_array([MarshalAs(UnmanagedType.LPArray)] double[] coord, int coord_size);
+
+        [DllImport(dllName, CallingConvention = CallingConvention.Cdecl)]
+        internal static extern void test_get_array(ref IntPtr coord_out, ref int coord_size_out);
+
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        //Implementations
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        [DllImport(dllName, CallingConvention = CallingConvention.Cdecl)]
+        internal static extern int pinvoke_get_connection_zones(
+            [MarshalAs(UnmanagedType.LPArray)] int[] f, int f_s, [MarshalAs(UnmanagedType.LPArray)] double[] v, int v_s,
+            [MarshalAs(UnmanagedType.LPArray)] int[] vec_f, int vec_f_s, [MarshalAs(UnmanagedType.LPArray)] double[] vec_v, int vec_v_s,
+            [MarshalAs(UnmanagedType.LPArray)] int[] joint_types_f, int joint_types_f_s, [MarshalAs(UnmanagedType.LPArray)] int[] joint_types_v, int joint_types_v_s,
+            [MarshalAs(UnmanagedType.LPArray)] int[] threevalence_f, int threevalence_f_s, [MarshalAs(UnmanagedType.LPArray)] int[] threevalence_v, int threevalence_v_s,
+            [MarshalAs(UnmanagedType.LPArray)] int[] adjacency_v, int adjacency_v_s,
+            [MarshalAs(UnmanagedType.LPArray)] double[] jointparams_v, int jointparams_v_s,
+            ref IntPtr groups_f, ref int groups_f_s, ref IntPtr out_f, ref int out_f_s, ref IntPtr out_v, ref int out_v_s,
+            int search_type = 1, double division_distance = 300, double shift = 0.6, int output_type = 4, int triangulate = 0
+            );
+    }
+}

@@ -1,0 +1,8 @@
+C:\IBOIS57\_Code\Software\Python\compas_wood\net\bin\joint_solver_net_console.exe.config
+C:\IBOIS57\_Code\Software\Python\compas_wood\net\bin\joint_solver_net_console.exe
+C:\IBOIS57\_Code\Software\Python\compas_wood\net\bin\joint_solver_net_console.pdb
+C:\IBOIS57\_Code\Software\Python\compas_wood\net\joint_solver_net_console\obj\Release\joint_solver_net_console.csproj.AssemblyReference.cache
+C:\IBOIS57\_Code\Software\Python\compas_wood\net\joint_solver_net_console\obj\Release\joint_solver_net_console.csproj.CoreCompileInputs.cache
+C:\IBOIS57\_Code\Software\Python\compas_wood\net\joint_solver_net_console\obj\Release\joint_solver_net_console.exe
+C:\IBOIS57\_Code\Software\Python\compas_wood\net\joint_solver_net_console\obj\Release\joint_solver_net_console.pdb
+C:\IBOIS57\_Code\Software\Python\compas_wood\net\joint_solver_net_console\obj\Release\joint_solver_net_console.csproj.CopyComplete

@@ -1,0 +1,52 @@
+#pragma once
+#include "joinery_solver_main.h"
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//Basic Method and Examples for PInvoke
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+#include<cstdio>
+
+#define PINVOKE extern "C" __declspec(dllexport)
+#define deletePtr(ptr, isArray) if (isArray) {delete[] arr;} else {delete arr;}
+
+PINVOKE int test_get_square(int n);
+
+PINVOKE void release_int(int* arr, bool isArray);
+
+PINVOKE void release_double(double* arr, bool isArray);
+
+PINVOKE void test_set_array(double* coord, int coord_size);
+
+PINVOKE void test_get_array(double*& coord_out, int& coord_size_out);
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//Input Conversion
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+void coord_to_list(int*& f, int& f_s, double*& v, int& v_s, std::vector<CGAL_Polyline>& plines);
+void coord_to_list(int*& f, int& f_s, double*& v, int& v_s, std::vector<std::vector<IK::Vector_3>>& vectorlists);
+void coord_to_list(int*& f, int& f_s, int*& v, int& v_s, std::vector<std::vector<int>>& vectorlists);
+void coord_to_list(int*& v, int& v_s, std::vector<int>& vectorlist);
+void coord_to_list(double*& v, int& v_s, std::vector<double>& vectorlist);
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//Output Conversion
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+void list_to_coord(std::vector<std::vector<CGAL_Polyline>>& output_plines, int*& groups_f, int& groups_f_s, int*& out_f, int& out_f_s, double*& out_v, int& out_v_s);
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//Implementations
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+PINVOKE int pinvoke_get_connection_zones(
+    //input
+    int* f, int f_s, double* v, int v_s,
+    int* vec_f, int vec_f_s, double* vec_v, int vec_v_s,
+    int* jointtypes_f, int jointtypes_f_s, int* jointtypes_v, int jointtypes_v_s,
+    int* threevalence_f, int threevalence_f_s, int* threevalence_v, int threevalence_v_s,
+    int* adjacency_v, int adjacency_v_s,
+    double* jointparams_v, int jointparams_v_s,
+    //output
+    int*& groups_f, int& groups_f_s, int*& out_f, int& out_f_s, double*& out_v, int& out_v_s,
+    //optional inputs
+    int search_type = 1, double division_distance = 300, double shift = 0.6, int output_type = 4, int triangulate = 0
+
+);
