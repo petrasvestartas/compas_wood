@@ -1,6 +1,0 @@
-C:\IBOIS57\_Code\Software\Python\compas_wood\net\joinery_solver_gh\bin\joinery_solver_gh.dll
-C:\IBOIS57\_Code\Software\Python\compas_wood\net\joinery_solver_gh\bin\joinery_solver_gh.pdb
-C:\IBOIS57\_Code\Software\Python\compas_wood\net\joinery_solver_gh\obj\Release\joinery_solver_gh.csproj.CoreCompileInputs.cache
-C:\IBOIS57\_Code\Software\Python\compas_wood\net\joinery_solver_gh\obj\Release\joinery_solver_gh.dll
-C:\IBOIS57\_Code\Software\Python\compas_wood\net\joinery_solver_gh\obj\Release\joinery_solver_gh.pdb
-C:\IBOIS57\_Code\Software\Python\compas_wood\net\joinery_solver_gh\obj\Release\joinery_solver_gh.csproj.AssemblyReference.cache

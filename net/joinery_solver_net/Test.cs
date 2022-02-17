@@ -6,24 +6,27 @@ using System.Threading.Tasks;
 using Rhino.Geometry;
 using Rhino;
 
-namespace joinery_solver_net {
-
-    public static class Test {
-
+namespace joinery_solver_net
+{
+    public static class Test
+    {
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         //Basic Method and Examples for PInvoke
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        public static int get_square(int n) {
+        public static int get_square(int n)
+        {
             return Unsafe.test_get_square(n);
         }
 
-        public static void test_set_coord() {
+        public static void test_set_coord()
+        {
             double[] coord = new double[] { 0.1, 0.2, 0.3 };
             int coord_size = 3;
             Unsafe.test_set_array(coord, coord_size);
         }
 
-        public static void test_get_coord() {
+        public static void test_get_coord()
+        {
             IntPtr coord_out = IntPtr.Zero;
             int coord_size_out = 0;
             Unsafe.test_get_array(ref coord_out, ref coord_size_out);
@@ -38,7 +41,8 @@ namespace joinery_solver_net {
         //Rhino Helpers
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        private static void list_coord(ref List<Rhino.Geometry.Polyline> polylines, out int[] f, out int f_s, out double[] v, out int v_s) {
+        private static void list_coord(ref List<Rhino.Geometry.Polyline> polylines, out int[] f, out int f_s, out double[] v, out int v_s)
+        {
             //f = null;
             //f_s = 0;
             //double[] v = null;
@@ -47,15 +51,18 @@ namespace joinery_solver_net {
             f_s = polylines.Count;
             f = new int[polylines.Count];
 
-            for (int i = 0; i < polylines.Count; i++) {
+            for (int i = 0; i < polylines.Count; i++)
+            {
                 f[i] = polylines[i].Count;
                 v_s += polylines[i].Count * 3;
             }
             v = new double[v_s];
 
             int count = 0;
-            for (int i = 0; i < polylines.Count; i++) {
-                for (int j = 0; j < polylines[i].Count; j++) {
+            for (int i = 0; i < polylines.Count; i++)
+            {
+                for (int j = 0; j < polylines[i].Count; j++)
+                {
                     v[count * 3 + 0] = polylines[i][j].X;
                     v[count * 3 + 1] = polylines[i][j].Y;
                     v[count * 3 + 2] = polylines[i][j].Z;
@@ -64,7 +71,44 @@ namespace joinery_solver_net {
             }
         }
 
-        private static void list_coord(ref Vector3d[][] vectors, out int[] f, out int f_s, out double[] v, out int v_s) {
+        private static void list_coord(ref Polyline[][] polylines, out int[] f, out int f_s, out double[] v, out int v_s)
+        {
+            f_s = 0;
+            v_s = 0;
+            for (int i = 0; i < polylines.Length; i++)
+            {
+                f_s += polylines[i].Length;//number of faces
+                for (int j = 0; j < polylines[i].Length; j++)
+                    v_s += polylines[i][j].Count * 3;//number of vertices
+            }
+            f = new int[f_s];
+            v = new double[v_s];
+
+            //Asign faces
+            int counter = 0;
+            for (int i = 0; i < polylines.Length; i++)
+                for (int j = 0; j < polylines[i].Length; j++)
+                    f[counter++] = polylines[i][j].Count;
+
+            //Assign vertices
+            int count = 0;
+            for (int i = 0; i < polylines.Length; i++)
+            {
+                for (int j = 0; j < polylines[i].Length; j++)
+                {
+                    for (int k = 0; k < polylines[i][j].Count; k++)
+                    {
+                        v[count * 3 + 0] = polylines[i][j][k].X;
+                        v[count * 3 + 1] = polylines[i][j][k].Y;
+                        v[count * 3 + 2] = polylines[i][j][k].Z;
+                        count++;
+                    }
+                }
+            }
+        }
+
+        private static void list_coord(ref Vector3d[][] vectors, out int[] f, out int f_s, out double[] v, out int v_s)
+        {
             //f = null;
             //f_s = 0;
             //double[] v = null;
@@ -73,15 +117,18 @@ namespace joinery_solver_net {
             f_s = vectors.Count();
             f = new int[vectors.Count()];
 
-            for (int i = 0; i < vectors.Count(); i++) {
+            for (int i = 0; i < vectors.Count(); i++)
+            {
                 f[i] = vectors[i].Count();
                 v_s += vectors[i].Count() * 3;
             }
             v = new double[v_s];
 
             int count = 0;
-            for (int i = 0; i < vectors.Count(); i++) {
-                for (int j = 0; j < vectors[i].Count(); j++) {
+            for (int i = 0; i < vectors.Count(); i++)
+            {
+                for (int j = 0; j < vectors[i].Count(); j++)
+                {
                     v[count * 3 + 0] = vectors[i][j].X;
                     v[count * 3 + 1] = vectors[i][j].Y;
                     v[count * 3 + 2] = vectors[i][j].Z;
@@ -90,7 +137,8 @@ namespace joinery_solver_net {
             }
         }
 
-        private static void list_coord(ref List<List<Vector3d>> vectors, out int[] f, out int f_s, out double[] v, out int v_s) {
+        private static void list_coord(ref List<List<Vector3d>> vectors, out int[] f, out int f_s, out double[] v, out int v_s)
+        {
             //f = null;
             //f_s = 0;
             //double[] v = null;
@@ -99,15 +147,18 @@ namespace joinery_solver_net {
             f_s = vectors.Count;
             f = new int[vectors.Count];
 
-            for (int i = 0; i < vectors.Count; i++) {
+            for (int i = 0; i < vectors.Count; i++)
+            {
                 f[i] = vectors[i].Count;
                 v_s += vectors[i].Count * 3;
             }
             v = new double[v_s];
 
             int count = 0;
-            for (int i = 0; i < vectors.Count; i++) {
-                for (int j = 0; j < vectors[i].Count; j++) {
+            for (int i = 0; i < vectors.Count; i++)
+            {
+                for (int j = 0; j < vectors[i].Count; j++)
+                {
                     v[count * 3 + 0] = vectors[i][j].X;
                     v[count * 3 + 1] = vectors[i][j].Y;
                     v[count * 3 + 2] = vectors[i][j].Z;
@@ -116,113 +167,136 @@ namespace joinery_solver_net {
             }
         }
 
-        private static void list_coord(ref int[][] numbers, out int[] f, out int f_s, out int[] v, out int v_s) {
+        private static void list_coord(ref int[][] numbers, out int[] f, out int f_s, out int[] v, out int v_s)
+        {
             v_s = 0;
             f_s = numbers.Count();
             f = new int[numbers.Count()];
 
-            for (int i = 0; i < numbers.Count(); i++) {
+            for (int i = 0; i < numbers.Count(); i++)
+            {
                 f[i] = numbers[i].Count();
                 v_s += numbers[i].Count() * 1;
             }
             v = new int[v_s];
 
             int count = 0;
-            for (int i = 0; i < numbers.Count(); i++) {
-                for (int j = 0; j < numbers[i].Count(); j++) {
+            for (int i = 0; i < numbers.Count(); i++)
+            {
+                for (int j = 0; j < numbers[i].Count(); j++)
+                {
                     v[count * 1 + 0] = numbers[i][j];
                     count++;
                 }
             }
         }
 
-        private static void list_coord(ref List<List<int>> numbers, out int[] f, out int f_s, out int[] v, out int v_s) {
+        private static void list_coord(ref List<List<int>> numbers, out int[] f, out int f_s, out int[] v, out int v_s)
+        {
             v_s = 0;
             f_s = numbers.Count;
             f = new int[numbers.Count];
 
-            for (int i = 0; i < numbers.Count; i++) {
+            for (int i = 0; i < numbers.Count; i++)
+            {
                 f[i] = numbers[i].Count;
                 v_s += numbers[i].Count * 1;
             }
             v = new int[v_s];
 
             int count = 0;
-            for (int i = 0; i < numbers.Count; i++) {
-                for (int j = 0; j < numbers[i].Count; j++) {
+            for (int i = 0; i < numbers.Count; i++)
+            {
+                for (int j = 0; j < numbers[i].Count; j++)
+                {
                     v[count * 1 + 0] = numbers[i][j];
                     count++;
                 }
             }
         }
 
-        private static void list_coord(ref List<int[]> numbers, out int[] f, out int f_s, out int[] v, out int v_s) {
+        private static void list_coord(ref List<int[]> numbers, out int[] f, out int f_s, out int[] v, out int v_s)
+        {
             v_s = 0;
             f_s = numbers.Count;
             f = new int[numbers.Count];
 
-            for (int i = 0; i < numbers.Count; i++) {
+            for (int i = 0; i < numbers.Count; i++)
+            {
                 f[i] = numbers[i].Count();
                 v_s += numbers[i].Count() * 1;
             }
             v = new int[v_s];
 
             int count = 0;
-            for (int i = 0; i < numbers.Count; i++) {
-                for (int j = 0; j < numbers[i].Count(); j++) {
+            for (int i = 0; i < numbers.Count; i++)
+            {
+                for (int j = 0; j < numbers[i].Count(); j++)
+                {
                     v[count * 1 + 0] = numbers[i][j];
                     count++;
                 }
             }
         }
 
-        private static void list_coord(ref List<List<int>> numbers, out int[] v, out int v_s) {
+        private static void list_coord(ref List<List<int>> numbers, out int[] v, out int v_s)
+        {
             v_s = 0;
 
-            for (int i = 0; i < numbers.Count; i++) {
+            for (int i = 0; i < numbers.Count; i++)
+            {
                 v_s += numbers[i].Count * 1;
             }
             v = new int[v_s];
 
             int count = 0;
-            for (int i = 0; i < numbers.Count; i++) {
-                for (int j = 0; j < numbers[i].Count; j++) {
+            for (int i = 0; i < numbers.Count; i++)
+            {
+                for (int j = 0; j < numbers[i].Count; j++)
+                {
                     v[count * 1 + 0] = numbers[i][j];
                     count++;
                 }
             }
         }
 
-        private static void list_coord(ref List<int[]> numbers, out int[] v, out int v_s) {
+        private static void list_coord(ref List<int[]> numbers, out int[] v, out int v_s)
+        {
             v_s = 0;
 
-            for (int i = 0; i < numbers.Count; i++) {
+            for (int i = 0; i < numbers.Count; i++)
+            {
                 v_s += numbers[i].Count() * 1;
             }
             v = new int[v_s];
 
             int count = 0;
-            for (int i = 0; i < numbers.Count; i++) {
-                for (int j = 0; j < numbers[i].Count(); j++) {
+            for (int i = 0; i < numbers.Count; i++)
+            {
+                for (int j = 0; j < numbers[i].Count(); j++)
+                {
                     v[count * 1 + 0] = numbers[i][j];
                     count++;
                 }
             }
         }
 
-        private static void list_coord(ref List<double> numbers, out double[] f, out int f_s) {
+        private static void list_coord(ref List<double> numbers, out double[] f, out int f_s)
+        {
             f_s = numbers.Count;
             f = System.Linq.Enumerable.ToArray(numbers);
         }
 
-        private static void list_coord(ref List<int> numbers, out int[] f, out int f_s) {
+        private static void list_coord(ref List<int> numbers, out int[] f, out int f_s)
+        {
             f_s = numbers.Count;
             f = System.Linq.Enumerable.ToArray(numbers);
         }
 
-        private static void coord_list(ref IntPtr groups_f, ref IntPtr out_f, ref IntPtr out_v, ref int groups_f_s, ref int out_f_s, ref int out_v_s, ref Polyline[][] polylines) {
+        private static void coord_list(ref IntPtr groups_f, ref IntPtr out_f, ref IntPtr out_v, ref int groups_f_s, ref int out_f_s, ref int out_v_s, ref Polyline[][] polylines)
+        {
             //transfer data from c++
-            Console.WriteLine(groups_f_s.ToString());
+            //Console.WriteLine(groups_f_s.ToString());
             int[] sharp_groups_f = new int[groups_f_s];
             int[] sharp_out_f = new int[out_f_s];
             double[] sharp_out_v = new double[out_v_s];
@@ -237,41 +311,48 @@ namespace joinery_solver_net {
             polylines = new Polyline[groups_f_s][];
 
             int face_count = 0;
-            for (int i = 0; i < groups_f_s; i++) {
+            for (int i = 0; i < groups_f_s; i++)
+            {
                 polylines[i] = new Polyline[sharp_groups_f[i]];
-                Console.WriteLine();
-                Console.WriteLine(sharp_groups_f[i].ToString());
+                //Console.WriteLine();
+                //Console.WriteLine(sharp_groups_f[i].ToString());
 
-                for (int j = 0; j < sharp_groups_f[i]; j++) {
+                for (int j = 0; j < sharp_groups_f[i]; j++)
+                {
                     polylines[i][j] = new Polyline(sharp_out_f[face_count]);
-                    Console.WriteLine(sharp_out_f[face_count]);
+                    //Console.WriteLine(sharp_out_f[face_count]);
                     face_count++;
                 }
             }
 
-            Console.WriteLine();
+            //Console.WriteLine();
             //fill polylines with points
             int a = 0;
             int b = 0;
             int pline_count = 0;
-            for (int i = 0; i < sharp_out_v.Length; i += 3) {
-                Console.WriteLine(sharp_out_v[i + 0].ToString());
-                Console.WriteLine(sharp_out_v[i + 1].ToString());
-                Console.WriteLine(sharp_out_v[i + 2].ToString());
+            for (int i = 0; i < sharp_out_v.Length; i += 3)
+            {
+                //Console.WriteLine(sharp_out_v[i + 0].ToString());
+                //Console.WriteLine(sharp_out_v[i + 1].ToString());
+                //Console.WriteLine(sharp_out_v[i + 2].ToString());
                 polylines[a][b].Add(sharp_out_v[i + 0], sharp_out_v[i + 1], sharp_out_v[i + 2]);
 
-                if (polylines[a][b].Count() == sharp_out_f[pline_count]) {//check if the current polyline is filled
-                    if (b == (sharp_groups_f[a] - 1)) {//number of current polylines == group count index
-                        Console.WriteLine("");
-                        Console.WriteLine("New group");
-                        Console.WriteLine("");
+                if (polylines[a][b].Count() == sharp_out_f[pline_count])
+                {//check if the current polyline is filled
+                    if (b == (sharp_groups_f[a] - 1))
+                    {//number of current polylines == group count index
+                        //Console.WriteLine("");
+                        //Console.WriteLine("New group");
+                        //Console.WriteLine("");
                         //New group
                         a++;
                         b = 0;
-                    } else {
-                        Console.WriteLine("");
-                        Console.WriteLine("Next polyline");
-                        Console.WriteLine("");
+                    }
+                    else
+                    {
+                        //Console.WriteLine("");
+                        //Console.WriteLine("Next polyline");
+                        //Console.WriteLine("");
                         //Or Next polyline
                         b++;
                     }
@@ -330,7 +411,9 @@ namespace joinery_solver_net {
             int output_type = 4,
             int triangulate = 0
 
-            ) {
+            )
+        {
+            var watch = new System.Diagnostics.Stopwatch();
             /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
             //Input
             /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -338,19 +421,24 @@ namespace joinery_solver_net {
             /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
             //Convert polylines to coordinate array
             /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            watch.Start();
             list_coord(ref data.polylines, out int[] f, out int f_s, out double[] v, out int v_s);
             list_coord(ref data.face_vectors, out int[] vec_f, out int vec_f_s, out double[] vec_v, out int vec_v_s);
             list_coord(ref data.joints_types, out int[] jointtypes_f, out int jointtypes_f_s, out int[] jointtypes_v, out int jointtypes_v_s);
             list_coord(ref data.three_valence, out int[] threevalence_f, out int threevalence_f_s, out int[] threevalence_v, out int threevalence_v_s);
             list_coord(ref data.adjacency, out int[] adjacency_v, out int adjacency_v_s);
             list_coord(ref jointparams, out double[] jointparams_v, out int jointparams_v_s);
+            watch.Stop();
+
+            // RhinoApp.WriteLine(watch.ElapsedMilliseconds.ToString());
+            watch.Reset();
             /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
             //Run the method
             /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            watch.Start();
             IntPtr coord_out = IntPtr.Zero;
             int coord_size_out = 0;
             Unsafe.test_get_array(ref coord_out, ref coord_size_out);
-            Console.WriteLine(search_type);
 
             IntPtr groups_f = IntPtr.Zero, out_f = IntPtr.Zero, out_v = IntPtr.Zero;
             int groups_f_s = 0, out_f_s = 0, out_v_s = 0;
@@ -367,12 +455,19 @@ namespace joinery_solver_net {
 
             if (r == 0)
                 return;
+            watch.Stop();
 
+            //RhinoApp.WriteLine(watch.ElapsedMilliseconds.ToString());
+            watch.Reset();
             /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
             //Convert arrays to data
             /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
+            watch.Start();
             coord_list(ref groups_f, ref out_f, ref out_v, ref groups_f_s, ref out_f_s, ref out_v_s, ref polylines);
+            watch.Stop();
+
+            //RhinoApp.WriteLine(watch.ElapsedMilliseconds.ToString());
+            watch.Reset();
             /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
             //OUTPUT
             /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

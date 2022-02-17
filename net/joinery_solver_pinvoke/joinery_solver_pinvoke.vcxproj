@@ -32,7 +32,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <OutDir>C:\IBOIS57\_Code\Software\Python\compas_wood\net\bin</OutDir>
+    <OutDir>C:\Users\petra\AppData\Roaming\Grasshopper\Libraries\compas_wood</OutDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>

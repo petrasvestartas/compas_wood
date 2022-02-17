@@ -1,24 +1,25 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{A5DDEF19-788A-4C65-8A2F-46C9E63D1E45}</ProjectGuid>
+    <ProjectGuid>{A64F2A86-3B31-406C-81FC-ADC7D5891688}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>joinery_solver_gh</RootNamespace>
     <AssemblyName>joinery_solver_gh</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <IsWebBootstrapper>false</IsWebBootstrapper>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\</OutputPath>
+    <OutputPath>..\..\..\..\..\..\..\Users\petra\AppData\Roaming\Grasshopper\Libraries\compas_wood\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisIgnoreBuiltInRules>false</CodeAnalysisIgnoreBuiltInRules>
@@ -56,9 +57,75 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="joinerysolverghComponent.cs" />
+    <Compile Include="display_assembly_sequence_component.cs" />
+    <Compile Include="case_1_chevron.cs" />
+    <Compile Include="case_1_chevron_component.cs" />
+    <Compile Include="case_1_chevron_plates_component.cs" />
+    <Compile Include="display_loft_mesh_component.cs" />
+    <Compile Include="input_connection_params_component.cs" />
+    <Compile Include="input_get_component.cs" />
+    <Compile Include="input_set_component.cs" />
     <Compile Include="joinery_solver_ghInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="solver_component.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\icons_compas_wood.ai" />
+    <None Include="Resources\insertion_sequence.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\joint_params.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\loft.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\solver_1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\solver_2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\annen_chevron.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\annen_plates.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\compas_wood.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\data_get.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\data_set.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\Raccoon_Litter_Box\joinery_solver\rhino_util\rhino_util.csproj">
+      <Project>{6ca5430f-93cf-4933-9d3a-3b5d1596adff}</Project>
+      <Name>rhino_util</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\joinery_solver_net\joinery_solver_net.csproj">
+      <Project>{12735e36-9859-4c02-b754-3a756fd1cd62}</Project>
+      <Name>joinery_solver_net</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\insertion_direction_edge.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\insertion_direction_element.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -2,7 +2,7 @@
 <Project>
   <ProjectOutputs>
     <ProjectOutput>
-      <FullPath>C:\IBOIS57\_Code\Software\Python\compas_wood\net\bin\joinery_solver_pinvoke.dll</FullPath>
+      <FullPath>C:\Users\petra\AppData\Roaming\Grasshopper\Libraries\compas_wood\joinery_solver_pinvoke.dll</FullPath>
     </ProjectOutput>
   </ProjectOutputs>
   <ContentFiles />

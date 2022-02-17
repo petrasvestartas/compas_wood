@@ -1,26 +1,29 @@
-﻿using Grasshopper.Kernel;
+using Grasshopper.Kernel;
 using System;
 using System.Drawing;
 
 namespace joinery_solver_gh {
+
     public class joinery_solver_ghInfo : GH_AssemblyInfo {
+
         public override string Name {
             get {
-                return "joinerysolvergh";
+                return "compas_wood";
             }
         }
+
         public override Bitmap Icon {
             get {
-                //Return a 24x24 pixel bitmap to represent this GHA library.
-                return null;
+                return Properties.Resources.compas_wood;
             }
         }
+
         public override string Description {
             get {
-                //Return a short string describing the purpose of this GHA library.
-                return "";
+                return "https://ibois-epfl.github.io/compas_wood/latest/";
             }
         }
+
         public override Guid Id {
             get {
                 return new Guid("9bb16bc1-9a19-4a99-9f0b-1afee092287d");
@@ -29,14 +32,13 @@ namespace joinery_solver_gh {
 
         public override string AuthorName {
             get {
-                //Return a string identifying you or your company.
-                return "";
+                return "petras_vestartas";
             }
         }
+
         public override string AuthorContact {
             get {
-                //Return a string representing your preferred contact details.
-                return "";
+                return "petrasvestartas@gmail.com";
             }
         }
     }
