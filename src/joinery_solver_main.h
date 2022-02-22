@@ -14,6 +14,7 @@
 
 #include "clipper_util.h"
 #include "rtree.h"
+#include "rtree_util.h"
 
 #include <algorithm>
 #include <thread>
@@ -574,7 +575,8 @@ inline bool face_to_face(
                         //Planes to get a quad
                         if (isLine && joint_line0.squared_length() > GlobalTolerance) { //
                             bool isQuad = cgal_intersection_util::QuadFromLineAndTopBottomPlanes(Plane0[i], joint_line0, Plane0[0], Plane0[1], joint_quads0);
-                        } else {
+                        }
+                        else {
 #ifdef DEBUG_JOINERY_SOLVER_MAIN_LOCAL_SEARCH
                             printf("CPP   IsLine %i joint_line0.squared_length() %f \n", isLine, joint_line0.squared_length());
 #endif
@@ -603,7 +605,8 @@ inline bool face_to_face(
                         //Planes to get a quad
                         if (isLine && joint_line1.squared_length() > GlobalTolerance) { //
                             bool isQuad = cgal_intersection_util::QuadFromLineAndTopBottomPlanes(Plane1[j], joint_line1, Plane1[0], Plane1[1], joint_quads1);
-                        } else {
+                        }
+                        else {
 #ifdef DEBUG_JOINERY_SOLVER_MAIN_LOCAL_SEARCH
                             printf("CPP   IsLine %i joint_line1.squared_length() %f \n", isLine, joint_line1.squared_length());
 #endif
@@ -725,7 +728,8 @@ inline bool face_to_face(
                             ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
                             //Elements are parallel
                             ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                        } else {
+                        }
+                        else {
 #ifdef DEBUG_JOINERY_SOLVER_MAIN_LOCAL_SEARCH
                             printf("Elements are parallel");
 #endif
@@ -765,7 +769,8 @@ inline bool face_to_face(
                             if (dihedralAngle < 20) { //160
                                 //CGAL_Debug(20);
                                 return false;
-                            } else if (dihedralAngle <= 150) { //OUT-OF-PLANE // && jointArea0.size()>0
+                            }
+                            else if (dihedralAngle <= 150) { //OUT-OF-PLANE // && jointArea0.size()>0
 #ifdef DEBUG_JOINERY_SOLVER_MAIN_LOCAL_SEARCH
                                 printf("Out-of-plane");
 #endif
@@ -793,7 +798,8 @@ inline bool face_to_face(
                                     planes[2] = Plane1[0];
                                     planes[3] = Plane0[1];
                                     planes[0] = Plane1[1];
-                                } else {
+                                }
+                                else {
                                     planes[2] = Plane1[1];
                                     planes[3] = Plane0[1];
                                     planes[0] = Plane1[0];
@@ -808,7 +814,8 @@ inline bool face_to_face(
                                 //joint_volumes_pairA_pairB[3] = { joint_volumes_pairA_pairB[1][3],joint_volumes_pairA_pairB[1][0],joint_volumes_pairA_pairB[1][1],joint_volumes_pairA_pairB[1][2] };
 
                                 type = 11;
-                            } else { //IN-PLANE
+                            }
+                            else { //IN-PLANE
 #ifdef DEBUG_JOINERY_SOLVER_MAIN_LOCAL_SEARCH
                                 printf("In-Plane");
 #endif
@@ -846,7 +853,8 @@ inline bool face_to_face(
                                 type = 12;
                             }
                         }
-                    } else if (type == 1) { //top-side
+                    }
+                    else if (type == 1) { //top-side
 #ifdef DEBUG_JOINERY_SOLVER_MAIN_LOCAL_SEARCH
                         printf("CPP Top-side \n");
 #endif
@@ -902,7 +910,8 @@ inline bool face_to_face(
 
                         type = 20;
                         return true;
-                    } else {
+                    }
+                    else {
 #ifdef DEBUG_JOINERY_SOLVER_MAIN_LOCAL_SEARCH
                         printf("CPP Type40\n");
 #endif
@@ -1030,35 +1039,35 @@ inline bool pair_search(
 
     int found_type = 0;
     switch (search_type) {
-        case (0):
+    case (0):
 
-            found_type = face_to_face(
-                beam_volumes_elements[0].polylines, beam_volumes_elements[1].polylines,
-                beam_volumes_elements[0].planes, beam_volumes_elements[1].planes,
-                beam_volumes_elements[0].edge_vectors, beam_volumes_elements[1].edge_vectors,
-                el_ids, face_ids, type,
-                joint_area, joint_lines, joint_volumes_pairA_pairB) ? 1 : 0;
-
-#ifdef DEBUG
-            printf("CPP Found_Type %i\n", found_type);
-#endif
-
-            break;
-
-        case (1):
-
-            found_type = plane_to_face(
-                beam_volumes_elements[0].polylines, beam_volumes_elements[1].polylines,
-                beam_volumes_elements[0].planes, beam_volumes_elements[1].planes,
-                beam_volumes_elements[0].edge_vectors, beam_volumes_elements[1].edge_vectors,
-                el_ids, face_ids, type,
-                joint_area, joint_lines, joint_volumes_pairA_pairB) ? 2 : 0;
+        found_type = face_to_face(
+            beam_volumes_elements[0].polylines, beam_volumes_elements[1].polylines,
+            beam_volumes_elements[0].planes, beam_volumes_elements[1].planes,
+            beam_volumes_elements[0].edge_vectors, beam_volumes_elements[1].edge_vectors,
+            el_ids, face_ids, type,
+            joint_area, joint_lines, joint_volumes_pairA_pairB) ? 1 : 0;
 
 #ifdef DEBUG
-
-            printf("CPP Found_Type %i\n", found_type);
+        printf("CPP Found_Type %i\n", found_type);
 #endif
-            break;
+
+        break;
+
+    case (1):
+
+        found_type = plane_to_face(
+            beam_volumes_elements[0].polylines, beam_volumes_elements[1].polylines,
+            beam_volumes_elements[0].planes, beam_volumes_elements[1].planes,
+            beam_volumes_elements[0].edge_vectors, beam_volumes_elements[1].edge_vectors,
+            el_ids, face_ids, type,
+            joint_area, joint_lines, joint_volumes_pairA_pairB) ? 2 : 0;
+
+#ifdef DEBUG
+
+        printf("CPP Found_Type %i\n", found_type);
+#endif
+        break;
     }
 
     if (found_type == 0)
@@ -1192,55 +1201,55 @@ inline void adjacency_search(
 
         int found_type = 0;
         switch (search_type) {
-            case (0):
-                found_type = face_to_face(
-                    elements[el_ids.first].polylines, elements[el_ids.second].polylines,
-                    elements[el_ids.first].planes, elements[el_ids.second].planes,
-                    elements[el_ids.first].edge_vectors, elements[el_ids.second].edge_vectors,
-                    el_ids, face_ids, type,
-                    joint_area,
-                    joint_lines,
-                    joint_volumes_pairA_pairB
+        case (0):
+            found_type = face_to_face(
+                elements[el_ids.first].polylines, elements[el_ids.second].polylines,
+                elements[el_ids.first].planes, elements[el_ids.second].planes,
+                elements[el_ids.first].edge_vectors, elements[el_ids.second].edge_vectors,
+                el_ids, face_ids, type,
+                joint_area,
+                joint_lines,
+                joint_volumes_pairA_pairB
 
-                ) ? 1 : 0;
+            ) ? 1 : 0;
 
+            break;
+
+        case (1):
+            found_type = plane_to_face(
+                elements[result[i]].polylines, elements[result[i + 1]].polylines,
+                elements[result[i]].planes, elements[result[i + 1]].planes,
+                elements[result[i]].edge_vectors, elements[result[i + 1]].edge_vectors,
+                el_ids, face_ids, type,
+                joint_area, joint_lines, joint_volumes_pairA_pairB
+            ) ? 2 : 0;
+            break;
+
+        case (2):
+
+            bool found_type_temp = face_to_face(
+                elements[el_ids.first].polylines, elements[el_ids.second].polylines,
+                elements[el_ids.first].planes, elements[el_ids.second].planes,
+                elements[el_ids.first].edge_vectors, elements[el_ids.second].edge_vectors,
+                el_ids, face_ids, type,
+                joint_area,
+                joint_lines,
+                joint_volumes_pairA_pairB
+            );
+
+            if (found_type_temp) {
+                found_type = 3;
                 break;
+            }
 
-            case (1):
-                found_type = plane_to_face(
-                    elements[result[i]].polylines, elements[result[i + 1]].polylines,
-                    elements[result[i]].planes, elements[result[i + 1]].planes,
-                    elements[result[i]].edge_vectors, elements[result[i + 1]].edge_vectors,
-                    el_ids, face_ids, type,
-                    joint_area, joint_lines, joint_volumes_pairA_pairB
-                ) ? 2 : 0;
-                break;
-
-            case (2):
-
-                bool found_type_temp = face_to_face(
-                    elements[el_ids.first].polylines, elements[el_ids.second].polylines,
-                    elements[el_ids.first].planes, elements[el_ids.second].planes,
-                    elements[el_ids.first].edge_vectors, elements[el_ids.second].edge_vectors,
-                    el_ids, face_ids, type,
-                    joint_area,
-                    joint_lines,
-                    joint_volumes_pairA_pairB
-                );
-
-                if (found_type_temp) {
-                    found_type = 3;
-                    break;
-                }
-
-                found_type = plane_to_face(
-                    elements[el_ids.first].polylines, elements[el_ids.second].polylines,
-                    elements[el_ids.first].planes, elements[el_ids.second].planes,
-                    elements[el_ids.first].edge_vectors, elements[el_ids.second].edge_vectors,
-                    el_ids, face_ids, type,
-                    joint_area, joint_lines, joint_volumes_pairA_pairB
-                ) ? 3 : 0;
-                break;
+            found_type = plane_to_face(
+                elements[el_ids.first].polylines, elements[el_ids.second].polylines,
+                elements[el_ids.first].planes, elements[el_ids.second].planes,
+                elements[el_ids.first].edge_vectors, elements[el_ids.second].edge_vectors,
+                el_ids, face_ids, type,
+                joint_area, joint_lines, joint_volumes_pairA_pairB
+            ) ? 3 : 0;
+            break;
         }
 
         //CGAL_Debug(" ");
@@ -1340,7 +1349,8 @@ inline void three_valence_joint_alignment(
         try {
             id_0 = joints_map.at(cgal_math_util::unique_from_two_int(out_three_valence_element_indices_and_instruction[i][0], out_three_valence_element_indices_and_instruction[i][1]));
             id_1 = joints_map.at(cgal_math_util::unique_from_two_int(out_three_valence_element_indices_and_instruction[i][2], out_three_valence_element_indices_and_instruction[i][3]));
-        } catch (const std::out_of_range& oor) {
+        }
+        catch (const std::out_of_range& oor) {
             printf("\nCPP   FILE %s    METHOD %s   LINE %i     WHAT %s  ", __FILE__, __FUNCTION__, __LINE__, "Out of Range error:", oor.what());
             continue;
         }
@@ -1571,37 +1581,38 @@ inline void get_connection_zones(
     plines = std::vector<std::vector<CGAL_Polyline>>(elements.size());
     for (int i = 0; i < elements.size(); i++) { //takes 30-50 ms just to copy past polyline geometry
         switch (output_type) {
-            case (0):
-                elements[i].get_joints_geometry(joints, plines, 0);
-                break;
-            case (1):
-                elements[i].get_joints_geometry(joints, plines, 1);
-                break;
-            case (2):
-                elements[i].get_joints_geometry(joints, plines, 2);
-                break;
-            default:
-            case (3):
-                elements[i].get_joints_geometry(joints, plines, 3);
-                break;
-            case (4):
+        case (0):
+            elements[i].get_joints_geometry(joints, plines, 0);
+            break;
+        case (1):
+            elements[i].get_joints_geometry(joints, plines, 1);
+            break;
+        case (2):
+            elements[i].get_joints_geometry(joints, plines, 2);
+            break;
+        default:
+        case (3):
+            elements[i].get_joints_geometry(joints, plines, 3);
+            break;
+        case (4):
 
-                try {
-                    elements[i].merge_joints(joints, plines);
-                } catch (const std::overflow_error& e) {
-                    printf("\nCPP   FILE %s    METHOD %s   LINE %i     WHAT %s  ", __FILE__, __FUNCTION__, __LINE__, "this executes if f() throws std::overflow_error(same type rule)");
-                } // this executes if f() throws std::overflow_error (same type rule)
-                catch (const std::runtime_error& e) {
-                    printf("\nCPP   FILE %s    METHOD %s   LINE %i     WHAT %s  ", __FILE__, __FUNCTION__, __LINE__, "this executes if f() throws std::underflow_error (base class rule)");
-                } // this executes if f() throws std::underflow_error (base class rule)
-                catch (const std::exception& e) {
-                    printf("\nCPP   FILE %s    METHOD %s   LINE %i     WHAT %s  ", __FILE__, __FUNCTION__, __LINE__, " this executes if f() throws std::logic_error (base class rule)");
-                } // this executes if f() throws std::logic_error (base class rule)
-                catch (...) {
-                    printf("\nCPP   FILE %s    METHOD %s   LINE %i     WHAT %s  ", __FILE__, __FUNCTION__, __LINE__, " // this executes if f() throws std::string or int or any other unrelated type");
-                } // this executes if f() throws std::string or int or any other unrelated type
+            try {
+                elements[i].merge_joints(joints, plines);
+            }
+            catch (const std::overflow_error& e) {
+                printf("\nCPP   FILE %s    METHOD %s   LINE %i     WHAT %s  ", __FILE__, __FUNCTION__, __LINE__, "this executes if f() throws std::overflow_error(same type rule)");
+            } // this executes if f() throws std::overflow_error (same type rule)
+            catch (const std::runtime_error& e) {
+                printf("\nCPP   FILE %s    METHOD %s   LINE %i     WHAT %s  ", __FILE__, __FUNCTION__, __LINE__, "this executes if f() throws std::underflow_error (base class rule)");
+            } // this executes if f() throws std::underflow_error (base class rule)
+            catch (const std::exception& e) {
+                printf("\nCPP   FILE %s    METHOD %s   LINE %i     WHAT %s  ", __FILE__, __FUNCTION__, __LINE__, " this executes if f() throws std::logic_error (base class rule)");
+            } // this executes if f() throws std::logic_error (base class rule)
+            catch (...) {
+                printf("\nCPP   FILE %s    METHOD %s   LINE %i     WHAT %s  ", __FILE__, __FUNCTION__, __LINE__, " // this executes if f() throws std::string or int or any other unrelated type");
+            } // this executes if f() throws std::string or int or any other unrelated type
 
-                break;
+            break;
         }
     }
 
@@ -1755,7 +1766,8 @@ inline void beam_volumes(
                 if (b2.info().first > b1.info().first) {
                     flipped = true;
                     id = (uint64_t)b2.info().first << 32 | b1.info().first;
-                } else {
+                }
+                else {
                     flipped = false;
                     id = (uint64_t)b1.info().first << 32 | b2.info().first;
                 }
@@ -1767,7 +1779,8 @@ inline void beam_volumes(
                     //not found
                     pair_collisions.insert(std::make_pair(id, dist_and_segment_ids));
                     pair_collisionslist.push_back(dist_and_segment_ids);
-                } else if (distance < std::get<0>(pair_collisions[id])) {
+                }
+                else if (distance < std::get<0>(pair_collisions[id])) {
                     pair_collisions.insert(std::make_pair(id, dist_and_segment_ids));
                     // found and distance is smaller that before found
                     pair_collisions[id] = dist_and_segment_ids;
@@ -1824,14 +1837,14 @@ inline void beam_volumes(
         auto is_valid_type = [](int sum_of_type0_type1, int allowed_type)
         {
             switch (allowed_type) {
-                case(0):
-                    return sum_of_type0_type1 == 0;
-                case(1):
-                    return sum_of_type0_type1 == 1 || sum_of_type0_type1 == 2;
-                case(-1):
-                    return true;
-                default:
-                    return false;
+            case(0):
+                return sum_of_type0_type1 == 0;
+            case(1):
+                return sum_of_type0_type1 == 1 || sum_of_type0_type1 == 2;
+            case(-1):
+                return true;
+            default:
+                return false;
             }
         };
 
@@ -1839,7 +1852,8 @@ inline void beam_volumes(
             if (allowed_types.size() == 1) {
                 if (!(is_valid_type(type0 + type1, allowed_types[0])))
                     continue;
-            } else if (allowed_types.size() == polylines.size()) {
+            }
+            else if (allowed_types.size() == polylines.size()) {
                 bool allowed_0 = is_valid_type(type0 + type1, allowed_types[std::get<1>(v)]);
                 bool allowed_1 = is_valid_type(type0 + type1, allowed_types[std::get<3>(v)]);
                 if (!(allowed_0 && allowed_1))
@@ -1901,7 +1915,8 @@ inline void beam_volumes(
                     beam_volume[1 + shift][0] = intersection_points[2];
                     beam_volume[1 + shift][3] = intersection_points[3];
                     beam_volume[1 + shift][4] = beam_volume[1 + shift][0];
-                } else {
+                }
+                else {
                     beam_volume[0 + shift][1] = intersection_points[0];
                     beam_volume[0 + shift][2] = intersection_points[1];
 
@@ -1912,7 +1927,8 @@ inline void beam_volumes(
 
             //beam_volume[0] = CGAL_Polyline{ p + v0 ,p + 2 * v0,p + 3 * v0 ,p + 4 * v0,p + 4 * v0 + IK::Vector_3(0,0,10) };
             //beam_volume[2] = CGAL_Polyline{ p + v1 ,p + 2 * v1,p + 3 * v1,p + 4 * v1,p + 4 * v1 + IK::Vector_3(0,0,10) };
-        } else if (type0 + type1 == 1) {
+        }
+        else if (type0 + type1 == 1) {
             //CGAL_Debug(1000);
             //if male vector is oriented from intersection point, the p+v closer rectangle is the cutting plane
             int closer_rect;
@@ -1921,7 +1937,8 @@ inline void beam_volumes(
                 bool closer = CGAL::has_smaller_distance_to_point(p0 + v0, beam_volume[2][0], beam_volume[3][0]);
                 closer_rect = closer ? 2 : 3;
                 farrer_rect = closer ? 3 : 2;
-            } else {
+            }
+            else {
                 bool closer = CGAL::has_smaller_distance_to_point(p1 + v1, beam_volume[0][0], beam_volume[1][0]);
                 closer_rect = closer ? 0 : 1;
                 farrer_rect = closer ? 1 : 0;
@@ -1955,7 +1972,8 @@ inline void beam_volumes(
                 beam_volume[1 + shift][0] = intersection_points[2];
                 beam_volume[1 + shift][3] = intersection_points[3];
                 beam_volume[1 + shift][4] = beam_volume[1 + shift][0];
-            } else {
+            }
+            else {
                 beam_volume[0 + shift][1] = intersection_points[0];
                 beam_volume[0 + shift][2] = intersection_points[1];
 
@@ -2010,23 +2028,23 @@ inline void beam_volumes(
     joints_oriented_polylines = std::vector<std::vector<CGAL_Polyline>>(elements.size());
     for (int i = 0; i < elements.size(); i++) { //takes 30-50 ms just to copy past polyline geometry
         switch (output_type) {
-            case (0):
-                elements[i].get_joints_geometry(joints, joints_oriented_polylines, 0);
-                break;
-            case (1):
-                elements[i].get_joints_geometry(joints, joints_oriented_polylines, 1);
-                break;
-            case (2):
-                elements[i].get_joints_geometry(joints, joints_oriented_polylines, 2);
-                break;
-            default:
-            case (3):
-                elements[i].get_joints_geometry(joints, joints_oriented_polylines, 3);
-                break;
-            case (4):
-                //This does not exist here because boolean cuts are made
-                //elements[i].get_joints_geometry_as_closed_polylines_performing_intersection(joints, plines);
-                break;
+        case (0):
+            elements[i].get_joints_geometry(joints, joints_oriented_polylines, 0);
+            break;
+        case (1):
+            elements[i].get_joints_geometry(joints, joints_oriented_polylines, 1);
+            break;
+        case (2):
+            elements[i].get_joints_geometry(joints, joints_oriented_polylines, 2);
+            break;
+        default:
+        case (3):
+            elements[i].get_joints_geometry(joints, joints_oriented_polylines, 3);
+            break;
+        case (4):
+            //This does not exist here because boolean cuts are made
+            //elements[i].get_joints_geometry_as_closed_polylines_performing_intersection(joints, plines);
+            break;
         }
     }
 #ifdef DEBUG

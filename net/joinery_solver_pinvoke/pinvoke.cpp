@@ -88,6 +88,47 @@ void coord_to_list(int*& f, int& f_s, int*& v, int& v_s, std::vector<std::vector
     }
 }
 
+void coord_to_list(double*& v, int& v_s, std::vector<IK::Segment_3>& vectorlist) {
+    //Sanity check
+    if (v_s == 0) return;
+
+    //Convert Coordinates to vector list
+    vectorlist.reserve((int)(v_s / 6));
+
+    //CGAL_Debug(v_s);
+    //for (size_t i = 0; i < v_s; i++) {
+    //    if (i % 6 == 0) {
+    //        CGAL_Debug(999);
+    //    }
+    //    CGAL_Debug(v[i]);
+    //}
+
+    //CGAL_Debug(999);
+
+    for (size_t i = 0; i < v_s; i += 6) {
+        //CGAL_Debug(v[i * 6 + 0], v[i * 6 + 1], v[i * 6 + 2]);
+        //CGAL_Debug(v[i * 6 + 3], v[i * 6 + 4], v[i * 6 + 5]);
+        vectorlist.emplace_back(
+            IK::Point_3(v[i + 0], v[i + 1], v[i + 2]),
+            IK::Point_3(v[i + 3], v[i + 4], v[i + 5])
+        );
+    }
+}
+
+void coord_to_list(double*& v, int& v_s, std::vector<IK::Point_3>& vectorlist) {
+    //Sanity check
+    if (v_s == 0) return;
+
+    //Convert Coordinates to vector list
+    vectorlist.reserve((int)(v_s / 3));
+
+    for (size_t i = 0; i < v_s; i += 3) {
+        vectorlist.emplace_back(
+            IK::Point_3(v[i + 0], v[i + 1], v[i + 2])
+        );
+    }
+}
+
 void coord_to_list(int*& v, int& v_s, std::vector<int>& vectorlist) {
     //Sanity check
     if (v_s == 0) return;
@@ -154,6 +195,52 @@ void list_to_coord(std::vector<std::vector<CGAL_Polyline>>& output_plines, int*&
     //coord_size_out = 3;
 }
 
+void list_to_coord(std::vector<std::vector<IK::Vector_3>>& output_vectors, int*& out_f, int& out_f_s, double*& out_v, int& out_v_s) {
+    out_f_s = output_vectors.size();
+    out_v_s = 0;
+
+    for (auto& list : output_vectors) {//vectors
+        out_v_s += list.size() * 3;
+    }
+
+    out_f = new int[output_vectors.size()];//number of arrays
+    out_v = new double[out_v_s];//number of coordinates
+
+    int vertex_count = 0;
+    for (int i = 0; i < output_vectors.size(); i++) {
+        out_f[i] = output_vectors[i].size();//number of sub-arrays
+
+        for (int j = 0; j < output_vectors[i].size(); j++) {
+            out_v[vertex_count + 0] = output_vectors[i][j].hx();
+            out_v[vertex_count + 1] = output_vectors[i][j].hy();
+            out_v[vertex_count + 2] = output_vectors[i][j].hz();
+            vertex_count += 3;
+        }
+    }
+}
+
+void list_to_coord(std::vector<std::vector<int>>& output_vectors, int*& out_f, int& out_f_s, int*& out_v, int& out_v_s) {
+    out_f_s = output_vectors.size();
+    out_v_s = 0;
+
+    for (auto& list : output_vectors) {//vectors
+        out_v_s += list.size();
+    }
+
+    out_f = new int[output_vectors.size()];//number of arrays
+    out_v = new int[out_v_s];//number of coordinates
+
+    int vertex_count = 0;
+    for (int i = 0; i < output_vectors.size(); i++) {
+        out_f[i] = output_vectors[i].size();//number of sub-arrays
+
+        for (int j = 0; j < output_vectors[i].size(); j++) {
+            out_v[vertex_count] = output_vectors[i][j];
+            vertex_count++;
+        }
+    }
+}
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //Implementations
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -191,8 +278,8 @@ PINVOKE int pinvoke_get_connection_zones(
     coord_to_list(adjacency_v, adjacency_v_s, input_adjacency);
     //if (jointparams_v_s % 3 == 0)
     coord_to_list(jointparams_v, jointparams_v_s, default_parameters_for_joint_types);
-    for (auto& o : default_parameters_for_joint_types)
-        CGAL_Debug(o);
+    //for (auto& o : default_parameters_for_joint_types)
+        //CGAL_Debug(o);
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //run
@@ -200,7 +287,7 @@ PINVOKE int pinvoke_get_connection_zones(
     groups_f_s = 0;
     out_f_s = 0;
     out_v_s = 0;
-    CGAL_Debug(search_type);
+    //CGAL_Debug(search_type);
     //CGAL_Debug(f_s);
     //CGAL_Debug(v_s);
     std::vector<std::vector<CGAL_Polyline>> output_plines;
@@ -219,54 +306,84 @@ PINVOKE int pinvoke_get_connection_zones(
     //CGAL_Debug(output_plines.size());
     list_to_coord(output_plines, groups_f, groups_f_s, out_f, out_f_s, out_v, out_v_s);
 
-    //printf("\n");
-    //CGAL_Debug(input_insertion_vectors.size());
-    //for (auto& pline : input_insertion_vectors) {
-    //    printf("\n");
-    //    for (auto& p : pline)
-    //        CGAL_Debug(p);
+    return 1;
+}
+
+PINVOKE int pinvoke_find_closest_plateside_to_line(
+    //input - polylines flat list and a flat list of lines
+    int* f, int f_s, double* v, int v_s,
+    double* lines_v, int lines_v_s,
+    //output - jagged array of vectors
+    int*& out_f, int& out_f_s, double*& out_v, int& out_v_s
+) {
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //input_convertion
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    std::vector<CGAL_Polyline> input_polyline_pairs;
+    std::vector<IK::Segment_3> input_insertion_segments;
+
+    coord_to_list(f, f_s, v, v_s, input_polyline_pairs);
+    coord_to_list(lines_v, lines_v_s, input_insertion_segments);
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //run
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    std::vector<std::vector<IK::Vector_3>> output_insertion_vectors;
+
+    rtree_util::find_closest_plateside_to_line(input_polyline_pairs, input_insertion_segments, output_insertion_vectors);
+    //for (int i = 0; i < output_insertion_vectors.size(); i++) {
+    //    CGAL_Debug(0);
+    //    for (int j = 0; j < output_insertion_vectors[i].size(); j++) {
+    //        CGAL_Debug(output_insertion_vectors[i][j]);
+    //    }
     //}
 
-    //printf("\n");
-    //CGAL_Debug(input_polyline_pairs.size());
-    //for (auto& pline : input_polyline_pairs) {
-    //    printf("\n");
-    //    for (auto& p : pline)
-    //        CGAL_Debug(p);
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //output_conversion
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //CGAL_Debug(output_plines.size());
+    list_to_coord(output_insertion_vectors, out_f, out_f_s, out_v, out_v_s);
+
+    return 1;
+}
+
+PINVOKE int pinvoke_find_closest_plateside_to_indexedpoint(
+    //input - polylines flat list and a flat list of lines
+    int* f, int f_s, double* v, int v_s,
+    double* pts_v, int pts_v_s,
+    int* ids_v, int ids_v_s,
+    //output - jagged array of integers, representing joint types
+    int*& out_f, int& out_f_s, int*& out_v, int& out_v_s
+) {
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//input_convertion
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    std::vector<CGAL_Polyline> input_polyline_pairs;
+    std::vector<IK::Point_3> input_joint_pts;
+    std::vector<int> input_joint_ids;
+
+    coord_to_list(f, f_s, v, v_s, input_polyline_pairs);
+    coord_to_list(pts_v, pts_v_s, input_joint_pts);
+    coord_to_list(ids_v, ids_v_s, input_joint_ids);
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //run
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    std::vector<std::vector<int>> output_joint_types;
+
+    rtree_util::find_closest_plateside_to_indexedpoint(input_polyline_pairs, input_joint_pts, input_joint_ids, output_joint_types);
+    //for (int i = 0; i < output_joint_types.size(); i++) {
+    //    CGAL_Debug(0);
+    //    for (int j = 0; j < output_joint_types[i].size(); j++) {
+    //        CGAL_Debug(output_joint_types[i][j]);
+    //    }
     //}
 
-    //printf("\n");
-    //CGAL_Debug(input_joint_types.size());
-    //for (auto& pline : input_joint_types) {
-    //    printf("\n");
-    //    for (auto& p : pline)
-    //        CGAL_Debug(p);
-    //}
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //output_conversion
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //CGAL_Debug(output_plines.size());
+    list_to_coord(output_joint_types, out_f, out_f_s, out_v, out_v_s);
 
-    //printf("\n");
-    //CGAL_Debug(input_three_valence_element_indices_and_instruction.size());
-    //for (auto& pline : input_three_valence_element_indices_and_instruction) {
-    //    printf("\n");
-    //    for (auto& p : pline)
-    //        CGAL_Debug(p);
-    //}
-
-    //printf("\n");
-    //CGAL_Debug(input_adjacency.size());
-    //for (auto& pline : input_adjacency) {
-    //    CGAL_Debug(pline);
-    //}
-
-    //printf("\n");
-    //CGAL_Debug(default_parameters_for_joint_types.size());
-    //for (auto& pline : default_parameters_for_joint_types) {
-    //    CGAL_Debug(pline);
-    //}
-    //printf("\n");
-    //CGAL_Debug(search_type);
-    //CGAL_Debug(division_distance);
-    //CGAL_Debug(shift);
-    //CGAL_Debug(output_type);
-    //CGAL_Debug(triangulate);
     return 1;
 }

@@ -20,13 +20,14 @@ using System.IO;
 //    }
 //}
 
-namespace joint_solver_net_console {
-
-    internal class Program {
-
+namespace joint_solver_net_console
+{
+    internal class Program
+    {
         #region Program static constructor
 
-        static Program() {
+        static Program()
+        {
             Resolver.Initialize();
         }
 
@@ -36,7 +37,8 @@ namespace joint_solver_net_console {
         // include user interface (we just never show the main window). This allows for things
         // like RhinoApp().RunScript to properly run.
         [System.STAThread]
-        private static void Main(string[] args) {
+        private static void Main(string[] args)
+        {
             //Console.WriteLine(joinery_solver_net.Test.get_square(4));
             //joinery_solver_net.Test.test_set_coord();
             //joinery_solver_net.Test.test_get_coord();
@@ -49,54 +51,113 @@ namespace joint_solver_net_console {
             //    };
 
             var polylines = new List<Polyline>() {
-new Polyline{new Point3d(17032.7530566426,2041.83227154561,-4835.73063596581),new Point3d(17094.9673755385,2046.03452535024,-5525.46630859375),new Point3d(17513.3924786418,2879.22900390625,-5525.46630859375),new Point3d(17401.6367556032,2879.22900390625,-4242.99021175908),new Point3d(17032.7530566426,2041.83227154561,-4835.73063596581),},
-new Polyline{new Point3d(17067.7501393799,2023.13252353802,-4829.898636052),new Point3d(17130.4905060312,2027.37030913374,-5525.46630859375),new Point3d(17558.2886628402,2879.22900390625,-5525.46630859375),new Point3d(17444.8713104347,2879.22900390625,-4223.9218375698),new Point3d(17067.7501393799,2023.13252353802,-4829.898636052),},
-new Polyline{new Point3d(16507.7968155834,2322.32849165945,-4923.21063467291),new Point3d(16562.1204181476,2325.99776859774,-5525.46630859375),new Point3d(16839.9497156666,2879.22900390625,-5525.46630859375),new Point3d(16753.1184331296,2879.22900390625,-4529.01582459816),new Point3d(16507.7968155834,2322.32849165945,-4923.21063467291),},
-new Polyline{new Point3d(16542.7938983207,2303.62874365186,-4917.3786347591),new Point3d(16597.6435486403,2307.33355238124,-5525.46630859375),new Point3d(16884.845899865,2879.22900390625,-5525.46630859375),new Point3d(16796.3529879612,2879.22900390625,-4509.94745040889),new Point3d(16542.7938983207,2303.62874365186,-4917.3786347591),},
-new Polyline{new Point3d(17505.6697484159,2879.22900390625,-4148.80370539581),new Point3d(16684.2132066161,2879.22900390625,-4511.10281499199),new Point3d(16435.4244846789,2314.45787580948,-4910.8687384917),new Point3d(17100.3690566873,1959.16266366556,-4800.06074012918),new Point3d(17505.6697484159,2879.22900390625,-4148.80370539581),},
-new Polyline{new Point3d(17509.7231426821,2879.22900390625,-4195.3192762859),new Point3d(16688.2666008823,2879.22900390625,-4557.61838588207),new Point3d(16455.3070643454,2350.39144557014,-4931.94919773148),new Point3d(17120.2516363538,1995.09623342623,-4821.14119936895),new Point3d(17509.7231426821,2879.22900390625,-4195.3192762859),},
-new Polyline{new Point3d(17100.3690566872,1959.16266366542,-4800.0607401291),new Point3d(16435.4244846789,2314.45787580961,-4910.86873849178),new Point3d(16490.8613291635,2318.20234645217,-5525.46630859375),new Point3d(17165.8008085253,1963.58223833866,-5525.46630859375),new Point3d(17100.3690566872,1959.16266366542,-4800.0607401291),},
-new Polyline{new Point3d(17120.2442012279,1995.08279600424,-4821.13331629392),new Point3d(16455.2996292197,2350.37800814843,-4931.94131465661),new Point3d(16508.8357224085,2353.99409292249,-5525.46630859375),new Point3d(17183.7752017703,1999.37398480899,-5525.46630859375),new Point3d(17120.2442012279,1995.08279600424,-4821.13331629392),},
+new Polyline{new Point3d(79.3722772723983,116.178055434243,0),new Point3d(44.1296460666944,133.883376279235,0),new Point3d(11.1750728299249,112.215022781386,0),new Point3d(13.4631307988593,72.8413484385437,0),new Point3d(48.7057620045632,55.1360275935513,0),new Point3d(81.6603352413327,76.8043810914008,0),new Point3d(79.3722772723983,116.178055434243,0),},
+new Polyline{new Point3d(79.3722772723983,116.178055434243,5.91851628154928),new Point3d(44.1296460666944,133.883376279235,5.91851628154928),new Point3d(11.1750728299249,112.215022781386,5.91851628154928),new Point3d(13.4631307988593,72.8413484385437,5.91851628154928),new Point3d(48.7057620045632,55.1360275935513,5.91851628154928),new Point3d(81.6603352413327,76.8043810914008,5.91851628154928),new Point3d(79.3722772723983,116.178055434243,5.91851628154928),},
+new Polyline{new Point3d(48.5932410001005,-17.1204299826823,0),new Point3d(105.256703853712,-17.1204299826823,0),new Point3d(48.5932410001005,31.318938635028,0),new Point3d(48.5932410001005,-17.1204299826823,0),},
+new Polyline{new Point3d(48.5932410001005,-17.1204299826823,3.89780846412175),new Point3d(105.256703853712,-17.1204299826823,3.89780846412175),new Point3d(48.5932410001005,31.318938635028,3.89780846412175),new Point3d(48.5932410001005,-17.1204299826823,3.89780846412175),},
+new Polyline{new Point3d(-46.0627043905459,-17.1204299826823,0),new Point3d(10.6007584630656,-17.1204299826823,0),new Point3d(10.6007584630656,31.318938635028,0),new Point3d(-46.0627043905459,31.318938635028,0),new Point3d(-46.0627043905459,-17.1204299826823,0),},
+new Polyline{new Point3d(-46.0627043905459,-17.1204299826823,3.89780846412175),new Point3d(10.6007584630656,-17.1204299826823,3.89780846412175),new Point3d(10.6007584630656,31.318938635028,3.89780846412175),new Point3d(-46.0627043905459,31.318938635028,3.89780846412175),new Point3d(-46.0627043905459,-17.1204299826823,3.89780846412175),},
 };
 
-            var face_vectors = new Vector3d[2][] {
-                new Vector3d[]{ new Vector3d(90, 91.1, 93) , new Vector3d(94.1, 91, 98.1) , new Vector3d(90.1, 99.4, 92.1) },
-                new Vector3d[]{ new Vector3d(910.8, 910.1, 930.5) , new Vector3d(940.1, 910, 980.1) , new Vector3d(952.1, 990.4, 920.1) }
-            };
+            var polylines_array = new Polyline[(int)(polylines.Count * 0.5)][];
+            for (int i = 0; i < polylines_array.Length; i++)
+            {
+                polylines_array[i] = new Polyline[] { polylines[i * 2 + 0], polylines[i * 2 + 1] };
+            }
 
-            var joints_types = new int[][] {
-                new int[]{  93 , 98, 92 },
-                new int[]{ 930, 980, 920 }
-            };
+            var lines = new List<Line>() {
+new Line(new Point3d(65.1830486229479,65.9702043424761,5.91851628154928),new Point3d(80.5602903217781,54.6720408086573,5.91851628154928)),
+new Line(new Point3d(48.5932410001005,1.85339312857982,0),new Point3d(41.5795635671774,2.84205148477829,0)),
+new Line(new Point3d(79.3052666614427,-17.1204299826823,3.89780846412175),new Point3d(84.0932196303112,-26.1752384449411,3.89780846412175)),
+new Line(new Point3d(10.6007584630656,4.1522990375585,0),new Point3d(17.8046559730008,5.2014741506303,0)),
+new Line(new Point3d(-12.2775187233455,31.318938635028,3.89780846412175),new Point3d(-11.4948856916736,46.0245545911547,3.89780846412175)),
+new Line(new Point3d(-46.0627043905459,10.0358113328213,0),new Point3d(-55.6164678402938,10.059307646704,0)),
+new Line(new Point3d(-16.6269479562328,-17.1204299826823,3.89780846412175),new Point3d(-16.6269479562328,-27.657211435445,3.89780846412175)),
+};
 
-            var three_valence = new List<int[]> {
-                new int[]{  93 , 98, 92, 98 },
-                new int[]{ 930, 980, 920, 980 }
-            };
+            var points = new List<Point3d>() {
+new Point3d(26.6631135952929,66.2098932218454,5.91851628154928),
+new Point3d(30.3731679287786,124.838190682803,0),
+new Point3d(61.7509616695463,125.030715856739,5.91851628154928),
+new Point3d(80.5163062568655,96.4912182628218,5.91851628154928),
+new Point3d(76.9249724269063,7.09925432617284,3.89780846412175),
+new Point3d(89.4716903982837,-17.1204299826823,3.89780846412175),
+};
 
-            var adjacency = new List<int[]> {
-                //new int[]{ 0,1 }
-            };
+            var ids = new List<int>() {
+0,
+1,
+2,
+3,
+4,
+5,
+};
+            Vector3d[][] insertion_vectors = null;
+            joinery_solver_net.Test.pinvoke_find_closest_plateside_to_line(polylines_array, lines, ref insertion_vectors);
+            int[][] joints_ids = null;
+            joinery_solver_net.Test.pinvoke_find_closest_plateside_to_indexedpoint(polylines_array, points, ids, ref joints_ids);
 
-            Data data = new Data { polylines = polylines, face_vectors = face_vectors, joints_types = joints_types, three_valence = three_valence, adjacency = adjacency };
+            //if (insertion_vectors != null)
+            //{
+            //    Console.WriteLine(insertion_vectors.Length.ToString());
+            //    foreach (var vecs in insertion_vectors)
+            //    {
+            //        Console.WriteLine("New");
+            //        foreach (var vec in vecs)
+            //            Console.WriteLine(vec.ToString());
+            //    }
+            //}
 
-            double division_length = 300;
-            var jointparams = new List<double>{
-                division_length, 0.5, 9,
-                division_length * 1.5,0.65,10,
-                division_length * 1.5, 0.5,21,
-                division_length, 0.5,30,
-                division_length, 0.5,40,
-                division_length, 0.5,50
-            };
+            if (joints_ids != null)
+            {
+                Console.WriteLine(joints_ids.Length.ToString());
+                foreach (var vecs in joints_ids)
+                {
+                    Console.WriteLine("New");
+                    foreach (var vec in vecs)
+                        Console.WriteLine(vec.ToString());
+                }
+            }
 
-            int search_type = 0;
-            double division_distance = 300;
-            double shift = 0.6;
-            int output_type = 4;
-            int triangulate = 0;
-            Polyline[][] out_polylines = null;
-            joinery_solver_net.Test.pinvoke_get_connection_zones(ref out_polylines, data, jointparams, search_type, division_distance, shift, output_type, triangulate);
+            //var face_vectors = new Vector3d[2][] {
+            //    new Vector3d[]{ new Vector3d(90, 91.1, 93) , new Vector3d(94.1, 91, 98.1) , new Vector3d(90.1, 99.4, 92.1) },
+            //    new Vector3d[]{ new Vector3d(910.8, 910.1, 930.5) , new Vector3d(940.1, 910, 980.1) , new Vector3d(952.1, 990.4, 920.1) }
+            //};
+
+            //var joints_types = new int[][] {
+            //    new int[]{  93 , 98, 92 },
+            //    new int[]{ 930, 980, 920 }
+            //};
+
+            //var three_valence = new List<int[]> {
+            //    new int[]{  93 , 98, 92, 98 },
+            //    new int[]{ 930, 980, 920, 980 }
+            //};
+
+            //var adjacency = new List<int[]>
+            //{
+            //    //new int[]{ 0,1 }
+            //};
+
+            //Data data = new Data { polylines = polylines, face_vectors = face_vectors, joints_types = joints_types, three_valence = three_valence, adjacency = adjacency };
+
+            //double division_length = 300;
+            //var jointparams = new List<double>{
+            //    division_length, 0.5, 9,
+            //    division_length * 1.5,0.65,10,
+            //    division_length * 1.5, 0.5,21,
+            //    division_length, 0.5,30,
+            //    division_length, 0.5,40,
+            //    division_length, 0.5,50
+            //};
+
+            //int search_type = 0;
+            //double division_distance = 300;
+            //double shift = 0.6;
+            //int output_type = 4;
+            //int triangulate = 0;
+            //Polyline[][] out_polylines = null;
+            //joinery_solver_net.Test.pinvoke_get_connection_zones(ref out_polylines, data, jointparams, search_type, division_distance, shift, output_type, triangulate);
 
             //Console.WriteLine("Please wait while Rhino is starting...");
             //try {

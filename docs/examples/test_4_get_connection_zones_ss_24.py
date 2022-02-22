@@ -24,18 +24,8 @@ def test_connection_detection():
         data_set_plates.annen_small_edge_joints(),
         data_set_plates.annen_small_three_valance_element_indices_and_instruction(),
     )
-
-    polylines_vertices_XYZ,
-    face_vectors_XYZ=None,
-    face_joints_types_int=None,
-    three_valance_element_indices_and_instruction=None,
-    default_joint_parameters=None,
-    search_type=2,
-    division_distance=300,
-    shift=0.6,
-    output_type=4,
-    triangulate=0,4
     """
+
     division_length = 300
     joint_parameters = [
         division_length,
@@ -81,14 +71,6 @@ def test_connection_detection():
         mesh_result = closed_mesh_from_polylines(result[i])
 
         if len(list(mesh_result.vertices())) == 0:  # mesh_result.is_valid() == False or
-            """
-            print("Mesh Is not Valid" + (str)(count))
-            for j in result[i]:
-                print("x")
-                for k in j:
-                    print(k)
-            """
-
             result_flat_list2.extend(result[i])
             print("Not Valid Mesh")
             break

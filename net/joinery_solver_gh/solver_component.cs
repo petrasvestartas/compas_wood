@@ -57,16 +57,18 @@ namespace joinery_solver_gh
 
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-            joinery_solver_net.Data data = new joinery_solver_net.Data();
-            DA.GetData(0, ref data);
-
-            var joint_params = new List<double>(18);
-            DA.GetDataList(1, joint_params);
-
-            if (joint_params.Count != 18)
+            try
             {
-                double division_length = 300;
-                joint_params = new List<double>{
+                joinery_solver_net.Data data = new joinery_solver_net.Data();
+                DA.GetData(0, ref data);
+
+                var joint_params = new List<double>(18);
+                DA.GetDataList(1, joint_params);
+
+                if (joint_params.Count != 18)
+                {
+                    double division_length = 300;
+                    joint_params = new List<double>{
         division_length, 0.5, 9,
         division_length * 1.5,0.65,10,
         division_length * 1.5, 0.5,21,
@@ -74,22 +76,27 @@ namespace joinery_solver_gh
         division_length, 0.5,40,
         division_length, 0.5,50
         };
+                }
+
+                //var watch = new System.Diagnostics.Stopwatch();
+                //watch.Start();
+                joinery_solver_net.Test.pinvoke_get_connection_zones(ref out_polylines, (joinery_solver_net.Data)(data), joint_params, 0);
+                joinery_solver_net.Data output_data = new Data() { polylines = out_polylines };
+                DA.SetData(0, output_data);
+                //watch.Stop();
+
+                if (out_polylines.Length == 0) return;
+
+                //Display
+                this.bbox = out_polylines[0][0].BoundingBox;
+                foreach (var plines in out_polylines)
+                    foreach (Polyline pline in plines)
+                        this.bbox.Union(pline.BoundingBox);
             }
-
-            //var watch = new System.Diagnostics.Stopwatch();
-            //watch.Start();
-            joinery_solver_net.Test.pinvoke_get_connection_zones(ref out_polylines, (joinery_solver_net.Data)(data), joint_params, 0);
-            joinery_solver_net.Data output_data = new Data() { polylines = out_polylines };
-            DA.SetData(0, output_data);
-            //watch.Stop();
-
-            if (out_polylines.Length == 0) return;
-
-            //Display
-            this.bbox = out_polylines[0][0].BoundingBox;
-            foreach (var plines in out_polylines)
-                foreach (Polyline pline in plines)
-                    this.bbox.Union(pline.BoundingBox);
+            catch (Exception e)
+            {
+                Rhino.RhinoApp.WriteLine(e.ToString());
+            }
         }
 
         protected override System.Drawing.Bitmap Icon

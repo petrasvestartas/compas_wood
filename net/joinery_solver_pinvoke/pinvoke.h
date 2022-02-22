@@ -24,6 +24,8 @@ PINVOKE void test_get_array(double*& coord_out, int& coord_size_out);
 void coord_to_list(int*& f, int& f_s, double*& v, int& v_s, std::vector<CGAL_Polyline>& plines);
 void coord_to_list(int*& f, int& f_s, double*& v, int& v_s, std::vector<std::vector<IK::Vector_3>>& vectorlists);
 void coord_to_list(int*& f, int& f_s, int*& v, int& v_s, std::vector<std::vector<int>>& vectorlists);
+void coord_to_list(double*& v, int& v_s, std::vector<IK::Segment_3>& vectorlist);
+void coord_to_list(double*& v, int& v_s, std::vector<IK::Point_3>& vectorlist);
 void coord_to_list(int*& v, int& v_s, std::vector<int>& vectorlist);
 void coord_to_list(double*& v, int& v_s, std::vector<double>& vectorlist);
 
@@ -31,6 +33,8 @@ void coord_to_list(double*& v, int& v_s, std::vector<double>& vectorlist);
 //Output Conversion
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void list_to_coord(std::vector<std::vector<CGAL_Polyline>>& output_plines, int*& groups_f, int& groups_f_s, int*& out_f, int& out_f_s, double*& out_v, int& out_v_s);
+void list_to_coord(std::vector<std::vector<IK::Vector_3>>& output_vectors, int*& out_f, int& out_f_s, double*& out_v, int& out_v_s);
+void list_to_coord(std::vector<std::vector<int>>& output_vectors, int*& out_f, int& out_f_s, int*& out_v, int& out_v_s);
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //Implementations
@@ -49,4 +53,21 @@ PINVOKE int pinvoke_get_connection_zones(
     //optional inputs
     int search_type = 1, double division_distance = 300, double shift = 0.6, int output_type = 4, int triangulate = 0
 
+);
+
+PINVOKE int pinvoke_find_closest_plateside_to_line(
+    //input - polylines flat list and a flat list of lines
+    int* f, int f_s, double* v, int v_s,
+    double* lines_v, int lines_v_s,
+    //output - jagged array of vectors
+    int*& out_f, int& out_f_s, double*& out_v, int& out_v_s
+);
+
+PINVOKE int pinvoke_find_closest_plateside_to_indexedpoint(
+    //input - polylines flat list and a flat list of lines
+    int* f, int f_s, double* v, int v_s,
+    double* pts_v, int pts_v_s,
+    int* ids_v, int ids_v_s,
+    //output - jagged array of vectors
+    int*& out_f, int& out_f_s, int*& out_v, int& out_v_s
 );

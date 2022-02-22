@@ -1,10 +1,10 @@
 using System;
 using System.Runtime.InteropServices;
 
-namespace joinery_solver_net {
-
-    internal class Unsafe {
-
+namespace joinery_solver_net
+{
+    internal class Unsafe
+    {
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         //Basic Method and Examples for PInvoke
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -39,5 +39,24 @@ namespace joinery_solver_net {
             ref IntPtr groups_f, ref int groups_f_s, ref IntPtr out_f, ref int out_f_s, ref IntPtr out_v, ref int out_v_s,
             int search_type = 1, double division_distance = 300, double shift = 0.6, int output_type = 4, int triangulate = 0
             );
+
+        [DllImport(dllName, CallingConvention = CallingConvention.Cdecl)]
+        internal static extern int pinvoke_find_closest_plateside_to_line(
+            //input - polylines flat list and a flat list of lines
+            [MarshalAs(UnmanagedType.LPArray)] int[] f, int f_s, [MarshalAs(UnmanagedType.LPArray)] double[] v, int v_s,
+            [MarshalAs(UnmanagedType.LPArray)] double[] lines_v, int lines_v_s,
+            //output - jagged array of vectors
+            ref IntPtr out_f, ref int out_f_s, ref IntPtr out_v, ref int out_v_s
+        );
+
+        [DllImport(dllName, CallingConvention = CallingConvention.Cdecl)]
+        internal static extern int pinvoke_find_closest_plateside_to_indexedpoint(
+        //input - polylines flat list and a flat list of lines
+        [MarshalAs(UnmanagedType.LPArray)] int[] f, int f_s, [MarshalAs(UnmanagedType.LPArray)] double[] v, int v_s,
+        [MarshalAs(UnmanagedType.LPArray)] double[] pts_v, int pts_v_s,
+        [MarshalAs(UnmanagedType.LPArray)] int[] ids_v, int ids_v_s,
+        //output - jagged array of vectors
+        ref IntPtr out_f, ref int out_f_s, ref IntPtr out_v, ref int out_v_s
+    );
     }
 }

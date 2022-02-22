@@ -83,6 +83,16 @@ namespace joinery_solver_gh.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap assembly_logo {
+            get {
+                object obj = ResourceManager.GetObject("assembly_logo", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap compas_wood {
             get {
                 object obj = ResourceManager.GetObject("compas_wood", resourceCulture);
@@ -146,6 +156,16 @@ namespace joinery_solver_gh.Properties {
         internal static System.Drawing.Bitmap insertion_sequence {
             get {
                 object obj = ResourceManager.GetObject("insertion_sequence", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap joint_ids {
+            get {
+                object obj = ResourceManager.GetObject("joint_ids", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

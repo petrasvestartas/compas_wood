@@ -38,345 +38,6 @@ namespace joinery_solver_net
         }
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        //Rhino Helpers
-        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-        private static void list_coord(ref List<Rhino.Geometry.Polyline> polylines, out int[] f, out int f_s, out double[] v, out int v_s)
-        {
-            //f = null;
-            //f_s = 0;
-            //double[] v = null;
-            v_s = 0;
-
-            f_s = polylines.Count;
-            f = new int[polylines.Count];
-
-            for (int i = 0; i < polylines.Count; i++)
-            {
-                f[i] = polylines[i].Count;
-                v_s += polylines[i].Count * 3;
-            }
-            v = new double[v_s];
-
-            int count = 0;
-            for (int i = 0; i < polylines.Count; i++)
-            {
-                for (int j = 0; j < polylines[i].Count; j++)
-                {
-                    v[count * 3 + 0] = polylines[i][j].X;
-                    v[count * 3 + 1] = polylines[i][j].Y;
-                    v[count * 3 + 2] = polylines[i][j].Z;
-                    count++;
-                }
-            }
-        }
-
-        private static void list_coord(ref Polyline[][] polylines, out int[] f, out int f_s, out double[] v, out int v_s)
-        {
-            f_s = 0;
-            v_s = 0;
-            for (int i = 0; i < polylines.Length; i++)
-            {
-                f_s += polylines[i].Length;//number of faces
-                for (int j = 0; j < polylines[i].Length; j++)
-                    v_s += polylines[i][j].Count * 3;//number of vertices
-            }
-            f = new int[f_s];
-            v = new double[v_s];
-
-            //Asign faces
-            int counter = 0;
-            for (int i = 0; i < polylines.Length; i++)
-                for (int j = 0; j < polylines[i].Length; j++)
-                    f[counter++] = polylines[i][j].Count;
-
-            //Assign vertices
-            int count = 0;
-            for (int i = 0; i < polylines.Length; i++)
-            {
-                for (int j = 0; j < polylines[i].Length; j++)
-                {
-                    for (int k = 0; k < polylines[i][j].Count; k++)
-                    {
-                        v[count * 3 + 0] = polylines[i][j][k].X;
-                        v[count * 3 + 1] = polylines[i][j][k].Y;
-                        v[count * 3 + 2] = polylines[i][j][k].Z;
-                        count++;
-                    }
-                }
-            }
-        }
-
-        private static void list_coord(ref Vector3d[][] vectors, out int[] f, out int f_s, out double[] v, out int v_s)
-        {
-            //f = null;
-            //f_s = 0;
-            //double[] v = null;
-            v_s = 0;
-
-            f_s = vectors.Count();
-            f = new int[vectors.Count()];
-
-            for (int i = 0; i < vectors.Count(); i++)
-            {
-                f[i] = vectors[i].Count();
-                v_s += vectors[i].Count() * 3;
-            }
-            v = new double[v_s];
-
-            int count = 0;
-            for (int i = 0; i < vectors.Count(); i++)
-            {
-                for (int j = 0; j < vectors[i].Count(); j++)
-                {
-                    v[count * 3 + 0] = vectors[i][j].X;
-                    v[count * 3 + 1] = vectors[i][j].Y;
-                    v[count * 3 + 2] = vectors[i][j].Z;
-                    count++;
-                }
-            }
-        }
-
-        private static void list_coord(ref List<List<Vector3d>> vectors, out int[] f, out int f_s, out double[] v, out int v_s)
-        {
-            //f = null;
-            //f_s = 0;
-            //double[] v = null;
-            v_s = 0;
-
-            f_s = vectors.Count;
-            f = new int[vectors.Count];
-
-            for (int i = 0; i < vectors.Count; i++)
-            {
-                f[i] = vectors[i].Count;
-                v_s += vectors[i].Count * 3;
-            }
-            v = new double[v_s];
-
-            int count = 0;
-            for (int i = 0; i < vectors.Count; i++)
-            {
-                for (int j = 0; j < vectors[i].Count; j++)
-                {
-                    v[count * 3 + 0] = vectors[i][j].X;
-                    v[count * 3 + 1] = vectors[i][j].Y;
-                    v[count * 3 + 2] = vectors[i][j].Z;
-                    count++;
-                }
-            }
-        }
-
-        private static void list_coord(ref int[][] numbers, out int[] f, out int f_s, out int[] v, out int v_s)
-        {
-            v_s = 0;
-            f_s = numbers.Count();
-            f = new int[numbers.Count()];
-
-            for (int i = 0; i < numbers.Count(); i++)
-            {
-                f[i] = numbers[i].Count();
-                v_s += numbers[i].Count() * 1;
-            }
-            v = new int[v_s];
-
-            int count = 0;
-            for (int i = 0; i < numbers.Count(); i++)
-            {
-                for (int j = 0; j < numbers[i].Count(); j++)
-                {
-                    v[count * 1 + 0] = numbers[i][j];
-                    count++;
-                }
-            }
-        }
-
-        private static void list_coord(ref List<List<int>> numbers, out int[] f, out int f_s, out int[] v, out int v_s)
-        {
-            v_s = 0;
-            f_s = numbers.Count;
-            f = new int[numbers.Count];
-
-            for (int i = 0; i < numbers.Count; i++)
-            {
-                f[i] = numbers[i].Count;
-                v_s += numbers[i].Count * 1;
-            }
-            v = new int[v_s];
-
-            int count = 0;
-            for (int i = 0; i < numbers.Count; i++)
-            {
-                for (int j = 0; j < numbers[i].Count; j++)
-                {
-                    v[count * 1 + 0] = numbers[i][j];
-                    count++;
-                }
-            }
-        }
-
-        private static void list_coord(ref List<int[]> numbers, out int[] f, out int f_s, out int[] v, out int v_s)
-        {
-            v_s = 0;
-            f_s = numbers.Count;
-            f = new int[numbers.Count];
-
-            for (int i = 0; i < numbers.Count; i++)
-            {
-                f[i] = numbers[i].Count();
-                v_s += numbers[i].Count() * 1;
-            }
-            v = new int[v_s];
-
-            int count = 0;
-            for (int i = 0; i < numbers.Count; i++)
-            {
-                for (int j = 0; j < numbers[i].Count(); j++)
-                {
-                    v[count * 1 + 0] = numbers[i][j];
-                    count++;
-                }
-            }
-        }
-
-        private static void list_coord(ref List<List<int>> numbers, out int[] v, out int v_s)
-        {
-            v_s = 0;
-
-            for (int i = 0; i < numbers.Count; i++)
-            {
-                v_s += numbers[i].Count * 1;
-            }
-            v = new int[v_s];
-
-            int count = 0;
-            for (int i = 0; i < numbers.Count; i++)
-            {
-                for (int j = 0; j < numbers[i].Count; j++)
-                {
-                    v[count * 1 + 0] = numbers[i][j];
-                    count++;
-                }
-            }
-        }
-
-        private static void list_coord(ref List<int[]> numbers, out int[] v, out int v_s)
-        {
-            v_s = 0;
-
-            for (int i = 0; i < numbers.Count; i++)
-            {
-                v_s += numbers[i].Count() * 1;
-            }
-            v = new int[v_s];
-
-            int count = 0;
-            for (int i = 0; i < numbers.Count; i++)
-            {
-                for (int j = 0; j < numbers[i].Count(); j++)
-                {
-                    v[count * 1 + 0] = numbers[i][j];
-                    count++;
-                }
-            }
-        }
-
-        private static void list_coord(ref List<double> numbers, out double[] f, out int f_s)
-        {
-            f_s = numbers.Count;
-            f = System.Linq.Enumerable.ToArray(numbers);
-        }
-
-        private static void list_coord(ref List<int> numbers, out int[] f, out int f_s)
-        {
-            f_s = numbers.Count;
-            f = System.Linq.Enumerable.ToArray(numbers);
-        }
-
-        private static void coord_list(ref IntPtr groups_f, ref IntPtr out_f, ref IntPtr out_v, ref int groups_f_s, ref int out_f_s, ref int out_v_s, ref Polyline[][] polylines)
-        {
-            //transfer data from c++
-            //Console.WriteLine(groups_f_s.ToString());
-            int[] sharp_groups_f = new int[groups_f_s];
-            int[] sharp_out_f = new int[out_f_s];
-            double[] sharp_out_v = new double[out_v_s];
-            System.Runtime.InteropServices.Marshal.Copy(groups_f, sharp_groups_f, 0, sharp_groups_f.Length);
-            System.Runtime.InteropServices.Marshal.Copy(out_f, sharp_out_f, 0, sharp_out_f.Length);
-            System.Runtime.InteropServices.Marshal.Copy(out_v, sharp_out_v, 0, sharp_out_v.Length);
-            //Unsafe.release_int(groups_f, true);
-            //Unsafe.release_int(out_f, true);
-            //Unsafe.release_double(out_v, true);
-
-            //create c# polylines
-            polylines = new Polyline[groups_f_s][];
-
-            int face_count = 0;
-            for (int i = 0; i < groups_f_s; i++)
-            {
-                polylines[i] = new Polyline[sharp_groups_f[i]];
-                //Console.WriteLine();
-                //Console.WriteLine(sharp_groups_f[i].ToString());
-
-                for (int j = 0; j < sharp_groups_f[i]; j++)
-                {
-                    polylines[i][j] = new Polyline(sharp_out_f[face_count]);
-                    //Console.WriteLine(sharp_out_f[face_count]);
-                    face_count++;
-                }
-            }
-
-            //Console.WriteLine();
-            //fill polylines with points
-            int a = 0;
-            int b = 0;
-            int pline_count = 0;
-            for (int i = 0; i < sharp_out_v.Length; i += 3)
-            {
-                //Console.WriteLine(sharp_out_v[i + 0].ToString());
-                //Console.WriteLine(sharp_out_v[i + 1].ToString());
-                //Console.WriteLine(sharp_out_v[i + 2].ToString());
-                polylines[a][b].Add(sharp_out_v[i + 0], sharp_out_v[i + 1], sharp_out_v[i + 2]);
-
-                if (polylines[a][b].Count() == sharp_out_f[pline_count])
-                {//check if the current polyline is filled
-                    if (b == (sharp_groups_f[a] - 1))
-                    {//number of current polylines == group count index
-                        //Console.WriteLine("");
-                        //Console.WriteLine("New group");
-                        //Console.WriteLine("");
-                        //New group
-                        a++;
-                        b = 0;
-                    }
-                    else
-                    {
-                        //Console.WriteLine("");
-                        //Console.WriteLine("Next polyline");
-                        //Console.WriteLine("");
-                        //Or Next polyline
-                        b++;
-                    }
-                    pline_count++;
-                }
-            }
-
-            //Console.WriteLine("");
-            //foreach (var plines in polylines) {
-            //    Console.WriteLine("");
-            //    Console.WriteLine("New Group");
-            //    foreach (var pline in plines) {
-            //        Console.WriteLine("New Polyline");
-            //        foreach (var p in pline)
-            //            Console.WriteLine(p.ToString());
-            //    }
-            //}
-            //Console.WriteLine("");
-            //Console.WriteLine(groups_f_s);
-            //Console.WriteLine(out_f_s);
-            //Console.WriteLine(out_v_s);
-        }
-
-        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         //Implementations
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         //            Parameters
@@ -422,12 +83,12 @@ namespace joinery_solver_net
             //Convert polylines to coordinate array
             /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
             watch.Start();
-            list_coord(ref data.polylines, out int[] f, out int f_s, out double[] v, out int v_s);
-            list_coord(ref data.face_vectors, out int[] vec_f, out int vec_f_s, out double[] vec_v, out int vec_v_s);
-            list_coord(ref data.joints_types, out int[] jointtypes_f, out int jointtypes_f_s, out int[] jointtypes_v, out int jointtypes_v_s);
-            list_coord(ref data.three_valence, out int[] threevalence_f, out int threevalence_f_s, out int[] threevalence_v, out int threevalence_v_s);
-            list_coord(ref data.adjacency, out int[] adjacency_v, out int adjacency_v_s);
-            list_coord(ref jointparams, out double[] jointparams_v, out int jointparams_v_s);
+            Conversions.list_coord(ref data.polylines, out int[] f, out int f_s, out double[] v, out int v_s);
+            Conversions.list_coord(ref data.face_vectors, out int[] vec_f, out int vec_f_s, out double[] vec_v, out int vec_v_s);
+            Conversions.list_coord(ref data.joints_types, out int[] jointtypes_f, out int jointtypes_f_s, out int[] jointtypes_v, out int jointtypes_v_s);
+            Conversions.list_coord(ref data.three_valence, out int[] threevalence_f, out int threevalence_f_s, out int[] threevalence_v, out int threevalence_v_s);
+            Conversions.list_coord(ref data.adjacency, out int[] adjacency_v, out int adjacency_v_s);
+            Conversions.list_coord(ref jointparams, out double[] jointparams_v, out int jointparams_v_s);
             watch.Stop();
 
             // RhinoApp.WriteLine(watch.ElapsedMilliseconds.ToString());
@@ -436,9 +97,9 @@ namespace joinery_solver_net
             //Run the method
             /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
             watch.Start();
-            IntPtr coord_out = IntPtr.Zero;
-            int coord_size_out = 0;
-            Unsafe.test_get_array(ref coord_out, ref coord_size_out);
+            //IntPtr coord_out = IntPtr.Zero;
+            //int coord_size_out = 0;
+            //Unsafe.test_get_array(ref coord_out, ref coord_size_out);
 
             IntPtr groups_f = IntPtr.Zero, out_f = IntPtr.Zero, out_v = IntPtr.Zero;
             int groups_f_s = 0, out_f_s = 0, out_v_s = 0;
@@ -463,7 +124,146 @@ namespace joinery_solver_net
             //Convert arrays to data
             /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
             watch.Start();
-            coord_list(ref groups_f, ref out_f, ref out_v, ref groups_f_s, ref out_f_s, ref out_v_s, ref polylines);
+            Conversions.coord_list(ref groups_f, ref out_f, ref out_v, ref groups_f_s, ref out_f_s, ref out_v_s, ref polylines);
+            watch.Stop();
+
+            //RhinoApp.WriteLine(watch.ElapsedMilliseconds.ToString());
+            watch.Reset();
+            /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            //OUTPUT
+            /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            //    std::vector<std::vector<CGAL_Polyline>>& plines,
+            //    std::vector<std::vector<int>>& top_face_triangulation,
+        }
+
+        public static void pinvoke_find_closest_plateside_to_line(
+                //input
+                Polyline[][] polylines,
+                List<Line> insertion_lines,
+                //output
+                ref Vector3d[][] insertion_vectors
+
+      )
+        {
+            var watch = new System.Diagnostics.Stopwatch();
+            /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            //Input
+            /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+            /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            //Convert polylines to coordinate array
+            /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            watch.Start();
+            Conversions.list_coord(ref polylines, out int[] f, out int f_s, out double[] v, out int v_s);
+            Conversions.list_coord(ref insertion_lines, out double[] lines_v, out int lines_v_s);
+
+            //foreach (var coord in lines_v)
+            //    Console.WriteLine(coord);
+
+            watch.Stop();
+
+            // RhinoApp.WriteLine(watch.ElapsedMilliseconds.ToString());
+            watch.Reset();
+            /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            //Run the method
+            /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            watch.Start();
+            IntPtr coord_out = IntPtr.Zero;
+            int coord_size_out = 0;
+            Unsafe.test_get_array(ref coord_out, ref coord_size_out);
+
+            IntPtr out_f = IntPtr.Zero, out_v = IntPtr.Zero;
+            int out_f_s = 0, out_v_s = 0;
+            int r = Unsafe.pinvoke_find_closest_plateside_to_line(
+                //input
+                f, f_s, v, v_s,
+                lines_v, lines_v_s,
+                 //outout
+                 ref out_f, ref out_f_s, ref out_v, ref out_v_s
+                );
+
+            if (r == 0)
+                return;
+            watch.Stop();
+
+            //RhinoApp.WriteLine(watch.ElapsedMilliseconds.ToString());
+            watch.Reset();
+            /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            //Convert arrays to data
+            /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            watch.Start();
+            Conversions.coord_list(ref out_f, ref out_v, ref out_f_s, ref out_v_s, ref insertion_vectors);
+            watch.Stop();
+
+            //RhinoApp.WriteLine(watch.ElapsedMilliseconds.ToString());
+            watch.Reset();
+            /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            //OUTPUT
+            /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            //    std::vector<std::vector<CGAL_Polyline>>& plines,
+            //    std::vector<std::vector<int>>& top_face_triangulation,
+        }
+
+        public static void pinvoke_find_closest_plateside_to_indexedpoint(
+        //input
+        Polyline[][] polylines,
+        List<Point3d> joint_points,
+         List<int> joint_points_ids,
+        //output
+        ref int[][] joints_ids
+
+)
+        {
+            var watch = new System.Diagnostics.Stopwatch();
+            /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            //Input
+            /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+            /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            //Convert polylines to coordinate array
+            /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            watch.Start();
+            Conversions.list_coord(ref polylines, out int[] f, out int f_s, out double[] v, out int v_s);
+            Conversions.list_coord(ref joint_points, out double[] pts_v, out int pts_v_s);
+            Conversions.list_coord(ref joint_points_ids, out int[] ids_v, out int ids_v_s);
+
+            //foreach (var coord in lines_v)
+            //    Console.WriteLine(coord);
+
+            watch.Stop();
+
+            // RhinoApp.WriteLine(watch.ElapsedMilliseconds.ToString());
+            watch.Reset();
+            /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            //Run the method
+            /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            watch.Start();
+            IntPtr coord_out = IntPtr.Zero;
+            int coord_size_out = 0;
+            Unsafe.test_get_array(ref coord_out, ref coord_size_out);
+
+            IntPtr out_f = IntPtr.Zero, out_v = IntPtr.Zero;
+            int out_f_s = 0, out_v_s = 0;
+            int r = Unsafe.pinvoke_find_closest_plateside_to_indexedpoint(
+                //input
+                f, f_s, v, v_s,
+                pts_v, pts_v_s,
+                ids_v, ids_v_s,
+                 //output
+                 ref out_f, ref out_f_s, ref out_v, ref out_v_s
+                );
+
+            if (r == 0)
+                return;
+            watch.Stop();
+
+            //RhinoApp.WriteLine(watch.ElapsedMilliseconds.ToString());
+            watch.Reset();
+            /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            //Convert arrays to data
+            /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            watch.Start();
+            Conversions.coord_list(ref out_f, ref out_v, ref out_f_s, ref out_v_s, ref joints_ids);
             watch.Stop();
 
             //RhinoApp.WriteLine(watch.ElapsedMilliseconds.ToString());

@@ -13,7 +13,7 @@ namespace joinery_solver_gh
         private List<Rhino.Geometry.TextEntity> joint_per_face_current = new List<Rhino.Geometry.TextEntity>();
         private List<Polyline> polylines = new List<Polyline>();
 
-        public override BoundingBox ClippingBox => base.ClippingBox;
+        public override BoundingBox ClippingBox => bbox;
 
         public override void DrawViewportWires(IGH_PreviewArgs args)
         {

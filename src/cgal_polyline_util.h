@@ -44,7 +44,8 @@ namespace cgal_polyline_util {
                 t = 1.0 + ((point - s[1]) * D) / DoD;
 
             rc = true;
-        } else { // (GBA) Closest point to a degenerate line works as well
+        }
+        else { // (GBA) Closest point to a degenerate line works as well
             t = 0.0;
             rc = true;
         }
@@ -436,17 +437,20 @@ namespace cgal_polyline_util {
 
         if (count0 == 0 && count1 == 0) {
             return false;
-        } else if (std::abs(count0 - count1) == 2) { //rectangle curve inside a rectangle curve
+        }
+        else if (std::abs(count0 - count1) == 2) { //rectangle curve inside a rectangle curve
             line = count0 == 2 ? IK::Segment_3(pts0[0], pts0[1]) : IK::Segment_3(pts1[0], pts1[1]);
             pair = count0 == 2 ? std::pair<int, int>(edge_ids_0[0], edge_ids_0[1]) : std::pair<int, int>(edge_ids_1[0], edge_ids_1[1]);
 
             return true;
-        } else if (count0 == 1 && count1 == 1) {
+        }
+        else if (count0 == 1 && count1 == 1) {
             line = IK::Segment_3(pts0[ID0[0]], pts1[ID1[0]]);
             pair = std::pair<int, int>(edge_ids_0[ID0[0]], edge_ids_1[ID1[0]]);
             //CGAL_Debug(4444);
             return true;
-        } else if (count0 > 1 || count1 > 1) {
+        }
+        else if (count0 > 1 || count1 > 1) {
             std::vector<IK::Point_3> pts(ID0.size() + ID1.size());
             for (int i = 0; i < ID0.size(); i++)
                 pts[i] = pts0[ID0[i]];
@@ -530,7 +534,8 @@ namespace cgal_polyline_util {
         if (proportion0 != 0 || proportion1 != 0) {
             p0 += v * proportion0;
             p1 -= v * proportion1;
-        } else {
+        }
+        else {
             cgal_vector_util::Unitize(v);
             p0 += v * dist0;
             p1 -= v * dist1;

@@ -64,6 +64,8 @@
     <Compile Include="display_loft_mesh_component.cs" />
     <Compile Include="input_connection_params_component.cs" />
     <Compile Include="input_get_component.cs" />
+    <Compile Include="input_set_closest_indexed_points.cs" />
+    <Compile Include="input_set_closest_insertion_vectors_component.cs" />
     <Compile Include="input_set_component.cs" />
     <Compile Include="joinery_solver_ghInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -126,6 +128,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\insertion_direction_element.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\joint_ids.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\assembly_logo.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
