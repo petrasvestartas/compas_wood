@@ -1,5 +1,4 @@
 # compas_wood
-from compas_wood.joinery import test
 from compas_wood.joinery import get_connection_zones
 from compas_wood.joinery import closed_mesh_from_polylines
 import data_set_plates
@@ -7,42 +6,51 @@ import data_set_plates
 # viewer
 from compas_wood.viewer_helpers import display
 
-import os
-
-os.system("cls" if os.name == "nt" else "clear")
-
 # ==============================================================================
-# Create a list of polyline pairs - input, then generate joints and display them
+# Create joints and mesh them
 # ==============================================================================
 
 
 def test_connection_detection():
 
-    # Generate connections
-    # result = get_connection_zones(c_15())
-    result = get_connection_zones(data_set_plates.ss_0())
+    # Parameters
+    division_length = 300
+    joint_parameters = [
+        division_length,
+        0.5,
+        9,
+        division_length * 1.5,
+        0.65,
+        10,
+        division_length * 1.5,
+        0.5,
+        21,
+        division_length,
+        0.95,
+        30,
+        division_length,
+        0.95,
+        40,
+        division_length,
+        0.95,
+        50,
+    ]
 
-    """
+    # Generate connections
     result = get_connection_zones(
-    annen_small_polylines(),
-    annen_small_edge_directions(),
-    annen_small_edge_joints(),
-    annen_small_three_valance_element_indices_and_instruction()
+        data_set_plates.annen_small_polylines(),
+        data_set_plates.annen_small_edge_directions(),
+        data_set_plates.annen_small_edge_joints(),
+        data_set_plates.annen_small_three_valance_element_indices_and_instruction(),
+        None,
+        joint_parameters,
     )
-    """
 
     # Mesh Polylines
     meshes = []
-
-    count = 0
-
     for i in range(len(result)):
         mesh_result = closed_mesh_from_polylines(result[i])
         meshes.append(mesh_result)
-        print("Mesh" + (str)(count))
-        count += 1
-
-    # meshes = [closed_mesh_from_polylines(result[21])]
 
     # Display via Compas_View2
     display(None, None, meshes, 0.01, 2, 0)
@@ -54,5 +62,4 @@ def test_connection_detection():
 # ==============================================================================
 # call the compas_wood methods
 # ==============================================================================
-test()
 test_connection_detection()

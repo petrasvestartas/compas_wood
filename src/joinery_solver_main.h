@@ -1588,7 +1588,7 @@ inline void get_connection_zones(
             elements[i].get_joints_geometry(joints, plines, 1);
             break;
         case (2):
-            elements[i].get_joints_geometry(joints, plines, 2);
+            elements[i].get_joints_geometry(joints, plines, 2);//Display error
             break;
         default:
         case (3):

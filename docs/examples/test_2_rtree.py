@@ -6,11 +6,11 @@ import data_set_plates
 from compas_wood.viewer_helpers import display
 
 # ==============================================================================
-# Create a list of polyline pairs - input, then generate joints and display them
+# Get Adjancency between Elements using RTree Search
 # ==============================================================================
 
 
-def test_rtree():
+def test_rtree(boxes_AABB_or_boxes_OOBB=False):
 
     # Get a list of polyline pairs
     input = data_set_plates.ss_24()
@@ -18,24 +18,18 @@ def test_rtree():
     # Compute Rtree
     neighbours, boxes_AABB, boxes_OOBB = rtree(input)
 
-    """
+    # get aabb or oobb boxes
     selected_id = 22
     boxes_selected = []
-    boxes_AABB_or_boxes_OOBB = False
-    if(boxes_AABB_or_boxes_OOBB):
-        boxes_selected.append(boxes_OOBB[selected_id])
-        for i in neighbours[selected_id]:
-            for j in i :
-                boxes_selected.append(boxes_OOBB[j])
-    else :
-        boxes_selected.append(boxes_AABB[selected_id])
-        for i in neighbours[selected_id]:
-            for j in i :
-                boxes_selected.append(boxes_AABB[j])
-    """
+    boxes = boxes_AABB if boxes_AABB_or_boxes_OOBB else boxes_OOBB
+
+    # get first and its neighbors
+    boxes_selected.append(boxes[selected_id])
+    for i in neighbours[selected_id][0]:
+        boxes_selected.append(boxes[i])
 
     # Display via Compas_View2
-    display(input, None, boxes_AABB, 0.01, 0, 0, 0, False)
+    display(input, None, boxes_selected, 0.01, 0, 0, 0, True)
 
     # output
     return neighbours
@@ -44,4 +38,4 @@ def test_rtree():
 # ==============================================================================
 # call the compas_wood methods
 # ==============================================================================
-test_rtree()
+test_rtree(True)

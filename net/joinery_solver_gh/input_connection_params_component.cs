@@ -122,6 +122,7 @@ namespace joinery_solver_gh
 
         public override GH_Exposure Exposure => GH_Exposure.primary;
 
+        //panel.Properties.Multiline = false;
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
             pManager.AddNumberParameter("ss_e_ip_len", "ss_e_ip_len", "ss_e_ip_len", GH_ParamAccess.item);

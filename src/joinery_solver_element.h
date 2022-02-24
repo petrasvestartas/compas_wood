@@ -72,50 +72,54 @@ inline void element::get_joints_geometry(std::vector<joint>& joints, std::vector
     for (int i = 0; i < j_mf.size(); i++) { //loop joint id
         for (size_t j = 0; j < j_mf[i].size(); j++) { //loop joints per each face + 1 undefined
             switch (what_to_expose) {
-                case (0)://Plate outlines
-                    if (this->polylines.size() > 1) {
-                        output[this->id].emplace_back(this->polylines[0]); //cut
-                        output[this->id].emplace_back(this->polylines[1]); //cut
-                    }
+            case (0)://Plate outlines
+                if (this->polylines.size() > 1) {
+                    output[this->id].emplace_back(this->polylines[0]); //cut
+                    output[this->id].emplace_back(this->polylines[1]); //cut
+                }
 
-                    output[this->id].emplace_back(joints[std::get<0>(j_mf[i][j])].joint_area);
-                    break;
-                case (1)://joint lines
-                    if (this->polylines.size() > 1) {
-                        output[this->id].emplace_back(this->polylines[0]); //cut
-                        output[this->id].emplace_back(this->polylines[1]); //cut
-                    }
+                output[this->id].emplace_back(joints[std::get<0>(j_mf[i][j])].joint_area);
+                break;
+            case (1)://joint lines
+                if (this->polylines.size() > 1) {
+                    output[this->id].emplace_back(this->polylines[0]); //cut
+                    output[this->id].emplace_back(this->polylines[1]); //cut
+                }
 
-                    output[this->id].emplace_back(joints[std::get<0>(j_mf[i][j])].joint_lines[0]);
-                    output[this->id].emplace_back(joints[std::get<0>(j_mf[i][j])].joint_lines[1]);
-                    break;
-                case (2)://joint volumes
+                output[this->id].emplace_back(joints[std::get<0>(j_mf[i][j])].joint_lines[0]);
+                output[this->id].emplace_back(joints[std::get<0>(j_mf[i][j])].joint_lines[1]);
+                break;
+            case (2)://joint volumes
 
-                    if (this->polylines.size() > 1) {
-                        output[this->id].emplace_back(this->polylines[0]); //cut
-                        output[this->id].emplace_back(this->polylines[1]); //cut
-                    }
+                if (this->polylines.size() > 1) {
+                    output[this->id].emplace_back(this->polylines[0]); //cut
+                    output[this->id].emplace_back(this->polylines[1]); //cut
+                }
 
+                if (joints[std::get<0>(j_mf[i][j])].joint_volumes[0].size() > 0)
                     output[this->id].emplace_back(joints[std::get<0>(j_mf[i][j])].joint_volumes[0]);
+                if (joints[std::get<0>(j_mf[i][j])].joint_volumes[1].size() > 0)
                     output[this->id].emplace_back(joints[std::get<0>(j_mf[i][j])].joint_volumes[1]);
+                if (joints[std::get<0>(j_mf[i][j])].joint_volumes[2].size() > 0)
                     output[this->id].emplace_back(joints[std::get<0>(j_mf[i][j])].joint_volumes[2]);
+                if (joints[std::get<0>(j_mf[i][j])].joint_volumes[3].size() > 0)
                     output[this->id].emplace_back(joints[std::get<0>(j_mf[i][j])].joint_volumes[3]);
-                    break;
-                case (3):
+                break;
+            case (3):
 
-                    if (this->polylines.size() > 1) {
-                        output[this->id].emplace_back(this->polylines[0]); //cut
-                        output[this->id].emplace_back(this->polylines[1]); //cut
-                    }
+                if (this->polylines.size() > 1) {
+                    output[this->id].emplace_back(this->polylines[0]); //cut
+                    output[this->id].emplace_back(this->polylines[1]); //cut
+                }
 
-                    for (int k = 0; k < joints[std::get<0>(j_mf[i][j])](std::get<1>(j_mf[i][j]), true).size(); k++) {
-                        output[this->id].emplace_back(joints[std::get<0>(j_mf[i][j])](std::get<1>(j_mf[i][j]), true)[k]);  //cut
-                        output[this->id].emplace_back(joints[std::get<0>(j_mf[i][j])](std::get<1>(j_mf[i][j]), false)[k]); //direction
-                    }
+                for (int k = 0; k < joints[std::get<0>(j_mf[i][j])](std::get<1>(j_mf[i][j]), true).size(); k++) {
+                    output[this->id].emplace_back(joints[std::get<0>(j_mf[i][j])](std::get<1>(j_mf[i][j]), true)[k]);  //cut
+                    output[this->id].emplace_back(joints[std::get<0>(j_mf[i][j])](std::get<1>(j_mf[i][j]), false)[k]); //direction
+                }
 
-                    break;
-                default:
-                    break;
+                break;
+            default:
+                break;
             }
         }
     }
@@ -440,7 +444,8 @@ inline bool element::intersection_closed_and_open_paths_2D(
                 if (count == 0) {
                     for (size_t j = 0; j < polynode->Contour.size(); j++)
                         c.emplace_back(polynode->Contour[j].X / scale, polynode->Contour[j].Y / scale, 0);
-                } else { //if there are multiple segments
+                }
+                else { //if there are multiple segments
                     std::vector<IK::Point_3> pts;
                     pts.reserve(polynode->Contour.size());
                     for (size_t j = 0; j < polynode->Contour.size(); j++)
@@ -513,10 +518,12 @@ inline bool element::intersection_closed_and_open_paths_2D(
                 c[i] = c[i].transform(xform_toXY_Inv);
 
             return assigned_t0_ && assigned_t1_;
-        } else {
+        }
+        else {
             return false;
         }
-    } catch (const  std::exception& ex) {
+    }
+    catch (const  std::exception& ex) {
         CGAL_Debug(scale);
         CGAL_Debug(max_coordinate);
         printf("\nCPP   FILE %s    METHOD %s   LINE %i     WHAT %s   ", __FILE__, __FUNCTION__, __LINE__, ex.what());
@@ -592,171 +599,172 @@ inline void element::merge_joints(std::vector<joint>& joints, std::vector<std::v
             ///////////////////////////////////////////////////////////////////////////////
 
             switch (joints[std::get<0>(j_mf[i][j])](std::get<1>(j_mf[i][j]), true).back().size()) {
-                case (2):
-                { //Reposition end points
+            case (2):
+            { //Reposition end points
 //#ifdef DEBUG_JOINERY_SOLVER_ELEMENT
 //                    printf("\nCPP   FILE %s    METHOD %s   LINE %i     WHAT %s ", __FILE__, __FUNCTION__, __LINE__, "Intersect rectangle or line CASE 2 ");
 //#endif
-                    int id = i - 2;
-                    int n = pline0.size() - 1;
+                int id = i - 2;
+                int n = pline0.size() - 1;
 
-                    IK::Segment_3 joint_line_0(joints[std::get<0>(j_mf[id + 2][j])](std::get<1>(j_mf[id + 2][j]), true).back()[0], joints[std::get<0>(j_mf[id + 2][j])](std::get<1>(j_mf[id + 2][j]), true).back()[1]);
-                    IK::Segment_3 joint_line_1(joints[std::get<0>(j_mf[id + 2][j])](std::get<1>(j_mf[id + 2][j]), false).back()[0], joints[std::get<0>(j_mf[id + 2][j])](std::get<1>(j_mf[id + 2][j]), false).back()[1]);
+                IK::Segment_3 joint_line_0(joints[std::get<0>(j_mf[id + 2][j])](std::get<1>(j_mf[id + 2][j]), true).back()[0], joints[std::get<0>(j_mf[id + 2][j])](std::get<1>(j_mf[id + 2][j]), true).back()[1]);
+                IK::Segment_3 joint_line_1(joints[std::get<0>(j_mf[id + 2][j])](std::get<1>(j_mf[id + 2][j]), false).back()[0], joints[std::get<0>(j_mf[id + 2][j])](std::get<1>(j_mf[id + 2][j]), false).back()[1]);
 
-                    ///////////////////////////////////////////////////////////////////////////////
-                    //Take last lines
-                    ///////////////////////////////////////////////////////////////////////////////
-                    int prev = (((id - 1) % n) + n) % n;
-                    int next = (((id + 1) % n) + n) % n;
-                    int nextnext = (((id + 2) % n) + n) % n;
+                ///////////////////////////////////////////////////////////////////////////////
+                //Take last lines
+                ///////////////////////////////////////////////////////////////////////////////
+                int prev = (((id - 1) % n) + n) % n;
+                int next = (((id + 1) % n) + n) % n;
+                int nextnext = (((id + 2) % n) + n) % n;
 
-                    IK::Segment_3 next_segment_0(pline0[prev], pline0[id]);
-                    IK::Segment_3 prev_segment_0(pline0[next], pline0[nextnext]);
-                    IK::Segment_3 next_segment_1(pline1[prev], pline1[id]);
-                    IK::Segment_3 prev_segment_1(pline1[next], pline1[nextnext]);
+                IK::Segment_3 next_segment_0(pline0[prev], pline0[id]);
+                IK::Segment_3 prev_segment_0(pline0[next], pline0[nextnext]);
+                IK::Segment_3 next_segment_1(pline1[prev], pline1[id]);
+                IK::Segment_3 prev_segment_1(pline1[next], pline1[nextnext]);
 
-                    ///////////////////////////////////////////////////////////////////////////////
-                    //Intersect them with side lines, same principle must work on both polygons
-                    ///////////////////////////////////////////////////////////////////////////////
-                    //1 Perform intersection line-line (needs implementation from rhino)
-                    //3 If intersecting relocate joint line points --|*---------*|--, if not overlaping do not change |  *-----*  |.
-                    IK::Point_3 p0_int, p1_int, p2_int, p3_int;
-                    double t0_int, t1_int, t2_int, t3_int;
+                ///////////////////////////////////////////////////////////////////////////////
+                //Intersect them with side lines, same principle must work on both polygons
+                ///////////////////////////////////////////////////////////////////////////////
+                //1 Perform intersection line-line (needs implementation from rhino)
+                //3 If intersecting relocate joint line points --|*---------*|--, if not overlaping do not change |  *-----*  |.
+                IK::Point_3 p0_int, p1_int, p2_int, p3_int;
+                double t0_int, t1_int, t2_int, t3_int;
 
-                    IK::Plane_3 joint_line_plane_0_prev = IK::Plane_3(joint_line_0[0], planes[2 + id].orthogonal_vector()); // IK::Plane_3(prev_segment_0[0], planes[2 + id].orthogonal_vector());
-                    IK::Plane_3 joint_line_plane_0_next(joint_line_0[0], planes[2 + id].orthogonal_vector());
-                    IK::Plane_3 joint_line_plane_1_prev = IK::Plane_3(joint_line_1[0], planes[2 + id].orthogonal_vector()); // IK::Plane_3(prev_segment_1[0], planes[2 + id].orthogonal_vector());
-                    IK::Plane_3 joint_line_plane_1_next(joint_line_1[0], planes[2 + id].orthogonal_vector());
+                IK::Plane_3 joint_line_plane_0_prev = IK::Plane_3(joint_line_0[0], planes[2 + id].orthogonal_vector()); // IK::Plane_3(prev_segment_0[0], planes[2 + id].orthogonal_vector());
+                IK::Plane_3 joint_line_plane_0_next(joint_line_0[0], planes[2 + id].orthogonal_vector());
+                IK::Plane_3 joint_line_plane_1_prev = IK::Plane_3(joint_line_1[0], planes[2 + id].orthogonal_vector()); // IK::Plane_3(prev_segment_1[0], planes[2 + id].orthogonal_vector());
+                IK::Plane_3 joint_line_plane_1_next(joint_line_1[0], planes[2 + id].orthogonal_vector());
 
-                    bool flag0 = cgal_intersection_util::plane_plane_plane(planes[2 + prev], joint_line_plane_0_prev, planes[0], p0_int, joint_line_0, t0_int);
-                    bool flag1 = cgal_intersection_util::plane_plane_plane(planes[2 + next], joint_line_plane_0_next, planes[0], p1_int, joint_line_0, t1_int);
-                    bool flag2 = cgal_intersection_util::plane_plane_plane(planes[2 + prev], joint_line_plane_1_prev, planes[1], p2_int, joint_line_1, t2_int);
-                    bool flag3 = cgal_intersection_util::plane_plane_plane(planes[2 + next], joint_line_plane_1_next, planes[1], p3_int, joint_line_1, t3_int);
+                bool flag0 = cgal_intersection_util::plane_plane_plane(planes[2 + prev], joint_line_plane_0_prev, planes[0], p0_int, joint_line_0, t0_int);
+                bool flag1 = cgal_intersection_util::plane_plane_plane(planes[2 + next], joint_line_plane_0_next, planes[0], p1_int, joint_line_0, t1_int);
+                bool flag2 = cgal_intersection_util::plane_plane_plane(planes[2 + prev], joint_line_plane_1_prev, planes[1], p2_int, joint_line_1, t2_int);
+                bool flag3 = cgal_intersection_util::plane_plane_plane(planes[2 + next], joint_line_plane_1_next, planes[1], p3_int, joint_line_1, t3_int);
 
-                    ///////////////////////////////////////////////////////////////////////////////
-                    //2 Relocate side segments points to intersection points
-                    ///////////////////////////////////////////////////////////////////////////////
+                ///////////////////////////////////////////////////////////////////////////////
+                //2 Relocate side segments points to intersection points
+                ///////////////////////////////////////////////////////////////////////////////
 
-                    if (lastID == i - 1) {
-                        IK::Point_3 p0;
-                        IK::Point_3 p1;
-                        if (cgal_intersection_util::LineLine3D(last_segment0, joint_line_0, p0) && cgal_intersection_util::LineLine3D(last_segment1, joint_line_1, p1)) {
-                            p0_int = p0;
-                            p2_int = p1;
-                        }
+                if (lastID == i - 1) {
+                    IK::Point_3 p0;
+                    IK::Point_3 p1;
+                    if (cgal_intersection_util::LineLine3D(last_segment0, joint_line_0, p0) && cgal_intersection_util::LineLine3D(last_segment1, joint_line_1, p1)) {
+                        p0_int = p0;
+                        p2_int = p1;
                     }
-
-                    if (flag0)
-                        pline0[id] = p0_int;
-                    if (flag1)
-                        pline0[next] = p1_int;
-                    if (flag2)
-                        pline1[id] = p2_int;
-                    if (flag3)
-                        pline1[next] = p3_int;
-
-                    last_segment0 = joint_line_0;
-                    last_segment1 = joint_line_1;
-                    if (i == 2) {
-                        last_segment0_start = joint_line_0;
-                        last_segment1_start = joint_line_1;
-                    }
-
-                    lastID = i;
-                    ///////////////////////////////////////////////////////////////////////////////
-                    //3 Check orientation of joint outlines, if needed flip
-                    ///////////////////////////////////////////////////////////////////////////////
-                    bool flip = CGAL::has_smaller_distance_to_point(
-                        pline0[id],
-                        joints[std::get<0>(j_mf[id + 2][j])](std::get<1>(j_mf[id + 2][j]), !flag)[0].front(),
-                        joints[std::get<0>(j_mf[id + 2][j])](std::get<1>(j_mf[id + 2][j]), !flag)[0].back());
-
-                    if (!flip) {
-                        //bottom
-                        std::reverse(
-                            joints[std::get<0>(j_mf[id + 2][j])](std::get<1>(j_mf[id + 2][j]), !flag)[0].begin(),
-                            joints[std::get<0>(j_mf[id + 2][j])](std::get<1>(j_mf[id + 2][j]), !flag)[0].end());
-
-                        //top
-                        std::reverse(
-                            joints[std::get<0>(j_mf[id + 2][j])](std::get<1>(j_mf[id + 2][j]), flag)[0].begin(),
-                            joints[std::get<0>(j_mf[id + 2][j])](std::get<1>(j_mf[id + 2][j]), flag)[0].end());
-                    }
-
-                    ///////////////////////////////////////////////////////////////////////////////
-                    //Get closest parameters (edge start, start+1) and add to pairs
-                    ///////////////////////////////////////////////////////////////////////////////
-                    std::pair<double, double> cp_pair(id + 0.1, id + 0.9);
-
-                    sorted_segments_or_points_0.insert(std::make_pair(cp_pair.first, std::pair<std::pair<double, double>, CGAL_Polyline>{cp_pair, joints[std::get<0>(j_mf[id + 2][j])](std::get<1>(j_mf[id + 2][j]), true)[0]}));
-                    sorted_segments_or_points_1.insert(std::make_pair(cp_pair.first, std::pair<std::pair<double, double>, CGAL_Polyline>{cp_pair, joints[std::get<0>(j_mf[id + 2][j])](std::get<1>(j_mf[id + 2][j]), false)[0]}));
-                    point_count += joints[std::get<0>(j_mf[id + 2][j])](std::get<1>(j_mf[id + 2][j]), true)[0].size();
-                    break;
                 }
-                case (5):
-                { //two edges
-                    int edge_pair[2];
-                    joints[std::get<0>(j_mf[i][j])].get_edge_ids(std::get<1>(j_mf[i][j]), edge_pair[0], edge_pair[1]);
-                    if (edge_pair[0] > edge_pair[1])
-                        std::swap(edge_pair[0], edge_pair[1]);
 
-#ifdef DEBUG_JOINERY_SOLVER_ELEMENT
-                    printf("\nCPP   FILE %s    METHOD %s   LINE %i     WHAT %s ", __FILE__, __FUNCTION__, __LINE__, "Intersect rectangle or line CASE 5 ");
-#endif
-                    if (false) { //split by line, in this case you need to know which side is inside
-                    } else { //split by full polygon
-                        ///////////////////////////////////////////////////////////////////////////////
-                        //1) Cut polygons and 2) Get closest parameters (Find closest parameters to edges) and add to pairs
-                        ///////////////////////////////////////////////////////////////////////////////
-                        std::pair<double, double> cp_pair_0(0, 0);
-                        CGAL_Polyline joint_pline_0;
-                        bool result0 = intersection_closed_and_open_paths_2D(pline0, joints[std::get<0>(j_mf[i][j])](std::get<1>(j_mf[i][j]), true).front(), this->planes[0], joint_pline_0, edge_pair, cp_pair_0);
-                        if (!result0) continue;
+                if (flag0)
+                    pline0[id] = p0_int;
+                if (flag1)
+                    pline0[next] = p1_int;
+                if (flag2)
+                    pline1[id] = p2_int;
+                if (flag3)
+                    pline1[next] = p3_int;
 
-#ifdef DEBUG_JOINERY_SOLVER_ELEMENT
-                        printf("\nCPP   FILE %s    METHOD %s   LINE %i     WHAT %s ", __FILE__, __FUNCTION__, __LINE__, "First Intersection ");
-#endif
-
-                        //CGAL_Debug(joint_pline_0.size());
-                        //for (size_t i = 0; i < joint_pline_0.size(); i++) {
-                        //    CGAL_Debug(joint_pline_0[i]);
-                        //}
-
-                        std::pair<double, double> cp_pair_1(0, 0);
-                        CGAL_Polyline joint_pline_1;
-                        bool result1 = intersection_closed_and_open_paths_2D(pline1, joints[std::get<0>(j_mf[i][j])](std::get<1>(j_mf[i][j]), false).front(), this->planes[1], joint_pline_1, edge_pair, cp_pair_1);
-                        if (!result1) continue;
-#ifdef DEBUG_JOINERY_SOLVER_ELEMENT
-                        printf("\nCPP   FILE %s    METHOD %s   LINE %i     WHAT %s ", __FILE__, __FUNCTION__, __LINE__, "Second Intersection ");
-#endif
-
-                        sorted_segments_or_points_0.insert(
-                            std::make_pair(
-                                (cp_pair_0.first + cp_pair_0.first) * 0.5,
-                                std::pair<std::pair<double, double>, CGAL_Polyline>{cp_pair_0, joint_pline_0}
-                        )
-                        );
-                        sorted_segments_or_points_1.insert(std::make_pair((cp_pair_1.first + cp_pair_1.first) * 0.5, std::pair<std::pair<double, double>, CGAL_Polyline>{cp_pair_1, joint_pline_1}));
-
-                        point_count += joint_pline_1.size();
-#ifdef DEBUG_JOINERY_SOLVER_ELEMENT
-                        printf("\nCPP   FILE %s    METHOD %s   LINE %i     WHAT %s ", __FILE__, __FUNCTION__, __LINE__, "Output of Case 5 ");
-#endif
-
-                        //CGAL_Debug((cp_pair_0.first + cp_pair_0.first) * 0.5, cp_pair_0.first, cp_pair_0.second);
-                        //CGAL_Debug((cp_pair_1.first + cp_pair_1.first) * 0.5, cp_pair_1.first, cp_pair_1.second);
-
-                        //CGAL_Debug(joint_pline_1.size());
-                        //for (size_t i = 0; i < joint_pline_1.size(); i++) {
-                        //    CGAL_Debug(joint_pline_1[i]);
-                        //}
-                    }
-
-                    break;
+                last_segment0 = joint_line_0;
+                last_segment1 = joint_line_1;
+                if (i == 2) {
+                    last_segment0_start = joint_line_0;
+                    last_segment1_start = joint_line_1;
                 }
-                default:
-                    continue;
-                    break;
+
+                lastID = i;
+                ///////////////////////////////////////////////////////////////////////////////
+                //3 Check orientation of joint outlines, if needed flip
+                ///////////////////////////////////////////////////////////////////////////////
+                bool flip = CGAL::has_smaller_distance_to_point(
+                    pline0[id],
+                    joints[std::get<0>(j_mf[id + 2][j])](std::get<1>(j_mf[id + 2][j]), !flag)[0].front(),
+                    joints[std::get<0>(j_mf[id + 2][j])](std::get<1>(j_mf[id + 2][j]), !flag)[0].back());
+
+                if (!flip) {
+                    //bottom
+                    std::reverse(
+                        joints[std::get<0>(j_mf[id + 2][j])](std::get<1>(j_mf[id + 2][j]), !flag)[0].begin(),
+                        joints[std::get<0>(j_mf[id + 2][j])](std::get<1>(j_mf[id + 2][j]), !flag)[0].end());
+
+                    //top
+                    std::reverse(
+                        joints[std::get<0>(j_mf[id + 2][j])](std::get<1>(j_mf[id + 2][j]), flag)[0].begin(),
+                        joints[std::get<0>(j_mf[id + 2][j])](std::get<1>(j_mf[id + 2][j]), flag)[0].end());
+                }
+
+                ///////////////////////////////////////////////////////////////////////////////
+                //Get closest parameters (edge start, start+1) and add to pairs
+                ///////////////////////////////////////////////////////////////////////////////
+                std::pair<double, double> cp_pair(id + 0.1, id + 0.9);
+
+                sorted_segments_or_points_0.insert(std::make_pair(cp_pair.first, std::pair<std::pair<double, double>, CGAL_Polyline>{cp_pair, joints[std::get<0>(j_mf[id + 2][j])](std::get<1>(j_mf[id + 2][j]), true)[0]}));
+                sorted_segments_or_points_1.insert(std::make_pair(cp_pair.first, std::pair<std::pair<double, double>, CGAL_Polyline>{cp_pair, joints[std::get<0>(j_mf[id + 2][j])](std::get<1>(j_mf[id + 2][j]), false)[0]}));
+                point_count += joints[std::get<0>(j_mf[id + 2][j])](std::get<1>(j_mf[id + 2][j]), true)[0].size();
+                break;
+            }
+            case (5):
+            { //two edges
+                int edge_pair[2];
+                joints[std::get<0>(j_mf[i][j])].get_edge_ids(std::get<1>(j_mf[i][j]), edge_pair[0], edge_pair[1]);
+                if (edge_pair[0] > edge_pair[1])
+                    std::swap(edge_pair[0], edge_pair[1]);
+
+#ifdef DEBUG_JOINERY_SOLVER_ELEMENT
+                printf("\nCPP   FILE %s    METHOD %s   LINE %i     WHAT %s ", __FILE__, __FUNCTION__, __LINE__, "Intersect rectangle or line CASE 5 ");
+#endif
+                if (false) { //split by line, in this case you need to know which side is inside
+                }
+                else { //split by full polygon
+                 ///////////////////////////////////////////////////////////////////////////////
+                 //1) Cut polygons and 2) Get closest parameters (Find closest parameters to edges) and add to pairs
+                 ///////////////////////////////////////////////////////////////////////////////
+                    std::pair<double, double> cp_pair_0(0, 0);
+                    CGAL_Polyline joint_pline_0;
+                    bool result0 = intersection_closed_and_open_paths_2D(pline0, joints[std::get<0>(j_mf[i][j])](std::get<1>(j_mf[i][j]), true).front(), this->planes[0], joint_pline_0, edge_pair, cp_pair_0);
+                    if (!result0) continue;
+
+#ifdef DEBUG_JOINERY_SOLVER_ELEMENT
+                    printf("\nCPP   FILE %s    METHOD %s   LINE %i     WHAT %s ", __FILE__, __FUNCTION__, __LINE__, "First Intersection ");
+#endif
+
+                    //CGAL_Debug(joint_pline_0.size());
+                    //for (size_t i = 0; i < joint_pline_0.size(); i++) {
+                    //    CGAL_Debug(joint_pline_0[i]);
+                    //}
+
+                    std::pair<double, double> cp_pair_1(0, 0);
+                    CGAL_Polyline joint_pline_1;
+                    bool result1 = intersection_closed_and_open_paths_2D(pline1, joints[std::get<0>(j_mf[i][j])](std::get<1>(j_mf[i][j]), false).front(), this->planes[1], joint_pline_1, edge_pair, cp_pair_1);
+                    if (!result1) continue;
+#ifdef DEBUG_JOINERY_SOLVER_ELEMENT
+                    printf("\nCPP   FILE %s    METHOD %s   LINE %i     WHAT %s ", __FILE__, __FUNCTION__, __LINE__, "Second Intersection ");
+#endif
+
+                    sorted_segments_or_points_0.insert(
+                        std::make_pair(
+                            (cp_pair_0.first + cp_pair_0.first) * 0.5,
+                            std::pair<std::pair<double, double>, CGAL_Polyline>{cp_pair_0, joint_pline_0}
+                    )
+                    );
+                    sorted_segments_or_points_1.insert(std::make_pair((cp_pair_1.first + cp_pair_1.first) * 0.5, std::pair<std::pair<double, double>, CGAL_Polyline>{cp_pair_1, joint_pline_1}));
+
+                    point_count += joint_pline_1.size();
+#ifdef DEBUG_JOINERY_SOLVER_ELEMENT
+                    printf("\nCPP   FILE %s    METHOD %s   LINE %i     WHAT %s ", __FILE__, __FUNCTION__, __LINE__, "Output of Case 5 ");
+#endif
+
+                    //CGAL_Debug((cp_pair_0.first + cp_pair_0.first) * 0.5, cp_pair_0.first, cp_pair_0.second);
+                    //CGAL_Debug((cp_pair_1.first + cp_pair_1.first) * 0.5, cp_pair_1.first, cp_pair_1.second);
+
+                    //CGAL_Debug(joint_pline_1.size());
+                    //for (size_t i = 0; i < joint_pline_1.size(); i++) {
+                    //    CGAL_Debug(joint_pline_1[i]);
+                    //}
+                }
+
+                break;
+            }
+            default:
+                continue;
+                break;
             }
         }
 
@@ -893,7 +901,7 @@ inline void element::merge_joints(std::vector<joint>& joints, std::vector<std::v
                 output[this->id].emplace_back(joints[std::get<0>(j_mf[i][j])](std::get<1>(j_mf[i][j]), false)[k]);
             }
         }
-    }
+            }
 
 #ifdef DEBUG_JOINERY_SOLVER_ELEMENT
     printf("\nCPP   FILE %s    METHOD %s   LINE %i     WHAT %s %i %i %i %i ", __FILE__, __FUNCTION__, __LINE__, "Add elements  ", pline0_new.size(), pline1_new.size(), this->id, output.size());
@@ -905,4 +913,4 @@ inline void element::merge_joints(std::vector<joint>& joints, std::vector<std::v
         output[this->id].emplace_back(pline0_new);
         output[this->id].emplace_back(pline1_new);
     }
-}
+        }
