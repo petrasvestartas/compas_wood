@@ -24,7 +24,7 @@ Mac
     conda activate wood-dev
     git clone https://github.com/ibois-epfl/compas_wood
     cd compas_wood 
-    pip install -e 
+    pip install -e .
 
 ################################################################################
 Rhino Grasshopper 
