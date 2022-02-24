@@ -33,6 +33,7 @@ Rhino Grasshopper
 .. code-block:: 
 
     Download the (Windows) or (Mac) zipped files and place them in libraries folder.
-    You can open this folder when you open Grasshopper->File->Special Folder->Component Folder.
+    You can find this folder when you open Grasshopper. 
+    File->Special Folder->Component Folder.
     https://github.com/ibois-epfl/compas_wood/releases/tag/compas_wood_GH_1.0.0
 
