@@ -854,8 +854,8 @@ inline void element::merge_joints(std::vector<joint>& joints, std::vector<std::v
 
     pline0_new.emplace_back(pline0_new.front());
     pline1_new.emplace_back(pline1_new.front());
-    CGAL_Debug(pline0_new);
-    CGAL_Debug(pline1_new);
+    //CGAL_Debug(pline0_new);
+    //CGAL_Debug(pline1_new);
 
     //#ifdef DEBUG_JOINERY_SOLVER_ELEMENT
     //    printf("\nCPP   FILE %s    METHOD %s   LINE %i     WHAT %s ", __FILE__, __FUNCTION__, __LINE__, "Close ");
