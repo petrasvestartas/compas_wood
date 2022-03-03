@@ -56,3 +56,9 @@ inline void CGAL_Debug(IK::Vector_3 v) {
 inline void CGAL_Debug(IK::Point_3 v) {
     printf("CPP Vector %.17g %.17g %.17g \n", v.x(), v.y(), v.z());
 }
+
+inline void CGAL_Debug(CGAL_Polyline polyline) {
+    for (auto& p : polyline)
+        CGAL_Debug(p);
+    printf("CPP int %i\n", 0);
+}

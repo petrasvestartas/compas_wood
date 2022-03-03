@@ -1,16 +1,47 @@
 #pragma once
 //#define DEBUG
 
+//filepath
+//#ifdef _WIN32
+//#include "direct.h"
+//#define PATH_SEP '\\'
+//#define GETCWD _getcwd
+//#define CHDIR _chdir
+//#else
+//#include "unistd.h"
+//#define PATH_SEP '/'
+//#define GETCWD getcwd
+//#define CHDIR chdir
+//#endif
+//
+//std::string GetExecutableDirectory(const char* argv0) {
+//    std::string path = argv0;
+//    int path_directory_index = path.find_last_of(PATH_SEP);
+//    return path.substr(0, path_directory_index + 1);
+//}
+//
+//bool ChangeDirectory(const char* dir) { return CHDIR(dir) == 0; }
+//
+//std::string GetCurrentWorkingDirectory() {
+//    const int BUFSIZE = 4096;
+//    char buf[BUFSIZE];
+//    memset(buf, 0, BUFSIZE);
+//    GETCWD(buf, BUFSIZE - 1);
+//    return buf;
+//}
+
 //Debugging
 //#define DEBUG_MEASURE_TIME
 //#define DEBUG_JOINERY_LIBRARY
 //#define DEBUG_JOINERY_SOLVER_MAIN
-//#define DEBUG_JOINERY_SOLVER_ELEMENT
+#define DEBUG_JOINERY_SOLVER_ELEMENT
 //#define DEBUG_JOINERY_SOLVER_MAIN_LOCAL_SEARCH
 #include <exception>
 #include <typeinfo>
 #include <stdexcept>
 #include <boost/exception/diagnostic_information.hpp>
+//#include <boost/filesystem/operations.hpp>
+//#include <boost/filesystem/path.hpp>
 
 //CGAL
 #include <CGAL/Exact_predicates_inexact_constructions_kernel.h>

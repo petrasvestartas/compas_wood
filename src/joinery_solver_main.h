@@ -1636,7 +1636,7 @@ inline void get_connection_zones(
             int v, f;
             cgal_mesh_util::mesh_from_polylines(plines[i], elements[i].planes[0], top_face_triangulation[i], v, f);
         }
-    }
+}
 }
 
 inline void beam_volumes(
@@ -2006,7 +2006,7 @@ inline void beam_volumes(
 
         //this is wrong because after joints must be distributed to elements that is why you need joints list
         volume_pairs.emplace_back(beam_volume);
-    }
+        }
 
     if (!compute_joints)
         return;

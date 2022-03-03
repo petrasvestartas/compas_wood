@@ -110,9 +110,12 @@ namespace joinery_solver_net
                 threevalence_f, threevalence_f_s, threevalence_v, threevalence_v_s,
                 adjacency_v, adjacency_v_s,
                 jointparams_v, jointparams_v_s,
+                 System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location).ToString(),
                 ref groups_f, ref groups_f_s, ref out_f, ref out_f_s, ref out_v, ref out_v_s,
                 search_type, division_distance, shift, output_type, triangulate
                 );
+
+            //RhinoApp.WriteLine(System.IO.Directory.GetCurrentDirectory().ToString());
 
             if (r == 0)
                 return;

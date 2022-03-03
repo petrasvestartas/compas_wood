@@ -28,30 +28,30 @@ namespace joint_library_xml_parser {
         std::string name = "";//custom
 
         switch (type) {
-            case(12):
-            case(0):
-                name = "ss_e_ip_9";
-                break;
-            case(11):
-            case(1):
-                name = "ss_e_op_9";
-                break;
-            case(20):
-            case(2):
-                name = "ts_e_p_9";
-                break;
-            case(30):
-            case(3):
-                name = "cr_c_ip_9";
-                break;
-            case(40):
-            case(4):
-                name = "tt_e_p_9";
-                break;
-            case(50):
-            case(5):
-                name = "ss_e_r_9";
-                break;
+        case(12):
+        case(0):
+            name = "ss_e_ip_9";
+            break;
+        case(11):
+        case(1):
+            name = "ss_e_op_9";
+            break;
+        case(20):
+        case(2):
+            name = "ts_e_p_9";
+            break;
+        case(30):
+        case(3):
+            name = "cr_c_ip_9";
+            break;
+        case(40):
+        case(4):
+            name = "tt_e_p_9";
+            break;
+        case(50):
+        case(5):
+            name = "ss_e_r_9";
+            break;
         }
 
         joint.name = name;
@@ -68,7 +68,21 @@ namespace joint_library_xml_parser {
 #ifdef DEBUG_JOINERY_LIBRARY
             printf("\nCPP File does not exist %s ", path_and_file_for_joints.c_str());
 #endif
+
+            std::ofstream myfile;
+            myfile.open("C:\\Users\\petra\\AppData\\Roaming\\Grasshopper\\Libraries\\compas_wood\\example.txt");
+            myfile << "Do not Exist\n";
+            myfile << path_and_file_for_joints;
+            myfile.close();
+
             return false;
+        }
+        else {
+            //std::ofstream myfile;
+            //myfile.open("C:\\Users\\petra\\AppData\\Roaming\\Grasshopper\\Libraries\\compas_wood\\example.txt");
+            //myfile << "Exists\n";
+            //myfile << path_and_file_for_joints;
+            //myfile.close();
         }
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         //Read XML
@@ -114,21 +128,21 @@ namespace joint_library_xml_parser {
 
                         //Assign to array
                         switch (i) {
-                            case(0):
-                                joint.m[0].emplace_back(polyline);
-                                break;
+                        case(0):
+                            joint.m[0].emplace_back(polyline);
+                            break;
 
-                            case(1):
-                                joint.m[1].emplace_back(polyline);
-                                break;
+                        case(1):
+                            joint.m[1].emplace_back(polyline);
+                            break;
 
-                            case(2):
-                                joint.f[0].emplace_back(polyline);
-                                break;
+                        case(2):
+                            joint.f[0].emplace_back(polyline);
+                            break;
 
-                            case(3):
-                                joint.f[1].emplace_back(polyline);
-                                break;
+                        case(3):
+                            joint.f[1].emplace_back(polyline);
+                            break;
                         }
                     }
                 }
@@ -147,7 +161,8 @@ namespace joint_library_xml_parser {
                             if (i == 5) {
                                 joint.m_boolean_type.emplace_back(id);
                                 //emplace to female joint.m_boolean_type
-                            } else {
+                            }
+                            else {
                                 joint.f_boolean_type.emplace_back(id);
                                 //emplace to female joint.f_boolean_type
                             }
@@ -175,12 +190,22 @@ namespace joint_library_xml_parser {
                     //Assign to array
                 }
             }
-        } catch (std::exception& e) {
+        }
+        catch (std::exception& e) {
 #ifdef DEBUG_JOINERY_LIBRARY
             printf("\nCPP Wrong property ");
+
 #endif
+            std::ofstream myfile;
+            myfile.open("C:\\Users\\petra\\AppData\\Roaming\\Grasshopper\\Libraries\\compas_wood\\example.txt");
+            myfile << "Wrong Property\n";
+            myfile.close();
             return false;
         }
+        std::ofstream myfile;
+        myfile.open("C:\\Users\\petra\\AppData\\Roaming\\Grasshopper\\Libraries\\compas_wood\\example.txt");
+        myfile << "Good Result\n";
+        myfile.close();
         return true;
     }
 }
@@ -205,7 +230,8 @@ namespace joint_library {
             len = x;
             x = y;
             y = len;
-        } else if (z >= x && z >= y) {
+        }
+        else if (z >= x && z >= y) {
             len = x;
             x = z;
             z = len;
@@ -223,7 +249,8 @@ namespace joint_library {
             y /= x;
             z /= x;
             len = x * sqrt(1.0 + y * y + z * z);
-        } else if (x > 0.0 && ON_IS_FINITE(x))
+        }
+        else if (x > 0.0 && ON_IS_FINITE(x))
             len = x;
         else
             len = 0.0;
@@ -269,7 +296,8 @@ namespace joint_library {
             }
 
             interpolated_points.emplace_back(to);
-        } else {
+        }
+        else {
             interpolated_points.reserve(Steps);
 
             for (int i = 1; i < Steps + 1; i++) {
@@ -347,7 +375,8 @@ namespace joint_library {
             if (i % 2 == 1) {
                 pline0.emplace_back(pts0[i] - v + v_d);
                 pline0.emplace_back(pts0[i] + v - v_d);
-            } else {
+            }
+            else {
                 pline0.emplace_back(pts0[i] + v + v_d);
                 pline0.emplace_back(pts0[i] - v - v_d);
             }
@@ -454,7 +483,8 @@ namespace joint_library {
                 if (i == 1) {
                     if (j < (mid - 1) || j > mid)
                         arrays[i][j] -= 4 * v * flip;
-                } else if (i == 0 || i == 2) {
+                }
+                else if (i == 0 || i == 2) {
                     if (j < (mid - 1) || j > mid)
                         arrays[i][j] -= 2 * v * flip;
                 }
@@ -476,7 +506,8 @@ namespace joint_library {
                 if (flip) {
                     pline.push_back(arrays[i + 0][j]);
                     pline.push_back(arrays[i + 1][j]);
-                } else {
+                }
+                else {
                     pline.push_back(arrays[i + 1][j]);
                     pline.push_back(arrays[i + 0][j]);
                 }
@@ -487,7 +518,8 @@ namespace joint_library {
                     pline,
                     //{ pline[0], pline[pline.size() - 1] },
                     {pline[0], pline[pline.size() - 1]} };
-            } else {
+            }
+            else {
                 joint.m[0] = {
                     pline,
                     //{ pline[0], pline[pline.size() - 1] },
@@ -507,7 +539,8 @@ namespace joint_library {
                 if (flip) {
                     pline.push_back(arrays[i + 0][j]);
                     pline.push_back(arrays[(i + 1) % 4][j]);
-                } else {
+                }
+                else {
                     pline.push_back(arrays[(i + 1) % 4][j]);
                     pline.push_back(arrays[i + 0][j]);
                 }
@@ -518,7 +551,8 @@ namespace joint_library {
                     pline,
                     //{ pline[0],pline[pline.size() - 1] },
                     {pline[0], pline[pline.size() - 1]} };
-            } else {
+            }
+            else {
                 joint.f[1] = {
                     pline,
                     //{ pline[0],pline[pline.size() - 1] },
@@ -593,7 +627,8 @@ namespace joint_library {
                 if (flip) {
                     pline.push_back(arrays[i + 0][j]);
                     pline.push_back(arrays[i + 1][j]);
-                } else {
+                }
+                else {
                     pline.push_back(arrays[i + 1][j]);
                     pline.push_back(arrays[i + 0][j]);
                 }
@@ -604,7 +639,8 @@ namespace joint_library {
                     pline,
                     //{ pline[0], pline[pline.size() - 1] },
                     {pline[0], pline[pline.size() - 1]} };
-            } else {
+            }
+            else {
                 joint.m[0] = {
                     pline,
                     //{ pline[0], pline[pline.size() - 1] },
@@ -624,7 +660,8 @@ namespace joint_library {
                 if (flip) {
                     pline.push_back(arrays[i + 0][j]);
                     pline.push_back(arrays[(i + 1) % 4][j]);
-                } else {
+                }
+                else {
                     pline.push_back(arrays[(i + 1) % 4][j]);
                     pline.push_back(arrays[i + 0][j]);
                 }
@@ -635,7 +672,8 @@ namespace joint_library {
                     pline,
                     //{ pline[0],pline[pline.size() - 1] },
                     {pline[0], pline[pline.size() - 1]} };
-            } else {
+            }
+            else {
                 joint.f[1] = {
                     pline,
                     //{ pline[0],pline[pline.size() - 1] },
@@ -767,7 +805,8 @@ namespace joint_library {
                 if (flip) {
                     pline.push_back(arrays[i + 0][j]);
                     pline.push_back(arrays[i + 1][j]);
-                } else {
+                }
+                else {
                     pline.push_back(arrays[i + 1][j]);
                     pline.push_back(arrays[i + 0][j]);
                 }
@@ -778,7 +817,8 @@ namespace joint_library {
                     pline,
                     //{ pline[0], pline[pline.size() - 1] },
                     {pline[0], pline[pline.size() - 1]} };
-            } else {
+            }
+            else {
                 joint.m[0] = {
                     pline,
                     //{ pline[0], pline[pline.size() - 1] },
@@ -867,8 +907,8 @@ namespace joint_library {
                 flip = i < 2 ? flip : flip * -1;
 
                 arrays[i][j] += v * flip;
-            }
         }
+    }
 
 #ifdef DEBUG_JOINERY_LIBRARY
         printf("\nCPP <<File>> joinery_solver_joint_library.h <<Method>> ts_e_p_3 <<Description> Move Segments");
@@ -896,7 +936,8 @@ namespace joint_library {
                 if (flip) {
                     pline.push_back(arrays[i + 0][j]);
                     pline.push_back(arrays[i + 1][j]);
-                } else {
+                }
+                else {
                     pline.push_back(arrays[i + 1][j]);
                     pline.push_back(arrays[i + 0][j]);
                 }
@@ -917,7 +958,8 @@ namespace joint_library {
                 //CGAL_Debug(4);
                 joint.m[1] = { pline, {pline[0], pline[pline.size() - 1]} };
                 //CGAL_Debug(5);
-            } else {
+            }
+            else {
                 //CGAL_Debug(6);
                 pline.push_back(arrays[i + 1][arrays[0].size() - 1]);
                 //CGAL_Debug(7);
@@ -944,7 +986,7 @@ namespace joint_library {
 #ifdef DEBUG_JOINERY_LIBRARY
         printf("\nCPP <<File>> joinery_solver_joint_library.h <<Method>> ts_e_p_3 <<Description> Create Polylines");
 #endif
-    }
+}
 
     //30-39
     inline void cr_c_ip_0(joint& joint) {
@@ -1160,9 +1202,11 @@ namespace joint_library {
                 int b = elements[jo.v1].joint_types[jo.f1_0];
                 id_representing_joint_name = (a > b) ? a : b;
                 //CGAL_Debug(a, b, a);
-            } else if (elements[jo.v0].joint_types.size()) {
+            }
+            else if (elements[jo.v0].joint_types.size()) {
                 id_representing_joint_name = elements[jo.v0].joint_types[jo.f0_0];
-            } else if (elements[jo.v1].joint_types.size()) {
+            }
+            else if (elements[jo.v1].joint_types.size()) {
                 id_representing_joint_name = elements[jo.v1].joint_types[jo.f1_0];
             }
 
@@ -1179,17 +1223,23 @@ namespace joint_library {
             int group = -1;
             if (id_representing_joint_name == 0) {
                 continue;
-            } else if (jo.type == 12 && ((id_representing_joint_name > 0 && id_representing_joint_name < 10) || id_representing_joint_name == -1)) {
+            }
+            else if (jo.type == 12 && ((id_representing_joint_name > 0 && id_representing_joint_name < 10) || id_representing_joint_name == -1)) {
                 group = 0;
-            } else if (jo.type == 11 && ((id_representing_joint_name > 9 && id_representing_joint_name < 20) || id_representing_joint_name == -1)) {
+            }
+            else if (jo.type == 11 && ((id_representing_joint_name > 9 && id_representing_joint_name < 20) || id_representing_joint_name == -1)) {
                 group = 1;
-            } else if (jo.type == 20 && ((id_representing_joint_name > 19 && id_representing_joint_name < 30) || id_representing_joint_name == -1)) {
+            }
+            else if (jo.type == 20 && ((id_representing_joint_name > 19 && id_representing_joint_name < 30) || id_representing_joint_name == -1)) {
                 group = 2;
-            } else if (jo.type == 30 && ((id_representing_joint_name > 29 && id_representing_joint_name < 40) || id_representing_joint_name == -1)) {
+            }
+            else if (jo.type == 30 && ((id_representing_joint_name > 29 && id_representing_joint_name < 40) || id_representing_joint_name == -1)) {
                 group = 3;
-            } else if (jo.type == 40 && ((id_representing_joint_name > 39 && id_representing_joint_name < 50) || id_representing_joint_name == -1)) { //top-top
+            }
+            else if (jo.type == 40 && ((id_representing_joint_name > 39 && id_representing_joint_name < 50) || id_representing_joint_name == -1)) { //top-top
                 group = 4;
-            } else if (jo.type == 50 && ((id_representing_joint_name > 49 && id_representing_joint_name < 60) || id_representing_joint_name == -1)) { //side-side rotated
+            }
+            else if (jo.type == 50 && ((id_representing_joint_name > 49 && id_representing_joint_name < 60) || id_representing_joint_name == -1)) { //side-side rotated
                 group = 5;
             }
 
@@ -1246,102 +1296,109 @@ namespace joint_library {
 
             //else create a new joint
             switch (group) {
-                case(0):
-                    switch (id_representing_joint_name) {
-                        case (1):
-                            ss_e_ip_1(jo);
-                            break;
-                        case (2):
-                            ss_e_ip_0(jo);
-                            break;
-                        case (9):
-                            //wont work, because not oriented to connection zones, need additional layer e.g. std::map of all joints
-                            joint_library_xml_parser::read_xml(jo, jo.type);//is it 0 or 12 ?
-                            //CGAL_Debug(elements[joint.v0].thickness);
-                            break;
-                        default:
-                            ss_e_ip_1(jo);
-                            //ss_e_ip_0(joint);
-                            break;
-                    }
+            case(0):
+                switch (id_representing_joint_name) {
+                case (1):
+                    ss_e_ip_1(jo);
                     break;
-                case(1):
-                    switch (id_representing_joint_name) {
-                        //printf("\nss_e_op_1");
-                        case (10):
+                case (2):
+                    ss_e_ip_0(jo);
+                    break;
+                case (9):
+                    //wont work, because not oriented to connection zones, need additional layer e.g. std::map of all joints
+                    joint_library_xml_parser::read_xml(jo, jo.type);//is it 0 or 12 ?
+                    //CGAL_Debug(elements[joint.v0].thickness);
+                    break;
+                default:
+                    ss_e_ip_1(jo);
+                    //ss_e_ip_0(joint);
+                    break;
+                }
+                break;
+            case(1):
+                switch (id_representing_joint_name) {
+                    //printf("\nss_e_op_1");
+                case (10):
 
-                            ss_e_op_1(jo);
-                            break;
-                        case (11):
-                            ss_e_op_2(jo);
-                            break;
-                        case (12):
-                            ss_e_op_0(jo);
-                            break;
-                        case (19):
-                            //wont work, because not oriented to connection zones, need additional layer e.g. std::map of all joints
-                            joint_library_xml_parser::read_xml(jo, jo.type);//is it 0 or 12 ?
-                            break;
-                        default:
-                            ss_e_op_1(jo);
-                            //ss_e_op_0(joint);
-                            break;
-                    }
+                    ss_e_op_1(jo);
                     break;
-                case(2):
-                    switch (id_representing_joint_name) {
-                        case (20):
-                            //printf("\nts_e_p_1");
-                            //printf("\nCPP   FILE %s    METHOD %s   LINE %i     WHAT %s ID %i SHIFT %f KEY %s DIVISIONS %f   ", __FILE__, __FUNCTION__, __LINE__, "Assigned groups", id_representing_joint_name, jo.shift, key.c_str(), jo.divisions);
-
-                            ts_e_p_3(jo);
-                            //ts_e_p_1(jo);
-                            break;
-                        case (21):
-                            ts_e_p_2(jo);
-                            break;
-                        case (22):
-                            ts_e_p_3(jo);
-                            break;
-                        case (23):
-                            ts_e_p_0(jo);
-                            break;
-                        case (29):
-                            //wont work, because not oriented to connection zones, need additional layer e.g. std::map of all joints
-                            joint_library_xml_parser::read_xml(jo, jo.type);//is it 0 or 12 ?
-                            break;
-                        default:
-                            ts_e_p_3(jo);
-                            break;
-                    }
+                case (11):
+                    ss_e_op_2(jo);
                     break;
-                case (3):
-
-                    switch (id_representing_joint_name) {
-                        case (30):
-                            cr_c_ip_0(jo);
-                            break;
-                        case (31):
-                            //cr_c_ip_0(joint);
-                            cr_c_ip_1(jo);
-                            break;
-                        case (39):
-                            //wont work, because not oriented to connection zones, need additional layer e.g. std::map of all joints
-                            joint_library_xml_parser::read_xml(jo, jo.type);//is it 0 or 12 ?
-                            break;
-                        default:
-                            cr_c_ip_0(jo);
-                            //cr_c_ip_0(joint);
-                            //printf(joint.name.c_str());
-                            break;
-                    }
+                case (12):
+                    ss_e_op_0(jo);
                     break;
-                case(4):
+                case (19):
+                    //if (true) {
+                    //    std::ofstream myfile2;
+                    //    myfile2.open("C:\\Users\\petra\\AppData\\Roaming\\Grasshopper\\Libraries\\compas_wood\\19.txt");
+                    //    myfile2 << "Exists\n";
+                    //    myfile2 << path_and_file_for_joints;
+                    //    myfile2.close();
+                    //}
+                    //wont work, because not oriented to connection zones, need additional layer e.g. std::map of all joints
                     joint_library_xml_parser::read_xml(jo, jo.type);//is it 0 or 12 ?
                     break;
-                case(5):
+                default:
+                    ss_e_op_1(jo);
+                    //ss_e_op_0(joint);
+                    break;
+                }
+                break;
+            case(2):
+                switch (id_representing_joint_name) {
+                case (20):
+                    //printf("\nts_e_p_1");
+                    //printf("\nCPP   FILE %s    METHOD %s   LINE %i     WHAT %s ID %i SHIFT %f KEY %s DIVISIONS %f   ", __FILE__, __FUNCTION__, __LINE__, "Assigned groups", id_representing_joint_name, jo.shift, key.c_str(), jo.divisions);
+
+                    ts_e_p_3(jo);
+                    //ts_e_p_1(jo);
+                    break;
+                case (21):
+                    ts_e_p_2(jo);
+                    break;
+                case (22):
+                    ts_e_p_3(jo);
+                    break;
+                case (23):
+                    ts_e_p_0(jo);
+                    break;
+                case (29):
+                    //wont work, because not oriented to connection zones, need additional layer e.g. std::map of all joints
                     joint_library_xml_parser::read_xml(jo, jo.type);//is it 0 or 12 ?
                     break;
+                default:
+                    ts_e_p_3(jo);
+                    break;
+                }
+                break;
+            case (3):
+
+                switch (id_representing_joint_name) {
+                case (30):
+                    cr_c_ip_0(jo);
+                    break;
+                case (31):
+                    //cr_c_ip_0(joint);
+                    cr_c_ip_1(jo);
+                    break;
+                case (39):
+                    //wont work, because not oriented to connection zones, need additional layer e.g. std::map of all joints
+                    joint_library_xml_parser::read_xml(jo, jo.type);//is it 0 or 12 ?
+                    break;
+                default:
+                    cr_c_ip_0(jo);
+                    //cr_c_ip_0(joint);
+                    //printf(joint.name.c_str());
+                    break;
+                }
+                break;
+            case(4):
+                joint_library_xml_parser::read_xml(jo, jo.type);//is it 0 or 12 ?
+                break;
+            case(5):
+                joint_library_xml_parser::read_xml(jo, jo.type);//is it 0 or 12 ?
+                break;
             }
 
 #ifdef DEBUG_JOINERY_LIBRARY
@@ -1366,7 +1423,7 @@ namespace joint_library {
 #ifdef DEBUG_JOINERY_LIBRARY
             printf("\nCPP   FILE %s    METHOD %s   LINE %i     WHAT %s ", __FILE__, __FUNCTION__, __LINE__, "last");
 #endif
-        }
+            }
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         //Remove empty joints
@@ -1379,5 +1436,5 @@ namespace joint_library {
         //joints.
 
         //myfile.close();
+        }
     }
-}

@@ -725,14 +725,11 @@ inline void element::merge_joints(std::vector<joint>& joints, std::vector<std::v
                     printf("\nCPP   FILE %s    METHOD %s   LINE %i     WHAT %s ", __FILE__, __FUNCTION__, __LINE__, "First Intersection ");
 #endif
 
-                    //CGAL_Debug(joint_pline_0.size());
-                    //for (size_t i = 0; i < joint_pline_0.size(); i++) {
-                    //    CGAL_Debug(joint_pline_0[i]);
-                    //}
-
                     std::pair<double, double> cp_pair_1(0, 0);
                     CGAL_Polyline joint_pline_1;
                     bool result1 = intersection_closed_and_open_paths_2D(pline1, joints[std::get<0>(j_mf[i][j])](std::get<1>(j_mf[i][j]), false).front(), this->planes[1], joint_pline_1, edge_pair, cp_pair_1);
+                    //CGAL_Debug(pline1);
+                    //CGAL_Debug(joints[std::get<0>(j_mf[i][j])](std::get<1>(j_mf[i][j]), false).front());
                     if (!result1) continue;
 #ifdef DEBUG_JOINERY_SOLVER_ELEMENT
                     printf("\nCPP   FILE %s    METHOD %s   LINE %i     WHAT %s ", __FILE__, __FUNCTION__, __LINE__, "Second Intersection ");
@@ -857,6 +854,8 @@ inline void element::merge_joints(std::vector<joint>& joints, std::vector<std::v
 
     pline0_new.emplace_back(pline0_new.front());
     pline1_new.emplace_back(pline1_new.front());
+    CGAL_Debug(pline0_new);
+    CGAL_Debug(pline1_new);
 
     //#ifdef DEBUG_JOINERY_SOLVER_ELEMENT
     //    printf("\nCPP   FILE %s    METHOD %s   LINE %i     WHAT %s ", __FILE__, __FUNCTION__, __LINE__, "Close ");
@@ -901,7 +900,7 @@ inline void element::merge_joints(std::vector<joint>& joints, std::vector<std::v
                 output[this->id].emplace_back(joints[std::get<0>(j_mf[i][j])](std::get<1>(j_mf[i][j]), false)[k]);
             }
         }
-            }
+    }
 
 #ifdef DEBUG_JOINERY_SOLVER_ELEMENT
     printf("\nCPP   FILE %s    METHOD %s   LINE %i     WHAT %s %i %i %i %i ", __FILE__, __FUNCTION__, __LINE__, "Add elements  ", pline0_new.size(), pline1_new.size(), this->id, output.size());
@@ -913,4 +912,4 @@ inline void element::merge_joints(std::vector<joint>& joints, std::vector<std::v
         output[this->id].emplace_back(pline0_new);
         output[this->id].emplace_back(pline1_new);
     }
-        }
+}

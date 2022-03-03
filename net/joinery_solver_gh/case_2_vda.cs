@@ -345,7 +345,7 @@ namespace joinery_solver_gh
                     xaxis *= -1;
 
                 //Incase insertion vectors are given
-                if (!(insertion_vectors[i].X == 0 && insertion_vectors[i].Y == 0 && insertion_vectors[i].Z == 0))
+                if (Math.Abs(insertion_vectors[i].X)+ Math.Abs(insertion_vectors[i].Y)+ Math.Abs(insertion_vectors[i].Z) >0.01 )
                 {
                     //Project given vector to a plane
                     Plane edge_plane = new Plane(this.e_lines[i].Mid(), yaxis);
