@@ -107,6 +107,7 @@ namespace joint_library_xml_parser {
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         try {
             for (boost::property_tree::ptree::value_type& v : tree.get_child(xml_joint_name)) {
+                //printf("\nCPP %s", v.first.c_str());
 #ifdef DEBUG_JOINERY_LIBRARY
                 printf("\nCPP %s", v.first.c_str());
 #endif
@@ -126,22 +127,29 @@ namespace joint_library_xml_parser {
 #endif
                         }
 
+                        //printf("\n");
+                        //CGAL_Debug(polyline.size());
+
                         //Assign to array
                         switch (i) {
                         case(0):
                             joint.m[0].emplace_back(polyline);
+                            //printf("\nCPP joint.m[0].emplace_back(polyline)");
                             break;
 
                         case(1):
                             joint.m[1].emplace_back(polyline);
+                            //printf("\nCPP joint.m[1].emplace_back(polyline)");
                             break;
 
                         case(2):
                             joint.f[0].emplace_back(polyline);
+                            //printf("\nCPP joint.f[0].emplace_back(polyline)");
                             break;
 
                         case(3):
                             joint.f[1].emplace_back(polyline);
+                            //printf("\nCPP joint.f[1].emplace_back(polyline)");
                             break;
                         }
                     }
@@ -158,7 +166,7 @@ namespace joint_library_xml_parser {
 #ifdef DEBUG_JOINERY_LIBRARY
                             printf("\nCPP id %c ", id);
 #endif
-                            if (i == 5) {
+                            if (i == 4) {
                                 joint.m_boolean_type.emplace_back(id);
                                 //emplace to female joint.m_boolean_type
                             }
@@ -206,6 +214,8 @@ namespace joint_library_xml_parser {
         myfile.open("C:\\Users\\petra\\AppData\\Roaming\\Grasshopper\\Libraries\\compas_wood\\example.txt");
         myfile << "Good Result\n";
         myfile.close();
+        //CGAL_Debug(joint.f[0].size(), joint.f[1].size(), joint.f_boolean_type.size());
+        //CGAL_Debug(joint.m[0].size(), joint.m[1].size(), joint.m_boolean_type.size());
         return true;
     }
 }
@@ -907,8 +917,8 @@ namespace joint_library {
                 flip = i < 2 ? flip : flip * -1;
 
                 arrays[i][j] += v * flip;
+            }
         }
-    }
 
 #ifdef DEBUG_JOINERY_LIBRARY
         printf("\nCPP <<File>> joinery_solver_joint_library.h <<Method>> ts_e_p_3 <<Description> Move Segments");
@@ -986,7 +996,7 @@ namespace joint_library {
 #ifdef DEBUG_JOINERY_LIBRARY
         printf("\nCPP <<File>> joinery_solver_joint_library.h <<Method>> ts_e_p_3 <<Description> Create Polylines");
 #endif
-}
+    }
 
     //30-39
     inline void cr_c_ip_0(joint& joint) {
@@ -1196,18 +1206,19 @@ namespace joint_library {
 
             //Select user given type
             //types0+265
+
             int id_representing_joint_name = -1;
             if (elements[jo.v0].joint_types.size() && elements[jo.v1].joint_types.size()) {
-                int a = elements[jo.v0].joint_types[jo.f0_0];
-                int b = elements[jo.v1].joint_types[jo.f1_0];
+                int a = std::abs(elements[jo.v0].joint_types[jo.f0_0]);
+                int b = std::abs(elements[jo.v1].joint_types[jo.f1_0]);
                 id_representing_joint_name = (a > b) ? a : b;
                 //CGAL_Debug(a, b, a);
             }
             else if (elements[jo.v0].joint_types.size()) {
-                id_representing_joint_name = elements[jo.v0].joint_types[jo.f0_0];
+                id_representing_joint_name = std::abs(elements[jo.v0].joint_types[jo.f0_0]);
             }
             else if (elements[jo.v1].joint_types.size()) {
-                id_representing_joint_name = elements[jo.v1].joint_types[jo.f1_0];
+                id_representing_joint_name = std::abs(elements[jo.v1].joint_types[jo.f1_0]);
             }
 
             //When users gives an input -> default_parameters_for_four_types
@@ -1423,7 +1434,7 @@ namespace joint_library {
 #ifdef DEBUG_JOINERY_LIBRARY
             printf("\nCPP   FILE %s    METHOD %s   LINE %i     WHAT %s ", __FILE__, __FUNCTION__, __LINE__, "last");
 #endif
-            }
+        }
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         //Remove empty joints
@@ -1436,5 +1447,5 @@ namespace joint_library {
         //joints.
 
         //myfile.close();
-        }
     }
+}

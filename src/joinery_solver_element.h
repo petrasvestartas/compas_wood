@@ -26,7 +26,9 @@ public:
     std::vector<IK::Plane_3> planes;	  //top and bottom planes + each side face
 
     std::vector<IK::Vector_3> edge_vectors; //if set
-    std::vector<int> joint_types;			//if set - used in joint_library | method construct_joint_by_index
+
+    std::vector<int> joint_types; //if set - used in joint_library | method construct_joint_by_index | if set negative is female
+
     IK::Segment_3 axis;
 
     //For beams only
@@ -575,17 +577,18 @@ inline void element::merge_joints(std::vector<joint>& joints, std::vector<std::v
             printf("\nCPP   FILE %s    METHOD %s   LINE %i     WHAT %s num of elements %zi ", __FILE__, __FUNCTION__, __LINE__, "Good Name", joints[std::get<0>(j_mf[i][j])](male_or_female, true).size());
 #endif
 
-            if (joints[std::get<0>(j_mf[i][j])](male_or_female, true).size() != 2)
-                continue;
+            //if (joints[std::get<0>(j_mf[i][j])](male_or_female, true).size() != 2)
+                //continue;
             if (joints[std::get<0>(j_mf[i][j])](male_or_female, false).size() == 0)
                 continue;
             ///////////////////////////////////////////////////////////////////////////////
-            //Take last lines Element outline can be not in the same order as joint outlines Take joint segment and measure its point to the plane
+            //Check if joint outline is on top or bottom face, if not reverse the order
+            //Take the last lines Element outline can be not in the same order as joint outlines Take joint segment and measure its point to the plane
             ///////////////////////////////////////////////////////////////////////////////
 
             bool flag =
-                CGAL::squared_distance(planes[0].projection(joints[std::get<0>(j_mf[i][j])](male_or_female, true).back()[0]), joints[std::get<0>(j_mf[i][j])](male_or_female, true).back()[0]) >
-                CGAL::squared_distance(planes[0].projection(joints[std::get<0>(j_mf[i][j])](male_or_female, false).back()[0]), joints[std::get<0>(j_mf[i][j])](male_or_female, false).back()[0]);
+                CGAL::squared_distance(planes[0].projection(joints[std::get<0>(j_mf[i][j])](male_or_female, true)[1][0]), joints[std::get<0>(j_mf[i][j])](male_or_female, true)[1][0]) >
+                CGAL::squared_distance(planes[0].projection(joints[std::get<0>(j_mf[i][j])](male_or_female, false)[1][0]), joints[std::get<0>(j_mf[i][j])](male_or_female, false)[1][0]);
 
             if (flag)
                 joints[std::get<0>(j_mf[i][j])].reverse(std::get<1>(j_mf[i][j]));
@@ -596,9 +599,10 @@ inline void element::merge_joints(std::vector<joint>& joints, std::vector<std::v
 
             ///////////////////////////////////////////////////////////////////////////////
             //Intersect rectangle or line
+            //Check the number of guid line, should either 2 (line) or 5 (rectangle) vertices
             ///////////////////////////////////////////////////////////////////////////////
 
-            switch (joints[std::get<0>(j_mf[i][j])](std::get<1>(j_mf[i][j]), true).back().size()) {
+            switch (joints[std::get<0>(j_mf[i][j])](std::get<1>(j_mf[i][j]), true)[1].size()) {
             case (2):
             { //Reposition end points
 //#ifdef DEBUG_JOINERY_SOLVER_ELEMENT
@@ -607,8 +611,8 @@ inline void element::merge_joints(std::vector<joint>& joints, std::vector<std::v
                 int id = i - 2;
                 int n = pline0.size() - 1;
 
-                IK::Segment_3 joint_line_0(joints[std::get<0>(j_mf[id + 2][j])](std::get<1>(j_mf[id + 2][j]), true).back()[0], joints[std::get<0>(j_mf[id + 2][j])](std::get<1>(j_mf[id + 2][j]), true).back()[1]);
-                IK::Segment_3 joint_line_1(joints[std::get<0>(j_mf[id + 2][j])](std::get<1>(j_mf[id + 2][j]), false).back()[0], joints[std::get<0>(j_mf[id + 2][j])](std::get<1>(j_mf[id + 2][j]), false).back()[1]);
+                IK::Segment_3 joint_line_0(joints[std::get<0>(j_mf[id + 2][j])](std::get<1>(j_mf[id + 2][j]), true)[1][0], joints[std::get<0>(j_mf[id + 2][j])](std::get<1>(j_mf[id + 2][j]), true)[1][1]);
+                IK::Segment_3 joint_line_1(joints[std::get<0>(j_mf[id + 2][j])](std::get<1>(j_mf[id + 2][j]), false)[1][0], joints[std::get<0>(j_mf[id + 2][j])](std::get<1>(j_mf[id + 2][j]), false)[1][1]);
 
                 ///////////////////////////////////////////////////////////////////////////////
                 //Take last lines
@@ -767,7 +771,7 @@ inline void element::merge_joints(std::vector<joint>& joints, std::vector<std::v
 
         //Unify windings of polylines
     }
-    //return;
+
     ///////////////////////////////////////////////////////////////////////////////
     //Iterate pairs and mark skipped points ids
     //first is key, second - value (pair of cpt (first) and polyline (second))
@@ -783,8 +787,6 @@ inline void element::merge_joints(std::vector<joint>& joints, std::vector<std::v
 #ifdef DEBUG_JOINERY_SOLVER_ELEMENT
     printf("\nCPP   FILE %s    METHOD %s   LINE %i     WHAT %s ", __FILE__, __FUNCTION__, __LINE__, "Iterate pairs and mark skipped points ids ");
 #endif
-
-    //CGAL_Debug(std::floor(sorted_segments_or_points_0.begin()->second.first.first), sorted_segments_or_points_0.begin()->second.first.second);
 
     std::vector<bool> point_flags_1(pline0.size(), true); //point flags to keep corners
     for (auto& pair : sorted_segments_or_points_1)
@@ -812,8 +814,6 @@ inline void element::merge_joints(std::vector<joint>& joints, std::vector<std::v
         if (point_flags_0[i])
             sorted_segments_or_points_0.insert(std::make_pair(i, std::pair<std::pair<double, double>, CGAL_Polyline>{std::pair<double, double>(i, i), CGAL_Polyline{ pline0[i] }}));
 
-    //
-
     for (size_t i = 0; i < point_flags_1.size(); i++)
         if (point_flags_1[i])
             sorted_segments_or_points_1.insert(std::make_pair(i, std::pair<std::pair<double, double>, CGAL_Polyline>{std::pair<double, double>(i, i), CGAL_Polyline{ pline1[i] }}));
@@ -823,13 +823,9 @@ inline void element::merge_joints(std::vector<joint>& joints, std::vector<std::v
     pline0_new.reserve(point_count);
     pline1_new.reserve(point_count);
 
-    //int counter = 0;
     for (auto const& x : sorted_segments_or_points_0) {
         for (size_t j = 0; j < x.second.second.size(); j++)
             pline0_new.emplace_back(x.second.second[j]);
-        //if(counter==1)
-        //break;
-        //counter++;
     }
 
     for (auto const& x : sorted_segments_or_points_1) {
@@ -861,11 +857,10 @@ inline void element::merge_joints(std::vector<joint>& joints, std::vector<std::v
     //    printf("\nCPP   FILE %s    METHOD %s   LINE %i     WHAT %s ", __FILE__, __FUNCTION__, __LINE__, "Close ");
     //#endif
 
-        ///////////////////////////////////////////////////////////////////////////////
-        //Add loose elements from top and bottom outlines also
-        //Also check the winding
-        ///////////////////////////////////////////////////////////////////////////////
-
+    ///////////////////////////////////////////////////////////////////////////////
+    //Add loose elements from top and bottom outlines also
+    //Also check the winding
+    ///////////////////////////////////////////////////////////////////////////////
     for (int i = 0; i < 2; i++) { //iterate top only
         for (size_t j = 0; j < j_mf[i].size(); j++) {
             if (joints[std::get<0>(j_mf[i][j])].name == "")
@@ -874,7 +869,9 @@ inline void element::merge_joints(std::vector<joint>& joints, std::vector<std::v
             if (joints[std::get<0>(j_mf[i][j])](std::get<1>(j_mf[i][j]), true).size() == 0) continue;
             if (joints[std::get<0>(j_mf[i][j])](std::get<1>(j_mf[i][j]), false).size() == 0)continue;
 
+            ///////////////////////////////////////////////////////////////////////////////
             //Check hole position
+            ///////////////////////////////////////////////////////////////////////////////
             bool flag =
                 CGAL::squared_distance(planes[0].projection(joints[std::get<0>(j_mf[i][j])](std::get<1>(j_mf[i][j]), true).back()[0]), joints[std::get<0>(j_mf[i][j])](std::get<1>(j_mf[i][j]), true).back()[0]) >
                 CGAL::squared_distance(planes[0].projection(joints[std::get<0>(j_mf[i][j])](std::get<1>(j_mf[i][j]), false).back()[0]), joints[std::get<0>(j_mf[i][j])](std::get<1>(j_mf[i][j]), false).back()[0]);
@@ -882,6 +879,9 @@ inline void element::merge_joints(std::vector<joint>& joints, std::vector<std::v
             if (flag)
                 joints[std::get<0>(j_mf[i][j])].reverse(std::get<1>(j_mf[i][j]));
 
+            ///////////////////////////////////////////////////////////////////////////////
+            //Check Winding
+            ///////////////////////////////////////////////////////////////////////////////
             for (int k = 0; k < joints[std::get<0>(j_mf[i][j])](std::get<1>(j_mf[i][j]), true).size() - 1; k++) {
                 //Orient to 2D and check the winding
                 bool is_clockwise = cgal_polyline_util::is_clockwise(joints[std::get<0>(j_mf[i][j])](std::get<1>(j_mf[i][j]), true)[k], planes[0]);
@@ -896,8 +896,93 @@ inline void element::merge_joints(std::vector<joint>& joints, std::vector<std::v
                         std::end(joints[std::get<0>(j_mf[i][j])](std::get<1>(j_mf[i][j]), false)[k]));
                 }
 
+                //Add holes
                 output[this->id].emplace_back(joints[std::get<0>(j_mf[i][j])](std::get<1>(j_mf[i][j]), true)[k]);
                 output[this->id].emplace_back(joints[std::get<0>(j_mf[i][j])](std::get<1>(j_mf[i][j]), false)[k]);
+            }
+        }
+    }
+
+    //Collect holes for sides, this was first implemented for miter joints
+    for (int i = 2; i < this->j_mf.size(); i++) {
+        for (int j = 0; j < this->j_mf[i].size(); j++) {
+            if (joints[std::get<0>(j_mf[i][j])].name == "")
+                continue;
+
+            if (joints[std::get<0>(j_mf[i][j])](std::get<1>(j_mf[i][j]), true).size() == 0) continue;
+            if (joints[std::get<0>(j_mf[i][j])](std::get<1>(j_mf[i][j]), false).size() == 0)continue;
+
+            ///////////////////////////////////////////////////////////////////////////////
+            //Check if there are any holes, if yes continue loop
+            ///////////////////////////////////////////////////////////////////////////////
+            std::vector<int> id_of_holes;
+
+            //printf("\n");
+            //CGAL_Debug(joints[std::get<0>(j_mf[i][j])].f.size());
+            //CGAL_Debug(joints[std::get<0>(j_mf[i][j])].f_boolean_type.size());
+            //CGAL_Debug(joints[std::get<0>(j_mf[i][j])].m.size());
+            //CGAL_Debug(joints[std::get<0>(j_mf[i][j])].m_boolean_type.size());
+
+            //CGAL_Debug(joints[std::get<0>(j_mf[i][j])](std::get<1>(j_mf[i][j]), true).size());//polylines
+            //CGAL_Debug(joints[std::get<0>(j_mf[i][j])](std::get<1>(j_mf[i][j])).size());//types
+
+            for (int k = 0; k < joints[std::get<0>(j_mf[i][j])](std::get<1>(j_mf[i][j])).size(); k += 2) {
+                if (joints[std::get<0>(j_mf[i][j])](std::get<1>(j_mf[i][j]))[k] == '2')
+                    id_of_holes.emplace_back((int)(k));
+
+                std::string s(1, joints[std::get<0>(j_mf[i][j])](std::get<1>(j_mf[i][j]))[k]);
+                printf("\n");
+                printf(s.c_str());
+
+                //CGAL_Debug(joints[std::get<0>(j_mf[i][j])](std::get<1>(j_mf[i][j]))[k]);
+            }
+
+            if (id_of_holes.size() == 0) continue;
+
+            ///////////////////////////////////////////////////////////////////////////////
+            //Check hole position
+            ///////////////////////////////////////////////////////////////////////////////
+            bool flag =
+                CGAL::squared_distance(planes[0].projection(joints[std::get<0>(j_mf[i][j])](std::get<1>(j_mf[i][j]), true).back()[0]), joints[std::get<0>(j_mf[i][j])](std::get<1>(j_mf[i][j]), true).back()[0]) >
+                CGAL::squared_distance(planes[0].projection(joints[std::get<0>(j_mf[i][j])](std::get<1>(j_mf[i][j]), false).back()[0]), joints[std::get<0>(j_mf[i][j])](std::get<1>(j_mf[i][j]), false).back()[0]);
+
+            if (flag)
+                joints[std::get<0>(j_mf[i][j])].reverse(std::get<1>(j_mf[i][j]));
+
+            ///////////////////////////////////////////////////////////////////////////////
+            //Check Winding and add holes
+            ///////////////////////////////////////////////////////////////////////////////
+            //CGAL_Debug(joints[std::get<0>(j_mf[i][j])].m_boolean_type.size());
+            //CGAL_Debug(joints[std::get<0>(j_mf[i][j])].f_boolean_type.size());
+
+            for (auto& k : id_of_holes) {
+                //CGAL_Debug(joints[std::get<0>(j_mf[i][j])](std::get<1>(j_mf[i][j]), true).size());
+                //CGAL_Debug(joints[std::get<0>(j_mf[i][j])](std::get<1>(j_mf[i][j]), false).size());
+                //CGAL_Debug(k);
+
+                //Orient to 2D and check the winding using top outline
+                bool is_clockwise = cgal_polyline_util::is_clockwise(joints[std::get<0>(j_mf[i][j])](std::get<1>(j_mf[i][j]), true)[k], planes[0]);
+
+                if (!is_clockwise) {
+                    std::reverse(
+                        std::begin(joints[std::get<0>(j_mf[i][j])](std::get<1>(j_mf[i][j]), true)[k]),
+                        std::end(joints[std::get<0>(j_mf[i][j])](std::get<1>(j_mf[i][j]), true)[k]));
+
+                    std::reverse(
+                        std::begin(joints[std::get<0>(j_mf[i][j])](std::get<1>(j_mf[i][j]), false)[k]),
+                        std::end(joints[std::get<0>(j_mf[i][j])](std::get<1>(j_mf[i][j]), false)[k]));
+                }
+
+                //Add holes
+                CGAL_Debug(0);
+                CGAL_Debug(joints[std::get<0>(j_mf[i][j])](std::get<1>(j_mf[i][j]), true)[k]);
+                CGAL_Debug(0);
+                CGAL_Debug(joints[std::get<0>(j_mf[i][j])](std::get<1>(j_mf[i][j]), false)[k]);
+                CGAL_Debug(0);
+                output[this->id].emplace_back(joints[std::get<0>(j_mf[i][j])](std::get<1>(j_mf[i][j]), true)[k]);
+                output[this->id].emplace_back(joints[std::get<0>(j_mf[i][j])](std::get<1>(j_mf[i][j]), false)[k]);
+                //CGAL_Debug(joints[std::get<0>(j_mf[i][j])](std::get<1>(j_mf[i][j]), true)[k]);
+                //CGAL_Debug(joints[std::get<0>(j_mf[i][j])](std::get<1>(j_mf[i][j]), false)[k]);
             }
         }
     }

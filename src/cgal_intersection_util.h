@@ -30,7 +30,8 @@ namespace cgal_intersection_util {
                 t = 1.0 + ((point - s[1]) * D) / DoD;
 
             rc = true;
-        } else { // (GBA) Closest point to a degenerate line works as well
+        }
+        else { // (GBA) Closest point to a degenerate line works as well
             t = 0.0;
             rc = true;
         }
@@ -52,7 +53,8 @@ namespace cgal_intersection_util {
             p0 = s0[0];
             p1 = s0[0];
             return true;
-        } else if (CGAL::squared_distance(s0[1], s1[0]) < GlobalTolerance || CGAL::squared_distance(s0[1], s1[1]) < GlobalTolerance) {
+        }
+        else if (CGAL::squared_distance(s0[1], s1[0]) < GlobalTolerance || CGAL::squared_distance(s0[1], s1[1]) < GlobalTolerance) {
             p0 = s0[1];
             p1 = s0[1];
             return true;
@@ -105,10 +107,11 @@ namespace cgal_intersection_util {
             p1 = seg0[1];
             //return Result(seg0, seg1);
             return true;
-        } else {//Skew segments have two different intersection points.
-            //Co-linear - check ends
+        }
+        else {//Skew segments have two different intersection points.
+         //Co-linear - check ends
 
-            //Works only if segments are not co-linear
+         //Works only if segments are not co-linear
             IK::Plane_3 plane(s0[0], normal);
             CGAL::Aff_transformation_3<IK> xform = cgal_xform_util::PlaneToXY(s0[0], plane);
             CGAL::Aff_transformation_3<IK> xform_Inv = xform.inverse();
@@ -157,10 +160,12 @@ namespace cgal_intersection_util {
                             p1 = point_at(s1, t1);
                         }
                     }
-                } else {
+                }
+                else {
                     return false;
                 }
-            } else {
+            }
+            else {
                 return false;
             }
             return true;
@@ -195,10 +200,12 @@ namespace cgal_intersection_util {
                 output = IK::Point_3(p->hx(), p->hy(), 0);
                 output = xform_Inv.transform(output);
                 //cgal_intersection_util::ClosestPointTo(*p, cutter_line, t);
-            } else {
+            }
+            else {
                 return false;
             }
-        } else {
+        }
+        else {
             return false;
         }
 
@@ -268,12 +275,14 @@ namespace cgal_intersection_util {
         if (DoD > 0.0) {
             if ((point - s[0]).squared_length() <= (point - s[1]).squared_length()) {
                 t = ((point - s[0]) * D) / DoD;
-            } else {
+            }
+            else {
                 t = 1.0 + ((point - s[1]) * D) / DoD;
             }
 
             rc = true;
-        } else {
+        }
+        else {
             t = 0.0;
             rc = true; // (GBA) Closest point to a degenerate line works as well
         }
@@ -292,12 +301,14 @@ namespace cgal_intersection_util {
         if (DoD > 0.0) {
             if ((point - s[0]).squared_length() <= (point - s[1]).squared_length()) {
                 t = ((point - s[0]) * D) / DoD;
-            } else {
+            }
+            else {
                 t = 1.0 + ((point - s[1]) * D) / DoD;
             }
 
             rc = true;
-        } else {
+        }
+        else {
             t = 0.0;
             rc = true; // (GBA) Closest point to a degenerate line works as well
         }
@@ -319,7 +330,8 @@ namespace cgal_intersection_util {
             p0 = (*boost::get<IK::Point_3>(&*result0));
             //printf("Good\n");
             //CGAL_Debug(p0, true);
-        } else {
+        }
+        else {
             printf("Bad\n");
         }
     }
@@ -539,72 +551,72 @@ namespace cgal_intersection_util {
         maxpiv = minpiv = fabs(x);
         p0 = workarray;
         switch (i) {
-            case 1: /* swap rows 0 and 1 */
-                memcpy(p0, row1, sizeof_row);
-                p0[3] = d1;
-                p0 += 4;
-                memcpy(p0, row0, sizeof_row);
-                p0[3] = d0;
-                p0 += 4;
-                memcpy(p0, row2, sizeof_row);
-                p0[3] = d2;
-                break;
-            case 2: /* swap rows 0 and 2 */
-                memcpy(p0, row2, sizeof_row);
-                p0[3] = d2;
-                p0 += 4;
-                memcpy(p0, row1, sizeof_row);
-                p0[3] = d1;
-                p0 += 4;
-                memcpy(p0, row0, sizeof_row);
-                p0[3] = d0;
-                break;
-            default:
-                memcpy(p0, row0, sizeof_row);
-                p0[3] = d0;
-                p0 += 4;
-                memcpy(p0, row1, sizeof_row);
-                p0[3] = d1;
-                p0 += 4;
-                memcpy(p0, row2, sizeof_row);
-                p0[3] = d2;
-                break;
+        case 1: /* swap rows 0 and 1 */
+            memcpy(p0, row1, sizeof_row);
+            p0[3] = d1;
+            p0 += 4;
+            memcpy(p0, row0, sizeof_row);
+            p0[3] = d0;
+            p0 += 4;
+            memcpy(p0, row2, sizeof_row);
+            p0[3] = d2;
+            break;
+        case 2: /* swap rows 0 and 2 */
+            memcpy(p0, row2, sizeof_row);
+            p0[3] = d2;
+            p0 += 4;
+            memcpy(p0, row1, sizeof_row);
+            p0[3] = d1;
+            p0 += 4;
+            memcpy(p0, row0, sizeof_row);
+            p0[3] = d0;
+            break;
+        default:
+            memcpy(p0, row0, sizeof_row);
+            p0[3] = d0;
+            p0 += 4;
+            memcpy(p0, row1, sizeof_row);
+            p0[3] = d1;
+            p0 += 4;
+            memcpy(p0, row2, sizeof_row);
+            p0[3] = d2;
+            break;
         }
         switch (j) {
-            case 1: /* swap columns 0 and 1 */
-                p0 = x_addr;
-                x_addr = y_addr;
-                y_addr = p0;
-                p0 = &workarray[0];
-                x = p0[0];
-                p0[0] = p0[1];
-                p0[1] = x;
-                p0 += 4;
-                x = p0[0];
-                p0[0] = p0[1];
-                p0[1] = x;
-                p0 += 4;
-                x = p0[0];
-                p0[0] = p0[1];
-                p0[1] = x;
-                break;
-            case 2: /* swap columns 0 and 2 */
-                p0 = x_addr;
-                x_addr = z_addr;
-                z_addr = p0;
-                p0 = &workarray[0];
-                x = p0[0];
-                p0[0] = p0[2];
-                p0[2] = x;
-                p0 += 4;
-                x = p0[0];
-                p0[0] = p0[2];
-                p0[2] = x;
-                p0 += 4;
-                x = p0[0];
-                p0[0] = p0[2];
-                p0[2] = x;
-                break;
+        case 1: /* swap columns 0 and 1 */
+            p0 = x_addr;
+            x_addr = y_addr;
+            y_addr = p0;
+            p0 = &workarray[0];
+            x = p0[0];
+            p0[0] = p0[1];
+            p0[1] = x;
+            p0 += 4;
+            x = p0[0];
+            p0[0] = p0[1];
+            p0[1] = x;
+            p0 += 4;
+            x = p0[0];
+            p0[0] = p0[1];
+            p0[1] = x;
+            break;
+        case 2: /* swap columns 0 and 2 */
+            p0 = x_addr;
+            x_addr = z_addr;
+            z_addr = p0;
+            p0 = &workarray[0];
+            x = p0[0];
+            p0[0] = p0[2];
+            p0[2] = x;
+            p0 += 4;
+            x = p0[0];
+            p0[0] = p0[2];
+            p0[2] = x;
+            p0 += 4;
+            x = p0[0];
+            p0[0] = p0[2];
+            p0[2] = x;
+            break;
         }
 
         x = 1.0 / workarray[0];
@@ -686,7 +698,8 @@ namespace cgal_intersection_util {
             p0 = workarray + 1;
             p1 = p0 + 8;
             p2 = p0 + 4;
-        } else {
+        }
+        else {
             /* pivot is in row 1 */
             p0 = workarray + 1;
             p1 = p0 + 4;
@@ -736,7 +749,8 @@ namespace cgal_intersection_util {
         if (i) {
             *y_addr = workarray[11];
             *z_addr = workarray[7];
-        } else {
+        }
+        else {
             *y_addr = workarray[7];
             *z_addr = workarray[11];
         }
@@ -800,13 +814,15 @@ namespace cgal_intersection_util {
                 t = 1.0;
             else
                 t = 0.5;
-        } else {
+        }
+        else {
             d = 1.0 / d;
             fd = fabs(d);
             if (fd > 1.0 && (fabs(a) >= ON_DBL_MAX / fd || fabs(b) >= ON_DBL_MAX / fd)) {
                 // double overflow - line may be (nearly) parallel to plane
                 t = 0.5;
-            } else {
+            }
+            else {
                 t = a / (a - b); // = a*d;  a/(a-b) has more precision than a*d
                 rc = true;
             }
@@ -928,6 +944,31 @@ namespace cgal_intersection_util {
         IK::Point_3 p3;
         cgal_intersection_util::Intersect(sequence_of_planes[3], sequence_of_planes[0], mainPlane, p3);
         quad = { p0, p1, p2, p3, p0 };
+    }
+
+    inline void plane_4_planes_open(IK::Plane_3& mainPlane, IK::Plane_3(&sequence_of_planes)[4], CGAL_Polyline& quad) {
+        //auto result0 = CGAL::intersection(sequence_of_planes[0], sequence_of_planes[1], mainPlane);
+        //auto result1 = CGAL::intersection(sequence_of_planes[1], sequence_of_planes[2], mainPlane);
+        //auto result2 = CGAL::intersection(sequence_of_planes[2], sequence_of_planes[3], mainPlane);
+        //auto result3 = CGAL::intersection(sequence_of_planes[3], sequence_of_planes[0], mainPlane);
+
+        //return {
+        // *boost::get<IK::Point_3>(&*result0),
+        //*boost::get<IK::Point_3>(&*result1),
+        //*boost::get<IK::Point_3>(&*result2),
+        //*boost::get<IK::Point_3>(&*result3),
+        //*boost::get<IK::Point_3>(&*result0)
+        //};
+
+        IK::Point_3 p0;
+        cgal_intersection_util::Intersect(sequence_of_planes[0], sequence_of_planes[1], mainPlane, p0);
+        IK::Point_3 p1;
+        cgal_intersection_util::Intersect(sequence_of_planes[1], sequence_of_planes[2], mainPlane, p1);
+        IK::Point_3 p2;
+        cgal_intersection_util::Intersect(sequence_of_planes[2], sequence_of_planes[3], mainPlane, p2);
+        IK::Point_3 p3;
+        cgal_intersection_util::Intersect(sequence_of_planes[3], sequence_of_planes[0], mainPlane, p3);
+        quad = { p0, p1, p2, p3 };
     }
 
     inline void LinePlane(IK::Line_3& line, IK::Plane_3& plane, IK::Point_3& output) {
@@ -1069,7 +1110,8 @@ double& middle_t_0, double& middle_t_1*/
                 result = IK::Segment_3(pts[1], pts[0]);
 
             return true;
-        } else {
+        }
+        else {
             return false;
         }
     }

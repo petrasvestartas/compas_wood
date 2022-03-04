@@ -63,28 +63,32 @@ public:
     //Constructors
     /////////////////////////////////////////////////////////////////////////////////////////
     joint();
-    joint(int, int, int, int, int, int, int, CGAL_Polyline(&)[4]);
-    joint(int, int, int, int, int, int, int, CGAL_Polyline(&), CGAL_Polyline(&)[2], CGAL_Polyline(&)[4], int);
+    joint(int, int, int, int, int, int, int, std::array<CGAL_Polyline, 4>&);
+    joint(int, int, int, int, int, int, int, CGAL_Polyline(&), std::array<CGAL_Polyline, 2>&, std::array<CGAL_Polyline, 4>&, int);
 
     //Operators
     // IK::Vector_3(&input)[4]
     std::vector<CGAL_Polyline>& operator()(bool male_or_female, bool first_or_second) {
-        if (male_or_female)
+        if (male_or_female) {
             if (first_or_second)
                 return m[0];
             else
                 return m[1];
-        else if (first_or_second)
-            return f[0];
-        else
-            return f[1];
+        }
+        else {
+            if (first_or_second)
+                return f[0];
+            else
+                return f[1];
+        }
     }
 
     void get_edge_ids(bool male_or_female, int& fA, int& fB) {
         if (male_or_female) {
             fA = f0_0;
             fB = f0_1;
-        } else {
+        }
+        else {
             fA = f1_0;
             fB = f1_1;
         }
@@ -93,7 +97,8 @@ public:
     char& get_first_cutting_type(bool male_or_female) {
         if (male_or_female) {
             return m_boolean_type[0];
-        } else {
+        }
+        else {
             return f_boolean_type[0];
         }
     }
@@ -168,12 +173,12 @@ public:
 inline joint::joint() {
 }
 
-inline joint::joint(int _id, int _v0, int _v1, int _f0_0, int _f1_0, int _f0_1, int _f1_1, CGAL_Polyline(&_joint_volumes)[4]) : id(_id), v0(_v0), v1(_v1), f0_0(_f0_0), f1_0(_f1_0), f0_1(_f0_1), f1_1(_f1_1), type(-1) {
+inline joint::joint(int _id, int _v0, int _v1, int _f0_0, int _f1_0, int _f0_1, int _f1_1, std::array<CGAL_Polyline, 4>& _joint_volumes) : id(_id), v0(_v0), v1(_v1), f0_0(_f0_0), f1_0(_f1_0), f0_1(_f0_1), f1_1(_f1_1), type(-1) {
     for (int i = 0; i < 4; i++)
         this->joint_volumes[i] = _joint_volumes[i];
 }
 
-inline joint::joint(int _id, int _v0, int _v1, int _f0_0, int _f1_0, int _f0_1, int _f1_1, CGAL_Polyline(&_joint_area), CGAL_Polyline(&_joint_lines)[2], CGAL_Polyline(&_joint_volumes)[4], int _type) : id(_id), v0(_v0), v1(_v1), f0_0(_f0_0), f1_0(_f1_0), f0_1(_f0_1), f1_1(_f1_1), type(_type) {
+inline joint::joint(int _id, int _v0, int _v1, int _f0_0, int _f1_0, int _f0_1, int _f1_1, CGAL_Polyline(&_joint_area), std::array<CGAL_Polyline, 2>& _joint_lines, std::array<CGAL_Polyline, 4>& _joint_volumes, int _type) : id(_id), v0(_v0), v1(_v1), f0_0(_f0_0), f1_0(_f1_0), f0_1(_f0_1), f1_1(_f1_1), type(_type) {
     for (int i = 0; i < 4; i++)
         this->joint_volumes[i] = _joint_volumes[i];
 

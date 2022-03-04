@@ -52,9 +52,9 @@ def test_connection_detection():
         0.6,
         4,
     )
-
     # Mesh Polylines
     meshes = []
+
     for i in range(len(result)):
         mesh_result = closed_mesh_from_polylines(result[i])
         meshes.append(mesh_result)

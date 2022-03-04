@@ -198,8 +198,8 @@ inline bool plane_to_face(std::vector<
     std::pair<std::array<int, 2>, std::array<int, 2>>& face_ids,
     int& type,
     CGAL_Polyline& joint_area,
-    CGAL_Polyline(&joint_lines)[2],
-    CGAL_Polyline(&joint_volumes_pairA_pairB)[4],
+    std::array<CGAL_Polyline, 2>& joint_lines,
+    std::array < CGAL_Polyline, 4>& joint_volumes_pairA_pairB,
 
     double angleTol = 30,
     bool checkOverlap = false
@@ -511,8 +511,8 @@ inline bool face_to_face(
     std::pair<std::array<int, 2>, std::array<int, 2>>& face_ids,
     int& type,
     CGAL_Polyline& joint_area,
-    CGAL_Polyline(&joint_lines)[2],
-    CGAL_Polyline(&joint_volumes_pairA_pairB)[4]
+    std::array<CGAL_Polyline, 2>& joint_lines,
+    std::array < CGAL_Polyline, 4>& joint_volumes_pairA_pairB
 ) {
     //printf("CPP StartIndersection \n");
 
@@ -615,14 +615,8 @@ inline bool face_to_face(
                         }
                     }
 
-                    //CGAL_Debug(type);
-                    //if (type == 1)
-                    //return false;
-                    //Top-top
-
-                    //return true;
                     ////////////////////////////////////////////////////////////////////////////////
-                    //ToDo set edge direction - Check Insertion angle if �dge axis is assigned
+                    //ToDo set edge direction - Check Insertion angle if edge axis is assigned
                     //Applies for both elements
                     ////////////////////////////////////////////////////////////////////////////////
                     IK::Vector_3 dir(0, 0, 0);
@@ -808,10 +802,57 @@ inline bool face_to_face(
                                 ////////////////////////////////////////////////////////////////////////////////
                                 //Intersect End plane |-----------------------| with top and bottom planes
                                 ////////////////////////////////////////////////////////////////////////////////
-                                cgal_intersection_util::plane_4_planes(plEnd0, planes, joint_volumes_pairA_pairB[0]);
-                                cgal_intersection_util::plane_4_planes(plEnd1, planes, joint_volumes_pairA_pairB[1]);
-                                //joint_volumes_pairA_pairB[2] = { joint_volumes_pairA_pairB[0][3],joint_volumes_pairA_pairB[0][0],joint_volumes_pairA_pairB[0][1],joint_volumes_pairA_pairB[0][2] };
-                                //joint_volumes_pairA_pairB[3] = { joint_volumes_pairA_pairB[1][3],joint_volumes_pairA_pairB[1][0],joint_volumes_pairA_pairB[1][1],joint_volumes_pairA_pairB[1][2] };
+                                cgal_intersection_util::plane_4_planes_open(plEnd0, planes, joint_volumes_pairA_pairB[0]);
+                                cgal_intersection_util::plane_4_planes_open(plEnd1, planes, joint_volumes_pairA_pairB[1]);
+
+                                ////////////////////////////////////////////////////////////////////////////////
+                                //Check the orientation of the volume, must consistent for non-simetrical joints
+                                ////////////////////////////////////////////////////////////////////////////////
+                                if (!Plane0[i].has_on_negative_side(joint_volumes_pairA_pairB[0][1])) {
+                                    std::rotate(joint_volumes_pairA_pairB[0].begin(), joint_volumes_pairA_pairB[0].begin() + 2, joint_volumes_pairA_pairB[0].end());
+                                    std::rotate(joint_volumes_pairA_pairB[1].begin(), joint_volumes_pairA_pairB[1].begin() + 2, joint_volumes_pairA_pairB[1].end());
+                                }
+
+                                ////////////////////////////////////////////////////////////////////////////////
+                                //Reverse if female and male order
+                                ////////////////////////////////////////////////////////////////////////////////
+                                std::reverse(joint_volumes_pairA_pairB[0].begin(), joint_volumes_pairA_pairB[0].end());
+                                std::reverse(joint_volumes_pairA_pairB[1].begin(), joint_volumes_pairA_pairB[1].end());
+                                std::rotate(joint_volumes_pairA_pairB[0].begin(), joint_volumes_pairA_pairB[0].begin() + 3, joint_volumes_pairA_pairB[0].end());
+                                std::rotate(joint_volumes_pairA_pairB[1].begin(), joint_volumes_pairA_pairB[1].begin() + 3, joint_volumes_pairA_pairB[1].end());
+                                el_ids = std::pair<int, int>(el_ids.second, el_ids.first);
+                                face_ids = std::pair<std::array<int, 2>, std::array<int, 2>>(face_ids.second, face_ids.first);
+                                std::reverse(joint_lines.begin(), joint_lines.end());
+
+                                ////////////////////////////////////////////////////////////////////////////////
+                                //Close rectangle
+                                ////////////////////////////////////////////////////////////////////////////////
+                                joint_volumes_pairA_pairB[0].emplace_back(joint_volumes_pairA_pairB[0][0]);
+                                joint_volumes_pairA_pairB[1].emplace_back(joint_volumes_pairA_pairB[1][0]);
+
+                                //joint_lines->reverse
+                                //    std::vector<CGAL_Polyline>& Polyline0,
+                                //    std::vector<CGAL_Polyline>& Polyline1,
+                                //    std::vector<IK::Plane_3>& Plane0,
+                                //    std::vector<IK::Plane_3>& Plane1,
+                                //    std::vector<IK::Vector_3>& insertion_vectors0,
+                                //    std::vector<IK::Vector_3>& insertion_vectors1,
+                                //    std::pair<int, int>& el_ids,
+                                //    std::pair<std::array<int, 2>, std::array<int, 2>>& face_ids,
+                                //    int& type,
+                                //    CGAL_Polyline& joint_area,
+                                //    CGAL_Polyline(&joint_lines)[2],
+                                //    CGAL_Polyline(&joint_volumes_pairA_pairB)[4]
+
+                                //    joint_id,
+                                //    el_ids.first, el_ids.second,
+                                //    face_ids.first[0], face_ids.second[0], face_ids.first[1], face_ids.second[1],
+                                //    joint_area,
+                                //    joint_lines,
+                                //    joint_volumes_pairA_pairB,
+
+                                    //joint_volumes_pairA_pairB[2] = { joint_volumes_pairA_pairB[0][3],joint_volumes_pairA_pairB[0][0],joint_volumes_pairA_pairB[0][1],joint_volumes_pairA_pairB[0][2] };
+                                    //joint_volumes_pairA_pairB[3] = { joint_volumes_pairA_pairB[1][3],joint_volumes_pairA_pairB[1][0],joint_volumes_pairA_pairB[1][1],joint_volumes_pairA_pairB[1][2] };
 
                                 type = 11;
                             }
@@ -1029,9 +1070,9 @@ inline bool pair_search(
     //////////////////////////////////////////////////////////////////////////////
 
     CGAL_Polyline joint_area;
-    CGAL_Polyline joint_quads[2];
-    CGAL_Polyline joint_lines[2];
-    CGAL_Polyline joint_volumes_pairA_pairB[4];
+    std::array<CGAL_Polyline, 2> joint_quads;
+    std::array<CGAL_Polyline, 2> joint_lines;
+    std::array<CGAL_Polyline, 4> joint_volumes_pairA_pairB;
 
     std::pair<int, int> el_ids(polyline_id_0, polyline_id_1);
     std::pair<std::array<int, 2>, std::array<int, 2>> face_ids;
@@ -1190,9 +1231,9 @@ inline void adjacency_search(
         //CGAL_Debug(99999999);
 
         CGAL_Polyline joint_area;
-        CGAL_Polyline joint_quads[2];
-        CGAL_Polyline joint_lines[2];
-        CGAL_Polyline joint_volumes_pairA_pairB[4];
+        //CGAL_Polyline joint_quads[2];
+        std::array<CGAL_Polyline, 2> joint_lines;
+        std::array<CGAL_Polyline, 4> joint_volumes_pairA_pairB;
 
         std::pair<int, int> el_ids(result[i], result[i + 1]);
 
@@ -1636,7 +1677,7 @@ inline void get_connection_zones(
             int v, f;
             cgal_mesh_util::mesh_from_polylines(plines[i], elements[i].planes[0], top_face_triangulation[i], v, f);
         }
-}
+    }
 }
 
 inline void beam_volumes(
@@ -2006,7 +2047,7 @@ inline void beam_volumes(
 
         //this is wrong because after joints must be distributed to elements that is why you need joints list
         volume_pairs.emplace_back(beam_volume);
-        }
+    }
 
     if (!compute_joints)
         return;
