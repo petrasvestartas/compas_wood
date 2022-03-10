@@ -44,6 +44,10 @@ def test_connection_detection():
         data_set_plates.annen_small_three_valance_element_indices_and_instruction(),
         None,
         joint_parameters,
+        2,
+        300,
+        0.6,
+        4,
     )
 
     # data_set_plates_annen.annen_three_valance_element_indices_and_instruction(),

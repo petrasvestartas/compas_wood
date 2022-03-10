@@ -365,7 +365,7 @@ inline bool joint::orient_to_connection_area() {
     //CGAL_Debug(thickness);
     //Change the distance between two rectangles
 
-    if (unit_scale && unit_scale_distance > 0) {
+    if (unit_scale && unit_scale_distance > 0) {//
         IK::Segment_3 volume_segment(joint_volumes[0][0], joint_volumes[1][0]);
         IK::Vector_3 vec = volume_segment.to_vector() * 0.5;
         IK::Vector_3 vec_unit = volume_segment.to_vector();

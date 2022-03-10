@@ -131,6 +131,16 @@ namespace joinery_solver_gh.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap folded_plates {
+            get {
+                object obj = ResourceManager.GetObject("folded_plates", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
         internal static byte[] icons_compas_wood {

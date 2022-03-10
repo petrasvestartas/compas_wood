@@ -444,9 +444,6 @@ namespace joint_library {
 
         joint.f_boolean_type = { '1', '1' };
         joint.m_boolean_type = { '1', '1' };
-
-        //if (orient_to_connection_zone)
-          //  joint.orient_to_connection_area();
     }
 
     inline void ss_e_op_2(joint& joint) {
@@ -696,6 +693,111 @@ namespace joint_library {
 
         //if (orient_to_connection_zone)
             //joint.orient_to_connection_area();
+    }
+
+    inline void ss_e_op_3(joint& joint) {
+        //Miter tenon-mortise
+        joint.name = "ss_e_op_3";
+
+        //Joint lines, always the last line or rectangle is not a joint but an cutting element
+        joint.f[0] = {
+        {
+        IK::Point_3(0.5, 0.5, 0.3),
+        IK::Point_3(0.5, -1.499975, 0.3),
+        IK::Point_3(0.5, -1.499975, -0.3),
+        IK::Point_3(0.5, 0.5, -0.3),
+        },
+
+        {
+        IK::Point_3(0.5, 0.5, 0.3),
+        IK::Point_3(0.5, 0.5, -0.3),
+        },
+
+        {
+        IK::Point_3(0.5, -0.5, 0.25),
+        IK::Point_3(0.5, 0.5, 0.25),
+        IK::Point_3(0.5, 0.5, -0.25),
+        IK::Point_3(0.5, -0.5, -0.25),
+        IK::Point_3(0.5, -0.5, 0.25),
+        },
+
+        {
+        IK::Point_3(0.5, -0.5, 0.25),
+        IK::Point_3(0.5, 0.5, 0.25),
+        IK::Point_3(0.5, 0.5, -0.25),
+        IK::Point_3(0.5, -0.5, -0.25),
+        IK::Point_3(0.5, -0.5, 0.25),
+        }
+        };
+
+        joint.f[1] = {
+        {
+        IK::Point_3(-0.5, -0.499975, 0.3),
+        IK::Point_3(-0.5, -1.49995, 0.3),
+        IK::Point_3(-0.5, -1.49995, -0.3),
+        IK::Point_3(-0.5, -0.5, -0.3),
+        },
+
+        {
+        IK::Point_3(-0.5, -0.499975, 0.3),
+        IK::Point_3(-0.5, -0.5, -0.3),
+        },
+
+        {
+        IK::Point_3(-0.5, -0.499975, 0.25),
+        IK::Point_3(-0.5, 0.500025, 0.25),
+        IK::Point_3(-0.5, 0.500025, -0.25),
+        IK::Point_3(-0.5, -0.499975, -0.25),
+        IK::Point_3(-0.5, -0.499975, 0.25),
+        },
+
+        {
+        IK::Point_3(-0.5, -0.499975, 0.25),
+        IK::Point_3(-0.5, 0.500025, 0.25),
+        IK::Point_3(-0.5, 0.500025, -0.25),
+        IK::Point_3(-0.5, -0.499975, -0.25),
+        IK::Point_3(-0.5, -0.499975, 0.25),
+        }
+        };
+
+        joint.m[0] = {
+        {
+        IK::Point_3(-0.5, -0.5, 0.3),
+        IK::Point_3(0.5, -0.5, 0.3),
+        IK::Point_3(0.5, -0.5, 0.25),
+        IK::Point_3(-1, -0.5, 0.25),
+        IK::Point_3(-1, -0.5, -0.25),
+        IK::Point_3(0.5, -0.5, -0.25),
+        IK::Point_3(0.5, -0.5, -0.3),
+        IK::Point_3(-0.5, -0.5, -0.3),
+        },
+
+        {
+        IK::Point_3(-0.5, -0.5, 0.3),
+        IK::Point_3(-0.5, -0.5, -0.3),
+        }
+        };
+
+        joint.m[1] = {
+        {
+        IK::Point_3(0.5, 0.5, 0.3),
+        IK::Point_3(0.510075, 0.5, 0.3),
+        IK::Point_3(0.5, 0.5, 0.25),
+        IK::Point_3(-1, 0.5, 0.25),
+        IK::Point_3(-1, 0.5, -0.25),
+        IK::Point_3(0.5, 0.5, -0.25),
+        IK::Point_3(0.510075, 0.5, -0.3),
+        IK::Point_3(0.5, 0.5, -0.3),
+        },
+
+        {
+        IK::Point_3(0.5, 0.5, 0.3),
+        IK::Point_3(0.5, 0.5, -0.3),
+        }
+        };
+
+        joint.f_boolean_type = { '3', '3', '2', '2' };
+        joint.m_boolean_type = { '3', '3' };
     }
 
     //20-29
@@ -1335,6 +1437,9 @@ namespace joint_library {
                     break;
                 case (11):
                     ss_e_op_2(jo);
+                    break;
+                case (13):
+                    ss_e_op_3(jo);
                     break;
                 case (12):
                     ss_e_op_0(jo);

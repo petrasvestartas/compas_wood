@@ -931,8 +931,8 @@ inline void element::merge_joints(std::vector<joint>& joints, std::vector<std::v
                     id_of_holes.emplace_back((int)(k));
 
                 std::string s(1, joints[std::get<0>(j_mf[i][j])](std::get<1>(j_mf[i][j]))[k]);
-                printf("\n");
-                printf(s.c_str());
+                //printf("\n");
+                //printf(s.c_str());
 
                 //CGAL_Debug(joints[std::get<0>(j_mf[i][j])](std::get<1>(j_mf[i][j]))[k]);
             }

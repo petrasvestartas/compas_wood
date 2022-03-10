@@ -7,6 +7,8 @@ namespace joinery_solver_gh.Resources
 {
     public class case_2_vda_component : GH_Component
     {
+        public override GH_Exposure Exposure => GH_Exposure.secondary;
+
         public case_2_vda_component()
           : base("connectors", "connectors",
               "case_2_vda_component",

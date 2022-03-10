@@ -57,7 +57,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="case_3_folded_plates.cs" />
     <Compile Include="case_2_vda.cs" />
+    <Compile Include="case_3_folded_plates_component.cs" />
     <Compile Include="display_assembly_sequence_component.cs" />
     <Compile Include="case_1_chevron.cs" />
     <Compile Include="case_1_chevron_component.cs" />
@@ -145,6 +147,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\case_2_cross.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\1x\folded_plates.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
