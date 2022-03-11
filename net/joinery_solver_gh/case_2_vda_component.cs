@@ -93,6 +93,8 @@ namespace joinery_solver_gh.Resources
 
             pManager.AddBrepParameter("projection", "projection", "projection", GH_ParamAccess.list);
 
+            pManager[3].Optional = true;
+            pManager[4].Optional = true;
             pManager[5].Optional = true;
             pManager[9].Optional = true;
         }

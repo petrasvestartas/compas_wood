@@ -15,3 +15,51 @@
 
 .. literalinclude:: test_4_get_connection_zones_ss_24.py
     :language: python
+
+
+**Grasshopper Version**
+
+.. figure:: /_images/annen_1.jpg
+    :figclass: figure
+    :class: figure-img img-fluid
+
+.. figure:: /_images/annen_0.jpg
+    :figclass: figure
+    :class: figure-img img-fluid
+
+
+.. figure:: /_images/annen_2.jpg
+    :figclass: figure
+    :class: figure-img img-fluid
+
+.. figure:: /_images/annen_3.jpg
+    :figclass: figure
+    :class: figure-img img-fluid
+
+.. figure:: /_images/annen_4.jpg
+    :figclass: figure
+    :class: figure-img img-fluid
+
+.. figure:: /_images/annen_5.jpg
+    :figclass: figure
+    :class: figure-img img-fluid
+
+.. figure:: /_images/annen_6.jpg
+    :figclass: figure
+    :class: figure-img img-fluid
+
+.. figure:: /_images/annen_7.jpg
+    :figclass: figure
+    :class: figure-img img-fluid
+
+.. figure:: /_images/annen_8.jpg
+    :figclass: figure
+    :class: figure-img img-fluid
+
+.. figure:: /_images/annen_9.jpg
+    :figclass: figure
+    :class: figure-img img-fluid
+
+.. figure:: /_images/annen_10.jpg
+    :figclass: figure
+    :class: figure-img img-fluid

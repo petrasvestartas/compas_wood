@@ -210,10 +210,10 @@ namespace joint_library_xml_parser {
             myfile.close();
             return false;
         }
-        std::ofstream myfile;
-        myfile.open("C:\\Users\\petra\\AppData\\Roaming\\Grasshopper\\Libraries\\compas_wood\\example.txt");
-        myfile << "Good Result\n";
-        myfile.close();
+        //std::ofstream myfile;
+        //myfile.open("C:\\Users\\petra\\AppData\\Roaming\\Grasshopper\\Libraries\\compas_wood\\example.txt");
+        //myfile << "Good Result\n";
+        //myfile.close();
         //CGAL_Debug(joint.f[0].size(), joint.f[1].size(), joint.f_boolean_type.size());
         //CGAL_Debug(joint.m[0].size(), joint.m[1].size(), joint.m_boolean_type.size());
         return true;

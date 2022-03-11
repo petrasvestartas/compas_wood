@@ -13,7 +13,11 @@ The data-set is taken from  `Lina Vestarte project <https://www.linavestarte.com
     :figclass: figure
     :class: figure-img img-fluid
 
-.. figure:: /_images/vda_2.jpg
+.. figure:: /_images/vda_1.jpg
+    :figclass: figure
+    :class: figure-img img-fluid
+
+.. figure:: /_images/vda_3.jpg
     :figclass: figure
     :class: figure-img img-fluid
 
