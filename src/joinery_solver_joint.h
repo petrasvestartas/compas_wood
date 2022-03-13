@@ -364,7 +364,8 @@ inline void joint::transform(CGAL::Aff_transformation_3<IK>& xform0, CGAL::Aff_t
 inline bool joint::orient_to_connection_area() {
     //CGAL_Debug(thickness);
     //Change the distance between two rectangles
-
+    //CGAL_Debug(unit_scale);
+    //CGAL_Debug(unit_scale_distance);
     if (unit_scale && unit_scale_distance > 0) {//
         IK::Segment_3 volume_segment(joint_volumes[0][0], joint_volumes[1][0]);
         IK::Vector_3 vec = volume_segment.to_vector() * 0.5;
@@ -414,6 +415,7 @@ inline void joint::duplicate_geometry(joint& new_joint) {
     new_joint.f = this->f;
     new_joint.m_boolean_type = this->m_boolean_type;
     new_joint.f_boolean_type = this->f_boolean_type;
+    new_joint.unit_scale = this->unit_scale;
 
     /* for (int i = 0; i < m.size(); i++) {
          for (int j = 0; j < m[i].size(); j++) {
@@ -452,6 +454,7 @@ inline void joint::transfer_geometry(joint& geo_joint) {
     this->f = geo_joint.f;
     this->m_boolean_type = geo_joint.m_boolean_type;
     this->f_boolean_type = geo_joint.f_boolean_type;
+    this->unit_scale = geo_joint.unit_scale;
 
     /*for (int i = 0; i < geo_joint.m.size(); i++) {
         for (int j = 0; j < geo_joint.m[i].size(); j++) {

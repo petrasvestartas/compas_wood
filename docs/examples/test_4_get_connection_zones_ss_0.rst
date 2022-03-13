@@ -13,6 +13,10 @@
     :figclass: figure
     :class: figure-img img-fluid
 
+.. figure:: /_images/ss_0_type3.jpg
+    :figclass: figure
+    :class: figure-img img-fluid
+
 
 .. literalinclude:: test_4_get_connection_zones_ss_0.py
     :language: python

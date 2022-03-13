@@ -21,7 +21,7 @@ viewer.view.camera.far = 100000
 # viewer.view.camera.tz = -10
 # viewer.view.camera.rz = 0
 # viewer.view.camera.rx = -20
-type_id = 43
+type_id = 18
 shift = 0.5
 divisions_distance = 1000
 result = []
@@ -143,7 +143,7 @@ available_joints = {
 }
 for i, text in available_joints.items():
 
-    @viewer.button(text=text, number=i)
+    @viewer.button(text=text)
     def click(id=i, local_number=type_id):
         viewer.view.objects.clear()
         global type_id
@@ -167,96 +167,61 @@ def add_joint_geometry(type, division_dist=1000, shift=0.6):
     result = []
     if type == 0:
         input = data_set_plates.c_0()
-        result = get_connection_zones(input, None, None, None, None, 1)
+        result = get_connection_zones(input, None, None, None, None, None, 1)
     elif type == 1:
         input = data_set_plates.c_1()
-        result = get_connection_zones(input, None, None, None, None, 1)
+        result = get_connection_zones(input, None, None, None, None, None, 1)
     elif type == 2:
         input = data_set_plates.c_2()
-        result = get_connection_zones(input, None, None, None, None, 1)
+        result = get_connection_zones(input, None, None, None, None, None, 1)
     elif type == 3:
         input = data_set_plates.c_3()
-        result = get_connection_zones(input, None, None, None, None, 1)
+        result = get_connection_zones(input, None, None, None, None, None, 1)
     elif type == 4:
         input = data_set_plates.c_4()
-        result = get_connection_zones(input, None, None, None, None, 1)
+        result = get_connection_zones(input, None, None, None, None, None, 1)
     elif type == 5:
         input = data_set_plates.c_5()
-        result = get_connection_zones(input, None, None, None, None, 1)
+        result = get_connection_zones(input, None, None, None, None, None, 1)
     elif type == 6:
         input = data_set_plates.c_6()
-        result = get_connection_zones(input, None, None, None, None, 1)
+        result = get_connection_zones(input, None, None, None, None, None, 1)
     elif type == 7:
         input = data_set_plates.c_7()
-        result = get_connection_zones(input, None, None, None, None, 1)
+        result = get_connection_zones(input, None, None, None, None, None, 1)
     elif type == 8:
         input = data_set_plates.c_8()
-        result = get_connection_zones(input, None, None, None, None, 1)
+        result = get_connection_zones(input, None, None, None, None, None, 1)
     elif type == 9:
         input = data_set_plates.c_9()
-        result = get_connection_zones(input, None, None, None, None, 1)
+        result = get_connection_zones(input, None, None, None, None, None, 1)
     elif type == 10:
         input = data_set_plates.c_10()
-        result = get_connection_zones(input, None, None, None, None, 1)
+        result = get_connection_zones(input, None, None, None, None, None, 1)
     elif type == 11:
         input = data_set_plates.c_11()
-        result = get_connection_zones(input, None, None, None, None, 1)
+        result = get_connection_zones(input, None, None, None, None, None, 1)
     elif type == 12:
         input = data_set_plates.c_12()
-        result = get_connection_zones(input, None, None, None, None, 1)
+        result = get_connection_zones(input, None, None, None, None, None, 1)
     elif type == 13:
         input = data_set_plates.c_13()
-        result = get_connection_zones(input, None, None, None, None, 1)
+        result = get_connection_zones(input, None, None, None, None, None, 1)
     elif type == 14:
         input = data_set_plates.c_14()
-        result = get_connection_zones(input, None, None, None, None, 1)
+        result = get_connection_zones(input, None, None, None, None, None, 1)
     elif type == 15:
         input = data_set_plates.c_15()
-        result = get_connection_zones(input, None, None, None, None, 2)
+        result = get_connection_zones(input, None, None, None, None, None, 2)
     elif type == 16:
         input = data_set_plates.c_16()
-        result = get_connection_zones(input, None, None, None, None, 1)
+        result = get_connection_zones(input, None, None, None, None, None, 1)
     elif type == 17:
         input = data_set_plates.c_17()
-        result = get_connection_zones(input, None, None, None, None, 1)
+        result = get_connection_zones(input, None, None, None, None, None, 1)
     elif type == 18:
         input = data_set_plates.ss_0()
-        joint_paramters = [
-            15,
-            0.5,
-            1,
-            50,
-            0.5,
-            10,
-            50,
-            0.5,
-            20,
-            50,
-            0.5,
-            30,
-            50,
-            0.5,
-            40,
-            50,
-            0.5,
-            50,
-        ]
-        result = get_connection_zones(input, None, None, None, joint_paramters, 0)
-    elif type == 19:
-        input = data_set_plates.ss_1()
-        result = get_connection_zones(input, None, None, None, None, 0)
-    elif type == 20:
-        input = data_set_plates.ss_2()
-        result = get_connection_zones(input, None, None, None, None, 0)
-    elif type == 21:
-        input = data_set_plates.ss_3()
-        result = get_connection_zones(input, None, None, None, None, 0)
-    elif type == 22:
-        input = data_set_plates.ss_4()
-        result = get_connection_zones(input, None, None, None, None, 0)
-    elif type == 23:
-        input = data_set_plates.ss_5()
-        joint_paramters = [
+        joint_parameters = [
             15,
             0.5,
             9,
@@ -276,10 +241,47 @@ def add_joint_geometry(type, division_dist=1000, shift=0.6):
             0.5,
             50,
         ]
-        result = get_connection_zones(input, None, None, None, joint_paramters)
+        result = get_connection_zones(
+            input, None, None, None, None, joint_parameters, 0, 300, 0.6, 4
+        )
+    elif type == 19:
+        input = data_set_plates.ss_1()
+        result = get_connection_zones(input, None, None, None, None, None, 0)
+    elif type == 20:
+        input = data_set_plates.ss_2()
+        result = get_connection_zones(input, None, None, None, None, None, 0)
+    elif type == 21:
+        input = data_set_plates.ss_3()
+        result = get_connection_zones(input, None, None, None, None, None, 0)
+    elif type == 22:
+        input = data_set_plates.ss_4()
+        result = get_connection_zones(input, None, None, None, None, None, 0)
+    elif type == 23:
+        input = data_set_plates.ss_5()
+        joint_parameters = [
+            15,
+            0.5,
+            9,
+            50,
+            0.5,
+            10,
+            50,
+            0.5,
+            20,
+            50,
+            0.5,
+            30,
+            50,
+            0.5,
+            40,
+            50,
+            0.5,
+            50,
+        ]
+        result = get_connection_zones(input, None, None, None, None, joint_parameters)
     elif type == 24:
         input = data_set_plates.ss_6()
-        result = get_connection_zones(input, None, None, None, None, 0)
+        result = get_connection_zones(input, None, None, None, None, None, 0)
     elif type == 25:
 
         joint_parameters = [
@@ -303,7 +305,9 @@ def add_joint_geometry(type, division_dist=1000, shift=0.6):
             50,
         ]
         input = data_set_plates.ss_7()
-        result = get_connection_zones(input, None, None, None, joint_parameters, 0)
+        result = get_connection_zones(
+            input, None, None, None, None, None, joint_parameters, 0
+        )
     elif type == 26:
 
         joint_parameters = [
@@ -328,56 +332,56 @@ def add_joint_geometry(type, division_dist=1000, shift=0.6):
         ]
         input = data_set_plates.ss_8()
         result = get_connection_zones(
-            input, None, None, None, joint_parameters, 0, 300, 0.6, 2
+            input, None, None, None, None, joint_parameters, 0, 300, 0.6, 2
         )
     elif type == 27:
         input = data_set_plates.ss_9()
-        result = get_connection_zones(input, None, None, None, None, 0)
+        result = get_connection_zones(input, None, None, None, None, None, 0)
     elif type == 28:
         input = data_set_plates.ss_10()
-        result = get_connection_zones(input, None, None, None, None, 0)
+        result = get_connection_zones(input, None, None, None, None, None, 0)
     elif type == 29:
         input = data_set_plates.ss_11()
-        result = get_connection_zones(input, None, None, None, None, 0)
+        result = get_connection_zones(input, None, None, None, None, None, 0)
     elif type == 30:
         input = data_set_plates.ss_12()
-        result = get_connection_zones(input, None, None, None, None, 0)
+        result = get_connection_zones(input, None, None, None, None, None, 0)
     elif type == 31:
         input = data_set_plates.ss_13()
-        result = get_connection_zones(input, None, None, None, None, 0)
+        result = get_connection_zones(input, None, None, None, None, None, 0)
     elif type == 32:
         input = data_set_plates.ss_14()
-        result = get_connection_zones(input, None, None, None, None, 0)
+        result = get_connection_zones(input, None, None, None, None, None, 0)
     elif type == 33:
         input = data_set_plates.ss_15()
-        result = get_connection_zones(input, None, None, None, None, 0)
+        result = get_connection_zones(input, None, None, None, None, None, 0)
     elif type == 34:
         input = data_set_plates.ss_16()
-        result = get_connection_zones(input, None, None, None, None, 0)
+        result = get_connection_zones(input, None, None, None, None, None, 0)
     elif type == 35:
         input = data_set_plates.ss_17()
-        result = get_connection_zones(input, None, None, None, None, 0)
+        result = get_connection_zones(input, None, None, None, None, None, 0)
     elif type == 36:
         input = data_set_plates.ss_18()
-        result = get_connection_zones(input, None, None, None, None, 0)
+        result = get_connection_zones(input, None, None, None, None, None, 0)
     elif type == 37:
         input = data_set_plates.ss_19()
-        result = get_connection_zones(input, None, None, None, None, 0)
+        result = get_connection_zones(input, None, None, None, None, None, 0)
     elif type == 38:
         input = data_set_plates.ss_20()
-        result = get_connection_zones(input, None, None, None, None, 0)
+        result = get_connection_zones(input, None, None, None, None, None, 0)
     elif type == 39:
         input = data_set_plates.ss_21()
-        result = get_connection_zones(input, None, None, None, None, 0)
+        result = get_connection_zones(input, None, None, None, None, None, 0)
     elif type == 40:
         input = data_set_plates.ss_22()
-        result = get_connection_zones(input, None, None, None, None, 0)
+        result = get_connection_zones(input, None, None, None, None, None, 0)
     elif type == 41:
         input = data_set_plates.ss_23()
-        result = get_connection_zones(input, None, None, None, None, 0)
+        result = get_connection_zones(input, None, None, None, None, None, 0)
     elif type == 42:
         input = data_set_plates.ss_24()
-        result = get_connection_zones(input, None, None, None, None, 0)
+        result = get_connection_zones(input, None, None, None, None, None, 0)
     elif type == 43:
 
         division_length = 300
@@ -407,6 +411,7 @@ def add_joint_geometry(type, division_dist=1000, shift=0.6):
             data_set_plates.annen_small_edge_directions(),
             data_set_plates.annen_small_edge_joints(),
             data_set_plates.annen_small_three_valance_element_indices_and_instruction(),
+            None,
             joint_parameters,
             0,
             300,
@@ -415,43 +420,43 @@ def add_joint_geometry(type, division_dist=1000, shift=0.6):
         )
     elif type == 44:
         input = data_set_plates.ss_25()
-        result = get_connection_zones(input, None, None, None, None, 0)
+        result = get_connection_zones(input, None, None, None, None, None, 0)
     elif type == 45:
         input = data_set_plates.ss_26()
-        result = get_connection_zones(input, None, None, None, None, 0)
+        result = get_connection_zones(input, None, None, None, None, None, 0)
     elif type == 46:
         input = data_set_plates.ts_0()
-        result = get_connection_zones(input, None, None, None, None, 0)
+        result = get_connection_zones(input, None, None, None, None, None, 0)
     elif type == 47:
         input = data_set_plates.ts_1()
-        result = get_connection_zones(input, None, None, None, None, 0)
+        result = get_connection_zones(input, None, None, None, None, None, 0)
     elif type == 48:
         input = data_set_plates.ts_2()
-        result = get_connection_zones(input, None, None, None, None, 0)
+        result = get_connection_zones(input, None, None, None, None, None, 0)
     elif type == 49:
         input = data_set_plates.ts_3()
-        result = get_connection_zones(input, None, None, None, None, 0)
+        result = get_connection_zones(input, None, None, None, None, None, 0)
     elif type == 50:
         input = data_set_plates.ts_4()
-        result = get_connection_zones(input, None, None, None, None, 0)
+        result = get_connection_zones(input, None, None, None, None, None, 0)
     elif type == 51:
         input = data_set_plates.ts_5()
-        result = get_connection_zones(input, None, None, None, None, 0)
+        result = get_connection_zones(input, None, None, None, None, None, 0)
     elif type == 52:
         input = data_set_plates.ts_6()
-        result = get_connection_zones(input, None, None, None, None, 0)
+        result = get_connection_zones(input, None, None, None, None, None, 0)
     elif type == 53:
         input = data_set_plates.vda_0()
-        result = get_connection_zones(input, None, None, None, None, 1)
+        result = get_connection_zones(input, None, None, None, None, None, 1)
     elif type == 54:
         input = data_set_plates.vda_1()
-        result = get_connection_zones(input, None, None, None, None, 1)
+        result = get_connection_zones(input, None, None, None, None, None, 1)
     elif type == 55:
         input = data_set_plates.vda_2()
-        result = get_connection_zones(input, None, None, None, None, 1)
+        result = get_connection_zones(input, None, None, None, None, None, 1)
     elif type == 56:
         input = data_set_plates.bad_input_0()
-        result = get_connection_zones(input, None, None, None, None, 1)
+        result = get_connection_zones(input, None, None, None, None, None, 1)
     elif type == 57:
         input = data_set_plates.annen_three_boxes()
 
@@ -477,7 +482,7 @@ def add_joint_geometry(type, division_dist=1000, shift=0.6):
             15,
         ]
         result = get_connection_zones(
-            input, None, None, None, joint_parameters, 0, 20, 0.6, 4
+            input, None, None, None, None, joint_parameters, 0, 20, 0.6, 4
         )
     result_flat_list = [item for sublist in result for item in sublist]
 
@@ -530,7 +535,7 @@ def display_polyline(viewer, polyline, scale=0.01, r=0.0, g=0.0, b=0.0, t=1):
 
 
 viewer.view.objects.clear()
-add_joint_geometry(43)
+add_joint_geometry(type_id)
 
 viewer.view.update()
 viewer.run()

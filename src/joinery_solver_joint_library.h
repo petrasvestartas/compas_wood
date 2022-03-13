@@ -425,6 +425,69 @@ namespace joint_library {
         joint.m_boolean_type = { '1', '1' };
     }
 
+    inline void ss_e_ip_2(joint& joint) {
+        joint.name = "ss_e_ip_2";//butterfly x-fix
+
+        //Joint lines, always the last line or rectangle is not a joint but an cutting element
+
+        joint.f[0] = {
+        {
+        IK::Point_3(0, -0.5, -0.1166666667),
+        IK::Point_3(0.5, -0.5, -0.4),
+        IK::Point_3(0.5, -0.5, 0.4),
+        IK::Point_3(0, -0.5, 0.1166666667),
+        },
+        {
+        IK::Point_3(0, -0.5, -0.1166666667),
+        IK::Point_3(0, -0.5, 0.1166666667),
+        }
+        };
+
+        joint.f[1] = {
+        {
+        IK::Point_3(0, 0.5, -0.1166666667),
+        IK::Point_3(0.5, 0.5, -0.4),
+        IK::Point_3(0.5, 0.5, 0.4),
+        IK::Point_3(0, 0.5, 0.1166666667),
+        },
+        {
+        IK::Point_3(0, 0.5, -0.1166666667),
+        IK::Point_3(0, 0.5, 0.1166666667),
+        }
+        };
+
+        joint.m[0] = {
+        {
+        IK::Point_3(0, -0.5, -0.1166666667),
+        IK::Point_3(-0.5, -0.5, -0.4),
+        IK::Point_3(-0.5, -0.5, 0.4),
+        IK::Point_3(0, -0.5, 0.1166666667),
+        },
+        {
+        IK::Point_3(0, -0.5, -0.1166666667),
+        IK::Point_3(0, -0.5, 0.1166666667),
+        }
+        };
+
+        joint.m[1] = {
+       {
+        IK::Point_3(0, 0.5, -0.1166666667),
+        IK::Point_3(-0.5, 0.5, -0.4),
+        IK::Point_3(-0.5, 0.5, 0.4),
+        IK::Point_3(0, 0.5, 0.1166666667),
+        },
+
+        {
+        IK::Point_3(0, 0.5, -0.1166666667),
+        IK::Point_3(0, 0.5, 0.1166666667),
+        }
+        };
+
+        joint.f_boolean_type = { '1', '1' };
+        joint.m_boolean_type = { '1', '1' };
+        joint.unit_scale = true;
+    }
+
     //10-19
     inline void ss_e_op_0(joint& joint) {
         joint.name = "ss_e_op_0";
@@ -1119,7 +1182,8 @@ namespace joint_library {
 
         joint.m[0] = {
             {IK::Point_3(0.5, 0.5, -scale), IK::Point_3(-0.5, 0.5, -scale), IK::Point_3(-0.5, 0.5, 0), IK::Point_3(0.5, 0.5, 0), IK::Point_3(0.5, 0.5, -scale)},
-            {IK::Point_3(0.5, 0.5, -scale), IK::Point_3(-0.5, 0.5, -scale), IK::Point_3(-0.5, 0.5, 0), IK::Point_3(0.5, 0.5, 0), IK::Point_3(0.5, 0.5, -scale)} };
+            {IK::Point_3(0.5, 0.5, -scale), IK::Point_3(-0.5, 0.5, -scale), IK::Point_3(-0.5, 0.5, 0), IK::Point_3(0.5, 0.5, 0), IK::Point_3(0.5, 0.5, -scale)}
+        };
 
         joint.m[1] = {
             {IK::Point_3(0.5, -0.5, -scale), IK::Point_3(-0.5, -0.5, -scale), IK::Point_3(-0.5, -0.5, 0), IK::Point_3(0.5, -0.5, 0), IK::Point_3(0.5, -0.5, -scale)},
@@ -1416,6 +1480,10 @@ namespace joint_library {
                     break;
                 case (2):
                     ss_e_ip_0(jo);
+                    break;
+
+                case (3):
+                    ss_e_ip_2(jo);
                     break;
                 case (9):
                     //wont work, because not oriented to connection zones, need additional layer e.g. std::map of all joints
