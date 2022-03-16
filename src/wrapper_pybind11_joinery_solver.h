@@ -40,6 +40,7 @@ void polylines_from_vertices_and_faces_and_properties(
     const RowMatrixXi& three_valence_element_indices_and_instruction,
     const RowMatrixXi& adjacency,
     const RowMatrixXd& default_parameters_for_joint_types_matrix,
+    const RowMatrixXd& scale,
 
     std::vector<CGAL_Polyline>& out_polyline_pairs,
     std::vector<std::vector<IK::Vector_3>>& out_insertion_vectors,
@@ -73,10 +74,9 @@ std::tuple<std::vector<RowMatrixXd>, std::vector<int>> pybind11_get_connection_z
     Eigen::Ref<const RowMatrixXi>& three_valence_element_indices_and_instruction,
     Eigen::Ref<const RowMatrixXi>& adjacency,
     Eigen::Ref<const RowMatrixXd>& default_parameters_for_joint_types_matrix,
+    Eigen::Ref<const RowMatrixXd>& scale,
 
     int search_type,
-    double division_distance,
-    double shift,
     int output_type,
     int triangulate
 
@@ -134,10 +134,9 @@ PYBIND11_MODULE(pybind11_joinery_solver, m) {
         pybind11::arg("X").noconvert(),
         pybind11::arg("A").noconvert(),
         pybind11::arg("P").noconvert(),
+        pybind11::arg("S").noconvert(),
 
         pybind11::arg("search_type"),
-        pybind11::arg("division_distance"),
-        pybind11::arg("shift"),
         pybind11::arg("output_type"),
         pybind11::arg("triangulation"));
 

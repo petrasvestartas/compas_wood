@@ -66,9 +66,8 @@ namespace joinery_solver_net
             ref Polyline[][] polylines,
             Data data,
             List<double> jointparams,
+            List<double> scale,
             int search_type = 1,
-            double division_distance = 300,
-            double shift = 0.6,
             int output_type = 4,
             int triangulate = 0
 
@@ -89,6 +88,7 @@ namespace joinery_solver_net
             Conversions.list_coord(ref data.three_valence, out int[] threevalence_f, out int threevalence_f_s, out int[] threevalence_v, out int threevalence_v_s);
             Conversions.list_coord(ref data.adjacency, out int[] adjacency_v, out int adjacency_v_s);
             Conversions.list_coord(ref jointparams, out double[] jointparams_v, out int jointparams_v_s);
+            Conversions.list_coord(ref scale, out double[] scale_v, out int scale_v_s);
             watch.Stop();
 
             // RhinoApp.WriteLine(watch.ElapsedMilliseconds.ToString());
@@ -103,35 +103,43 @@ namespace joinery_solver_net
 
             IntPtr groups_f = IntPtr.Zero, out_f = IntPtr.Zero, out_v = IntPtr.Zero;
             int groups_f_s = 0, out_f_s = 0, out_v_s = 0;
-            int r = Unsafe.pinvoke_get_connection_zones(
-                f, f_s, v, v_s,
-                vec_f, vec_f_s, vec_v, vec_v_s,
-                jointtypes_f, jointtypes_f_s, jointtypes_v, jointtypes_v_s,
-                threevalence_f, threevalence_f_s, threevalence_v, threevalence_v_s,
-                adjacency_v, adjacency_v_s,
-                jointparams_v, jointparams_v_s,
-                 System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location).ToString(),
-                ref groups_f, ref groups_f_s, ref out_f, ref out_f_s, ref out_v, ref out_v_s,
-                search_type, division_distance, shift, output_type, triangulate
-                );
+            try
+            {
+                Console.WriteLine(System.IO.Directory.GetCurrentDirectory().ToString());
+                int r = Unsafe.pinvoke_get_connection_zones(
+                    f, f_s, v, v_s,
+                    vec_f, vec_f_s, vec_v, vec_v_s,
+                    jointtypes_f, jointtypes_f_s, jointtypes_v, jointtypes_v_s,
+                    threevalence_f, threevalence_f_s, threevalence_v, threevalence_v_s,
+                    adjacency_v, adjacency_v_s,
+                    jointparams_v, jointparams_v_s,
+                    scale_v, scale_v_s,
+                     System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location).ToString(),
+                    ref groups_f, ref groups_f_s, ref out_f, ref out_f_s, ref out_v, ref out_v_s,
+                    search_type, output_type, triangulate
+                    );
 
-            //RhinoApp.WriteLine(System.IO.Directory.GetCurrentDirectory().ToString());
+                //if (r == 0)
+                // return;
 
-            if (r == 0)
-                return;
-            watch.Stop();
+                watch.Stop();
 
-            //RhinoApp.WriteLine(watch.ElapsedMilliseconds.ToString());
-            watch.Reset();
-            /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-            //Convert arrays to data
-            /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-            watch.Start();
-            Conversions.coord_list(ref groups_f, ref out_f, ref out_v, ref groups_f_s, ref out_f_s, ref out_v_s, ref polylines);
-            watch.Stop();
+                //RhinoApp.WriteLine(watch.ElapsedMilliseconds.ToString());
+                watch.Reset();
+                /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                //Convert arrays to data
+                /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                watch.Start();
+                Conversions.coord_list(ref groups_f, ref out_f, ref out_v, ref groups_f_s, ref out_f_s, ref out_v_s, ref polylines);
+                watch.Stop();
 
-            //RhinoApp.WriteLine(watch.ElapsedMilliseconds.ToString());
-            watch.Reset();
+                //RhinoApp.WriteLine(watch.ElapsedMilliseconds.ToString());
+                watch.Reset();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.ToString());
+            }
             /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
             //OUTPUT
             /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

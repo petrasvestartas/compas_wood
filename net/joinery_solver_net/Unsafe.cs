@@ -36,9 +36,10 @@ namespace joinery_solver_net
             [MarshalAs(UnmanagedType.LPArray)] int[] threevalence_f, int threevalence_f_s, [MarshalAs(UnmanagedType.LPArray)] int[] threevalence_v, int threevalence_v_s,
             [MarshalAs(UnmanagedType.LPArray)] int[] adjacency_v, int adjacency_v_s,
             [MarshalAs(UnmanagedType.LPArray)] double[] jointparams_v, int jointparams_v_s,
+            [MarshalAs(UnmanagedType.LPArray)] double[] scale_v, int scale_v_s,
             string file_and_folder_of_joint_library_xml,
             ref IntPtr groups_f, ref int groups_f_s, ref IntPtr out_f, ref int out_f_s, ref IntPtr out_v, ref int out_v_s,
-            int search_type = 1, double division_distance = 300, double shift = 0.6, int output_type = 4, int triangulate = 0
+            int search_type = 1, int output_type = 4, int triangulate = 0
             );
 
         [DllImport(dllName, CallingConvention = CallingConvention.Cdecl)]

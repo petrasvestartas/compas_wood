@@ -132,13 +132,15 @@ void polylines_from_vertices_and_faces_and_properties(
     const RowMatrixXi& three_valence_element_indices_and_instruction,
     const RowMatrixXi& adjacency,
     const RowMatrixXd& default_parameters_for_joint_types_matrix,
+    const RowMatrixXd& scale,
 
     std::vector<CGAL_Polyline>& out_polyline_pairs,
     std::vector<std::vector<IK::Vector_3>>& out_insertion_vectors,
     std::vector<std::vector<int>>& out_joint_types,
     std::vector<std::vector<int>>& out_three_valence_element_indices_and_instruction,
     std::vector<int>& out_adjacency,
-    std::vector<double>& out_default_parameters_for_joint_types
+    std::vector<double>& out_default_parameters_for_joint_types,
+    std::vector<double>& out_scale
 
 ) {
     //////////////////////////////////////////////////////////////////////////////
@@ -228,6 +230,12 @@ void polylines_from_vertices_and_faces_and_properties(
         out_default_parameters_for_joint_types.reserve(default_parameters_for_joint_types_matrix.size());
         for (int i = 0; i < default_parameters_for_joint_types_matrix.size(); i++)
             out_default_parameters_for_joint_types.emplace_back(default_parameters_for_joint_types_matrix(i, 0));
+    }
+
+    if (scale.size() > 0) {
+        out_scale.reserve(scale.size());
+        for (int i = 0; i < scale.size(); i++)
+            out_scale.emplace_back(scale(i, 0));
     }
 }
 
@@ -372,10 +380,9 @@ std::tuple<std::vector<RowMatrixXd>, std::vector<int>> pybind11_get_connection_z
     Eigen::Ref<const RowMatrixXi>& three_valence_element_indices_and_instruction,
     Eigen::Ref<const RowMatrixXi>& adjacency,
     Eigen::Ref<const RowMatrixXd>& default_parameters_for_joint_types_matrix,
+    Eigen::Ref<const RowMatrixXd>& scale,
 
     int search_type = 1,
-    double division_distance = 300,
-    double shift = 0.6,
     int output_type = 4,
     int triangulate = 0
 
@@ -396,7 +403,7 @@ std::tuple<std::vector<RowMatrixXd>, std::vector<int>> pybind11_get_connection_z
     std::vector<std::vector<int>> out_three_valence_element_indices_and_instruction;
     std::vector<int> out_adjacency;
     std::vector<double> out_default_parameters_for_joint_types;
-
+    std::vector<double> out_scale;
     polylines_from_vertices_and_faces_and_properties(
 
         polylines_vertices_XYZ,
@@ -406,22 +413,18 @@ std::tuple<std::vector<RowMatrixXd>, std::vector<int>> pybind11_get_connection_z
         three_valence_element_indices_and_instruction,
         adjacency,
         default_parameters_for_joint_types_matrix,
+        scale,
 
         out_polyline_pairs,
         out_insertion_vectors,
         out_joint_types,
         out_three_valence_element_indices_and_instruction,
         out_adjacency,
-        out_default_parameters_for_joint_types);
+        out_default_parameters_for_joint_types,
+        out_scale);
 
     std::vector<std::vector<CGAL_Polyline>> output;
     std::vector<std::vector<int>> top_face_triangulation;
-
-    //for (int i = 0; i < 18; i++) {
-    //    CGAL_Debug(default_parameters_for_joint_types_matrix(0, i));
-    //}
-    // for (double t : out_default_parameters_for_joint_types)//out_default_parameters_for_joint_types
-      //   CGAL_Debug(t);
 
     get_connection_zones(
         out_polyline_pairs,
@@ -434,17 +437,17 @@ std::tuple<std::vector<RowMatrixXd>, std::vector<int>> pybind11_get_connection_z
         top_face_triangulation,
 
         out_default_parameters_for_joint_types,
+        out_scale,
         search_type,
-        division_distance,
-        shift,
+
         output_type,
         triangulate
 
-    );
+    );//        division_distance,    shift,
 
-    //////////////////////////////////////////////////////////////////////////////
-    //Convert Output to Raw Data
-    //////////////////////////////////////////////////////////////////////////////
+        //////////////////////////////////////////////////////////////////////////////
+        //Convert Output to Raw Data
+        //////////////////////////////////////////////////////////////////////////////
 
     return result_tuple_from_polylinesVector(output, true);
 }
@@ -979,65 +982,65 @@ std::tuple < std::vector<RowMatrixXd>, std::vector<RowMatrixXd>, RowMatrixXi, Ro
     empty_joint.shift = shift;
 
     switch (type) {
-        case(1):
-            joint_library::ss_e_ip_0(empty_joint);
-            break;
-        case(2):
-            joint_library::ss_e_ip_1(empty_joint);
-            break;
-        case(9):
-            joint_library_xml_parser::read_xml(empty_joint, 0);
-            break;
+    case(1):
+        joint_library::ss_e_ip_0(empty_joint);
+        break;
+    case(2):
+        joint_library::ss_e_ip_1(empty_joint);
+        break;
+    case(9):
+        joint_library_xml_parser::read_xml(empty_joint, 0);
+        break;
 
-        case(10):
-            joint_library::ss_e_op_0(empty_joint);
-            break;
-        case(11):
-            joint_library::ss_e_op_1(empty_joint);
-            break;
-        case(12):
-            joint_library::ss_e_op_2(empty_joint);
-            break;
-        case(19):
-            joint_library_xml_parser::read_xml(empty_joint, 1);
-            break;
+    case(10):
+        joint_library::ss_e_op_0(empty_joint);
+        break;
+    case(11):
+        joint_library::ss_e_op_1(empty_joint);
+        break;
+    case(12):
+        joint_library::ss_e_op_2(empty_joint);
+        break;
+    case(19):
+        joint_library_xml_parser::read_xml(empty_joint, 1);
+        break;
 
-        case(20):
-            joint_library::ts_e_p_0(empty_joint);
-            break;
-        case(21):
-            joint_library::ts_e_p_1(empty_joint);
-            break;
-        case(22):
-            joint_library::ts_e_p_2(empty_joint);
-            break;
-        case(23):
-            joint_library::ts_e_p_3(empty_joint);
-            break;
-        case(29):
-            joint_library_xml_parser::read_xml(empty_joint, 2);
-            break;
+    case(20):
+        joint_library::ts_e_p_0(empty_joint);
+        break;
+    case(21):
+        joint_library::ts_e_p_1(empty_joint);
+        break;
+    case(22):
+        joint_library::ts_e_p_2(empty_joint);
+        break;
+    case(23):
+        joint_library::ts_e_p_3(empty_joint);
+        break;
+    case(29):
+        joint_library_xml_parser::read_xml(empty_joint, 2);
+        break;
 
-        case(30):
-            joint_library::cr_c_ip_0(empty_joint);
-            break;
-        case(31):
-            joint_library::cr_c_ip_1(empty_joint);
-            break;
-        case(39):
-            joint_library_xml_parser::read_xml(empty_joint, 3);
-            break;
+    case(30):
+        joint_library::cr_c_ip_0(empty_joint);
+        break;
+    case(31):
+        joint_library::cr_c_ip_1(empty_joint);
+        break;
+    case(39):
+        joint_library_xml_parser::read_xml(empty_joint, 3);
+        break;
 
-        case(49):
-            joint_library_xml_parser::read_xml(empty_joint, 4);
-            break;
+    case(49):
+        joint_library_xml_parser::read_xml(empty_joint, 4);
+        break;
 
-        case(59):
-            joint_library_xml_parser::read_xml(empty_joint, 5);
-            break;
+    case(59):
+        joint_library_xml_parser::read_xml(empty_joint, 5);
+        break;
 
-        default:
-            joint_library::ss_e_ip_0(empty_joint);
+    default:
+        joint_library::ss_e_ip_0(empty_joint);
     }
 
     /* CGAL_Debug(empty_joint.m[0].size());

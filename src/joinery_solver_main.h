@@ -713,11 +713,11 @@ inline bool face_to_face(
                             double d0 = 0.5 * std::sqrt(CGAL::squared_distance(Plane0[0].point(), Plane0[1].projection(Plane0[0].point())));
                             offset_vector *= d0;
 
-                            joint_volumes_pairA_pairB[0] = { average_rectangle[3] + offset_vector, average_rectangle[3] - offset_vector, average_rectangle[0] - offset_vector, average_rectangle[0] + offset_vector, average_rectangle[0] + offset_vector };
-                            joint_volumes_pairA_pairB[1] = { average_rectangle[2] + offset_vector, average_rectangle[2] - offset_vector, average_rectangle[1] - offset_vector, average_rectangle[1] + offset_vector, average_rectangle[1] + offset_vector };
+                            joint_volumes_pairA_pairB[0] = { average_rectangle[3] + offset_vector, average_rectangle[3] - offset_vector, average_rectangle[0] - offset_vector, average_rectangle[0] + offset_vector, average_rectangle[3] + offset_vector };
+                            joint_volumes_pairA_pairB[1] = { average_rectangle[2] + offset_vector, average_rectangle[2] - offset_vector, average_rectangle[1] - offset_vector, average_rectangle[1] + offset_vector,  average_rectangle[2] + offset_vector };
                             //joint_volumes_pairA_pairB[2] = joint_volumes_pairA_pairB[0];
                             //joint_volumes_pairA_pairB[3] = joint_volumes_pairA_pairB[1];
-                            type = 10;
+                            type = 13;
 
                             ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
                             //Elements are parallel
@@ -1525,9 +1525,10 @@ inline void get_connection_zones(
 
     //Global Parameters
     std::vector<double>& default_parameters_for_joint_types,
+    std::vector<double>& scale,
     int search_type = 1,
-    double division_distance = 300,
-    double shift = 0.6,
+    //double division_distance = 300,
+    //double shift = 0.6,
     int output_type = 4,
     int triangulate = 0
 
@@ -1603,8 +1604,8 @@ inline void get_connection_zones(
     ////////////////////////////////////////////////////////////////////////////////
     //Create and Align Joints 1. Iterate type 2. Select joint based on not/given user joint_type
     ////////////////////////////////////////////////////////////////////////////////
-    joint_library::construct_joint_by_index(elements, joints, division_distance, shift, default_parameters_for_joint_types);
-
+    joint_library::construct_joint_by_index(elements, joints, default_parameters_for_joint_types, scale);//division_distance, shift,
+    //CGAL_Debug(99999);
 #ifdef DEBUG_MEASURE_TIME
     end = std::chrono::high_resolution_clock::now();
     elapsed = std::chrono::duration_cast<std::chrono::nanoseconds>(end - begin);
@@ -1634,6 +1635,8 @@ inline void get_connection_zones(
         default:
         case (3):
             elements[i].get_joints_geometry(joints, plines, 3);
+
+            //CGAL_Debug(plines[i].size());
             break;
         case (4):
 
@@ -1713,6 +1716,7 @@ inline void beam_volumes(
     //////////////////////////////////////////////////////////////////////////////
     //Main Properties: elements, joints, joints_map
     //////////////////////////////////////////////////////////////////////////////
+    std::vector<double> scale = { 1,1,1 };
 
     std::vector<element> elements;
     elements.reserve(polylines.size());
@@ -2058,7 +2062,7 @@ inline void beam_volumes(
 #ifdef DEBUG
     printf("CPP finish pair search\n");
 #endif
-    joint_library::construct_joint_by_index(elements, joints, division_distance, shift, default_parameters_for_joint_types);
+    joint_library::construct_joint_by_index(elements, joints, default_parameters_for_joint_types, scale);// division_distance, shift,
 #ifdef DEBUG
     printf("CPP construct_joint_by_index\n");
 #endif

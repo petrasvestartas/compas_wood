@@ -19,7 +19,7 @@ def test_connection_detection():
     input = data_set_plates.ts_3()
 
     # Generate connections
-    result = get_connection_zones(input, None, None, None, None, 0)
+    result = get_connection_zones(input, None, None, None, None, None, 0, 300, 0.6, 3)
     result_flat_list = [item for sublist in result for item in sublist]
 
     # Generate mesh

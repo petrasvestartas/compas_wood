@@ -75,28 +75,40 @@ inline void element::get_joints_geometry(std::vector<joint>& joints, std::vector
         for (size_t j = 0; j < j_mf[i].size(); j++) { //loop joints per each face + 1 undefined
             switch (what_to_expose) {
             case (0)://Plate outlines
-                if (this->polylines.size() > 1) {
-                    output[this->id].emplace_back(this->polylines[0]); //cut
-                    output[this->id].emplace_back(this->polylines[1]); //cut
+                //if (this->polylines.size() > 1 && i == 0) {
+                //    output[this->id].emplace_back(this->polylines[0]); //cut
+                //    output[this->id].emplace_back(this->polylines[1]); //cut
+                //}
+            {
+                CGAL_Polyline joint_area(joints[std::get<0>(j_mf[i][j])].joint_area);
+                IK::Vector_3 plane[4];
+                cgal_polyline_util::AveragePlane(joint_area, plane);
+                IK::Point_3 origin(plane[0].hx(), plane[0].hy(), plane[0].hz());
+                IK::Point_3 center = cgal_polyline_util::Center(this->polylines[0]);
+                IK::Point_3 p0 = origin + plane[3];
+                IK::Point_3 p1 = origin - plane[3];
+                if (CGAL::has_smaller_distance_to_point(center, p0, p1)) {
+                    std::reverse(joint_area.begin(), joint_area.end());
                 }
-
-                output[this->id].emplace_back(joints[std::get<0>(j_mf[i][j])].joint_area);
+                output[this->id].emplace_back(joint_area);
                 break;
+            }
+
             case (1)://joint lines
-                if (this->polylines.size() > 1) {
-                    output[this->id].emplace_back(this->polylines[0]); //cut
-                    output[this->id].emplace_back(this->polylines[1]); //cut
-                }
+                //if (this->polylines.size() > 1 && i == 0) {
+                //    output[this->id].emplace_back(this->polylines[0]); //cut
+                //    output[this->id].emplace_back(this->polylines[1]); //cut
+                //}
 
                 output[this->id].emplace_back(joints[std::get<0>(j_mf[i][j])].joint_lines[0]);
                 output[this->id].emplace_back(joints[std::get<0>(j_mf[i][j])].joint_lines[1]);
                 break;
             case (2)://joint volumes
 
-                if (this->polylines.size() > 1) {
-                    output[this->id].emplace_back(this->polylines[0]); //cut
-                    output[this->id].emplace_back(this->polylines[1]); //cut
-                }
+                //if (this->polylines.size() > 1 && i == 0) {
+                //    output[this->id].emplace_back(this->polylines[0]); //cut
+                //    output[this->id].emplace_back(this->polylines[1]); //cut
+                //}
 
                 if (joints[std::get<0>(j_mf[i][j])].joint_volumes[0].size() > 0)
                     output[this->id].emplace_back(joints[std::get<0>(j_mf[i][j])].joint_volumes[0]);
@@ -109,10 +121,10 @@ inline void element::get_joints_geometry(std::vector<joint>& joints, std::vector
                 break;
             case (3):
 
-                if (this->polylines.size() > 1) {
-                    output[this->id].emplace_back(this->polylines[0]); //cut
-                    output[this->id].emplace_back(this->polylines[1]); //cut
-                }
+                //if (this->polylines.size() > 1 && i == 0) {
+                //    output[this->id].emplace_back(this->polylines[0]); //cut
+                //    output[this->id].emplace_back(this->polylines[1]); //cut
+                //}
 
                 for (int k = 0; k < joints[std::get<0>(j_mf[i][j])](std::get<1>(j_mf[i][j]), true).size(); k++) {
                     output[this->id].emplace_back(joints[std::get<0>(j_mf[i][j])](std::get<1>(j_mf[i][j]), true)[k]);  //cut

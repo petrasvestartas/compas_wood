@@ -526,19 +526,22 @@ namespace cgal_polyline_util {
     }
 
     inline void Extend(CGAL_Polyline& pline, int sID, double dist0, double dist1, double proportion0 = 0, double proportion1 = 0) {
+        if (dist0 == 0 && dist1 == 0 && proportion0 == 0 && proportion1 == 0)
+            return;
+
         IK::Point_3 p0 = pline[sID];
         IK::Point_3 p1 = pline[sID + 1];
         IK::Vector_3 v = p1 - p0;
 
         //Either scale or extend polyline segments
         if (proportion0 != 0 || proportion1 != 0) {
-            p0 += v * proportion0;
-            p1 -= v * proportion1;
+            p0 -= v * proportion0;
+            p1 += v * proportion1;
         }
         else {
             cgal_vector_util::Unitize(v);
-            p0 += v * dist0;
-            p1 -= v * dist1;
+            p0 -= v * dist0;
+            p1 += v * dist1;
         }
 
         pline[sID] = p0;
@@ -546,7 +549,7 @@ namespace cgal_polyline_util {
 
         if (sID == 0)
             pline[pline.size() - 1] = pline[0];
-        else if (sID == pline.size() - 1)
+        else if ((sID + 1) == pline.size() - 1)
             pline[0] = pline[pline.size() - 1];
     }
 
@@ -583,5 +586,41 @@ namespace cgal_polyline_util {
             num = num + x1 * y1;
         }
         return num > 0;
+    }
+
+    inline void convex_corner(CGAL_Polyline& polyline, std::vector<bool>& convex_or_concave) {
+        //check if it is closed
+        bool closed = true;
+        if (CGAL::squared_distance(polyline[0], polyline[polyline.size() - 1]) > 0.001)
+            closed = false;
+
+        //get average normal
+        IK::Vector_3 normal(0, 0, 1);
+        cgal_vector_util::AverageNormal(polyline, normal, closed);
+
+        //reserve boolean flags
+        int n = closed ? polyline.size() - 1 : polyline.size();
+        convex_or_concave.reserve(n);
+
+        //find the convexcorner corners
+        for (auto current = 0; current < n; current++)
+        {
+            auto prev = current == 0 ? n - 1 : current - 1;
+            auto next = current == n - 1 ? 0 : current + 1;
+
+            auto dir0 = polyline[current] - polyline[prev];
+            cgal_vector_util::Unitize(dir0);
+
+            auto dir1 = polyline[next] - polyline[current];
+            cgal_vector_util::Unitize(dir1);
+
+            auto dir2 = CGAL::cross_product(dir0, dir1);
+            cgal_vector_util::Unitize(dir2);
+
+            auto dot = dir2 * normal; // dot product
+
+            bool is_convex = !(dot < 0.0);
+            convex_or_concave.emplace_back(is_convex);
+        }
     }
 }

@@ -18,7 +18,7 @@ def test_connection_detection():
     input = data_set_plates.c_0()
 
     # Generate connections
-    result = get_connection_zones(input, None, None, None, None, 1, 300, 0.6, 4)
+    result = get_connection_zones(input, None, None, None, None, None, 2, 300, 0.6, 4)
     result_flat_list = [item for sublist in result for item in sublist]
 
     # Display via Compas_View2

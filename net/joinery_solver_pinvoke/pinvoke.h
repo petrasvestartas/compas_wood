@@ -48,11 +48,12 @@ PINVOKE int pinvoke_get_connection_zones(
     int* threevalence_f, int threevalence_f_s, int* threevalence_v, int threevalence_v_s,
     int* adjacency_v, int adjacency_v_s,
     double* jointparams_v, int jointparams_v_s,
+    double* scale_v, int scale_v_s,
     const char* file_and_folder_of_joint_library_xml,
     //output
     int*& groups_f, int& groups_f_s, int*& out_f, int& out_f_s, double*& out_v, int& out_v_s,
     //optional inputs
-    int search_type = 1, double division_distance = 300, double shift = 0.6, int output_type = 4, int triangulate = 0
+    int search_type = 1, int output_type = 4, int triangulate = 0
 
 );
 

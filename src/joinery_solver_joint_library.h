@@ -48,13 +48,15 @@ namespace joint_library_xml_parser {
         case(4):
             name = "tt_e_p_9";
             break;
-        case(50):
+        case(13):
         case(5):
             name = "ss_e_r_9";
             break;
         }
 
         joint.name = name;
+        //printf("XML \n");
+        //printf(type);
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         //Check if XML file exists, path_and_file_for_joints is a global path
@@ -70,7 +72,7 @@ namespace joint_library_xml_parser {
 #endif
 
             std::ofstream myfile;
-            myfile.open("C:\\Users\\petra\\AppData\\Roaming\\Grasshopper\\Libraries\\compas_wood\\example.txt");
+            myfile.open("C:\\Users\\petra\\AppData\\Roaming\\Grasshopper\\Libraries\\compas_wood\\xml_error.txt");
             myfile << "Do not Exist\n";
             myfile << path_and_file_for_joints;
             myfile.close();
@@ -205,9 +207,10 @@ namespace joint_library_xml_parser {
 
 #endif
             std::ofstream myfile;
-            myfile.open("C:\\Users\\petra\\AppData\\Roaming\\Grasshopper\\Libraries\\compas_wood\\example.txt");
+            myfile.open("C:\\Users\\petra\\AppData\\Roaming\\Grasshopper\\Libraries\\compas_wood\\xml_error.txt");
             myfile << "Wrong Property\n";
             myfile.close();
+            //printf("Wrong Property \n");
             return false;
         }
         //std::ofstream myfile;
@@ -216,6 +219,8 @@ namespace joint_library_xml_parser {
         //myfile.close();
         //CGAL_Debug(joint.f[0].size(), joint.f[1].size(), joint.f_boolean_type.size());
         //CGAL_Debug(joint.m[0].size(), joint.m[1].size(), joint.m_boolean_type.size());
+        //printf("Exists \n");
+
         return true;
     }
 }
@@ -320,6 +325,118 @@ namespace joint_library {
     //type_typeidedge_subtypeieinplane_id
     //0 - do not merge, 1 - edge insertion, 2 - hole 3 - insert between multiple edges hole
 
+    //custom
+    inline void side_removal(joint& joint, std::vector<element>& elements) {
+        joint.name = "side_removal";
+        joint.orient = false;
+
+        /////////////////////////////////////////////////////////////////////////////////
+        //offset vector
+        /////////////////////////////////////////////////////////////////////////////////
+        IK::Vector_3 v0 = elements[joint.v0].planes[joint.f0_0].orthogonal_vector();
+        cgal_vector_util::Unitize(v0);
+        v0 *= joint.scale[2];
+
+        IK::Vector_3 v1 = elements[joint.v1].planes[joint.f1_0].orthogonal_vector();
+        cgal_vector_util::Unitize(v1);
+        v1 *= joint.scale[2];
+
+        /////////////////////////////////////////////////////////////////////////////////
+        //copy sides
+        /////////////////////////////////////////////////////////////////////////////////
+        CGAL_Polyline pline0 = elements[joint.v0].polylines[joint.f0_0];
+        CGAL_Polyline pline1 = elements[joint.v1].polylines[joint.f1_0];
+
+        /////////////////////////////////////////////////////////////////////////////////
+        //extend only convex angles and side polygons | only rectangles
+        /////////////////////////////////////////////////////////////////////////////////
+        //CGAL_Debug(pline0.size(), pline1.size());
+        //CGAL_Debug(joint.scale[0]);
+        if (pline0.size() == 5 && pline1.size() == 5) {
+            //get convex_concave cornerss
+            std::vector<bool>convex_corner0;
+
+            cgal_polyline_util::convex_corner(elements[joint.v0].polylines[0], convex_corner0);
+
+            int id = 15;
+
+            double scale0_0 = convex_corner0[joint.f0_0 - 2] ? joint.scale[0] : 0;
+            double scale0_1 = convex_corner0[(joint.f0_0 - 2 + 1) % convex_corner0.size()] ? joint.scale[0] : 0;
+
+            //if (joint.v0 == id) {
+            //    for (auto& flag : convex_corner0)
+            //        CGAL_Debug(flag);
+            //    CGAL_Debug(8888);
+            //    CGAL_Debug(convex_corner0[joint.f0_0 - 2]);
+            //    CGAL_Debug(convex_corner0[(joint.f0_0 - 2 + 1) % convex_corner0.size()]);
+            //    CGAL_Debug(joint.f0_0 - 2);
+            //    CGAL_Debug(9999);
+            //}
+
+            std::vector<bool>convex_corner1;
+            cgal_polyline_util::convex_corner(elements[joint.v1].polylines[0], convex_corner1);
+            double scale1_0 = convex_corner1[joint.f1_0 - 2] ? joint.scale[0] : 0;
+            double scale1_1 = convex_corner1[(joint.f1_0 - 2 + 1) % convex_corner1.size()] ? joint.scale[0] : 0;
+
+            //if (joint.v1 == id) {
+            //    for (auto& flag : convex_corner1)
+            //        CGAL_Debug(flag);
+            //    CGAL_Debug(8888);
+            //    CGAL_Debug(convex_corner1[joint.f1_0 - 2]);
+            //    CGAL_Debug(convex_corner1[(joint.f1_0 - 2 + 1) % convex_corner1.size()]);
+            //    CGAL_Debug(joint.f1_0 - 2);
+            //    CGAL_Debug(9999);
+            //}
+
+            //currrent
+            cgal_polyline_util::Extend(pline0, 0, scale0_0, scale0_1);
+            cgal_polyline_util::Extend(pline0, 2, scale0_1, scale0_0);
+
+            //neighbor
+            cgal_polyline_util::Extend(pline1, 0, scale1_0, scale1_1);
+            cgal_polyline_util::Extend(pline1, 2, scale1_1, scale1_0);
+
+            //Extend vertical
+            cgal_polyline_util::Extend(pline0, 1, joint.scale[1], joint.scale[1]);
+            cgal_polyline_util::Extend(pline0, 3, joint.scale[1], joint.scale[1]);
+            cgal_polyline_util::Extend(pline1, 1, joint.scale[1], joint.scale[1]);
+            cgal_polyline_util::Extend(pline1, 3, joint.scale[1], joint.scale[1]);
+        }
+
+        /////////////////////////////////////////////////////////////////////////////////
+        //move outlines by vector
+        /////////////////////////////////////////////////////////////////////////////////
+        CGAL_Polyline pline0_moved = pline0;
+        CGAL_Polyline pline1_moved = pline1;
+        cgal_polyline_util::move(pline0_moved, v0);
+        cgal_polyline_util::move(pline1_moved, v1);
+
+        //output
+        joint.m[0] = {
+             pline0,
+             pline0
+        };
+
+        joint.m[1] = {
+            pline0_moved,
+            pline0_moved
+        };
+
+        joint.f[0] = {
+           pline1,
+            pline1
+        };
+
+        joint.f[1] = {
+           pline1_moved,
+            pline1_moved
+        };
+
+        joint.m_boolean_type = { '1', '1' };
+        joint.f_boolean_type = { '1', '1' };
+        //joint.m_boolean_type = { };
+    }
+
     //1-9
 
     inline void ss_e_ip_0(joint& joint) {
@@ -347,6 +464,7 @@ namespace joint_library {
     }
 
     inline void ss_e_ip_1(joint& joint) {
+        //CGAL_Debug(0);
         joint.name = "ss_e_ip_1";
 
         //Resize arrays
@@ -360,12 +478,15 @@ namespace joint_library {
         //Input joint line (its lengths)
         //Input distance for division
         ////////////////////////////////////////////////////////////////////
+        //CGAL_Debug(1);
+        //CGAL_Debug(joint.divisions);
         int divisions = (int)std::max(2, std::min(100, joint.divisions));
         divisions += divisions % 2;
 
         //////////////////////////////////////////////////////////////////////////////////////////
         //Interpolate points
         //////////////////////////////////////////////////////////////////////////////////////////
+        //CGAL_Debug(2);
         std::vector<IK::Point_3> pts0;
 
         interpolate_points(IK::Point_3(0, -0.5, 0.5), IK::Point_3(0, -0.5, -0.5), divisions, false, pts0);
@@ -375,6 +496,8 @@ namespace joint_library {
 
         int count = pts0.size() * 2;
 
+        //CGAL_Debug(count);
+        //CGAL_Debug(3);
         //1st polyline
         std::vector<IK::Point_3> pline0;
         pline0.reserve(count);
@@ -395,7 +518,8 @@ namespace joint_library {
         pline0.emplace_back(pts0[pts0.size() - 1] - v + v_d);
         pline0.emplace_back(pts0[pts0.size() - 1]);
 
-        //2nd polyline
+        // CGAL_Debug(4);
+         //2nd polyline
         IK::Vector_3 v_o(0, 1, 0);
         std::vector<IK::Point_3> pline1;
         pline1.reserve(pline0.size());
@@ -404,6 +528,7 @@ namespace joint_library {
             pline1.emplace_back(pline0[i] + v_o);
         }
 
+        //CGAL_Debug(5);
         //Joint lines, always the last line or rectangle is not a joint but an cutting element
         joint.f[0] = {
             pline0,
@@ -1319,27 +1444,37 @@ namespace joint_library {
             //joint.orient_to_connection_area();
     }
 
-    inline void construct_joint_by_index(std::vector<element>& elements, std::vector<joint>& joints, const double& division_distance_, const double& shift_, std::vector<double>& default_parameters_for_four_types) {
-        std::array<std::string, 59> joint_names;
-
+    inline void construct_joint_by_index(std::vector<element>& elements, std::vector<joint>& joints, std::vector<double>& default_parameters_for_four_types, std::vector<double>& scale) {// const double& division_distance_, const double& shift_,
+        /////////////////////////////////////////////////////////////////////
+        //You must define new joint each time you internalize it
+        /////////////////////////////////////////////////////////////////////
+        std::array<std::string, 60> joint_names;
         for (size_t i = 0; i < joint_names.size(); i++)
             joint_names[i] = "undefined";
 
         joint_names[1] = "ss_e_ip_0";
         joint_names[2] = "ss_e_ip_1";
+        joint_names[3] = "ss_e_ip_2";
+        joint_names[8] = "side_removal";
         joint_names[9] = "ss_e_ip_9";
         joint_names[10] = "ss_e_op_0";
         joint_names[11] = "ss_e_op_1";
         joint_names[12] = "ss_e_op_2";
+        joint_names[18] = "side_removal";
         joint_names[19] = "ss_e_op_9";
         joint_names[20] = "ts_e_p_0";
         joint_names[21] = "ts_e_p_1";
         joint_names[22] = "ts_e_p_2";
         joint_names[22] = "ts_e_p_3";
+        joint_names[28] = "side_removal";
         joint_names[29] = "ts_e_p_9";
         joint_names[30] = "cr_c_ip_0";
         joint_names[31] = "cr_c_ip_1";
+        joint_names[38] = "side_removal";
         joint_names[39] = "cr_c_ip_9";
+        joint_names[48] = "side_removal";
+        joint_names[58] = "side_removal";
+        joint_names[59] = "ss_e_r_9";
 
 #ifdef DEBUG_JOINERY_LIBRARY
         printf("\nCPP   FILE %s    METHOD %s   LINE %i     WHAT %s ", __FILE__, __FUNCTION__, __LINE__, "construct_joint_by_index");
@@ -1355,8 +1490,8 @@ namespace joint_library {
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         std::map<std::string, joint> unique_joints;
 
-        double division_distance = division_distance_;
-        double shift = shift_;
+        double division_distance = 1000;
+        double shift = 0.5;
 
 #ifdef DEBUG_JOINERY_LIBRARY
         printf("\nCPP   FILE %s    METHOD %s   LINE %i     WHAT %s   ", __FILE__, __FUNCTION__, __LINE__, "Before Joint Iteration");
@@ -1367,12 +1502,14 @@ namespace joint_library {
         std::vector<int> ids_to_remove;
         ids_to_remove.reserve(joints.size());
         int counter = 0;
+        //CGAL_Debug(joints.size());
         for (auto& jo : joints) {
+            //CGAL_Debug(counter);
             counter++;
 
             //Select user given type
             //types0+265
-
+            //CGAL_Debug(0);
             int id_representing_joint_name = -1;
             if (elements[jo.v0].joint_types.size() && elements[jo.v1].joint_types.size()) {
                 int a = std::abs(elements[jo.v0].joint_types[jo.f0_0]);
@@ -1396,7 +1533,7 @@ namespace joint_library {
             // Select first by local search, only then by user given index, or by default
             // This setting produces joints without geometry, do you need to delete these joints?
             /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
+            //CGAL_Debug(1);
             int group = -1;
             if (id_representing_joint_name == 0) {
                 continue;
@@ -1416,9 +1553,27 @@ namespace joint_library {
             else if (jo.type == 40 && ((id_representing_joint_name > 39 && id_representing_joint_name < 50) || id_representing_joint_name == -1)) { //top-top
                 group = 4;
             }
-            else if (jo.type == 50 && ((id_representing_joint_name > 49 && id_representing_joint_name < 60) || id_representing_joint_name == -1)) { //side-side rotated
+            else if (jo.type == 13 && ((id_representing_joint_name > 49 && id_representing_joint_name < 60) || id_representing_joint_name == -1)) { //side-side rotated
                 group = 5;
             }
+
+            //define scale
+
+            if (scale.size() > 0) {
+                if (scale.size() < 3)
+                    jo.scale = { scale[0] ,scale[0],scale[0] };
+                else if (scale.size() == 3)
+                    jo.scale = { scale[0] ,scale[1],scale[2] };
+                else
+                    jo.scale = { scale[group * 3 + 0] ,scale[group * 3 + 1],scale[group * 3 + 2] };
+            }
+            //CGAL_Debug(jo.scale[0], jo.scale[1], jo.scale[2]);
+
+            //printf("\n");
+            //CGAL_Debug(group);
+            //CGAL_Debug(id_representing_joint_name);
+            //CGAL_Debug(jo.type);
+            //printf("\n");
 
             if (default_parameters_given) {
                 division_distance = default_parameters_for_four_types[(long long)(number_of_parameters * group + 0)];
@@ -1435,7 +1590,14 @@ namespace joint_library {
             /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
             //Set unit distance, this value is a distance between joint volume rectangles, in case this property is set -> unit_scale = true
             /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
+            //CGAL_Debug(2);
+            //CGAL_Debug(division_distance);
+            //CGAL_Debug(id_representing_joint_name);
+            //std::ofstream f;
+            //f.open("C:\\Users\\petra\\AppData\\Roaming\\Grasshopper\\Libraries\\compas_wood\\xml_error.txt");
+            //f << "construct_joint_by_index\n";
+            //f << id_representing_joint_name;
+            //f.close();
             jo.name = joint_names[id_representing_joint_name];
             jo.unit_scale_distance = elements[jo.v0].thickness;
             //CGAL_Debug(division_distance);
@@ -1457,16 +1619,20 @@ namespace joint_library {
 #ifdef DEBUG_JOINERY_LIBRARY
             printf("\nCPP   FILE %s    METHOD %s   LINE %i     WHAT %s %i", __FILE__, __FUNCTION__, __LINE__, "Is similar joint", is_similar_joint);
 #endif
-
-            //CGAL_Debug(id_representing_joint_name);
-            //is_similar_joint = false;
+            //CGAL_Debug(0);
+             //CGAL_Debug(id_representing_joint_name);
+             //is_similar_joint = false;
             if (is_similar_joint) {
+                //CGAL_Debug(0);
                 auto u_j = unique_joints.at(key);
+                //CGAL_Debug(1);
                 jo.transfer_geometry(u_j);
+                //CGAL_Debug(2);
                 jo.orient_to_connection_area();
+                //CGAL_Debug(3);
                 continue;
             }
-
+            //CGAL_Debug(4);
 #ifdef DEBUG_JOINERY_LIBRARY
             printf("\nCPP   FILE %s    METHOD %s   LINE %i     WHAT %s ", __FILE__, __FUNCTION__, __LINE__, "transfer_geometry");
 #endif
@@ -1484,6 +1650,9 @@ namespace joint_library {
 
                 case (3):
                     ss_e_ip_2(jo);
+                    break;
+                case (8):
+                    side_removal(jo, elements);
                     break;
                 case (9):
                     //wont work, because not oriented to connection zones, need additional layer e.g. std::map of all joints
@@ -1511,6 +1680,9 @@ namespace joint_library {
                     break;
                 case (12):
                     ss_e_op_0(jo);
+                    break;
+                case (18):
+                    side_removal(jo, elements);
                     break;
                 case (19):
                     //if (true) {
@@ -1547,6 +1719,9 @@ namespace joint_library {
                 case (23):
                     ts_e_p_0(jo);
                     break;
+                case (28):
+                    side_removal(jo, elements);
+                    break;
                 case (29):
                     //wont work, because not oriented to connection zones, need additional layer e.g. std::map of all joints
                     joint_library_xml_parser::read_xml(jo, jo.type);//is it 0 or 12 ?
@@ -1566,6 +1741,9 @@ namespace joint_library {
                     //cr_c_ip_0(joint);
                     cr_c_ip_1(jo);
                     break;
+                case (38):
+                    side_removal(jo, elements);
+                    break;
                 case (39):
                     //wont work, because not oriented to connection zones, need additional layer e.g. std::map of all joints
                     joint_library_xml_parser::read_xml(jo, jo.type);//is it 0 or 12 ?
@@ -1578,13 +1756,43 @@ namespace joint_library {
                 }
                 break;
             case(4):
-                joint_library_xml_parser::read_xml(jo, jo.type);//is it 0 or 12 ?
-                break;
+                switch (id_representing_joint_name) {
+                case (48):
+                    side_removal(jo, elements);
+                    break;
+                default:
+                    joint_library_xml_parser::read_xml(jo, jo.type);//is it 0 or 12 ?
+                    break;
+                }
             case(5):
-                joint_library_xml_parser::read_xml(jo, jo.type);//is it 0 or 12 ?
+
+                //CGAL_Debug(99999);
+                //CGAL_Debug(id_representing_joint_name);
+                switch (id_representing_joint_name) {
+                    //CGAL_Debug(id_representing_joint_name);
+                case (58):
+                    side_removal(jo, elements);
+                    break;
+                case (59):
+                    //CGAL_Debug(99999);
+                    ss_e_ip_1(jo);
+
+                    //joint_library_xml_parser::read_xml(jo, jo.type);//is it 0 or 12 ?
+
+                    break;
+                default:
+
+                    //default case remove polygon from each
+
+                    side_removal(jo, elements);
+                    //CGAL_Debug(jo.orient);
+                    //joint_library_xml_parser::read_xml(jo, jo.type);//is it 0 or 12 ?
+                    break;
+                }
+
                 break;
             }
-
+            //CGAL_Debug(5);
 #ifdef DEBUG_JOINERY_LIBRARY
             printf("\nCPP   FILE %s    METHOD %s   LINE %i     WHAT %s ", __FILE__, __FUNCTION__, __LINE__, "after unique joint create");
 #endif
@@ -1592,33 +1800,30 @@ namespace joint_library {
             //Add to joint map because this joint was not present
             /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
             if (jo.m[0].size() == 0 && jo.f[0].size() == 0) {
+                //std::ofstream myfile;
+                //myfile.open("C:\\Users\\petra\\AppData\\Roaming\\Grasshopper\\Libraries\\compas_wood\\xml_error.txt");
+                //myfile << "Empty joint\n";
+                //myfile << path_and_file_for_joints;
+                //myfile.close();
                 CGAL_Debug(100000000);
-                CGAL_Debug(group);
-                CGAL_Debug(id_representing_joint_name);
+                //CGAL_Debug(group);
+                //CGAL_Debug(id_representing_joint_name);
                 continue;
             }
             //continue;
-            joint temp_joint;
-            jo.duplicate_geometry(temp_joint);
 
-            unique_joints.insert(std::pair<std::string, joint>(key, temp_joint));
-            jo.orient_to_connection_area();//and orient to connection volume
+            if (jo.orient) {
+                joint temp_joint;
+                jo.duplicate_geometry(temp_joint);
+                unique_joints.insert(std::pair<std::string, joint>(key, temp_joint));
+                jo.orient_to_connection_area();//and orient to connection volume
+            }
 
 #ifdef DEBUG_JOINERY_LIBRARY
             printf("\nCPP   FILE %s    METHOD %s   LINE %i     WHAT %s ", __FILE__, __FUNCTION__, __LINE__, "last");
 #endif
         }
 
-        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        //Remove empty joints
-        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        //std::reverse(ids_to_remove.begin(), ids_to_remove.end());
-        //for (auto& id : ids_to_remove)
-        //    joints.erase(joints.begin() + id);
-        //for (auto& j : joints)
-        //    j.id -= ids_to_remove.size();
-        //joints.
-
-        //myfile.close();
+        //CGAL_Debug(111111);
     }
 }

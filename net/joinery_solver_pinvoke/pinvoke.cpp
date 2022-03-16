@@ -252,11 +252,12 @@ PINVOKE int pinvoke_get_connection_zones(
     int* threevalence_f, int threevalence_f_s, int* threevalence_v, int threevalence_v_s,
     int* adjacency_v, int adjacency_v_s,
     double* jointparams_v, int jointparams_v_s,
+    double* scale_v, int scale_v_s,
     const char* file_and_folder_of_joint_library_xml,
     //output
     int*& groups_f, int& groups_f_s, int*& out_f, int& out_f_s, double*& out_v, int& out_v_s,
     //optional inputs
-    int search_type, double division_distance, double shift, int output_type, int triangulate
+    int search_type, int output_type, int triangulate
 ) {
     path_and_file_for_joints = std::string(file_and_folder_of_joint_library_xml) + "\\joinery_library.xml";
 
@@ -275,6 +276,7 @@ PINVOKE int pinvoke_get_connection_zones(
     std::vector<std::vector<int>> input_three_valence_element_indices_and_instruction;
     std::vector<int> input_adjacency;
     std::vector<double> default_parameters_for_joint_types;
+    std::vector<double> scale;
 
     coord_to_list(f, f_s, v, v_s, input_polyline_pairs);
     //if (v_s == vec_v_s && f_s == vec_f_s)
@@ -287,6 +289,8 @@ PINVOKE int pinvoke_get_connection_zones(
     coord_to_list(adjacency_v, adjacency_v_s, input_adjacency);
     //if (jointparams_v_s % 3 == 0)
     coord_to_list(jointparams_v, jointparams_v_s, default_parameters_for_joint_types);
+
+    coord_to_list(scale_v, scale_v_s, scale);
     //for (auto& o : default_parameters_for_joint_types)
         //CGAL_Debug(o);
 
@@ -305,14 +309,28 @@ PINVOKE int pinvoke_get_connection_zones(
     get_connection_zones(
         input_polyline_pairs, input_insertion_vectors, input_joint_types, input_three_valence_element_indices_and_instruction, input_adjacency,
         output_plines, output_top_face_triangulation,
-        default_parameters_for_joint_types,
-        search_type, division_distance, shift, output_type, triangulate
-    );
+        default_parameters_for_joint_types, scale,
+        search_type, output_type, triangulate
+    );//division_distance, shift,
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //output_conversion
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //CGAL_Debug(output_plines.size());
+    //std::ofstream myfile;
+    //myfile.open("C:\\Users\\petra\\AppData\\Roaming\\Grasshopper\\Libraries\\compas_wood\\example.txt");
+
+    //for (auto& p : output_plines[0][0]) {
+    //    myfile << p[0];
+    //    myfile << "\n";
+    //    myfile << p[1];
+    //    myfile << "\n";
+    //    myfile << p[2];
+    //    myfile << "\n";
+    //    myfile << "\n";
+    //}
+
+    //myfile.close();
+
     list_to_coord(output_plines, groups_f, groups_f_s, out_f, out_f_s, out_v, out_v_s);
 
     return 1;

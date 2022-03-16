@@ -40,10 +40,9 @@ def get_connection_zones(
     adjacency=None,
     default_joint_parameters=None,
     search_type=2,
-    division_distance=300,
-    shift=0.6,
     output_type=4,
     triangulate=0,
+    scale=None,
 ):
     """Compute joinery
 
@@ -55,12 +54,11 @@ def get_connection_zones(
     three_valance_element_indices_and_instruction : special case e.g. alignment of rectangles
     adjacency : a list of plate id integer pairs
     search_type : 0 - face-to-face, 1 - plane-to-face (cross), 2 - all
-    division_distance : division parameter if tile allows this
-    shift : distance value if tile allows this
     output_type : 0 - top outlines and one joint_area, 1 - top outlines and two joint lines,
     2 - top outlines and joint volumes first and third, 3 - top outlines and joint polylines,
     4 - get_joints_geometry_as_closed_polylines_performing_intersection
     triangulate : 0 - not output as mesh, 1 - output as mesh, currently not supported in python
+    scale : xyz once or six times per joint type
 
     Returns
     -------
@@ -97,6 +95,27 @@ def get_connection_zones(
         1000,
         0.5,
         50,
+    ]
+
+    flat_list_scale = [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
     ]
 
     flag0 = face_vectors_XYZ is not None
@@ -147,6 +166,10 @@ def get_connection_zones(
         for i in range(0, len(adjacency)):
             flat_list_adjacency.extend(adjacency[i])
 
+    if scale is not None:
+        if(len(scale)>2):
+            flat_list_scale = scale
+
     # ==============================================================================
     # Convert to Numpy
     # ==============================================================================
@@ -159,6 +182,7 @@ def get_connection_zones(
     )
     A = np.asarray(flat_list_adjacency, dtype=np.int32)
     P = np.asarray(flat_list_default_joint_paramters, dtype=np.float64)
+    S = np.asarray(flat_list_scale, dtype=np.float64)
 
     # ==============================================================================
     # Test CPP module
@@ -183,6 +207,7 @@ def get_connection_zones(
     folder = os.path.join(
         os.path.dirname(os.path.abspath(__file__)), "joinery_library.xml"
     )
+    # print(folder)
     start_time = time.time()
     (
         pointsets,
@@ -196,9 +221,8 @@ def get_connection_zones(
         X,
         A,
         P,
+        S,
         search_type,
-        division_distance,
-        shift,
         output_type,
         triangulate,
     )
