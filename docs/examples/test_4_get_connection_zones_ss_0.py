@@ -53,7 +53,7 @@ def test_connection_detection():
         0,
         [10, 10, 6, 10, 10, 6, 10, 10, 6, 10, 10, 6, 10, 10, 6, 10, 10, 6],
     )
-    result_flat_list = [item for sublist in result for item in sublist]
+    # result_flat_list = [item for sublist in result for item in sublist]
 
     # Display via Compas_View2
     id = 15

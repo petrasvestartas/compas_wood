@@ -45,7 +45,7 @@ namespace joinery_solver_gh
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
             pManager.AddGenericParameter("data", "data", "data", GH_ParamAccess.item);
-            pManager.AddNumberParameter("join", "join", "joint parameters", GH_ParamAccess.list);
+            pManager.AddNumberParameter("join_p", "join_p", "joint parameters", GH_ParamAccess.list);
             pManager.AddNumberParameter("scale", "scale", "scale joint parameters", GH_ParamAccess.list);
             pManager.AddIntegerParameter("find", "find", "searc types 0 - face-to-face, 1 - plane-to-face (cross), 2 - all", GH_ParamAccess.item, 0);
             pManager.AddIntegerParameter("get", "get", "0 - get top outlines and one joint_area \n 1 - get top outlines and two joint lines \n    2 - top outlines and joint volumes first and third \n  3 - get top outlines and joint polylines \n  4 - get  joints geometry as closed polylines performing intersection", GH_ParamAccess.item, 4);

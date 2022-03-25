@@ -126,7 +126,7 @@ inline void element::get_joints_geometry(std::vector<joint>& joints, std::vector
                 //    output[this->id].emplace_back(this->polylines[1]); //cut
                 //}
 
-                for (int k = 0; k < joints[std::get<0>(j_mf[i][j])](std::get<1>(j_mf[i][j]), true).size(); k++) {
+                for (int k = 0; k < joints[std::get<0>(j_mf[i][j])](std::get<1>(j_mf[i][j]), true).size(); k += 2) {
                     output[this->id].emplace_back(joints[std::get<0>(j_mf[i][j])](std::get<1>(j_mf[i][j]), true)[k]);  //cut
                     output[this->id].emplace_back(joints[std::get<0>(j_mf[i][j])](std::get<1>(j_mf[i][j]), false)[k]); //direction
                 }
@@ -613,13 +613,15 @@ inline void element::merge_joints(std::vector<joint>& joints, std::vector<std::v
             //Intersect rectangle or line
             //Check the number of guid line, should either 2 (line) or 5 (rectangle) vertices
             ///////////////////////////////////////////////////////////////////////////////
-
+#ifdef DEBUG_JOINERY_SOLVER_ELEMENT
+            printf("\nCPP   FILE %s    METHOD %s   LINE %i     WHAT %s %zi ", __FILE__, __FUNCTION__, __LINE__, "Case ", joints[std::get<0>(j_mf[i][j])](std::get<1>(j_mf[i][j]), true)[1].size());
+#endif
             switch (joints[std::get<0>(j_mf[i][j])](std::get<1>(j_mf[i][j]), true)[1].size()) {
             case (2):
             { //Reposition end points
-//#ifdef DEBUG_JOINERY_SOLVER_ELEMENT
-//                    printf("\nCPP   FILE %s    METHOD %s   LINE %i     WHAT %s ", __FILE__, __FUNCTION__, __LINE__, "Intersect rectangle or line CASE 2 ");
-//#endif
+#ifdef DEBUG_JOINERY_SOLVER_ELEMENT
+                printf("\nCPP   FILE %s    METHOD %s   LINE %i     WHAT %s ", __FILE__, __FUNCTION__, __LINE__, "Intersect rectangle or line CASE 2 ");
+#endif
                 int id = i - 2;
                 int n = pline0.size() - 1;
 

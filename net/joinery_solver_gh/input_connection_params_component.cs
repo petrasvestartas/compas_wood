@@ -155,7 +155,7 @@ namespace joinery_solver_gh
 
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.AddGenericParameter("p", "p", "p", GH_ParamAccess.list);
+            pManager.AddGenericParameter("join_p", "join_p", "joint_parameters", GH_ParamAccess.list);
         }
 
         protected override void SolveInstance(IGH_DataAccess DA)

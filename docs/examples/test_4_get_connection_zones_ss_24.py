@@ -21,7 +21,7 @@ def test_connection_detection():
         9,
         division_length * 1.5,
         0.65,
-        10,
+        19,
         division_length * 1.5,
         0.5,
         21,
@@ -37,6 +37,7 @@ def test_connection_detection():
     ]
 
     # Generate connections
+    """
     result = get_connection_zones(
         data_set_plates.annen_small_polylines(),
         data_set_plates.annen_small_edge_directions(),
@@ -49,12 +50,15 @@ def test_connection_detection():
         0.6,
         4,
     )
+    """
+    input = data_set_plates.ss_10()
+    result = get_connection_zones(input, None, None, None, None, joint_parameters, 2, 4)
 
     # data_set_plates_annen.annen_three_valance_element_indices_and_instruction(),
     result_flat_list = [item for sublist in result for item in sublist]
 
     # Display via Compas_View2
-    display(result_flat_list, None, None, 0.01, 0, 0, 0, False)
+    display(input, result_flat_list, None, 0.01, 0, 0, 0, False)  # result_flat_list
 
     # output
     return result
