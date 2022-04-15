@@ -3,3 +3,4 @@ C:\Users\petra\AppData\Roaming\Grasshopper\Libraries\compas_wood\joinery_solver_
 C:\IBOIS57\_Code\Software\Python\compas_wood\net\joinery_solver_net\obj\x64\Debug\joinery_solver_net.csproj.CoreCompileInputs.cache
 C:\IBOIS57\_Code\Software\Python\compas_wood\net\joinery_solver_net\obj\x64\Debug\joinery_solver_net.dll
 C:\IBOIS57\_Code\Software\Python\compas_wood\net\joinery_solver_net\obj\x64\Debug\joinery_solver_net.pdb
+C:\IBOIS57\_Code\Software\Python\compas_wood\net\joinery_solver_net\obj\x64\Debug\joinery_solver_net.csproj.AssemblyReference.cache

@@ -1526,7 +1526,7 @@ inline void get_connection_zones(
     //Global Parameters
     std::vector<double>& default_parameters_for_joint_types,
     std::vector<double>& scale,
-    int search_type = 1,
+    int search_type = 0,
     //double division_distance = 300,
     //double shift = 0.6,
     int output_type = 4,

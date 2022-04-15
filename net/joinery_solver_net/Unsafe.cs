@@ -9,7 +9,7 @@ namespace joinery_solver_net
         //Basic Method and Examples for PInvoke
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         //private const string dllName = System.Runtime.InteropServices.RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? "joinery_solver_pinvoke.dll" : "joinery_solver_pinvoke.dylib";
-        private const string dllName = "joinery_solver_pinvoke.dylib";
+        private const string dllName = "joinery_solver_pinvoke.dll";
 
         [DllImport(dllName, CallingConvention = CallingConvention.Cdecl)]
         internal static extern int test_get_square(int n);
