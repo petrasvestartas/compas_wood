@@ -26,7 +26,7 @@ easy3d::Viewer viewer_init() {
     return easy3d::Viewer("viewer_joinery_solver", 4, 3, 2, false, true, 24, 8, 3840 * 0.495, 2160 * 0.9);
 }
 
-easy3d::Viewer viewer_disply_polylines(easy3d::Viewer& viewer, std::vector<std::vector<IK::Point_3>>& polylines) {//, std::vector<std::vector<IK::Point_3>>& polylines
+void viewer_display_polylines(easy3d::Viewer& viewer, std::vector<std::vector<IK::Point_3>>& polylines) {//, std::vector<std::vector<IK::Point_3>>& polylines
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //Convert geometry to easy3d lines
@@ -77,15 +77,12 @@ easy3d::Viewer viewer_disply_polylines(easy3d::Viewer& viewer, std::vector<std::
     //update easy3d settings
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////    
     drawable->set_uniform_coloring(easy3d::vec4(0.0f, 0.0f, 0.0f, 1.0f));
-    drawable->set_line_width(10.0f);
+    drawable->set_line_width(2.0f);
     viewer.add_drawable(drawable);
-    viewer.set_background_color(easy3d::vec4(1.0f, 1.0f, 1.0f, 1.0f));
-    viewer.fit_screen();
-    viewer.run();
 }
 
 
-easy3d::Viewer viewer_disply_polylines_tree(easy3d::Viewer& viewer, std::vector<std::vector<std::vector<IK::Point_3>>>& polylines_tree) {//, std::vector<std::vector<IK::Point_3>>& polylines
+void viewer_display_polylines_tree(easy3d::Viewer& viewer, std::vector<std::vector<std::vector<IK::Point_3>>>& polylines_tree) {//, std::vector<std::vector<IK::Point_3>>& polylines
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //Convert geometry to easy3d lines
@@ -134,13 +131,16 @@ easy3d::Viewer viewer_disply_polylines_tree(easy3d::Viewer& viewer, std::vector<
     auto drawable = new easy3d::LinesDrawable("lines");
     drawable->update_element_buffer(lineIndices);
     drawable->update_vertex_buffer(pts);
-
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //update easy3d settings
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////    
     drawable->set_uniform_coloring(easy3d::vec4(0.0f, 0.0f, 0.0f, 1.0f));
     drawable->set_line_width(10.0f);
     viewer.add_drawable(drawable);
+
+}
+
+void viewer_run(easy3d::Viewer& viewer) {
     viewer.set_background_color(easy3d::vec4(1.0f, 1.0f, 1.0f, 1.0f));
     viewer.fit_screen();
     viewer.run();

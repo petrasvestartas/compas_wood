@@ -48,8 +48,8 @@ int main(int argc, char** argv) {
     
     std::vector<double> scale = {1,1,1};
     int search_type = 0;
-    int output_type = 1;
-    int triangulate = 0;
+    int output_type = 2;
+
 
     get_connection_zones(
         input_polyline_pairs,
@@ -66,8 +66,8 @@ int main(int argc, char** argv) {
         default_parameters_for_joint_types,
         scale,
         search_type,
-        output_type = 4,
-        triangulate = 0
+        output_type,
+        0
     );
 
 
@@ -81,5 +81,7 @@ int main(int argc, char** argv) {
     //Preview poylylines from xml
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     auto viewer = viewer_init();
-    viewer_disply_polylines_tree(viewer, output_polyline_pairs);
+    viewer_display_polylines(viewer, input_polyline_pairs);
+    viewer_display_polylines_tree(viewer, output_polyline_pairs);
+    viewer_run(viewer);
 }
