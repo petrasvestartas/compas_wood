@@ -3,34 +3,34 @@ using System.Runtime.InteropServices;
 
 namespace joinery_solver_net
 {
-    internal class Unsafe
+    public class Unsafe
     {
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         //Basic Method and Examples for PInvoke
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        //private const string dllName = System.Runtime.InteropServices.RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? "joinery_solver_pinvoke.dll" : "joinery_solver_pinvoke.dylib";
-        private const string dllName = "joinery_solver_pinvoke.dll";
+        //private string dllName = System.Runtime.InteropServices.RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? "joinery_solver_pinvoke.dll" : "joinery_solver_pinvoke.dylib";
+        public const string dllName = "libjoinery_solver_pinvoke.dylib";
 
         [DllImport(dllName, CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int test_get_square(int n);
+        public static extern int test_get_square(int n);
 
         [DllImport(dllName, CallingConvention = CallingConvention.Cdecl)]
-        internal static extern void release_double(IntPtr arr, bool is_array); // release input coordinates
+        public static extern void release_double(IntPtr arr, bool is_array); // release input coordinates
 
         [DllImport(dllName, CallingConvention = CallingConvention.Cdecl)]
-        internal static extern void release_int(IntPtr arr, bool is_array); //release output indices array
+        public static extern void release_int(IntPtr arr, bool is_array); //release output indices array
 
         [DllImport(dllName, CallingConvention = CallingConvention.Cdecl)]
-        internal static extern void test_set_array([MarshalAs(UnmanagedType.LPArray)] double[] coord, int coord_size);
+        public static extern void test_set_array([MarshalAs(UnmanagedType.LPArray)] double[] coord, int coord_size);
 
         [DllImport(dllName, CallingConvention = CallingConvention.Cdecl)]
-        internal static extern void test_get_array(ref IntPtr coord_out, ref int coord_size_out);
+        public static extern void test_get_array(ref IntPtr coord_out, ref int coord_size_out);
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         //Implementations
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         [DllImport(dllName, CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int pinvoke_get_connection_zones(
+        public static extern int pinvoke_get_connection_zones(
             [MarshalAs(UnmanagedType.LPArray)] int[] f, int f_s, [MarshalAs(UnmanagedType.LPArray)] double[] v, int v_s,
             [MarshalAs(UnmanagedType.LPArray)] int[] vec_f, int vec_f_s, [MarshalAs(UnmanagedType.LPArray)] double[] vec_v, int vec_v_s,
             [MarshalAs(UnmanagedType.LPArray)] int[] joint_types_f, int joint_types_f_s, [MarshalAs(UnmanagedType.LPArray)] int[] joint_types_v, int joint_types_v_s,
@@ -44,7 +44,7 @@ namespace joinery_solver_net
             );
 
         [DllImport(dllName, CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int pinvoke_find_closest_plateside_to_line(
+        public static extern int pinvoke_find_closest_plateside_to_line(
             //input - polylines flat list and a flat list of lines
             [MarshalAs(UnmanagedType.LPArray)] int[] f, int f_s, [MarshalAs(UnmanagedType.LPArray)] double[] v, int v_s,
             [MarshalAs(UnmanagedType.LPArray)] double[] lines_v, int lines_v_s,
@@ -53,7 +53,7 @@ namespace joinery_solver_net
         );
 
         [DllImport(dllName, CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int pinvoke_find_closest_plateside_to_indexedpoint(
+        public static extern int pinvoke_find_closest_plateside_to_indexedpoint(
         //input - polylines flat list and a flat list of lines
         [MarshalAs(UnmanagedType.LPArray)] int[] f, int f_s, [MarshalAs(UnmanagedType.LPArray)] double[] v, int v_s,
         [MarshalAs(UnmanagedType.LPArray)] double[] pts_v, int pts_v_s,

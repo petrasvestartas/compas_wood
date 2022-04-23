@@ -19,7 +19,7 @@ def test_connection_detection():
 
     # Generate connections
 
-    result = get_connection_zones(input, None, None, None, None, None, 1, 300, 0.6, 4)
+    result = get_connection_zones(input, None, None, None, None, None, 1,  4)
 
     meshes = []
     for i in range(len(result)):

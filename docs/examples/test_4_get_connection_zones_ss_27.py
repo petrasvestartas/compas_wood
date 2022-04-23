@@ -48,8 +48,7 @@ def test_connection_detection():
         None,
         joint_parameters,
         0,
-        300,
-        0.6,
+
         4,
     )
     # Mesh Polylines

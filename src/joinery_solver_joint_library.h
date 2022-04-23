@@ -18,10 +18,10 @@ namespace joint_library_xml_parser {
         return f.good();
     }
 
-    inline bool exists_test3(const std::string& name) {
-        struct stat buffer;
-        return (stat(name.c_str(), &buffer) == 0);
-    }
+    //inline bool exists_test3(const std::string& name) {
+      //  struct stat buffer;
+     //   return (stat(name.c_str(), &buffer) == 0);
+    //}
 
     //https://zipproth.de/cheat-sheets/cpp-boost/
     inline bool read_xml(joint& joint, int type = 0) {
@@ -66,7 +66,7 @@ namespace joint_library_xml_parser {
         printf("\nCPP File path %s ", path_and_file_for_joints.c_str());
         printf("\nCPP Joint Type %i %s ", type, name.c_str());
 #endif
-        if (!exists_test3(path_and_file_for_joints)) {
+        if (!exists_test0(path_and_file_for_joints)) {
 #ifdef DEBUG_JOINERY_LIBRARY
             printf("\nCPP File does not exist %s ", path_and_file_for_joints.c_str());
 #endif

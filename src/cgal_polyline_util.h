@@ -286,6 +286,7 @@ namespace cgal_polyline_util {
         //            break;
         //    }//if point type
         //}//result exists
+        return true;
     }
 
     inline bool PlanePolylineIntersection(CGAL_Polyline& polyline, IK::Plane_3& plane, std::vector<IK::Point_3>& points, std::vector<int>& edge_ids) {

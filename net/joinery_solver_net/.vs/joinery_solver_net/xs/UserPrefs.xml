@@ -1,0 +1,26 @@
+﻿<Properties StartupConfiguration="{12735E36-9859-4C02-B754-3A756FD1CD62}|Default">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Unsafe.cs">
+    <Files>
+      <File FileName="Unsafe.cs" Line="12" Column="63" />
+      <File FileName="Conversions.cs" />
+    </Files>
+    <Pads>
+      <Pad Id="ProjectPad">
+        <State name="__root__">
+          <Node name="joinery_solver_net" expanded="True" selected="True">
+            <Node name="joinery_solver_net" expanded="True">
+              <Node name="References" expanded="True" />
+            </Node>
+          </Node>
+        </State>
+      </Pad>
+    </Pads>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.ItemProperties.joinery__solver__net PreferredExecutionTarget="MonoDevelop.Default" />
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x64" />
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MultiItemStartupConfigurations />
+</Properties>
