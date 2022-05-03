@@ -4,6 +4,16 @@ __pycache__/
 *$py.class
 
 # C extensions
+
+# Ignore all
+*
+
+# Unignore directories
+!*/
+
+# Unignore source code files
+!source/**/*.c
+!source/**/*.h
 *.so
 
 # Distribution / packaging

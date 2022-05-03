@@ -118,7 +118,7 @@
     <None Include="Resources\data_set.png" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\Raccoon_Litter_Box\joinery_solver\rhino_util\rhino_util.csproj">
+    <ProjectReference Include="..\rhino_util\rhino_util.csproj">
       <Project>{6ca5430f-93cf-4933-9d3a-3b5d1596adff}</Project>
       <Name>rhino_util</Name>
     </ProjectReference>
