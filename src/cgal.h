@@ -34,7 +34,7 @@
 //#define DEBUG_MEASURE_TIME
 //#define DEBUG_JOINERY_LIBRARY
 //#define DEBUG_JOINERY_SOLVER_MAIN
-#define DEBUG_JOINERY_SOLVER_ELEMENT
+//#define DEBUG_JOINERY_SOLVER_ELEMENT
 //#define DEBUG_JOINERY_SOLVER_MAIN_LOCAL_SEARCH
 #include <exception>
 #include <typeinfo>
@@ -97,6 +97,9 @@ static std::string path_and_file_for_joints = "";
 #define ON_SQRT_EPSILON 1.490116119385000000e-8
 #define ON_ZERO_TOLERANCE 2.3283064365386962890625e-10
 #define ON_DBL_MAX 1.7976931348623158e+308
+
+//Display
+static std::vector<CGAL_Polyline> viewer_polylines;
 
 struct FaceInfo2 {
     FaceInfo2() {}

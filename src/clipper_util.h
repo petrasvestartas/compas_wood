@@ -11,12 +11,17 @@ namespace clipper_util {
         CGAL_Polyline& p1,
         IK::Plane_3& plane,
         CGAL_Polyline& c,
-        double scale = 100000.0) {
+        double scale = 100000.0,
+        int intersection_type = 0) {
         /////////////////////////////////////////////////////////////////////////////////////
         //Orient from 3D to 2D
         /////////////////////////////////////////////////////////////////////////////////////
         CGAL_Polyline a;
         CGAL_Polyline b;
+
+        if (p0.size() > p0.max_size()) return false;
+        if (p1.size() > p1.max_size()) return false;
+        
         cgal_polyline_util::Duplicate(p0, a);
         cgal_polyline_util::Duplicate(p1, b);
 
@@ -50,7 +55,9 @@ namespace clipper_util {
         clipper.AddPath(pathA, ClipperLib::ptSubject, true);
         clipper.AddPath(pathB, ClipperLib::ptClip, true);
         ClipperLib::Paths C;
-        clipper.Execute(ClipperLib::ctIntersection, C, ClipperLib::pftNonZero, ClipperLib::pftNonZero);
+        
+        ClipperLib::ClipType clip_type = static_cast<ClipperLib::ClipType>(intersection_type);
+        clipper.Execute(clip_type, C, ClipperLib::pftNonZero, ClipperLib::pftNonZero);
 
         if (C.size() > 0) {
             //CGAL_Debug(C[0].size());

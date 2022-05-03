@@ -4,7 +4,7 @@
 #include "joinery_solver_main.h"
 
 int main(int argc, char** argv) {
-
+    
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //Read Polylines from XML
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -15,8 +15,33 @@ int main(int argc, char** argv) {
     //Joinery Solver
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+    //xml joint path
+    path_and_file_for_joints = "C:\\Users\\petra\\AppData\\Roaming\\Grasshopper\\Libraries\\compas_wood\\joinery_library.xml";
+
     std::vector<std::vector<IK::Vector_3>> input_insertion_vectors;
+    //std::vector<std::vector<int>> input_joint_types;
     std::vector<std::vector<int>> input_joint_types;
+    input_joint_types.reserve(input_polyline_pairs.size());
+
+    for (int i = 0; i < input_polyline_pairs.size(); i+=2) {
+
+        int id = i*0.5;
+
+        auto input_joint_types_ = std::vector<int>();
+        input_joint_types_.reserve(input_polyline_pairs[i].size()+1);
+        input_joint_types_.emplace_back(-1);
+        input_joint_types_.emplace_back(-1);
+        
+        for (int j = 0; j < input_polyline_pairs[i].size()-1; j++) {
+            int type = CGAL::squared_distance(input_polyline_pairs[i+1][j], input_polyline_pairs[i+1][j + 1]) < 800 ? 57 : 58;
+            input_joint_types_.emplace_back(type);
+        }
+        
+        input_joint_types.emplace_back(input_joint_types_);       
+    }
+    
+
+    
     std::vector<std::vector<int>> input_three_valence_element_indices_and_instruction;
     std::vector<int> input_adjacency;
 
@@ -26,32 +51,34 @@ int main(int argc, char** argv) {
 
     //Global Parameters
     std::vector<double> default_parameters_for_joint_types = {
-        1000,
-        0.5,
-        1,
-        1000,
-        0.5,
-        10,
-        1000,
-        0.5,
-        20,
-        1000,
-        0.6,
-        30,
-        1000,
-        0.5,
-        40,
-        1000,
-        0.5,
-        50,
+300,
+0.5,
+8,
+450,
+0.64,
+10,
+450,
+0.7,
+22,
+300,
+0.5,
+30,
+300,
+0.5,
+40,
+300,
+0.5,
+58
     };
-    
-    std::vector<double> scale = {1,1,1};
+
+    std::vector<double> scale = { 1,1,2 };
     int search_type = 0;
-    int output_type = 2;
+    int output_type = 3;
 
 
     get_connection_zones(
+
+        //input
         input_polyline_pairs,
         input_insertion_vectors,
         input_joint_types,
@@ -70,17 +97,16 @@ int main(int argc, char** argv) {
         0
     );
 
-
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //Write Polylines to XML
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     xml_parser::write_xml_polylines(output_polyline_pairs);
 
-
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //Preview poylylines from xml
+    //Preview poylylines from xml, take 9-th element
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     auto viewer = viewer_init();
+    viewer_display_polylines(viewer, viewer_polylines,-1,20);    
     viewer_display_polylines(viewer, input_polyline_pairs);
     viewer_display_polylines_tree(viewer, output_polyline_pairs);
     viewer_run(viewer);

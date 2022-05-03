@@ -326,23 +326,26 @@ namespace joint_library {
     //0 - do not merge, 1 - edge insertion, 2 - hole 3 - insert between multiple edges hole
 
     //custom
-    inline void side_removal(joint& jo, std::vector<element>& elements) {
+    inline void side_removal(joint& jo, std::vector<element>& elements, bool merge_with_joint = false) {
         jo.name = "side_removal";
         jo.orient = false;
+
+        //printf("Side_Removal");
 
         /////////////////////////////////////////////////////////////////////////////////
         //offset vector
         /////////////////////////////////////////////////////////////////////////////////
-        IK::Vector_3 v0 = elements[jo.v0].planes[jo.f0_0].orthogonal_vector();
-        cgal_vector_util::Unitize(v0);
-        v0 *= (jo.scale[2] + jo.shift);
+        IK::Vector_3 f0_0_normal = elements[jo.v0].planes[jo.f0_0].orthogonal_vector();
+        cgal_vector_util::Unitize(f0_0_normal);
+        //v0 *= (jo.scale[2] + jo.shift);
+        f0_0_normal *= jo.scale[2];
 
-        IK::Vector_3 v1 = elements[jo.v1].planes[jo.f1_0].orthogonal_vector();
-        cgal_vector_util::Unitize(v1);
-        v1 *= jo.scale[2];
+        IK::Vector_3 f1_0_normal = elements[jo.v1].planes[jo.f1_0].orthogonal_vector();
+        cgal_vector_util::Unitize(f1_0_normal);
+        f1_0_normal *= jo.scale[2];
 
         /////////////////////////////////////////////////////////////////////////////////
-        //copy sides
+        //copy side rectangles
         /////////////////////////////////////////////////////////////////////////////////
         CGAL_Polyline pline0 = elements[jo.v0].polylines[jo.f0_0];
         CGAL_Polyline pline1 = elements[jo.v1].polylines[jo.f1_0];
@@ -353,7 +356,7 @@ namespace joint_library {
         //CGAL_Debug(pline0.size(), pline1.size());
         //CGAL_Debug(joint.scale[0]);
         if (pline0.size() == 5 && pline1.size() == 5) {
-            //get convex_concave cornerss
+            //get convex_concave corners
             std::vector<bool>convex_corner0;
 
             cgal_polyline_util::convex_corner(elements[jo.v0].polylines[0], convex_corner0);
@@ -406,17 +409,21 @@ namespace joint_library {
         /////////////////////////////////////////////////////////////////////////////////
         //move outlines by vector
         /////////////////////////////////////////////////////////////////////////////////
-        CGAL_Polyline pline0_copy = pline0;
-        CGAL_Polyline pline0_moved = pline0;
-        CGAL_Polyline pline1_moved = pline1;
+        CGAL_Polyline pline0_moved0 = pline0;//side 0
+        CGAL_Polyline pline0_moved1 = pline0;//side 0        
+        CGAL_Polyline pline1_moved = pline1;//side 1
 
-        IK::Vector_3 v0_(v0.hx(), v0.hy(), v0.hz());
-        cgal_vector_util::Unitize(v0_);
-        v0_ *= jo.shift;
+        IK::Vector_3 f0_1_normal = f0_0_normal;
+        cgal_vector_util::Unitize(f0_1_normal);
+        f0_1_normal *= jo.scale[2] +jo.shift;
 
-        cgal_polyline_util::move(pline0, v0_);
-        cgal_polyline_util::move(pline0_moved, v0);
-        cgal_polyline_util::move(pline1_moved, v1);
+
+        //Move twice to remove one side and the cut surface around
+        cgal_polyline_util::move(pline0_moved0, f0_0_normal);
+        cgal_polyline_util::move(pline0_moved1, f0_1_normal);
+
+        //Move once to remove the side and the cut the female joint
+        cgal_polyline_util::move(pline1_moved, f1_0_normal);
 
         /////////////////////////////////////////////////////////////////////////////////
         //orient a tile
@@ -430,108 +437,141 @@ namespace joint_library {
         IK::Point_3 edge_mid_1 = CGAL::midpoint(pline0[3], pline0[2]);
         double half_dist = std::sqrt(CGAL::squared_distance(edge_mid_0, edge_mid_1)) * 0.5;
 
+
         IK::Vector_3 x_axis = edge_mid_1 - edge_mid_0;
         cgal_vector_util::Unitize(x_axis);
-        IK::Vector_3 z_axis = v0;
+        IK::Vector_3 z_axis = f0_0_normal;
         cgal_vector_util::Unitize(z_axis);
         IK::Vector_3 y_axis = CGAL::cross_product(z_axis, x_axis);
         cgal_vector_util::Unitize(y_axis);
-
+ 
+        z_axis *= jo.scale[2] / half_dist;
+        
         CGAL_Polyline rect0 = {
             edge_mid_1 - y_axis * half_dist - z_axis * half_dist,
             edge_mid_1 - y_axis * half_dist + z_axis * half_dist,
             edge_mid_0 - y_axis * half_dist + z_axis * half_dist,
-        edge_mid_0 - y_axis * half_dist - z_axis * half_dist,
-              edge_mid_1 - y_axis * half_dist - z_axis * half_dist,
+            edge_mid_0 - y_axis * half_dist - z_axis * half_dist,
+            edge_mid_1 - y_axis * half_dist - z_axis * half_dist,
         };
 
         CGAL_Polyline rect1 = {
-    edge_mid_1 + y_axis * half_dist - z_axis * half_dist,
-    edge_mid_1 + y_axis * half_dist + z_axis * half_dist,
-    edge_mid_0 + y_axis * half_dist + z_axis * half_dist,
-        edge_mid_0 + y_axis * half_dist - z_axis * half_dist,
-           edge_mid_1 + y_axis * half_dist - z_axis * half_dist,
+            edge_mid_1 + y_axis * half_dist - z_axis * half_dist,
+            edge_mid_1 + y_axis * half_dist + z_axis * half_dist,
+            edge_mid_0 + y_axis * half_dist + z_axis * half_dist,
+            edge_mid_0 + y_axis * half_dist - z_axis * half_dist,
+            edge_mid_1 + y_axis * half_dist - z_axis * half_dist,
         };
 
-        //2) Create joint in XY plane and orient it to the two rectangles
-        joint joint_2;
-        joint_library_xml_parser::read_xml(joint_2, jo.type);
-        joint_2.joint_volumes[0] = rect0;
-        joint_2.joint_volumes[1] = rect1;
-        joint_2.joint_volumes[2] = rect0;
-        joint_2.joint_volumes[3] = rect1;
-        joint_2.orient_to_connection_area();//and orient to connection volume
 
-        //3) Clipper boolean difference, cut joint polygon form the outline
 
-        /////////////////////////////////////////////////////////////////////////////////
-        //output, no need to merge if already cut
-        // vector1.insert( vector1.end(), vector2.begin(), vector2.end() );
-        /////////////////////////////////////////////////////////////////////////////////
-        if (jo.shift > 0) {
-            jo.m[0] = {
-                //rect0,
-                //rect0,
-                 pline0_copy,
-                 pline0_copy,
-                  pline0,
-                  pline0
-            };
+            /////////////////////////////////////////////////////////////////////////////////
+            //output, no need to merge if already cut
+            // vector1.insert( vector1.end(), vector2.begin(), vector2.end() );
+            /////////////////////////////////////////////////////////////////////////////////
+            if (jo.shift > 0 && merge_with_joint) {
+                jo.m[0] = {
+                    //rect0,
+                    //rect0,
+                     pline0,
+                     pline0,
+                      pline0_moved0,
+                      pline0_moved0
+                };
 
-            jo.m[1] = {
-                // rect1,
-                 //rect1,
+                jo.m[1] = {
+                     //rect1,
+                    //rect1,
+                       pline0_moved0,
+                       pline0_moved0,
+                       pline0_moved1,
+                       pline0_moved1
+                };
+            }
+            else {
+                jo.m[0] = {
+                    //rect0,
+                    //rect0
+                    // pline0_moved0,
+                    //pline0_moved0
                    pline0,
-                   pline0,
-                   pline0_moved,
-                   pline0_moved
+                    pline0
+                };
+
+                jo.m[1] = {
+                    //rect1,
+                    //rect1
+                   // pline0_moved1,
+                   // pline0_moved1
+                     pline0_moved0,
+                    pline0_moved0                    
+                };
+            }
+
+            jo.f[0] = {
+                  // rect0,
+                  // rect0
+               pline1,
+               pline1
             };
+
+            jo.f[1] = {
+                 //  rect1,
+                 //  rect1
+                pline1_moved,
+                pline1_moved
+               //pline1_moved,
+               //pline1_moved
+            };
+
+            if (jo.shift > 0 && merge_with_joint)
+                jo.m_boolean_type = { '1', '1', '1', '1' };
+            else
+                jo.m_boolean_type = { '1', '1' };
+
+            jo.f_boolean_type = { '1', '1' };
+
+            /////////////////////////////////////////////////////////////////////////////////
+            //if merge is needed
+            // vector1.insert( vector1.end(), vector2.begin(), vector2.end() );
+            /////////////////////////////////////////////////////////////////////////////////
+            if (merge_with_joint) {
+
+                //2) Create joint in XY plane and orient it to the two rectangles
+                joint joint_2;
+                bool read_successful = joint_library_xml_parser::read_xml(joint_2, jo.type);
+                //printf("xml tile reading number of polyines %iz", joint_2.m[0].size());
+                if (read_successful) {
+                    joint_2.joint_volumes[0] = rect0;
+                    joint_2.joint_volumes[1] = rect1;
+                    joint_2.joint_volumes[2] = rect0;
+                    joint_2.joint_volumes[3] = rect1;
+                    joint_2.orient_to_connection_area();//and orient to connection volume
+
+                    //printf("xml tile reading number of polyines %iz" , joint_2.m[0].size());
+
+                    //3) Clipper boolean difference, cut joint polygon form the outline
+
+                //Merge male, by performing boolean union
+                //cgal_polyline_util::AveragePlane(
+                    IK::Plane_3 plane_0_0(jo.m[0][0][0], elements[jo.v0].planes[jo.f0_0].orthogonal_vector());
+                    IK::Plane_3 plane_0_1(jo.m[0][2][0], elements[jo.v0].planes[jo.f0_0].orthogonal_vector());
+                    IK::Plane_3 plane_1_0(jo.f[0][0][0], elements[jo.v1].planes[jo.f1_0].orthogonal_vector());
+
+                    clipper_util::intersection_2D(jo.m[0][0], joint_2.m[0][0], plane_0_0, jo.m[0][0], 100000, 2);
+                    clipper_util::intersection_2D(jo.m[1][0], joint_2.m[1][0], plane_0_1, jo.m[1][0], 100000, 2);
+
+
+                    //jo.m[0].insert(jo.m[0].end(), joint_2.m[0].begin(), joint_2.m[0].end());
+                    //jo.m[1].insert(jo.m[1].end(), joint_2.m[1].begin(), joint_2.m[1].end());
+                    //jo.m_boolean_type.insert(jo.m_boolean_type.end(), joint_2.m_boolean_type.begin(), joint_2.m_boolean_type.end());
+
+                    jo.f[0].insert(jo.f[0].end(), joint_2.f[0].begin(), joint_2.f[0].end());
+                    jo.f[1].insert(jo.f[1].end(), joint_2.f[1].begin(), joint_2.f[1].end());
+                    jo.f_boolean_type.insert(jo.f_boolean_type.end(), joint_2.f_boolean_type.begin(), joint_2.f_boolean_type.end());
+                }
+            
         }
-        else {
-            jo.m[0] = {
-                //rect0,
-                //rect0
-                 pline0,
-                pline0
-            };
-
-            jo.m[1] = {
-                //rect1,
-                //rect1
-                pline0_moved,
-                pline0_moved
-            };
-        }
-
-        jo.f[0] = {
-           pline1,
-            pline1
-        };
-
-        jo.f[1] = {
-           pline1_moved,
-            pline1_moved
-        };
-
-        if (jo.shift > 0)
-            jo.m_boolean_type = { '1', '1', '1', '1' };
-        else
-            jo.m_boolean_type = { '1', '1' };
-
-        jo.f_boolean_type = { '1', '1' };
-
-        /////////////////////////////////////////////////////////////////////////////////
-        //if merge is needed
-        // vector1.insert( vector1.end(), vector2.begin(), vector2.end() );
-        /////////////////////////////////////////////////////////////////////////////////
-        jo.m[0].insert(jo.m[0].end(), joint_2.m[0].begin(), joint_2.m[0].end());
-        jo.m[1].insert(jo.m[1].end(), joint_2.m[1].begin(), joint_2.m[1].end());
-
-        jo.f[0].insert(jo.f[0].end(), joint_2.f[0].begin(), joint_2.f[0].end());
-        jo.f[1].insert(jo.f[1].end(), joint_2.f[1].begin(), joint_2.f[1].end());
-
-        jo.m_boolean_type.insert(jo.m_boolean_type.end(), joint_2.m_boolean_type.begin(), joint_2.m_boolean_type.end());
-        jo.f_boolean_type.insert(jo.f_boolean_type.end(), joint_2.f_boolean_type.begin(), joint_2.f_boolean_type.end());
     }
 
     //1-9
@@ -1867,8 +1907,11 @@ namespace joint_library {
                 //CGAL_Debug(id_representing_joint_name);
                 switch (id_representing_joint_name) {
                     //CGAL_Debug(id_representing_joint_name);
-                case (58):
+                case (57):
                     side_removal(jo, elements);
+                    break;
+                case (58):
+                    side_removal(jo, elements,true);
                     break;
                 case (59):
                     //CGAL_Debug(99999);

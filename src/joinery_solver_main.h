@@ -650,7 +650,7 @@ inline bool face_to_face(
                         auto v0 = joint_line0[0] - joint_line0[1];
                         auto v1 = joint_line1[0] - joint_line1[1];
 
-                        if (cgal_vector_util::IsParallelTo(v0, v1, GlobalTolerance) == 0) {
+                        if (cgal_vector_util::IsParallelTo(v0, v1, GlobalTolerance) == 0 || true) {//GlobalTolerance
 #ifdef DEBUG_JOINERY_SOLVER_MAIN_LOCAL_SEARCH
                             printf("Elements Are rotated");
 #endif
