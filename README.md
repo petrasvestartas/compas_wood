@@ -106,11 +106,11 @@ C:\IBOIS57\_Code\Software\CPP\CGAL\CGAL-5.3\auxiliary\gmp\lib\libmpfr-4.lib;
 
 
 ## Interface Rhino, Grasshopper
-- [ ] Python or C# wrappers 
-- [ ] Grasshopper components 
+- [x] Python or C# wrappers 
+- [x] Grasshopper components 
 
 ## Interface Stand-alone
-- [ ] C++ Visualizer
+- [x] C++ Visualizer
 ________________________________________________________
 
 
