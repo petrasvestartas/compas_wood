@@ -14,6 +14,7 @@ __pycache__/
 # Unignore source code files
 !source/**/*.c
 !source/**/*.h
+!source/**/*.csproj
 *.so
 
 # Distribution / packaging
