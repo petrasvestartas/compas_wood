@@ -117,8 +117,8 @@ ________________________________________________________
 ### Data-sets: 
 - [x] Small samples 
 - [x] Annen 1) Create a C# mesh from nubrs, output a list of V,F 2) C++ create plates, vectors of insertions, joint types
-- [ ] CR 
-- [ ] VDA 
+- [x] CR 
+- [x] VDA 
 - [ ] Vidy 
 - [ ] Zollinger
 
