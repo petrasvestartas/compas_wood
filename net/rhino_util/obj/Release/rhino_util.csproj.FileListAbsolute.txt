@@ -1,0 +1,8 @@
+C:\IBOIS57\_Code\Software\Raccoon_Litter_Box\joinery_solver\rhino_util\obj\Release\rhino_util.csproj.AssemblyReference.cache
+C:\IBOIS57\_Code\Software\Raccoon_Litter_Box\joinery_solver\rhino_util\obj\Release\rhino_util.csproj.CoreCompileInputs.cache
+C:\IBOIS57\_Code\Software\Raccoon_Litter_Box\joinery_solver\rhino_util\bin\Release\rhino_util.dll
+C:\IBOIS57\_Code\Software\Raccoon_Litter_Box\joinery_solver\rhino_util\bin\Release\rhino_util.pdb
+C:\IBOIS57\_Code\Software\Raccoon_Litter_Box\joinery_solver\rhino_util\obj\Release\rhino_util.dll
+C:\IBOIS57\_Code\Software\Raccoon_Litter_Box\joinery_solver\rhino_util\obj\Release\rhino_util.pdb
+C:\Users\petra\AppData\Roaming\Grasshopper\Libraries\compas_wood\rhino_util.dll
+C:\Users\petra\AppData\Roaming\Grasshopper\Libraries\compas_wood\rhino_util.pdb

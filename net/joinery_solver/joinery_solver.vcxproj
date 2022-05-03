@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>16.0</VCProjectVersion>
+    <Keyword>Win32Proj</Keyword>
+    <ProjectGuid>{a5f8fdb5-c3a6-47e0-9337-7fb67444f513}</ProjectGuid>
+    <RootNamespace>joinerysolver</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PreferredToolArchitecture>x64</PreferredToolArchitecture>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>false</LinkIncremental>
+    <OutDir>C:\IBOIS57\_Code\Software\Python\Pybind11Example\vsstudio\Release\</OutDir>
+    <IntDir>pybind11module.dir\Release\</IntDir>
+    <TargetName>pybind11module.cp38-win_amd64</TargetName>
+    <TargetExt>.pyd</TargetExt>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level1</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>false</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;CMAKE_INTDIR="Release";pybind11module_EXPORTS</PreprocessorDefinitions>
+      <ConformanceMode>Default</ConformanceMode>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <AdditionalIncludeDirectories>C:\Users\petra\AppData\Local\Programs\Python\Python38\include;C:\IBOIS57\_Code\Software\CPP\pybind11-2.9.0\include;C:\IBOIS57\_Code\Software\CPP\CGAL\CGAL-5.3\include;C:\IBOIS57\_Code\Software\CPP\CGAL\CGAL-5.3\auxiliary\gmp\include;C:\IBOIS57\_Code\Software\CPP\Eigen\eigen-3.3.9;C:\IBOIS57\_Code\Software\CPP\Boost\lib64-msvc-14.2;C:\IBOIS57\_Code\Software\CPP\Boost\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <AdditionalOptions>%(AdditionalOptions) /bigobj</AdditionalOptions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableUAC>true</EnableUAC>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>C:\Users\petra\AppData\Local\Programs\Python\Python38\libs\python38.lib;C:\IBOIS57\_Code\Software\CPP\CGAL\CGAL-5.3\auxiliary\gmp\lib\libgmp-10.lib;C:\IBOIS57\_Code\Software\CPP\CGAL\CGAL-5.3\auxiliary\gmp\lib\libmpfr-4.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
+      <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <LinkTimeCodeGeneration>UseLinkTimeCodeGeneration</LinkTimeCodeGeneration>
+      <ImportLibrary>C:/IBOIS57/_Code/Software/Python/Pybind11Example/vsstudio/Release/pybind11module.lib</ImportLibrary>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\Python\compas_wood\src\cgal.h" />
+    <ClInclude Include="..\..\..\Python\compas_wood\src\cgal_box_search.h" />
+    <ClInclude Include="..\..\..\Python\compas_wood\src\cgal_box_util.h" />
+    <ClInclude Include="..\..\..\Python\compas_wood\src\cgal_data_set.h" />
+    <ClInclude Include="..\..\..\Python\compas_wood\src\cgal_intersection_util.h" />
+    <ClInclude Include="..\..\..\Python\compas_wood\src\cgal_math_util.h" />
+    <ClInclude Include="..\..\..\Python\compas_wood\src\cgal_mesh_util.h" />
+    <ClInclude Include="..\..\..\Python\compas_wood\src\cgal_plane_util.h" />
+    <ClInclude Include="..\..\..\Python\compas_wood\src\cgal_polyline_snapping.h" />
+    <ClInclude Include="..\..\..\Python\compas_wood\src\cgal_polyline_util.h" />
+    <ClInclude Include="..\..\..\Python\compas_wood\src\cgal_print.h" />
+    <ClInclude Include="..\..\..\Python\compas_wood\src\cgal_vector_util.h" />
+    <ClInclude Include="..\..\..\Python\compas_wood\src\cgal_xform_util.h" />
+    <ClInclude Include="..\..\..\Python\compas_wood\src\clipper.h" />
+    <ClInclude Include="..\..\..\Python\compas_wood\src\clipper_util.h" />
+    <ClInclude Include="..\..\..\Python\compas_wood\src\joinery_solver_main.h" />
+    <ClInclude Include="..\..\..\Python\compas_wood\src\joinery_solver_element.h" />
+    <ClInclude Include="..\..\..\Python\compas_wood\src\joinery_solver_joint.h" />
+    <ClInclude Include="..\..\..\Python\compas_wood\src\joinery_solver_joint_library.h" />
+    <ClInclude Include="..\..\..\Python\compas_wood\src\rtree.h" />
+    <ClInclude Include="..\..\..\Python\compas_wood\src\rtree_util.h" />
+    <ClInclude Include="..\..\..\Python\compas_wood\src\wrapper_pybind11_joinery_solver.h" />
+    <ClInclude Include="D:\IBOIS57\_Software_back_up\Python\compas_wood_220114\compas_wood\src\cgal_mesh_pipe.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\src\clipper.cpp" />
+    <ClCompile Include="..\..\src\wrapper_pybind11_joinery_solver.cpp" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
