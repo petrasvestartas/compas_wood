@@ -10,6 +10,7 @@
 !source/**/*.c
 !source/**/*.h
 !source/**/*.csproj
+!source/**/*.sln
 *.so
 
 # Distribution / packaging
