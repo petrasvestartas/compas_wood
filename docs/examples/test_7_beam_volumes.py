@@ -7,7 +7,7 @@ from compas_wood.viewer_helpers import display
 
 import os
 
-from data_set_beams import polylines_0
+# from data_set_beams import polylines_0
 
 os.system("cls" if os.name == "nt" else "clear")
 
@@ -20,7 +20,7 @@ def test_beam_volumes():
 
     polylines = data_set_beams.polylines_1()
     segment_radii = data_set_beams.polylines_radii_1()
-    #segment_normals = data_set_beams.polylines_vector_0()
+    # segment_normals = data_set_beams.polylines_vector_0()
 
     # print(segment_normals)
 

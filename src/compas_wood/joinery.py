@@ -682,7 +682,7 @@ def beam_volumes(
     shift=0.6,
     output_type=3,
 ):
-    """Find closest polylines within given distance
+    """Draw rectangle volumes around polylines segments
 
     Parameters
     ----------
