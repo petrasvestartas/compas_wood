@@ -20,6 +20,8 @@ enum cut_types : char {
     binary_slice_mill = '9' //project and make rectangle
 };
 
+
+
 //Container for cuts
 class joint {
     //Methods

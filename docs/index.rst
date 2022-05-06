@@ -22,7 +22,7 @@ Table of Contents
    :titlesonly:
 
    Introduction <self>
-   description
+   about
    installation
    examples
    api

@@ -682,7 +682,7 @@ def beam_volumes(
     shift=0.6,
     output_type=3,
 ):
-    """Draw rectangle volumes around polylines segments
+    """Draw box volumes around polylines segments
 
     Parameters
     ----------

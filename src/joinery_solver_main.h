@@ -185,10 +185,109 @@ inline void get_elements(
 
 #pragma endregion
 
-#pragma region SEARCH LOCAL METHODS
+#pragma region SEARCH_LOCAL_METHODS
 
-inline bool plane_to_face(std::vector<
-    CGAL_Polyline>& Polyline0,
+inline bool border_to_face(
+    std::vector<CGAL_Polyline>& Polyline0,
+    std::vector<IK::Plane_3>& Plane0,
+    std::vector<IK::Vector_3>& insertion_vectors0,
+    int f,
+    double& thickness,
+    CGAL_Polyline& joint_area,
+    std::array<CGAL_Polyline, 2>& joint_lines,
+    std::array < CGAL_Polyline, 4>& joint_volumes_pairA_pairB
+    )
+{
+    /////////////////////////////////////////////////////////////////////////////////////////////////////
+    //The wifth and offset bretween two rectangles must be changed by user given scale values
+    /////////////////////////////////////////////////////////////////////////////////////////////////////
+        joint_area = Polyline0[f];
+
+        
+        
+        if (f > 1) {
+
+            /////////////////////////////////////////////////////////////////////////////////////////////////////
+            //Get average line
+            /////////////////////////////////////////////////////////////////////////////////////////////////////
+
+            IK::Segment_3 edge_0(Polyline0[0][f - 2], Polyline0[1][f - 2] );
+            IK::Segment_3 edge_1(Polyline0[0][f - 1], Polyline0[1][f - 1]);
+            CGAL_Polyline projection_points = { Polyline0[0][f - 2], Polyline0[1][f - 2] ,Polyline0[0][f - 1], Polyline0[1][f - 1] };
+            
+            IK::Segment_3 average_line;
+            cgal_polyline_util::LineLineAverage(edge_0, edge_1, average_line);
+            //IK::Segment_3 average_line = cgal_polyline_util::LineLineMaximumOverlap(edge_0, edge_1);
+            cgal_polyline_util::LineFromProjectedPoints(average_line, projection_points, average_line);
+            //viewer_polylines.emplace_back(CGAL_Polyline({ average_line[0], average_line[1] }));
+            joint_lines[0] = { average_line[0] ,average_line[1] };
+            joint_lines[1] = joint_lines[0];
+            double line_length = cgal_polyline_util::polyline_length(joint_lines[0]);
+
+            //Get average thickness
+            double y_offset = 0.5;// thickness / 2.0;
+            double x_offset = 0.5;// thickness / 2.0;
+            double half_dist = thickness / 2.0;
+
+            //Move points up and down using cross product
+            IK::Vector_3 z_axis = Plane0[f].orthogonal_vector();
+            cgal_vector_util::Unitize(z_axis);
+
+            //set x-axis
+            auto x_axis = average_line.to_vector();
+            cgal_vector_util::Unitize(x_axis);
+
+            //set y-axis
+            auto y_axis = CGAL::cross_product(z_axis, x_axis);
+            cgal_vector_util::Unitize(y_axis);
+
+            //IK::Point_3 p0 = CGAL::midpoint(average_line[0], average_line[1]) + x_axis * y_offset *0.5;
+            //IK::Point_3 p1 = CGAL::midpoint(average_line[0], average_line[1]) - x_axis * y_offset *0.5;
+            IK::Point_3 p0 = average_line[0];
+            IK::Point_3 p1 = average_line[1];
+            if (CGAL::has_smaller_distance_to_point(CGAL::midpoint(Polyline0[f][0], Polyline0[f][1]), p0, p1))
+                std::swap(p0, p1);
+
+
+
+
+            /////////////////////////////////////////////////////////////////////////////////////////////////////
+            //joint valumes
+            /////////////////////////////////////////////////////////////////////////////////////////////////////
+            CGAL_Polyline rect0 = {
+                p0 - y_axis * half_dist * 1 - z_axis * half_dist * 0.25,
+                p0 - y_axis * half_dist * 1 + z_axis * half_dist * 0.25,
+                p1 - y_axis * half_dist * 1 + z_axis * half_dist * 0.25,
+                p1 - y_axis * half_dist * 1 - z_axis * half_dist * 0.25,
+                p0 - y_axis * half_dist * 1 - z_axis * half_dist * 0.25,
+            };
+            
+            CGAL_Polyline rect1 = {
+                 p0 - y_axis * half_dist * -1 - z_axis * half_dist * 0.25,
+                 p0 - y_axis * half_dist * -1 + z_axis * half_dist * 0.25,
+                 p1 - y_axis * half_dist * -1 + z_axis * half_dist * 0.25,
+                 p1 - y_axis * half_dist * -1 - z_axis * half_dist * 0.25,
+                 p0 - y_axis * half_dist * -1 - z_axis * half_dist * 0.25,
+            };
+
+            joint_volumes_pairA_pairB = { rect0 ,rect1 ,rect0 ,rect1 };
+
+            //viewer_polylines.emplace_back(joint_lines[0]);
+            //viewer_polylines.emplace_back(rect0);
+            //viewer_polylines.emplace_back(rect1);
+
+            return true;
+        }
+  
+            return false;
+        
+
+        
+    
+}
+
+inline bool plane_to_face(
+    std::vector<CGAL_Polyline>& Polyline0,
     std::vector<CGAL_Polyline>& Polyline1,
     std::vector<IK::Plane_3>& Plane0,
     std::vector<IK::Plane_3>& Plane1,
@@ -973,7 +1072,7 @@ inline bool face_to_face(
 
 #pragma endregion
 
-#pragma region SEARCH GLOBAL METHODS
+#pragma region SEARCH_GLOBAL_METHODS
 
 //inline void search(
 //
@@ -1187,8 +1286,10 @@ inline void rtree_search(
         auto callback = [&result, i, &elements](int foundValue) -> bool
         {
             if (i < foundValue && cgal_box_util::GetCollision(elements[i].oob, elements[foundValue].oob)) {
-                result.push_back(i);
-                result.push_back(foundValue);
+                result.emplace_back(i);
+                result.emplace_back(foundValue);
+                result.emplace_back(-1);
+                result.emplace_back(-1);
             }
             return true;
         };
@@ -1207,27 +1308,52 @@ inline void adjacency_search(
     //Output
     std::vector<joint>& joints,
     std::unordered_map<uint64_t, int>& joints_map)
-
 {
+
+    
+
+    //////////////////////////////////////////////////////////////////////////////
+    // Split the adjacency list into two lists:
+    // a) one that does not have v0=v1 and f0 = f1 (border conditions usually)
+    // b) one that has valid adjacency
+    //////////////////////////////////////////////////////////////////////////////
+    std::vector<int> adjacency_border;
+    std::vector<int> adjacency_valid;
+    adjacency_border.reserve(input_adjacency.size());
+    adjacency_valid.reserve(input_adjacency.size());
+
+    int adjacency_item_count = 4;
+    for (int i = 0; i < input_adjacency.size(); i += adjacency_item_count) {
+
+        //Sanity check
+        if (input_adjacency[i] > (elements.size() - 1) || input_adjacency[i + 1] > (elements.size() - 1))
+            continue;
+
+        if (input_adjacency[i + 0] == input_adjacency[i + 1]) {
+            for (int j = 0; j < adjacency_item_count; j++)
+                adjacency_border.emplace_back(input_adjacency[i + j]);
+        } else {
+            for (int j = 0; j < adjacency_item_count; j++)
+                adjacency_valid.emplace_back(input_adjacency[i + j]);
+        }
+    }
+    
     //////////////////////////////////////////////////////////////////////////////
     // Perform Adjacency Search in result is empty
     //////////////////////////////////////////////////////////////////////////////
-    if (input_adjacency.size() == 0)
-        rtree_search(elements, search_type, input_adjacency);
-    //CGAL_Debug(99999999);
-    //CGAL_Debug(result.size());
-    //CGAL_Debug(99999999);
-    joints.reserve(input_adjacency.size());
-    joints_map.reserve(input_adjacency.size());
+    if (adjacency_valid.size() == 0)
+        rtree_search(elements, search_type, adjacency_valid);
+
+    joints.reserve(adjacency_valid.size());
+    joints_map.reserve(adjacency_valid.size());
 
     //////////////////////////////////////////////////////////////////////////////
     // Search Contact zones
     //////////////////////////////////////////////////////////////////////////////
     int joint_id = 0;
-    for (int i = 0; i < input_adjacency.size(); i += 4) {//because v0, f0 and v1,f1 are adjacent
+    for (int i = 0; i < adjacency_valid.size(); i += adjacency_item_count) {//because v0, f0 and v1,f1 are adjacent
         //CGAL_Debug(result[i], result[i + 1]);
-        if (input_adjacency[i] > (elements.size() - 1) || input_adjacency[i + 1] > (elements.size() - 1))
-            continue;
+
         //CGAL_Debug(99999999);
 
         CGAL_Polyline joint_area;
@@ -1235,7 +1361,7 @@ inline void adjacency_search(
         std::array<CGAL_Polyline, 2> joint_lines;
         std::array<CGAL_Polyline, 4> joint_volumes_pairA_pairB;
 
-        std::pair<int, int> el_ids(input_adjacency[i], input_adjacency[i + 1]);
+        std::pair<int, int> el_ids(adjacency_valid[i], adjacency_valid[i + 1]);
 
         std::pair<std::array<int, 2>, std::array<int, 2>> face_ids;
         int type;
@@ -1258,9 +1384,9 @@ inline void adjacency_search(
 
         case (1):
             found_type = plane_to_face(
-                elements[input_adjacency[i]].polylines, elements[input_adjacency[i + 1]].polylines,
-                elements[input_adjacency[i]].planes, elements[input_adjacency[i + 1]].planes,
-                elements[input_adjacency[i]].edge_vectors, elements[input_adjacency[i + 1]].edge_vectors,
+                elements[adjacency_valid[i]].polylines, elements[adjacency_valid[i + 1]].polylines,
+                elements[adjacency_valid[i]].planes, elements[adjacency_valid[i + 1]].planes,
+                elements[adjacency_valid[i]].edge_vectors, elements[adjacency_valid[i + 1]].edge_vectors,
                 el_ids, face_ids, type,
                 joint_area, joint_lines, joint_volumes_pairA_pairB
             ) ? 2 : 0;
@@ -1293,17 +1419,13 @@ inline void adjacency_search(
             break;
         }
 
-        //CGAL_Debug(" ");
-        //for (auto& pp : joint_area)
-        //    CGAL_Debug(pp.hx(), pp.hy(), pp.hz());
-
         if (!found_type)
             continue;
 
-        //CGAL_Debug(joint_area.size());
+
         if (joint_area.size() > 0) {
-            //
-            int joint_id = joints.size();
+           
+            //int joint_id = joints.size();
 
             joints.emplace_back(
                 joint_id,
@@ -1314,42 +1436,58 @@ inline void adjacency_search(
                 joint_volumes_pairA_pairB,
                 type);
 
-            //CGAL_Debug(1);
+
             joints_map.emplace(cgal_math_util::unique_from_two_int(el_ids.first, el_ids.second), joint_id);
-            //if ((el_ids.first == 1044 || el_ids.second == 1044) == 1047) {
-            //    CGAL_Debug(el_ids.first);
-            //    CGAL_Debug(el_ids.second);
-            //    CGAL_Debug(cgal_math_util::unique_from_two_int(el_ids.first, el_ids.second));
-            //}
 
             //////////////////////////////////////////////////////////////////////////////////////////////////////
             //Place joint ids and male or female flags to joint list
             //////////////////////////////////////////////////////////////////////////////////////////////////////
-            elements[el_ids.first].j_mf[face_ids.first[0]].push_back(std::tuple<int, bool, double>(joint_id, true, 0));
-            elements[el_ids.second].j_mf[face_ids.second[0]].push_back(std::tuple<int, bool, double>(joint_id, false, 0));
-            //if (face_ids.second[0] == -1) {
-            //    //CGAL_Debug(3);
-            //    elements[el_ids.first].j_mf.back().push_back(std::tuple<int, bool, double>(jointID, true, 0));
-            //    elements[el_ids.second].j_mf.back().push_back(std::tuple<int, bool, double>(jointID, false, 0));
-            //    //CGAL_Debug(4);
-            //} else {
-            //    //CGAL_Debug((double)f0_0, (double)f1_0);
-            //    if (type == 20) { //side-top connection weirdo, clean this up
-            //        if ((face_ids.second[0] < 2 && face_ids.first[0] > 1)) {
-            //            elements[el_ids.first].j_mf[face_ids.first[0]].push_back(std::tuple<int, bool, double>(jointID, true, 0));
-            //            elements[el_ids.second].j_mf[face_ids.second[0]].push_back(std::tuple<int, bool, double>(jointID, false, 0));
-            //        } else {
-            //            elements[el_ids.first].j_mf[face_ids.first[0]].push_back(std::tuple<int, bool, double>(jointID, false, 0));
-            //            elements[el_ids.second].j_mf[face_ids.second[0]].push_back(std::tuple<int, bool, double>(jointID, true, 0));
-            //        }
-            //    } else {
-            //        elements[el_ids.first].j_mf[face_ids.first[0]].push_back(std::tuple<int, bool, double>(jointID, true, 0));
-            //        elements[el_ids.second].j_mf[face_ids.second[0]].push_back(std::tuple<int, bool, double>(jointID, false, 0));
-            //    }
-            //}
-
-            //jointID++;
+            elements[el_ids.first].j_mf[face_ids.first[0]].emplace_back(std::tuple<int, bool, double>(joint_id, true, 0));
+            elements[el_ids.second].j_mf[face_ids.second[0]].emplace_back(std::tuple<int, bool, double>(joint_id, false, 0));
+            joint_id++;
         }
+    }
+
+    //////////////////////////////////////////////////////////////////////////////
+    // Define border if adjacency was given
+    //////////////////////////////////////////////////////////////////////////////
+    for (int i = 0; i < adjacency_border.size(); i += adjacency_item_count) {
+
+        CGAL_Polyline joint_area;
+        std::array<CGAL_Polyline, 2> joint_lines;
+        std::array<CGAL_Polyline, 4> joint_volumes_pairA_pairB;
+
+        border_to_face(
+            elements[adjacency_border[i]].polylines,
+            elements[adjacency_border[i]].planes,
+            elements[adjacency_border[i]].edge_vectors,
+            adjacency_border[i + 2],
+            elements[adjacency_border[i]].thickness,
+            joint_area,
+            joint_lines,
+            joint_volumes_pairA_pairB
+
+        );
+
+        joints.emplace_back(
+            joint_id,
+            adjacency_border[i], adjacency_border[i],
+            adjacency_border[i + 2], adjacency_border[i + 2], adjacency_border[i + 2], adjacency_border[i + 2],
+            joint_area,
+            joint_lines,
+            joint_volumes_pairA_pairB,
+            60);
+
+        joints_map.emplace(cgal_math_util::unique_from_two_int(adjacency_border[i], adjacency_border[i]), joint_id);
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
+        //Place joint ids and male or female flags to joint list
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
+        elements[adjacency_border[i]].j_mf[adjacency_border[i + 2]].emplace_back(std::tuple<int, bool, double>(joint_id, true, 0));
+        //elements[adjacency_border[i]].j_mf[adjacency_border[i + 2]].emplace_back(std::tuple<int, bool, double>(joint_id, false,99990));
+
+
+        joint_id++;
     }
 }
 
@@ -1621,7 +1759,10 @@ inline void get_connection_zones(
     //Iterate joint address
     //////////////////////////////////////////////////////////////////////////////
     plines = std::vector<std::vector<CGAL_Polyline>>(elements.size());
-    for (int i = 0; i < elements.size(); i++) { //takes 30-50 ms just to copy past polyline geometry
+
+    
+    for (int i = 0; i < elements.size(); i++) { //takes 30-50 ms just to copy-paste polyline geometry
+        
         switch (output_type) {
         case (0):
             elements[i].get_joints_geometry(joints, plines, 0);
@@ -1635,8 +1776,6 @@ inline void get_connection_zones(
         default:
         case (3):
             elements[i].get_joints_geometry(joints, plines, 3);
-
-            //CGAL_Debug(plines[i].size());
             break;
         case (4):
 

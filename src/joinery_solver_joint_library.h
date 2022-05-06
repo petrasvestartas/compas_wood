@@ -52,6 +52,10 @@ namespace joint_library_xml_parser {
         case(5):
             name = "ss_e_r_9";
             break;
+        case(60):
+        case(6):
+            name = "b_9";
+            break;            
         }
 
         joint.name = name;
@@ -326,6 +330,9 @@ namespace joint_library {
     //0 - do not merge, 1 - edge insertion, 2 - hole 3 - insert between multiple edges hole
 
     //custom
+
+ 
+    
     inline void side_removal_both_sides(joint& jo, std::vector<element>& elements) {
 
         //rotations is jo.shift
@@ -1662,11 +1669,80 @@ namespace joint_library {
             //joint.orient_to_connection_area();
     }
 
+    //60-69
+    inline void b_0(joint& joint) {
+        joint.name = "b_0";
+        joint.orient = false;//prevents joint from copying
+
+        double temp_scale_y = 5;
+        double temp_scale_z = 1;
+        
+        //printf("\nb_0\n");
+
+        //Get center rectangle
+        CGAL_Polyline mid_rectangle = cgal_polyline_util::tween_two_polylines(joint.joint_volumes[0], joint.joint_volumes[1],0.5);
+
+        //X-Axis Extend polyline in scale[0]
+        cgal_polyline_util::extend_equally(mid_rectangle, 1, joint.scale[0] + 0);
+        cgal_polyline_util::extend_equally(mid_rectangle, 3, joint.scale[0] + 0);
+        
+        //Y-Axis Move rectangle down and give it a length of scale[1]
+        //move to center
+        IK::Vector_3 v = mid_rectangle[1] - mid_rectangle[0];
+        v *= 0.5;
+
+        mid_rectangle[0] += v;
+        mid_rectangle[1] -= v;
+        mid_rectangle[2] -= v;
+        mid_rectangle[3] += v;
+        mid_rectangle[4] += v;
+
+        cgal_vector_util::Unitize(v);
+        v *= joint.scale[1]+ temp_scale_y;
+        mid_rectangle[0] += v;
+        mid_rectangle[3] += v;
+        mid_rectangle[4] += v;
+    
+        //Z-AxisOffset by normal, scale value gives the offset from the center
+        IK::Vector_3 z_axis;
+        cgal_vector_util::AverageNormal(mid_rectangle, z_axis, true, true);
+        double len = cgal_vector_util::LengthVec(z_axis);
+        z_axis *= (joint.scale[2] + temp_scale_z);
+        
+        
+        CGAL_Polyline rect0 = mid_rectangle;
+        CGAL_Polyline rect1 = mid_rectangle;
+        CGAL_Polyline rect2 = mid_rectangle;
+        CGAL_Polyline rect3 = mid_rectangle;
+        cgal_polyline_util::move(rect1, z_axis );
+        cgal_polyline_util::move(rect3, -z_axis );
+        //printf("\n Length %f %f %f", len, joint.scale[2], temp_scale_z);
+        rect0=cgal_polyline_util::tween_two_polylines(rect0, rect1, joint.shift);
+        rect2=cgal_polyline_util::tween_two_polylines(rect2, rect3, joint.shift);
+
+        //Create cutting geometry - two rectangles that represents single line cut
+
+        //Add geometry and boolean types
+        //viewer_polylines.emplace_back(rect0);
+        //viewer_polylines.emplace_back(rect1);
+        //viewer_polylines.emplace_back(rect2);
+        //viewer_polylines.emplace_back(rect3);
+        joint.m[0] = { rect0,rect0, rect2,rect2 };
+        joint.m[1] = { rect1,rect1, rect3,rect3 };
+
+        //joint.f[0] = { rect0, rect1 };
+        //joint.f[1] = { rect2, rect3 };
+
+        joint.m_boolean_type = { '1', '1' };
+        //joint.f_boolean_type = { '1', '1' };
+        
+    }
+    
     inline void construct_joint_by_index(std::vector<element>& elements, std::vector<joint>& joints, std::vector<double>& default_parameters_for_four_types, std::vector<double>& scale) {// const double& division_distance_, const double& shift_,
         /////////////////////////////////////////////////////////////////////
         //You must define new joint each time you internalize it
         /////////////////////////////////////////////////////////////////////
-        std::array<std::string, 60> joint_names;
+        std::array<std::string, 70> joint_names;
         for (size_t i = 0; i < joint_names.size(); i++)
             joint_names[i] = "undefined";
 
@@ -1693,6 +1769,7 @@ namespace joint_library {
         joint_names[48] = "side_removal";
         joint_names[58] = "side_removal";
         joint_names[59] = "ss_e_r_9";
+        joint_names[60] = "b_0";
 
 #ifdef DEBUG_JOINERY_LIBRARY
         printf("\nCPP   FILE %s    METHOD %s   LINE %i     WHAT %s ", __FILE__, __FUNCTION__, __LINE__, "construct_joint_by_index");
@@ -1733,7 +1810,7 @@ namespace joint_library {
                 int a = std::abs(elements[jo.v0].joint_types[jo.f0_0]);
                 int b = std::abs(elements[jo.v1].joint_types[jo.f1_0]);
                 id_representing_joint_name = (a > b) ? a : b;
-                //CGAL_Debug(a, b, a);
+               //CGAL_Debug(a, b, a);
             }
             else if (elements[jo.v0].joint_types.size()) {
                 id_representing_joint_name = std::abs(elements[jo.v0].joint_types[jo.f0_0]);
@@ -1743,7 +1820,7 @@ namespace joint_library {
             }
 
             //When users gives an input -> default_parameters_for_four_types
-            int number_of_types = 6;	  //side-side in-plane | side-side out-of-plane | top-side | cross | top-top | side-side rotated
+            int number_of_types = 7;	  //side-side in-plane | side-side out-of-plane | top-side | cross | top-top | side-side rotated
             int number_of_parameters = 3; //division_dist | shift | type
             bool default_parameters_given = default_parameters_for_four_types.size() == (long long)(number_of_types * number_of_parameters);
 
@@ -1774,6 +1851,11 @@ namespace joint_library {
             else if (jo.type == 13 && ((id_representing_joint_name > 49 && id_representing_joint_name < 60) || id_representing_joint_name == -1)) { //side-side rotated
                 group = 5;
             }
+            else if (jo.type == 60 && ((id_representing_joint_name > 59 && id_representing_joint_name < 70) || id_representing_joint_name == -1)) { //top-top
+                group = 6;
+            }
+            printf("\n %i %i %i", group, id_representing_joint_name, jo.type);
+            
 
             //define scale
 
@@ -2012,7 +2094,21 @@ namespace joint_library {
                 }
 
                 break;
+
+            case(6):
+               
+                switch (id_representing_joint_name) {
+                case (60):
+                    //printf("\nhi %i", id_representing_joint_name);                    
+                    b_0(jo);
+                    break;
+                default:
+                    b_0(jo);
+                    break;
+                }
+                break;
             }
+                
             //CGAL_Debug(5);
 #ifdef DEBUG_JOINERY_LIBRARY
             printf("\nCPP   FILE %s    METHOD %s   LINE %i     WHAT %s ", __FILE__, __FUNCTION__, __LINE__, "after unique joint create");
@@ -2026,7 +2122,7 @@ namespace joint_library {
                 //myfile << "Empty joint\n";
                 //myfile << path_and_file_for_joints;
                 //myfile.close();
-                CGAL_Debug(100000000);
+                printf("\njoint name %s between elements %i and %i is empty",jo.name, jo.v0, jo.v1);
                 //CGAL_Debug(group);
                 //CGAL_Debug(id_representing_joint_name);
                 continue;

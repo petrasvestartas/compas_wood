@@ -65,6 +65,31 @@ namespace cgal_polyline_util {
         result = IK::Segment_3(PointAt(l0, t[1]), PointAt(l0, t[2]));
     }
 
+    inline void LineFromProjectedPoints(const IK::Segment_3& l0, CGAL_Polyline& points, IK::Segment_3& result) {
+
+
+
+        std::vector<double> t(points.size());
+        t.reserve(points.size());
+        
+        for (size_t i = 0; i < points.size(); i++)
+            ClosestPointTo(points[i], l0, t[i]);
+     
+        std::sort(t.begin(), t.end());
+    
+
+        result = IK::Segment_3(PointAt(l0, t.front()), PointAt(l0, t.back()));
+        
+    }
+
+    inline void LineLineAverage(const IK::Segment_3& l0, const IK::Segment_3& l1, IK::Segment_3& result) {
+
+        result = IK::Segment_3(
+            cgal_vector_util::MidPoint_(l0[0], l1[0]),
+            cgal_vector_util::MidPoint_(l0[1], l1[1])
+        );
+    }
+
     inline void LineLineOverlapAverage(const IK::Segment_3& l0, const IK::Segment_3& l1, IK::Segment_3& result) {
         IK::Segment_3 lA;
         LineLineOverlap(l0, l1, lA);
@@ -568,6 +593,34 @@ namespace cgal_polyline_util {
             pline[0] = pline[pline.size() - 1];
     }
 
+    inline void extend_equally(CGAL_Polyline& pline, int sID, double dist=0, double proportion = 0) {
+        if (dist == 0 && proportion == 0 )
+            return;
+
+        IK::Point_3 p0 = pline[sID];
+        IK::Point_3 p1 = pline[sID + 1];
+        IK::Vector_3 v = p1 - p0;
+
+        //Either scale or extend polyline segments
+        if (proportion != 0 ) {
+            p0 -= v * proportion;
+            p1 += v * proportion;
+        }
+        else {
+            cgal_vector_util::Unitize(v);
+            p0 -= v * dist;
+            p1 += v * dist;
+        }
+
+        pline[sID] = p0;
+        pline[sID + 1] = p1;
+
+        if (sID == 0)
+            pline[pline.size() - 1] = pline[0];
+        else if ((sID + 1) == pline.size() - 1)
+            pline[0] = pline[pline.size() - 1];
+    }
+
     inline void move(CGAL_Polyline& polyline, const IK::Vector_3& v) {
         CGAL::Aff_transformation_3<IK> T(CGAL::TRANSLATION, v);
         Transform(polyline, T);
@@ -638,4 +691,26 @@ namespace cgal_polyline_util {
             convex_or_concave.emplace_back(is_convex);
         }
     }
+
+    inline CGAL_Polyline tween_two_polylines(CGAL_Polyline& p0, CGAL_Polyline& p1, double w) {
+
+        CGAL_Polyline result;
+        
+        result.reserve(p0.size());
+
+        for (size_t i = 0; i < p0.size(); i++)
+        {
+            
+            //auto x = p0[i].hx() + (p1[i].hx() - p0[i].hx()) * w;
+            //auto y = p0[i].hy() + (p1[i].hy() - p0[i].hy()) * w;
+            //auto z = p0[i].hz() + (p1[i].hz() - p0[i].hz()) * w;
+            //result.emplace_back(x, y, z);
+            
+            auto p = p0[i] + (p1[i] - p0[i]) * w;
+            result.emplace_back(p);          
+
+        }
+        return result;
+    }
+    
 }

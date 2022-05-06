@@ -23,6 +23,18 @@ int main(int argc, char** argv) {
     std::vector<std::vector<int>> input_joint_types;
     input_joint_types.reserve(input_polyline_pairs.size());
 
+
+    //The adjacency will work because none of the joints can be found on boundaries
+    std::vector<int> input_adjacency = {
+        0,0,2 + 0,2 + 0,
+        1,1,2 + 0,2 + 0,
+        2,2,2 + 0,2 + 0,
+        13,13,2 + 3,2 + 3,
+        14,14,2 + 3,2 + 3,
+        15,15,2 + 2,2 + 2
+    };
+
+    //Joint types are give to each element, no rtree search will be used here
     for (int i = 0; i < input_polyline_pairs.size(); i+=2) {
 
         int id = i*0.5;
@@ -39,11 +51,13 @@ int main(int argc, char** argv) {
         
         input_joint_types.emplace_back(input_joint_types_);       
     }
+
+    for (size_t i = 0; i < input_adjacency.size(); i += 4)
+        input_joint_types[input_adjacency[i]][input_adjacency[i + 2]] = 60;
     
 
-    
+    //Three valence
     std::vector<std::vector<int>> input_three_valence_element_indices_and_instruction;
-    std::vector<int> input_adjacency;
 
     //output
     std::vector<std::vector<CGAL_Polyline>> output_polyline_pairs;
@@ -68,7 +82,10 @@ int main(int argc, char** argv) {
 40,
 300,
 0.5,
-58
+58,
+300,
+0.25,
+60
     };
 
     std::vector<double> scale = { 1,1,2 };
@@ -107,7 +124,7 @@ int main(int argc, char** argv) {
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     auto viewer = viewer_init();
     viewer_display_polylines(viewer, viewer_polylines,-1,20);    
-    viewer_display_polylines(viewer, input_polyline_pairs,9);
-    viewer_display_polylines_tree(viewer, output_polyline_pairs,9);
+    viewer_display_polylines(viewer, input_polyline_pairs);
+    viewer_display_polylines_tree(viewer, output_polyline_pairs);
     viewer_run(viewer);
 }
