@@ -186,6 +186,20 @@ namespace cgal_polyline_util {
         return l;
     }
 
+    inline IK::Segment_3 LineLineMaximumOverlap(IK::Segment_3& l0, IK::Segment_3& l1) {
+        double t[4];
+        t[0] = 0;
+        t[1] = 1;
+        ClosestPointTo(l1[0], l0, t[2]);
+        ClosestPointTo(l1[1], l0, t[3]);
+        int n = sizeof(t) / sizeof(t[0]);
+        std::sort(t, t + n);
+
+        IK::Segment_3 l(PointAt(l0, t[0]), PointAt(l0, t[3]));
+
+        return l;
+    }
+
     inline bool IsClosed(CGAL_Polyline& input, double tolerance = 0.0001) {
         return cgal_vector_util::DistanceSquare(input.front(), input.back()) < tolerance;
         // IK::Point_3 p0(0, 0, 0);

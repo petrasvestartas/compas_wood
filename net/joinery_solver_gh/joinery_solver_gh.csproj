@@ -118,16 +118,6 @@
     <None Include="Resources\data_set.png" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\rhino_util\rhino_util.csproj">
-      <Project>{6ca5430f-93cf-4933-9d3a-3b5d1596adff}</Project>
-      <Name>rhino_util</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\joinery_solver_net\joinery_solver_net.csproj">
-      <Project>{12735e36-9859-4c02-b754-3a756fd1cd62}</Project>
-      <Name>joinery_solver_net</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\insertion_direction_edge.png" />
   </ItemGroup>
   <ItemGroup>
@@ -150,6 +140,16 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\1x\folded_plates.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\joinery_solver_net\joinery_solver_net.csproj">
+      <Project>{12735e36-9859-4c02-b754-3a756fd1cd62}</Project>
+      <Name>joinery_solver_net</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\rhino_util\rhino_util.csproj">
+      <Project>{6ca5430f-93cf-4933-9d3a-3b5d1596adff}</Project>
+      <Name>rhino_util</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

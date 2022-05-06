@@ -68,33 +68,32 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\Python\compas_wood\src\cgal.h" />
-    <ClInclude Include="..\..\..\Python\compas_wood\src\cgal_box_search.h" />
-    <ClInclude Include="..\..\..\Python\compas_wood\src\cgal_box_util.h" />
-    <ClInclude Include="..\..\..\Python\compas_wood\src\cgal_data_set.h" />
-    <ClInclude Include="..\..\..\Python\compas_wood\src\cgal_intersection_util.h" />
-    <ClInclude Include="..\..\..\Python\compas_wood\src\cgal_math_util.h" />
-    <ClInclude Include="..\..\..\Python\compas_wood\src\cgal_mesh_util.h" />
-    <ClInclude Include="..\..\..\Python\compas_wood\src\cgal_plane_util.h" />
-    <ClInclude Include="..\..\..\Python\compas_wood\src\cgal_polyline_snapping.h" />
-    <ClInclude Include="..\..\..\Python\compas_wood\src\cgal_polyline_util.h" />
-    <ClInclude Include="..\..\..\Python\compas_wood\src\cgal_print.h" />
-    <ClInclude Include="..\..\..\Python\compas_wood\src\cgal_vector_util.h" />
-    <ClInclude Include="..\..\..\Python\compas_wood\src\cgal_xform_util.h" />
-    <ClInclude Include="..\..\..\Python\compas_wood\src\clipper.h" />
-    <ClInclude Include="..\..\..\Python\compas_wood\src\clipper_util.h" />
-    <ClInclude Include="..\..\..\Python\compas_wood\src\joinery_solver_main.h" />
-    <ClInclude Include="..\..\..\Python\compas_wood\src\joinery_solver_element.h" />
-    <ClInclude Include="..\..\..\Python\compas_wood\src\joinery_solver_joint.h" />
-    <ClInclude Include="..\..\..\Python\compas_wood\src\joinery_solver_joint_library.h" />
-    <ClInclude Include="..\..\..\Python\compas_wood\src\rtree.h" />
-    <ClInclude Include="..\..\..\Python\compas_wood\src\rtree_util.h" />
-    <ClInclude Include="..\..\..\Python\compas_wood\src\wrapper_pybind11_joinery_solver.h" />
-    <ClInclude Include="D:\IBOIS57\_Software_back_up\Python\compas_wood_220114\compas_wood\src\cgal_mesh_pipe.h" />
-  </ItemGroup>
-  <ItemGroup>
     <ClCompile Include="..\..\src\clipper.cpp" />
     <ClCompile Include="..\..\src\wrapper_pybind11_joinery_solver.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\src\cgal.h" />
+    <ClInclude Include="..\..\src\cgal_box_search.h" />
+    <ClInclude Include="..\..\src\cgal_box_util.h" />
+    <ClInclude Include="..\..\src\cgal_data_set.h" />
+    <ClInclude Include="..\..\src\cgal_intersection_util.h" />
+    <ClInclude Include="..\..\src\cgal_math_util.h" />
+    <ClInclude Include="..\..\src\cgal_mesh_util.h" />
+    <ClInclude Include="..\..\src\cgal_plane_util.h" />
+    <ClInclude Include="..\..\src\cgal_polyline_util.h" />
+    <ClInclude Include="..\..\src\cgal_print.h" />
+    <ClInclude Include="..\..\src\cgal_vector_util.h" />
+    <ClInclude Include="..\..\src\cgal_xform_util.h" />
+    <ClInclude Include="..\..\src\clipper.h" />
+    <ClInclude Include="..\..\src\clipper_util.h" />
+    <ClInclude Include="..\..\src\joinery_solver_element.h" />
+    <ClInclude Include="..\..\src\joinery_solver_joint.h" />
+    <ClInclude Include="..\..\src\joinery_solver_joint_library.h" />
+    <ClInclude Include="..\..\src\joinery_solver_main.h" />
+    <ClInclude Include="..\..\src\rtree.h" />
+    <ClInclude Include="..\..\src\rtree_util.h" />
+    <ClInclude Include="..\..\src\stdafx.h" />
+    <ClInclude Include="..\..\src\wrapper_pybind11_joinery_solver.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

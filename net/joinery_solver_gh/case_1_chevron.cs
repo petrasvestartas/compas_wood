@@ -35,7 +35,7 @@ namespace joinery_solver_gh
         public int[][] f_me;
         public List<Polyline> plines;//pair of outlines
         public Vector3d[][] insertion_vectors;//v0,v1,v2,v3,v4,v5
-        public List<int[]> adjacency;//0,1
+        public List<int[]> adjacency;//v0,v1, f0, f1
         public int[][] joints_per_face;//0,0,1,1,2,2
         public List<int[]> three_valence;//43, 41, 45, 41
 
@@ -702,11 +702,11 @@ namespace joinery_solver_gh
                 int[] e = o.Value;
 
                 //Current box
-                this.adjacency.Add(new int[] { counter * 4 + 0, counter * 4 + 2 });
-                this.adjacency.Add(new int[] { counter * 4 + 0, counter * 4 + 3 });
-                this.adjacency.Add(new int[] { counter * 4 + 1, counter * 4 + 2 });
-                this.adjacency.Add(new int[] { counter * 4 + 1, counter * 4 + 3 });
-                this.adjacency.Add(new int[] { counter * 4 + 2, counter * 4 + 3 });
+                this.adjacency.Add(new int[] { counter * 4 + 0, counter * 4 + 2, -1, -1 });
+                this.adjacency.Add(new int[] { counter * 4 + 0, counter * 4 + 3, -1, -1 });
+                this.adjacency.Add(new int[] { counter * 4 + 1, counter * 4 + 2, -1, -1 });
+                this.adjacency.Add(new int[] { counter * 4 + 1, counter * 4 + 3, -1, -1 });
+                this.adjacency.Add(new int[] { counter * 4 + 2, counter * 4 + 3, -1, -1 });
                 //Neighbors
                 int m_e_0 = this.f_me[f][e[0]];// mesh.TopologyEdges.GetEdgeIndex(v[e[0]], v[(e[0] + 1) % 4]);
                 int m_e_1 = this.f_me[f][e[1]];//mesh.TopologyEdges.GetEdgeIndex(v[e[1]], v[(e[1] + 1) % 4]);
@@ -715,16 +715,16 @@ namespace joinery_solver_gh
                 if (f0.Length == 2)
                 {
                     int next_face = f0[0] == f ? f0[1] : f0[0];
-                    this.adjacency.Add(new int[] { dict_plate_id_meshface_id[next_face] * 4 + 0, counter * 4 + 2 });
-                    this.adjacency.Add(new int[] { dict_plate_id_meshface_id[next_face] * 4 + 1, counter * 4 + 2 });
+                    this.adjacency.Add(new int[] { dict_plate_id_meshface_id[next_face] * 4 + 0, counter * 4 + 2, -1, -1 });
+                    this.adjacency.Add(new int[] { dict_plate_id_meshface_id[next_face] * 4 + 1, counter * 4 + 2, -1, -1 });
                 }
 
                 int[] f1 = this.mesh.TopologyEdges.GetConnectedFaces(m_e_1);
                 if (f1.Length == 2)
                 {
                     int next_face = f1[0] == f ? f1[1] : f1[0];
-                    this.adjacency.Add(new int[] { dict_plate_id_meshface_id[next_face] * 4 + 0, counter * 4 + 3 });
-                    this.adjacency.Add(new int[] { dict_plate_id_meshface_id[next_face] * 4 + 1, counter * 4 + 3 });
+                    this.adjacency.Add(new int[] { dict_plate_id_meshface_id[next_face] * 4 + 0, counter * 4 + 3, -1, -1 });
+                    this.adjacency.Add(new int[] { dict_plate_id_meshface_id[next_face] * 4 + 1, counter * 4 + 3, -1, -1 });
                 }
 
                 counter++;

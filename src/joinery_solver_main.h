@@ -1203,7 +1203,7 @@ inline void adjacency_search(
     //Input
     std::vector<element>& elements,
     int search_type,
-    std::vector<int>& result,
+    std::vector<int>& input_adjacency,
     //Output
     std::vector<joint>& joints,
     std::unordered_map<uint64_t, int>& joints_map)
@@ -1212,21 +1212,21 @@ inline void adjacency_search(
     //////////////////////////////////////////////////////////////////////////////
     // Perform Adjacency Search in result is empty
     //////////////////////////////////////////////////////////////////////////////
-    if (result.size() == 0)
-        rtree_search(elements, search_type, result);
+    if (input_adjacency.size() == 0)
+        rtree_search(elements, search_type, input_adjacency);
     //CGAL_Debug(99999999);
     //CGAL_Debug(result.size());
     //CGAL_Debug(99999999);
-    joints.reserve(result.size());
-    joints_map.reserve(result.size());
+    joints.reserve(input_adjacency.size());
+    joints_map.reserve(input_adjacency.size());
 
     //////////////////////////////////////////////////////////////////////////////
     // Search Contact zones
     //////////////////////////////////////////////////////////////////////////////
     int joint_id = 0;
-    for (int i = 0; i < result.size(); i += 2) {
+    for (int i = 0; i < input_adjacency.size(); i += 4) {//because v0, f0 and v1,f1 are adjacent
         //CGAL_Debug(result[i], result[i + 1]);
-        if (result[i] > (elements.size() - 1) || result[i + 1] > (elements.size() - 1))
+        if (input_adjacency[i] > (elements.size() - 1) || input_adjacency[i + 1] > (elements.size() - 1))
             continue;
         //CGAL_Debug(99999999);
 
@@ -1235,7 +1235,7 @@ inline void adjacency_search(
         std::array<CGAL_Polyline, 2> joint_lines;
         std::array<CGAL_Polyline, 4> joint_volumes_pairA_pairB;
 
-        std::pair<int, int> el_ids(result[i], result[i + 1]);
+        std::pair<int, int> el_ids(input_adjacency[i], input_adjacency[i + 1]);
 
         std::pair<std::array<int, 2>, std::array<int, 2>> face_ids;
         int type;
@@ -1258,9 +1258,9 @@ inline void adjacency_search(
 
         case (1):
             found_type = plane_to_face(
-                elements[result[i]].polylines, elements[result[i + 1]].polylines,
-                elements[result[i]].planes, elements[result[i + 1]].planes,
-                elements[result[i]].edge_vectors, elements[result[i + 1]].edge_vectors,
+                elements[input_adjacency[i]].polylines, elements[input_adjacency[i + 1]].polylines,
+                elements[input_adjacency[i]].planes, elements[input_adjacency[i + 1]].planes,
+                elements[input_adjacency[i]].edge_vectors, elements[input_adjacency[i + 1]].edge_vectors,
                 el_ids, face_ids, type,
                 joint_area, joint_lines, joint_volumes_pairA_pairB
             ) ? 2 : 0;

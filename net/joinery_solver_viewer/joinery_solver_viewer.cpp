@@ -107,7 +107,7 @@ int main(int argc, char** argv) {
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     auto viewer = viewer_init();
     viewer_display_polylines(viewer, viewer_polylines,-1,20);    
-    viewer_display_polylines(viewer, input_polyline_pairs);
-    viewer_display_polylines_tree(viewer, output_polyline_pairs);
+    viewer_display_polylines(viewer, input_polyline_pairs,9);
+    viewer_display_polylines_tree(viewer, output_polyline_pairs,9);
     viewer_run(viewer);
 }

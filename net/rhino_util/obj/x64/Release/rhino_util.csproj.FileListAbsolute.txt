@@ -1,0 +1,6 @@
+C:\IBOIS57\_Code\Software\Python\compas_wood\net\rhino_util\bin\x64\Release\rhino_util.dll
+C:\IBOIS57\_Code\Software\Python\compas_wood\net\rhino_util\bin\x64\Release\rhino_util.pdb
+C:\IBOIS57\_Code\Software\Python\compas_wood\net\rhino_util\obj\x64\Release\rhino_util.csproj.AssemblyReference.cache
+C:\IBOIS57\_Code\Software\Python\compas_wood\net\rhino_util\obj\x64\Release\rhino_util.csproj.CoreCompileInputs.cache
+C:\IBOIS57\_Code\Software\Python\compas_wood\net\rhino_util\obj\x64\Release\rhino_util.dll
+C:\IBOIS57\_Code\Software\Python\compas_wood\net\rhino_util\obj\x64\Release\rhino_util.pdb

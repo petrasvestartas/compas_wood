@@ -52,11 +52,10 @@ def get_connection_zones(
     face_vectors_XYZ : vectors to orient a joint
     face_joints_types_int : joint id, existing in the code
     three_valance_element_indices_and_instruction : special case e.g. alignment of rectangles
-    adjacency : a list of plate id integer pairs
+    adjacency : a list of plate id integer pairs and face pairs e.g. v0, v1, f0, f1
     search_type : 0 - face-to-face, 1 - plane-to-face (cross), 2 - all
     output_type : 0 - top outlines and one joint_area, 1 - top outlines and two joint lines,
-    2 - top outlines and joint volumes first and third, 3 - top outlines and joint polylines,
-    4 - get_joints_geometry_as_closed_polylines_performing_intersection
+    2 - top outlines and joint volumes first and third, 3 - top outlines and joint polylines,     4 - get_joints_geometry_as_closed_polylines_performing_intersection
     triangulate : 0 - not output as mesh, 1 - output as mesh, currently not supported in python
     scale : xyz once or six times per joint type
 
@@ -167,7 +166,7 @@ def get_connection_zones(
             flat_list_adjacency.extend(adjacency[i])
 
     if scale is not None:
-        if(len(scale)>2):
+        if len(scale) > 2:
             flat_list_scale = scale
 
     # ==============================================================================

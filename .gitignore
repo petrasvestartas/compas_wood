@@ -2,6 +2,7 @@
 *.d
 *.db
 *.opendb
+*.ipch
 
 # Compiled Object files
 *.slo

@@ -112,12 +112,7 @@ namespace joinery_solver_gh
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
             pManager.AddGenericParameter("data", "data", "data", GH_ParamAccess.item);
-            //pManager.AddCurveParameter("plines", "plines", "plines", GH_ParamAccess.tree);
             pManager.AddLineParameter("dir", "dir", "dir", GH_ParamAccess.list);
-            //pManager.AddVectorParameter("insertion_vectors", "insertion_vectors", "insertion_vectors", GH_ParamAccess.tree);
-            //pManager.AddIntegerParameter("joints_per_face", "joints_per_face", "joints_per_face", GH_ParamAccess.tree);
-            //pManager.AddIntegerParameter("three_valence", "three_valence", "three_valence", GH_ParamAccess.tree);
-            //pManager.AddIntegerParameter("adjacency", "adjacency", "adjacency", GH_ParamAccess.tree);
         }
 
         protected override void SolveInstance(IGH_DataAccess DA)
