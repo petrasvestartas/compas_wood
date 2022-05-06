@@ -26,7 +26,7 @@
     <CodeAnalysisIgnoreBuiltInRules>false</CodeAnalysisIgnoreBuiltInRules>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
-    <OutputPath>..\..\..\Library\Application\ Support\McNeel\Rhinoceros\7.0\Plug-ins\Grasshopper\ \%28b45a29b1-4343-4035-989e-044e8580d9cf\%29\Libraries\compas_wood\Users\petra\AppData\Roaming\Grasshopper\Libraries\compas_wood\</OutputPath>
+    <OutputPath>..\..\..\..\..\..\..\Users\petra\AppData\Roaming\Grasshopper\Libraries\compas_wood\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <Optimize>true</Optimize>
     <DebugType>pdbonly</DebugType>

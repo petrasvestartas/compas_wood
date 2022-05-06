@@ -4,3 +4,5 @@ C:\IBOIS57\_Code\Software\Python\compas_wood\net\rhino_util\obj\x64\Release\rhin
 C:\IBOIS57\_Code\Software\Python\compas_wood\net\rhino_util\obj\x64\Release\rhino_util.csproj.CoreCompileInputs.cache
 C:\IBOIS57\_Code\Software\Python\compas_wood\net\rhino_util\obj\x64\Release\rhino_util.dll
 C:\IBOIS57\_Code\Software\Python\compas_wood\net\rhino_util\obj\x64\Release\rhino_util.pdb
+C:\Users\petra\AppData\Roaming\Grasshopper\Libraries\compas_wood\rhino_util.dll
+C:\Users\petra\AppData\Roaming\Grasshopper\Libraries\compas_wood\rhino_util.pdb

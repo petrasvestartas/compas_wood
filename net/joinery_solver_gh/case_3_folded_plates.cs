@@ -224,7 +224,7 @@ namespace joinery_solver_gh
                     int[] nei = m.Faces.AdjacentFaces(i);
 
                     foreach (int j in nei)
-                        this.adjacency.Add(new int[2] { i, j });
+                        this.adjacency.Add(new int[4] { i, j,-1,-1 });
                 }
                 edge_joints[i] = Enumerable.Repeat(this.flags[i], 9).ToArray();
             }

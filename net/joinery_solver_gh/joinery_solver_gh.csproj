@@ -27,12 +27,24 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin\</OutputPath>
+    <OutputPath>..\..\..\..\..\..\..\Users\petra\AppData\Roaming\Grasshopper\Libraries\compas_wood\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="GH_IO">
+      <HintPath>..\..\..\..\..\..\..\Program Files\Rhino 7\Plug-ins\Grasshopper\GH_IO.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Grasshopper">
+      <HintPath>..\..\..\..\..\..\..\Program Files\Rhino 7\Plug-ins\Grasshopper\Grasshopper.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="RhinoCommon">
+      <HintPath>..\..\..\..\..\..\..\Program Files\Rhino 7\System\RhinoCommon.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
@@ -40,21 +52,6 @@
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
-    <Reference Include="RhinoCommon">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>C:\Program Files\Rhino 6\System\rhinocommon.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="Grasshopper">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>C:\Program Files\Rhino 6\Plug-ins\Grasshopper\Grasshopper.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="GH_IO">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>C:\Program Files\Rhino 6\Plug-ins\Grasshopper\GH_IO.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="case_3_folded_plates.cs" />
