@@ -4,6 +4,7 @@
 *.opendb
 *.ipch
 *.bin
+*.suo
 *.tlog
 
 # Compiled Object files
