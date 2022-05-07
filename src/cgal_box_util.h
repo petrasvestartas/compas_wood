@@ -1,7 +1,7 @@
 #pragma once
-#include "cgal.h"
-#include "cgal_vector_util.h"
-#include "cgal_print.h"
+#include "stdafx.h"
+//#include "cgal_vector_util.h"
+
 
 namespace cgal_box_util {
     inline IK::Vector_3 VectorAt(IK::Vector_3(&plane)[4], double s, double t, double c) {
