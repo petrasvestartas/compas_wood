@@ -3,6 +3,7 @@
 *.db
 *.opendb
 *.ipch
+*.bin
 
 # Compiled Object files
 *.slo
