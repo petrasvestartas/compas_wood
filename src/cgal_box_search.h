@@ -1,5 +1,6 @@
 #pragma once
-#include "cgal.h"
+#include "stdafx.h"
+
 
 //ToDo
 //What happens when 3 beams meet in one node when only two joints are needed, maybe move ends apart from each other or give point id
@@ -683,7 +684,7 @@ namespace cgal_box_search {
 #endif
 
                 if (distance < min_distance * min_distance) {
-                    size_t first_0, first_1;
+                    size_t first_0=0, first_1=0;
                     bool flipped = false;
                     uint64_t id;
                     if (b2.info().first > b1.info().first) {
@@ -694,18 +695,20 @@ namespace cgal_box_search {
                         id = (uint64_t)b1.info().first << 32 | b2.info().first;
                     }
 
-                    auto dist_and_segment_ids = flipped ? std::make_tuple(distance, b1.info().first, b1.info().second, b2.info().first, b2.info().second) : std::make_tuple(distance, b2.info().first, b2.info().second, b1.info().first, b1.info().second);
+                    std::tuple<double, int, int, int, int > dist_and_segment_ids = flipped ?
+                        std::make_tuple((double)distance, (int)b1.info().first, (int)b1.info().second, (int)b2.info().first, (int)b2.info().second) :
+                        std::make_tuple((double)distance, (int)b2.info().first, (int)b2.info().second, (int)b1.info().first, (int)b1.info().second);
 
                     //Add elements to std::map
                     if (pair_collisions.find(id) == pair_collisions.end()) {
                         //not found
-                        pair_collisions.insert(std::make_pair(id, dist_and_segment_ids));
-                        pair_collisionslist.push_back(dist_and_segment_ids);
+                        pair_collisions.insert(std::make_pair((uint64_t)id, dist_and_segment_ids));
+                        pair_collisionslist.emplace_back(dist_and_segment_ids);
                     } else if (distance < std::get<0>(pair_collisions[id])) {
-                        pair_collisions.insert(std::make_pair(id, dist_and_segment_ids));
+                        pair_collisions.insert(std::make_pair((uint64_t)id, dist_and_segment_ids));
                         // found and distance is smaller that before found
                         pair_collisions[id] = dist_and_segment_ids;
-                        pair_collisionslist.push_back(dist_and_segment_ids);
+                        pair_collisionslist.emplace_back(dist_and_segment_ids);
                     }
                     //}
                 }//check if lines closer than the given distance

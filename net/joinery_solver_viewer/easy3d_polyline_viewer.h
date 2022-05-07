@@ -1,13 +1,7 @@
 #pragma once
-#define NOMINMAX
-#ifdef max
-#undef max
-#endif
-#ifdef min
-#undef min
-#endif
 
-#include <iostream>
+#include "stdafx.h"
+
 #include <easy3d/viewer/viewer.h>
 #include <easy3d/core/surface_mesh.h>
 #include <easy3d/renderer/drawable_lines.h>
@@ -23,7 +17,7 @@ easy3d::Viewer viewer_init() {
     // Create the default Easy3D viewer.
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     easy3d::logging::initialize();
-    return easy3d::Viewer("viewer_joinery_solver", 4, 3, 2, false, true, 24, 8, 3840 * 0.495, 2160 * 0.9);
+    return easy3d::Viewer("viewer_joinery_solver", 4, 3, 2, false, true, 24, 8, (int)(3840 * 0.495), (int)(2160 * 0.9));
 }
 
 void viewer_display_polylines(easy3d::Viewer& viewer, std::vector<std::vector<IK::Point_3>>& polylines,int display_specific_id=-1, float line_width = 2.0f) {//, std::vector<std::vector<IK::Point_3>>& polylines
@@ -33,8 +27,8 @@ void viewer_display_polylines(easy3d::Viewer& viewer, std::vector<std::vector<IK
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     //count the number of vertices
-    int count_v = 0;
-    int count_e = 0;
+    size_t count_v = 0;
+    size_t count_e = 0;
     for (auto& polyline : polylines) {
         count_v += polyline.size();
         count_e += polyline.size() - 1;
@@ -53,12 +47,12 @@ void viewer_display_polylines(easy3d::Viewer& viewer, std::vector<std::vector<IK
     {
         //Output specific output
         if (display_specific_id > -1) {
-            int panel_id = (i - (i % 2)) * 0.5;
+            int panel_id = (int)((i - (i % 2)) * 0.5);
             if (panel_id != display_specific_id) continue;
         }
 
         for (int j = 0; j < polylines[i].size(); j++) {
-            pts.emplace_back(easy3d::vec3(polylines[i][j].x(), polylines[i][j].y(), polylines[i][j].z()));
+            pts.emplace_back(easy3d::vec3((float)polylines[i][j].x(), (float)polylines[i][j].y(), (float)polylines[i][j].z()));
         }
 
         for (int j = 0; j < polylines[i].size() - 1; j++) {
@@ -94,8 +88,8 @@ void viewer_display_polylines_tree(easy3d::Viewer& viewer, std::vector<std::vect
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     //count the number of vertices
-    int count_v = 0;
-    int count_e = 0;
+    size_t count_v = 0;
+    size_t count_e = 0;
     for (auto& polylines : polylines_tree) {
         for (auto& polyline : polylines) {
             count_v += polyline.size();
@@ -108,10 +102,10 @@ void viewer_display_polylines_tree(easy3d::Viewer& viewer, std::vector<std::vect
     std::vector<uint32_t> lineIndices0;
     std::vector<easy3d::vec3> pts1;
     std::vector<uint32_t> lineIndices1;
-    pts0.reserve((int)count_v * 0.5);
-    pts0.reserve((int)count_e * 0.5);
-    pts1.reserve((int)count_v*0.5);
-    pts1.reserve((int)count_e * 0.5);
+    pts0.reserve((size_t)(count_v * 0.5));
+    pts0.reserve((size_t)(count_e * 0.5));
+    pts1.reserve((size_t)(count_v*0.5));
+    pts1.reserve((size_t)(count_e * 0.5));
 
     //add vertices
     //add indices
@@ -134,7 +128,7 @@ void viewer_display_polylines_tree(easy3d::Viewer& viewer, std::vector<std::vect
                 if (flip) {
                     
                     for (int j = 0; j < polylines[i].size(); j++) {
-                        pts0.emplace_back(easy3d::vec3(polylines[i][j].x(), polylines[i][j].y(), polylines[i][j].z()));
+                        pts0.emplace_back(easy3d::vec3((float)polylines[i][j].x(), (float)polylines[i][j].y(), (float)polylines[i][j].z()));
                     }
 
                     for (int j = 0; j < polylines[i].size() - 1; j++) {
@@ -147,7 +141,7 @@ void viewer_display_polylines_tree(easy3d::Viewer& viewer, std::vector<std::vect
                 } else {
                     
                     for (int j = 0; j < polylines[i].size(); j++) {
-                        pts1.emplace_back(easy3d::vec3(polylines[i][j].x(), polylines[i][j].y(), polylines[i][j].z()));
+                        pts1.emplace_back(easy3d::vec3((float)polylines[i][j].x(), (float)polylines[i][j].y(), (float)polylines[i][j].z()));
                     }
 
                     for (int j = 0; j < polylines[i].size() - 1; j++) {

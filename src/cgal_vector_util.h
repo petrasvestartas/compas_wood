@@ -1,6 +1,6 @@
 #pragma once
-#include <math.h>
-#include "cgal.h"
+
+#include "stdafx.h"
 
 namespace cgal_vector_util {
     inline double DotProduct(const IK::Vector_3& a, const IK::Vector_3& b) {
@@ -248,12 +248,12 @@ namespace cgal_vector_util {
     }
 
     inline void AverageNormal(CGAL_Polyline& p, IK::Vector_3& averageNormal, bool closed = true, bool unitize = false) {
-        int len = closed ? p.size() - 1 : p.size();
+        size_t len = closed ? p.size() - 1 : p.size();
         averageNormal = IK::Vector_3(0, 0, 0);
 
         for (int i = 0; i < len; i++) {
-            int num = ((i - 1) + len) % len;
-            int item1 = ((i + 1) + len) % len;
+            auto num = ((i - 1) + len) % len;
+            auto item1 = ((i + 1) + len) % len;
             averageNormal = averageNormal + CGAL::cross_product(p[i] - p[num], p[item1] - p[i]);
         }
 

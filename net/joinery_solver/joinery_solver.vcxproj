@@ -72,7 +72,6 @@
     <ClCompile Include="..\..\src\wrapper_pybind11_joinery_solver.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\src\cgal.h" />
     <ClInclude Include="..\..\src\cgal_box_search.h" />
     <ClInclude Include="..\..\src\cgal_box_util.h" />
     <ClInclude Include="..\..\src\cgal_data_set.h" />

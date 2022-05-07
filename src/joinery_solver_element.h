@@ -1,13 +1,10 @@
 #pragma once
-#include <string>
 
-#include "cgal.h"
+
+#include "stdafx.h"
 #include "joinery_solver_joint.h"
 
-#include "cgal_intersection_util.h"
-#include "cgal_xform_util.h"
-#include "cgal_polyline_util.h"
-#include "cgal_print.h"
+
 
 class element {
 public:
@@ -112,9 +109,9 @@ inline void element::get_joints_geometry(std::vector<joint>& joints, std::vector
                 //}
 
                 if (joints[std::get<0>(j_mf[i][j])].joint_volumes[0].size() > 0)
-                    output[this->id].emplace_back(joints[std::get<0>(j_mf[i][j])].joint_volumes[0]);
+                    output[this->id].emplace_back(joints[std::get<0>(j_mf[i][j])].joint_volumes[0]) ;
                 if (joints[std::get<0>(j_mf[i][j])].joint_volumes[1].size() > 0)
-                    output[this->id].emplace_back(joints[std::get<0>(j_mf[i][j])].joint_volumes[1]);
+                    output[this->id].emplace_back(joints[std::get<0>(j_mf[i][j])].joint_volumes[1]) ;
                 if (joints[std::get<0>(j_mf[i][j])].joint_volumes[2].size() > 0)
                     output[this->id].emplace_back(joints[std::get<0>(j_mf[i][j])].joint_volumes[2]);
                 if (joints[std::get<0>(j_mf[i][j])].joint_volumes[3].size() > 0)
@@ -126,7 +123,7 @@ inline void element::get_joints_geometry(std::vector<joint>& joints, std::vector
                 //    output[this->id].emplace_back(this->polylines[0]); //cut
                 //    output[this->id].emplace_back(this->polylines[1]); //cut
                 //}
-                printf("\n %s", joints[std::get<0>(j_mf[i][j])].name);
+                printf("\n %s", joints[std::get<0>(j_mf[i][j])].name.c_str());
                 for (int k = 0; k < joints[std::get<0>(j_mf[i][j])](std::get<1>(j_mf[i][j]), true).size(); k += 2) {
                     output[this->id].emplace_back(joints[std::get<0>(j_mf[i][j])](std::get<1>(j_mf[i][j]), true)[k]);  //cut
                     output[this->id].emplace_back(joints[std::get<0>(j_mf[i][j])](std::get<1>(j_mf[i][j]), false)[k]); //direction
@@ -154,7 +151,7 @@ inline void element::get_joints_geometry_as_closed_polylines_replacing_edges(std
     CGAL_Polyline polyline1;
     cgal_polyline_util::Duplicate(polylines[0], polyline0);
     cgal_polyline_util::Duplicate(polylines[1], polyline1);
-    int n = polyline0.size() - 1;
+    auto n = polyline0.size() - 1;
     bool debug = false;
     if (debug)
         CGAL_Debug(-4);
@@ -211,9 +208,9 @@ inline void element::get_joints_geometry_as_closed_polylines_replacing_edges(std
                 ///////////////////////////////////////////////////////////////////////////////
                 //Take last lines
                 ///////////////////////////////////////////////////////////////////////////////
-                int prev = (((i - 1) % n) + n) % n;
-                int next = (((i + 1) % n) + n) % n;
-                int nextnext = (((i + 2) % n) + n) % n;
+                auto prev = (((i - 1) % n) + n) % n;
+                auto next = (((i + 1) % n) + n) % n;
+                auto nextnext = (((i + 2) % n) + n) % n;
 
                 IK::Segment_3 next_segment_0(polyline0[prev], polyline0[i]);
                 IK::Segment_3 prev_segment_0(polyline0[next], polyline0[nextnext]);
@@ -411,12 +408,12 @@ inline bool element::intersection_closed_and_open_paths_2D(
     std::vector<ClipperLib::IntPoint> pathB(b.size() - 1);
 
     for (int i = 0; i < a.size(); i++) {
-        pathA[i] = ClipperLib::IntPoint(a[i].x() * scale, a[i].y() * scale);
+        pathA[i] = ClipperLib::IntPoint((int)(a[i].x() * scale), (int)(a[i].y() * scale));
         //printf("%f,%f,%f \n", a[i].x(), a[i].y(), a[i].z());
     }
     //printf("\n");
     for (int i = 0; i < b.size() - 1; i++) {
-        pathB[i] = ClipperLib::IntPoint(b[i].x() * scale, b[i].y() * scale);
+        pathB[i] = ClipperLib::IntPoint((int)(b[i].x() * scale), (int)(b[i].y() * scale));
         //printf("%f,%f,%f \n", b[i].x(), b[i].y(), b[i].z());
     }
 
@@ -434,7 +431,7 @@ inline bool element::intersection_closed_and_open_paths_2D(
         //CGAL_Debug(C.ChildCount());
         if (C.ChildCount() > 0) {
             //Calculate number of points
-            int count = 0;
+            size_t count = 0;
             ClipperLib::PolyNode* polynode = C.GetFirst();
             while (polynode) {
                 //do stuff with polynode here
@@ -565,7 +562,7 @@ inline void element::merge_joints(std::vector<joint>& joints, std::vector<std::v
 
     std::vector<bool> flags0(pline0.size() - 1);
     std::vector<bool> flags1(pline1.size() - 1);
-    int point_count = pline0.size();
+    auto point_count = pline0.size();
 
     IK::Segment_3 last_segment0_start(IK::Point_3(0, 0, 0), IK::Point_3(0, 0, 0));
     IK::Segment_3 last_segment1_start(IK::Point_3(0, 0, 0), IK::Point_3(0, 0, 0));
@@ -624,7 +621,7 @@ inline void element::merge_joints(std::vector<joint>& joints, std::vector<std::v
                 printf("\nCPP   FILE %s    METHOD %s   LINE %i     WHAT %s ", __FILE__, __FUNCTION__, __LINE__, "Intersect rectangle or line CASE 2 ");
 #endif
                 int id = i - 2;
-                int n = pline0.size() - 1;
+                auto n = pline0.size() - 1;
 
                 IK::Segment_3 joint_line_0(joints[std::get<0>(j_mf[id + 2][j])](std::get<1>(j_mf[id + 2][j]), true)[1][0], joints[std::get<0>(j_mf[id + 2][j])](std::get<1>(j_mf[id + 2][j]), true)[1][1]);
                 IK::Segment_3 joint_line_1(joints[std::get<0>(j_mf[id + 2][j])](std::get<1>(j_mf[id + 2][j]), false)[1][0], joints[std::get<0>(j_mf[id + 2][j])](std::get<1>(j_mf[id + 2][j]), false)[1][1]);
@@ -632,9 +629,9 @@ inline void element::merge_joints(std::vector<joint>& joints, std::vector<std::v
                 ///////////////////////////////////////////////////////////////////////////////
                 //Take last lines
                 ///////////////////////////////////////////////////////////////////////////////
-                int prev = (((id - 1) % n) + n) % n;
-                int next = (((id + 1) % n) + n) % n;
-                int nextnext = (((id + 2) % n) + n) % n;
+                auto prev = (((id - 1) % n) + n) % n;
+                auto next = (((id + 1) % n) + n) % n;
+                auto nextnext = (((id + 2) % n) + n) % n;
 
                 IK::Segment_3 next_segment_0(pline0[prev], pline0[id]);
                 IK::Segment_3 prev_segment_0(pline0[next], pline0[nextnext]);
@@ -712,7 +709,7 @@ inline void element::merge_joints(std::vector<joint>& joints, std::vector<std::v
                 ///////////////////////////////////////////////////////////////////////////////
                 //Get closest parameters (edge start, start+1) and add to pairs
                 ///////////////////////////////////////////////////////////////////////////////
-                std::pair<double, double> cp_pair(id + 0.1, id + 0.9);
+                std::pair<double, double> cp_pair((double)(id + 0.1), (double)(id + 0.9));
 
                 sorted_segments_or_points_0.insert(std::make_pair(cp_pair.first, std::pair<std::pair<double, double>, CGAL_Polyline>{cp_pair, joints[std::get<0>(j_mf[id + 2][j])](std::get<1>(j_mf[id + 2][j]), true)[0]}));
                 sorted_segments_or_points_1.insert(std::make_pair(cp_pair.first, std::pair<std::pair<double, double>, CGAL_Polyline>{cp_pair, joints[std::get<0>(j_mf[id + 2][j])](std::get<1>(j_mf[id + 2][j]), false)[0]}));
@@ -735,7 +732,7 @@ inline void element::merge_joints(std::vector<joint>& joints, std::vector<std::v
                  ///////////////////////////////////////////////////////////////////////////////
                  //1) Cut polygons and 2) Get closest parameters (Find closest parameters to edges) and add to pairs
                  ///////////////////////////////////////////////////////////////////////////////
-                    std::pair<double, double> cp_pair_0(0, 0);
+                    std::pair<double, double> cp_pair_0(0.0, 0.0)  ;
                     CGAL_Polyline joint_pline_0;
                     bool result0 = intersection_closed_and_open_paths_2D(pline0, joints[std::get<0>(j_mf[i][j])](std::get<1>(j_mf[i][j]), true).front(), this->planes[0], joint_pline_0, edge_pair, cp_pair_0);
                     if (!result0) continue;
@@ -744,7 +741,7 @@ inline void element::merge_joints(std::vector<joint>& joints, std::vector<std::v
                     printf("\nCPP   FILE %s    METHOD %s   LINE %i     WHAT %s ", __FILE__, __FUNCTION__, __LINE__, "First Intersection ");
 #endif
 
-                    std::pair<double, double> cp_pair_1(0, 0);
+                    std::pair<double, double> cp_pair_1(0.0, 0.0);
                     CGAL_Polyline joint_pline_1;
                     bool result1 = intersection_closed_and_open_paths_2D(pline1, joints[std::get<0>(j_mf[i][j])](std::get<1>(j_mf[i][j]), false).front(), this->planes[1], joint_pline_1, edge_pair, cp_pair_1);
                     //CGAL_Debug(pline1);
@@ -793,7 +790,7 @@ inline void element::merge_joints(std::vector<joint>& joints, std::vector<std::v
     ///////////////////////////////////////////////////////////////////////////////
     std::vector<bool> point_flags_0(pline0.size(), true); //point flags to keep corners
     for (auto& pair : sorted_segments_or_points_0)
-        for (size_t j = std::ceil(pair.second.first.first); j <= std::floor(pair.second.first.second); j++) { //are corners in between insertable polylines
+        for (size_t j = (size_t)std::ceil(pair.second.first.first); j <= (size_t)std::floor(pair.second.first.second); j++) { //are corners in between insertable polylines
             point_flags_0[j] = false;
             point_count--;
         }
@@ -805,7 +802,7 @@ inline void element::merge_joints(std::vector<joint>& joints, std::vector<std::v
 
     std::vector<bool> point_flags_1(pline0.size(), true); //point flags to keep corners
     for (auto& pair : sorted_segments_or_points_1)
-        for (size_t j = std::ceil(pair.second.first.first); j <= std::floor(pair.second.first.second); j++) //are corners in between insertable polylines
+        for (size_t j = (size_t)std::ceil(pair.second.first.first); j <= (size_t)std::floor(pair.second.first.second); j++) //are corners in between insertable polylines
             point_flags_1[j] = false;
     point_flags_1[point_flags_1.size() - 1] = false; //ignore last
 
@@ -827,11 +824,11 @@ inline void element::merge_joints(std::vector<joint>& joints, std::vector<std::v
 
     for (size_t i = 0; i < point_flags_0.size(); i++)
         if (point_flags_0[i])
-            sorted_segments_or_points_0.insert(std::make_pair(i, std::pair<std::pair<double, double>, CGAL_Polyline>{std::pair<double, double>(i, i), CGAL_Polyline{ pline0[i] }}));
+            sorted_segments_or_points_0.insert(std::make_pair((double)i, std::pair<std::pair<double, double>, CGAL_Polyline>{std::pair<double, double>((double)i, (double)i), CGAL_Polyline{ pline0[i] }}));
 
     for (size_t i = 0; i < point_flags_1.size(); i++)
         if (point_flags_1[i])
-            sorted_segments_or_points_1.insert(std::make_pair(i, std::pair<std::pair<double, double>, CGAL_Polyline>{std::pair<double, double>(i, i), CGAL_Polyline{ pline1[i] }}));
+            sorted_segments_or_points_1.insert(std::make_pair((double)i, std::pair<std::pair<double, double>, CGAL_Polyline>{std::pair<double, double>((double)i, (double)i), CGAL_Polyline{ pline1[i] }}));
 
     CGAL_Polyline pline0_new; //reserve optimize
     CGAL_Polyline pline1_new; //reserve optimize

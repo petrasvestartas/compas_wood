@@ -1,32 +1,33 @@
-#include <iostream>
+
+#include "stdafx.h"
 #include "easy3d_polyline_viewer.h"
 #include "xml_parser.h"
 #include "joinery_solver_main.h"
 
 int main(int argc, char** argv) {
-    
+        
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //Read Polylines from XML
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    std::vector<std::vector<IK::Point_3>> input_polyline_pairs;
-    bool result = xml_parser::read_xml_polylines(input_polyline_pairs);
+    std::vector<std::vector<IK::Point_3>> input_polyline_pairs     ;
+    bool result = xml_parser::read_xml_polylines(input_polyline_pairs)  ;
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //Joinery Solver
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     //xml joint path
-    path_and_file_for_joints = "C:\\Users\\petra\\AppData\\Roaming\\Grasshopper\\Libraries\\compas_wood\\joinery_library.xml";
+    path_and_file_for_joints = "C:\\Users\\petra\\AppData\\Roaming\\Grasshopper\\Libraries\\compas_wood\\joinery_library.xml ";
 
     std::vector<std::vector<IK::Vector_3>> input_insertion_vectors;
     //std::vector<std::vector<int>> input_joint_types;
     std::vector<std::vector<int>> input_joint_types;
-    input_joint_types.reserve(input_polyline_pairs.size());
+    input_joint_types.reserve(input_polyline_pairs.size()) ;
 
 
     //The adjacency will work because none of the joints can be found on boundaries
     std::vector<int> input_adjacency = {
-        0,0,2 + 0,2 + 0,
+        0,0,2 + 0,2 + 0 ,
         1,1,2 + 0,2 + 0,
         2,2,2 + 0,2 + 0,
         13,13,2 + 3,2 + 3,
@@ -37,7 +38,7 @@ int main(int argc, char** argv) {
     //Joint types are give to each element, no rtree search will be used here
     for (int i = 0; i < input_polyline_pairs.size(); i+=2) {
 
-        int id = i*0.5;
+        int id = (int)(i*0.5);
 
         auto input_joint_types_ = std::vector<int>();
         input_joint_types_.reserve(input_polyline_pairs[i].size()+1);
@@ -123,7 +124,7 @@ int main(int argc, char** argv) {
     //Preview poylylines from xml, take 9-th element
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     auto viewer = viewer_init();
-    viewer_display_polylines(viewer, viewer_polylines,-1,20);    
+    viewer_display_polylines(viewer, viewer_polylines,-1,20) ;    
     viewer_display_polylines(viewer, input_polyline_pairs);
     viewer_display_polylines_tree(viewer, output_polyline_pairs);
     viewer_run(viewer);

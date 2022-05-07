@@ -1,16 +1,8 @@
 #pragma once
-#include "cgal.h"
+#include "stdafx.h"
 #include "joinery_solver_joint.h"
 
-//XML Reader
-#include <iostream>
-#include <fstream>
-//#include <cstdint>
 
-//
-#include <vector>
-#include <boost/property_tree/ptree.hpp>
-#include <boost/property_tree/xml_parser.hpp>
 
 namespace joint_library_xml_parser {
     inline bool exists_test0(const std::string& name) {
@@ -206,6 +198,7 @@ namespace joint_library_xml_parser {
             }
         }
         catch (std::exception& e) {
+            (void)e;
 #ifdef DEBUG_JOINERY_LIBRARY
             printf("\nCPP Wrong property ");
 
@@ -719,7 +712,7 @@ namespace joint_library {
         double shift_ = RemapNumbers(joint.shift, 0, 1.0, -0.5, 0.5);
         IK::Vector_3 v_d(0, 0, -(1.0 / ((divisions + 1) * 2)) * shift_);
 
-        int count = pts0.size() * 2;
+        size_t count = pts0.size() * 2;
 
         //CGAL_Debug(count);
         //CGAL_Debug(3);
@@ -1879,7 +1872,7 @@ namespace joint_library {
                 division_distance = default_parameters_for_four_types[(long long)(number_of_parameters * group + 0)];
                 jo.shift = default_parameters_for_four_types[(long long)(number_of_parameters * group + 1)];
                 if (id_representing_joint_name == -1) //for cases when joint types per each edge are not defined
-                    id_representing_joint_name = default_parameters_for_four_types[(long long)(number_of_parameters * group + 2)];
+                    id_representing_joint_name = (int)default_parameters_for_four_types[(number_of_parameters * group + 2)];
             }
 
             if (id_representing_joint_name < 1 || group == -1) {
@@ -2122,7 +2115,7 @@ namespace joint_library {
                 //myfile << "Empty joint\n";
                 //myfile << path_and_file_for_joints;
                 //myfile.close();
-                printf("\njoint name %s between elements %i and %i is empty",jo.name, jo.v0, jo.v1);
+                printf("\njoint name %s between elements %i and %i is empty",jo.name.c_str(), jo.v0, jo.v1);
                 //CGAL_Debug(group);
                 //CGAL_Debug(id_representing_joint_name);
                 continue;

@@ -1,10 +1,11 @@
 #pragma once
 
-#include <cmath>
+#include "stdafx.h"
+
 
 namespace cgal_math_util {
     inline int count_digits(double number) {
-        int n = std::ceil(std::abs(number));
+        int n = (int)std::ceil(std::abs(number));
 
         int count = 0;
         while (n != 0) {

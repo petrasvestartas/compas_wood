@@ -32,6 +32,7 @@
 *******************************************************************************/
 
 #pragma once
+#include "stdafx.h"
 #ifndef clipper_hpp
 #define clipper_hpp
 
@@ -50,15 +51,16 @@
 //use_deprecated: Enables temporary support for the obsolete functions
 //#define use_deprecated
 
-#include <vector>
-#include <list>
-#include <set>
-#include <stdexcept>
-#include <cstring>
-#include <cstdlib>
-#include <ostream>
-#include <functional>
-#include <queue>
+
+//#include <vector>
+//#include <list>
+//#include <set>
+//#include <stdexcept>
+//#include <cstring>
+//#include <cstdlib>
+//#include <ostream>
+//#include <functional>
+//#include <queue>
 
 namespace ClipperLib {
     enum ClipType {

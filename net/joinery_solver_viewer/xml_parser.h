@@ -1,10 +1,6 @@
 #pragma once
 
-#include <iostream>
-#include <fstream>
-#include <vector>
-#include <boost/property_tree/ptree.hpp>
-#include <boost/property_tree/xml_parser.hpp>
+#include "stdafx.h"
 #include "joinery_solver_main.h"
 
 static std::string path_and_file_for_input_polylines = "C:\\IBOIS57\\_Code\\Software\\Python\\compas_wood\\net\\data\\input_polylines.xml";
@@ -22,7 +18,7 @@ namespace xml_parser {
     //}
 
     inline bool read_xml_polylines(std::vector<std::vector<IK::Point_3>>& polylines) {
-        auto file_path = path_and_file_for_input_polylines;
+        std::string file_path = path_and_file_for_input_polylines;
         std::string property_to_read = "input_polylines";
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -50,7 +46,7 @@ namespace xml_parser {
                     for (boost::property_tree::ptree::value_type& point : v.second) {
                         double x = point.second.get<double>("x");
                         double y = point.second.get<double>("y");
-                        double z = point.second.get<double>("z");
+                        double z = point.second.get<double>("z") ;
                         polyline.emplace_back(x, y, z);
                     }
                     polylines.emplace_back(polyline);
@@ -58,14 +54,16 @@ namespace xml_parser {
             }
         }
         catch (std::exception& e) {
+            (void)e;
             printf("\nCPP Wrong property ");
             return false;
         }
+        return true;
     }
 
 
     inline bool write_xml_polylines(std::vector<std::vector<IK::Point_3>>& polylines) {
-        auto file_path = path_and_file_for_output_polylines;
+        std::string  file_path = path_and_file_for_output_polylines ;
         std::string property_to_write = "output_polylines";
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -101,14 +99,16 @@ namespace xml_parser {
 
         }
         catch (std::exception& e) {
+            (void)e;
             printf("\nCPP Something went wrong ");
             return false;
         }
+        return true;
     }
 
 
     inline bool write_xml_polylines(std::vector<std::vector<std::vector<IK::Point_3>>>& polylines_tree) {
-        auto file_path = path_and_file_for_output_polylines;
+        std::string  file_path = path_and_file_for_output_polylines;
         std::string property_to_write = "output_polylines";
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -150,9 +150,11 @@ namespace xml_parser {
 
         }
         catch (std::exception& e) {
+            (void)e;
             printf("\nCPP Something went wrong ");
             return false;
         }
+        return true;
     }
 
 }

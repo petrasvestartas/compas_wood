@@ -1,7 +1,6 @@
 #pragma once
-#include "cgal.h"
-#include "cgal_vector_util.h"
-#include <math.h>
+#include "stdafx.h"
+//#include "cgal_vector_util.h"
 
 namespace cgal_xform_util {
     //https://github.com/mcneel/opennurbs/blob/7.x/opennurbs_xform.cpp //Line 2153

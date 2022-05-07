@@ -1,8 +1,7 @@
 #pragma once
 
-#include "cgal.h"
-#include <float.h>
-#include <inttypes.h>
+#include "stdafx.h"
+
 
 static int Digs = DECIMAL_DIG;
 

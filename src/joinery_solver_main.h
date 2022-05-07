@@ -1,26 +1,25 @@
 #pragma once
-#include "cgal.h"
+#include "stdafx.h"
 
-#include "cgal_xform_util.h"
-#include "cgal_vector_util.h"
-#include "cgal_polyline_util.h"
-#include "cgal_intersection_util.h"
-#include "cgal_box_util.h"
-#include "cgal_plane_util.h"
-#include "cgal_print.h"
-#include "cgal_math_util.h"
-#include "cgal_mesh_util.h"
-#include "cgal_box_search.h"
+//#include "cgal_box_search.h"
 
-#include "clipper_util.h"
-#include "rtree.h"
-#include "rtree_util.h"
+//#include "cgal_intersection_util.h"
 
-#include <algorithm>
-#include <thread>
-#include <functional>
-#include <vector>
-#include <execution>
+//#include "cgal_print.h"
+//#include "cgal_vector_util.h"
+//#include "cgal_xform_util.h"
+
+//#include "cgal_box_util.h"
+//#include "cgal_data_set.h"
+//#include "cgal_math_util.h"
+//#include "cgal_mesh_util.h"
+//#include "cgal_plane_util.h"
+//#include "cgal_polyline_util.h"
+//
+//#include "clipper_util.h"
+//#include "rtree_util.h"
+
+
 
 #include "joinery_solver_element.h"
 #include "joinery_solver_joint.h"
@@ -33,7 +32,7 @@ inline void get_elements(
     std::vector<std::vector<IK::Vector_3>>& insertion_vectors,
     std::vector<std::vector<int>>& joint_types,
     std::vector<element>& elements) {
-    int n = pp.size() * 0.5;
+    int n = (int)(pp.size() * 0.5);
     //elements = std::vector<element>(n);
     elements.reserve(n);
 
@@ -51,7 +50,7 @@ inline void get_elements(
         //Create Empty Element
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         //elements[id].id = i * 0.5;
-        elements.emplace_back(i * 0.5);
+        elements.emplace_back((int)(i * 0.5));//Create empty element just with id
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         //Get BoundingBox - AABB
@@ -118,7 +117,7 @@ inline void get_elements(
         //CGAL_Debug(1.0 + GlobalTolerance * 0.00001);
 
         cgal_box_util::TransformPlaneOrPlane(box, xform_toXY_Inv);
-        cgal_box_util::Assign(box, elements[i * 0.5].oob, 5);
+        cgal_box_util::Assign(box, elements[(int)(i * 0.5)].oob, 5);
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         //Check orientation of polylines and reverse if needed
@@ -1216,7 +1215,7 @@ inline bool pair_search(
     //////////////////////////////////////////////////////////////////////////////
     //create and joints
     //////////////////////////////////////////////////////////////////////////////
-    int joint_id = joints.size();
+    int joint_id = (int)joints.size();
     if (joint_area.size() > 0) {
         joints.emplace_back(
             joint_id,
@@ -1530,7 +1529,7 @@ inline void three_valence_joint_alignment(
             id_1 = joints_map.at(cgal_math_util::unique_from_two_int(out_three_valence_element_indices_and_instruction[i][2], out_three_valence_element_indices_and_instruction[i][3]));
         }
         catch (const std::out_of_range& oor) {
-            printf("\nCPP   FILE %s    METHOD %s   LINE %i     WHAT %s  ", __FILE__, __FUNCTION__, __LINE__, "Out of Range error:", oor.what());
+            printf("\nCPP   FILE %s    METHOD %s   LINE %i     WHAT %s  %s ", __FILE__, __FUNCTION__, __LINE__, "Out of Range error:", oor.what());
             continue;
         }
 
@@ -1783,12 +1782,15 @@ inline void get_connection_zones(
                 elements[i].merge_joints(joints, plines);
             }
             catch (const std::overflow_error& e) {
+                (void)e;
                 printf("\nCPP   FILE %s    METHOD %s   LINE %i     WHAT %s  ", __FILE__, __FUNCTION__, __LINE__, "this executes if f() throws std::overflow_error(same type rule)");
             } // this executes if f() throws std::overflow_error (same type rule)
             catch (const std::runtime_error& e) {
+                (void)e;
                 printf("\nCPP   FILE %s    METHOD %s   LINE %i     WHAT %s  ", __FILE__, __FUNCTION__, __LINE__, "this executes if f() throws std::underflow_error (base class rule)");
             } // this executes if f() throws std::underflow_error (base class rule)
             catch (const std::exception& e) {
+                (void)e;
                 printf("\nCPP   FILE %s    METHOD %s   LINE %i     WHAT %s  ", __FILE__, __FUNCTION__, __LINE__, " this executes if f() throws std::logic_error (base class rule)");
             } // this executes if f() throws std::logic_error (base class rule)
             catch (...) {
@@ -1944,7 +1946,7 @@ inline void beam_volumes(
             double distance = CGAL::squared_distance(s0, s1);
 
             if (distance < min_distance * min_distance) {
-                size_t first_0, first_1;
+                size_t first_0=0, first_1=0;
                 bool flipped = false;
                 uint64_t id;
                 if (b2.info().first > b1.info().first) {
@@ -1956,19 +1958,21 @@ inline void beam_volumes(
                     id = (uint64_t)b1.info().first << 32 | b2.info().first;
                 }
 
-                auto dist_and_segment_ids = flipped ? std::make_tuple(distance, b1.info().first, b1.info().second, b2.info().first, b2.info().second) : std::make_tuple(distance, b2.info().first, b2.info().second, b1.info().first, b1.info().second);
+                std::tuple<double, int, int, int, int > dist_and_segment_ids = flipped ?
+                    std::make_tuple(distance, (int)b1.info().first, (int)b1.info().second, (int)b2.info().first, (int)b2.info().second) :
+                    std::make_tuple(distance, (int)b2.info().first, (int)b2.info().second, (int)b1.info().first, (int)b1.info().second);
 
                 //Add elements to std::map
                 if (pair_collisions.find(id) == pair_collisions.end()) {
                     //not found
                     pair_collisions.insert(std::make_pair(id, dist_and_segment_ids));
-                    pair_collisionslist.push_back(dist_and_segment_ids);
+                    pair_collisionslist.emplace_back(dist_and_segment_ids);
                 }
                 else if (distance < std::get<0>(pair_collisions[id])) {
                     pair_collisions.insert(std::make_pair(id, dist_and_segment_ids));
                     // found and distance is smaller that before found
                     pair_collisions[id] = dist_and_segment_ids;
-                    pair_collisionslist.push_back(dist_and_segment_ids);
+                    pair_collisionslist.emplace_back(dist_and_segment_ids);
                 }
                 //}
             }//check if lines closer than the given distance
@@ -2005,7 +2009,7 @@ inline void beam_volumes(
 
         bool r = cgal_box_search::line_line_intersection_with_properties(
             s0, s1,
-            polylines[std::get<1>(v)].size() - 1, polylines[std::get<3>(v)].size() - 1,
+            (int)(polylines[std::get<1>(v)].size() - 1), (int)(polylines[std::get<3>(v)].size() - 1),
             std::get<2>(v), std::get<4>(v), cross_or_side_to_end,
             p0, p1, v0, v1, normal,
             type0, type1,

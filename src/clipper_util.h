@@ -1,9 +1,6 @@
 #pragma once
 #include "stdafx.h"
-#include "clipper.h"
-#include "cgal.h"
-#include "cgal_polyline_util.h"
-#include "cgal_xform_util.h"
+
 
 namespace clipper_util {
     inline bool intersection_2D(
@@ -39,12 +36,12 @@ namespace clipper_util {
         std::vector<ClipperLib::IntPoint> pathA(a.size() - 1);
         std::vector<ClipperLib::IntPoint> pathB(b.size() - 1);
         for (int i = 0; i < a.size() - 1; i++) {
-            pathA[i] = ClipperLib::IntPoint(a[i].x() * scale, a[i].y() * scale);
+            pathA[i] = ClipperLib::IntPoint((int)(a[i].x() * scale), (int)(a[i].y() * scale));
             //printf("%f,%f,%f \n", a[i].x(), a[i].y(), a[i].z());
         }
         //printf("\n");
         for (int i = 0; i < b.size() - 1; i++) {
-            pathB[i] = ClipperLib::IntPoint(b[i].x() * scale, b[i].y() * scale);
+            pathB[i] = ClipperLib::IntPoint((int)(b[i].x() * scale), (int)(b[i].y() * scale));
             //printf("%f,%f,%f \n", b[i].x(), b[i].y(), b[i].z());
         }
 

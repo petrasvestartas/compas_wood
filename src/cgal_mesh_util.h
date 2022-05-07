@@ -1,6 +1,6 @@
 #pragma once
 #include "stdafx.h"
-#include "cgal.h"
+
 
 namespace cgal_mesh_util {
     inline void
@@ -150,7 +150,7 @@ namespace cgal_mesh_util {
         v = k;
 
         //count vertices to check if there are same number of points as in polyline
-        int vertex_count = 0;
+        size_t vertex_count = 0;
         for (int i = 0; i < polylines_with_holes.size(); i += 2)
             vertex_count += polylines_with_holes[i].size() - 1;
 
@@ -197,8 +197,8 @@ namespace cgal_mesh_util {
             return empty_tuple;
 
         for (int i = 0; i < polylines.size(); i += 2) {
-            int a = polylines[i].size();
-            int b = polylines[i + 1].size();
+            auto a = polylines[i].size();
+            auto b = polylines[i + 1].size();
             if (a != b) return empty_tuple;
             if (a < 2 || b < 2) return empty_tuple;
         }
@@ -210,13 +210,13 @@ namespace cgal_mesh_util {
         //for (int i = 0; i < polylines.size(); i += 2)
         //    CGAL_Debug(cgal_polyline_util::polyline_length(polylines[i]));
 
-        int lastID = polylines.size() - 2;
-        int len = polylines[lastID].size() - 1;
+        auto lastID = polylines.size() - 2;
+        auto len = polylines[lastID].size() - 1;
         IK::Vector_3 average_normal = IK::Vector_3(0, 0, 0);
 
         for (int i = 0; i < len; i++) {
-            int prev = ((i - 1) + len) % len;
-            int next = ((i + 1) + len) % len;
+            auto prev = ((i - 1) + len) % len;
+            auto next = ((i + 1) + len) % len;
             average_normal = average_normal + CGAL::cross_product(polylines[lastID][i] - polylines[lastID][prev], polylines[lastID][next] - polylines[lastID][i]);
         }
 
@@ -237,7 +237,7 @@ namespace cgal_mesh_util {
         // -> Count vertices and faces
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        int vertex_count = 0;
+        size_t vertex_count = 0;
         for (int i = 0; i < polylines.size(); i += 2)
             vertex_count += polylines[i].size() - 1;
 
@@ -249,7 +249,7 @@ namespace cgal_mesh_util {
             return std::make_tuple(vv, ff);
         }
 
-        int face_count = top_outline_face_vertex_indices.size() / 3;
+        auto face_count = top_outline_face_vertex_indices.size() / 3;
 
         RowMatrixXd vertices(vertex_count * 2, 3);
         RowMatrixXi faces(face_count * 2 + vertex_count * 2, 3); //
@@ -280,8 +280,8 @@ namespace cgal_mesh_util {
 
                 //last faces
                 if (j == polylines[i].size() - 2) { //take vertices from beggining
-                    int n = polylines[i].size() - 2;
-                    std::array<int, 4> side{ vid, vid - n, vid - n + vertex_count, vid + 0 + vertex_count };
+                    auto n = polylines[i].size() - 2;
+                    std::array<int, 4> side{ vid, vid - (int)n, vid - (int)n + (int)vertex_count, vid + 0 + (int)vertex_count };
 
                     if (holes) {
                         sides.emplace_back(side);
@@ -303,8 +303,8 @@ namespace cgal_mesh_util {
                     //iterated faces
                 } else { //take next vertices
                     std::array<int, 4> side = {
-                        vid + 0 + vertex_count,
-                        vid + 1 + vertex_count,
+                        vid + 0 + (int)vertex_count,
+                        vid + 1 + (int)vertex_count,
                         vid + 1,
                         vid,
                     };
@@ -314,8 +314,8 @@ namespace cgal_mesh_util {
                         side = {
                             vid,
                             vid + 1,
-                            vid + 1 + vertex_count,
-                            vid + 0 + vertex_count,
+                            vid + 1 + (int)vertex_count ,
+                            vid + 0 + (int)vertex_count,
                         };
                         sides.emplace_back(side);
                         //}
@@ -326,8 +326,8 @@ namespace cgal_mesh_util {
                         side = {
                             vid,
                             vid + 1,
-                            vid + 1 + vertex_count,
-                            vid + 0 + vertex_count,
+                            vid + 1 + (int)vertex_count,
+                            vid + 0 + (int)vertex_count,
                         };
                         sides.emplace_back(side);
                     }
@@ -376,9 +376,9 @@ namespace cgal_mesh_util {
 
         for (int i = 0; i < top_outline_face_vertex_indices.size(); i += 3) {
             int fid = i / 3;
-            faces(face_count + fid, 0) = vertex_count + top_outline_face_vertex_indices[i + 2];
-            faces(face_count + fid, 1) = vertex_count + top_outline_face_vertex_indices[i + 1];
-            faces(face_count + fid, 2) = vertex_count + top_outline_face_vertex_indices[i + 0];
+            faces(face_count + fid, 0) = (int)vertex_count + top_outline_face_vertex_indices[i + 2];
+            faces(face_count + fid, 1) = (int)vertex_count + top_outline_face_vertex_indices[i + 1];
+            faces(face_count + fid, 2) = (int)vertex_count + top_outline_face_vertex_indices[i + 0];
 
             //RhinoApp().Print("Triangulation flag %i faceID %i vertexIds %i %i %i \n\n", flag1, face_count + fid, top_face_triangulation[i + 0] + vertex_count, top_face_triangulation[i + 1] + vertex_count, top_face_triangulation[i + 2] + vertex_count);
         }

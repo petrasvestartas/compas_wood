@@ -1,25 +1,28 @@
+#pragma once
 #ifndef RTREE_H
 #define RTREE_H
 
 // NOTE This file compiles under MSVC 6 SP5 and MSVC .Net 2003 it may not work on other compilers without modification.
 
 // NOTE These next few lines may be win32 specific, you may need to modify them to compile on other platform
-#include <stdio.h>
-#include <math.h>
-#include <assert.h>
-#include <stdlib.h>
 
-#include <algorithm>
-#include <functional>
-#include <vector>
+#include "stdafx.h"
+//#include <stdio.h>
+//#include <math.h>
+//#include <assert.h>
+//#include <stdlib.h>
+//
+//#include <algorithm>
+//#include <functional>
+//#include <vector>
 
 #define ASSERT assert // RTree uses ASSERT( condition )
-#ifndef Min
-#define Min std::min
-#endif //Min
-#ifndef Max
-#define Max std::max
-#endif //Max
+//#ifndef Min
+//#define Min std::min
+//#endif //Min
+//#ifndef Max
+//#define Max std::max
+//#endif //Max
 
 //
 // RTree.h
@@ -1001,10 +1004,10 @@ typename RTREE_QUAL::Rect RTREE_QUAL::CombineRect(const Rect* a_rectA, const Rec
     ASSERT(a_rectA && a_rectB);
 
     Rect newRect;
-
+    
     for (int index = 0; index < NUMDIMS; ++index) {
-        newRect.m_min[index] = Min(a_rectA->m_min[index], a_rectB->m_min[index]);
-        newRect.m_max[index] = Max(a_rectA->m_max[index], a_rectB->m_max[index]);
+        newRect.m_min[index] = std::min(a_rectA->m_min[index], a_rectB->m_min[index]);
+        newRect.m_max[index] = std::max(a_rectA->m_max[index], a_rectB->m_max[index]);
     }
 
     return newRect;
@@ -1445,7 +1448,7 @@ std::vector<typename RTREE_QUAL::Rect> RTREE_QUAL::ListTree() const {
 #undef RTREE_TEMPLATE
 #undef RTREE_QUAL
 
-#endif //RTREE_H
+//#endif //RTREE_H
 
 //
 //#ifndef RTREE_H
@@ -2914,5 +2917,5 @@ std::vector<typename RTREE_QUAL::Rect> RTREE_QUAL::ListTree() const {
 //#undef RTREE_TEMPLATE
 //#undef RTREE_QUAL
 //
-//#endif //RTREE_H
+#endif //RTREE_H
 //

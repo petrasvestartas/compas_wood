@@ -1,6 +1,7 @@
 #pragma once
 
-#include "cgal.h"
+#include "stdafx.h"
+
 
 //PlanePlanePlane
 //PlanePlane
@@ -37,6 +38,29 @@ namespace cgal_intersection_util {
         }
 
         return rc;
+    }
+
+    inline CGAL::Aff_transformation_3<IK> PlaneToXY(
+        IK::Point_3 O0, IK::Plane_3 plane) {
+        auto X0 = plane.base1();
+        auto Y0 = plane.base2();
+        auto Z0 = plane.orthogonal_vector();
+        cgal_vector_util::Unitize(X0);
+        cgal_vector_util::Unitize(Y0);
+        cgal_vector_util::Unitize(Z0);
+
+        // transformation maps P0 to P1, P0+X0 to P1+X1, ...
+
+        //Move to origin -> T0 translates point P0 to (0,0,0)
+        CGAL::Aff_transformation_3<IK> T0(CGAL::TRANSLATION, IK::Vector_3(0 - O0.x(), 0 - O0.y(), 0 - O0.z()));
+
+        //Rotate ->
+        CGAL::Aff_transformation_3<IK> F0(
+            X0.x(), X0.y(), X0.z(),
+            Y0.x(), Y0.y(), Y0.z(),
+            Z0.x(), Z0.y(), Z0.z());
+
+        return F0 * T0;
     }
 
     inline bool line_line_intersection(IK::Segment_3& s0, IK::Segment_3& s1, bool finite, IK::Point_3& p0, IK::Point_3& p1) {
@@ -113,7 +137,7 @@ namespace cgal_intersection_util {
 
          //Works only if segments are not co-linear
             IK::Plane_3 plane(s0[0], normal);
-            CGAL::Aff_transformation_3<IK> xform = cgal_xform_util::PlaneToXY(s0[0], plane);
+            CGAL::Aff_transformation_3<IK> xform = PlaneToXY(s0[0], plane);
             CGAL::Aff_transformation_3<IK> xform_Inv = xform.inverse();
 
             IK::Point_3 p0_0 = xform.transform(s0[0]);
@@ -175,7 +199,7 @@ namespace cgal_intersection_util {
 
     inline bool LineLine3D(IK::Segment_3& cutter_line, IK::Segment_3& segment, IK::Point_3& output) {
         IK::Plane_3 plane(cutter_line[0], CGAL::cross_product(cutter_line.to_vector(), segment.to_vector()));
-        CGAL::Aff_transformation_3<IK> xform = cgal_xform_util::PlaneToXY(cutter_line[0], plane);
+        CGAL::Aff_transformation_3<IK> xform = PlaneToXY(cutter_line[0], plane);
         CGAL::Aff_transformation_3<IK> xform_Inv = xform.inverse();
 
         IK::Point_3 p0_0 = xform.transform(cutter_line[0]);

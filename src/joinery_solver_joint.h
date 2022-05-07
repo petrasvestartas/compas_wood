@@ -1,7 +1,6 @@
 #pragma once
-#include "cgal.h"
-#include <string>
-#include <sstream>
+#include "stdafx.h"
+
 
 enum cut_types : char {
     nothing = '0',
@@ -32,7 +31,7 @@ public:
     /////////////////////////////////////////////////////////////////////////////////////////
     //Parameters from Search method v-volume f-face
     /////////////////////////////////////////////////////////////////////////////////////////
-    int id, v0, v1, f0_0, f1_0, f0_1, f1_1, type; //10 - SS Rotate 11 - SS OUT OF PLANE 12 - SS IN Plane,  20 Top-Side, 30 - Cross
+    int id=0, v0, v1, f0_0, f1_0, f0_1, f1_1, type; //10 - SS Rotate 11 - SS OUT OF PLANE 12 - SS IN Plane,  20 Top-Side, 30 - Cross
     CGAL_Polyline joint_area;					  //delete
     CGAL_Polyline joint_lines[2];				  //delete
     //CGAL_Polyline joint_quads[2];//delete
@@ -175,6 +174,7 @@ public:
 };
 
 inline joint::joint() {
+
 }
 
 inline joint::joint(int _id, int _v0, int _v1, int _f0_0, int _f1_0, int _f0_1, int _f1_1, std::array<CGAL_Polyline, 4>& _joint_volumes) : id(_id), v0(_v0), v1(_v1), f0_0(_f0_0), f1_0(_f1_0), f0_1(_f0_1), f1_1(_f1_1), type(-1) {

@@ -1,8 +1,8 @@
 #pragma once
-#include "cgal.h"
-#include "cgal_vector_util.h"
-#include "cgal_print.h"
-#include "clipper.h"
+#include "stdafx.h"
+//#include "cgal_vector_util.h"
+//#include "clipper.h"
+
 
 namespace cgal_polyline_util {
     inline double polyline_length(CGAL_Polyline& pline) {
@@ -235,7 +235,7 @@ namespace cgal_polyline_util {
 
     inline IK::Point_3 Center(CGAL_Polyline& input) {
         double x = 0, y = 0, z = 0;
-        int n = input.size() - 1;
+        auto n = input.size() - 1;
 
         for (int i = 0; i < n; i++) {
             x += input[i].x();
@@ -252,7 +252,7 @@ namespace cgal_polyline_util {
 
     inline IK::Vector_3 CenterVec(CGAL_Polyline& input) {
         double x = 0, y = 0, z = 0;
-        int n = input.size() - 1;
+        auto n = input.size() - 1;
 
         for (int i = 0; i < n; i++) {
             x += input[i].x();
@@ -366,6 +366,29 @@ namespace cgal_polyline_util {
         return true;
     }
 
+    inline CGAL::Aff_transformation_3<IK> PlaneToXY(
+        IK::Point_3 O0, IK::Plane_3 plane) {
+        auto X0 = plane.base1();
+        auto Y0 = plane.base2();
+        auto Z0 = plane.orthogonal_vector();
+        cgal_vector_util::Unitize(X0);
+        cgal_vector_util::Unitize(Y0);
+        cgal_vector_util::Unitize(Z0);
+
+        // transformation maps P0 to P1, P0+X0 to P1+X1, ...
+
+        //Move to origin -> T0 translates point P0 to (0,0,0)
+        CGAL::Aff_transformation_3<IK> T0(CGAL::TRANSLATION, IK::Vector_3(0 - O0.x(), 0 - O0.y(), 0 - O0.z()));
+
+        //Rotate ->
+        CGAL::Aff_transformation_3<IK> F0(
+            X0.x(), X0.y(), X0.z(),
+            Y0.x(), Y0.y(), Y0.z(),
+            Z0.x(), Z0.y(), Z0.z());
+
+        return F0 * T0;
+    }
+
     inline int IsPointPairInside(
         CGAL_Polyline& polyline, IK::Plane_3& plane,
         std::vector<IK::Point_3>& testPoints, std::vector<int>& testPointsID, double scale = 100000.0) {
@@ -378,7 +401,7 @@ namespace cgal_polyline_util {
         /////////////////////////////////////////////////////////////////////////////////////
         //Create Transformation - Orient to XY
         /////////////////////////////////////////////////////////////////////////////////////
-        CGAL::Aff_transformation_3<IK> xform_toXY = cgal_xform_util::PlaneToXY(polyline[0], plane);
+        CGAL::Aff_transformation_3<IK> xform_toXY = PlaneToXY(polyline[0], plane);
         Transform(a, xform_toXY);
 
         std::vector<IK::Point_3> pts(testPoints.size());
@@ -392,7 +415,7 @@ namespace cgal_polyline_util {
         /////////////////////////////////////////////////////////////////////////////////////
         std::vector<ClipperLib::IntPoint> pathA(a.size() - 1);
         for (int i = 0; i < a.size() - 1; i++) {
-            pathA[i] = ClipperLib::IntPoint(a[i].x() * scale, a[i].y() * scale);
+            pathA[i] = ClipperLib::IntPoint((int)(a[i].x() * scale), (int)(a[i].y() * scale));
             //printf("%f,%f,%f \n", a[i].x(), a[i].y(), a[i].z());
         }
 
@@ -407,7 +430,7 @@ namespace cgal_polyline_util {
 
         //printf("-\n");
         for (int i = 0; i < testPoints.size(); i++) {
-            auto p = ClipperLib::IntPoint(pts[i].x() * scale, pts[i].y() * scale);
+            auto p = ClipperLib::IntPoint((int)(pts[i].x() * scale), (int)(pts[i].y() * scale));
 
             int result = ClipperLib::PointInPolygon(p, pathA);
             //testPointsFlag[i] = result != 0;//0 - false, 1 true, -1 on boundary
@@ -632,7 +655,7 @@ namespace cgal_polyline_util {
         Duplicate(polyline, cp);
 
         //transform
-        CGAL::Aff_transformation_3<IK> xform_toXY = cgal_xform_util::PlaneToXY(polyline[0], plane);
+        CGAL::Aff_transformation_3<IK> xform_toXY = PlaneToXY(polyline[0], plane);
         Transform(cp, xform_toXY);
 
         //check if closed
@@ -667,7 +690,7 @@ namespace cgal_polyline_util {
         cgal_vector_util::AverageNormal(polyline, normal, closed);
 
         //reserve boolean flags
-        int n = closed ? polyline.size() - 1 : polyline.size();
+        auto n = closed ? polyline.size() - 1 : polyline.size();
         convex_or_concave.reserve(n);
 
         //find the convexcorner corners

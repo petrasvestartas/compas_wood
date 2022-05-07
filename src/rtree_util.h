@@ -1,6 +1,6 @@
 #pragma once
-#include "cgal.h"
-#include "rtree.h"
+#include "stdafx.h"
+//#include "rtree.h"
 
 namespace rtree_util {
     //std::vector<std::vector<int>>& input_joint_types
@@ -67,7 +67,7 @@ namespace rtree_util {
         std::vector<std::vector<IK::Vector_3>>& output_insertion_vectors,
         double tol = 0.01) {
         //Create a container to store full empty insertion vectors
-        int n = input_polyline_pairs.size() * 0.5;
+        int n = (int)(input_polyline_pairs.size() * 0.5);
 
         //Init empty array
         output_insertion_vectors = std::vector<std::vector<IK::Vector_3>>(n);
@@ -189,7 +189,7 @@ namespace rtree_util {
         std::vector<std::vector<int>>& output_joint_types,
         double tol = 0.01) {
         //Create a container to store full empty insertion vectors
-        int n = input_polyline_pairs.size() * 0.5;
+        int n = (int)(input_polyline_pairs.size() * 0.5);
 
         output_joint_types = std::vector<std::vector<int>>(n);
 

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "cgal.h"
+#include "stdafx.h"
 
 //https://doc.cgal.org/latest/Box_intersection_d/index.html#Chapter_Intersecting_Sequences_of_dD_Iso-oriented_Boxes
 //https://gist.github.com/afabri/827106024fd6b89fbacd6b2bbb7b3f94

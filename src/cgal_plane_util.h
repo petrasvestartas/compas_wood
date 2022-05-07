@@ -1,6 +1,6 @@
 #pragma once
-#include "cgal.h"
-#include "cgal_intersection_util.h"
+#include "stdafx.h"
+//#include "cgal_intersection_util.h"
 
 namespace cgal_plane_util {
     inline IK::Plane_3 offset(IK::Plane_3& mainPlane, double d) {
