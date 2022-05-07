@@ -6,12 +6,18 @@
 *.bin
 *.suo
 *.tlog
+*.db-shm
+*.bin
+.VC.db-shm
+.db-wal
+.VC,db-wal
 
 # Compiled Object files
 *.slo
 *.lo
 *.o
 *.obj
+*.suo
 
 # Precompiled Headers
 *.gch

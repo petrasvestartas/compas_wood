@@ -27,6 +27,7 @@
 
 #pragma region GET ELEMENTS
 
+
 inline void get_elements(
     std::vector<CGAL_Polyline>& pp,
     std::vector<std::vector<IK::Vector_3>>& insertion_vectors,
