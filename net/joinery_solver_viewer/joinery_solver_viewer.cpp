@@ -4,12 +4,14 @@
 #include "xml_parser.h"
 #include "joinery_solver_main.h"
 
-int main(int argc, char** argv) {
+
+
+int main(int argc, char** argv ) {
         
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //Read Polylines from XML
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    std::vector<std::vector<IK::Point_3>> input_polyline_pairs     ;
+    std::vector<std::vector<IK::Point_3>> input_polyline_pairs  ;
     bool result = xml_parser::read_xml_polylines(input_polyline_pairs)  ;
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -110,7 +112,7 @@ int main(int argc, char** argv) {
         //Global Parameters
         default_parameters_for_joint_types,
         scale,
-        search_type,
+        search_type ,
         output_type,
         0
     );

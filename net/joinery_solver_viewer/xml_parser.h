@@ -7,7 +7,7 @@ static std::string path_and_file_for_input_polylines = "C:\\IBOIS57\\_Code\\Soft
 static std::string path_and_file_for_output_polylines = "C:\\IBOIS57\\_Code\\Software\\Python\\compas_wood\\net\\data\\output_polylines.xml";
 
 namespace xml_parser {
-    inline bool file_exists_0(const std::string& name) {
+    inline bool file_exists_0(const  std::string& name  ) {
         std::ifstream f(name.c_str());
         return f.good();
     }

@@ -1,5 +1,12 @@
 #pragma once
 
+#define easy3d_precompiled
+//#define DEBUG_MEASURE_TIME
+//#define DEBUG_JOINERY_LIBRARY
+//#define DEBUG_JOINERY_SOLVER_MAIN
+//#define DEBUG_JOINERY_SOLVER_ELEMENT
+//#define DEBUG_JOINERY_SOLVER_MAIN_LOCAL_SEARCH
+
 #define NOMINMAX
 #ifdef max
 #undef max
@@ -30,6 +37,8 @@
 #include <cstdlib>
 
 
+
+
 //Data structures
 #include <float.h>
 #include <inttypes.h>
@@ -44,12 +53,7 @@
 #include <list>
 
 
-//Debugging
-//#define DEBUG_MEASURE_TIME
-//#define DEBUG_JOINERY_LIBRARY
-//#define DEBUG_JOINERY_SOLVER_MAIN
-//#define DEBUG_JOINERY_SOLVER_ELEMENT
-//#define DEBUG_JOINERY_SOLVER_MAIN_LOCAL_SEARCH
+
 
 #include <boost/exception/diagnostic_information.hpp>
 
@@ -138,6 +142,17 @@ typedef CDT::Face_handle Face_handle;
 
 using RowMatrixXd = Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor>;
 using RowMatrixXi = Eigen::Matrix<int, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor>;
+
+
+//EASY3D
+#ifdef easy3d_precompiled
+#include <easy3d/viewer/viewer.h>
+#include <easy3d/core/surface_mesh.h>
+#include <easy3d/renderer/drawable_lines.h>
+#include <easy3d/renderer/renderer.h>
+#include <easy3d/fileio/resources.h>
+#include <easy3d/util/logging.h>
+#endif // easy3d_precompiled
 
 
 //MY LIBRARY UTILITIES
