@@ -1,5 +1,8 @@
-Joinery
-* create joint "remove_sides_from_two_sides"
+XML Output a cutting typetype
+    * get outlines new function to output this information
+    * new xml writer 
+    * The direction of curve for fabrication must be oriented according to original curve first segment
+
 
 Pointcloud processing in Rhino
 * Rhino crop the environment manually
