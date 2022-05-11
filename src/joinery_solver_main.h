@@ -769,6 +769,21 @@ inline bool face_to_face(
                             IK::Vector_3 x = average_segment.to_vector();	//cgal_vector_util::Unitize(x);
                             IK::Vector_3 z = Plane0[i].orthogonal_vector(); //cgal_vector_util::Unitize(z);
                             IK::Vector_3 y = CGAL::cross_product(x, z);		//cgal_vector_util::Unitize(y);
+                            cgal_vector_util::Unitize(y);
+                            
+                            //Reorient axis using first element orientation - Plane0 and Plane1
+                               IK::Point_3 center = cgal_polyline_util::Center(Polyline0[i]);
+                            double thickness = std::max(
+                                cgal_vector_util::Distance(Plane0[0].point(), Plane0[1].projection(Plane0[0].point())),
+                                cgal_vector_util::Distance(Plane1[0].point(), Plane1[1].projection(Plane1[0].point()))
+                            );
+                            y *= thickness*2;
+                            IK::Segment_3 y_line(center + y, center - y);
+                            cgal_polyline_util::LineTwoPlanes(y_line, Plane0[0], Plane1[1]);                         
+                            y = y_line[1] - y_line[0];
+                            x = CGAL::cross_product(y, z);
+                            viewer_polylines.emplace_back(CGAL_Polyline{ y_line[0] ,y_line[1] });                            
+                            
                             CGAL::Aff_transformation_3<IK> xform = cgal_xform_util::VectorsToXY(o, x, y, z);
 
                             ////////////////////////////////////////////////////////////////////////////////
@@ -793,7 +808,7 @@ inline bool face_to_face(
                             CGAL_Polyline average_rectangle = { segmentX[0], segmentX[1], segmentX[0] + segmentX.to_vector() + segmentY.to_vector(), segmentY[1] };
 
                             ////////////////////////////////////////////////////////////////////////////////
-                            //3D Orient to 3D
+                            //2D Orient to 3D
                             ////////////////////////////////////////////////////////////////////////////////
                             CGAL::Aff_transformation_3<IK> xformInv = xform.inverse();
                             cgal_polyline_util::Transform(average_rectangle, xformInv);
@@ -1658,7 +1673,8 @@ inline void get_connection_zones(
     std::vector<int>& input_adjacency,
 
     //output
-    std::vector<std::vector<CGAL_Polyline>>& plines,
+    std::vector<std::vector<CGAL_Polyline>>& output_plines,
+    std::vector<std::vector<char>>& output_types,
     std::vector<std::vector<int>>& top_face_triangulation,
 
     //Global Parameters
@@ -1758,29 +1774,30 @@ inline void get_connection_zones(
     //////////////////////////////////////////////////////////////////////////////
     //Iterate joint address
     //////////////////////////////////////////////////////////////////////////////
-    plines = std::vector<std::vector<CGAL_Polyline>>(elements.size());
+    output_plines = std::vector<std::vector<CGAL_Polyline>>(elements.size());
+    output_types = std::vector<std::vector<char>>(elements.size());
 
     
     for (int i = 0; i < elements.size(); i++) { //takes 30-50 ms just to copy-paste polyline geometry
         
         switch (output_type) {
         case (0):
-            elements[i].get_joints_geometry(joints, plines, 0);
+            elements[i].get_joints_geometry(joints, output_plines, 0, output_types);
             break;
         case (1):
-            elements[i].get_joints_geometry(joints, plines, 1);
+            elements[i].get_joints_geometry(joints, output_plines, 1, output_types);
             break;
         case (2):
-            elements[i].get_joints_geometry(joints, plines, 2);//Display error
+            elements[i].get_joints_geometry(joints, output_plines, 2, output_types);//Display error
             break;
         default:
         case (3):
-            elements[i].get_joints_geometry(joints, plines, 3);
+            elements[i].get_joints_geometry(joints, output_plines, 3, output_types);
             break;
         case (4):
 
             try {
-                elements[i].merge_joints(joints, plines);
+                elements[i].merge_joints(joints, output_plines);
             }
             catch (const std::overflow_error& e) {
                 (void)e;
@@ -1820,7 +1837,7 @@ inline void get_connection_zones(
         top_face_triangulation = std::vector<std::vector<int>>(elements.size());
         for (int i = 0; i < elements.size(); i++) {
             int v, f;
-            cgal_mesh_util::mesh_from_polylines(plines[i], elements[i].planes[0], top_face_triangulation[i], v, f);
+            cgal_mesh_util::mesh_from_polylines(output_plines[i], elements[i].planes[0], top_face_triangulation[i], v, f);
         }
     }
 }
@@ -2215,20 +2232,21 @@ inline void beam_volumes(
     //////////////////////////////////////////////////////////////////////////////
 
     joints_oriented_polylines = std::vector<std::vector<CGAL_Polyline>>(elements.size());
+    auto output_types = std::vector<std::vector<char>>(elements.size());
     for (int i = 0; i < elements.size(); i++) { //takes 30-50 ms just to copy past polyline geometry
         switch (output_type) {
         case (0):
-            elements[i].get_joints_geometry(joints, joints_oriented_polylines, 0);
+            elements[i].get_joints_geometry(joints, joints_oriented_polylines, 0, output_types);
             break;
         case (1):
-            elements[i].get_joints_geometry(joints, joints_oriented_polylines, 1);
+            elements[i].get_joints_geometry(joints, joints_oriented_polylines, 1, output_types);
             break;
         case (2):
-            elements[i].get_joints_geometry(joints, joints_oriented_polylines, 2);
+            elements[i].get_joints_geometry(joints, joints_oriented_polylines, 2, output_types);
             break;
         default:
         case (3):
-            elements[i].get_joints_geometry(joints, joints_oriented_polylines, 3);
+            elements[i].get_joints_geometry(joints, joints_oriented_polylines, 3, output_types);
             break;
         case (4):
             //This does not exist here because boolean cuts are made

@@ -53,7 +53,7 @@ public:
     element();
     element(int);
 
-    void get_joints_geometry(std::vector<joint>& joints, std::vector<std::vector<CGAL_Polyline>>& output, int what_to_expose);
+    void get_joints_geometry(std::vector<joint>& joints, std::vector<std::vector<CGAL_Polyline>>& output, int what_to_expose,  std::vector<std::vector<char>>& output_cut_types);
     void get_joints_geometry_as_closed_polylines_replacing_edges(std::vector<joint>& joints, std::vector<std::vector<CGAL_Polyline>>& output);
     bool intersection_closed_and_open_paths_2D(
         CGAL_Polyline& closed_pline_cutter, CGAL_Polyline& pline_to_cut, IK::Plane_3& plane, CGAL_Polyline& c,
@@ -66,7 +66,7 @@ inline element::element() {}
 inline element::element(int _id) : id(_id) {
 }
 
-inline void element::get_joints_geometry(std::vector<joint>& joints, std::vector<std::vector<CGAL_Polyline>>& output, int what_to_expose) {
+inline void element::get_joints_geometry(std::vector<joint>& joints, std::vector<std::vector<CGAL_Polyline>>& output, int what_to_expose, std::vector<std::vector<char>>& output_cut_types) {
     //you are in a loop
     //printf("/n %i", id);
     for (int i = 0; i < j_mf.size(); i++) { //loop joint id
@@ -123,12 +123,19 @@ inline void element::get_joints_geometry(std::vector<joint>& joints, std::vector
                 //    output[this->id].emplace_back(this->polylines[0]); //cut
                 //    output[this->id].emplace_back(this->polylines[1]); //cut
                 //}
-                printf("\n %s", joints[std::get<0>(j_mf[i][j])].name.c_str());
-                for (int k = 0; k < joints[std::get<0>(j_mf[i][j])](std::get<1>(j_mf[i][j]), true).size(); k += 2) {
+                //printf("\n %s", joints[std::get<0>(j_mf[i][j])].name.c_str());
+                for (int k = 0; k <               joints[std::get<0>(j_mf[i][j])](std::get<1>(j_mf[i][j]), true).size(); k += 2) {
                     output[this->id].emplace_back(joints[std::get<0>(j_mf[i][j])](std::get<1>(j_mf[i][j]), true)[k]);  //cut
                     output[this->id].emplace_back(joints[std::get<0>(j_mf[i][j])](std::get<1>(j_mf[i][j]), false)[k]); //direction
-                }
 
+                    //output_cut_types[this->id].emplace_back('8');
+                    output_cut_types[this->id].emplace_back (joints[std::get<0>(j_mf[i][j])](std::get<1>(j_mf[i][j]))[k]); //type
+                }
+                //printf("\n Debug Start");
+                //printf("\n %zi",  joints[std::get<0>(j_mf[i][j])](std::get<1>(j_mf[i][j]), true).size());
+                //printf("\n %zi",  joints[std::get<0>(j_mf[i][j])](std::get<1>(j_mf[i][j]), false).size());
+                //printf("\n %zi",  joints[std::get<0>(j_mf[i][j])](std::get<1>(j_mf[i][j])).size());
+                //printf("\n Debug Ends \n");
                 break;
             default:
                 break;

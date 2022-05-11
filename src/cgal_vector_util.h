@@ -18,7 +18,7 @@ namespace cgal_vector_util {
         return p.x() * p.x() + p.y() * p.y() + p.z() * p.z();
     }
 
-    inline double Distance(IK::Point_3& p0, IK::Point_3& p1) {
+    inline double Distance(const IK::Point_3& p0, const IK::Point_3& p1) {
         IK::Point_3 p(p0.x() - p1.x(), p0.y() - p1.y(), p0.z() - p1.z());
         return std::sqrt(p.x() * p.x() + p.y() * p.y() + p.z() * p.z());
     }

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Rhino;
@@ -2722,8 +2722,8 @@ namespace rhino_util
 
         public static Plane plane(this Polyline polylines)
         {
-            return polylines.plane();
-            //return new Plane(polylines.CenterPoint(), polylines.AverageNormal());
+            //return polylines.plane();
+            return new Plane(polylines.CenterPoint(), polylines.AverageNormal());
         }
 
         public static Vector3d AverageNormal(this Polyline p)

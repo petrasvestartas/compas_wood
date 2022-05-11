@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using Rhino.Geometry;
 using System.Drawing;
 using System;
@@ -155,7 +155,7 @@ namespace rhino_util {
             mesh.Vertices.AddVertices(verts);
             mesh.Faces.AddFaces(quads);
             mesh.Weld(100);
-
+           
             // foreach(Line l in lines)
             //  Rhino.RhinoDoc.ActiveDoc.Objects.AddLine(l);
 

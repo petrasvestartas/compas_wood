@@ -5,14 +5,14 @@
 #include "joinery_solver_main.h"
 
 
-
-int main(int argc, char** argv ) {
+int main(int argc, char** argv  ) {
         
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //Read Polylines from XML
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     std::vector<std::vector<IK::Point_3>> input_polyline_pairs  ;
     bool result = xml_parser::read_xml_polylines(input_polyline_pairs)  ;
+    
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //Joinery Solver
@@ -48,7 +48,7 @@ int main(int argc, char** argv ) {
         input_joint_types_.emplace_back(-1);
         
         for (int j = 0; j < input_polyline_pairs[i].size()-1; j++) {
-            int type = CGAL::squared_distance(input_polyline_pairs[i+1][j], input_polyline_pairs[i+1][j + 1]) < 800 ? 57 : 58;
+            int type = CGAL::squared_distance(input_polyline_pairs[i+1][j], input_polyline_pairs[i+1][j + 1]) < 800 ? 56 : 58;
             input_joint_types_.emplace_back(type);
         }
         
@@ -64,6 +64,7 @@ int main(int argc, char** argv ) {
 
     //output
     std::vector<std::vector<CGAL_Polyline>> output_polyline_pairs;
+    std::vector<std::vector<char>> output_types;
     std::vector<std::vector<int>> top_face_triangulation;
 
     //Global Parameters
@@ -107,6 +108,7 @@ int main(int argc, char** argv ) {
 
         //output
         output_polyline_pairs,
+        output_types,
         top_face_triangulation,
 
         //Global Parameters
@@ -117,17 +119,27 @@ int main(int argc, char** argv ) {
         0
     );
 
+    
+
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //Write Polylines to XML
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    xml_parser::write_xml_polylines(output_polyline_pairs);
+    xml_parser::write_xml_polylines_and_types(output_polyline_pairs, output_types);
+    printf("\n Loops Starts");
+    for (auto& types : output_types) {
+        printf("\n Iteration \n");
+        for (auto& type : types)
+            printf("%c \n", type);
+        break;
+    }
+    printf("\n");
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //Preview poylylines from xml, take 9-th element
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     auto viewer = viewer_init();
     viewer_display_polylines(viewer, viewer_polylines,-1,20) ;    
-    viewer_display_polylines(viewer, input_polyline_pairs);
-    viewer_display_polylines_tree(viewer, output_polyline_pairs);
+    viewer_display_polylines(viewer, input_polyline_pairs,0);
+    viewer_display_polylines_tree(viewer, output_polyline_pairs,0);
     viewer_run(viewer);
 }

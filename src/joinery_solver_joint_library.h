@@ -325,11 +325,7 @@ namespace joint_library {
     //custom
 
  
-    
-    inline void side_removal_both_sides(joint& jo, std::vector<element>& elements) {
 
-        //rotations is jo.shift
-    }
     
     inline void side_removal(joint& jo, std::vector<element>& elements, bool merge_with_joint = false) {
         jo.name = "side_removal";
@@ -605,11 +601,11 @@ namespace joint_library {
             };
 
             if (jo.shift > 0 && merge_with_joint)
-                jo.m_boolean_type = { '1', '1', '1', '1' };
+                jo.m_boolean_type = { mill_project,mill_project,mill_project,mill_project };
             else
-                jo.m_boolean_type = { '1', '1' };
+                jo.m_boolean_type = { mill_project,mill_project };
 
-            jo.f_boolean_type = { '1', '1' };
+            jo.f_boolean_type = { mill_project,mill_project };
 
             /////////////////////////////////////////////////////////////////////////////////
             //if merge is needed
@@ -1206,6 +1202,91 @@ namespace joint_library {
         joint.m_boolean_type = { '3', '3' };
     }
 
+    inline void ss_e_r_0(joint& jo, std::vector<element>& elements) {
+
+        jo.name = __func__;
+        jo.orient = false;
+
+        CGAL_Polyline rect_2 = cgal_polyline_util::tween_two_polylines(jo.joint_volumes[0], jo.joint_volumes[1], 0.5);
+
+        IK::Point_3 p_rect_2_mid_0 = CGAL::midpoint(rect_2[0], rect_2[1]);
+        IK::Point_3 p_rect_2_mid_1 = CGAL::midpoint(rect_2[3], rect_2[2]);
+        IK::Vector_3 z_scaled = (p_rect_2_mid_0 - rect_2[1])*0.75;//this might be scaled by user
+        IK::Vector_3 x = (jo.joint_volumes[1][0] - jo.joint_volumes[0][0])*0.5;
+        double x_len = std::sqrt(x.squared_length());
+
+
+        //viewer_polylines.emplace_back(CGAL_Polyline{ jo.joint_volumes[0][1] ,jo.joint_volumes[0][2] });
+
+        
+        CGAL_Polyline rect_half_0 = {
+            p_rect_2_mid_0,// + z_scaled,
+            rect_2[0] - z_scaled,
+            rect_2[3] - z_scaled,
+            p_rect_2_mid_1,// + z_scaled,
+            p_rect_2_mid_0// + z_scaled
+        };
+
+        CGAL_Polyline rect_half_1 = {
+            p_rect_2_mid_0 ,
+            rect_2[1] + z_scaled,
+            rect_2[2] + z_scaled,
+            p_rect_2_mid_1,
+            p_rect_2_mid_0
+        };
+
+        //Extend
+        double y_extend_len = jo.scale[1];
+        cgal_polyline_util::extend_equally(rect_half_0, 1, y_extend_len);
+        cgal_polyline_util::extend_equally(rect_half_0, 3, y_extend_len);
+        cgal_polyline_util::extend_equally(rect_half_1, 1, y_extend_len);
+        cgal_polyline_util::extend_equally(rect_half_1, 3, y_extend_len);
+
+       // viewer_polylines.emplace_back(CGAL_Polyline{ p_rect_2_mid_0 ,p_rect_2_mid_1 });
+       // viewer_polylines.emplace_back(rect_half_0);
+
+        double x_target_len = jo.scale[0];
+        IK::Vector_3 x_offset = x * ( (x_len+x_target_len) / x_len);
+        IK::Vector_3 x_tween = x * ((jo.shift) / x_len);//x_offset * jo.shift;
+
+        std::array<IK::Vector_3, 4> offset_vectors = {
+   x_tween,
+   x_offset ,
+   -x_tween,
+    -x_offset ,
+        };
+        
+
+        std::array<CGAL_Polyline, 4> m_rectangles{
+     rect_half_0,rect_half_0,rect_half_0,rect_half_0
+        };
+
+        std::array<CGAL_Polyline, 4> f_rectangles{
+rect_half_1,rect_half_1,rect_half_1,rect_half_1
+        };
+
+        for (int j = 0; j < 4; j++) {
+            cgal_polyline_util::move(m_rectangles[j], offset_vectors[j]);
+            cgal_polyline_util::move(f_rectangles[j], offset_vectors[j]);
+            //viewer_polylines.emplace_back(m_rectangles[j]);
+        }
+        
+
+        // Check sides
+        // Add polylines
+        // Add slices
+
+        jo.m[0] = { m_rectangles[0],m_rectangles[0] , m_rectangles[2] , m_rectangles[2] };
+        jo.m[1] = { m_rectangles[1] ,m_rectangles[1] , m_rectangles[3], m_rectangles[3] };
+
+        jo.f[0] = { f_rectangles[0] , f_rectangles[0] , f_rectangles[2], f_rectangles[2] };
+        jo.f[1] = { f_rectangles[1] ,f_rectangles[1] , f_rectangles[3] ,f_rectangles[3] };
+      
+        jo.m_boolean_type = { slice,slice,slice,slice };
+        jo.f_boolean_type = { slice,slice,slice,slice };
+
+    }
+    
     //20-29
     inline void ts_e_p_0(joint& joint) {
         joint.name = "ts_e_p_0";
@@ -1726,7 +1807,7 @@ namespace joint_library {
         //joint.f[0] = { rect0, rect1 };
         //joint.f[1] = { rect2, rect3 };
 
-        joint.m_boolean_type = { '1', '1' };
+        joint.m_boolean_type = { slice,slice,slice,slice };
         //joint.f_boolean_type = { '1', '1' };
         
     }
@@ -2063,6 +2144,10 @@ namespace joint_library {
                 //CGAL_Debug(id_representing_joint_name);
                 switch (id_representing_joint_name) {
                     //CGAL_Debug(id_representing_joint_name);
+
+                case (56):
+                    ss_e_r_0(jo, elements);
+                    break;
                 case (57):
                     side_removal(jo, elements);
                     break;

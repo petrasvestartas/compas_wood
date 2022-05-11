@@ -107,7 +107,7 @@ namespace xml_parser {
     }
 
 
-    inline bool write_xml_polylines(std::vector<std::vector<std::vector<IK::Point_3>>>& polylines_tree) {
+    inline bool write_xml_polylines(std::vector<std::vector<std::vector<IK::Point_3>>>& polylines_tree, int id = -1) {
         std::string  file_path = path_and_file_for_output_polylines;
         std::string property_to_write = "output_polylines";
 
@@ -119,8 +119,12 @@ namespace xml_parser {
 
 
             boost::property_tree::ptree main_node;
+            int count = 0;
             for (auto& polylines : polylines_tree) {
 
+                if (id != -1)
+                    if (count != id)
+                        continue;
                 boost::property_tree::ptree polyline_group_node;
                 for (auto& polyline : polylines) {
 
@@ -142,6 +146,7 @@ namespace xml_parser {
 
                 }
                 main_node.push_back(std::make_pair("Polyline_Group", polyline_group_node));
+                count++;
             }
             tree.add_child(property_to_write, main_node);//without this xml is invalid
 
@@ -149,6 +154,115 @@ namespace xml_parser {
             boost::property_tree::write_xml(file_path, tree);
 
         }
+
+
+
+        
+        catch (std::exception& e) {
+            (void)e;
+            printf("\nCPP Something went wrong ");
+            return false;
+        }
+        return true;
+    }
+
+
+    inline bool write_xml_polylines_and_types(std::vector<std::vector<std::vector<IK::Point_3>>>& polylines_tree, std::vector<std::vector<char>>& types_tree, int id = -1) {
+        std::string  file_path = path_and_file_for_output_polylines;
+        std::string property_to_write = "output_polylines";
+
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        //Set properties to XML from a polylines
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        try {
+
+            ////////////////////////////////////////////////////////////////////////////////
+            //start
+            ////////////////////////////////////////////////////////////////////////////////
+            
+            boost::property_tree::ptree tree;
+            boost::property_tree::ptree main_node;
+            int count = 0;
+
+            ////////////////////////////////////////////////////////////////////////////////
+            //Polylines
+            ////////////////////////////////////////////////////////////////////////////////
+            for (auto& polylines : polylines_tree) {
+
+                if (id != -1)
+                    if (count != id)
+                        continue;
+                
+                boost::property_tree::ptree polyline_group_node;
+                for (auto& polyline : polylines) {
+
+                    boost::property_tree::ptree polyline_node;
+
+                    for (auto& point : polyline) {
+
+                        //Add coordinates to point_node
+                        boost::property_tree::ptree point_node;
+                        point_node.put("x", point.x());
+                        point_node.put("y", point.y());
+                        point_node.put("z", point.z());
+
+                        //Add point_node to polyline_node
+                        polyline_node.add_child("point", point_node);
+
+                        //polyline_node.push_back(std::make_pair("point", point_node));
+                    }
+                    //Add to polyline group
+                    polyline_group_node.add_child("polyline", polyline_node);
+
+                }
+                main_node.add_child("polyline_group", polyline_group_node);
+                count++;
+
+                //break;
+            }
+        
+
+            
+            ////////////////////////////////////////////////////////////////////////////////
+            //types
+            ////////////////////////////////////////////////////////////////////////////////
+
+            count = 0;
+            //printf("\n Loop of types ");
+            for (auto& types : types_tree) {
+
+                if (id != -1)
+                    if (count != id)
+                        continue;
+
+                boost::property_tree::ptree type_group;
+                for (char& type : types) {
+                    type_group.add("type", type);
+                }
+
+                main_node.add_child("type_group", type_group);
+                count++;
+                //break;
+            }
+
+            ////////////////////////////////////////////////////////////////////////////////
+            //end
+            ////////////////////////////////////////////////////////////////////////////////
+       
+            //add to the main code
+            //tree.add(property_to_write, main_node);//without this xml is invalid
+
+            //without this xml is invalid 
+            tree.add_child(property_to_write, main_node);
+            
+            //Write property tree to XML file
+            boost::property_tree::write_xml(file_path, tree);
+           
+        }
+
+
+
+
         catch (std::exception& e) {
             (void)e;
             printf("\nCPP Something went wrong ");
