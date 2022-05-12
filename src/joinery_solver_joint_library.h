@@ -648,9 +648,8 @@ namespace joint_library {
                     //offset curve due to conic tool
                     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
                     double dist_two_outlines = std::sqrt(CGAL::squared_distance(jo.m[0][0][0], plane_0_1.projection(jo.m[0][0][0])));
-                    printf("\n Distance between two outlines: %f" , dist_two_outlines);
-                    double conic_offset = dist_two_outlines * std::tan(15 * 3.14159265 / 180.0);
-                    printf("\n Offset: %f", conic_offset);
+                    //double conic_offset = dist_two_outlines * std::tan(15 * 3.14159265 / 180.0);
+                    double conic_offset = cgal_math_util::triangle_edge_by_angle(dist_two_outlines,15.0);
 
 /*                    jo.f[0].insert(jo.f[0].end(), joint_2.f[0].begin(), joint_2.f[0].end());
                     jo.f[1].insert(jo.f[1].end(), joint_2.f[1].begin(), joint_2.f[1].end());
@@ -1787,6 +1786,7 @@ rect_half_1,rect_half_1,rect_half_1,rect_half_1
 
         //Get center rectangle
         CGAL_Polyline mid_rectangle = cgal_polyline_util::tween_two_polylines(joint.joint_volumes[0], joint.joint_volumes[1],0.5);
+        
 
         //X-Axis Extend polyline in scale[0]
         cgal_polyline_util::extend_equally(mid_rectangle, 1, joint.scale[0] + 0);
@@ -1815,7 +1815,7 @@ rect_half_1,rect_half_1,rect_half_1,rect_half_1
         double len = cgal_vector_util::LengthVec(z_axis);
         z_axis *= (joint.scale[2] + temp_scale_z);
         
-        
+        cgal_polyline_util::shift(mid_rectangle, 2);
         CGAL_Polyline rect0 = mid_rectangle;
         CGAL_Polyline rect1 = mid_rectangle;
         CGAL_Polyline rect2 = mid_rectangle;

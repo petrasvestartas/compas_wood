@@ -261,7 +261,7 @@ inline bool border_to_face(
                 p1 - y_axis * half_dist * 1 - z_axis * half_dist * 0.25,
                 p0 - y_axis * half_dist * 1 - z_axis * half_dist * 0.25,
             };
-            
+
             CGAL_Polyline rect1 = {
                  p0 - y_axis * half_dist * -1 - z_axis * half_dist * 0.25,
                  p0 - y_axis * half_dist * -1 + z_axis * half_dist * 0.25,
@@ -269,7 +269,6 @@ inline bool border_to_face(
                  p1 - y_axis * half_dist * -1 - z_axis * half_dist * 0.25,
                  p0 - y_axis * half_dist * -1 - z_axis * half_dist * 0.25,
             };
-
             joint_volumes_pairA_pairB = { rect0 ,rect1 ,rect0 ,rect1 };
 
             //viewer_polylines.emplace_back(joint_lines[0]);

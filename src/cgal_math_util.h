@@ -4,6 +4,36 @@
 
 
 namespace cgal_math_util {
+
+    ////////////////////////////
+    /////////// ////////////////
+    /////////// / //////////////
+    /////////// // /////////////
+    /////////// /// ////////////
+    /////////// an / ///////////
+    // edge /// gle / //////////
+    //// len // ////// /////////
+    /////////// /////// ////////
+    /////////// //////// ///////
+    /////////// ///////// //////
+    ///////////            /////
+    ///////////// x = ? ////////
+    
+    inline double triangle_edge_by_angle(const double& edge_length, const double& angle_degrees) {
+
+        return edge_length * std::tan(angle_degrees * 3.14159265358979323846 / 180.0);
+    }
+
+
+    inline double rad_to_deg(const double& radians) {
+        return radians * 180.0 / 3.14159265358979323846;
+    }
+    
+    inline double deg_to_rad(const double& deg) {
+        return deg * 3.14159265358979323846 / 180.0;
+    }
+
+    
     inline int count_digits(double number) {
         int n = (int)std::ceil(std::abs(number));
 

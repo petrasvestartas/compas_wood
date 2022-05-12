@@ -5,6 +5,15 @@
 
 
 namespace cgal_polyline_util {
+
+    inline void shift(CGAL_Polyline& pline, int times) {
+
+        pline.pop_back();
+        std::rotate(pline.begin(), pline.begin() + times, pline.end());
+        pline.emplace_back(pline[0]);
+        
+    }
+
     inline double polyline_length(CGAL_Polyline& pline) {
         double l = 0;
         for (int i = 0; i < pline.size(); i++) {
