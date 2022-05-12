@@ -16,7 +16,8 @@ enum cut_types : char {
     mill_project = '6', //project
     cut = '7',
     cut_project = '8',		//project
-    binary_slice_mill = '9' //project and make rectangle
+    //binary_slice_mill = '9', //project and make rectangle
+    conic = '9'
 };
 
 

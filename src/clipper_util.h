@@ -13,14 +13,12 @@ namespace clipper_util {
         /////////////////////////////////////////////////////////////////////////////////////
         //Orient from 3D to 2D
         /////////////////////////////////////////////////////////////////////////////////////
-        CGAL_Polyline a;
-        CGAL_Polyline b;
-
         if (p0.size() > p0.max_size()) return false;
         if (p1.size() > p1.max_size()) return false;
+
+        CGAL_Polyline a = p0;
+        CGAL_Polyline b = p1;
         
-        cgal_polyline_util::Duplicate(p0, a);
-        cgal_polyline_util::Duplicate(p1, b);
 
         /////////////////////////////////////////////////////////////////////////////////////
         //Create Transformation
@@ -87,4 +85,73 @@ namespace clipper_util {
         /////////////////////////////////////////////////////////////////////////////////////
         return true;
     }
+
+    inline bool offset_2D(
+        CGAL_Polyline& p0,
+        //CGAL_Polyline& result,
+        IK::Plane_3& plane,
+        double offset,
+        double scale = 100000.0
+    ) {
+        /////////////////////////////////////////////////////////////////////////////////////
+        //Orient from 3D to 2D
+        /////////////////////////////////////////////////////////////////////////////////////
+        if (p0.size() > p0.max_size()) return false;
+
+        CGAL_Polyline a = p0;
+
+        /////////////////////////////////////////////////////////////////////////////////////
+        //Create Transformation
+        /////////////////////////////////////////////////////////////////////////////////////
+        CGAL::Aff_transformation_3<IK> xform_toXY = cgal_xform_util::PlaneToXY(p0[0], plane);
+        CGAL::Aff_transformation_3<IK> xform_toXY_Inv = xform_toXY.inverse();
+        cgal_polyline_util::Transform(a, xform_toXY);
+
+        /////////////////////////////////////////////////////////////////////////////////////
+        //Convert to Clipper
+        /////////////////////////////////////////////////////////////////////////////////////
+        std::vector<ClipperLib::IntPoint> pathA(a.size() - 1);
+
+        for (int i = 0; i < a.size() - 1; i++) {
+            pathA[i] = ClipperLib::IntPoint((int)(a[i].x() * scale), (int)(a[i].y() * scale));
+        }
+
+
+      
+        ClipperLib::ClipperOffset clipper;
+        clipper.AddPath(pathA, ClipperLib::JoinType::jtMiter, ClipperLib::EndType::etClosedPolygon);
+        ClipperLib::Paths C;
+        clipper.Execute(C, offset*scale);
+        //printf("\n offset %f", offset);
+
+        if (C.size() > 0) {
+
+            if (C[0].size() > 3 && std::abs(Area(C[0])) > std::abs(Area(pathA) * GlobalClipperAreaTolerance)) { //skip triangles and very small polygons
+
+                p0.clear();
+                p0.resize(C[0].size() + 1);
+
+                for (int i = 0; i < C[0].size(); i++) {
+                    IK::Point_3 p(C[0][i].X / scale, C[0][i].Y / scale, 0);
+                    p = p.transform(xform_toXY_Inv); //Rotate back to 3D
+                    p0[i] = p;
+                }
+
+                p0[C[0].size()] = p0[0]; //Close
+            }
+            else {
+                return false;
+            }
+        }
+        else {
+            return false;
+        }
+
+        /////////////////////////////////////////////////////////////////////////////////////
+        //Output
+        /////////////////////////////////////////////////////////////////////////////////////
+        return true;
+    }
+
+
 }

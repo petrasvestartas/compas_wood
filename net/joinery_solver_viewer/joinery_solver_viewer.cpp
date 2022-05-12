@@ -21,6 +21,10 @@ int main(int argc, char** argv  ) {
     //xml joint path
     path_and_file_for_joints = "C:\\Users\\petra\\AppData\\Roaming\\Grasshopper\\Libraries\\compas_wood\\joinery_library.xml ";
 
+    auto start = std::chrono::high_resolution_clock::now();
+    // unsync the I/O of C and C++.
+    std::ios::sync_with_stdio(false);
+
     std::vector<std::vector<IK::Vector_3>> input_insertion_vectors;
     //std::vector<std::vector<int>> input_joint_types;
     std::vector<std::vector<int>> input_joint_types;
@@ -120,26 +124,33 @@ int main(int argc, char** argv  ) {
     );
 
     
+    auto end = std::chrono::high_resolution_clock::now();
+    // Calculating total time taken by the program.
+    double time_taken = std::chrono::duration_cast<std::chrono::nanoseconds>(end - start).count();
+    time_taken *= 1e-6;
 
+    std::cout << "\nTime taken by program is : " << std::fixed << time_taken << std::setprecision(9);
+    std::cout << " ms" << std::endl;
+    
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //Write Polylines to XML
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     xml_parser::write_xml_polylines_and_types(output_polyline_pairs, output_types);
-    printf("\n Loops Starts");
-    for (auto& types : output_types) {
-        printf("\n Iteration \n");
-        for (auto& type : types)
-            printf("%c \n", type);
-        break;
-    }
-    printf("\n");
+    //printf("\n Loops Starts");
+    //for (auto& types : output_types) {
+    //    printf("\n Iteration \n");
+    //    for (auto& type : types)
+    //        printf("%c \n", type);
+    //    break;
+    //}
+    //printf("\n");
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //Preview poylylines from xml, take 9-th element
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     auto viewer = viewer_init();
     viewer_display_polylines(viewer, viewer_polylines,-1,20) ;    
-    viewer_display_polylines(viewer, input_polyline_pairs,0);
-    viewer_display_polylines_tree(viewer, output_polyline_pairs,0);
+    viewer_display_polylines(viewer, input_polyline_pairs,9);
+    viewer_display_polylines_tree(viewer, output_polyline_pairs,9);
     viewer_run(viewer);
 }

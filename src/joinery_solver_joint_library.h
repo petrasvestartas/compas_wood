@@ -638,14 +638,46 @@ namespace joint_library {
                     clipper_util::intersection_2D(jo.m[1][0], joint_2.m[1][0], plane_0_1, jo.m[1][0], 100000, 2);
 
 
-                    //jo.m[0].insert(jo.m[0].end(), joint_2.m[0].begin(), joint_2.m[0].end());
-                    //jo.m[1].insert(jo.m[1].end(), joint_2.m[1].begin(), joint_2.m[1].end());
+                    jo.m[0].insert(jo.m[0].end(), joint_2.m[0].begin(), joint_2.m[0].end());
+                    jo.m[1].insert(jo.m[1].end(), joint_2.m[1].begin(), joint_2.m[1].end());
+                    for (auto& f : joint_2.m_boolean_type)
+                        jo.m_boolean_type.emplace_back('9');
                     //jo.m_boolean_type.insert(jo.m_boolean_type.end(), joint_2.m_boolean_type.begin(), joint_2.m_boolean_type.end());
 
+                    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                    //offset curve due to conic tool
+                    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                    double dist_two_outlines = std::sqrt(CGAL::squared_distance(jo.m[0][0][0], plane_0_1.projection(jo.m[0][0][0])));
+                    printf("\n Distance between two outlines: %f" , dist_two_outlines);
+                    double conic_offset = dist_two_outlines * std::tan(15 * 3.14159265 / 180.0);
+                    printf("\n Offset: %f", conic_offset);
 
+/*                    jo.f[0].insert(jo.f[0].end(), joint_2.f[0].begin(), joint_2.f[0].end());
+                    jo.f[1].insert(jo.f[1].end(), joint_2.f[1].begin(), joint_2.f[1].end());
+                    jo.f_boolean_type.insert(jo.f_boolean_type.end(), joint_2.f_boolean_type.begin(), joint_2.f_boolean_type.end());          */          
+
+                    for (int i = 0; i < joint_2.f[0].size(); i++) {
+                        //cgal_polyline_util::reverse_if_clockwise(joint_2.f[0][i], plane_0_0);
+                        clipper_util::offset_2D(joint_2.f[0][i], plane_0_0, conic_offset);
+
+                    }
+
+                    for (int i = 0; i < joint_2.f[1].size(); i++) {
+                        //cgal_polyline_util::reverse_if_clockwise(joint_2.f[1][i], plane_0_0);
+                        clipper_util::offset_2D(joint_2.f[1][i], plane_0_0, conic_offset);
+                    }
+
+                    //Add once for milling
                     jo.f[0].insert(jo.f[0].end(), joint_2.f[0].begin(), joint_2.f[0].end());
                     jo.f[1].insert(jo.f[1].end(), joint_2.f[1].begin(), joint_2.f[1].end());
                     jo.f_boolean_type.insert(jo.f_boolean_type.end(), joint_2.f_boolean_type.begin(), joint_2.f_boolean_type.end());
+
+                    //Add second time for conical cut
+                    jo.f[0].insert(jo.f[0].end(), joint_2.f[0].begin(), joint_2.f[0].end());
+                    jo.f[1].insert(jo.f[1].end(), joint_2.f[1].begin(), joint_2.f[1].end());
+                    for (auto& f : joint_2.f_boolean_type)
+                        jo.f_boolean_type.emplace_back('9');
+                    //jo.f_boolean_type.insert(jo.f_boolean_type.end(), joint_2.f_boolean_type.begin(), joint_2.f_boolean_type.end());
                 }
             
         }
@@ -1928,7 +1960,7 @@ rect_half_1,rect_half_1,rect_half_1,rect_half_1
             else if (jo.type == 60 && ((id_representing_joint_name > 59 && id_representing_joint_name < 70) || id_representing_joint_name == -1)) { //top-top
                 group = 6;
             }
-            printf("\n %i %i %i", group, id_representing_joint_name, jo.type);
+            //printf("\n %i %i %i", group, id_representing_joint_name, jo.type);
             
 
             //define scale

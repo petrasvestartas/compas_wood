@@ -679,6 +679,11 @@ namespace cgal_polyline_util {
         return num > 0;
     }
 
+    inline void reverse_if_clockwise(CGAL_Polyline& polyline, IK::Plane_3 plane) {
+        if (is_clockwise(polyline, plane)) 
+            std::reverse(polyline.begin(),polyline.end());
+    }
+
     inline void convex_corner(CGAL_Polyline& polyline, std::vector<bool>& convex_or_concave) {
         //check if it is closed
         bool closed = true;

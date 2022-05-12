@@ -15,6 +15,8 @@
 #undef min
 #endif
 
+//Timer
+#include <chrono>
 
 //STD and Other
 #include <exception>
@@ -35,7 +37,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <cstdlib>
-
+#include <cstdio>
 
 
 
