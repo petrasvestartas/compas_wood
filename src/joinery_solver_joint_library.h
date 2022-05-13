@@ -368,30 +368,14 @@ namespace joint_library {
             double scale0_0 = convex_corner0[jo.f0_0 - 2] ? jo.scale[0] : 0;
             double scale0_1 = convex_corner0[(jo.f0_0 - 2 + 1) % convex_corner0.size()] ? jo.scale[0] : 0;
 
-            //if (joint.v0 == id) {
-            //    for (auto& flag : convex_corner0)
-            //        CGAL_Debug(flag);
-            //    CGAL_Debug(8888);
-            //    CGAL_Debug(convex_corner0[joint.f0_0 - 2]);
-            //    CGAL_Debug(convex_corner0[(joint.f0_0 - 2 + 1) % convex_corner0.size()]);
-            //    CGAL_Debug(joint.f0_0 - 2);
-            //    CGAL_Debug(9999);
-            //}
+
 
             std::vector<bool>convex_corner1;
             cgal_polyline_util::convex_corner(elements[jo.v1].polylines[0], convex_corner1);
             double scale1_0 = convex_corner1[jo.f1_0 - 2] ? jo.scale[0] : 0;
             double scale1_1 = convex_corner1[(jo.f1_0 - 2 + 1) % convex_corner1.size()] ? jo.scale[0] : 0;
 
-            //if (joint.v1 == id) {
-            //    for (auto& flag : convex_corner1)
-            //        CGAL_Debug(flag);
-            //    CGAL_Debug(8888);
-            //    CGAL_Debug(convex_corner1[joint.f1_0 - 2]);
-            //    CGAL_Debug(convex_corner1[(joint.f1_0 - 2 + 1) % convex_corner1.size()]);
-            //    CGAL_Debug(joint.f1_0 - 2);
-            //    CGAL_Debug(9999);
-            //}
+
 
             //currrent
             cgal_polyline_util::Extend(pline0, 0, scale0_0, scale0_1);
@@ -440,60 +424,15 @@ namespace joint_library {
         double half_dist = std::sqrt(CGAL::squared_distance(edge_mid_0, edge_mid_1)) * 0.5;
         half_dist = 10;//Change to scale
 
-        //IK::Vector_3 x_axis = edge_mid_1 - edge_mid_0;
-        //cgal_vector_util::Unitize(x_axis);
+
         IK::Vector_3 z_axis = f0_0_normal;
         cgal_vector_util::Unitize(z_axis);
-        //IK::Vector_3 y_axis = CGAL::cross_product(z_axis, x_axis);
-       // y_axis = CGAL::midpoint(pline0[1], pline0[2]) - CGAL::midpoint(pline0[0], pline0[3]);
-        //cgal_vector_util::Unitize(y_axis);
+
  
         z_axis *= jo.scale[2] / half_dist;
         
-        //CGAL_Polyline rect0 = {
-        //    edge_mid_1 - y_axis * half_dist - z_axis * half_dist,
-        //    edge_mid_1 - y_axis * half_dist + z_axis * half_dist,
-        //    edge_mid_0 - y_axis * half_dist + z_axis * half_dist,
-        //    edge_mid_0 - y_axis * half_dist - z_axis * half_dist,
-        //    edge_mid_1 - y_axis * half_dist - z_axis * half_dist,
-        //};
-
-        //CGAL_Polyline rect1 = {
-        //    edge_mid_1 + y_axis * half_dist - z_axis * half_dist,
-        //    edge_mid_1 + y_axis * half_dist + z_axis * half_dist,
-        //    edge_mid_0 + y_axis * half_dist + z_axis * half_dist,
-        //    edge_mid_0 + y_axis * half_dist - z_axis * half_dist,
-        //    edge_mid_1 + y_axis * half_dist - z_axis * half_dist,
-        //};
-
-        //Insert of creating two rectangles at the ends, create centre one and project to two ends
-        //viewer_polylines.emplace_back(
-        //    CGAL_Polyline({
-        //        CGAL::midpoint(pline0[1], pline0[2]),
-        //        CGAL::midpoint(pline0[0], pline0[3])
-        //        }));
 
 
-       //IK::Segment_3 result;
-        //CGAL::midpoint(CGAL::midpoint(pline0[0], pline1[0]), CGAL::midpoint(pline0[1], pline1[1]))
-        //auto s0 = IK::Segment_3(pline0[0], pline0[1]);
-        //auto s1 = IK::Segment_3(pline0[3], pline0[2]);
-        //viewer_polylines.emplace_back(CGAL_Polyline({ pline0[0], pline0[1] }));
-        //viewer_polylines.emplace_back(CGAL_Polyline({ pline0[3], pline0[2] }));
-        
-       // auto smid = IK::Segment_3(CGAL::midpoint(s0[0], s1[0]), CGAL::midpoint(s0[1], s1[1]));
-       // auto pmid = CGAL::midpoint(smid[0], smid[1]);
-       //     
-       //IK::Segment_3 result = cgal_polyline_util::LineLineMaximumOverlap( s0, s1 );
-       
-       //IK::Point_3 p0 = s1.supporting_line().projection(pmid);
-       //IK::Point_3 p1 = s0.supporting_line().projection(pmid);
-       //viewer_polylines.emplace_back(CGAL_Polyline({ result[0], result[1] }));
-       //viewer_polylines.emplace_back(CGAL_Polyline({ p0,p1 }));
-       //viewer_polylines.emplace_back(CGAL_Polyline({ CGAL::midpoint(s0[0], s1[0]), CGAL::midpoint(s0[1], s1[1]) }));
-
-       //viewer_polylines.emplace_back(jo.joint_lines[0]);
-       //viewer_polylines.emplace_back(jo.joint_lines[1]);
 
        /////////////////////////////////////////////////////////////////////////////////////////////////////
        //Get average line
@@ -504,7 +443,7 @@ namespace joint_library {
        //Get average thickness
        double half_thickness = (elements[jo.v0].thickness + elements[jo.v1].thickness)/4.0;
 
-       //Move points up and down using cross produc
+       //Move points up and down using cross product
        auto x_axis = CGAL::cross_product(z_axis, average_line.to_vector());
        cgal_vector_util::Unitize(x_axis);
        
@@ -545,6 +484,11 @@ namespace joint_library {
             //output, no need to merge if already cut
             // vector1.insert( vector1.end(), vector2.begin(), vector2.end() );
             /////////////////////////////////////////////////////////////////////////////////
+       
+       CGAL_Polyline pline0_moved0_surfacing_tolerance_male = pline0_moved0;
+       //cgal_polyline_util::move(pline0_moved0_surfacing_tolerance_male, z_axis * 0.10);
+       
+      // viewer_polylines.emplace_back(copypline);
             if (jo.shift > 0 && merge_with_joint) {
                 jo.m[0] = {
                     //rect0,
@@ -553,8 +497,8 @@ namespace joint_library {
 
                       
                    
-                       pline0_moved0,
-                      pline0_moved0,
+                      pline0_moved0_surfacing_tolerance_male,
+                      pline0_moved0_surfacing_tolerance_male,
                       pline0,
                      pline0,
                 };
@@ -662,7 +606,7 @@ namespace joint_library {
                     //3) Clipper boolean difference, cut joint polygon form the outline
 
                 //Merge male, by performing boolean union
-                //cgal_polyline_util::AveragePlane(
+           
 
 
 
