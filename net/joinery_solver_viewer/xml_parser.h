@@ -4,6 +4,7 @@
 #include "joinery_solver_main.h"
 
 static std::string path_and_file_for_input_polylines = "C:\\IBOIS57\\_Code\\Software\\Python\\compas_wood\\net\\data\\input_polylines.xml";
+static std::string path_and_file_for_input_polylines_simple_case = "C:\\IBOIS57\\_Code\\Software\\Python\\compas_wood\\net\\data\\input_polylines_simple_case.xml";
 static std::string path_and_file_for_output_polylines = "C:\\IBOIS57\\_Code\\Software\\Python\\compas_wood\\net\\data\\output_polylines.xml";
 
 namespace xml_parser {
@@ -17,8 +18,9 @@ namespace xml_parser {
     //    return (stat(name.c_str(), &buffer) == 0);
     //}
 
-    inline bool read_xml_polylines(std::vector<std::vector<IK::Point_3>>& polylines) {
-        std::string file_path = path_and_file_for_input_polylines;
+    inline bool read_xml_polylines(std::vector<std::vector<IK::Point_3>>& polylines, bool simple_case = false) {
+        std::string file_path = simple_case ? path_and_file_for_input_polylines_simple_case : path_and_file_for_input_polylines;
+  
         std::string property_to_read = "input_polylines";
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

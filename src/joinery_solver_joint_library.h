@@ -549,19 +549,27 @@ namespace joint_library {
                 jo.m[0] = {
                     //rect0,
                     //rect0,
-                     pline0,
-                     pline0,
+                 
+
+                      
+                   
+                       pline0_moved0,
                       pline0_moved0,
-                      pline0_moved0
+                      pline0,
+                     pline0,
                 };
 
                 jo.m[1] = {
                      //rect1,
                     //rect1,
-                       pline0_moved0,
-                       pline0_moved0,
+              
+  
+                       
+              
                        pline0_moved1,
-                       pline0_moved1
+                       pline0_moved1,
+                       pline0_moved0,
+                       pline0_moved0,
                 };
             }
             else {
@@ -615,7 +623,11 @@ namespace joint_library {
 
                 //2) Create joint in XY plane and orient it to the two rectangles
                 joint joint_2;
+
+               
                 bool read_successful = joint_library_xml_parser::read_xml(joint_2, jo.type);
+                joint_2.unit_scale = true;
+                //joint_2.unit_scale_distance = 10;
                 //printf("xml tile reading number of polyines %iz", joint_2.m[0].size());
                 if (read_successful) {
                     joint_2.joint_volumes[0] = rect0;
@@ -624,32 +636,55 @@ namespace joint_library {
                     joint_2.joint_volumes[3] = rect1;
                     joint_2.orient_to_connection_area();//and orient to connection volume
 
+                    IK::Plane_3 plane_0_0(jo.m[0][0][0], elements[jo.v0].planes[jo.f0_0].orthogonal_vector());
+                    IK::Plane_3 plane_0_1(jo.m[0][2][0], elements[jo.v0].planes[jo.f0_0].orthogonal_vector());
+                    //Conical offset
+                    double dist_two_outlines = std::sqrt(CGAL::squared_distance(jo.m[0][0][0], plane_0_1.projection(jo.m[0][0][0])));
+                    double conic_offset = -cgal_math_util::triangle_edge_by_angle(dist_two_outlines, 15.0);
+                    double conic_offset_opposite = -(0.8440 + conic_offset);
+                    //conic_offset = 0.8440;
+                    printf("\n %f", conic_offset);
+                    printf("\n %f", conic_offset_opposite);
+
+                    for (int i = 0; i < joint_2.m[0].size(); i++) {
+                        //cgal_polyline_util::reverse_if_clockwise(joint_2.f[0][i], plane_0_0);
+                        clipper_util::offset_2D(joint_2.m[0][i], plane_0_0, -conic_offset_opposite-conic_offset);//0.1 means more tighter
+
+                    }
+
+                    for (int i = 0; i < joint_2.m[1].size(); i++) {
+                        //cgal_polyline_util::reverse_if_clockwise(joint_2.f[1][i], plane_0_0);
+                        clipper_util::offset_2D(joint_2.m[1][i], plane_0_0, -conic_offset_opposite - conic_offset );
+                    }
+
                     //printf("xml tile reading number of polyines %iz" , joint_2.m[0].size());
 
                     //3) Clipper boolean difference, cut joint polygon form the outline
 
                 //Merge male, by performing boolean union
                 //cgal_polyline_util::AveragePlane(
-                    IK::Plane_3 plane_0_0(jo.m[0][0][0], elements[jo.v0].planes[jo.f0_0].orthogonal_vector());
-                    IK::Plane_3 plane_0_1(jo.m[0][2][0], elements[jo.v0].planes[jo.f0_0].orthogonal_vector());
 
 
-                    clipper_util::intersection_2D(jo.m[0][0], joint_2.m[0][0], plane_0_0, jo.m[0][0], 100000, 2);
-                    clipper_util::intersection_2D(jo.m[1][0], joint_2.m[1][0], plane_0_1, jo.m[1][0], 100000, 2);
+
+                    clipper_util::intersection_2D(jo.m[0][2], joint_2.m[0][0], plane_0_0, jo.m[0][2], 100000, 2);
+                    clipper_util::intersection_2D(jo.m[1][2], joint_2.m[1][0], plane_0_1, jo.m[1][2], 100000, 2);
 
 
-                    jo.m[0].insert(jo.m[0].end(), joint_2.m[0].begin(), joint_2.m[0].end());
+                   jo.m[0].insert(jo.m[0].end(), joint_2.m[0].begin(), joint_2.m[0].end());
                     jo.m[1].insert(jo.m[1].end(), joint_2.m[1].begin(), joint_2.m[1].end());
-                    for (auto& f : joint_2.m_boolean_type)
+                    for (auto& m : joint_2.m_boolean_type)
                         jo.m_boolean_type.emplace_back('9');
                     //jo.m_boolean_type.insert(jo.m_boolean_type.end(), joint_2.m_boolean_type.begin(), joint_2.m_boolean_type.end());
 
                     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
                     //offset curve due to conic tool
                     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                    double dist_two_outlines = std::sqrt(CGAL::squared_distance(jo.m[0][0][0], plane_0_1.projection(jo.m[0][0][0])));
+                   
+                    //viewer_polylines.emplace_back(jo.m[0][0]);
+                    //viewer_polylines.emplace_back(jo.m[0][2]);
+                    
                     //double conic_offset = dist_two_outlines * std::tan(15 * 3.14159265 / 180.0);
-                    double conic_offset = cgal_math_util::triangle_edge_by_angle(dist_two_outlines,15.0);
+
 
 /*                    jo.f[0].insert(jo.f[0].end(), joint_2.f[0].begin(), joint_2.f[0].end());
                     jo.f[1].insert(jo.f[1].end(), joint_2.f[1].begin(), joint_2.f[1].end());
@@ -657,25 +692,29 @@ namespace joint_library {
 
                     for (int i = 0; i < joint_2.f[0].size(); i++) {
                         //cgal_polyline_util::reverse_if_clockwise(joint_2.f[0][i], plane_0_0);
-                        clipper_util::offset_2D(joint_2.f[0][i], plane_0_0, conic_offset);
+                        clipper_util::offset_2D(joint_2.f[0][i], plane_0_0, conic_offset_opposite);//- conic_offset
 
                     }
 
                     for (int i = 0; i < joint_2.f[1].size(); i++) {
                         //cgal_polyline_util::reverse_if_clockwise(joint_2.f[1][i], plane_0_0);
-                        clipper_util::offset_2D(joint_2.f[1][i], plane_0_0, conic_offset);
+                        clipper_util::offset_2D(joint_2.f[1][i], plane_0_0, conic_offset_opposite);// - conic_offset
                     }
 
                     //Add once for milling
                     jo.f[0].insert(jo.f[0].end(), joint_2.f[0].begin(), joint_2.f[0].end());
                     jo.f[1].insert(jo.f[1].end(), joint_2.f[1].begin(), joint_2.f[1].end());
-                    jo.f_boolean_type.insert(jo.f_boolean_type.end(), joint_2.f_boolean_type.begin(), joint_2.f_boolean_type.end());
-
+  
+                    for (auto& f : joint_2.f_boolean_type)
+                        jo.f_boolean_type.emplace_back('6');
+                    
                     //Add second time for conical cut
+                    printf("\n %i", jo.f[0].size());
+                    
                     jo.f[0].insert(jo.f[0].end(), joint_2.f[0].begin(), joint_2.f[0].end());
                     jo.f[1].insert(jo.f[1].end(), joint_2.f[1].begin(), joint_2.f[1].end());
                     for (auto& f : joint_2.f_boolean_type)
-                        jo.f_boolean_type.emplace_back('9');
+                        jo.f_boolean_type.emplace_back('8');
                     //jo.f_boolean_type.insert(jo.f_boolean_type.end(), joint_2.f_boolean_type.begin(), joint_2.f_boolean_type.end());
                 }
             
@@ -1815,6 +1854,7 @@ rect_half_1,rect_half_1,rect_half_1,rect_half_1
         double len = cgal_vector_util::LengthVec(z_axis);
         z_axis *= (joint.scale[2] + temp_scale_z);
         
+
         cgal_polyline_util::shift(mid_rectangle, 2);
         CGAL_Polyline rect0 = mid_rectangle;
         CGAL_Polyline rect1 = mid_rectangle;

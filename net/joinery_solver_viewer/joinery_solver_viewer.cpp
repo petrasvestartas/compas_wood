@@ -10,8 +10,9 @@ int main(int argc, char** argv  ) {
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //Read Polylines from XML
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    bool simple_case = true;
     std::vector<std::vector<IK::Point_3>> input_polyline_pairs  ;
-    bool result = xml_parser::read_xml_polylines(input_polyline_pairs)  ;
+    bool result = xml_parser::read_xml_polylines(input_polyline_pairs, simple_case)  ;
     
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -31,6 +32,7 @@ int main(int argc, char** argv  ) {
     input_joint_types.reserve(input_polyline_pairs.size()) ;
 
 
+
     //The adjacency will work because none of the joints can be found on boundaries
     std::vector<int> input_adjacency = {
         0,0,2 + 0,2 + 0 ,
@@ -40,17 +42,23 @@ int main(int argc, char** argv  ) {
         14,14,2 + 3,2 + 3,
         15,15,2 + 2,2 + 2
     };
+    if (simple_case)
+        input_adjacency.clear();
 
-    //Joint types are give to each element, no rtree search will be used here
+
+    //Joint types are given to each element, no rtree search will be used here
     for (int i = 0; i < input_polyline_pairs.size(); i+=2) {
 
         int id = (int)(i*0.5);
 
         auto input_joint_types_ = std::vector<int>();
+    
+        //Give first two faces empty joint type
         input_joint_types_.reserve(input_polyline_pairs[i].size()+1);
         input_joint_types_.emplace_back(-1);
         input_joint_types_.emplace_back(-1);
-        
+    
+       //Give the rest of the faces the faces joint type based on distance
         for (int j = 0; j < input_polyline_pairs[i].size()-1; j++) {
             int type = CGAL::squared_distance(input_polyline_pairs[i+1][j], input_polyline_pairs[i+1][j + 1]) < 800 ? 56 : 58;
             input_joint_types_.emplace_back(type);
@@ -60,7 +68,7 @@ int main(int argc, char** argv  ) {
     }
 
     for (size_t i = 0; i < input_adjacency.size(); i += 4)
-        input_joint_types[input_adjacency[i]][input_adjacency[i + 2]] = 60;
+       input_joint_types[input_adjacency[i]][input_adjacency[i + 2]] = 60;
     
 
     //Three valence
@@ -135,6 +143,7 @@ int main(int argc, char** argv  ) {
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //Write Polylines to XML
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //output_polyline_pairs.emplace_back(viewer_polylines);
     xml_parser::write_xml_polylines_and_types(output_polyline_pairs, output_types);
     //printf("\n Loops Starts");
     //for (auto& types : output_types) {
@@ -150,7 +159,7 @@ int main(int argc, char** argv  ) {
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     auto viewer = viewer_init();
     viewer_display_polylines(viewer, viewer_polylines,-1,20) ;    
-    viewer_display_polylines(viewer, input_polyline_pairs,9);
-    viewer_display_polylines_tree(viewer, output_polyline_pairs,9);
+    viewer_display_polylines(viewer, input_polyline_pairs);
+    viewer_display_polylines_tree(viewer, output_polyline_pairs);
     viewer_run(viewer);
 }

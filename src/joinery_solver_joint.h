@@ -15,7 +15,7 @@ enum cut_types : char {
     mill = '5',
     mill_project = '6', //project
     cut = '7',
-    cut_project = '8',		//project
+    conic_reverse = '8',		//project
     //binary_slice_mill = '9', //project and make rectangle
     conic = '9'
 };
@@ -367,29 +367,39 @@ inline void joint::transform(CGAL::Aff_transformation_3<IK>& xform0, CGAL::Aff_t
 }
 
 inline bool joint::orient_to_connection_area() {
-    //CGAL_Debug(thickness);
-    //Change the distance between two rectangles
-    //CGAL_Debug(unit_scale);
-    //CGAL_Debug(unit_scale_distance);
-    if (unit_scale && unit_scale_distance > 0) {//
+
+    if (unit_scale ) {//&& unit_scale_distance > 0
+
+        //Distance between two rectangles
+        //if(unit_scale_two_directions)
+        //Check this one if it fine for timber plate joints
+        //Why do we need to give a distance if it is only 2D scale?
+        //Does the distance measurement between 1 and 2 vertex would be valid in all cases? If not should it be or not?
+        unit_scale_distance = cgal_vector_util::Distance(joint_volumes[0][1], joint_volumes[0][2]);
+        
         IK::Segment_3 volume_segment(joint_volumes[0][0], joint_volumes[1][0]);
         IK::Vector_3 vec = volume_segment.to_vector() * 0.5;
         IK::Vector_3 vec_unit = volume_segment.to_vector();
         cgal_vector_util::Unitize(vec_unit);
         vec_unit *= (unit_scale_distance * 0.5);
-        //CGAL_Debug(thickness);
+
+   
+
         cgal_polyline_util::move(joint_volumes[0], vec);
         cgal_polyline_util::move(joint_volumes[1], -vec);
         cgal_polyline_util::move(joint_volumes[0], -vec_unit);
         cgal_polyline_util::move(joint_volumes[1], vec_unit);
 
+     
+
+        //The same as above
         if (joint_volumes[2].size() > 0) {
             IK::Segment_3 volume_segment(joint_volumes[2][0], joint_volumes[3][0]);
             vec = volume_segment.to_vector() * 0.5;
             vec_unit = volume_segment.to_vector();
             cgal_vector_util::Unitize(vec_unit);
             vec_unit *= (unit_scale_distance * 0.5);
-            //CGAL_Debug(thickness);
+
             cgal_polyline_util::move(joint_volumes[2], vec);
             cgal_polyline_util::move(joint_volumes[3], -vec);
             cgal_polyline_util::move(joint_volumes[2], -vec_unit);
@@ -397,6 +407,8 @@ inline bool joint::orient_to_connection_area() {
         }
     }
 
+   viewer_polylines.emplace_back(joint_volumes[0]);
+    viewer_polylines.emplace_back(joint_volumes[1]);
     CGAL::Aff_transformation_3<IK> xform0;
     bool flag0 = change_basis(joint_volumes[0], joint_volumes[1], xform0);
 
