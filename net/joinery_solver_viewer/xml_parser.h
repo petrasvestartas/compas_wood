@@ -6,7 +6,7 @@
 static std::string path_and_file_for_input_polylines = "C:\\IBOIS57\\_Code\\Software\\Python\\compas_wood\\net\\data\\input_polylines.xml";
 static std::string path_and_file_for_input_polylines_simple_case = "C:\\IBOIS57\\_Code\\Software\\Python\\compas_wood\\net\\data\\input_polylines_simple_case.xml";
 static std::string path_and_file_for_output_polylines = "C:\\IBOIS57\\_Code\\Software\\Python\\compas_wood\\net\\data\\output_polylines.xml";
-
+static std::string path_and_file_for_output_polylines_simple_case = "C:\\IBOIS57\\_Code\\Software\\Python\\compas_wood\\net\\data\\output_polylines_simple_case.xml";
 namespace xml_parser {
     inline bool file_exists_0(const  std::string& name  ) {
         std::ifstream f(name.c_str());
@@ -20,7 +20,7 @@ namespace xml_parser {
 
     inline bool read_xml_polylines(std::vector<std::vector<IK::Point_3>>& polylines, bool simple_case = false) {
         std::string file_path = simple_case ? path_and_file_for_input_polylines_simple_case : path_and_file_for_input_polylines;
-  
+        //printf( " \n %s  \n", file_path.c_str());
         std::string property_to_read = "input_polylines";
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -64,8 +64,9 @@ namespace xml_parser {
     }
 
 
-    inline bool write_xml_polylines(std::vector<std::vector<IK::Point_3>>& polylines) {
-        std::string  file_path = path_and_file_for_output_polylines ;
+    inline bool write_xml_polylines(std::vector<std::vector<IK::Point_3>>& polylines, bool simple_case = false) {
+
+        std::string file_path = simple_case ? path_and_file_for_output_polylines_simple_case : path_and_file_for_output_polylines;
         std::string property_to_write = "output_polylines";
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -169,10 +170,10 @@ namespace xml_parser {
     }
 
 
-    inline bool write_xml_polylines_and_types(std::vector<std::vector<std::vector<IK::Point_3>>>& polylines_tree, std::vector<std::vector<char>>& types_tree, int id = -1) {
-        std::string  file_path = path_and_file_for_output_polylines;
-        std::string property_to_write = "output_polylines";
+    inline bool write_xml_polylines_and_types(std::vector<std::vector<std::vector<IK::Point_3>>>& polylines_tree, std::vector<std::vector<char>>& types_tree, int id = -1, bool simple_case = false) {
 
+        std::string property_to_write = "output_polylines";
+        std::string file_path = simple_case ? path_and_file_for_output_polylines_simple_case : path_and_file_for_output_polylines;
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         //Set properties to XML from a polylines
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

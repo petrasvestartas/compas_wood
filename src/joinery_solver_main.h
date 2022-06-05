@@ -1344,13 +1344,19 @@ inline void adjacency_search(
             continue;
 
         if (input_adjacency[i + 0] == input_adjacency[i + 1]) {
-            for (int j = 0; j < adjacency_item_count; j++)
+            for (int j = 0; j < adjacency_item_count; j++) {
                 adjacency_border.emplace_back(input_adjacency[i + j]);
+           
+            }
         } else {
-            for (int j = 0; j < adjacency_item_count; j++)
+            for (int j = 0; j < adjacency_item_count; j++) {
                 adjacency_valid.emplace_back(input_adjacency[i + j]);
+
+            }
         }
     }
+    //printf("\n %zi", adjacency_border.size());
+    //printf("\n %zi", adjacency_valid.size());
     
     //////////////////////////////////////////////////////////////////////////////
     // Perform Adjacency Search in result is empty
@@ -1470,7 +1476,7 @@ inline void adjacency_search(
         CGAL_Polyline joint_area;
         std::array<CGAL_Polyline, 2> joint_lines;
         std::array<CGAL_Polyline, 4> joint_volumes_pairA_pairB;
-
+    
         border_to_face(
             elements[adjacency_border[i]].polylines,
             elements[adjacency_border[i]].planes,
@@ -1492,17 +1498,20 @@ inline void adjacency_search(
             joint_volumes_pairA_pairB,
             60);
 
+        printf("\n %i %i %i %i"  , adjacency_border[i], adjacency_border[i], adjacency_border[i + 2], adjacency_border[i + 2]);
+
         joints_map.emplace(cgal_math_util::unique_from_two_int(adjacency_border[i], adjacency_border[i]), joint_id);
+        //printf("\n border %d %ds ", adjacency_border[i], joint_id);
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
         //Place joint ids and male or female flags to joint list
         //////////////////////////////////////////////////////////////////////////////////////////////////////
         elements[adjacency_border[i]].j_mf[adjacency_border[i + 2]].emplace_back(std::tuple<int, bool, double>(joint_id, true, 0));
         //elements[adjacency_border[i]].j_mf[adjacency_border[i + 2]].emplace_back(std::tuple<int, bool, double>(joint_id, false,99990));
-
-
+        
         joint_id++;
     }
+    //printf("\n \n");
 }
 
 #pragma endregion

@@ -12,8 +12,8 @@ enum cut_types : char {
 
     //beams
     slice = '4', //project and make rectangle
-    mill = '5',
-    mill_project = '6', //project
+    mill_project = '5', //
+    mill = '6', //project
     cut = '7',
     conic_reverse = '8',		//project
     //binary_slice_mill = '9', //project and make rectangle

@@ -128,6 +128,20 @@ namespace clipper_util {
 
             if (C[0].size() > 3 && std::abs(Area(C[0])) > std::abs(Area(pathA) * GlobalClipperAreaTolerance)) { //skip triangles and very small polygons
 
+             //Not Sure if rotation is correct, I doubt that cp_id+1 is needed, 
+                int cp_id = 0;
+                double cp_dist = std::pow(pathA[0].X - C[0][0].X, 2) + std::pow(pathA[0].Y - C[0][0].Y, 2);
+                for (int i = 1; i < C[0].size(); i++) {
+                    double dist = std::pow(pathA[0].X - C[0][i].X, 2) + std::pow(pathA[0].Y - C[0][i].Y, 2);
+                    if (dist < cp_dist) {
+                        cp_dist = dist;
+                        cp_id = i;
+                    }
+                }
+                std::rotate(C[0].begin(), C[0].begin() + cp_id, C[0].end());
+                //std::rotate(C[0].begin(), C[0].begin()+ C[0].size()- cp_id, C[0].end());
+                
+
                 p0.clear();
                 p0.resize(C[0].size() + 1);
 

@@ -330,7 +330,13 @@ namespace joint_library {
     inline void side_removal(joint& jo, std::vector<element>& elements, bool merge_with_joint = false) {
         jo.name = "side_removal";
         jo.orient = false;
-
+       std::swap(jo.v0, jo.v1);
+        std::swap(jo.f0_0, jo.f1_0);
+        std::swap(jo.f0_1, jo.f1_1);
+        std::swap(jo.joint_lines[1], jo.joint_lines[0]);
+        std::swap(jo.joint_volumes[0], jo.joint_lines[2]);
+        std::swap(jo.joint_volumes[1], jo.joint_lines[3]);
+        
         //printf("Side_Removal");
 
         /////////////////////////////////////////////////////////////////////////////////
@@ -339,11 +345,11 @@ namespace joint_library {
         IK::Vector_3 f0_0_normal = elements[jo.v0].planes[jo.f0_0].orthogonal_vector();
         cgal_vector_util::Unitize(f0_0_normal);
         //v0 *= (jo.scale[2] + jo.shift);
-        f0_0_normal *= jo.scale[2];
+        f0_0_normal *= (jo.scale[2]);
 
         IK::Vector_3 f1_0_normal = elements[jo.v1].planes[jo.f1_0].orthogonal_vector();
         cgal_vector_util::Unitize(f1_0_normal);
-        f1_0_normal *= jo.scale[2];
+        f1_0_normal *= (jo.scale[2]+2);//Forced for safety
 
         /////////////////////////////////////////////////////////////////////////////////
         //copy side rectangles
@@ -401,7 +407,7 @@ namespace joint_library {
 
         IK::Vector_3 f0_1_normal = f0_0_normal;
         cgal_vector_util::Unitize(f0_1_normal);
-        f0_1_normal *= jo.scale[2] +jo.shift;
+        f0_1_normal *= (jo.scale[2]+2) +jo.shift;//Forced offset for safety
 
 
         //Move twice to remove one side and the cut surface around
@@ -486,16 +492,13 @@ namespace joint_library {
             /////////////////////////////////////////////////////////////////////////////////
        
        CGAL_Polyline pline0_moved0_surfacing_tolerance_male = pline0_moved0;
-       //cgal_polyline_util::move(pline0_moved0_surfacing_tolerance_male, z_axis * 0.10);
+       //cgal_polyline_util::move(pline0_moved0_surfacing_tolerance_male, z_axis * 0.20);
        
       // viewer_polylines.emplace_back(copypline);
             if (jo.shift > 0 && merge_with_joint) {
                 jo.m[0] = {
                     //rect0,
                     //rect0,
-                 
-
-                      
                    
                       pline0_moved0_surfacing_tolerance_male,
                       pline0_moved0_surfacing_tolerance_male,
@@ -506,9 +509,6 @@ namespace joint_library {
                 jo.m[1] = {
                      //rect1,
                     //rect1,
-              
-  
-                       
               
                        pline0_moved1,
                        pline0_moved1,
@@ -587,18 +587,24 @@ namespace joint_library {
                     double conic_offset = -cgal_math_util::triangle_edge_by_angle(dist_two_outlines, 15.0);
                     double conic_offset_opposite = -(0.8440 + conic_offset);
                     //conic_offset = 0.8440;
-                    printf("\n %f", conic_offset);
-                    printf("\n %f", conic_offset_opposite);
+                    //printf("\n %f", conic_offset);
+                    //printf("\n %f", conic_offset_opposite);
 
+                    double offset_value = -(1.5 * conic_offset_opposite) - conic_offset;
+                    
                     for (int i = 0; i < joint_2.m[0].size(); i++) {
                         //cgal_polyline_util::reverse_if_clockwise(joint_2.f[0][i], plane_0_0);
-                        clipper_util::offset_2D(joint_2.m[0][i], plane_0_0, -conic_offset_opposite-conic_offset);//0.1 means more tighter
-
+                        clipper_util::offset_2D(joint_2.m[0][i], plane_0_0, offset_value);//0.1 means more tighter
+                        //double value = -(2 * conic_offset_opposite) - conic_offset;
+                       printf("reult %f ", offset_value);
+                       // printf("reult %f ", conic_offset);
+                      printf("reult %f ", conic_offset_opposite);
+                       // printf("reult %f ", conic_offset +conic_offset_opposite);//shOULD BE THIS
                     }
 
                     for (int i = 0; i < joint_2.m[1].size(); i++) {
                         //cgal_polyline_util::reverse_if_clockwise(joint_2.f[1][i], plane_0_0);
-                        clipper_util::offset_2D(joint_2.m[1][i], plane_0_0, -conic_offset_opposite - conic_offset );
+                       clipper_util::offset_2D(joint_2.m[1][i], plane_0_0, offset_value);
                     }
 
                     //printf("xml tile reading number of polyines %iz" , joint_2.m[0].size());
@@ -618,31 +624,22 @@ namespace joint_library {
                     jo.m[1].insert(jo.m[1].end(), joint_2.m[1].begin(), joint_2.m[1].end());
                     for (auto& m : joint_2.m_boolean_type)
                         jo.m_boolean_type.emplace_back('9');
-                    //jo.m_boolean_type.insert(jo.m_boolean_type.end(), joint_2.m_boolean_type.begin(), joint_2.m_boolean_type.end());
+
 
                     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
                     //offset curve due to conic tool
                     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
                    
-                    //viewer_polylines.emplace_back(jo.m[0][0]);
-                    //viewer_polylines.emplace_back(jo.m[0][2]);
-                    
-                    //double conic_offset = dist_two_outlines * std::tan(15 * 3.14159265 / 180.0);
-
-
-/*                    jo.f[0].insert(jo.f[0].end(), joint_2.f[0].begin(), joint_2.f[0].end());
-                    jo.f[1].insert(jo.f[1].end(), joint_2.f[1].begin(), joint_2.f[1].end());
-                    jo.f_boolean_type.insert(jo.f_boolean_type.end(), joint_2.f_boolean_type.begin(), joint_2.f_boolean_type.end());          */          
+      
 
                     for (int i = 0; i < joint_2.f[0].size(); i++) {
                         //cgal_polyline_util::reverse_if_clockwise(joint_2.f[0][i], plane_0_0);
-                        clipper_util::offset_2D(joint_2.f[0][i], plane_0_0, conic_offset_opposite);//- conic_offset
+                        //clipper_util::offset_2D(joint_2.f[0][i], plane_0_0, conic_offset_opposite);//- conic_offset
 
                     }
 
                     for (int i = 0; i < joint_2.f[1].size(); i++) {
-                        //cgal_polyline_util::reverse_if_clockwise(joint_2.f[1][i], plane_0_0);
-                        clipper_util::offset_2D(joint_2.f[1][i], plane_0_0, conic_offset_opposite);// - conic_offset
+                        //clipper_util::offset_2D(joint_2.f[1][i], plane_0_0, conic_offset_opposite);// - conic_offset
                     }
 
                     //Add once for milling
@@ -652,15 +649,18 @@ namespace joint_library {
                     for (auto& f : joint_2.f_boolean_type)
                         jo.f_boolean_type.emplace_back('6');
                     
-                    //Add second time for conical cut
-                    printf("\n %i", jo.f[0].size());
-                    
                     jo.f[0].insert(jo.f[0].end(), joint_2.f[0].begin(), joint_2.f[0].end());
                     jo.f[1].insert(jo.f[1].end(), joint_2.f[1].begin(), joint_2.f[1].end());
                     for (auto& f : joint_2.f_boolean_type)
                         jo.f_boolean_type.emplace_back('8');
-                    //jo.f_boolean_type.insert(jo.f_boolean_type.end(), joint_2.f_boolean_type.begin(), joint_2.f_boolean_type.end());
+
                 }
+
+
+                std::swap(jo.m[0], jo.f[0]);
+                std::swap(jo.m[1], jo.f[1]);
+                std::swap(jo.m_boolean_type[1], jo.f_boolean_type[1]);
+                   
             
         }
     }
@@ -1256,12 +1256,10 @@ namespace joint_library {
         cgal_polyline_util::extend_equally(rect_half_1, 1, y_extend_len);
         cgal_polyline_util::extend_equally(rect_half_1, 3, y_extend_len);
 
-       // viewer_polylines.emplace_back(CGAL_Polyline{ p_rect_2_mid_0 ,p_rect_2_mid_1 });
-       // viewer_polylines.emplace_back(rect_half_0);
 
         double x_target_len = jo.scale[0];
-        IK::Vector_3 x_offset = x * ( (x_len+x_target_len) / x_len);
-        IK::Vector_3 x_tween = x * ((jo.shift) / x_len);//x_offset * jo.shift;
+        IK::Vector_3 x_offset = x * ( (5+x_len+x_target_len) / x_len);
+        IK::Vector_3 x_tween = x * ((0.25) / x_len);//jo.shift is the length //x_offset * jo.shift;
 
         std::array<IK::Vector_3, 4> offset_vectors = {
    x_tween,
@@ -1325,8 +1323,6 @@ rect_half_1,rect_half_1,rect_half_1,rect_half_1
         joint.f_boolean_type = { '2', '2', '2', '2' };
         joint.m_boolean_type = { '1', '1' };
 
-        //if (orient_to_connection_zone)
-            //joint.orient_to_connection_area();
     }
 
     inline void ts_e_p_1(joint& joint) {
@@ -1601,6 +1597,454 @@ rect_half_1,rect_half_1,rect_half_1,rect_half_1
 #endif
     }
 
+    inline void ts_e_p_4(joint& joint) {
+        joint.name = "ts_e_p_4";
+
+        joint.f[0]={
+
+
+
+{
+IK::Point_3(0.64333, -0.78666, -0.01),
+IK::Point_3(0.375, -0.25, -0.01),
+IK::Point_3(-0.375, -0.25, -0.01),
+IK::Point_3(-0.64333, -0.78666, -0.01),
+IK::Point_3(0.64333, -0.78666, -0.01),
+},
+
+{
+IK::Point_3(0.64333, -0.78666, -0.01),
+IK::Point_3(0.375, -0.25, -0.01),
+IK::Point_3(-0.375, -0.25, -0.01),
+IK::Point_3(-0.64333, -0.78666, -0.01),
+IK::Point_3(0.64333, -0.78666, -0.01),
+},
+
+{
+IK::Point_3(0.64333, -0.78666, 0.01),
+IK::Point_3(0.375, -0.25, 0.01),
+IK::Point_3(-0.375, -0.25, 0.01),
+IK::Point_3(-0.64333, -0.78666, 0.01),
+IK::Point_3(0.64333, -0.78666, 0.01),
+},
+
+{
+IK::Point_3(0.64333, -0.78666, 0.01),
+IK::Point_3(0.375, -0.25, 0.01),
+IK::Point_3(-0.375, -0.25, 0.01),
+IK::Point_3(-0.64333, -0.78666, 0.01),
+IK::Point_3(0.64333, -0.78666, 0.01),
+},
+
+{
+IK::Point_3(-0.375, 0.075, 0.15),
+IK::Point_3(0.375, 0.075, 0.15),
+IK::Point_3(0.375, 0.075, -0.15),
+IK::Point_3(-0.375, 0.075, -0.15),
+IK::Point_3(-0.375, 0.075, 0.15),
+},
+
+{
+IK::Point_3(-0.375, 0.075, 0.15),
+IK::Point_3(0.375, 0.075, 0.15),
+IK::Point_3(0.375, 0.075, -0.15),
+IK::Point_3(-0.375, 0.075, -0.15),
+IK::Point_3(-0.375, 0.075, 0.15),
+},
+
+{
+IK::Point_3(-0.375, 0.075, 0.15),
+IK::Point_3(0.375, 0.075, 0.15),
+IK::Point_3(0.375, 0.075, -0.15),
+IK::Point_3(-0.375, 0.075, -0.15),
+IK::Point_3(-0.375, 0.075, 0.15),
+},
+
+{
+IK::Point_3(-0.375, 0.075, 0.15),
+IK::Point_3(0.375, 0.075, 0.15),
+IK::Point_3(0.375, 0.075, -0.15),
+IK::Point_3(-0.375, 0.075, -0.15),
+IK::Point_3(-0.375, 0.075, 0.15),
+},
+
+
+
+
+
+
+        };
+
+        joint.f[1]={
+
+
+{
+IK::Point_3(0.64333, -0.78666, 0.5),
+IK::Point_3(0.375, -0.25, 0.5),
+IK::Point_3(-0.375, -0.25, 0.5),
+IK::Point_3(-0.64333, -0.78666, 0.5),
+IK::Point_3(0.64333, -0.78666, 0.5),
+},
+
+{
+IK::Point_3(0.64333, -0.78666, 0.5),
+IK::Point_3(0.375, -0.25, 0.5),
+IK::Point_3(-0.375, -0.25, 0.5),
+IK::Point_3(-0.64333, -0.78666, 0.5),
+IK::Point_3(0.64333, -0.78666, 0.5),
+},
+
+{
+IK::Point_3(0.64333, -0.78666, -0.5),
+IK::Point_3(0.375, -0.25, -0.5),
+IK::Point_3(-0.375, -0.25, -0.5),
+IK::Point_3(-0.64333, -0.78666, -0.5),
+IK::Point_3(0.64333, -0.78666, -0.5),
+},
+
+{
+IK::Point_3(0.64333, -0.78666, -0.5),
+IK::Point_3(0.375, -0.25, -0.5),
+IK::Point_3(-0.375, -0.25, -0.5),
+IK::Point_3(-0.64333, -0.78666, -0.5),
+IK::Point_3(0.64333, -0.78666, -0.5),
+},
+
+{
+IK::Point_3(-0.375, -0.35, 0.15),
+IK::Point_3(0.375, -0.35, 0.15),
+IK::Point_3(0.375, -0.35, -0.15),
+IK::Point_3(-0.375, -0.35, -0.15),
+IK::Point_3(-0.375, -0.35, 0.15),
+},
+
+{
+IK::Point_3(-0.375, -0.35, 0.15),
+IK::Point_3(0.375, -0.35, 0.15),
+IK::Point_3(0.375, -0.35, -0.15),
+IK::Point_3(-0.375, -0.35, -0.15),
+IK::Point_3(-0.375, -0.35, 0.15),
+},
+
+{
+IK::Point_3(-0.375, 0.5, 0.15),
+IK::Point_3(0.375, 0.5, 0.15),
+IK::Point_3(0.375, 0.5, -0.15),
+IK::Point_3(-0.375, 0.5, -0.15),
+IK::Point_3(-0.375, 0.5, 0.15),
+},
+
+{
+IK::Point_3(-0.375, 0.5, 0.15),
+IK::Point_3(0.375, 0.5, 0.15),
+IK::Point_3(0.375, 0.5, -0.15),
+IK::Point_3(-0.375, 0.5, -0.15),
+IK::Point_3(-0.375, 0.5, 0.15),
+},
+
+
+
+
+
+
+
+        };
+
+
+        joint.m[0] = {
+
+{
+IK::Point_3(-0.59861, -0.69721, 0.5),
+IK::Point_3(-0.375, -0.25, 0.5),
+IK::Point_3(-0.375, -0.25, -0.5),
+IK::Point_3(-0.59861, -0.69721, -0.5),
+IK::Point_3(-0.59861, -0.69721, 0.5),
+},
+
+{
+IK::Point_3(-0.59861, -0.69721, 0.5),
+IK::Point_3(-0.375, -0.25, 0.5),
+IK::Point_3(-0.375, -0.25, -0.5),
+IK::Point_3(-0.59861, -0.69721, -0.5),
+IK::Point_3(-0.59861, -0.69721, 0.5),
+},
+
+{
+IK::Point_3(0.59861, -0.69721, 0.5),
+IK::Point_3(0.375, -0.25, 0.5),
+IK::Point_3(0.375, -0.25, -0.5),
+IK::Point_3(0.59861, -0.69721, -0.5),
+IK::Point_3(0.59861, -0.69721, 0.5),
+},
+
+{
+IK::Point_3(0.59861, -0.69721, 0.5),
+IK::Point_3(0.375, -0.25, 0.5),
+IK::Point_3(0.375, -0.25, -0.5),
+IK::Point_3(0.59861, -0.69721, -0.5),
+IK::Point_3(0.59861, -0.69721, 0.5),
+},
+
+{
+IK::Point_3(-0.375, 0.7, 0.5),
+IK::Point_3(-0.375, 0.7, -0.5),
+IK::Point_3(-0.375, -0.25, -0.5),
+IK::Point_3(-0.375, -0.25, 0.5),
+IK::Point_3(-0.375, 0.7, 0.5),
+},
+
+{
+IK::Point_3(-0.375, 0.7, 0.5),
+IK::Point_3(-0.375, 0.7, -0.5),
+IK::Point_3(-0.375, -0.25, -0.5),
+IK::Point_3(-0.375, -0.25, 0.5),
+IK::Point_3(-0.375, 0.7, 0.5),
+},
+
+{
+IK::Point_3(0.375, 0.7, 0.5),
+IK::Point_3(0.375, 0.7, -0.5),
+IK::Point_3(0.375, -0.25, -0.5),
+IK::Point_3(0.375, -0.25, 0.5),
+IK::Point_3(0.375, 0.7, 0.5),
+},
+
+{
+IK::Point_3(0.375, 0.7, 0.5),
+IK::Point_3(0.375, 0.7, -0.5),
+IK::Point_3(0.375, -0.25, -0.5),
+IK::Point_3(0.375, -0.25, 0.5),
+IK::Point_3(0.375, 0.7, 0.5),
+},
+
+{
+IK::Point_3(-0.5, 0.7, 0.15),
+IK::Point_3(0.5, 0.7, 0.15),
+IK::Point_3(0.5, -0.25, 0.15),
+IK::Point_3(-0.5, -0.25, 0.15),
+IK::Point_3(-0.5, 0.7, 0.15),
+},
+
+{
+IK::Point_3(-0.5, 0.7, 0.15),
+IK::Point_3(0.5, 0.7, 0.15),
+IK::Point_3(0.5, -0.25, 0.15),
+IK::Point_3(-0.5, -0.25, 0.15),
+IK::Point_3(-0.5, 0.7, 0.15),
+},
+
+{
+IK::Point_3(-0.5, 0.7, -0.15),
+IK::Point_3(0.5, 0.7, -0.15),
+IK::Point_3(0.5, -0.25, -0.15),
+IK::Point_3(-0.5, -0.25, -0.15),
+IK::Point_3(-0.5, 0.7, -0.15),
+},
+
+{
+IK::Point_3(-0.5, 0.7, -0.15),
+IK::Point_3(0.5, 0.7, -0.15),
+IK::Point_3(0.5, -0.25, -0.15),
+IK::Point_3(-0.5, -0.25, -0.15),
+IK::Point_3(-0.5, 0.7, -0.15),
+},
+
+{
+IK::Point_3(0.05, 0.7, -0.6),
+IK::Point_3(0.05, 0.8, -0.6),
+IK::Point_3(0.05, 0.8, 0.6),
+IK::Point_3(0.05, 0.7, 0.6),
+IK::Point_3(0.05, 0.7, -0.6),
+},
+
+{
+IK::Point_3(0.05, 0.7, -0.6),
+IK::Point_3(0.05, 0.8, -0.6),
+IK::Point_3(0.05, 0.8, 0.6),
+IK::Point_3(0.05, 0.7, 0.6),
+IK::Point_3(0.05, 0.7, -0.6),
+},
+
+{
+IK::Point_3(-0.05, 0.7, -0.6),
+IK::Point_3(-0.05, 0.8, -0.6),
+IK::Point_3(-0.05, 0.8, 0.6),
+IK::Point_3(-0.05, 0.7, 0.6),
+IK::Point_3(-0.05, 0.7, -0.6),
+},
+
+{
+IK::Point_3(-0.05, 0.7, -0.6),
+IK::Point_3(-0.05, 0.8, -0.6),
+IK::Point_3(-0.05, 0.8, 0.6),
+IK::Point_3(-0.05, 0.7, 0.6),
+IK::Point_3(-0.05, 0.7, -0.6),
+},
+
+
+
+
+
+
+
+
+        };
+
+        joint.m[1] = {
+
+{
+IK::Point_3(-0.95638, -0.51833, 0.5),
+IK::Point_3(-0.73277, -0.07111, 0.5),
+IK::Point_3(-0.73277, -0.07111, -0.5),
+IK::Point_3(-0.95638, -0.51833, -0.5),
+IK::Point_3(-0.95638, -0.51833, 0.5),
+},
+
+{
+IK::Point_3(-0.95638, -0.51833, 0.5),
+IK::Point_3(-0.73277, -0.07111, 0.5),
+IK::Point_3(-0.73277, -0.07111, -0.5),
+IK::Point_3(-0.95638, -0.51833, -0.5),
+IK::Point_3(-0.95638, -0.51833, 0.5),
+},
+
+{
+IK::Point_3(0.95638, -0.51833, 0.5),
+IK::Point_3(0.73277, -0.07111, 0.5),
+IK::Point_3(0.73277, -0.07111, -0.5),
+IK::Point_3(0.95638, -0.51833, -0.5),
+IK::Point_3(0.95638, -0.51833, 0.5),
+},
+
+{
+IK::Point_3(0.95638, -0.51833, 0.5),
+IK::Point_3(0.73277, -0.07111, 0.5),
+IK::Point_3(0.73277, -0.07111, -0.5),
+IK::Point_3(0.95638, -0.51833, -0.5),
+IK::Point_3(0.95638, -0.51833, 0.5),
+},
+
+{
+IK::Point_3(-0.675, 0.7, 0.5),
+IK::Point_3(-0.675, 0.7, -0.5),
+IK::Point_3(-0.675, -0.25, -0.5),
+IK::Point_3(-0.675, -0.25, 0.5),
+IK::Point_3(-0.675, 0.7, 0.5),
+},
+
+{
+IK::Point_3(-0.675, 0.7, 0.5),
+IK::Point_3(-0.675, 0.7, -0.5),
+IK::Point_3(-0.675, -0.25, -0.5),
+IK::Point_3(-0.675, -0.25, 0.5),
+IK::Point_3(-0.675, 0.7, 0.5),
+},
+
+{
+IK::Point_3(0.675, 0.7, 0.5),
+IK::Point_3(0.675, 0.7, -0.5),
+IK::Point_3(0.675, -0.25, -0.5),
+IK::Point_3(0.675, -0.25, 0.5),
+IK::Point_3(0.675, 0.7, 0.5),
+},
+
+{
+IK::Point_3(0.675, 0.7, 0.5),
+IK::Point_3(0.675, 0.7, -0.5),
+IK::Point_3(0.675, -0.25, -0.5),
+IK::Point_3(0.675, -0.25, 0.5),
+IK::Point_3(0.675, 0.7, 0.5),
+},
+
+{
+IK::Point_3(-0.5, 0.7, 0.55),
+IK::Point_3(0.5, 0.7, 0.55),
+IK::Point_3(0.5, -0.25, 0.55),
+IK::Point_3(-0.5, -0.25, 0.55),
+IK::Point_3(-0.5, 0.7, 0.55),
+},
+
+{
+IK::Point_3(-0.5, 0.7, 0.55),
+IK::Point_3(0.5, 0.7, 0.55),
+IK::Point_3(0.5, -0.25, 0.55),
+IK::Point_3(-0.5, -0.25, 0.55),
+IK::Point_3(-0.5, 0.7, 0.55),
+},
+
+{
+IK::Point_3(-0.5, 0.7, -0.55),
+IK::Point_3(0.5, 0.7, -0.55),
+IK::Point_3(0.5, -0.25, -0.55),
+IK::Point_3(-0.5, -0.25, -0.55),
+IK::Point_3(-0.5, 0.7, -0.55),
+},
+
+{
+IK::Point_3(-0.5, 0.7, -0.55),
+IK::Point_3(0.5, 0.7, -0.55),
+IK::Point_3(0.5, -0.25, -0.55),
+IK::Point_3(-0.5, -0.25, -0.55),
+IK::Point_3(-0.5, 0.7, -0.55),
+},
+
+{
+IK::Point_3(0.7, 0.7, -0.6),
+IK::Point_3(0.7, 0.8, -0.6),
+IK::Point_3(0.7, 0.8, 0.6),
+IK::Point_3(0.7, 0.7, 0.6),
+IK::Point_3(0.7, 0.7, -0.6),
+},
+
+{
+IK::Point_3(0.7, 0.7, -0.6),
+IK::Point_3(0.7, 0.8, -0.6),
+IK::Point_3(0.7, 0.8, 0.6),
+IK::Point_3(0.7, 0.7, 0.6),
+IK::Point_3(0.7, 0.7, -0.6),
+},
+
+{
+IK::Point_3(-0.7, 0.7, -0.6),
+IK::Point_3(-0.7, 0.8, -0.6),
+IK::Point_3(-0.7, 0.8, 0.6),
+IK::Point_3(-0.7, 0.7, 0.6),
+IK::Point_3(-0.7, 0.7, -0.6),
+},
+
+{
+IK::Point_3(-0.7, 0.7, -0.6),
+IK::Point_3(-0.7, 0.8, -0.6),
+IK::Point_3(-0.7, 0.8, 0.6),
+IK::Point_3(-0.7, 0.7, 0.6),
+IK::Point_3(-0.7, 0.7, -0.6),
+},
+
+
+
+
+
+
+
+
+        };
+
+
+        joint.f_boolean_type = { '6', '6' , '6', '6', '6', '6',   '6', '6'};
+        joint.m_boolean_type = { '5', '5' , '5', '5', '5', '5',   '5', '5',    '5', '5' , '5', '5', '4', '4',   '4', '4', };
+
+        //Joint lines, always the last line or rectangle is not a joint but an cutting element
+       // joint.m[0] = { {IK::Point_3(0.5, -0.5, -0.357142857142857), IK::Point_3(0.5, 0.5, -0.357142857142857), IK::Point_3(0.5, 0.5, -0.214285714285714), IK::Point_3(0.5, -0.5, -0.214285714285714), IK::Point_3(0.5, -0.5, -0.0714285714285715), IK::Point_3(0.5, 0.5, -0.0714285714285713), IK::Point_3(0.5, 0.5, 0.0714285714285715), IK::Point_3(0.5, -0.5, 0.0714285714285714), IK::Point_3(0.5, -0.5, 0.214285714285714), IK::Point_3(0.5, 0.5, 0.214285714285714), IK::Point_3(0.5, 0.5, 0.357142857142857), IK::Point_3(0.5, -0.5, 0.357142857142857)},
+             //         {IK::Point_3(0.5, -0.5, -0.357142857142857), IK::Point_3(0.5, -0.5, 0.357142857142857)} };
+
+       // joint.m[1] = { {IK::Point_3(-0.5, -0.5, -0.357142857142857), IK::Point_3(-0.5, 0.5, -0.357142857142857), IK::Point_3(-0.5, 0.5, -0.214285714285714), IK::Point_3(-0.5, -0.5, -0.214285714285714), IK::Point_3(-0.5, -0.5, -0.0714285714285715), IK::Point_3(-0.5, 0.5, -0.0714285714285713), IK::Point_3(-0.5, 0.5, 0.0714285714285715), IK::Point_3(-0.5, -0.5, 0.0714285714285714), IK::Point_3(-0.5, -0.5, 0.214285714285714), IK::Point_3(-0.5, 0.5, 0.214285714285714), IK::Point_3(-0.5, 0.5, 0.357142857142857), IK::Point_3(-0.5, -0.5, 0.357142857142857)},
+                     // {IK::Point_3(-0.5, -0.5, -0.357142857142857), IK::Point_3(-0.5, -0.5, 0.357142857142857)} };
+
+        //joint.f_boolean_type = { '6', '6', '6', '6', '6', '6', '6', '6' , '6', '6' };
+        //joint.m_boolean_type = { '6', '6', '6', '6', '6', '6', '6', '6' , '6', '6'  , '4', '4' , '4', '4' };
+
+    }
+
     //30-39
     inline void cr_c_ip_0(joint& joint) {
         //printf("cr_c_ip_0");
@@ -1763,8 +2207,8 @@ rect_half_1,rect_half_1,rect_half_1,rect_half_1
         joint.orient = false;//prevents joint from copying
 
         double temp_scale_y = 5;
-        double temp_scale_z = 1;
-        
+        double temp_scale_z = 15;
+        double offset_from_center = 0.25;
         //printf("\nb_0\n");
 
         //Get center rectangle
@@ -1795,21 +2239,27 @@ rect_half_1,rect_half_1,rect_half_1,rect_half_1
         //Z-AxisOffset by normal, scale value gives the offset from the center
         IK::Vector_3 z_axis;
         cgal_vector_util::AverageNormal(mid_rectangle, z_axis, true, true);
+        IK::Vector_3 z_axis_offset_from_center = z_axis*offset_from_center;
         double len = cgal_vector_util::LengthVec(z_axis);
+   
         z_axis *= (joint.scale[2] + temp_scale_z);
         
 
         cgal_polyline_util::shift(mid_rectangle, 2);
+       
         CGAL_Polyline rect0 = mid_rectangle;
         CGAL_Polyline rect1 = mid_rectangle;
         CGAL_Polyline rect2 = mid_rectangle;
         CGAL_Polyline rect3 = mid_rectangle;
-        cgal_polyline_util::move(rect1, z_axis );
-        cgal_polyline_util::move(rect3, -z_axis );
+        cgal_polyline_util::move(rect1, z_axis);
+        cgal_polyline_util::move(rect3, -z_axis);
+        cgal_polyline_util::move(rect0, z_axis_offset_from_center);
+        cgal_polyline_util::move(rect2, -z_axis_offset_from_center);
         //printf("\n Length %f %f %f", len, joint.scale[2], temp_scale_z);
-        rect0=cgal_polyline_util::tween_two_polylines(rect0, rect1, joint.shift);
-        rect2=cgal_polyline_util::tween_two_polylines(rect2, rect3, joint.shift);
-
+        //rect0=cgal_polyline_util::tween_two_polylines(rect0, rect1, 0.25);//joint.shift
+        //rect2=cgal_polyline_util::tween_two_polylines(rect2, rect3, 0.25);
+        //viewer_polylines.emplace_back(rect0);
+        //viewer_polylines.emplace_back(rect1);
         //Create cutting geometry - two rectangles that represents single line cut
 
         //Add geometry and boolean types
@@ -1822,7 +2272,7 @@ rect_half_1,rect_half_1,rect_half_1,rect_half_1
 
         //joint.f[0] = { rect0, rect1 };
         //joint.f[1] = { rect2, rect3 };
-
+        //printf("Hi");
         joint.m_boolean_type = { slice,slice,slice,slice };
         //joint.f_boolean_type = { '1', '1' };
         
@@ -1849,7 +2299,8 @@ rect_half_1,rect_half_1,rect_half_1,rect_half_1
         joint_names[20] = "ts_e_p_0";
         joint_names[21] = "ts_e_p_1";
         joint_names[22] = "ts_e_p_2";
-        joint_names[22] = "ts_e_p_3";
+        joint_names[23] = "ts_e_p_3";
+        joint_names[24] = "ts_e_p_4";
         joint_names[28] = "side_removal";
         joint_names[29] = "ts_e_p_9";
         joint_names[30] = "cr_c_ip_0";
@@ -1889,6 +2340,7 @@ rect_half_1,rect_half_1,rect_half_1,rect_half_1
         int counter = 0;
         //CGAL_Debug(joints.size());
         for (auto& jo : joints) {
+           // printf("\n %i %i %i %i %i", jo.v0, jo.v1, jo.f0_0, jo.f1_0, jo.type);
             //CGAL_Debug(counter);
             counter++;
 
@@ -1899,14 +2351,20 @@ rect_half_1,rect_half_1,rect_half_1,rect_half_1
             if (elements[jo.v0].joint_types.size() && elements[jo.v1].joint_types.size()) {
                 int a = std::abs(elements[jo.v0].joint_types[jo.f0_0]);
                 int b = std::abs(elements[jo.v1].joint_types[jo.f1_0]);
+
+               // printf("\n %i %i ", a,b);
+                
                 id_representing_joint_name = (a > b) ? a : b;
-               //CGAL_Debug(a, b, a);
+              // CGAL_Debug(a, b, a);
+        
             }
             else if (elements[jo.v0].joint_types.size()) {
                 id_representing_joint_name = std::abs(elements[jo.v0].joint_types[jo.f0_0]);
+                //printf("\n b");
             }
             else if (elements[jo.v1].joint_types.size()) {
                 id_representing_joint_name = std::abs(elements[jo.v1].joint_types[jo.f1_0]);
+                //printf("\n c");
             }
 
             //When users gives an input -> default_parameters_for_four_types
@@ -1945,7 +2403,7 @@ rect_half_1,rect_half_1,rect_half_1,rect_half_1
                 group = 6;
             }
             //printf("\n %i %i %i", group, id_representing_joint_name, jo.type);
-            
+           //printf("\n ");
 
             //define scale
 
@@ -1971,7 +2429,8 @@ rect_half_1,rect_half_1,rect_half_1,rect_half_1
                 if (id_representing_joint_name == -1) //for cases when joint types per each edge are not defined
                     id_representing_joint_name = (int)default_parameters_for_four_types[(number_of_parameters * group + 2)];
             }
-
+            //printf("\n  %i, %i, %i", jo.type, jo.v0, jo.v1);
+            //printf("\n Hi %i %i", id_representing_joint_name, group);
             if (id_representing_joint_name < 1 || group == -1) {
                 ids_to_remove.emplace_back(counter - 1);
                 continue;
@@ -2012,6 +2471,7 @@ rect_half_1,rect_half_1,rect_half_1,rect_half_1
             //CGAL_Debug(0);
              //CGAL_Debug(id_representing_joint_name);
              //is_similar_joint = false;
+     
             if (is_similar_joint) {
                 //CGAL_Debug(0);
                 auto u_j = unique_joints.at(key);
@@ -2108,6 +2568,8 @@ rect_half_1,rect_half_1,rect_half_1,rect_half_1
                     break;
                 case (23):
                     ts_e_p_0(jo);
+                case (24):
+                    ts_e_p_4(jo);
                     break;
                 case (28):
                     side_removal(jo, elements);
