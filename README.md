@@ -32,4 +32,15 @@ https://user-images.githubusercontent.com/18013985/147587822-cfb43c96-4a81-4b89-
 
 
 
-
+##### References
+https://grail.cs.washington.edu/projects/carpentrycompiler/
+@article {wu_siga19,
+    author = {Chenming Wu and Haisen Zhao and Chandrakana Nandi and Jeffrey I. Lipton and Zachary Tatlock and Adriana Schulz},
+    title = {Carpentry Compiler},
+    journal = {ACM Transactions on Graphics},
+    note = {presented at SIGGRAPH Asia 2019},
+    volume = {38},
+    number = {6},
+    pages = {Article No. 195},
+    year = {2019}
+}
