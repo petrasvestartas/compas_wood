@@ -104,14 +104,15 @@ def display_lines(viewer, lines, scale=0.01):
 
 def display_polylines_as_mesh(viewer, polylines, types, scale=0.01, t=3):
     # 10 - SS Rotate 11 - SS OUT OF PLANE 12 - SS IN Plane,  20 Top-Side, 30 - Cross
-    my_dict = {10: 0, 11: 1, 12: 2, 20: 3, 30: 4}
-    out_mesh = [[], [], [], [], []]
+    my_dict = {10: 0, 11: 1, 12: 2, 20: 3, 30: 4, 13: 5}
+    out_mesh = [[], [], [], [], [], []]
     out_mesh_colors = [
         (255 / 255.0, 0 / 255.0, 0 / 255.0),
         (255 / 255.0, 0 / 255.0, 100 / 255.0),
         (206 / 255, 0, 88 / 255.0),
         (0 / 255.0, 146 / 255.0, 210 / 255.0),
         (200 / 255.0, 174 / 255.0, 102 / 255.0),
+        (255 / 255.0, 0 / 255.0, 25 / 255.0),
     ]
     # 0 Red Side-Side 1 Yellow Top-Side 2 Grey Top-Top 3 Blue Cross
 

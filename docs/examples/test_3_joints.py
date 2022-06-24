@@ -18,9 +18,10 @@ def test_joints():
 
     # Compute joint polylines
     element_pairs_list, joint_areas_polylines, joint_types = joints(input, 0)
+    # print(joint_types)
 
     # Display via Compas_View2
-    display(input, joint_areas_polylines, None, 0.01, 0, 0, 0, False, joint_types)
+    display(input, joint_areas_polylines, None, 0.01, 0, 0, 0, False, joint_types)  #
 
 
 # ==============================================================================

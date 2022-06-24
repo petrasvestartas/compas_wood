@@ -426,6 +426,8 @@ std::tuple<std::vector<RowMatrixXd>, std::vector<int>> pybind11_get_connection_z
     std::vector<std::vector<CGAL_Polyline>> output;
     std::vector<std::vector<int>> top_face_triangulation;
 
+
+    std::vector<std::vector<char>> output_types;
     get_connection_zones(
         out_polyline_pairs,
         out_insertion_vectors,
@@ -433,9 +435,12 @@ std::tuple<std::vector<RowMatrixXd>, std::vector<int>> pybind11_get_connection_z
         out_three_valence_element_indices_and_instruction,
         out_adjacency,
 
+        //output
         output,
+        output_types,//new
         top_face_triangulation,
 
+        //Global Parameters
         out_default_parameters_for_joint_types,
         out_scale,
         search_type,
