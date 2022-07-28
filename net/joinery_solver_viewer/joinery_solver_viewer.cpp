@@ -3,361 +3,215 @@
 #include "easy3d_polyline_viewer.h"
 #include "xml_parser.h"
 #include "joinery_solver_main.h"
-//
-//int main(int argc, char** argv) {
-//
-//    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//    //Read Polylines from XML
-//    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//    bool simple_case = true;
-//    std::vector<std::vector<IK::Point_3>> input_polyline_pairs;
-//    bool result = xml_parser::read_xml_polylines(input_polyline_pairs, simple_case);
-//
-//
-//    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//    //Joinery Solver
-//    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//
-//    //xml joint path
-//    path_and_file_for_joints = "C:\\Users\\petra\\AppData\\Roaming\\Grasshopper\\Libraries\\compas_wood\\joinery_library.xml ";
-//
-//    auto start = std::chrono::high_resolution_clock::now();
-//    // unsync the I/O of C and C++.
-//    std::ios::sync_with_stdio(false);
-//
-//    std::vector<std::vector<IK::Vector_3>> input_insertion_vectors;
-//    //std::vector<std::vector<int>> input_joint_types;
-//    std::vector<std::vector<int>> input_joint_types;
-//    input_joint_types.reserve(input_polyline_pairs.size());
-//
-//
-//
-//
-//
-//    //The adjacency will work because none of the joints can be found on boundaries
-//
-//
-//
-//
-//    //if (simple_case)
-//    //    input_adjacency.clear();
-//
-//
-//
-//
-//    //Three valence
-//    std::vector<std::vector<int>> input_three_valence_element_indices_and_instruction;
-//
-//    //output
-//    std::vector<std::vector<CGAL_Polyline>> output_polyline_pairs;
-//    std::vector<std::vector<char>> output_types;
-//    std::vector<std::vector<int>> top_face_triangulation;
-//
-//    //Global Parameters
-//    std::vector<double> default_parameters_for_joint_types = {
-//300,
-//0.5,
-//8,
-//450,
-//0.64,
-//10,
-//450,
-//0.7,
-//24,
-//300,
-//0.5,
-//30,
-//300,
-//0.5,
-//40,
-//300,
-//0.5,
-//58,
-//300,
-//1.0,
-//60
-//    };
-//
-//    std::vector<double> scale = { 1,1,1 };
-//    int search_type = 0;
-//    int output_type = 3;
-//
-//        //Joint types are given to each element, no rtree search will be used here
-//    for (int i = 0; i < input_polyline_pairs.size(); i+=2) {
-//
-//        int id = (int)(i*0.5);
-//
-//        auto input_joint_types_ = std::vector<int>();
-//    
-//        //Give first two faces empty joint type
-//        input_joint_types_.reserve(input_polyline_pairs[i].size()+1);
-//        input_joint_types_.emplace_back(-1);
-//        input_joint_types_.emplace_back(-1);
-//    
-//       //Give the rest of the faces the faces joint type based on distance
-//        for (int j = 0; j < input_polyline_pairs[i].size()-1; j++) {
-//                    input_joint_types_.emplace_back(24);
-//        }
-//
-//
-//        
-//        input_joint_types.emplace_back(input_joint_types_);       
-//    }    
-//    std::vector<int> input_adjacency;
-//
-//    //!!!
-//    //This would work only if polyline are oriented correctly, because during the element creation in the solver the joint types property is reversed
-//
-//    input_adjacency = {
-//   1,1,2 + 1,2 + 1 ,
-//   1,1,2 + 3,2 + 3,
-//   0,0,2 +3,2 + 3
-//
-//    };
-//    
-//    for (size_t i = 0; i < input_adjacency.size(); i += 4) {
-//        input_joint_types[input_adjacency[i]][input_adjacency[i + 2]] = 60;
-//    }
-//
-//
-//    get_connection_zones(
-//
-//        //input
-//        input_polyline_pairs,
-//        input_insertion_vectors,
-//        input_joint_types,
-//        input_three_valence_element_indices_and_instruction,
-//        input_adjacency,
-//
-//        //output
-//        output_polyline_pairs,
-//        output_types,
-//        top_face_triangulation,
-//
-//        //Global Parameters
-//        default_parameters_for_joint_types,
-//        scale,
-//        search_type,
-//        output_type,
-//        0
-//    );
-//
-//
-//    auto end = std::chrono::high_resolution_clock::now();
-//    // Calculating total time taken by the program.
-//    double time_taken = (double)std::chrono::duration_cast<std::chrono::nanoseconds>(end - start).count();
-//    time_taken *= 1e-6;
-//
-//    std::cout << "\nTime taken by program is : " << std::fixed << time_taken << std::setprecision(9);
-//    std::cout << " ms" << std::endl;
-//
-//    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//    //Write Polylines to XML
-//    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//    //output_polyline_pairs.emplace_back(viewer_polylines);
-//    xml_parser::write_xml_polylines_and_types(output_polyline_pairs, output_types,-1,true);
-//    //printf("\n Loops Starts");
-//    //for (auto& types : output_types) {
-//    //    printf("\n Iteration \n");
-//    //    for (auto& type : types)
-//    //        printf("%c \n", type);
-//    //    break;
-//    //}
-//    //printf("\n");
-//
-//    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//    //Preview poylylines from xml, take 9-th element
-//    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//    auto viewer = viewer_init();
-//    viewer_display_polylines(viewer, viewer_polylines, -1, 20);
-//    viewer_display_polylines(viewer, input_polyline_pairs);
-//    viewer_display_polylines_tree(viewer, output_polyline_pairs);
-//    viewer_run(viewer);
-//}
-//
 
-int main(int argc, char** argv  ) {
-        
+//Generate cross connections from lines
+//Input: vector of lines
+//Output: rectangle volumes
+//Output: cross joints
+int main(int argc, char** argv) {
+
+    //std::vector<CGAL_Polyline>& polylines,
+    //std::vector<std::vector<double>>& polylines_segment_radii,
+    //std::vector<std::vector<IK::Vector_3>>& polylines_segment_direction,
+    //std::vector<int>& allowed_types,
+    //double& min_distance,
+    //double& volume_length,
+    //double& cross_or_side_to_end,
+    //int& flip_male,
+
+    ////output of joint areas
+    //std::vector<std::array<int, 4>>& polyline0_id_segment0_id_polyline1_id_segment1_id,
+    //std::vector<std::array<IK::Point_3, 2>>& point_pairs,
+    //std::vector<std::array<CGAL_Polyline, 4>>& volume_pairs,
+    //std::vector<CGAL_Polyline>& joints_areas,
+    //std::vector<int>& joints_types,
+
+    ////Global Parameters and output joint selection and orientation
+    //std::vector<double>& default_parameters_for_joint_types,
+    //std::vector<std::vector<CGAL_Polyline>>& joints_oriented_polylines,
+    //bool compute_joints = false,
+    //double division_distance = 300,
+    //double shift = 0.6,
+    //int output_type = 3
+
+
+
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //Read Polylines from XML
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    //pollylines axes
     bool simple_case = false;
-    std::vector<std::vector<IK::Point_3>> input_polyline_pairs  ;
-    bool result = xml_parser::read_xml_polylines(input_polyline_pairs, simple_case)  ;
-    
+    std::vector<std::vector<IK::Point_3>> input_polyline_pairs;
+    path_and_file_for_input_polylines = "C:\\IBOIS57\\_Code\\Software\\Python\\compas_wood\\net\\data\\input_polylines.xml";
+    bool result = xml_parser::read_xml_polylines(input_polyline_pairs, simple_case);
+    if (!result) {
+        std::cout << "Error input_polylines.xml";
+        return 0;
+    }
+
+    //radii
+    std::vector<std::vector<double>> input_radii;
+    path_and_file_for_input_numbers = "C:\\IBOIS57\\_Code\\Software\\Python\\compas_wood\\net\\data\\input_numbers.xml";
+    result = xml_parser::read_xml_numbers(input_radii);
+    if (!result) {
+        std::cout << "Error input_numbers.xml";
+        return 0;
+    }
+
+    //direction
+    std::vector<std::vector<IK::Vector_3>> polylines_segment_direction;
+
+
+    //allowed types
+    //allowed_types: -1 - all possible types, 0 - end - to - end, 1 - cross or side - to - end, this option is needed because multiple joint can be made in one intersection,
+    std::vector<int> allowed_types;
+    allowed_types.reserve(input_polyline_pairs.size());
+    for (int i = 0; i < input_polyline_pairs.size(); i++)
+        allowed_types.emplace_back(-1);
+
+
+
+    //min_distance : double distance until which search is valid
+    //Parameter t explanation
+    // x < 0 - all cross
+    //x > 1.0 all side - end
+    // how close the point is to the middle from
+    //(closest to the middle) 0 <= x <= 1 (closest to the edge)
+    //possible output : one is above another below - side - to - end joint  e.g. 0.9999
+    //possible output : when both are above, the smaller is female, other is male 0.75
+    //possible output : when both are below, then cross, e.g. 0.0001
+    double min_distance = 50.0;
+
+
+    // volume_length : double length of beam volumes
+    double volume_length = 100;
+
+    //cross_or_side_to_end : double type0_type1_parameter
+    double cross_or_side_to_end = 1 - 0.91;
+
+    //flip_male : property for side-to-end volumes 0 - no shift, -1 shift to right, 1 shift to left
+    int flip_male = 0;
+
+
+
+
+    //Output
+    std::vector<std::array<int, 4>> polyline0_id_segment0_id_polyline1_id_segment1_id;
+    std::vector<std::array<IK::Point_3, 2>> point_pairs;
+    std::vector<std::array<CGAL_Polyline, 4>> volume_pairs;
+    std::vector<CGAL_Polyline> joints_areas;
+    std::vector<int> joints_types;
+
+    //Global Parameters and output joint selection and orientation
+    double division_length = 300;
+    std::vector<double> default_parameters_for_joint_types{
+        300,
+        0.5,
+        8,
+        450,
+        0.64,
+        10,
+        450,
+        0.7,
+        22,
+        300,
+        0.5,
+        30,
+        300,
+        0.5,
+        40,
+        300,
+        0.5,
+        58,
+        300,
+        1.0,
+        60
+    };
+
+    std::vector<std::vector<CGAL_Polyline>> joints_oriented_polylines;
+    bool compute_joints = false;
+    double division_distance = 500;
+    double shift = 0.6;
+    int output_type = 3;
+
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //Joinery Solver
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-    //xml joint path
-    path_and_file_for_joints = "C:\\Users\\petra\\AppData\\Roaming\\Grasshopper\\Libraries\\compas_wood\\joinery_library.xml ";
-
-    auto start = std::chrono::high_resolution_clock::now();
-    // unsync the I/O of C and C++.
-    std::ios::sync_with_stdio(false);
-
-    std::vector<std::vector<IK::Vector_3>> input_insertion_vectors;
-    //std::vector<std::vector<int>> input_joint_types;
-    std::vector<std::vector<int>> input_joint_types;
-    input_joint_types.reserve(input_polyline_pairs.size()) ;
+   // std::vector < double> 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40,
 
 
-
-    //The adjacency will work because none of the joints can be found on boundaries
-     std::vector<int> input_adjacency ;
-     input_adjacency = {
-        5,5,2 + 0,2 + 0 ,
-        11,11,2 + 0,2 + 0,
-        6,6,2 + 0,2 + 0,
-        13,13,2 + 3,2 + 3,
-        1,1,2 + 3,2 + 3,
-        0,0,2 + 2,2 + 2
-    };
-    if (simple_case)
-        input_adjacency.clear();
-
-
-    //Joint types are given to each element, no rtree search will be used here
-    for (int i = 0; i < input_polyline_pairs.size(); i+=2) {
-
-        int id = (int)(i*0.5);
-
-        auto input_joint_types_ = std::vector<int>();
-    
-        //Give first two faces empty joint type
-        input_joint_types_.reserve(input_polyline_pairs[i].size()+1);
-        input_joint_types_.emplace_back(-1);
-        input_joint_types_.emplace_back(-1);
-    
-       //Give the rest of the faces the faces joint type based on distance
-        for (int j = 0; j < input_polyline_pairs[i].size()-1; j++) {
-
-            if (input_polyline_pairs[i].size() - 1 == 6) {
-
-                if (j == 0 || j == 3) {
-                    input_joint_types_.emplace_back(56);
-                    
-                }
-                else {
-                    input_joint_types_.emplace_back(58);
-                }
-                
-            }
-            else {
-                if (j == 0 || j == 2) {
-
-                    input_joint_types_.emplace_back(56);
-                }
-                else {
-                    input_joint_types_.emplace_back(58);
-                }
-            }
-        
-
-            
-            //int type = CGAL::squared_distance(input_polyline_pairs[i+1][j], input_polyline_pairs[i+1][j + 1]) < 800 ? 56 : 58;
-           // input_joint_types_.emplace_back(type);
-        }
-
-
-        
-        input_joint_types.emplace_back(input_joint_types_);       
-    }
-
-    for (size_t i = 0; i < input_adjacency.size(); i += 4)
-       input_joint_types[input_adjacency[i]][input_adjacency[i + 2]] = 60;
-    
-
-    //Three valence
-    std::vector<std::vector<int>> input_three_valence_element_indices_and_instruction;
-
-    //output
-    std::vector<std::vector<CGAL_Polyline>> output_polyline_pairs;
-    std::vector<std::vector<char>> output_types;
-    std::vector<std::vector<int>> top_face_triangulation;
-
-    //Global Parameters
-    std::vector<double> default_parameters_for_joint_types = {
-300,
-0.5,
-8,
-450,
-0.64,
-10,
-450,
-0.7,
-22,
-300,
-0.5,
-30,
-300,
-0.5,
-40,
-300,
-0.5,
-58,
-300,
-1.0,
-60
-    };
-
-    std::vector<double> scale = { 1,1,2.5 };
-    int search_type = 0;
-    int output_type = 3;
-
-
-    get_connection_zones(
+    beam_volumes(
 
         //input
         input_polyline_pairs,
-        input_insertion_vectors,
-        input_joint_types,
-        input_three_valence_element_indices_and_instruction,
-        input_adjacency,
+        input_radii,
+        polylines_segment_direction,
+        allowed_types,
+        min_distance,
+        volume_length,
+        cross_or_side_to_end,
+        flip_male,
 
-        //output
-        output_polyline_pairs,
-        output_types,
-        top_face_triangulation,
+        //ouput
+        polyline0_id_segment0_id_polyline1_id_segment1_id,
+        point_pairs,
+        volume_pairs,
+        joints_areas,
+        joints_types,
 
-        //Global Parameters
+        //Global Parameters and output joint selection and orientation
         default_parameters_for_joint_types,
-        scale,
-        search_type ,
-        output_type,
-        0
+        joints_oriented_polylines,
+        compute_joints,
+        division_distance,
+        shift,
+        output_type
+
     );
 
-    
-    auto end = std::chrono::high_resolution_clock::now();
-    // Calculating total time taken by the program.
-    double time_taken = (double)std::chrono::duration_cast<std::chrono::nanoseconds>(end - start).count();
-    time_taken *= 1e-6;
-
-    std::cout << "\nTime taken by program is : " << std::fixed << time_taken << std::setprecision(9);
-    std::cout << " ms" << std::endl;
-    
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //Write Polylines to XML
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //output_polyline_pairs.emplace_back(viewer_polylines);
-    xml_parser::write_xml_polylines_and_types(output_polyline_pairs, output_types);
-    //printf("\n Loops Starts");
-    //for (auto& types : output_types) {
-    //    printf("\n Iteration \n");
-    //    for (auto& type : types)
-    //        printf("%c \n", type);
-    //    break;
-    //}
-    //printf("\n");
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //Preview poylylines from xml, take 9-th element
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //    //Preview polylines from xml, take 9-th element
+    //    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+             //viewer
     auto viewer = viewer_init();
-    viewer_display_polylines(viewer, viewer_polylines,-1,20) ;    
-    viewer_display_polylines(viewer, input_polyline_pairs,6);
-    viewer_display_polylines_tree(viewer, output_polyline_pairs,6);
+    viewer_display_polylines(
+        viewer,
+        input_polyline_pairs
+    );
+
+    //viewer_display_polylines_tree(viewer, output_polyline_pairs, 6);
+
+
+    for (auto& point_pair : point_pairs) {
+        std::vector<CGAL_Polyline> polylines{ CGAL_Polyline{point_pair[0],point_pair[1]} };
+        viewer_display_polylines(
+            viewer,
+            polylines, -1, 10
+
+        );
+    }
+
+
+    //for (auto& volume : volume_pairs) {
+    //    std::vector<CGAL_Polyline> polylines{ volume[0] ,volume[1] ,volume[2] ,volume[3] };
+    //    viewer_display_polylines(
+    //        viewer,
+    //        polylines
+    //    );
+    //}
+
+
+    //viewer_display_polylines()
+    //    //std::vector<std::array<CGAL_Polyline, 4>> volume_pairs;
+    //    //volume_pairs(viewer, input_polyline_pairs, 6);
+    //    viewer_run(viewer);
+
+
+    //    auto viewer = viewer_init();
+    //    viewer_display_polylines(viewer, viewer_polylines, -1, 20);
+
+    //    viewer_display_polylines_tree(viewer, output_polyline_pairs, 6);
     viewer_run(viewer);
 }

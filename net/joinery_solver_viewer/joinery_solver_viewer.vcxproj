@@ -148,6 +148,7 @@
   <ItemGroup>
     <ClCompile Include="clipper.cpp" />
     <ClCompile Include="joinery_solver_viewer.cpp" />
+    <ClCompile Include="joinery_solver_viewer_touch_wood_exibition.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">stdafx.h</PrecompiledHeaderFile>

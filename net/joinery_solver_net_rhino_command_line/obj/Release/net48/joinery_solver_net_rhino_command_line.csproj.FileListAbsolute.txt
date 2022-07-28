@@ -1,0 +1,11 @@
+C:\IBOIS57\_Code\Software\Python\compas_wood\net\joinery_solver_net_rhino_command_line\bin\Release\net48\joinery_solver_net_rhino_command_line.rhp
+C:\IBOIS57\_Code\Software\Python\compas_wood\net\joinery_solver_net_rhino_command_line\bin\Release\net48\joinery_solver_net_rhino_command_line.pdb
+C:\IBOIS57\_Code\Software\Python\compas_wood\net\joinery_solver_net_rhino_command_line\obj\Release\net48\joinery_solver_net_rhino_command_line.csproj.AssemblyReference.cache
+C:\IBOIS57\_Code\Software\Python\compas_wood\net\joinery_solver_net_rhino_command_line\obj\Release\net48\joinery_solver_net_rhino_command_line.GeneratedMSBuildEditorConfig.editorconfig
+C:\IBOIS57\_Code\Software\Python\compas_wood\net\joinery_solver_net_rhino_command_line\obj\Release\net48\joinery_solver_net_rhino_command_line.AssemblyInfoInputs.cache
+C:\IBOIS57\_Code\Software\Python\compas_wood\net\joinery_solver_net_rhino_command_line\obj\Release\net48\joinery_solver_net_rhino_command_line.AssemblyInfo.cs
+C:\IBOIS57\_Code\Software\Python\compas_wood\net\joinery_solver_net_rhino_command_line\obj\Release\net48\joinery_solver_net_rhino_command_line.csproj.CoreCompileInputs.cache
+C:\IBOIS57\_Code\Software\Python\compas_wood\net\joinery_solver_net_rhino_command_line\obj\Release\net48\joinery_solver_net_rhino_command_line.rhp
+C:\IBOIS57\_Code\Software\Python\compas_wood\net\joinery_solver_net_rhino_command_line\obj\Release\net48\joinery_solver_net_rhino_command_line.pdb
+C:\Users\petra\AppData\Roaming\Grasshopper\Libraries\compas_wood\Release\net48\joinery_solver_net_rhino_command_line.rhp
+C:\Users\petra\AppData\Roaming\Grasshopper\Libraries\compas_wood\Release\net48\joinery_solver_net_rhino_command_line.pdb

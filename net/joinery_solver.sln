@@ -21,6 +21,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "joinery_solver_net", "joine
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "joinery_solver", "joinery_solver\joinery_solver.vcxproj", "{A5F8FDB5-C3A6-47E0-9337-7FB67444F513}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "joinery_solver_net_rhino_command_line", "joinery_solver_net_rhino_command_line\joinery_solver_net_rhino_command_line.csproj", "{94CAAE70-D62B-4E71-9276-D5EECEA912C8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -127,6 +129,18 @@ Global
 		{A5F8FDB5-C3A6-47E0-9337-7FB67444F513}.Release|x64.Build.0 = Release|x64
 		{A5F8FDB5-C3A6-47E0-9337-7FB67444F513}.Release|x86.ActiveCfg = Release|x64
 		{A5F8FDB5-C3A6-47E0-9337-7FB67444F513}.Release|x86.Build.0 = Release|x64
+		{94CAAE70-D62B-4E71-9276-D5EECEA912C8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{94CAAE70-D62B-4E71-9276-D5EECEA912C8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{94CAAE70-D62B-4E71-9276-D5EECEA912C8}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{94CAAE70-D62B-4E71-9276-D5EECEA912C8}.Debug|x64.Build.0 = Debug|Any CPU
+		{94CAAE70-D62B-4E71-9276-D5EECEA912C8}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{94CAAE70-D62B-4E71-9276-D5EECEA912C8}.Debug|x86.Build.0 = Debug|Any CPU
+		{94CAAE70-D62B-4E71-9276-D5EECEA912C8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{94CAAE70-D62B-4E71-9276-D5EECEA912C8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{94CAAE70-D62B-4E71-9276-D5EECEA912C8}.Release|x64.ActiveCfg = Release|Any CPU
+		{94CAAE70-D62B-4E71-9276-D5EECEA912C8}.Release|x64.Build.0 = Release|Any CPU
+		{94CAAE70-D62B-4E71-9276-D5EECEA912C8}.Release|x86.ActiveCfg = Release|Any CPU
+		{94CAAE70-D62B-4E71-9276-D5EECEA912C8}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,6 +1,6 @@
 #pragma once
 
-//#define easy3d_precompiled
+#define easy3d_precompiled
 //#define DEBUG_MEASURE_TIME
 //#define DEBUG_JOINERY_LIBRARY
 //#define DEBUG_JOINERY_SOLVER_MAIN

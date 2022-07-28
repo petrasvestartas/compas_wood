@@ -15,7 +15,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
     <DebugSymbols>true</DebugSymbols>
-    <OutputPath>..\..\..\Library\Application\ Support\McNeel\Rhinoceros\7.0\Plug-ins\Grasshopper\ \%28b45a29b1-4343-4035-989e-044e8580d9cf\%29\Libraries\compas_wood\Users\petra\AppData\Roaming\Grasshopper\Libraries\compas_wood\</OutputPath>
+    <OutputPath>..\..\..\..\..\..\..\Users\petra\AppData\Roaming\Grasshopper\Libraries\compas_wood\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <Optimize>true</Optimize>
@@ -52,9 +52,17 @@
   <ItemGroup>
     <Compile Include="Conversions.cs" />
     <Compile Include="Data.cs" />
+    <Compile Include="NET_DataStructures\cut.cs" />
+    <Compile Include="NET_DataStructures\element.cs" />
     <Compile Include="Test.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Unsafe.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\rhino_util\rhino_util.csproj">
+      <Project>{6ca5430f-93cf-4933-9d3a-3b5d1596adff}</Project>
+      <Name>rhino_util</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
