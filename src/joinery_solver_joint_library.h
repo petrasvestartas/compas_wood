@@ -2759,8 +2759,12 @@ IK::Point_3(-0.7, 0.7, -0.6),
     }
 
     inline void cr_c_ip_1(joint& joint) {
-        joint.name = "cr_c_ip_1";
+
+
+
+        joint.name = __func__;
         //double shift = 0.5;
+
         double s = std::max(std::min(joint.shift, 1.0), 0.0);
         s = 0.05 + (s - 0.0) * (0.4 - 0.05) / (1.0 - 0.0);
 
@@ -2778,14 +2782,19 @@ IK::Point_3(-0.7, 0.7, -0.6),
 
         IK::Vector_3 v0 = ((p[0] - p[1]) * (1 / (a * 2))) * (0.5 - a);
 
+        joint.f[0].reserve(9 * 2);
         //Construct polylines from points
         joint.f[0] = {
             {p[0] + v0, p[1] - v0, p[2] - v0, p[3] + v0, p[0] + v0}, //Center
 
+
             {p[1] - v0, p[0] + v0, p[0 + 8] + v0, p[1 + 8] - v0, p[1] - v0}, //TopSide0
             {p[3] + v0, p[2] - v0, p[2 + 8] - v0, p[3 + 8] + v0, p[3] + v0}, //TopSide1
+
+
             {p[2], p[1], p[1 + 12], p[2 + 12], p[2]},						 //BotSide0
             {p[0], p[3], p[3 + 12], p[0 + 12], p[0]},						 //BotSide1
+
 
             {p[0], p[0 + 12], p[0 + 4], p[0 + 8], p[0]},	  //Corner0
             {p[1 + 12], p[1], p[1 + 8], p[1 + 4], p[1 + 12]}, //Corner1
@@ -2793,17 +2802,25 @@ IK::Point_3(-0.7, 0.7, -0.6),
             {p[3 + 12], p[3], p[3 + 8], p[3 + 4], p[3 + 12]}  //Corner3
         };
 
+
+
+
+        //for (int i = 0; i < 9; i++) {
+        //    for (auto it = joint.f[0][i].begin(); it != joint.f[0][i].end(); ++it)
+        //        *it = it->transform(xform_scale);
+        //}
+
         //Offset and
         //flip polylines
-        joint.f[1].reserve(9);
-        joint.m[0].reserve(9);
-        joint.f[1].reserve(9);
+        joint.f[1].reserve(9 * 2);
+        joint.m[0].reserve(9 * 2);
+        joint.m[1].reserve(9 * 2);
 
         auto xform = to_plane(IK::Vector_3(0, 1, 0), IK::Vector_3(1, 0, 0), IK::Vector_3(0, 0, -1));
 
         double lenghts[9] = { 0.5, 0.4, 0.4, 0.4, 0.4, 0.1, 0.1, 0.1, 0.1 };
         for (int i = 0; i < 9; i++) {
-            joint.f[1].push_back(joint.f[0][i]);
+            joint.f[1].emplace_back(joint.f[0][i]);
 
             //offset distance
             IK::Vector_3 cross = CGAL::cross_product(joint.f[1][i][1] - joint.f[1][i][0], joint.f[1][i][1] - joint.f[1][i][2]);
@@ -2813,18 +2830,231 @@ IK::Point_3(-0.7, 0.7, -0.6),
             for (int j = 0; j < joint.f[1][i].size(); j++)
                 joint.f[1][i][j] += cross * lenghts[i];
 
-            joint.m[0].push_back(joint.f[0][i]);
+            joint.m[0].emplace_back(joint.f[0][i]);
             for (auto it = joint.m[0][i].begin(); it != joint.m[0][i].end(); ++it)
                 *it = it->transform(xform);
 
-            joint.m[1].push_back(joint.f[1][i]);
+            joint.m[1].emplace_back(joint.f[1][i]);
             for (auto it = joint.m[1][i].begin(); it != joint.m[1][i].end(); ++it)
                 *it = it->transform(xform);
+
+        }
+
+        //duplicate two times
+        auto f0 = joint.f[0];
+        auto f1 = joint.f[1];
+        auto m0 = joint.m[0];
+        auto m1 = joint.m[1];
+        joint.f[0].clear();
+        joint.f[1].clear();
+        joint.m[0].clear();
+        joint.m[1].clear();
+        for (int i = 0; i < 9; i++) {
+            joint.f[0].emplace_back(f0[i]);
+            joint.f[0].emplace_back(f0[i]);
+
+            joint.f[1].emplace_back(f1[i]);
+            joint.f[1].emplace_back(f1[i]);
+
+            joint.m[0].emplace_back(m0[i]);
+            joint.m[0].emplace_back(m0[i]);
+
+            joint.m[1].emplace_back(m1[i]);
+            joint.m[1].emplace_back(m1[i]);
+
         }
 
 
-        joint.m_boolean_type = { '6', '6', '6', '4', '4', '4', '4', '9', '9' };
-        joint.f_boolean_type = { '6', '6', '6', '4', '4', '4', '4', '9', '9' };
+        joint.m_boolean_type = {
+            '6',  '6',
+            '6',   '6',
+            '6', '6',
+            '4', '4',
+            '4',  '4',
+            '4', '4',
+            '4',   '4',
+            '9', '9',
+            '9', '9',
+        };
+        joint.f_boolean_type = {
+            '6','6',
+            '6', '6',
+            '6', '6',
+            '4', '4',
+            '4', '4',
+            '4',   '4',
+            '4','4',
+            '9', '9',
+            '9',  '9'
+
+        };
+
+    }
+
+    inline void cr_c_ip_2(joint& joint) {
+
+
+
+        joint.name = __func__;
+        //double shift = 0.5;
+
+        double s = std::max(std::min(joint.shift, 1.0), 0.0);
+        s = 0.05 + (s - 0.0) * (0.4 - 0.05) / (1.0 - 0.0);
+
+        double a = 0.5 - s;
+        double b = 0.5;
+        double c = 2 * (b - a);
+        double z = 0.5;
+
+        IK::Point_3 p[16] = {
+            IK::Point_3(a, -a, 0), IK::Point_3(-a, -a, 0), IK::Point_3(-a, a, 0), IK::Point_3(a, a, 0),									//Center
+            IK::Point_3(a + c, -a - c, 0), IK::Point_3(-a - c, -a - c, 0), IK::Point_3(-a - c, a + c, 0), IK::Point_3(a + c, a + c, 0), //CenterOffset
+            IK::Point_3(b, -b, z), IK::Point_3(-b, -b, z), IK::Point_3(-b, b, z), IK::Point_3(b, b, z),									//Top
+            IK::Point_3(b, -b, -z), IK::Point_3(-b, -b, -z), IK::Point_3(-b, b, -z), IK::Point_3(b, b, -z)								//Bottom
+        };
+
+        IK::Vector_3 v0 = ((p[0] - p[1]) * (1 / (a * 2))) * (0.5 - a);
+
+        int n = 7;
+
+        joint.f[0].reserve(n * 2);
+        //Construct polylines from points
+        joint.f[0] = {
+            {p[0] + v0, p[1] - v0, p[2] - v0, p[3] + v0, p[0] + v0}, //Center
+
+
+            {p[1] - v0, p[0] + v0, p[0 + 8] + v0, p[1 + 8] - v0, p[1] - v0}, //TopSide0
+            {p[3] + v0, p[2] - v0, p[2 + 8] - v0, p[3 + 8] + v0, p[3] + v0}, //TopSide1
+
+
+            {p[2], p[1], p[1 + 12], p[2 + 12], p[2]},						 //BotSide0
+            {p[0], p[3], p[3 + 12], p[0 + 12], p[0]},						 //BotSide1
+
+
+           { IK::Point_3(0.091902, 0.433324, -0.928477) ,IK::Point_3(-0.433324, -0.091902, 0.928477)}, //drill line
+           { IK::Point_3(-0.091902, -0.433324, -0.928477) ,IK::Point_3(0.433324, 0.091902, 0.928477)}, //drill line
+
+//{0.091902, 0.433324, -0.928477}
+//{-0.433324, -0.091902, 0.928477}
+//{-0.091902, -0.433324, -0.928477}
+//{0.433324, 0.091902, 0.928477}
+
+
+
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////////////////////////////
+        //Extend rectangles to both sides to compensate for irregularities
+        ///////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        //to sides
+        cgal_polyline_util::extend_equally(joint.f[0][3], 0, 0.15);
+        cgal_polyline_util::extend_equally(joint.f[0][3], 2, 0.15);
+        cgal_polyline_util::extend_equally(joint.f[0][4], 0, 0.15);
+        cgal_polyline_util::extend_equally(joint.f[0][4], 2, 0.15);
+
+        //vertically
+        cgal_polyline_util::extend_equally(joint.f[0][3], 1, 0.6);
+        cgal_polyline_util::extend_equally(joint.f[0][3], 3, 0.6);
+        cgal_polyline_util::extend_equally(joint.f[0][4], 1, 0.6);
+        cgal_polyline_util::extend_equally(joint.f[0][4], 3, 0.6);
+
+
+
+
+
+
+        //for (int i = 0; i < 9; i++) {
+        //    for (auto it = joint.f[0][i].begin(); it != joint.f[0][i].end(); ++it)
+        //        *it = it->transform(xform_scale);
+        //}
+
+        //Offset and
+        //flip polylines
+        joint.f[1].reserve(n * 2);
+        joint.m[0].reserve(n * 2);
+        joint.m[1].reserve(n * 2);
+
+        auto xform = to_plane(IK::Vector_3(0, 1, 0), IK::Vector_3(1, 0, 0), IK::Vector_3(0, 0, -1));
+
+        // double lenghts[9] = { 0.5, 0.4, 0.4, 0.4, 0.4, 0.1, 0.1, 0.1, 0.1 };
+        double lenghts[5] = { 0.5, 0.4, 0.4, 0.4, 0.4 };
+        for (int i = 0; i < n; i++) {
+            joint.f[1].emplace_back(joint.f[0][i]);
+
+            //offset distance
+            IK::Vector_3 cross = CGAL::cross_product(joint.f[1][i][1] - joint.f[1][i][0], joint.f[1][i][1] - joint.f[1][i][2]);
+            unitize(cross);
+
+            //offset| skip drill lines
+            if (joint.f[1][i].size() > 2)
+                for (int j = 0; j < joint.f[1][i].size(); j++)
+                    joint.f[1][i][j] += cross * lenghts[i];
+
+
+            joint.m[0].emplace_back(joint.f[0][i]);
+            for (auto it = joint.m[0][i].begin(); it != joint.m[0][i].end(); ++it)
+                *it = it->transform(xform);
+
+            joint.m[1].emplace_back(joint.f[1][i]);
+            for (auto it = joint.m[1][i].begin(); it != joint.m[1][i].end(); ++it)
+                *it = it->transform(xform);
+
+        }
+
+        //duplicate two times
+        auto f0 = joint.f[0];
+        auto f1 = joint.f[1];
+        auto m0 = joint.m[0];
+        auto m1 = joint.m[1];
+        joint.f[0].clear();
+        joint.f[1].clear();
+        joint.m[0].clear();
+        joint.m[1].clear();
+        for (int i = 0; i < n; i++) {
+            joint.f[0].emplace_back(f0[i]);
+            joint.f[0].emplace_back(f0[i]);
+
+            joint.f[1].emplace_back(f1[i]);
+            joint.f[1].emplace_back(f1[i]);
+
+            joint.m[0].emplace_back(m0[i]);
+            joint.m[0].emplace_back(m0[i]);
+
+            joint.m[1].emplace_back(m1[i]);
+            joint.m[1].emplace_back(m1[i]);
+
+        }
+
+
+        joint.m_boolean_type = {
+            '6',  '6',
+            '6',   '6',
+            '6', '6',
+            //'4', '4',
+            //'4',  '4',
+            //'4', '4',
+            //'4',  '4',
+            '9', '9',
+            '9', '9',
+             '0', '0',
+               '0', '0',
+        };
+        joint.f_boolean_type = {
+            '6','6',
+            '6', '6',
+            '6', '6',
+            //'4', '4',
+            //'4', '4',
+            //'4', '4',
+            //'4','4',
+            '9', '9',
+            '9',  '9',
+               '0', '0',
+                   '0', '0',
+
+        };
 
     }
 
@@ -2935,6 +3165,7 @@ IK::Point_3(-0.7, 0.7, -0.6),
         joint_names[29] = "ts_e_p_9";
         joint_names[30] = "cr_c_ip_0";
         joint_names[31] = "cr_c_ip_1";
+        joint_names[32] = "cr_c_ip_2";
         joint_names[38] = "side_removal";
         joint_names[39] = "cr_c_ip_9";
         joint_names[48] = "side_removal";
@@ -3220,8 +3451,10 @@ IK::Point_3(-0.7, 0.7, -0.6),
                     cr_c_ip_0(jo);
                     break;
                 case (31):
-                    //cr_c_ip_0(joint);
                     cr_c_ip_1(jo);
+                    break;
+                case (32):
+                    cr_c_ip_2(jo);
                     break;
                 case (38):
                     side_removal(jo, elements);
@@ -3325,8 +3558,8 @@ IK::Point_3(-0.7, 0.7, -0.6),
 #ifdef DEBUG_JOINERY_LIBRARY
             printf("\nCPP   FILE %s    METHOD %s   LINE %i     WHAT %s ", __FILE__, __FUNCTION__, __LINE__, "last");
 #endif
-        }
+            }
 
         //CGAL_Debug(111111);
-    }
-}
+            }
+        }

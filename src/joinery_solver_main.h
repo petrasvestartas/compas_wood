@@ -196,93 +196,93 @@ inline bool border_to_face(
     CGAL_Polyline& joint_area,
     std::array<CGAL_Polyline, 2>& joint_lines,
     std::array < CGAL_Polyline, 4>& joint_volumes_pairA_pairB
-    )
+)
 {
     /////////////////////////////////////////////////////////////////////////////////////////////////////
     //The wifth and offset bretween two rectangles must be changed by user given scale values
     /////////////////////////////////////////////////////////////////////////////////////////////////////
-        joint_area = Polyline0[f];
-
-        
-        
-        if (f > 1) {
-
-            /////////////////////////////////////////////////////////////////////////////////////////////////////
-            //Get average line
-            /////////////////////////////////////////////////////////////////////////////////////////////////////
-
-            IK::Segment_3 edge_0(Polyline0[0][f - 2], Polyline0[1][f - 2] );
-            IK::Segment_3 edge_1(Polyline0[0][f - 1], Polyline0[1][f - 1]);
-            CGAL_Polyline projection_points = { Polyline0[0][f - 2], Polyline0[1][f - 2] ,Polyline0[0][f - 1], Polyline0[1][f - 1] };
-            
-            IK::Segment_3 average_line;
-            cgal_polyline_util::LineLineAverage(edge_0, edge_1, average_line);
-            //IK::Segment_3 average_line = cgal_polyline_util::LineLineMaximumOverlap(edge_0, edge_1);
-            cgal_polyline_util::LineFromProjectedPoints(average_line, projection_points, average_line);
-            //viewer_polylines.emplace_back(CGAL_Polyline({ average_line[0], average_line[1] }));
-            joint_lines[0] = { average_line[0] ,average_line[1] };
-            joint_lines[1] = joint_lines[0];
-            double line_length = cgal_polyline_util::polyline_length(joint_lines[0]);
-
-            //Get average thickness
-            double y_offset = 0.5;// thickness / 2.0;
-            double x_offset = 0.5;// thickness / 2.0;
-            double half_dist = thickness / 2.0;
-
-            //Move points up and down using cross product
-            IK::Vector_3 z_axis = Plane0[f].orthogonal_vector();
-            cgal_vector_util::Unitize(z_axis);
-
-            //set x-axis
-            auto x_axis = average_line.to_vector();
-            cgal_vector_util::Unitize(x_axis);
-
-            //set y-axis
-            auto y_axis = CGAL::cross_product(z_axis, x_axis);
-            cgal_vector_util::Unitize(y_axis);
-
-            //IK::Point_3 p0 = CGAL::midpoint(average_line[0], average_line[1]) + x_axis * y_offset *0.5;
-            //IK::Point_3 p1 = CGAL::midpoint(average_line[0], average_line[1]) - x_axis * y_offset *0.5;
-            IK::Point_3 p0 = average_line[0];
-            IK::Point_3 p1 = average_line[1];
-            if (CGAL::has_smaller_distance_to_point(CGAL::midpoint(Polyline0[f][0], Polyline0[f][1]), p0, p1))
-                std::swap(p0, p1);
+    joint_area = Polyline0[f];
 
 
 
+    if (f > 1) {
 
-            /////////////////////////////////////////////////////////////////////////////////////////////////////
-            //joint valumes
-            /////////////////////////////////////////////////////////////////////////////////////////////////////
-            CGAL_Polyline rect0 = {
-                p0 - y_axis * half_dist * 1 - z_axis * half_dist * 0.25,
-                p0 - y_axis * half_dist * 1 + z_axis * half_dist * 0.25,
-                p1 - y_axis * half_dist * 1 + z_axis * half_dist * 0.25,
-                p1 - y_axis * half_dist * 1 - z_axis * half_dist * 0.25,
-                p0 - y_axis * half_dist * 1 - z_axis * half_dist * 0.25,
-            };
+        /////////////////////////////////////////////////////////////////////////////////////////////////////
+        //Get average line
+        /////////////////////////////////////////////////////////////////////////////////////////////////////
 
-            CGAL_Polyline rect1 = {
-                 p0 - y_axis * half_dist * -1 - z_axis * half_dist * 0.25,
-                 p0 - y_axis * half_dist * -1 + z_axis * half_dist * 0.25,
-                 p1 - y_axis * half_dist * -1 + z_axis * half_dist * 0.25,
-                 p1 - y_axis * half_dist * -1 - z_axis * half_dist * 0.25,
-                 p0 - y_axis * half_dist * -1 - z_axis * half_dist * 0.25,
-            };
-            joint_volumes_pairA_pairB = { rect0 ,rect1 ,rect0 ,rect1 };
+        IK::Segment_3 edge_0(Polyline0[0][f - 2], Polyline0[1][f - 2]);
+        IK::Segment_3 edge_1(Polyline0[0][f - 1], Polyline0[1][f - 1]);
+        CGAL_Polyline projection_points = { Polyline0[0][f - 2], Polyline0[1][f - 2] ,Polyline0[0][f - 1], Polyline0[1][f - 1] };
 
-            //viewer_polylines.emplace_back(joint_lines[0]);
-            //viewer_polylines.emplace_back(rect0);
-            //viewer_polylines.emplace_back(rect1);
+        IK::Segment_3 average_line;
+        cgal_polyline_util::LineLineAverage(edge_0, edge_1, average_line);
+        //IK::Segment_3 average_line = cgal_polyline_util::LineLineMaximumOverlap(edge_0, edge_1);
+        cgal_polyline_util::LineFromProjectedPoints(average_line, projection_points, average_line);
+        //viewer_polylines.emplace_back(CGAL_Polyline({ average_line[0], average_line[1] }));
+        joint_lines[0] = { average_line[0] ,average_line[1] };
+        joint_lines[1] = joint_lines[0];
+        double line_length = cgal_polyline_util::polyline_length(joint_lines[0]);
 
-            return true;
-        }
-  
-            return false;
-        
+        //Get average thickness
+        double y_offset = 0.5;// thickness / 2.0;
+        double x_offset = 0.5;// thickness / 2.0;
+        double half_dist = thickness / 2.0;
 
-        
-    
+        //Move points up and down using cross product
+        IK::Vector_3 z_axis = Plane0[f].orthogonal_vector();
+        cgal_vector_util::Unitize(z_axis);
+
+        //set x-axis
+        auto x_axis = average_line.to_vector();
+        cgal_vector_util::Unitize(x_axis);
+
+        //set y-axis
+        auto y_axis = CGAL::cross_product(z_axis, x_axis);
+        cgal_vector_util::Unitize(y_axis);
+
+        //IK::Point_3 p0 = CGAL::midpoint(average_line[0], average_line[1]) + x_axis * y_offset *0.5;
+        //IK::Point_3 p1 = CGAL::midpoint(average_line[0], average_line[1]) - x_axis * y_offset *0.5;
+        IK::Point_3 p0 = average_line[0];
+        IK::Point_3 p1 = average_line[1];
+        if (CGAL::has_smaller_distance_to_point(CGAL::midpoint(Polyline0[f][0], Polyline0[f][1]), p0, p1))
+            std::swap(p0, p1);
+
+
+
+
+        /////////////////////////////////////////////////////////////////////////////////////////////////////
+        //joint valumes
+        /////////////////////////////////////////////////////////////////////////////////////////////////////
+        CGAL_Polyline rect0 = {
+            p0 - y_axis * half_dist * 1 - z_axis * half_dist * 0.25,
+            p0 - y_axis * half_dist * 1 + z_axis * half_dist * 0.25,
+            p1 - y_axis * half_dist * 1 + z_axis * half_dist * 0.25,
+            p1 - y_axis * half_dist * 1 - z_axis * half_dist * 0.25,
+            p0 - y_axis * half_dist * 1 - z_axis * half_dist * 0.25,
+        };
+
+        CGAL_Polyline rect1 = {
+             p0 - y_axis * half_dist * -1 - z_axis * half_dist * 0.25,
+             p0 - y_axis * half_dist * -1 + z_axis * half_dist * 0.25,
+             p1 - y_axis * half_dist * -1 + z_axis * half_dist * 0.25,
+             p1 - y_axis * half_dist * -1 - z_axis * half_dist * 0.25,
+             p0 - y_axis * half_dist * -1 - z_axis * half_dist * 0.25,
+        };
+        joint_volumes_pairA_pairB = { rect0 ,rect1 ,rect0 ,rect1 };
+
+        //viewer_polylines.emplace_back(joint_lines[0]);
+        //viewer_polylines.emplace_back(rect0);
+        //viewer_polylines.emplace_back(rect1);
+
+        return true;
+    }
+
+    return false;
+
+
+
+
 }
 
 inline bool plane_to_face(
@@ -769,20 +769,20 @@ inline bool face_to_face(
                             IK::Vector_3 z = Plane0[i].orthogonal_vector(); //cgal_vector_util::Unitize(z);
                             IK::Vector_3 y = CGAL::cross_product(x, z);		//cgal_vector_util::Unitize(y);
                             cgal_vector_util::Unitize(y);
-                            
+
                             //Reorient axis using first element orientation - Plane0 and Plane1
-                               IK::Point_3 center = cgal_polyline_util::Center(Polyline0[i]);
+                            IK::Point_3 center = cgal_polyline_util::Center(Polyline0[i]);
                             double thickness = std::max(
                                 cgal_vector_util::Distance(Plane0[0].point(), Plane0[1].projection(Plane0[0].point())),
                                 cgal_vector_util::Distance(Plane1[0].point(), Plane1[1].projection(Plane1[0].point()))
                             );
-                            y *= thickness*2;
+                            y *= thickness * 2;
                             IK::Segment_3 y_line(center + y, center - y);
-                            cgal_polyline_util::LineTwoPlanes(y_line, Plane0[0], Plane1[1]);                         
+                            cgal_polyline_util::LineTwoPlanes(y_line, Plane0[0], Plane1[1]);
                             y = y_line[1] - y_line[0];
                             x = CGAL::cross_product(y, z);
-                            viewer_polylines.emplace_back(CGAL_Polyline{ y_line[0] ,y_line[1] });                            
-                            
+                            viewer_polylines.emplace_back(CGAL_Polyline{ y_line[0] ,y_line[1] });
+
                             CGAL::Aff_transformation_3<IK> xform = cgal_xform_util::VectorsToXY(o, x, y, z);
 
                             ////////////////////////////////////////////////////////////////////////////////
@@ -1324,7 +1324,7 @@ inline void adjacency_search(
     std::unordered_map<uint64_t, int>& joints_map)
 {
 
-    
+
 
     //////////////////////////////////////////////////////////////////////////////
     // Split the adjacency list into two lists:
@@ -1346,9 +1346,10 @@ inline void adjacency_search(
         if (input_adjacency[i + 0] == input_adjacency[i + 1]) {
             for (int j = 0; j < adjacency_item_count; j++) {
                 adjacency_border.emplace_back(input_adjacency[i + j]);
-           
+
             }
-        } else {
+        }
+        else {
             for (int j = 0; j < adjacency_item_count; j++) {
                 adjacency_valid.emplace_back(input_adjacency[i + j]);
 
@@ -1357,7 +1358,7 @@ inline void adjacency_search(
     }
     //printf("\n %zi", adjacency_border.size());
     //printf("\n %zi", adjacency_valid.size());
-    
+
     //////////////////////////////////////////////////////////////////////////////
     // Perform Adjacency Search in result is empty
     //////////////////////////////////////////////////////////////////////////////
@@ -1444,7 +1445,7 @@ inline void adjacency_search(
 
 
         if (joint_area.size() > 0) {
-           
+
             //int joint_id = joints.size();
 
             joints.emplace_back(
@@ -1476,7 +1477,7 @@ inline void adjacency_search(
         CGAL_Polyline joint_area;
         std::array<CGAL_Polyline, 2> joint_lines;
         std::array<CGAL_Polyline, 4> joint_volumes_pairA_pairB;
-    
+
         border_to_face(
             elements[adjacency_border[i]].polylines,
             elements[adjacency_border[i]].planes,
@@ -1498,7 +1499,7 @@ inline void adjacency_search(
             joint_volumes_pairA_pairB,
             60);
 
-        printf("\n %i %i %i %i"  , adjacency_border[i], adjacency_border[i], adjacency_border[i + 2], adjacency_border[i + 2]);
+        printf("\n %i %i %i %i", adjacency_border[i], adjacency_border[i], adjacency_border[i + 2], adjacency_border[i + 2]);
 
         joints_map.emplace(cgal_math_util::unique_from_two_int(adjacency_border[i], adjacency_border[i]), joint_id);
         //printf("\n border %d %ds ", adjacency_border[i], joint_id);
@@ -1508,7 +1509,7 @@ inline void adjacency_search(
         //////////////////////////////////////////////////////////////////////////////////////////////////////
         elements[adjacency_border[i]].j_mf[adjacency_border[i + 2]].emplace_back(std::tuple<int, bool, double>(joint_id, true, 0));
         //elements[adjacency_border[i]].j_mf[adjacency_border[i + 2]].emplace_back(std::tuple<int, bool, double>(joint_id, false,99990));
-        
+
         joint_id++;
     }
     //printf("\n \n");
@@ -1785,9 +1786,9 @@ inline void get_connection_zones(
     output_plines = std::vector<std::vector<CGAL_Polyline>>(elements.size());
     output_types = std::vector<std::vector<char>>(elements.size());
 
-    
+
     for (int i = 0; i < elements.size(); i++) { //takes 30-50 ms just to copy-paste polyline geometry
-        
+
         switch (output_type) {
         case (0):
             elements[i].get_joints_geometry(joints, output_plines, 0, output_types);
@@ -1869,11 +1870,13 @@ inline void beam_volumes(
 
     //Global Parameters and output joint selection and orientation
     std::vector<double>& default_parameters_for_joint_types,
-    std::vector<std::vector<CGAL_Polyline>>& joints_oriented_polylines,
+    std::vector<std::vector<CGAL_Polyline>>& output_plines,
+    std::vector<std::vector<char>>& output_types,
     bool compute_joints = false,
     double division_distance = 300,
     double shift = 0.6,
-    int output_type = 3
+    int output_type = 3,
+    bool use_eccentricities_to_scale_joints = true
 
 ) {
 #ifdef DEBUG
@@ -1883,6 +1886,7 @@ inline void beam_volumes(
     //////////////////////////////////////////////////////////////////////////////
     //Main Properties: elements, joints, joints_map
     //////////////////////////////////////////////////////////////////////////////
+    //std::cos(std::asin(1-std::min(L/R/2,R)))
     std::vector<double> scale = { 1,1,1 };
 
     std::vector<element> elements;
@@ -1972,7 +1976,7 @@ inline void beam_volumes(
             double distance = CGAL::squared_distance(s0, s1);
 
             if (distance < min_distance * min_distance) {
-                size_t first_0=0, first_1=0;
+                size_t first_0 = 0, first_1 = 0;
                 bool flipped = false;
                 uint64_t id;
                 if (b2.info().first > b1.info().first) {
@@ -2231,6 +2235,42 @@ inline void beam_volumes(
 #ifdef DEBUG
     printf("CPP finish pair search\n");
 #endif
+
+    //Experimental scale joints by value of intersection
+    //This works only when two beams are the same radius 
+    if (use_eccentricities_to_scale_joints && joints.size() == point_pairs.size()) {
+        scale.clear();
+        for (int i = 0; i < point_pairs.size(); i++) {
+            double L = cgal_vector_util::Distance(point_pairs[i][0], point_pairs[i][1]);
+            double L_ = L;
+            L *= 0.5;
+
+            double scale_value = 1;
+            if (L > 0.01) {
+
+                //double max_r = std::max(polylines_segment_radii[joints[i].v0][0], polylines_segment_radii[joints[i].v1][0]);
+                double max_r = (polylines_segment_radii[joints[i].v0][0] + polylines_segment_radii[joints[i].v1][0]) * 0.5;
+
+                // L == 0 will be scale 1
+                //
+                L = (max_r - L) / max_r;
+
+                // L /= (polylines_segment_radii[joints[i].v0][0] + polylines_segment_radii[joints[i].v1][0]) * 0.5;
+                scale_value = std::cos(std::asin(1 - std::min(L, 1.0)));//Math.Cos(Math.Asin(1 - x));
+                //scale_value = std::sin(std::acos(1 - std::min(L, 1.0)));//Math.Cos(Math.Asin(1 - x));
+
+            }
+
+            std::cout << L_ << " " << L << " " << std::endl;
+
+            joints[i].scale[0] = scale_value;
+            joints[i].scale[1] = scale_value;
+            joints[i].scale[2] = 1;
+
+        }
+        scale.clear();
+    }
+
     joint_library::construct_joint_by_index(elements, joints, default_parameters_for_joint_types, scale);// division_distance, shift,
 #ifdef DEBUG
     printf("CPP construct_joint_by_index\n");
@@ -2238,23 +2278,24 @@ inline void beam_volumes(
     //////////////////////////////////////////////////////////////////////////////
     //Iterate joint address
     //////////////////////////////////////////////////////////////////////////////
+    //printf("\nCPP -------------> joint count %i  \n", joints.size());
 
-    joints_oriented_polylines = std::vector<std::vector<CGAL_Polyline>>(elements.size());
-    auto output_types = std::vector<std::vector<char>>(elements.size());
+    output_plines = std::vector<std::vector<CGAL_Polyline>>(elements.size());
+    output_types = std::vector<std::vector<char>>(elements.size());
     for (int i = 0; i < elements.size(); i++) { //takes 30-50 ms just to copy past polyline geometry
         switch (output_type) {
         case (0):
-            elements[i].get_joints_geometry(joints, joints_oriented_polylines, 0, output_types);
+            elements[i].get_joints_geometry(joints, output_plines, 0, output_types);
             break;
         case (1):
-            elements[i].get_joints_geometry(joints, joints_oriented_polylines, 1, output_types);
+            elements[i].get_joints_geometry(joints, output_plines, 1, output_types);
             break;
         case (2):
-            elements[i].get_joints_geometry(joints, joints_oriented_polylines, 2, output_types);
+            elements[i].get_joints_geometry(joints, output_plines, 2, output_types);
             break;
         default:
         case (3):
-            elements[i].get_joints_geometry(joints, joints_oriented_polylines, 3, output_types);
+            elements[i].get_joints_geometry(joints, output_plines, 3, output_types);
             break;
         case (4):
             //This does not exist here because boolean cuts are made
@@ -2268,6 +2309,6 @@ inline void beam_volumes(
 
     joint jj;
     joint_library_xml_parser::read_xml(jj, 0);
-}
+    }
 
 #pragma endregion

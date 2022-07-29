@@ -9,3 +9,5 @@ C:\IBOIS57\_Code\Software\Python\compas_wood\net\joinery_solver_net_rhino_comman
 C:\IBOIS57\_Code\Software\Python\compas_wood\net\joinery_solver_net_rhino_command_line\obj\Release\net48\joinery_solver_net_rhino_command_line.pdb
 C:\Users\petra\AppData\Roaming\Grasshopper\Libraries\compas_wood\Release\net48\joinery_solver_net_rhino_command_line.rhp
 C:\Users\petra\AppData\Roaming\Grasshopper\Libraries\compas_wood\Release\net48\joinery_solver_net_rhino_command_line.pdb
+C:\IBOIS57\_Code\Software\Python\compas_wood\net\joinery_solver_net_rhino_command_line\obj\Release\net48\joinery_solver_net_rhino_command_line.Properties.Resources.resources
+C:\IBOIS57\_Code\Software\Python\compas_wood\net\joinery_solver_net_rhino_command_line\obj\Release\net48\joinery_solver_net_rhino_command_line.csproj.GenerateResource.cache

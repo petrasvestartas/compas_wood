@@ -88,7 +88,7 @@ int main(int argc, char** argv) {
     double volume_length = 100;
 
     //cross_or_side_to_end : double type0_type1_parameter
-    double cross_or_side_to_end = 1 - 0.91;
+    double cross_or_side_to_end = -1; 1 - 0.91;
 
     //flip_male : property for side-to-end volumes 0 - no shift, -1 shift to right, 1 shift to left
     int flip_male = 0;
@@ -115,9 +115,9 @@ int main(int argc, char** argv) {
         450,
         0.7,
         22,
-        300,
-        0.5,
-        30,
+        300,//cross joints
+        0.1,//cross joints
+        32, //cross joints
         300,
         0.5,
         40,
@@ -129,8 +129,9 @@ int main(int argc, char** argv) {
         60
     };
 
-    std::vector<std::vector<CGAL_Polyline>> joints_oriented_polylines;
-    bool compute_joints = false;
+    std::vector<std::vector<CGAL_Polyline>> output_plines;
+    std::vector<std::vector<char>> output_types;
+    bool compute_joints = true;
     double division_distance = 500;
     double shift = 0.6;
     int output_type = 3;
@@ -163,7 +164,8 @@ int main(int argc, char** argv) {
 
         //Global Parameters and output joint selection and orientation
         default_parameters_for_joint_types,
-        joints_oriented_polylines,
+        output_plines,
+        output_types,
         compute_joints,
         division_distance,
         shift,
@@ -171,10 +173,25 @@ int main(int argc, char** argv) {
 
     );
 
-    //    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //    //Preview polylines from xml, take 9-th element
-    //    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-             //viewer
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //WritePolylines
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    xml_parser::write_xml_polylines_and_types(output_plines, output_types);
+
+    std::vector<CGAL_Polyline> output_plines2;
+    for (auto& volume : volume_pairs) {
+        output_plines2.emplace_back(volume[0]);
+        output_plines2.emplace_back(volume[1]);
+        output_plines2.emplace_back(volume[2]);
+        output_plines2.emplace_back(volume[3]);
+    }
+
+    //xml_parser::write_xml_polylines(joints_areas);
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //Preview polylines from xml, take 9-th element
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
     auto viewer = viewer_init();
     viewer_display_polylines(
         viewer,
@@ -194,13 +211,21 @@ int main(int argc, char** argv) {
     }
 
 
-    //for (auto& volume : volume_pairs) {
-    //    std::vector<CGAL_Polyline> polylines{ volume[0] ,volume[1] ,volume[2] ,volume[3] };
-    //    viewer_display_polylines(
-    //        viewer,
-    //        polylines
-    //    );
-    //}
+    for (auto& volume : volume_pairs) {
+        std::vector<CGAL_Polyline> polylines{ volume[0] ,volume[1] ,volume[2] ,volume[3] };
+        viewer_display_polylines(
+            viewer,
+            polylines
+        );
+    }
+
+
+    viewer_display_polylines(
+        viewer,
+        joints_areas, -1, 5
+    );
+
+    viewer_display_polylines_tree(viewer, output_plines);
 
 
     //viewer_display_polylines()
@@ -214,4 +239,5 @@ int main(int argc, char** argv) {
 
     //    viewer_display_polylines_tree(viewer, output_polyline_pairs, 6);
     viewer_run(viewer);
+
 }

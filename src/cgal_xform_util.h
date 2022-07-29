@@ -208,6 +208,15 @@ namespace cgal_xform_util {
         return F0 * T0;
     }
 
+    inline CGAL::Aff_transformation_3<IK> Scale(double x, double y, double z) {
+        CGAL::Aff_transformation_3<IK> scale_matrix(
+            x, 0, 0,
+            0, y, 0,
+            0, 0, z);
+        return scale_matrix;
+
+    }
+
     inline CGAL::Aff_transformation_3<IK> VectorsToXY(
         IK::Vector_3 O0, IK::Vector_3 X0, IK::Vector_3 Y0, IK::Vector_3 Z0) {
         // transformation maps P0 to P1, P0+X0 to P1+X1, ...
@@ -267,7 +276,8 @@ namespace cgal_xform_util {
                     cos_angle = cs.x();
                     sin_angle = cs.y();
                     // no break here
-                } else {
+                }
+                else {
                     //ON_ERROR("sin_angle and cos_angle are both zero.");
                     cos_angle = 1.0;
                     sin_angle = 0.0;
@@ -324,7 +334,8 @@ namespace cgal_xform_util {
                     x20, x21, x22, x23
                     //x30, x31, x32, x33
                     );
-            } else {
+            }
+            else {
                 xform = CGAL::Aff_transformation_3<IK>(
                     x00, x01, x02,
                     x10, x11, x12,

@@ -32,7 +32,7 @@ public:
     /////////////////////////////////////////////////////////////////////////////////////////
     //Parameters from Search method v-volume f-face
     /////////////////////////////////////////////////////////////////////////////////////////
-    int id=0, v0, v1, f0_0, f1_0, f0_1, f1_1, type; //10 - SS Rotate 11 - SS OUT OF PLANE 12 - SS IN Plane,  20 Top-Side, 30 - Cross
+    int id = 0, v0, v1, f0_0, f1_0, f0_1, f1_1, type; //10 - SS Rotate 11 - SS OUT OF PLANE 12 - SS IN Plane,  20 Top-Side, 30 - Cross
     CGAL_Polyline joint_area;					  //delete
     CGAL_Polyline joint_lines[2];				  //delete
     //CGAL_Polyline joint_quads[2];//delete
@@ -348,6 +348,8 @@ inline bool joint::change_basis(CGAL_Polyline& rect0, CGAL_Polyline& rect1, CGAL
     return true;
 }
 
+
+
 inline void joint::transform(CGAL::Aff_transformation_3<IK>& xform0, CGAL::Aff_transformation_3<IK>& xform1) {
     for (int i = 0; i < m[0].size(); i++)
         for (auto it = m[0][i].begin(); it != m[0][i].end(); ++it)
@@ -368,7 +370,9 @@ inline void joint::transform(CGAL::Aff_transformation_3<IK>& xform0, CGAL::Aff_t
 
 inline bool joint::orient_to_connection_area() {
 
-    if (unit_scale ) {//&& unit_scale_distance > 0
+    if (unit_scale) {//&& unit_scale_distance > 0
+
+
 
         //Distance between two rectangles
         //if(unit_scale_two_directions)
@@ -376,21 +380,21 @@ inline bool joint::orient_to_connection_area() {
         //Why do we need to give a distance if it is only 2D scale?
         //Does the distance measurement between 1 and 2 vertex would be valid in all cases? If not should it be or not?
         unit_scale_distance = cgal_vector_util::Distance(joint_volumes[0][1], joint_volumes[0][2]);
-        
+
         IK::Segment_3 volume_segment(joint_volumes[0][0], joint_volumes[1][0]);
         IK::Vector_3 vec = volume_segment.to_vector() * 0.5;
         IK::Vector_3 vec_unit = volume_segment.to_vector();
         cgal_vector_util::Unitize(vec_unit);
         vec_unit *= (unit_scale_distance * 0.5);
 
-   
+
 
         cgal_polyline_util::move(joint_volumes[0], vec);
         cgal_polyline_util::move(joint_volumes[1], -vec);
         cgal_polyline_util::move(joint_volumes[0], -vec_unit);
         cgal_polyline_util::move(joint_volumes[1], vec_unit);
 
-     
+
 
         //The same as above
         if (joint_volumes[2].size() > 0) {
@@ -407,7 +411,15 @@ inline bool joint::orient_to_connection_area() {
         }
     }
 
-   viewer_polylines.emplace_back(joint_volumes[0]);
+    //scale, implemented first time for round wood cross joint intersection
+    if (scale[0] != 1.0 || scale[1] != 1.0 || scale[2] != 1.0) {
+        //scale 2d
+        //std::cout << scale[0] << " " << scale[1] << " " << scale[2] << std::endl;
+        auto xform_scale = cgal_xform_util::Scale(scale[0], scale[1], scale[2]);
+        transform(xform_scale, xform_scale);
+    }
+
+    viewer_polylines.emplace_back(joint_volumes[0]);
     viewer_polylines.emplace_back(joint_volumes[1]);
     CGAL::Aff_transformation_3<IK> xform0;
     bool flag0 = change_basis(joint_volumes[0], joint_volumes[1], xform0);
