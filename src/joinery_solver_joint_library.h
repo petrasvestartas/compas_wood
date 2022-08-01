@@ -153,22 +153,24 @@ namespace joint_library_xml_parser {
                 }
 
                 for (int i = 4; i < 6; i++) {
-                    std::vector<char> boolean_type;
+                    std::vector<cut_type> boolean_type;
                     if (v.first == keys[i]) {
                         //std::cout << v.first << "\n";
 
                         for (boost::property_tree::ptree::value_type& index : v.second) {
-                            char id = index.second.get_value<char>();
+
+                            auto txt = index.second.get_value<std::string>();
+                            cut_type type = string_to_cut_type[txt];
 
 #ifdef DEBUG_JOINERY_LIBRARY
                             printf("\nCPP id %c ", id);
 #endif
                             if (i == 4) {
-                                joint.m_boolean_type.emplace_back(id);
+                                joint.m_boolean_type.emplace_back(type);
                                 //emplace to female joint.m_boolean_type
                             }
                             else {
-                                joint.f_boolean_type.emplace_back(id);
+                                joint.f_boolean_type.emplace_back(type);
                                 //emplace to female joint.f_boolean_type
                             }
                         }
@@ -687,8 +689,8 @@ namespace joint_library {
             {IK::Point_3(0, 0.5, 0.357142857142857), IK::Point_3(-0.5, 0.5, 0.357142857142857), IK::Point_3(-0.5, 0.5, 0.214285714285714), IK::Point_3(0.5, 0.5, 0.214285714285714), IK::Point_3(0.5, 0.5, 0.0714285714285714), IK::Point_3(-0.5, 0.5, 0.0714285714285714), IK::Point_3(-0.5, 0.5, -0.0714285714285714), IK::Point_3(0.5, 0.5, -0.0714285714285714), IK::Point_3(0.5, 0.5, -0.214285714285714), IK::Point_3(-0.5, 0.5, -0.214285714285714), IK::Point_3(-0.5, 0.5, -0.357142857142857), IK::Point_3(0, 0.5, -0.357142857142857)},
             {IK::Point_3(0, 0.5, 0.5), IK::Point_3(0, 0.5, -0.5)} };
 
-        joint.f_boolean_type = { '1', '1' };
-        joint.m_boolean_type = { '1', '1' };
+        joint.f_boolean_type = { edge_insertion, edge_insertion };
+        joint.m_boolean_type = { edge_insertion, edge_insertion };
     }
 
     inline void ss_e_ip_1(joint& joint) {
@@ -774,8 +776,8 @@ namespace joint_library {
             pline1,
             {pline1.front(), pline1.back()} };
 
-        joint.f_boolean_type = { '1', '1' };
-        joint.m_boolean_type = { '1', '1' };
+        joint.f_boolean_type = { edge_insertion, edge_insertion };
+        joint.m_boolean_type = { edge_insertion, edge_insertion };
     }
 
     inline void ss_e_ip_2(joint& joint) {
@@ -836,8 +838,8 @@ namespace joint_library {
         }
         };
 
-        joint.f_boolean_type = { '1', '1' };
-        joint.m_boolean_type = { '1', '1' };
+        joint.f_boolean_type = { edge_insertion, edge_insertion };
+        joint.m_boolean_type = { edge_insertion, edge_insertion };
         joint.unit_scale = true;
     }
 
@@ -860,8 +862,8 @@ namespace joint_library {
         joint.m[1] = { {IK::Point_3(-0.5, -0.5, 0.357142857142857), IK::Point_3(0.5, -0.5, 0.357142857142857), IK::Point_3(0.5, -0.5, 0.214285714285714), IK::Point_3(-0.5, -0.5, 0.214285714285714), IK::Point_3(-0.5, -0.5, 0.0714285714285713), IK::Point_3(0.5, -0.5, 0.0714285714285712), IK::Point_3(0.5, -0.5, -0.0714285714285716), IK::Point_3(-0.5, -0.5, -0.0714285714285715), IK::Point_3(-0.5, -0.5, -0.214285714285714), IK::Point_3(0.5, -0.5, -0.214285714285714), IK::Point_3(0.5, -0.5, -0.357142857142857), IK::Point_3(-0.5, -0.5, -0.357142857142857)},
                       {IK::Point_3(-0.5, -0.5, 0.5), IK::Point_3(-0.5, -0.5, -0.5)} };
 
-        joint.f_boolean_type = { '1', '1' };
-        joint.m_boolean_type = { '1', '1' };
+        joint.f_boolean_type = { edge_insertion, edge_insertion };
+        joint.m_boolean_type = { edge_insertion, edge_insertion };
     }
 
     inline void ss_e_op_2(joint& joint) {
@@ -985,8 +987,8 @@ namespace joint_library {
             }
         }
 
-        joint.f_boolean_type = { '1', '1' };
-        joint.m_boolean_type = { '1', '1' };
+        joint.f_boolean_type = { edge_insertion, edge_insertion };
+        joint.m_boolean_type = { edge_insertion, edge_insertion };
     }
 
     inline void ss_e_op_1(joint& joint) {
@@ -1106,8 +1108,8 @@ namespace joint_library {
             }
         }
 
-        joint.f_boolean_type = { '1', '1' };
-        joint.m_boolean_type = { '1', '1' };
+        joint.f_boolean_type = { edge_insertion, edge_insertion };
+        joint.m_boolean_type = { edge_insertion, edge_insertion };
 
         //if (orient_to_connection_zone)
             //joint.orient_to_connection_area();
@@ -1214,8 +1216,8 @@ namespace joint_library {
         }
         };
 
-        joint.f_boolean_type = { '3', '3', '2', '2' };
-        joint.m_boolean_type = { '3', '3' };
+        joint.f_boolean_type = { insert_between_multiple_edges, insert_between_multiple_edges, hole, hole };
+        joint.m_boolean_type = { insert_between_multiple_edges, insert_between_multiple_edges };
     }
 
     inline void ss_e_r_0(joint& jo, std::vector<element>& elements) {
@@ -1414,12 +1416,12 @@ IK::Point_3(0.5,-0.625,-0.2),
             },
             };
             joint.f_boolean_type = {
-            '9',
-            '9',
+            conic,
+            conic,
             };
             joint.m_boolean_type = {
-            '8',
-            '8',
+            conic_reverse,
+            conic_reverse,
             };
 
             break;
@@ -1629,12 +1631,12 @@ IK::Point_3(0.5,-0.825,0.39066965),
         }
 
         joint.f_boolean_type = {
-        '9',
-        '9',
+        conic,
+        conic,
         };
         joint.m_boolean_type = {
-        '8',
-        '8',
+        conic_reverse,
+        conic_reverse,
         };
 
     }
@@ -1936,7 +1938,7 @@ IK::Point_3(0.5,-0.825,0.39066965),
                 jo.m[0].insert(jo.m[0].end(), joint_2.m[0].begin(), joint_2.m[0].end());
                 jo.m[1].insert(jo.m[1].end(), joint_2.m[1].begin(), joint_2.m[1].end());
                 for (auto& m : joint_2.m_boolean_type)
-                    jo.m_boolean_type.emplace_back('9');
+                    jo.m_boolean_type.emplace_back(conic);
 
 
                 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1960,12 +1962,12 @@ IK::Point_3(0.5,-0.825,0.39066965),
                 jo.f[1].insert(jo.f[1].end(), joint_2.f[1].begin(), joint_2.f[1].end());
 
                 for (auto& f : joint_2.f_boolean_type)
-                    jo.f_boolean_type.emplace_back('6');
+                    jo.f_boolean_type.emplace_back(mill);
 
                 jo.f[0].insert(jo.f[0].end(), joint_2.f[0].begin(), joint_2.f[0].end());
                 jo.f[1].insert(jo.f[1].end(), joint_2.f[1].begin(), joint_2.f[1].end());
                 for (auto& f : joint_2.f_boolean_type)
-                    jo.f_boolean_type.emplace_back('8');
+                    jo.f_boolean_type.emplace_back(conic_reverse);
 
             }
 
@@ -1999,8 +2001,8 @@ IK::Point_3(0.5,-0.825,0.39066965),
         joint.m[1] = { {IK::Point_3(-0.5, -0.5, -0.357142857142857), IK::Point_3(-0.5, 0.5, -0.357142857142857), IK::Point_3(-0.5, 0.5, -0.214285714285714), IK::Point_3(-0.5, -0.5, -0.214285714285714), IK::Point_3(-0.5, -0.5, -0.0714285714285715), IK::Point_3(-0.5, 0.5, -0.0714285714285713), IK::Point_3(-0.5, 0.5, 0.0714285714285715), IK::Point_3(-0.5, -0.5, 0.0714285714285714), IK::Point_3(-0.5, -0.5, 0.214285714285714), IK::Point_3(-0.5, 0.5, 0.214285714285714), IK::Point_3(-0.5, 0.5, 0.357142857142857), IK::Point_3(-0.5, -0.5, 0.357142857142857)},
                       {IK::Point_3(-0.5, -0.5, -0.357142857142857), IK::Point_3(-0.5, -0.5, 0.357142857142857)} };
 
-        joint.f_boolean_type = { '2', '2', '2', '2' };
-        joint.m_boolean_type = { '1', '1' };
+        joint.f_boolean_type = { hole, hole, hole, hole };
+        joint.m_boolean_type = { edge_insertion, edge_insertion };
 
     }
 
@@ -2022,8 +2024,8 @@ IK::Point_3(0.5,-0.825,0.39066965),
         joint.m[1] = { {IK::Point_3(-0.5, -0.5, 0.166666666666667), IK::Point_3(-0.5, 0.5, 0.166666666666667), IK::Point_3(-0.5, 0.5, 0.0555555555555558), IK::Point_3(-0.5, -0.5, 0.0555555555555557), IK::Point_3(-0.5, -0.5, -0.277777777777778), IK::Point_3(-0.5, 0.5, -0.277777777777778), IK::Point_3(-0.5, 0.5, -0.388888888888889), IK::Point_3(-0.5, -0.5, -0.388888888888889)},
                       {IK::Point_3(-0.5, -0.5, 0.5), IK::Point_3(-0.5, -0.5, -0.5)} };
 
-        joint.f_boolean_type = { '2', '2', '2', '2' };
-        joint.m_boolean_type = { '1', '1' };
+        joint.f_boolean_type = { hole, hole, hole, hole };
+        joint.m_boolean_type = { edge_insertion, edge_insertion };
 
         //if (orient_to_connection_zone)
             //joint.orient_to_connection_area();
@@ -2122,8 +2124,8 @@ IK::Point_3(0.5,-0.825,0.39066965),
         joint.f[0].emplace_back(std::initializer_list<IK::Point_3>{joint.f[0][0][0], joint.f[0][0][3], joint.f[0][size - 2][3], joint.f[0][size - 2][0], joint.f[0][0][0]});
         joint.f[1].emplace_back(std::initializer_list<IK::Point_3>{joint.f[1][0][0], joint.f[1][0][3], joint.f[1][size - 2][3], joint.f[1][size - 2][0], joint.f[1][0][0]});
 
-        joint.f_boolean_type = std::vector<char>(size, '2');
-        joint.m_boolean_type = { '1', '1' };
+        joint.f_boolean_type = std::vector<cut_type>(size, hole);
+        joint.m_boolean_type = { edge_insertion, edge_insertion };
     }
 
     inline void ts_e_p_3(joint& joint) {
@@ -2268,8 +2270,8 @@ IK::Point_3(0.5,-0.825,0.39066965),
         joint.f[1].emplace_back(std::initializer_list<IK::Point_3>{joint.f[1][0][0], joint.f[1][0][3], joint.f[1][size - 2][3], joint.f[1][size - 2][0], joint.f[1][0][0]});
 
         //CGAL_Debug(30);
-        joint.f_boolean_type = std::vector<char>(size, '2');
-        joint.m_boolean_type = { '1', '1' };
+        joint.f_boolean_type = std::vector<cut_type>(size, hole);
+        joint.m_boolean_type = { edge_insertion, edge_insertion };
 
 #ifdef DEBUG_JOINERY_LIBRARY
         printf("\nCPP <<File>> joinery_solver_joint_library.h <<Method>> ts_e_p_3 <<Description> Create Polylines");
@@ -2709,8 +2711,8 @@ IK::Point_3(-0.7, 0.7, -0.6),
         };
 
 
-        joint.f_boolean_type = { '6', '6' , '6', '6', '6', '6',   '6', '6' };
-        joint.m_boolean_type = { '5', '5' , '5', '5', '5', '5',   '5', '5',    '5', '5' , '5', '5', '4', '4',   '4', '4', };
+        joint.f_boolean_type = { mill, mill , mill, mill, mill, mill,   mill, mill };
+        joint.m_boolean_type = { mill_project, mill_project , mill_project,mill_project, mill_project, mill_project,   mill_project, mill_project,    mill_project, mill_project ,mill_project, mill_project, slice,slice,   slice, slice, };
 
         //Joint lines, always the last line or rectangle is not a joint but an cutting element
        // joint.m[0] = { {IK::Point_3(0.5, -0.5, -0.357142857142857), IK::Point_3(0.5, 0.5, -0.357142857142857), IK::Point_3(0.5, 0.5, -0.214285714285714), IK::Point_3(0.5, -0.5, -0.214285714285714), IK::Point_3(0.5, -0.5, -0.0714285714285715), IK::Point_3(0.5, 0.5, -0.0714285714285713), IK::Point_3(0.5, 0.5, 0.0714285714285715), IK::Point_3(0.5, -0.5, 0.0714285714285714), IK::Point_3(0.5, -0.5, 0.214285714285714), IK::Point_3(0.5, 0.5, 0.214285714285714), IK::Point_3(0.5, 0.5, 0.357142857142857), IK::Point_3(0.5, -0.5, 0.357142857142857)},
@@ -2750,8 +2752,8 @@ IK::Point_3(-0.7, 0.7, -0.6),
             {IK::Point_3(0.5, -0.5, -scale), IK::Point_3(-0.5, -0.5, -scale), IK::Point_3(-0.5, -0.5, 0), IK::Point_3(0.5, -0.5, 0), IK::Point_3(0.5, -0.5, -scale)},
             {IK::Point_3(0.5, -0.5, -scale), IK::Point_3(-0.5, -0.5, -scale), IK::Point_3(-0.5, -0.5, 0), IK::Point_3(0.5, -0.5, 0), IK::Point_3(0.5, -0.5, -scale)} };
 
-        joint.m_boolean_type = { '3', '3' };
-        joint.f_boolean_type = { '3', '3' };
+        joint.m_boolean_type = { insert_between_multiple_edges, insert_between_multiple_edges };
+        joint.f_boolean_type = { insert_between_multiple_edges, insert_between_multiple_edges };
 
         //Orient to 3D
         //if (orient_to_connection_zone)
@@ -2866,26 +2868,28 @@ IK::Point_3(-0.7, 0.7, -0.6),
 
 
         joint.m_boolean_type = {
-            '6',  '6',
-            '6',   '6',
-            '6', '6',
-            '4', '4',
-            '4',  '4',
-            '4', '4',
-            '4',   '4',
-            '9', '9',
-            '9', '9',
+            mill_project, mill_project,
+            mill_project, mill_project,
+            mill_project, mill_project,
+            slice, slice,
+            slice, slice,
+            slice, slice,
+            slice, slice,
+
+            slice, slice,
+            slice,slice,
         };
         joint.f_boolean_type = {
-            '6','6',
-            '6', '6',
-            '6', '6',
-            '4', '4',
-            '4', '4',
-            '4',   '4',
-            '4','4',
-            '9', '9',
-            '9',  '9'
+            mill_project,mill_project,
+            mill_project, mill_project,
+            mill_project, mill_project,
+            slice,slice,
+            slice, slice,
+            slice,slice,
+            slice,slice,
+
+            slice, slice,
+            slice,  slice
 
         };
 
@@ -2920,19 +2924,30 @@ IK::Point_3(-0.7, 0.7, -0.6),
         joint.f[0].reserve(n * 2);
         //Construct polylines from points
         joint.f[0] = {
+
+
             {p[0] + v0, p[1] - v0, p[2] - v0, p[3] + v0, p[0] + v0}, //Center
 
 
-            {p[1] - v0, p[0] + v0, p[0 + 8] + v0, p[1 + 8] - v0, p[1] - v0}, //TopSide0
-            {p[3] + v0, p[2] - v0, p[2 + 8] - v0, p[3 + 8] + v0, p[3] + v0}, //TopSide1
+            {p[1] - v0, p[0] + v0, p[0 + 8] + v0, p[1 + 8] - v0, p[1] - v0}, //slice TopSide0
+            {p[3] + v0, p[2] - v0, p[2 + 8] - v0, p[3 + 8] + v0, p[3] + v0}, //slice TopSide1
 
 
-            {p[2], p[1], p[1 + 12], p[2 + 12], p[2]},						 //BotSide0
-            {p[0], p[3], p[3 + 12], p[0 + 12], p[0]},						 //BotSide1
+            {p[2], p[1], p[1 + 12], p[2 + 12], p[2]},						 //mill BotSide0
+            {p[0], p[3], p[3 + 12], p[0 + 12], p[0]},						 //mill BotSide1
 
 
-           { IK::Point_3(0.091902, 0.433324, -0.928477) ,IK::Point_3(-0.433324, -0.091902, 0.928477)}, //drill line
-           { IK::Point_3(-0.091902, -0.433324, -0.928477) ,IK::Point_3(0.433324, 0.091902, 0.928477)}, //drill line
+           //{ IK::Point_3(0.091902, 0.433324, -0.928477) ,IK::Point_3(-0.433324, -0.091902, 0.928477)}, //drill line
+           //{ IK::Point_3(-0.091902, -0.433324, -0.928477) ,IK::Point_3(0.433324, 0.091902, 0.928477)}, //drill line
+                      { IK::Point_3(0.091421, -0.25, -0.928477) ,IK::Point_3(0.25, -0.091421, 0.928477)}, //drill line
+           { IK::Point_3(-0.091421, 0.25, -0.928477) ,IK::Point_3(-0.25, 0.091421, 0.928477)}, //drill line
+
+
+//           {0.091421, -0.25, -0.928477}
+//{0.25, -0.091421, 0.928477}
+//{-0.091421, 0.25, -0.928477}
+//{-0.25, 0.091421, 0.928477}
+
 
 //{0.091902, 0.433324, -0.928477}
 //{-0.433324, -0.091902, 0.928477}
@@ -3003,7 +3018,10 @@ IK::Point_3(-0.7, 0.7, -0.6),
 
         }
 
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         //duplicate two times
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
         auto f0 = joint.f[0];
         auto f1 = joint.f[1];
         auto m0 = joint.m[0];
@@ -3012,6 +3030,7 @@ IK::Point_3(-0.7, 0.7, -0.6),
         joint.f[1].clear();
         joint.m[0].clear();
         joint.m[1].clear();
+
         for (int i = 0; i < n; i++) {
             joint.f[0].emplace_back(f0[i]);
             joint.f[0].emplace_back(f0[i]);
@@ -3027,32 +3046,58 @@ IK::Point_3(-0.7, 0.7, -0.6),
 
         }
 
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        //take sides of id = 1*2 and id = 2*2 
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        for (int i = 0; i < 2; i++) {
+            int id = (i + 1) * 2;
+            CGAL_Polyline side00 = { joint.f[0][id][0],joint.f[0][id][1],joint.f[1][id][1],joint.f[1][id][0],joint.f[0][id][0] };
+            CGAL_Polyline side01 = { joint.f[0][id][3],joint.f[0][id][2],joint.f[1][id][2],joint.f[1][id][3], joint.f[0][id][3] };
+            joint.f[0][id] = side00;
+            joint.f[1][id] = side01;
+            joint.f[0][id + 1] = side00;
+            joint.f[1][id + 1] = side01;
+
+            side00 = { joint.m[0][id][0],joint.m[0][id][1], joint.m[1][id][1],joint.m[1][id][0],joint.m[0][id][0] };
+            side01 = { joint.m[0][id][3],joint.m[0][id][2],joint.m[1][id][2],joint.m[1][id][3], joint.m[0][id][3] };
+            joint.m[0][id] = side00;
+            joint.m[1][id] = side01;
+            joint.m[0][id + 1] = side00;
+            joint.m[1][id + 1] = side01;
+        }
+
+
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        //cut types
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         joint.m_boolean_type = {
-            '6',  '6',
-            '6',   '6',
-            '6', '6',
-            //'4', '4',
-            //'4',  '4',
-            //'4', '4',
-            //'4',  '4',
-            '9', '9',
-            '9', '9',
-             '0', '0',
-               '0', '0',
+            mill_project,  mill_project,
+
+            slice_projectsheer, slice_projectsheer,
+            slice_projectsheer, slice_projectsheer,
+
+            mill_project,mill_project,
+            mill_project,mill_project,
+
+
+            drill,drill,
+            drill,drill,
         };
         joint.f_boolean_type = {
-            '6','6',
-            '6', '6',
-            '6', '6',
-            //'4', '4',
-            //'4', '4',
-            //'4', '4',
-            //'4','4',
-            '9', '9',
-            '9',  '9',
-               '0', '0',
-                   '0', '0',
+            mill_project,mill_project,
+
+            slice_projectsheer, slice_projectsheer,
+            slice_projectsheer, slice_projectsheer,
+
+            mill_project, mill_project,
+            mill_project, mill_project,
+
+
+
+            drill, drill,
+            drill,drill,
 
         };
 
@@ -3558,8 +3603,8 @@ IK::Point_3(-0.7, 0.7, -0.6),
 #ifdef DEBUG_JOINERY_LIBRARY
             printf("\nCPP   FILE %s    METHOD %s   LINE %i     WHAT %s ", __FILE__, __FUNCTION__, __LINE__, "last");
 #endif
-            }
+        }
 
         //CGAL_Debug(111111);
-            }
-        }
+    }
+}

@@ -20,7 +20,7 @@
 //#include "rtree_util.h"
 
 
-
+#include "joinery_solver_cut_type.h"
 #include "joinery_solver_element.h"
 #include "joinery_solver_joint.h"
 #include "joinery_solver_joint_library.h"
@@ -1683,7 +1683,7 @@ inline void get_connection_zones(
 
     //output
     std::vector<std::vector<CGAL_Polyline>>& output_plines,
-    std::vector<std::vector<char>>& output_types,
+    std::vector<std::vector<cut_type>>& output_types,
     std::vector<std::vector<int>>& top_face_triangulation,
 
     //Global Parameters
@@ -1784,7 +1784,7 @@ inline void get_connection_zones(
     //Iterate joint address
     //////////////////////////////////////////////////////////////////////////////
     output_plines = std::vector<std::vector<CGAL_Polyline>>(elements.size());
-    output_types = std::vector<std::vector<char>>(elements.size());
+    output_types = std::vector<std::vector<cut_type>>(elements.size());
 
 
     for (int i = 0; i < elements.size(); i++) { //takes 30-50 ms just to copy-paste polyline geometry
@@ -1871,7 +1871,7 @@ inline void beam_volumes(
     //Global Parameters and output joint selection and orientation
     std::vector<double>& default_parameters_for_joint_types,
     std::vector<std::vector<CGAL_Polyline>>& output_plines,
-    std::vector<std::vector<char>>& output_types,
+    std::vector<std::vector<cut_type>>& output_types,
     bool compute_joints = false,
     double division_distance = 300,
     double shift = 0.6,
@@ -2281,7 +2281,7 @@ inline void beam_volumes(
     //printf("\nCPP -------------> joint count %i  \n", joints.size());
 
     output_plines = std::vector<std::vector<CGAL_Polyline>>(elements.size());
-    output_types = std::vector<std::vector<char>>(elements.size());
+    output_types = std::vector<std::vector<cut_type>>(elements.size());
     for (int i = 0; i < elements.size(); i++) { //takes 30-50 ms just to copy past polyline geometry
         switch (output_type) {
         case (0):
@@ -2309,6 +2309,6 @@ inline void beam_volumes(
 
     joint jj;
     joint_library_xml_parser::read_xml(jj, 0);
-    }
+}
 
 #pragma endregion

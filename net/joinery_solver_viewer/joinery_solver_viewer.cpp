@@ -130,7 +130,7 @@ int main(int argc, char** argv) {
     };
 
     std::vector<std::vector<CGAL_Polyline>> output_plines;
-    std::vector<std::vector<char>> output_types;
+    std::vector<std::vector<cut_type>> output_types;
     bool compute_joints = true;
     double division_distance = 500;
     double shift = 0.6;

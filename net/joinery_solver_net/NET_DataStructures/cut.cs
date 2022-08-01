@@ -11,44 +11,33 @@ namespace joinery_solver_net
 
     public enum cut_type
     {
-        nothing = 0,
+        nothing,
 
         //plates
-        edge_insertion = 1,
-        hole = 2,
-        insert_between_multiple_edges = 3,
+        edge_insertion,
+        hole,
+        insert_between_multiple_edges,
 
         //beams
-        slice = 4, //project and make rectangle
-        mill_project = 5, //
-        mill = 6, //project
-        cut = 7,
-        conic_reverse = 8,        //project
-                                  //binary_slice_mill = '9', //project and make rectangle
-        conic = 9,
+        slice, //always projected
+        slice_projectsheer,
 
-        //drill
-        drill = 10,
-        cut_reverse = 11
+        mill,//always inside volume
+        mill_project,
+        mill_projectsheer,
+
+        cut,
+        cut_project,
+        cut_projectsheer,
+        cut_reverse,
+
+        conic, //always projected
+        conic_reverse,
+
+        drill,
     }
     public class cut
     {
-
-        //    nothing = '0',
-        //
-        //    //plates
-        //    edge_insertion = '1',
-        //    hole = '2',
-        //    insert_between_multiple_edges = '3',
-        //
-        //    //beams
-        //    slice = '4', //project and make rectangle
-        //    mill_project = '5', //
-        //    mill = '6', //project
-        //    cut = '7',
-        //    conic_reverse = '8',		//project
-        //    //binary_slice_mill = '9', //project and make rectangle
-        //    conic = '9'
 
         public cut_type type = 0;
         public List<Polyline> plines_copy = new List<Polyline>();
@@ -85,6 +74,23 @@ namespace joinery_solver_net
             this.plines_copy.Add(line.ToPolyline());
             Rhino.Geometry.Cylinder cylinder = new Rhino.Geometry.Cylinder(new Circle(new Plane(line.From, line.Direction), radius), line.Length);
             this.geometry = cylinder.ToBrep(true, true);
+        }
+
+        public cut(Line line, double radius, bool loft = false)
+        {
+            /////////////////////////////////////////////////////////////////////////////////
+            //convert string values
+            /////////////////////////////////////////////////////////////////////////////////
+            this.radius = radius;
+
+
+            this.type = cut_type.drill;
+            this.plines_copy.Add(line.ToPolyline());
+            if (loft)
+            {
+                Rhino.Geometry.Cylinder cylinder = new Rhino.Geometry.Cylinder(new Circle(new Plane(line.From, line.Direction), radius), line.Length);
+                this.geometry = cylinder.ToBrep(true, true);
+            }
         }
 
         public cut(Brep brep, string txt)
@@ -169,9 +175,26 @@ namespace joinery_solver_net
 
 
             /////////////////////////////////////////////////////////////////////////////////
-            //reverse for outside cutting
+            //Check orientation
             /////////////////////////////////////////////////////////////////////////////////
-            if (type == "cut_reverse")
+            Plane plane = rhino_util.PolylineUtil.plane(sortedPlines[0]);
+            Point3d center = rhino_util.PolylineUtil.CenterPoint(sortedPlines[1]);
+            if (plane.DistanceTo(center) < 0)
+            {
+                sortedPlines[0] = sortedPlines[0].Flip();
+                sortedPlines[0].ShiftPolyline(1);
+
+                sortedPlines[1] = sortedPlines[1].Flip();
+                sortedPlines[1].ShiftPolyline(1);
+            }
+
+
+
+
+            /////////////////////////////////////////////////////////////////////////////////
+            //reverse for inside cutting
+            /////////////////////////////////////////////////////////////////////////////////
+            if (type != "cut_reverse")
             {
                 sortedPlines[0] = sortedPlines[0].Flip();
                 sortedPlines[0].ShiftPolyline(1);
@@ -188,6 +211,7 @@ namespace joinery_solver_net
             /////////////////////////////////////////////////////////////////////////////////
             this.type = (cut_type)Enum.Parse(typeof(cut_type), type);
 
+            //this.plines_copy = new List<Polyline>() { sortedPlines[0].Flip().ShiftPline(-1), sortedPlines[1].Flip().ShiftPline(-1) };
             this.plines_copy = new List<Polyline>() { sortedPlines[0], sortedPlines[1] };
 
             /////////////////////////////////////////////////////////////////////////////////
@@ -214,35 +238,83 @@ namespace joinery_solver_net
 
 
 
-        public cut(List<Polyline> plines, cut_type type)
+        public cut(List<Polyline> plines, cut_type type, bool loft = false)
         {
 
             this.type = type;
+            this.plines_copy = plines.Duplicate();
+
+            project();
 
 
-            Polyline polyline = new Polyline(plines[0]);
-            Plane plane = plines[0].plane();
+            if (loft)
+                this.geometry = BrepUtil.Loft(plines_copy[0], plines_copy[1], true);
 
-            bool flag = rhino_util.PolylineUtil.IsClockwiseClosedPolyline(plines[0], plines[0].plane());
+        }
 
-            plines_copy = new List<Polyline>(plines);
+        public void project()
+        {
 
-            if (plane.DistanceTo(plines[1][0]) > 0)
+            // List<Polyline> plines_copy = x.Duplicate();
+
+
+
+            Polyline polyline = new Polyline(plines_copy[0]);
+            Plane pline_plane0 = plines_copy[0].plane();
+            Plane pline_plane1 = plines_copy[1].plane();
+
+            if (pline_plane0.DistanceTo(plines_copy[1][0]) > 0)
+            { //if wrong orientation, this will force polylines to be inwards always
                 for (int i = 0; i < plines_copy.Count; i++)
-                    plines_copy[i] = rhino_util.PolylineUtil.Flip(plines_copy[i]).ShiftPline(-1);
+                    plines_copy[i] = rhino_util.PolylineUtil.Flip(plines_copy[i]).ShiftPline(1);
+                // Print("Hi");
+            }
 
-            if (type == cut_type.slice)
-                for (int i = 0; i < plines_copy.Count; i++)
-                    plines_copy[i] = plines_copy[i].Flip().ShiftPline(-1);
+            //B = plane;
 
-            if (type == cut_type.mill_project)
+            if (type == cut_type.mill_project || type == cut_type.slice || type == cut_type.cut_project || type == cut_type.conic || type == cut_type.conic_reverse)
             {
                 plines_copy[1] = plines_copy[0].Duplicate();
-                var xform = Transform.PlanarProjection(plines[1].plane());
+                var xform = Transform.PlanarProjection(pline_plane1);
                 plines_copy[1].Transform(xform);
 
             }
+            else if (type == cut_type.slice_projectsheer || type == cut_type.mill_projectsheer || type == cut_type.cut_projectsheer)
+            {
+                //Get segments of the two polylines and intersect them with perperdicular to first line segment
 
+
+
+                Line plane_line = new Line(plines_copy[0][0], plines_copy[1].SegmentAt(0).ClosestPoint(plines_copy[0][0], false));
+                Plane plane0 = new Plane(plane_line.From, plane_line.Direction);
+                Plane plane1 = new Plane(plane_line.To, plane_line.Direction);
+                plines_copy[1] = plines_copy[0].Duplicate();
+                plines_copy[1].Transform(Transform.Translation(plane_line.Direction));
+
+                Line[] lines = new Line[plines_copy[0].Count - 1];// (plines_copy[0][0], plines_copy[1][0]);
+                for (int i = 0; i < lines.Length; i++)
+                    lines[i] = new Line(plines_copy[0][i], plines_copy[1][i]);
+
+
+
+
+                Polyline pline0 = new Polyline();
+                Polyline pline1 = new Polyline();
+
+                for (int i = 0; i < lines.Length; i++)
+                {
+                    pline0.Add(rhino_util.PlaneUtil.LinePlane(lines[i], plane0));
+                    pline1.Add(rhino_util.PlaneUtil.LinePlane(lines[i], plane1));
+                }
+                pline0.Close();
+                pline1.Close();
+                plines_copy[0] = pline0;
+                plines_copy[1] = pline1;
+            }
+
+            if (type == cut_type.cut_reverse || type == cut_type.conic_reverse)
+                for (int i = 0; i < plines_copy.Count; i++)
+                    plines_copy[i] = rhino_util.PolylineUtil.Flip(plines_copy[i]).ShiftPline(-1);
         }
 
 
@@ -254,7 +326,7 @@ namespace joinery_solver_net
         public void transform(Transform xform)
         {
             plines_copy.Transform(xform);
-            if(geometry!=null)
+            if (geometry != null)
                 geometry.Transform(xform);
         }
 

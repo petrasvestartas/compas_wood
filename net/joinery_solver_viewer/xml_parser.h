@@ -216,7 +216,7 @@ namespace xml_parser {
     }
 
 
-    inline bool write_xml_polylines_and_types(std::vector<std::vector<std::vector<IK::Point_3>>>& polylines_tree, std::vector<std::vector<char>>& types_tree, int id = -1, bool simple_case = false) {
+    inline bool write_xml_polylines_and_types(std::vector<std::vector<std::vector<IK::Point_3>>>& polylines_tree, std::vector<std::vector<cut_type>>& types_tree, int id = -1, bool simple_case = false) {
 
         std::string property_to_write = "output_polylines";
         std::string file_path = simple_case ? path_and_file_for_output_polylines_simple_case : path_and_file_for_output_polylines;
@@ -285,8 +285,8 @@ namespace xml_parser {
                         continue;
 
                 boost::property_tree::ptree type_group;
-                for (char& type : types) {
-                    type_group.add("type", type);
+                for (cut_type& type : types) {
+                    type_group.add("type", cut_type_to_string[type]);
                 }
 
                 main_node.add_child("type_group", type_group);

@@ -67,7 +67,7 @@ public:
     element();
     element(int);
 
-    void get_joints_geometry(std::vector<joint>& joints, std::vector<std::vector<CGAL_Polyline>>& output, int what_to_expose, std::vector<std::vector<char>>& output_cut_types);
+    void get_joints_geometry(std::vector<joint>& joints, std::vector<std::vector<CGAL_Polyline>>& output, int what_to_expose, std::vector<std::vector<cut_type>>& output_cut_types);
     void get_joints_geometry_as_closed_polylines_replacing_edges(std::vector<joint>& joints, std::vector<std::vector<CGAL_Polyline>>& output);
     bool intersection_closed_and_open_paths_2D(
         CGAL_Polyline& closed_pline_cutter, CGAL_Polyline& pline_to_cut, IK::Plane_3& plane, CGAL_Polyline& c,
@@ -80,7 +80,7 @@ inline element::element() {}
 inline element::element(int _id) : id(_id) {
 }
 
-inline void element::get_joints_geometry(std::vector<joint>& joints, std::vector<std::vector<CGAL_Polyline>>& output, int what_to_expose, std::vector<std::vector<char>>& output_cut_types) {
+inline void element::get_joints_geometry(std::vector<joint>& joints, std::vector<std::vector<CGAL_Polyline>>& output, int what_to_expose, std::vector<std::vector<cut_type>>& output_cut_types) {
     //you are in a loop
     //printf("/n %i", id);
     for (int i = 0; i < j_mf.size(); i++) { //loop joint id
@@ -952,7 +952,7 @@ inline void element::merge_joints(std::vector<joint>& joints, std::vector<std::v
             //CGAL_Debug(joints[std::get<0>(j_mf[i][j])](std::get<1>(j_mf[i][j])).size());//types
 
             for (int k = 0; k < joints[std::get<0>(j_mf[i][j])](std::get<1>(j_mf[i][j])).size(); k += 2) {
-                if (joints[std::get<0>(j_mf[i][j])](std::get<1>(j_mf[i][j]))[k] == '2')
+                if (joints[std::get<0>(j_mf[i][j])](std::get<1>(j_mf[i][j]))[k] == hole)//
                     id_of_holes.emplace_back((int)(k));
 
                 std::string s(1, joints[std::get<0>(j_mf[i][j])](std::get<1>(j_mf[i][j]))[k]);

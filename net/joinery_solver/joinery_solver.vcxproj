@@ -69,6 +69,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\clipper.cpp" />
+    <ClCompile Include="..\..\src\clipper2.engine.cpp" />
+    <ClCompile Include="..\..\src\clipper2.offset.cpp" />
     <ClCompile Include="..\..\src\wrapper_pybind11_joinery_solver.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -84,7 +86,13 @@
     <ClInclude Include="..\..\src\cgal_vector_util.h" />
     <ClInclude Include="..\..\src\cgal_xform_util.h" />
     <ClInclude Include="..\..\src\clipper.h" />
+    <ClInclude Include="..\..\src\clipper2.core.h" />
+    <ClInclude Include="..\..\src\clipper2.engine.h" />
+    <ClInclude Include="..\..\src\clipper2.h" />
+    <ClInclude Include="..\..\src\clipper2.minkowski.h" />
+    <ClInclude Include="..\..\src\clipper2.offset.h" />
     <ClInclude Include="..\..\src\clipper_util.h" />
+    <ClInclude Include="..\..\src\joinery_solver_cut_type.h" />
     <ClInclude Include="..\..\src\joinery_solver_element.h" />
     <ClInclude Include="..\..\src\joinery_solver_joint.h" />
     <ClInclude Include="..\..\src\joinery_solver_joint_library.h" />

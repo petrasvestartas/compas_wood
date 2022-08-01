@@ -2,26 +2,6 @@
 #include "stdafx.h"
 
 
-enum cut_types : char {
-    nothing = '0',
-
-    //plates
-    edge_insertion = '1',
-    hole = '2',
-    insert_between_multiple_edges = '3',
-
-    //beams
-    slice = '4', //project and make rectangle
-    mill_project = '5', //
-    mill = '6', //project
-    cut = '7',
-    conic_reverse = '8',		//project
-    //binary_slice_mill = '9', //project and make rectangle
-    conic = '9'
-};
-
-
-
 //Container for cuts
 class joint {
     //Methods
@@ -46,10 +26,10 @@ public:
     std::vector<double> tile_parameters; //For rebuilding
 
     std::array< std::vector<CGAL_Polyline>, 2> m;
-    std::vector<char> m_boolean_type; //0 - do not merge, 1 - edge insertion, 2 - hole 3 - insert between multiple edges hole
+    std::vector<cut_type> m_boolean_type; //0 - do not merge, 1 - edge insertion, 2 - hole 3 - insert between multiple edges hole
 
     std::array < std::vector<CGAL_Polyline>, 2> f;
-    std::vector<char> f_boolean_type; //0 - do not merge, 1 - edge insertion, 2 - hole 3 - insert between multiple edges hole
+    std::vector<cut_type> f_boolean_type; //0 - do not merge, 1 - edge insertion, 2 - hole 3 - insert between multiple edges hole
 
     //if this property is enable, joint volume rectangles are moved within unit_scale_distance, this property is equal to first element thickness
     bool unit_scale = false;
@@ -98,7 +78,7 @@ public:
         }
     }
 
-    char& get_first_cutting_type(bool male_or_female) {
+    cut_type& get_first_cutting_type(bool male_or_female) {
         if (male_or_female) {
             return m_boolean_type[0];
         }
@@ -107,7 +87,7 @@ public:
         }
     }
 
-    std::vector<char>& operator()(bool male_or_female) {
+    std::vector<cut_type>& operator()(bool male_or_female) {
         if (male_or_female)
             return m_boolean_type;
         else
