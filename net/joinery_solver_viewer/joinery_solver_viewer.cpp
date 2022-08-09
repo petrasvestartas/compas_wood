@@ -55,7 +55,7 @@ int main(int argc, char** argv) {
     path_and_file_for_input_numbers = "C:\\IBOIS57\\_Code\\Software\\Python\\compas_wood\\net\\data\\input_numbers.xml";
     result = xml_parser::read_xml_numbers(input_radii);
     if (!result) {
-        std::cout << "Error input_numbers.xml";
+        std::cout << "Error input_numbers.xml ";
         return 0;
     }
 

@@ -85,6 +85,69 @@ inline void element::get_joints_geometry(std::vector<joint>& joints, std::vector
     //printf("/n %i", id);
     for (int i = 0; i < j_mf.size(); i++) { //loop joint id
         for (size_t j = 0; j < j_mf[i].size(); j++) { //loop joints per each face + 1 undefined
+
+            /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            //correct drilling lines
+            //k+=2 means skipping bounding lines or rectangles that are used in other method when joints have to be merged with polygons
+            /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+            //output[this->id].emplace_back(joints[std::get<0>(j_mf[i][j])](std::get<1>(j_mf[i][j]), true)[k]);  //cut
+            //output[this->id].emplace_back(joints[std::get<0>(j_mf[i][j])](std::get<1>(j_mf[i][j]), false)[k]); //direction
+            for (int k = 0; k < joints[std::get<0>(j_mf[i][j])](std::get<1>(j_mf[i][j]), true).size(); k += 2) {
+                continue;
+                if (joints[std::get<0>(j_mf[i][j])](std::get<1>(j_mf[i][j]))[k] != drill) continue;
+
+                auto segment = IK::Segment_3(
+                    joints[std::get<0>(j_mf[i][j])](std::get<1>(j_mf[i][j]), true)[k].front(),
+                    joints[std::get<0>(j_mf[i][j])](std::get<1>(j_mf[i][j]), true)[k].back()
+                );
+
+                std::vector<IK::Point_3> intersection_points;
+                intersection_points.reserve(2);
+
+
+                if (this->central_polyline.size() > 0) {
+                    int e = -1;
+                    IK::Point_3 cp;
+                    double dist = cgal_polyline_util::closest_distance_and_point(segment[0], this->central_polyline, e, cp);
+
+                }
+                else {
+
+
+                    for (int l = 0; l < this->planes.size(); l++) {
+
+
+                        IK::Point_3 output;
+                        if (cgal_intersection_util::Intersect(segment, this->planes[l], output)) {
+                            if (clipper_util::point_inclusion(this->polylines[l], this->planes[l], output)) {
+                                intersection_points.emplace_back(output);
+                                if (intersection_points.size() == 2)
+                                    break;
+                            }
+                        }
+                    }
+
+                    if (intersection_points.size() == 2) {
+                        double t0;
+                        cgal_polyline_util::ClosestPointTo(intersection_points[0], segment, t0);
+                        double t1;
+                        cgal_polyline_util::ClosestPointTo(intersection_points[1], segment, t1);
+                        if (t0 > t1)
+                            std::reverse(intersection_points.begin(), intersection_points.end());
+                        joints[std::get<0>(j_mf[i][j])](std::get<1>(j_mf[i][j]), true)[k] = intersection_points;
+                        joints[std::get<0>(j_mf[i][j])](std::get<1>(j_mf[i][j]), false)[k] = intersection_points;
+                    }
+
+                }
+
+
+
+
+
+            }
+
             switch (what_to_expose) {
             case (0)://Plate outlines
                 //if (this->polylines.size() > 1 && i == 0) {

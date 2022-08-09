@@ -3,6 +3,53 @@
 
 
 namespace clipper_util {
+
+    inline bool point_inclusion(
+        CGAL_Polyline& p0,
+        IK::Plane_3& plane,
+        IK::Point_3& point,
+        double scale = 100000.0
+    ) {
+
+        /////////////////////////////////////////////////////////////////////////////////////
+        //Orient from 3D to 2D
+        /////////////////////////////////////////////////////////////////////////////////////
+        if (p0.size() > p0.max_size()) return false;
+
+
+        CGAL_Polyline a = p0;
+        IK::Point_3 b = point;
+
+        /////////////////////////////////////////////////////////////////////////////////////
+        //Create Transformation
+        /////////////////////////////////////////////////////////////////////////////////////
+        CGAL::Aff_transformation_3<IK> xform_toXY = cgal_xform_util::PlaneToXY(p0[0], plane);
+        cgal_polyline_util::Transform(a, xform_toXY);
+        b = b.transform(xform_toXY);
+
+
+
+        /////////////////////////////////////////////////////////////////////////////////////
+        //Convert to Clipper
+        /////////////////////////////////////////////////////////////////////////////////////
+        std::vector<ClipperLib::IntPoint> pathA(a.size() - 1);
+        for (int i = 0; i < a.size() - 1; i++) {
+            pathA[i] = ClipperLib::IntPoint((int)(a[i].x() * scale), (int)(a[i].y() * scale));
+            //printf("%f,%f,%f \n", a[i].x(), a[i].y(), a[i].z());
+        }
+
+        ClipperLib::IntPoint point_clipper((int)(b.x() * scale), (int)(b.y() * scale));
+
+        /////////////////////////////////////////////////////////////////////////////////////
+        //Check if point is inside
+        //returns 0 if false, +1 if true, -1 if pt ON polygon boundary
+        /////////////////////////////////////////////////////////////////////////////////////
+        return ClipperLib::PointInPolygon(point_clipper, pathA) != 0;
+
+
+
+    }
+
     inline bool intersection_2D(
         CGAL_Polyline& p0,
         CGAL_Polyline& p1,
@@ -18,7 +65,7 @@ namespace clipper_util {
 
         CGAL_Polyline a = p0;
         CGAL_Polyline b = p1;
-        
+
 
         /////////////////////////////////////////////////////////////////////////////////////
         //Create Transformation
@@ -50,7 +97,7 @@ namespace clipper_util {
         clipper.AddPath(pathA, ClipperLib::ptSubject, true);
         clipper.AddPath(pathB, ClipperLib::ptClip, true);
         ClipperLib::Paths C;
-        
+
         ClipperLib::ClipType clip_type = static_cast<ClipperLib::ClipType>(intersection_type);
         clipper.Execute(clip_type, C, ClipperLib::pftNonZero, ClipperLib::pftNonZero);
 
@@ -73,10 +120,12 @@ namespace clipper_util {
                 }
                 //CGAL_Debug(999999);
                 c[C[0].size()] = c[0]; //Close
-            } else {
+            }
+            else {
                 return false;
             }
-        } else {
+        }
+        else {
             return false;
         }
 
@@ -117,11 +166,11 @@ namespace clipper_util {
         }
 
 
-      
+
         ClipperLib::ClipperOffset clipper;
         clipper.AddPath(pathA, ClipperLib::JoinType::jtMiter, ClipperLib::EndType::etClosedPolygon);
         ClipperLib::Paths C;
-        clipper.Execute(C, offset*scale);
+        clipper.Execute(C, offset * scale);
         //printf("\n offset %f", offset);
 
         if (C.size() > 0) {
@@ -140,7 +189,7 @@ namespace clipper_util {
                 }
                 std::rotate(C[0].begin(), C[0].begin() + cp_id, C[0].end());
                 //std::rotate(C[0].begin(), C[0].begin()+ C[0].size()- cp_id, C[0].end());
-                
+
 
                 p0.clear();
                 p0.resize(C[0].size() + 1);

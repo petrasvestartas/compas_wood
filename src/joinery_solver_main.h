@@ -20,7 +20,7 @@
 //#include "rtree_util.h"
 
 
-#include "joinery_solver_cut_type.h"
+#include "joinery_solver_cut_type.h"<<
 #include "joinery_solver_element.h"
 #include "joinery_solver_joint.h"
 #include "joinery_solver_joint_library.h"
@@ -1176,8 +1176,9 @@ inline bool pair_search(
     std::vector<std::vector<IK::Vector_3>> input_insertion_vectors;
     std::vector<std::vector<int>> input_joint_types;
     std::vector<element> beam_volumes_elements;
-    get_elements(input_polyline_pairs, input_insertion_vectors, input_joint_types, beam_volumes_elements);
 
+    get_elements(input_polyline_pairs, input_insertion_vectors, input_joint_types, beam_volumes_elements);
+    //elements = beam_volumes_elements;
     //////////////////////////////////////////////////////////////////////////////
     // search
     //////////////////////////////////////////////////////////////////////////////
@@ -2309,6 +2310,6 @@ inline void beam_volumes(
 
     joint jj;
     joint_library_xml_parser::read_xml(jj, 0);
-}
+    }
 
 #pragma endregion
