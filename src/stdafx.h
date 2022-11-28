@@ -39,8 +39,6 @@
 #include <cstdlib>
 #include <cstdio>
 
-
-
 //Data structures
 #include <float.h>
 #include <inttypes.h>
@@ -54,9 +52,6 @@
 #include <unordered_map>
 #include <list>
 
-
-
-
 #include <boost/exception/diagnostic_information.hpp>
 
 //CGAL
@@ -67,7 +62,6 @@
 #include <CGAL/Bbox_3.h>
 #include <CGAL/Plane_3.h>
 #include <CGAL/Boolean_set_operations_2.h>
-
 
 //CGAL meshing 2D
 #include <CGAL/Constrained_Delaunay_triangulation_2.h>
@@ -94,10 +88,8 @@
 //CLIPPER
 #include "clipper.h"
 
-
 //RTREE
 #include "rtree.h"
-
 
 using IK = CGAL::Exact_predicates_inexact_constructions_kernel;
 using EK = CGAL::Exact_predicates_exact_constructions_kernel;
@@ -145,7 +137,6 @@ typedef CDT::Face_handle Face_handle;
 using RowMatrixXd = Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor>;
 using RowMatrixXi = Eigen::Matrix<int, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor>;
 
-
 //EASY3D
 #ifdef easy3d_precompiled
 #include <easy3d/viewer/viewer.h>
@@ -155,7 +146,6 @@ using RowMatrixXi = Eigen::Matrix<int, Eigen::Dynamic, Eigen::Dynamic, Eigen::Ro
 #include <easy3d/fileio/resources.h>
 #include <easy3d/util/logging.h>
 #endif // easy3d_precompiled
-
 
 //MY LIBRARY UTILITIES
 
@@ -175,11 +165,6 @@ using RowMatrixXi = Eigen::Matrix<int, Eigen::Dynamic, Eigen::Dynamic, Eigen::Ro
 #include "cgal_plane_util.h"
 #include "cgal_polyline_util.h"
 
-
-
 //
 #include "clipper_util.h"
 #include "rtree_util.h"
-
-
-

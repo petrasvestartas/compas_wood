@@ -1576,6 +1576,57 @@ namespace rhino_util
             return p;
         }
 
+        public static Polyline Chamfer(this Polyline polyline, bool[] flags, double value = 0.001)
+        {
+      
+            //RhinoApp.WriteLine(" ");
+            Line[] lines = polyline.GetSegments();
+
+            if (value <= 0)
+                return polyline;
+
+            Polyline p = new Polyline();
+            Polyline points = new Polyline(polyline.GetRange(0, polyline.Count-1).ToArray());
+       
+       
+                    for (int i = 0; i < points.Count; i++)
+                    {
+                        int curr = i;
+                        int next = rhino_util.MathUtil.Wrap((i + 1), points.Count);
+                        int prev = rhino_util.MathUtil.Wrap((i - 1), points.Count);
+                //RhinoApp.WriteLine(next.ToString() +" " + prev.ToString());
+
+                Vector3d v0 = points[prev] - points[curr];
+                Vector3d v1 = points[next] - points[curr];
+                double angle = Vector3d.VectorAngle(v0, v1, Vector3d.CrossProduct(v0, v1));
+
+                if (flags[i] && angle<Math.PI*0.5)
+                        {
+
+                    double value_ = MathUtil.RemapNumbers(angle,0,Math.PI*0.5, value, value * 0.1);
+                    //RhinoApp.WriteLine(angle.ToString());
+                        v0.Unitize();
+                        v1.Unitize();
+                        v0 *= value_;
+                        v1 *= value_;
+                        p.Add(points[curr] + v0);
+                        p.Add(points[curr] + v1);
+                    }
+                        else
+                        {
+                           p.Add(points[curr]);
+                            p.Add(points[curr]);
+
+                        }
+                    }
+
+
+             
+            p.Add(p[0]);
+            
+            return p;
+        }
+
         /// <summary>
         /// Boolean union of joint outline and rectangle
         /// jointPolyline - Rectangle outline with joints
@@ -3058,6 +3109,130 @@ namespace rhino_util
 
                     return polyline;
             }
+        }
+
+        public static void CutMesh_FoldedPlates(ref Polyline[][] polylines, List<Plane> P)
+        {
+
+            foreach(var plane in P)
+                for (int i = 0; i < polylines.Length; i++)
+                        polylines[i] = CutMesh(polylines[i].ToList(), plane).ToArray();
+
+    
+
+        }
+
+        public static List<Polyline> CutMesh(List<Polyline> polylines, List<Plane> P)
+        {
+
+            var plines = polylines.ToList();
+
+            for (int i = 0; i < P.Count; i++)
+            {
+                plines = CutMesh(plines, P[i]);
+            }
+            return plines;
+
+        }
+
+        public static List<Polyline> CutMesh(this List<Polyline> plines3D, Plane P)
+        {
+
+            // Rhino.RhinoApp.WriteLine("H");
+
+            double tolerance = Rhino.RhinoDoc.ActiveDoc.ModelAbsoluteTolerance;
+
+            Transform xform = Rhino.Geometry.Transform.PlaneToPlane(P, Plane.WorldXY);
+            Transform xformI = Rhino.Geometry.Transform.PlaneToPlane(Plane.WorldXY, P);
+
+            //Transform to XY Plane
+            Polyline[] plines = new Polyline[plines3D.Count];
+
+
+            for (int i = 0; i < plines.Length; i++)
+            {
+                Polyline pline = new Polyline(plines3D[i]);
+                pline.Transform(xform);
+                plines[i] = pline;
+            }
+
+
+
+
+
+            List<Polyline> plinesCulled = new List<Polyline>();
+            for (int i = 0; i < plines.Length; i++)
+            {
+
+                bool flag = true;
+                bool[] below = new bool[plines[i].Count];
+                int counter = 0;
+                for (int j = 0; j < plines[i].Count; j++)
+                {
+                    if (plines[i][j].Z < 0)
+                    {
+                        below[j] = true;
+                        flag = false;
+                        counter++;
+                    }
+                    else
+                    {
+                        below[j] = false;
+                    }
+                }
+
+                //For faces that coincide with plane
+                if (counter != 0 && counter != plines[i].Count)
+                {
+
+
+
+                    Curve curve = plines[i].ToNurbsCurve();
+                    Rhino.Geometry.Intersect.CurveIntersections ci = Rhino.Geometry.Intersect.Intersection.CurvePlane(curve, Plane.WorldXY, tolerance * 0.01);
+
+                    List<double> t = new List<double>();
+
+                    for (int j = 0; j < ci.Count; j++)
+                    {
+                        t.Add(ci[j].ParameterA);
+                    }
+
+                    Curve[] curves = curve.Split(t);
+                    foreach (Curve c in curves)
+                    {
+                        if (c.PointAt(0.5 * (c.Domain.T0 + c.Domain.T1)).Z > tolerance)
+                        {
+                            Polyline splitPline;
+                            if (c.TryGetPolyline(out splitPline))
+                            {
+                                splitPline.Add(splitPline[0]);
+                                plinesCulled.Add(splitPline);
+                            }
+                        }
+                    }
+
+
+                }
+
+
+
+                if (flag)
+                {
+
+                    plinesCulled.Add(plines[i]);
+                }
+
+
+            }
+
+            for (int i = 0; i < plinesCulled.Count; i++)
+            {
+                Polyline plineCopy = plinesCulled[i];
+                plineCopy.Transform(xformI);
+                plinesCulled[i] = plineCopy;
+            }
+
+            return plinesCulled;
         }
     }
 

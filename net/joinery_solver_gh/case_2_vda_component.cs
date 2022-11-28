@@ -92,11 +92,17 @@ namespace joinery_solver_gh.Resources
             pManager.AddNumberParameter("rect_thickness", "rect_thickness", "rect_thickness", GH_ParamAccess.item);
 
             pManager.AddBrepParameter("projection", "projection", "projection", GH_ParamAccess.list);
+            pManager.AddNumberParameter("chamfer", "chamfer", "chamfer sharp corners", GH_ParamAccess.item);
+            pManager.AddPlaneParameter("cut", "cut", "cut using planes", GH_ParamAccess.list);
+            pManager[6].Optional = true;
+            pManager[7].Optional = true;
 
             pManager[3].Optional = true;
             pManager[4].Optional = true;
             pManager[5].Optional = true;
             pManager[9].Optional = true;
+            pManager[10].Optional = true;
+            pManager[11].Optional = true;
         }
 
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
@@ -142,11 +148,22 @@ namespace joinery_solver_gh.Resources
             List<Brep> projection = new List<Brep>();
             DA.GetDataList(9, projection);
 
+            double chamfer = 10;
+            DA.GetData(10, ref chamfer);
+
+            List<Plane> cut_planes = new List<Plane>();
+            DA.GetDataList(11, cut_planes);
+
             case_2_vda vda = new case_2_vda(
               m, null,
               face_thickness, face_positions,
               divisions, division_len,
-              edge_vectors, rect_width, rect_height, rect_thickness, projection);
+              edge_vectors, rect_width, rect_height, rect_thickness, chamfer, projection);
+
+            if (cut_planes.Count > 0)
+            {
+                rhino_util.PolylineUtil.CutMesh_FoldedPlates(ref vda.f_polylines, cut_planes);
+            }
 
             DA.SetDataTree(0, rhino_util.GrasshopperUtil.IE2_GH_Structure(vda.f_polylines));
             DA.SetDataTree(1, rhino_util.GrasshopperUtil.IE2_GH_Structure(vda.f_polylines_planes));

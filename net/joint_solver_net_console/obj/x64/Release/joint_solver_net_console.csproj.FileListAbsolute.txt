@@ -14,4 +14,3 @@ C:\IBOIS57\_Code\Software\Python\compas_wood\net\joint_solver_net_console\obj\x6
 C:\Users\petra\AppData\Roaming\Grasshopper\Libraries\compas_wood\joint_solver_net_console.exe.config
 C:\Users\petra\AppData\Roaming\Grasshopper\Libraries\compas_wood\joint_solver_net_console.exe
 C:\Users\petra\AppData\Roaming\Grasshopper\Libraries\compas_wood\joint_solver_net_console.pdb
-C:\IBOIS57\_Code\Software\Python\compas_wood\net\joint_solver_net_console\obj\x64\Release\joint_solver_net_console.csproj.SuggestedBindingRedirects.cache

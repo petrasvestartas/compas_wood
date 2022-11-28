@@ -62,7 +62,7 @@ namespace joinery_solver_gh
         public case_2_vda(Mesh m, Surface s,
           double face_thickness, List<double> face_positions, List<double> edge_divisions,
           List<double> edge_division_len, List<Line> insertion_vectors,
-        double rect_width, double rect_height, double rect_thickness, List<Brep> projection_breps)
+        double rect_width, double rect_height, double rect_thickness, double chamfer, List<Brep> projection_breps)
         {
             if (m == null) return;
             if (!m.IsValid) return;
@@ -90,7 +90,7 @@ namespace joinery_solver_gh
             get_faces_planes();
             get_face_edge_planes();
             get_bisector_planes();
-            get_face_polylines();
+            get_face_polylines(chamfer);
             get_edges();
             get_edge_faces();
             get_edge_vectors(insertion_vectors);
@@ -345,7 +345,7 @@ namespace joinery_solver_gh
                     xaxis *= -1;
 
                 //Incase insertion vectors are given
-                if (Math.Abs(insertion_vectors[i].X)+ Math.Abs(insertion_vectors[i].Y)+ Math.Abs(insertion_vectors[i].Z) >0.01 )
+                if (Math.Abs(insertion_vectors[i].X) + Math.Abs(insertion_vectors[i].Y) + Math.Abs(insertion_vectors[i].Z) > 0.01)
                 {
                     //Project given vector to a plane
                     Plane edge_plane = new Plane(this.e_lines[i].Mid(), yaxis);
@@ -477,14 +477,13 @@ namespace joinery_solver_gh
 
                         this.e_polylines_planes[i][j] = e90_multiple_planes[i][j].MovePlanebyAxis(this.rect_thickness * 0.5);
                         this.e_polylines_index[i][j] = string.Format("{0}-{1}_{2}", this.e_f[i][0], this.e_f[i][1], j);
-
                     }
                 }
             }
         }
 
         //Compute geometry
-        public void get_face_polylines()
+        public void get_face_polylines(double chamfer_dist = 0.0)
         {
             bool zero_layer = this.face_positions.Count == 0;
 
@@ -527,6 +526,33 @@ namespace joinery_solver_gh
                         f_polylines_index[i][j] = this.face_positions.Count == 1 ? i.ToString() : string.Format("{0}-{1}", i, j);
                     }
                 }
+            }
+
+            //chamfer
+
+            for (int i = 0; i < this.m.Faces.Count; i++)
+            {
+                int[] v = this.m.Faces[i].IsQuad ?
+                    new int[] { this.m.Faces[i].A, this.m.Faces[i].B, this.m.Faces[i].C, this.m.Faces[i].D } :
+                    new int[] { this.m.Faces[i].A, this.m.Faces[i].B, this.m.Faces[i].C };
+
+                bool[] do_chamfer = this.m.Faces[i].IsQuad ?
+                    new bool[] { false, false, false, false } :
+                    new bool[] { false, false, false };
+
+                for (int j = 0; j < v.Length; j++)
+                {
+                    int tv = this.m.TopologyVertices.TopologyVertexIndex(v[j]);
+                    int[] connectedFaces = this.m.TopologyVertices.ConnectedFaces(tv);
+                    if (connectedFaces.Length > 3)
+                        do_chamfer[rhino_util.MathUtil.Wrap((j - 1), v.Length)] = true;
+                }
+
+                for (int j = 0; j < this.f_polylines[i].Length; j++)
+                {
+                    this.f_polylines[i][j] = this.f_polylines[i][j].Chamfer(do_chamfer, chamfer_dist);
+                }
+                // this.f_polylines = new Polyline[f][];
             }
         }
     }
