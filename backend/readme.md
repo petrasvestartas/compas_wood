@@ -4,6 +4,13 @@ This is a test case
 
 # git 
 
+Add files to the repository
+```
+git add .
+git commit -m "..."
+git push origin backend
+```
+
 ## git branch
 
 To create a new branch and switch to it at the same time:

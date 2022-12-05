@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="350px"
+   height="350px"
+   viewBox="0 0 350 350"
+   version="1.1"
+   id="svg24"
+   sodipodi:docname="rounding2.svg"
+   inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)">
+  <metadata
+     id="metadata30">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs28" />
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1368"
+     inkscape:window-height="850"
+     id="namedview26"
+     showgrid="false"
+     inkscape:zoom="1.7657143"
+     inkscape:cx="175"
+     inkscape:cy="175"
+     inkscape:window-x="-6"
+     inkscape:window-y="-6"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg24" />
+  <path
+     d=" M 330.00 150.20 L  20.00 289.70  20.00 20.00  330.00 20.00  Z "
+     style="fill:#0000FF; fill-opacity:0.06; fill-rule:evenodd; stroke:#0000FF; stroke-opacity:0.50; stroke-width:1.00;"
+     id="path2" />
+  <path
+     d=" M 154.54 330.00 L  20.00 330.00  20.00 328.14  176.86 194.84  Z M 330.00 65.26 L  176.86 194.84  206.00 20.00  330.00 20.00  Z "
+     style="fill:#FFFF00; fill-opacity:0.13; fill-rule:evenodd; stroke:#999900; stroke-opacity:1.00; stroke-width:1.00;"
+     id="path4" />
+  <path
+     d=" M 172.52 220.88 L  116.72 246.30  176.86 194.84  Z M 330.00 64.64 L  176.86 194.84  206.00 20.00  330.00 20.00  Z "
+     style="fill:#00FF00; fill-opacity:0.13; fill-rule:evenodd; stroke:#0000FF; stroke-opacity:0.50; stroke-width:1.00;"
+     id="path6" />
+  <path
+     d=" M 206.00 206.00 L  144.00 268.00  144.00 206.00  Z M 330.00 99.36 L  206.00 206.00  235.76 20.00  330.00 20.00  Z "
+     style="fill:#00FF00; fill-opacity:0.50; fill-rule:evenodd; stroke:#0000FF; stroke-opacity:0.50; stroke-width:1.00;"
+     id="path8" />
+  <path
+     d=" M 20.00 20.00 L  330.00 20.00  330.00 330.00  20.00 330.00  Z "
+     style="fill:#000000; fill-opacity:0.00; fill-rule:evenodd; stroke:#FFFFFF; stroke-opacity:1.00; stroke-width:2.00;"
+     id="path10" />
+  <circle
+     cx="116.10"
+     cy="246.30"
+     r="3.00"
+     stroke="#000000"
+     stroke-width="1.00"
+     fill="#000000"
+     id="circle12" />
+  <circle
+     cx="172.52"
+     cy="220.88"
+     r="3.00"
+     stroke="#000000"
+     stroke-width="1.00"
+     fill="#000000"
+     id="circle14" />
+  <circle
+     cx="176.86"
+     cy="194.84"
+     r="3.00"
+     stroke="#000000"
+     stroke-width="1.00"
+     fill="#000000"
+     id="circle16" />
+  <circle
+     cx="144.00"
+     cy="268.00"
+     r="3.00"
+     stroke="#000000"
+     stroke-width="1.00"
+     fill="#FF0000"
+     id="circle18" />
+  <circle
+     cx="144.00"
+     cy="206.00"
+     r="3.00"
+     stroke="#000000"
+     stroke-width="1.00"
+     fill="#FF0000"
+     id="circle20" />
+  <circle
+     cx="206.00"
+     cy="206.00"
+     r="3.00"
+     stroke="#000000"
+     stroke-width="1.00"
+     fill="#FF0000"
+     id="circle22" />
+  <path
+     style="fill:none;stroke:#b10000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:3, 3;stroke-dashoffset:0;stroke-opacity:0.333333"
+     d="M 53.120581,207.16914 225.76454,205.99726"
+     id="path32-93"
+     sodipodi:nodetypes="cc" />
+  <path
+     style="fill:none;stroke:#b10000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:3, 3;stroke-dashoffset:0;stroke-opacity:0.333333"
+     d="m 143.09757,104.50742 1.17188,196.86754"
+     id="path32"
+     sodipodi:nodetypes="cc" />
+  <path
+     style="fill:none;stroke:#b10000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:3, 3;stroke-dashoffset:0;stroke-opacity:0.333333"
+     d="m 205.8396,104.50718 1.17188,197.64925"
+     id="path32-9"
+     sodipodi:nodetypes="cc" />
+  <path
+     style="fill:none;stroke:#b10000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:3, 3;stroke-dashoffset:0;stroke-opacity:0.333333"
+     d="M 54.175711,269.34984 226.81968,268.17796"
+     id="path32-93-4"
+     sodipodi:nodetypes="cc" />
+  <text
+     xml:space="preserve"
+     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:10.6667px;line-height:1.25;font-family:Tahoma;-inkscape-font-specification:'Tahoma, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#000000;fill-opacity:1;stroke:none"
+     x="34.074112"
+     y="210.66808"
+     id="text919"><tspan
+       sodipodi:role="line"
+       id="tspan917"
+       x="34.074112"
+       y="210.66808"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:10.6667px;font-family:Tahoma;-inkscape-font-specification:'Tahoma, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal">73</tspan></text>
+  <text
+     xml:space="preserve"
+     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:10.6667px;line-height:1.25;font-family:Tahoma;-inkscape-font-specification:'Tahoma, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#000000;fill-opacity:1;stroke:none"
+     x="34.914738"
+     y="272.7294"
+     id="text919-8"><tspan
+       sodipodi:role="line"
+       id="tspan917-8"
+       x="34.914738"
+       y="272.7294"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:10.6667px;font-family:Tahoma;-inkscape-font-specification:'Tahoma, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal">74</tspan></text>
+  <text
+     xml:space="preserve"
+     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:10.6667px;line-height:1.25;font-family:Tahoma;-inkscape-font-specification:'Tahoma, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#000000;fill-opacity:1;stroke:none"
+     x="133.45012"
+     y="313.41306"
+     id="text919-86"><tspan
+       sodipodi:role="line"
+       id="tspan917-9"
+       x="133.45012"
+       y="313.41306"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:10.6667px;font-family:Tahoma;-inkscape-font-specification:'Tahoma, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal">319</tspan></text>
+  <text
+     xml:space="preserve"
+     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:10.6667px;line-height:1.25;font-family:Tahoma;-inkscape-font-specification:'Tahoma, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#000000;fill-opacity:1;stroke:none"
+     x="195.52043"
+     y="312.76474"
+     id="text919-86-0"><tspan
+       sodipodi:role="line"
+       id="tspan917-9-7"
+       x="195.52043"
+       y="312.76474"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:10.6667px;font-family:Tahoma;-inkscape-font-specification:'Tahoma, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal">320</tspan></text>
+</svg>

@@ -1,0 +1,32 @@
+<svg width="240px" height="240px" viewBox="0 0 240 240" version="1.1" xmlns="http://www.w3.org/2000/svg">
+  <path d="M 39.62 19.81 L 216.18 19.81 216.18 196.37 39.62 196.37 ZM 78.85 59.04 L 176.94 59.04 176.94 157.13 78.85 157.13 Z"
+    style="fill:#000000; fill-opacity:0.04; fill-rule:evenodd; stroke:#000000; stroke-opacity:0.38; stroke-width:1.00;"/>
+
+  <path d="M 68.06 108.09 L 67.30 111.68 65.14 114.65 61.96 116.48 58.31 116.87 54.82 115.73 52.09 113.28 50.60 109.92 50.60 106.25 52.09 102.90 54.82 100.44 58.31 99.31 61.96 99.69 65.14 101.53 67.30 104.50 Z"
+    style="fill:#00FF00; fill-opacity:0.13; fill-rule:evenodd; stroke:#009900; stroke-opacity:1.00; stroke-width:1.20;"/>
+
+  <path d="M 136.73 108.09 L 135.96 111.68 133.80 114.65 130.63 116.48 126.97 116.87 123.48 115.73 120.76 113.28 119.26 109.92 119.26 106.25 120.76 102.90 123.48 100.44 126.97 99.31 130.63 99.69 133.80 101.53 135.96 104.50 Z"
+    style="fill:#FF0000; fill-opacity:0.13; fill-rule:evenodd; stroke:#990000; stroke-opacity:1.00; stroke-width:1.20;"/>
+
+  <path d="M 20.00 137.52 L 88.66 137.52 "
+    style="fill:none; stroke:#990000; stroke-opacity:1.00; stroke-width:1.00; stroke-dasharray: 5 5 ;"/>
+
+  <path d="M 39.62 77.68 L 43.44 86.51 35.80 86.51 Z"
+    style="fill:#00FF00; fill-opacity:0.25; fill-rule:evenodd; stroke:#009900; stroke-opacity:1.00; stroke-width:1.00;"/>
+
+  <path d="M 78.85 89.45 L 75.03 80.62 82.68 80.62 Z"
+    style="fill:#FF0000; fill-opacity:0.25; fill-rule:evenodd; stroke:#990000; stroke-opacity:1.00; stroke-width:1.00;"/>
+
+  <path d="M 176.94 126.73 L 180.76 135.55 173.12 135.55 Z"
+    style="fill:#FF0000; fill-opacity:0.13; fill-rule:evenodd; stroke:#990000; stroke-opacity:1.00; stroke-width:1.00;"/>
+
+  <path d="M 216.18 138.50 L 212.35 129.67 220.00 129.67 Z"
+    style="fill:#00FF00; fill-opacity:0.25; fill-rule:evenodd; stroke:#009900; stroke-opacity:1.00; stroke-width:1.00;"/>
+
+  <path d="M 99.45 137.52 L 90.62 141.34 90.62 133.69 Z"
+    style="fill:#FF0000; fill-opacity:0.25; fill-rule:evenodd; stroke:#990000; stroke-opacity:1.00; stroke-width:1.00;"/>
+
+  <g font-family="Verdana" font-style="normal" font-weight="700" font-size="10" fill="#000000"><text x="55.31" y="111.03">1</text></g>
+  <g font-family="Verdana" font-style="normal" font-weight="700" font-size="10" fill="#000000"><text x="124.95" y="111.03">0</text></g>
+</svg>
+

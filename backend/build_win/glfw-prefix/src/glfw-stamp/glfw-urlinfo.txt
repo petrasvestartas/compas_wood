@@ -1,0 +1,12 @@
+# This is a generated file and its contents are an internal implementation detail.
+# The download step will be re-executed if anything in this file changes.
+# No other meaning or use of this file is supported.
+
+method=url
+command=C:/Program Files/CMake/bin/cmake.exe;-P;C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/glfw-prefix/src/glfw-stamp/download-glfw.cmake;COMMAND;C:/Program Files/CMake/bin/cmake.exe;-P;C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/glfw-prefix/src/glfw-stamp/verify-glfw.cmake;COMMAND;C:/Program Files/CMake/bin/cmake.exe;-P;C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/glfw-prefix/src/glfw-stamp/extract-glfw.cmake
+source_dir=C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/install/glfw
+work_dir=C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/install
+url(s)=https://github.com/glfw/glfw/releases/download/3.3.8/glfw-3.3.8.zip
+hash=
+no_extract=
+

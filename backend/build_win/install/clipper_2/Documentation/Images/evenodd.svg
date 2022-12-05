@@ -1,0 +1,12 @@
+<svg width="250px" height="250px" viewBox="0 0 250 250" version="1.1" xmlns="http://www.w3.org/2000/svg">
+  <path d="M 219.62 125.21 L 19.90 190.11 143.33 20.21 143.33 230.21 19.90 60.32 Z"
+    style="fill:#000000; fill-opacity:0.04; fill-rule:evenodd; stroke:#000000; stroke-opacity:0.38; stroke-width:1.00;"/>
+
+  <path d="M 118.51 125.21 L 117.71 129.00 115.44 132.12 112.09 134.06 108.24 134.46 104.57 133.27 101.69 130.68 100.12 127.15 100.12 123.28 101.69 119.75 104.57 117.16 108.24 115.97 112.09 116.37 115.44 118.31 117.71 121.43 ZM 69.70 90.35 L 68.90 94.13 66.63 97.26 63.28 99.19 59.43 99.60 55.76 98.40 52.88 95.81 51.31 92.28 51.31 88.42 52.88 84.89 55.76 82.30 59.43 81.10 63.28 81.51 66.63 83.44 68.90 86.57 Z"
+    style="fill:#00FF00; fill-opacity:0.13; fill-rule:evenodd; stroke:#009900; stroke-opacity:1.00; stroke-width:1.20;"/>
+
+  <g font-family="Verdana" font-style="normal" font-weight="700" font-size="12" fill="#000000"><text x="56.92" y="93.84">1</text></g>
+  <g font-family="Verdana" font-style="normal" font-weight="700" font-size="12" fill="#000000"><text x="105.73" y="128.70">2</text></g>
+  <g font-family="Verdana" font-style="normal" font-weight="normal" font-size="12" fill="#000000"><text x="51.11" y="229.81">EvenOdd</text></g>
+</svg>
+

@@ -1,0 +1,13 @@
+<?xml version="1.0" standalone="no"?>
+<svg width="300px" height="300px" viewBox="0 0 300 300" version="1.1" xmlns="http://www.w3.org/2000/svg">
+
+ <path d=" M 275.31 147.65 L 36.53 224.59 L 182.45 20.31 L 182.45 275.00 L 36.53 70.71 z"
+ style="fill:#00009C; fill-opacity:0.09; fill-rule:nonzero; stroke:#B3B3DA; stroke-opacity:0.80; stroke-width:0.80;"/>
+
+ <path d=" M 270.00 182.14 L 20.61 195.41 L 214.29 36.22 L 147.96 280.31 L 60.41 46.84 z"
+ style="fill:#9C0000; fill-opacity:0.07; fill-rule:nonzero; stroke:#FFA07A; stroke-opacity:0.80; stroke-width:0.80;"/>
+
+ <path d=" M 182.45 118.47 L 190.41 121.12 L 187.76 129.08 L 235.51 160.92 L 182.45 176.84 L 182.45 187.45 L 174.49 187.45 L 158.57 240.51 L 126.73 195.41 L 116.12 198.06 L 113.47 190.10 L 57.76 192.76 L 92.24 147.65 L 86.94 142.35 L 94.90 134.39 L 73.67 83.98 L 126.73 99.90 L 132.04 91.94 L 140.00 97.24 L 182.45 62.76 z"
+ style="fill:#80FF9C; fill-opacity:1.00; fill-rule:nonzero; stroke:#003300; stroke-opacity:1.00; stroke-width:0.80;"/>
+
+</svg>

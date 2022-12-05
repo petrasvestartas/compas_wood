@@ -1,0 +1,41 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <CustomBuild Include="C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\CMakeFiles\2245a31a0d943ce4d42bee40d28004ea\glfw-mkdir.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\CMakeFiles\2245a31a0d943ce4d42bee40d28004ea\glfw-download.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\CMakeFiles\2245a31a0d943ce4d42bee40d28004ea\glfw-update.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\CMakeFiles\2245a31a0d943ce4d42bee40d28004ea\glfw-patch.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\CMakeFiles\2245a31a0d943ce4d42bee40d28004ea\glfw-configure.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\CMakeFiles\2245a31a0d943ce4d42bee40d28004ea\glfw-build.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\CMakeFiles\2245a31a0d943ce4d42bee40d28004ea\glfw-install.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\CMakeFiles\77c6b3fa8a0fc24a1664936823025f05\glfw-complete.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\CMakeFiles\b9dfba4f048e03c1599c5b91598ea2e8\glfw.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\IBOIS57\_Code\Software\Python\compas_wood\backend\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\CMakeFiles\glfw" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="CMake Rules">
+      <UniqueIdentifier>{CA68597B-E98B-3107-9F82-8392521FAD41}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

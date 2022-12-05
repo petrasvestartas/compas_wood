@@ -1,0 +1,19 @@
+# CMake generation dependency list for this directory.
+C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/install/googletest/src/googletest/googletest/CMakeLists.txt
+C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/install/googletest/src/googletest/googletest/cmake/Config.cmake.in
+C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/install/googletest/src/googletest/googletest/cmake/gtest.pc.in
+C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/install/googletest/src/googletest/googletest/cmake/gtest_main.pc.in
+C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/install/googletest/src/googletest/googletest/cmake/internal_utils.cmake
+C:/Program Files/CMake/share/cmake-3.24/Modules/BasicConfigVersion-AnyNewerVersion.cmake.in
+C:/Program Files/CMake/share/cmake-3.24/Modules/CMakePackageConfigHelpers.cmake
+C:/Program Files/CMake/share/cmake-3.24/Modules/CheckCSourceCompiles.cmake
+C:/Program Files/CMake/share/cmake-3.24/Modules/CheckFunctionExists.c
+C:/Program Files/CMake/share/cmake-3.24/Modules/CheckIncludeFile.cmake
+C:/Program Files/CMake/share/cmake-3.24/Modules/CheckLibraryExists.cmake
+C:/Program Files/CMake/share/cmake-3.24/Modules/FindPackageHandleStandardArgs.cmake
+C:/Program Files/CMake/share/cmake-3.24/Modules/FindPackageMessage.cmake
+C:/Program Files/CMake/share/cmake-3.24/Modules/FindPython.cmake
+C:/Program Files/CMake/share/cmake-3.24/Modules/FindPython/Support.cmake
+C:/Program Files/CMake/share/cmake-3.24/Modules/FindThreads.cmake
+C:/Program Files/CMake/share/cmake-3.24/Modules/Internal/CheckSourceCompiles.cmake
+C:/Program Files/CMake/share/cmake-3.24/Modules/WriteBasicConfigVersionFile.cmake

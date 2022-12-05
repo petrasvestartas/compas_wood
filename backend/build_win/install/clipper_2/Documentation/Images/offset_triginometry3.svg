@@ -1,0 +1,75 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="600">
+  <text xml:space="preserve" style="font-size:13.3px;line-height:1.25;font-family:Tahoma;" x="373.977" y="12.046">
+    <tspan x="373.977" y="26.046">When offsetting polygons using <tspan style="font-weight:700;font-size:13.3px">mitered joins</tspan>, there&apos;s a risk</tspan>
+    <tspan x="373.977" y="43.379">that mitered offset points will be a very long way away from </tspan>
+    <tspan x="373.977" y="62.046">their starting points (the miter distance). This will happen </tspan>
+    <tspan x="373.977" y="78.713">whenever the internal angle at a given point (vertex) is very </tspan>
+    <tspan x="373.977" y="95.379">small. To manage this, whenever the miter distance at a given </tspan>
+    <tspan x="373.977" y="112.046">vertex exceeds a specified limit, the join is &apos;squared&apos; instead of </tspan>
+    <tspan x="373.977" y="128.712">mitered. So, given a specific limit (expressed as a multiple of </tspan>
+    <tspan x="373.977" y="145.379">the offset value), calculate the largest <tspan style="font-weight:700;font-size:13.3px">ß</tspan> that&apos;s safe to miter.</tspan>
+    <tspan x="373.977" y="178.712">Given <tspan style="font-weight:700;font-size:13.3px">δ</tspan> is the offset distance and <tspan style="font-weight:700;font-size:13.3px">λ</tspan> (as a multiple of <tspan style="font-weight:700;font-size:13.3px">δ</tspan>) is the </tspan>
+    <tspan x="373.977" y="195.379">maximum allowed miter distance .. </tspan>
+    <tspan x="373.977" y="212.046">Calculate the largest possible <tspan style="font-weight:700;font-size:13.3px">ß</tspan> (relative to <tspan style="font-weight:700">δ</tspan> and <tspan style="font-weight:700">λ)</tspan>.</tspan>
+    <tspan x="373.977" y="245.379">length(ac) = δ </tspan>
+    <tspan x="373.977" y="262.045">length(ab) = λ × δ (eg λ = 2 as in the example below)</tspan>
+    <tspan x="373.977" y="278.712">Ø = π - ß</tspan>
+    <tspan x="373.977" y="295.379">∠a = ∠b = Ø, ∠abc = Ø / 2</tspan>
+    <tspan x="373.977" y="312.413">sin(Ø / 2) = δ / (λ × δ) = 1 / λ</tspan>
+    <tspan x="373.977" y="329.079">sin(Ø / 2) = √((1 – cos(Ø)) / 2) **</tspan>
+    <tspan x="373.977" y="345.746">1 / λ = √((1 – cos(Ø)) / 2)</tspan>
+    <tspan x="373.977" y="362.413">λ = √(2 / (1 – cos(Ø)))</tspan>
+    <tspan x="373.977" y="379.079">λ² = 2 / (1 – cos(Ø))</tspan>
+    <tspan x="373.977" y="395.746">1 – cos(Ø) = 2 / λ²</tspan>
+    <tspan x="373.977" y="412.413">Since Ø = π - ß (see above)</tspan>
+    <tspan x="373.977" y="429.079">1 – cos(π – ß) = 2 / λ² </tspan>
+    <tspan x="373.977" y="445.746">and given cos(π – ß) = –cos(ß) **</tspan>
+    <tspan x="373.977" y="462.412">1 + cos(ß) = 2 / λ²</tspan>
+    <tspan x="373.977" y="479.079">cos(ß) = (2 / λ²) – 1</tspan>
+    <tspan x="373.977" y="495.746" style="font-weight:700">ß = cos⁻¹((2 / λ²) – 1)</tspan>
+    <tspan x="373.977" y="529.079" style="font-weight:400">Example: Given 2 = relative miter distance (λ), then</tspan>
+    <tspan x="373.977" y="545.746" style="font-weight:400">ß = cos⁻¹((2 / 2²) – 1) = 2.094 radians (ie 120 degrees).</tspan>
+    <tspan x="373.977" y="579.079" style="font-weight:400;font-size:10.6667px">** see http://en.wikipedia.org/wiki/List_of_trigonometric_identities</tspan>
+  </text>
+  <path style="color:#000;display:inline;overflow:visible;fill:none;stroke:#000;stroke-width:1.06666672;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:4.26666667,4.26666667;" d="m643.12 331.573 91.52-59.413" transform="translate(-434.773 57.013)"/>
+  <text style="color:#000;font-size:14px;font-family:Tahoma;display:inline;overflow:visible;fill:#000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1.06667px;" x="663.704" y="337.402" transform="translate(-434.773 57.013)">
+    <tspan x="663.704" y="337.402" style="font-weight:700;font-size:21.3px;line-height:1.25;-inkscape-font-specification:'Tahoma Bold';stroke-width:1.06667px">ß</tspan>
+  </text>
+  <path d="m641.294 132.395 11.654 17.71h-7.77v173.858h-7.768V150.106h-7.77z" style="color:#000;display:inline;overflow:visible;fill:#ff0;fill-opacity:1;stroke:#000;stroke-width:1.65736556;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;" transform="translate(-434.773 57.013)"/>
+  <text style="color:#000;font-size:14px;font-family:Tahoma;display:inline;overflow:visible;fill:#000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1.06667px;" x="740.434" y="271.734" transform="translate(-434.773 57.013)">
+    <tspan x="740.434" y="271.734" style="font-size:14.9333px;line-height:1.25;stroke-width:1.06667px">c</tspan>
+  </text>
+  <text style="color:#000;font-size:14px;font-family:Tahoma;display:inline;overflow:visible;fill:#000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1.06667px;" x="638.41" y="108.786" transform="translate(-434.773 57.013)">
+    <tspan x="638.41" y="108.786" style="font-size:14.9333px;line-height:1.25;stroke-width:1.06667px">b</tspan>
+  </text>
+  <path style="color:#000;display:inline;overflow:visible;fill:none;stroke:#000;stroke-width:1.06666672;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:2.13333333,2.13333333;" d="M728.347 261.707 717.04 268l5.76 10.773" transform="translate(-434.773 57.013)"/>
+  <text style="color:#000;font-size:14px;font-family:Tahoma;display:inline;overflow:visible;fill:#000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1.06667px;" x="625.989" y="332.895" transform="translate(-434.773 57.013)">
+    <tspan x="625.989" y="332.895" style="font-size:14.9333px;line-height:1.25;stroke-width:1.06667px">a</tspan>
+  </text>
+  <path d="m187.307 295.253 61.973-107.84" style="color:#000;display:inline;overflow:visible;fill:none;stroke:#000;stroke-width:1.91999996;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:7.68,7.68;" transform="translate(-10.107 142.933)"/>
+  <path d="M242.88 201.28c29.547 19.093 33.707 61.44-.533 81.813" style="color:#000;display:inline;overflow:visible;fill:none;stroke:#000;stroke-width:1.93066657;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:7.72266667,7.72266667;" transform="translate(-10.107 142.933)"/>
+  <text style="color:#000;font-size:14px;font-family:Tahoma;display:inline;overflow:visible;fill:#000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1.06667px;" x="633.381" y="370.838" transform="translate(-434.773 57.013)">
+    <tspan x="633.381" y="370.838" style="font-weight:700;font-size:21.3px;line-height:1.25;-inkscape-font-specification:'Tahoma Bold';stroke-width:1.06667px">Ø</tspan>
+  </text>
+  <text y="370.838" x="633.381" style="color:#000;font-size:14px;font-family:Tahoma;display:inline;overflow:visible;fill:#000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1.06667px;" xml:space="preserve" transform="translate(-434.773 57.013)">
+    <tspan style="font-weight:700;font-size:21.3px;line-height:1.25;-inkscape-font-specification:'Tahoma Bold';stroke-width:1.06667px" y="370.838" x="633.381">Ø</tspan>
+  </text>
+  <path style="color:#000;display:inline;overflow:visible;fill:none;stroke:#00009c;stroke-width:3.83999991;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;" d="M564.187 463.52 641.2 332l79.467 128.213" transform="translate(-434.773 57.013)"/>
+  <text style="color:#000;font-size:14px;font-family:Tahoma;display:inline;overflow:visible;fill:#000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1.06667px;" x="652.972" y="236.266" transform="translate(-434.773 57.013)">
+    <tspan x="652.972" y="236.266" style="font-weight:700;font-size:26.6667px;line-height:1.25;-inkscape-font-specification:'Tahoma Bold';stroke-width:1.06667px">
+      <tspan style="font-size:21.3px">λ×δ</tspan>
+    </tspan>
+  </text>
+  <path style="color:#000;display:inline;overflow:visible;fill:none;stroke:#000;stroke-width:1.92;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;" d="m445.616 455.074 195.52-337.088 127.597 202.921" transform="translate(-434.773 57.013)"/>
+  <path d="m598.902 391.547-64.052-40.835-4.442 8.948-12.322-22.896 25.624-4.045-4.443 8.948 64.236 41.205z" style="color:#000;fill:#0f0;stroke:#000;stroke-width:2.138" transform="translate(-434.773 57.013)"/>
+  <text style="color:#000;font-size:14px;font-family:Tahoma;display:inline;overflow:visible;fill:#000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1.06667px;" x="544.927" y="390.383" transform="translate(-434.773 57.013)">
+    <tspan x="544.927" y="390.383" style="font-weight:700;font-size:26.6667px;line-height:1.25;-inkscape-font-specification:'Tahoma Bold';stroke-width:1.06667px">
+      <tspan style="font-size:21.3px">δ</tspan>
+    </tspan>
+  </text>
+  <text style="font-size:40px;line-height:.6em;font-family:Tahoma;-inkscape-font-specification:Tahoma;letter-spacing:0;word-spacing:0;fill:#000;fill-opacity:1;stroke:none" x="452.48" y="7.627" transform="translate(-434.773 57.013)">
+    <tspan x="452.48" y="7.627" style="font-weight:700;font-size:21.3px;line-height:.6em">Offsetting polygons and </tspan>
+    <tspan x="452.48" y="31.627" style="font-weight:700;font-size:21.3px;line-height:.6em">when to square mitered joins</tspan>
+  </text>
+  <path style="color:#000;display:inline;overflow:visible;fill:#0f0;fill-opacity:.331754;stroke:#000;stroke-width:2.01325;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:.454976;" d="m616.26 229.352 13.045 21.888-8.407-1.12 1.338 53.895 8.317 1.266-12.246 18.465-13.026-22.097 8.361 1.193-1.106-53.916-8.406-1.12zm-2.602-96.447 13.045 21.888-8.407-1.12 1.338 53.895 8.317 1.267-12.246 18.464-13.026-22.097 8.362 1.194-1.106-53.916-8.407-1.12z" transform="translate(-434.773 57.013)"/>
+</svg>

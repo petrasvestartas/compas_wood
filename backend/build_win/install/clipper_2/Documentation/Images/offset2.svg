@@ -1,0 +1,11 @@
+<?xml version="1.0" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+
+ <svg width="320px" height="240px" viewBox="0 0 320 240" version="1.1" xmlns="http://www.w3.org/2000/svg">
+
+  <path d=" M 34.75 32.50 L 34.75 32.50 L 209.75 32.50 L 34.75 207.50 L 209.75 207.50"
+    style="fill:#000000; fill-opacity:0.00; fill-rule:evenodd; stroke:#b3b3da; stroke-opacity:0.80; stroke-width:1.30;"/>
+  <path d=" M 224.49 35.43 L 224.49 35.43 L 64.92 195.00 L 222.25 195.00 L 222.25 220.00 L 26.39 220.00 L 20.00 204.57 L 179.57 45.00 L 22.25 45.00 L 22.25 20.00 L 218.10 20.00 z"
+    style="fill:#66ff66; fill-opacity:0.27; fill-rule:nonzero; stroke:#003300; stroke-opacity:1.00; stroke-width:1.20;"/>
+</svg>

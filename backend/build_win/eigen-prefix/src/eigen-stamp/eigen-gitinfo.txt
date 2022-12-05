@@ -1,0 +1,15 @@
+# This is a generated file and its contents are an internal implementation detail.
+# The download step will be re-executed if anything in this file changes.
+# No other meaning or use of this file is supported.
+
+method=git
+command=C:/Program Files/CMake/bin/cmake.exe;-P;C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/eigen-prefix/tmp/eigen-gitclone.cmake
+source_dir=C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/install/eigen
+work_dir=C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/install
+repository=https://gitlab.com/libeigen/eigen.git
+remote=origin
+init_submodules=TRUE
+recurse_submodules=--recursive
+submodules=
+CMP0097=NEW
+

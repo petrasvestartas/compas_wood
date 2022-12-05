@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\install\eigen\test\stdlist_overload.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\install\eigen\test\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{A8893036-9A08-346B-9804-D7F21BA4EA14}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

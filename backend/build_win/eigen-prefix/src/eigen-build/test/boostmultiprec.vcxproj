@@ -1,0 +1,221 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <PreferredToolArchitecture>x64</PreferredToolArchitecture>
+  </PropertyGroup>
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="MinSizeRel|x64">
+      <Configuration>MinSizeRel</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="RelWithDebInfo|x64">
+      <Configuration>RelWithDebInfo</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{37C43978-878E-32B8-AE78-B4F1953AA1D5}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <WindowsTargetPlatformVersion>10.0.19041.0</WindowsTargetPlatformVersion>
+    <Platform>x64</Platform>
+    <ProjectName>boostmultiprec</ProjectName>
+    <VCProjectUpgraderObjectName>NoUpgrade</VCProjectUpgraderObjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Utility</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Utility</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'" Label="Configuration">
+    <ConfigurationType>Utility</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'" Label="Configuration">
+    <ConfigurationType>Utility</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.20506.1</_ProjectFileVersion>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Midl>
+      <AdditionalIncludeDirectories>C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\install\eigen;C:\IBOIS57\_Code\Software\CPP\Boost;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Midl>
+      <AdditionalIncludeDirectories>C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\install\eigen;C:\IBOIS57\_Code\Software\CPP\Boost;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">
+    <Midl>
+      <AdditionalIncludeDirectories>C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\install\eigen;C:\IBOIS57\_Code\Software\CPP\Boost;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">
+    <Midl>
+      <AdditionalIncludeDirectories>C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\install\eigen;C:\IBOIS57\_Code\Software\CPP\Boost;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <CustomBuild Include="C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\install\eigen\test\CMakeLists.txt">
+      <UseUtf8Encoding>Always</UseUtf8Encoding>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Building Custom Rule C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/install/eigen/test/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/install/eigen -BC:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/eigen-prefix/src/eigen-build --check-stamp-file C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/eigen-prefix/src/eigen-build/test/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\install\eigen\cmake\EigenSmokeTestList.cmake;C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\install\eigen\cmake\FindBLAS.cmake;C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\install\eigen\cmake\FindCHOLMOD.cmake;C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\install\eigen\cmake\FindHWLOC.cmake;C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\install\eigen\cmake\FindKLU.cmake;C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\install\eigen\cmake\FindLAPACK.cmake;C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\install\eigen\cmake\FindPASTIX.cmake;C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\install\eigen\cmake\FindSPQR.cmake;C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\install\eigen\cmake\FindSuperLU.cmake;C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\install\eigen\cmake\FindUMFPACK.cmake;C:\Program Files\CMake\share\cmake-3.24\Modules\CMakeFindDependencyMacro.cmake;C:\Program Files\CMake\share\cmake-3.24\Modules\CMakePushCheckState.cmake;C:\Program Files\CMake\share\cmake-3.24\Modules\CheckCSourceCompiles.cmake;C:\Program Files\CMake\share\cmake-3.24\Modules\CheckCXXSourceCompiles.cmake;C:\Program Files\CMake\share\cmake-3.24\Modules\CheckCXXSymbolExists.cmake;C:\Program Files\CMake\share\cmake-3.24\Modules\CheckFortranFunctionExists.cmake;C:\Program Files\CMake\share\cmake-3.24\Modules\CheckFunctionExists.c;C:\Program Files\CMake\share\cmake-3.24\Modules\CheckFunctionExists.cmake;C:\Program Files\CMake\share\cmake-3.24\Modules\CheckIncludeFile.cmake;C:\Program Files\CMake\share\cmake-3.24\Modules\CheckLanguage.cmake;C:\Program Files\CMake\share\cmake-3.24\Modules\CheckLibraryExists.cmake;C:\Program Files\CMake\share\cmake-3.24\Modules\CheckStructHasMember.cmake;C:\Program Files\CMake\share\cmake-3.24\Modules\FindBoost.cmake;C:\Program Files\CMake\share\cmake-3.24\Modules\FindPackageHandleStandardArgs.cmake;C:\Program Files\CMake\share\cmake-3.24\Modules\FindPackageMessage.cmake;C:\Program Files\CMake\share\cmake-3.24\Modules\FindPkgConfig.cmake;C:\Program Files\CMake\share\cmake-3.24\Modules\FindQt4.cmake;C:\Program Files\CMake\share\cmake-3.24\Modules\FindThreads.cmake;C:\Program Files\CMake\share\cmake-3.24\Modules\Internal\CheckSourceCompiles.cmake;C:\Program Files\CMake\share\cmake-3.24\Modules\MacroAddFileDependencies.cmake;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\eigen-prefix\src\eigen-build\test\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Building Custom Rule C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/install/eigen/test/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/install/eigen -BC:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/eigen-prefix/src/eigen-build --check-stamp-file C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/eigen-prefix/src/eigen-build/test/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\install\eigen\cmake\EigenSmokeTestList.cmake;C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\install\eigen\cmake\FindBLAS.cmake;C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\install\eigen\cmake\FindCHOLMOD.cmake;C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\install\eigen\cmake\FindHWLOC.cmake;C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\install\eigen\cmake\FindKLU.cmake;C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\install\eigen\cmake\FindLAPACK.cmake;C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\install\eigen\cmake\FindPASTIX.cmake;C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\install\eigen\cmake\FindSPQR.cmake;C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\install\eigen\cmake\FindSuperLU.cmake;C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\install\eigen\cmake\FindUMFPACK.cmake;C:\Program Files\CMake\share\cmake-3.24\Modules\CMakeFindDependencyMacro.cmake;C:\Program Files\CMake\share\cmake-3.24\Modules\CMakePushCheckState.cmake;C:\Program Files\CMake\share\cmake-3.24\Modules\CheckCSourceCompiles.cmake;C:\Program Files\CMake\share\cmake-3.24\Modules\CheckCXXSourceCompiles.cmake;C:\Program Files\CMake\share\cmake-3.24\Modules\CheckCXXSymbolExists.cmake;C:\Program Files\CMake\share\cmake-3.24\Modules\CheckFortranFunctionExists.cmake;C:\Program Files\CMake\share\cmake-3.24\Modules\CheckFunctionExists.c;C:\Program Files\CMake\share\cmake-3.24\Modules\CheckFunctionExists.cmake;C:\Program Files\CMake\share\cmake-3.24\Modules\CheckIncludeFile.cmake;C:\Program Files\CMake\share\cmake-3.24\Modules\CheckLanguage.cmake;C:\Program Files\CMake\share\cmake-3.24\Modules\CheckLibraryExists.cmake;C:\Program Files\CMake\share\cmake-3.24\Modules\CheckStructHasMember.cmake;C:\Program Files\CMake\share\cmake-3.24\Modules\FindBoost.cmake;C:\Program Files\CMake\share\cmake-3.24\Modules\FindPackageHandleStandardArgs.cmake;C:\Program Files\CMake\share\cmake-3.24\Modules\FindPackageMessage.cmake;C:\Program Files\CMake\share\cmake-3.24\Modules\FindPkgConfig.cmake;C:\Program Files\CMake\share\cmake-3.24\Modules\FindQt4.cmake;C:\Program Files\CMake\share\cmake-3.24\Modules\FindThreads.cmake;C:\Program Files\CMake\share\cmake-3.24\Modules\Internal\CheckSourceCompiles.cmake;C:\Program Files\CMake\share\cmake-3.24\Modules\MacroAddFileDependencies.cmake;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\eigen-prefix\src\eigen-build\test\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">Building Custom Rule C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/install/eigen/test/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/install/eigen -BC:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/eigen-prefix/src/eigen-build --check-stamp-file C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/eigen-prefix/src/eigen-build/test/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\install\eigen\cmake\EigenSmokeTestList.cmake;C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\install\eigen\cmake\FindBLAS.cmake;C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\install\eigen\cmake\FindCHOLMOD.cmake;C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\install\eigen\cmake\FindHWLOC.cmake;C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\install\eigen\cmake\FindKLU.cmake;C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\install\eigen\cmake\FindLAPACK.cmake;C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\install\eigen\cmake\FindPASTIX.cmake;C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\install\eigen\cmake\FindSPQR.cmake;C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\install\eigen\cmake\FindSuperLU.cmake;C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\install\eigen\cmake\FindUMFPACK.cmake;C:\Program Files\CMake\share\cmake-3.24\Modules\CMakeFindDependencyMacro.cmake;C:\Program Files\CMake\share\cmake-3.24\Modules\CMakePushCheckState.cmake;C:\Program Files\CMake\share\cmake-3.24\Modules\CheckCSourceCompiles.cmake;C:\Program Files\CMake\share\cmake-3.24\Modules\CheckCXXSourceCompiles.cmake;C:\Program Files\CMake\share\cmake-3.24\Modules\CheckCXXSymbolExists.cmake;C:\Program Files\CMake\share\cmake-3.24\Modules\CheckFortranFunctionExists.cmake;C:\Program Files\CMake\share\cmake-3.24\Modules\CheckFunctionExists.c;C:\Program Files\CMake\share\cmake-3.24\Modules\CheckFunctionExists.cmake;C:\Program Files\CMake\share\cmake-3.24\Modules\CheckIncludeFile.cmake;C:\Program Files\CMake\share\cmake-3.24\Modules\CheckLanguage.cmake;C:\Program Files\CMake\share\cmake-3.24\Modules\CheckLibraryExists.cmake;C:\Program Files\CMake\share\cmake-3.24\Modules\CheckStructHasMember.cmake;C:\Program Files\CMake\share\cmake-3.24\Modules\FindBoost.cmake;C:\Program Files\CMake\share\cmake-3.24\Modules\FindPackageHandleStandardArgs.cmake;C:\Program Files\CMake\share\cmake-3.24\Modules\FindPackageMessage.cmake;C:\Program Files\CMake\share\cmake-3.24\Modules\FindPkgConfig.cmake;C:\Program Files\CMake\share\cmake-3.24\Modules\FindQt4.cmake;C:\Program Files\CMake\share\cmake-3.24\Modules\FindThreads.cmake;C:\Program Files\CMake\share\cmake-3.24\Modules\Internal\CheckSourceCompiles.cmake;C:\Program Files\CMake\share\cmake-3.24\Modules\MacroAddFileDependencies.cmake;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\eigen-prefix\src\eigen-build\test\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">Building Custom Rule C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/install/eigen/test/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/install/eigen -BC:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/eigen-prefix/src/eigen-build --check-stamp-file C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/eigen-prefix/src/eigen-build/test/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\install\eigen\cmake\EigenSmokeTestList.cmake;C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\install\eigen\cmake\FindBLAS.cmake;C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\install\eigen\cmake\FindCHOLMOD.cmake;C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\install\eigen\cmake\FindHWLOC.cmake;C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\install\eigen\cmake\FindKLU.cmake;C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\install\eigen\cmake\FindLAPACK.cmake;C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\install\eigen\cmake\FindPASTIX.cmake;C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\install\eigen\cmake\FindSPQR.cmake;C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\install\eigen\cmake\FindSuperLU.cmake;C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\install\eigen\cmake\FindUMFPACK.cmake;C:\Program Files\CMake\share\cmake-3.24\Modules\CMakeFindDependencyMacro.cmake;C:\Program Files\CMake\share\cmake-3.24\Modules\CMakePushCheckState.cmake;C:\Program Files\CMake\share\cmake-3.24\Modules\CheckCSourceCompiles.cmake;C:\Program Files\CMake\share\cmake-3.24\Modules\CheckCXXSourceCompiles.cmake;C:\Program Files\CMake\share\cmake-3.24\Modules\CheckCXXSymbolExists.cmake;C:\Program Files\CMake\share\cmake-3.24\Modules\CheckFortranFunctionExists.cmake;C:\Program Files\CMake\share\cmake-3.24\Modules\CheckFunctionExists.c;C:\Program Files\CMake\share\cmake-3.24\Modules\CheckFunctionExists.cmake;C:\Program Files\CMake\share\cmake-3.24\Modules\CheckIncludeFile.cmake;C:\Program Files\CMake\share\cmake-3.24\Modules\CheckLanguage.cmake;C:\Program Files\CMake\share\cmake-3.24\Modules\CheckLibraryExists.cmake;C:\Program Files\CMake\share\cmake-3.24\Modules\CheckStructHasMember.cmake;C:\Program Files\CMake\share\cmake-3.24\Modules\FindBoost.cmake;C:\Program Files\CMake\share\cmake-3.24\Modules\FindPackageHandleStandardArgs.cmake;C:\Program Files\CMake\share\cmake-3.24\Modules\FindPackageMessage.cmake;C:\Program Files\CMake\share\cmake-3.24\Modules\FindPkgConfig.cmake;C:\Program Files\CMake\share\cmake-3.24\Modules\FindQt4.cmake;C:\Program Files\CMake\share\cmake-3.24\Modules\FindThreads.cmake;C:\Program Files\CMake\share\cmake-3.24\Modules\Internal\CheckSourceCompiles.cmake;C:\Program Files\CMake\share\cmake-3.24\Modules\MacroAddFileDependencies.cmake;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\eigen-prefix\src\eigen-build\test\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">false</LinkObjects>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\eigen-prefix\src\eigen-build\ZERO_CHECK.vcxproj">
+      <Project>{6FC0E3D9-4AE4-30DD-B651-DB7BF471B790}</Project>
+      <Name>ZERO_CHECK</Name>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </ProjectReference>
+    <ProjectReference Include="C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\eigen-prefix\src\eigen-build\test\boostmultiprec_1.vcxproj">
+      <Project>{A4A68922-E82D-39CF-AFD3-A5AF2268F053}</Project>
+      <Name>boostmultiprec_1</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\eigen-prefix\src\eigen-build\test\boostmultiprec_10.vcxproj">
+      <Project>{B493836D-592C-3C85-A1BF-69D0744A187D}</Project>
+      <Name>boostmultiprec_10</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\eigen-prefix\src\eigen-build\test\boostmultiprec_11.vcxproj">
+      <Project>{6C9D24BF-C43C-3F09-A341-6C7108F037A9}</Project>
+      <Name>boostmultiprec_11</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\eigen-prefix\src\eigen-build\test\boostmultiprec_2.vcxproj">
+      <Project>{6AD8B840-611C-3176-9A40-FF3A08F70129}</Project>
+      <Name>boostmultiprec_2</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\eigen-prefix\src\eigen-build\test\boostmultiprec_3.vcxproj">
+      <Project>{241A9FF7-4686-32B8-9564-1A1EC1E7D801}</Project>
+      <Name>boostmultiprec_3</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\eigen-prefix\src\eigen-build\test\boostmultiprec_4.vcxproj">
+      <Project>{A8112E1E-803D-3C06-82AF-90DCC8D7A226}</Project>
+      <Name>boostmultiprec_4</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\eigen-prefix\src\eigen-build\test\boostmultiprec_5.vcxproj">
+      <Project>{F1A72373-18D6-33EC-8AD3-1FBE0FE4A3D6}</Project>
+      <Name>boostmultiprec_5</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\eigen-prefix\src\eigen-build\test\boostmultiprec_6.vcxproj">
+      <Project>{3A0C115A-F175-3AFB-8987-3FAD31ECFFEE}</Project>
+      <Name>boostmultiprec_6</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\eigen-prefix\src\eigen-build\test\boostmultiprec_7.vcxproj">
+      <Project>{0E046440-7DB5-3B73-B0A8-B10A86742A80}</Project>
+      <Name>boostmultiprec_7</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\eigen-prefix\src\eigen-build\test\boostmultiprec_8.vcxproj">
+      <Project>{5F056325-4CE9-3F6D-81E4-D80CC41893AC}</Project>
+      <Name>boostmultiprec_8</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\eigen-prefix\src\eigen-build\test\boostmultiprec_9.vcxproj">
+      <Project>{A313A5A7-7A7E-373E-A0DA-742C3F032B12}</Project>
+      <Name>boostmultiprec_9</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

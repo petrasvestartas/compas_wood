@@ -1,0 +1,57 @@
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//vidy joint by intersection
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+// //////////////////////////////////////////////////////////////////////////////////////////////////
+// // get joint volume around the second plate, using the first joint rectangle
+// // case 0 - plates are parallel, then just move the volume
+// // case 1 - plates are not parallel, then you need to perform the full intersection
+// //////////////////////////////////////////////////////////////////////////////////////////////////
+
+// // there are two sides
+// for (int j = 0; j < 2; j++)
+// {
+//     // Compute one distance d0 and d1 to Pl0 and Pl1 to get the nearest planes
+//     int id_project = out_three_valence_element_indices_and_instruction[i][2 + j];
+//     double d0 = CGAL::squared_distance(elements[id_project].planes[0], joints[id].joint_volumes[0][0]);
+//     double d1 = CGAL::squared_distance(elements[id_project].planes[1], joints[id].joint_volumes[0][0]);
+//     std::array<IK::Plane_3, 2> pl_near_far = d0 < d1 ? std::array<IK::Plane_3, 2>{elements[id_project].planes[0], elements[id_project].planes[1]} : std::array<IK::Plane_3, 2>{elements[id_project].planes[1], elements[id_project].planes[0]};
+
+//     // Compute all distances d to pl_near
+//     std::array<std::pair<double, int>, 4> d_and_id = {
+//         std::make_pair(CGAL::squared_distance(pl_near_far[0], joints[id].joint_volumes[0][0]), 0),
+//         std::make_pair(CGAL::squared_distance(pl_near_far[0], joints[id].joint_volumes[0][1]), 1),
+//         std::make_pair(CGAL::squared_distance(pl_near_far[0], joints[id].joint_volumes[0][2]), 2),
+//         std::make_pair(CGAL::squared_distance(pl_near_far[0], joints[id].joint_volumes[0][3]), 3),
+//     };
+
+//     // Sort distance d, and get the ids of the cps
+//     std::sort(d_and_id.begin(), d_and_id.end(), [](const auto &a, const auto &b) -> bool
+//               { return a.first < b.first; });
+
+//     // Construct segments indices, using logic of prev and next points, assuming that the 2 nearest points are neighbors
+//     int v0 = d_and_id[0].second;
+//     int v1 = d_and_id[1].second;
+
+//     if (v0 > v1 && !(v0 == 3 && v1 == 0))
+//         std::swap(v0, v1);
+
+//     // for (int k = 0; k < 2; k++) // joints[id].joint_volumes.size()
+//     // {
+//     //     IK::Segment_3 s0(joints[id].joint_volumes[k][v0], joints[id].joint_volumes[k][cgal_math_util::wrap(v0 - 1, 4)]);
+//     //     IK::Segment_3 s1(joints[id].joint_volumes[k][v1], joints[id].joint_volumes[k][cgal_math_util::wrap(v1 + 1, 4)]);
+
+//     //     // Intersect segments with pl_near and pl_far
+//     //     CGAL_Polyline volume_0;
+//     //     volume_0.resize(4);
+//     //     cgal_intersection_util::SegmentPlane(s0, pl_near_far[0], volume_0[v0]);
+//     //     cgal_intersection_util::SegmentPlane(s0, pl_near_far[1], volume_0[cgal_math_util::wrap(v0 - 1, 4)]);
+//     //     cgal_intersection_util::SegmentPlane(s1, pl_near_far[0], volume_0[v1]);
+//     //     cgal_intersection_util::SegmentPlane(s1, pl_near_far[1], volume_0[cgal_math_util::wrap(v1 + 1, 4)]);
+//     // }
+//     // Create the joint volume and the joint itself
+// }
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

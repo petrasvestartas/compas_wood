@@ -1,0 +1,36 @@
+<?xml version="1.0" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-/W3C/DTD SVG 1.0/EN"
+"http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd">
+
+<svg width="450px" height="200px" viewBox="0 0 450 200" version="1.1" xmlns="http://www.w3.org/2000/svg">
+
+
+ <path d="
+M 78.96 55.64 L 
+77.55 40.56 
+127.81 35.54 
+35.54 35.54 
+35.54 120.98 
+279.29 120.98 
+279.29 136.05 
+20.46 136.05 
+20.46 20.46 
+430.46 20.46 
+Z
+" style="fill:#0000FF; fill-opacity:0.13; fill-rule:evenodd; stroke:#0000FF; stroke-opacity:0.50; stroke-width:1.00;"/>
+
+
+ <path d="
+M 279.29 128.51 L 
+28.00 128.51 
+28.00 28.00 
+279.29 28.00 
+78.26 48.10 
+" style="fill:none; stroke:#000000; stroke-opacity:1.00; stroke-width:2.00;"/>
+
+
+<g font-family="Verdana" font-style="normal" font-weight="normal" font-size="14" fill="#000000"><text x="85.33" y="90.36">MiterLimit = 25</text></g>
+
+
+</svg>
+

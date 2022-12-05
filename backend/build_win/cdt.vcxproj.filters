@@ -1,0 +1,41 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <CustomBuild Include="C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\CMakeFiles\f597f61ea2dad6bc41a72d170ae34522\cdt-mkdir.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\CMakeFiles\f597f61ea2dad6bc41a72d170ae34522\cdt-download.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\CMakeFiles\f597f61ea2dad6bc41a72d170ae34522\cdt-update.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\CMakeFiles\f597f61ea2dad6bc41a72d170ae34522\cdt-patch.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\CMakeFiles\f597f61ea2dad6bc41a72d170ae34522\cdt-configure.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\CMakeFiles\f597f61ea2dad6bc41a72d170ae34522\cdt-build.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\CMakeFiles\f597f61ea2dad6bc41a72d170ae34522\cdt-install.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\CMakeFiles\77c6b3fa8a0fc24a1664936823025f05\cdt-complete.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\CMakeFiles\b9dfba4f048e03c1599c5b91598ea2e8\cdt.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\IBOIS57\_Code\Software\Python\compas_wood\backend\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\CMakeFiles\cdt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="CMake Rules">
+      <UniqueIdentifier>{CA68597B-E98B-3107-9F82-8392521FAD41}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

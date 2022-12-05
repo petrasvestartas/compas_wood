@@ -1,0 +1,581 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <PreferredToolArchitecture>x64</PreferredToolArchitecture>
+  </PropertyGroup>
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="MinSizeRel|x64">
+      <Configuration>MinSizeRel</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="RelWithDebInfo|x64">
+      <Configuration>RelWithDebInfo</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{FDAAE0A1-9D0F-3708-8071-30C4A75A9AFC}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <WindowsTargetPlatformVersion>10.0.19041.0</WindowsTargetPlatformVersion>
+    <Platform>x64</Platform>
+    <ProjectName>BuildUnsupported</ProjectName>
+    <VCProjectUpgraderObjectName>NoUpgrade</VCProjectUpgraderObjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Utility</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Utility</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'" Label="Configuration">
+    <ConfigurationType>Utility</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'" Label="Configuration">
+    <ConfigurationType>Utility</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.20506.1</_ProjectFileVersion>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Midl>
+      <AdditionalIncludeDirectories>C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\install\eigen;C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\install\eigen\unsupported\test\..\..\test;C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\install\eigen\unsupported\test\..\..\unsupported;C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\install\eigen\unsupported\test\..\..\Eigen;C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\eigen-prefix\src\eigen-build\unsupported\test\..\..\test;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Midl>
+      <AdditionalIncludeDirectories>C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\install\eigen;C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\install\eigen\unsupported\test\..\..\test;C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\install\eigen\unsupported\test\..\..\unsupported;C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\install\eigen\unsupported\test\..\..\Eigen;C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\eigen-prefix\src\eigen-build\unsupported\test\..\..\test;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">
+    <Midl>
+      <AdditionalIncludeDirectories>C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\install\eigen;C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\install\eigen\unsupported\test\..\..\test;C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\install\eigen\unsupported\test\..\..\unsupported;C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\install\eigen\unsupported\test\..\..\Eigen;C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\eigen-prefix\src\eigen-build\unsupported\test\..\..\test;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">
+    <Midl>
+      <AdditionalIncludeDirectories>C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\install\eigen;C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\install\eigen\unsupported\test\..\..\test;C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\install\eigen\unsupported\test\..\..\unsupported;C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\install\eigen\unsupported\test\..\..\Eigen;C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\eigen-prefix\src\eigen-build\unsupported\test\..\..\test;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <CustomBuild Include="C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\install\eigen\unsupported\test\CMakeLists.txt">
+      <UseUtf8Encoding>Always</UseUtf8Encoding>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Building Custom Rule C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/install/eigen/unsupported/test/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/install/eigen -BC:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/eigen-prefix/src/eigen-build --check-stamp-file C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/eigen-prefix/src/eigen-build/unsupported/test/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\install\eigen\cmake\FindAdolc.cmake;C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\install\eigen\cmake\FindFFTW.cmake;C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\install\eigen\cmake\FindGoogleHash.cmake;C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\install\eigen\cmake\FindMPFR.cmake;C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\install\eigen\cmake\FindMPREAL.cmake;C:\Program Files\CMake\share\cmake-3.24\Modules\CMakeFindDependencyMacro.cmake;C:\Program Files\CMake\share\cmake-3.24\Modules\CheckCSourceCompiles.cmake;C:\Program Files\CMake\share\cmake-3.24\Modules\CheckIncludeFile.cmake;C:\Program Files\CMake\share\cmake-3.24\Modules\CheckLibraryExists.cmake;C:\Program Files\CMake\share\cmake-3.24\Modules\FindCUDA.cmake;C:\Program Files\CMake\share\cmake-3.24\Modules\FindCUDA\select_compute_arch.cmake;C:\Program Files\CMake\share\cmake-3.24\Modules\FindPackageHandleStandardArgs.cmake;C:\Program Files\CMake\share\cmake-3.24\Modules\FindPackageMessage.cmake;C:\Program Files\CMake\share\cmake-3.24\Modules\FindPkgConfig.cmake;C:\Program Files\CMake\share\cmake-3.24\Modules\FindThreads.cmake;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\eigen-prefix\src\eigen-build\unsupported\test\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Building Custom Rule C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/install/eigen/unsupported/test/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/install/eigen -BC:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/eigen-prefix/src/eigen-build --check-stamp-file C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/eigen-prefix/src/eigen-build/unsupported/test/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\install\eigen\cmake\FindAdolc.cmake;C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\install\eigen\cmake\FindFFTW.cmake;C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\install\eigen\cmake\FindGoogleHash.cmake;C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\install\eigen\cmake\FindMPFR.cmake;C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\install\eigen\cmake\FindMPREAL.cmake;C:\Program Files\CMake\share\cmake-3.24\Modules\CMakeFindDependencyMacro.cmake;C:\Program Files\CMake\share\cmake-3.24\Modules\CheckCSourceCompiles.cmake;C:\Program Files\CMake\share\cmake-3.24\Modules\CheckIncludeFile.cmake;C:\Program Files\CMake\share\cmake-3.24\Modules\CheckLibraryExists.cmake;C:\Program Files\CMake\share\cmake-3.24\Modules\FindCUDA.cmake;C:\Program Files\CMake\share\cmake-3.24\Modules\FindCUDA\select_compute_arch.cmake;C:\Program Files\CMake\share\cmake-3.24\Modules\FindPackageHandleStandardArgs.cmake;C:\Program Files\CMake\share\cmake-3.24\Modules\FindPackageMessage.cmake;C:\Program Files\CMake\share\cmake-3.24\Modules\FindPkgConfig.cmake;C:\Program Files\CMake\share\cmake-3.24\Modules\FindThreads.cmake;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\eigen-prefix\src\eigen-build\unsupported\test\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">Building Custom Rule C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/install/eigen/unsupported/test/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/install/eigen -BC:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/eigen-prefix/src/eigen-build --check-stamp-file C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/eigen-prefix/src/eigen-build/unsupported/test/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\install\eigen\cmake\FindAdolc.cmake;C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\install\eigen\cmake\FindFFTW.cmake;C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\install\eigen\cmake\FindGoogleHash.cmake;C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\install\eigen\cmake\FindMPFR.cmake;C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\install\eigen\cmake\FindMPREAL.cmake;C:\Program Files\CMake\share\cmake-3.24\Modules\CMakeFindDependencyMacro.cmake;C:\Program Files\CMake\share\cmake-3.24\Modules\CheckCSourceCompiles.cmake;C:\Program Files\CMake\share\cmake-3.24\Modules\CheckIncludeFile.cmake;C:\Program Files\CMake\share\cmake-3.24\Modules\CheckLibraryExists.cmake;C:\Program Files\CMake\share\cmake-3.24\Modules\FindCUDA.cmake;C:\Program Files\CMake\share\cmake-3.24\Modules\FindCUDA\select_compute_arch.cmake;C:\Program Files\CMake\share\cmake-3.24\Modules\FindPackageHandleStandardArgs.cmake;C:\Program Files\CMake\share\cmake-3.24\Modules\FindPackageMessage.cmake;C:\Program Files\CMake\share\cmake-3.24\Modules\FindPkgConfig.cmake;C:\Program Files\CMake\share\cmake-3.24\Modules\FindThreads.cmake;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\eigen-prefix\src\eigen-build\unsupported\test\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">Building Custom Rule C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/install/eigen/unsupported/test/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/install/eigen -BC:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/eigen-prefix/src/eigen-build --check-stamp-file C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/eigen-prefix/src/eigen-build/unsupported/test/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\install\eigen\cmake\FindAdolc.cmake;C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\install\eigen\cmake\FindFFTW.cmake;C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\install\eigen\cmake\FindGoogleHash.cmake;C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\install\eigen\cmake\FindMPFR.cmake;C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\install\eigen\cmake\FindMPREAL.cmake;C:\Program Files\CMake\share\cmake-3.24\Modules\CMakeFindDependencyMacro.cmake;C:\Program Files\CMake\share\cmake-3.24\Modules\CheckCSourceCompiles.cmake;C:\Program Files\CMake\share\cmake-3.24\Modules\CheckIncludeFile.cmake;C:\Program Files\CMake\share\cmake-3.24\Modules\CheckLibraryExists.cmake;C:\Program Files\CMake\share\cmake-3.24\Modules\FindCUDA.cmake;C:\Program Files\CMake\share\cmake-3.24\Modules\FindCUDA\select_compute_arch.cmake;C:\Program Files\CMake\share\cmake-3.24\Modules\FindPackageHandleStandardArgs.cmake;C:\Program Files\CMake\share\cmake-3.24\Modules\FindPackageMessage.cmake;C:\Program Files\CMake\share\cmake-3.24\Modules\FindPkgConfig.cmake;C:\Program Files\CMake\share\cmake-3.24\Modules\FindThreads.cmake;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\eigen-prefix\src\eigen-build\unsupported\test\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">false</LinkObjects>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\eigen-prefix\src\eigen-build\ZERO_CHECK.vcxproj">
+      <Project>{6FC0E3D9-4AE4-30DD-B651-DB7BF471B790}</Project>
+      <Name>ZERO_CHECK</Name>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </ProjectReference>
+    <ProjectReference Include="C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\eigen-prefix\src\eigen-build\unsupported\test\BVH_1.vcxproj">
+      <Project>{1CA1CC5C-4D84-3109-9332-C1E9E4CCB056}</Project>
+      <Name>BVH_1</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\eigen-prefix\src\eigen-build\unsupported\test\BVH_2.vcxproj">
+      <Project>{C04E9CDA-495A-352E-A29E-38285F468E4A}</Project>
+      <Name>BVH_2</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\eigen-prefix\src\eigen-build\unsupported\test\BVH_3.vcxproj">
+      <Project>{3674AFF2-662A-34F9-9DE8-573EEBE71CCF}</Project>
+      <Name>BVH_3</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\eigen-prefix\src\eigen-build\unsupported\test\EulerAngles_1.vcxproj">
+      <Project>{2D78975D-DBFE-33B4-A71A-3956EBB42338}</Project>
+      <Name>EulerAngles_1</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\eigen-prefix\src\eigen-build\unsupported\test\EulerAngles_2.vcxproj">
+      <Project>{E939D791-7065-3F87-81B2-484B844B90B7}</Project>
+      <Name>EulerAngles_2</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\eigen-prefix\src\eigen-build\unsupported\test\EulerAngles_3.vcxproj">
+      <Project>{D1D695FB-24D4-3DD7-8C3A-77D3A7355C14}</Project>
+      <Name>EulerAngles_3</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\eigen-prefix\src\eigen-build\unsupported\test\EulerAngles_4.vcxproj">
+      <Project>{ADEFB3E2-E1F1-38EB-98A5-67E4E3F061E0}</Project>
+      <Name>EulerAngles_4</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\eigen-prefix\src\eigen-build\unsupported\test\FFT.vcxproj">
+      <Project>{018A91FB-EC7C-3F22-B98A-1228E810D85A}</Project>
+      <Name>FFT</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\eigen-prefix\src\eigen-build\unsupported\test\NonLinearOptimization.vcxproj">
+      <Project>{913E5D33-CA03-35C8-BB06-CD75E4E144EF}</Project>
+      <Name>NonLinearOptimization</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\eigen-prefix\src\eigen-build\unsupported\test\NumericalDiff.vcxproj">
+      <Project>{1F76D21B-FD05-3324-9DCF-144043F2B669}</Project>
+      <Name>NumericalDiff</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\eigen-prefix\src\eigen-build\unsupported\test\alignedvector3.vcxproj">
+      <Project>{9C177943-7493-346C-AD2C-01CE41BB4EC4}</Project>
+      <Name>alignedvector3</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\eigen-prefix\src\eigen-build\unsupported\test\autodiff_1.vcxproj">
+      <Project>{788AB0C2-321C-3CFB-962E-61EE0C16C2C8}</Project>
+      <Name>autodiff_1</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\eigen-prefix\src\eigen-build\unsupported\test\autodiff_2.vcxproj">
+      <Project>{EB468D2D-CA33-351F-863C-7497474E60BD}</Project>
+      <Name>autodiff_2</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\eigen-prefix\src\eigen-build\unsupported\test\autodiff_3.vcxproj">
+      <Project>{8B4BC1C5-4C34-3E21-B765-6137DC1A4F1B}</Project>
+      <Name>autodiff_3</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\eigen-prefix\src\eigen-build\unsupported\test\autodiff_4.vcxproj">
+      <Project>{47D50F7A-5446-3604-ABE3-E79101F42C86}</Project>
+      <Name>autodiff_4</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\eigen-prefix\src\eigen-build\unsupported\test\autodiff_5.vcxproj">
+      <Project>{009704C5-C630-3CB4-8673-CAFD9ED89EAA}</Project>
+      <Name>autodiff_5</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\eigen-prefix\src\eigen-build\unsupported\test\autodiff_scalar_1.vcxproj">
+      <Project>{7F04E57A-599A-381A-8331-39230DC052E3}</Project>
+      <Name>autodiff_scalar_1</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\eigen-prefix\src\eigen-build\unsupported\test\autodiff_scalar_2.vcxproj">
+      <Project>{9C441B7F-659D-3AAF-B27E-58E9FBF634F6}</Project>
+      <Name>autodiff_scalar_2</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\eigen-prefix\src\eigen-build\unsupported\test\autodiff_scalar_3.vcxproj">
+      <Project>{0D2E5BED-11B8-30D1-8870-15CE34FD65D1}</Project>
+      <Name>autodiff_scalar_3</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\eigen-prefix\src\eigen-build\unsupported\test\autodiff_scalar_4.vcxproj">
+      <Project>{2970C143-A61F-3219-A6EB-6167115BE241}</Project>
+      <Name>autodiff_scalar_4</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\eigen-prefix\src\eigen-build\unsupported\test\autodiff_scalar_5.vcxproj">
+      <Project>{8CA40182-5FCE-329C-9511-18DA981F6617}</Project>
+      <Name>autodiff_scalar_5</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\eigen-prefix\src\eigen-build\unsupported\test\bessel_functions_1.vcxproj">
+      <Project>{FA89DD60-0C0C-3BC7-B541-77ECE5E6A4BF}</Project>
+      <Name>bessel_functions_1</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\eigen-prefix\src\eigen-build\unsupported\test\bessel_functions_2.vcxproj">
+      <Project>{2BFB0E2D-24AE-3EF8-B5B6-BDECCEC090FA}</Project>
+      <Name>bessel_functions_2</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\eigen-prefix\src\eigen-build\unsupported\test\dgmres_1.vcxproj">
+      <Project>{9A3B922A-7617-35BE-A9F4-D02509509224}</Project>
+      <Name>dgmres_1</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\eigen-prefix\src\eigen-build\unsupported\test\dgmres_2.vcxproj">
+      <Project>{A378D218-A60E-3B4C-AD41-F1805818EC26}</Project>
+      <Name>dgmres_2</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\eigen-prefix\src\eigen-build\unsupported\test\gmres_1.vcxproj">
+      <Project>{416C20C2-2630-39F3-9297-FDAF6612FB4A}</Project>
+      <Name>gmres_1</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\eigen-prefix\src\eigen-build\unsupported\test\gmres_2.vcxproj">
+      <Project>{1FD911C4-62BB-3229-9706-1AF709B52BAC}</Project>
+      <Name>gmres_2</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\eigen-prefix\src\eigen-build\unsupported\test\idrs_1.vcxproj">
+      <Project>{5B07B112-8767-36CF-A1CD-07DF17B5C08A}</Project>
+      <Name>idrs_1</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\eigen-prefix\src\eigen-build\unsupported\test\idrs_2.vcxproj">
+      <Project>{6DB1BA9F-C2A5-3027-AC27-2A9D2B62C754}</Project>
+      <Name>idrs_2</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\eigen-prefix\src\eigen-build\unsupported\test\kronecker_product_1.vcxproj">
+      <Project>{60876AA3-3AEB-3120-AA51-75FE0F344656}</Project>
+      <Name>kronecker_product_1</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\eigen-prefix\src\eigen-build\unsupported\test\kronecker_product_2.vcxproj">
+      <Project>{48D37840-FBA0-3701-BCCD-F7F0D9B1C344}</Project>
+      <Name>kronecker_product_2</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\eigen-prefix\src\eigen-build\unsupported\test\levenberg_marquardt.vcxproj">
+      <Project>{639FFD79-2BC3-3138-A854-E47B4CED8216}</Project>
+      <Name>levenberg_marquardt</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\eigen-prefix\src\eigen-build\unsupported\test\matrix_exponential_1.vcxproj">
+      <Project>{9DFF09F4-7A58-36BB-BD0F-DE9646400845}</Project>
+      <Name>matrix_exponential_1</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\eigen-prefix\src\eigen-build\unsupported\test\matrix_exponential_2.vcxproj">
+      <Project>{14F4CE52-786B-3713-A491-991C9C806395}</Project>
+      <Name>matrix_exponential_2</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\eigen-prefix\src\eigen-build\unsupported\test\matrix_exponential_3.vcxproj">
+      <Project>{A7466B14-84DD-3C01-A34B-72784A949591}</Project>
+      <Name>matrix_exponential_3</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\eigen-prefix\src\eigen-build\unsupported\test\matrix_exponential_4.vcxproj">
+      <Project>{39A8B7D4-4158-3F4F-83C3-036F2E09240B}</Project>
+      <Name>matrix_exponential_4</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\eigen-prefix\src\eigen-build\unsupported\test\matrix_exponential_5.vcxproj">
+      <Project>{31D6CB9A-059D-374B-8BE3-EA4245CB0B9E}</Project>
+      <Name>matrix_exponential_5</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\eigen-prefix\src\eigen-build\unsupported\test\matrix_exponential_6.vcxproj">
+      <Project>{168ED7B5-1A40-3C73-A63A-7681FB55E0B6}</Project>
+      <Name>matrix_exponential_6</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\eigen-prefix\src\eigen-build\unsupported\test\matrix_exponential_7.vcxproj">
+      <Project>{E7DBEB94-B5B8-39D0-BAF4-784D528172AD}</Project>
+      <Name>matrix_exponential_7</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\eigen-prefix\src\eigen-build\unsupported\test\matrix_exponential_8.vcxproj">
+      <Project>{BF0D2C09-1A57-30CD-B947-A8D9CAE7B695}</Project>
+      <Name>matrix_exponential_8</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\eigen-prefix\src\eigen-build\unsupported\test\matrix_exponential_9.vcxproj">
+      <Project>{3EEF488F-B714-332E-A482-1F9912B643E0}</Project>
+      <Name>matrix_exponential_9</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\eigen-prefix\src\eigen-build\unsupported\test\matrix_function_1.vcxproj">
+      <Project>{B3DBE7C9-FBAA-3A7E-8726-DD194FC0D7F6}</Project>
+      <Name>matrix_function_1</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\eigen-prefix\src\eigen-build\unsupported\test\matrix_function_2.vcxproj">
+      <Project>{EAC1DAE5-6495-3B07-A8B3-5499287B8D4C}</Project>
+      <Name>matrix_function_2</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\eigen-prefix\src\eigen-build\unsupported\test\matrix_function_3.vcxproj">
+      <Project>{929E42D8-04CA-3C85-8784-AC5C9ADABC61}</Project>
+      <Name>matrix_function_3</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\eigen-prefix\src\eigen-build\unsupported\test\matrix_function_4.vcxproj">
+      <Project>{CA6ED649-8AD6-341C-BC64-9E01CB4328F9}</Project>
+      <Name>matrix_function_4</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\eigen-prefix\src\eigen-build\unsupported\test\matrix_function_5.vcxproj">
+      <Project>{AD54A740-D364-35D1-8B9D-B875A56FDA53}</Project>
+      <Name>matrix_function_5</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\eigen-prefix\src\eigen-build\unsupported\test\matrix_function_6.vcxproj">
+      <Project>{9B5003AC-7BFA-33D7-B6E7-8D48844F363D}</Project>
+      <Name>matrix_function_6</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\eigen-prefix\src\eigen-build\unsupported\test\matrix_function_7.vcxproj">
+      <Project>{A15EC0B9-F5FF-3B91-BA3B-324683536358}</Project>
+      <Name>matrix_function_7</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\eigen-prefix\src\eigen-build\unsupported\test\matrix_power_1.vcxproj">
+      <Project>{513360F0-FE8F-384F-98AB-07CA08CE31BF}</Project>
+      <Name>matrix_power_1</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\eigen-prefix\src\eigen-build\unsupported\test\matrix_power_10.vcxproj">
+      <Project>{B76B4B4C-64E6-3CAA-8DFD-E8E7D1760935}</Project>
+      <Name>matrix_power_10</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\eigen-prefix\src\eigen-build\unsupported\test\matrix_power_11.vcxproj">
+      <Project>{10AF9E06-61E4-357E-9097-92D852E4C5EC}</Project>
+      <Name>matrix_power_11</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\eigen-prefix\src\eigen-build\unsupported\test\matrix_power_12.vcxproj">
+      <Project>{6BAED752-594C-3EA4-B223-57A315E4CD03}</Project>
+      <Name>matrix_power_12</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\eigen-prefix\src\eigen-build\unsupported\test\matrix_power_2.vcxproj">
+      <Project>{EB196426-975E-3102-988A-B9054B7EA213}</Project>
+      <Name>matrix_power_2</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\eigen-prefix\src\eigen-build\unsupported\test\matrix_power_3.vcxproj">
+      <Project>{DC6077C3-AFF7-3C68-95B1-FF31772D0C98}</Project>
+      <Name>matrix_power_3</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\eigen-prefix\src\eigen-build\unsupported\test\matrix_power_4.vcxproj">
+      <Project>{31D92C65-C7C2-3952-BB25-709E1231FF1A}</Project>
+      <Name>matrix_power_4</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\eigen-prefix\src\eigen-build\unsupported\test\matrix_power_5.vcxproj">
+      <Project>{84C34100-500D-3A80-A78F-F4DD177005F5}</Project>
+      <Name>matrix_power_5</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\eigen-prefix\src\eigen-build\unsupported\test\matrix_power_6.vcxproj">
+      <Project>{967BB9C8-4842-3822-A9D2-11D51E5907D1}</Project>
+      <Name>matrix_power_6</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\eigen-prefix\src\eigen-build\unsupported\test\matrix_power_7.vcxproj">
+      <Project>{C7D346D2-7DAB-3594-ACDA-A5AA33435DEB}</Project>
+      <Name>matrix_power_7</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\eigen-prefix\src\eigen-build\unsupported\test\matrix_power_8.vcxproj">
+      <Project>{C9D37B01-490F-3EEE-A35E-3E311FFF6A7D}</Project>
+      <Name>matrix_power_8</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\eigen-prefix\src\eigen-build\unsupported\test\matrix_power_9.vcxproj">
+      <Project>{7FDB79E3-6EF6-32B7-89A9-DD548E46FEFF}</Project>
+      <Name>matrix_power_9</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\eigen-prefix\src\eigen-build\unsupported\test\matrix_square_root_1.vcxproj">
+      <Project>{77E0999D-A45E-3DDA-8363-9B7393A5396A}</Project>
+      <Name>matrix_square_root_1</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\eigen-prefix\src\eigen-build\unsupported\test\matrix_square_root_2.vcxproj">
+      <Project>{D85ACFAF-13D6-3DA0-B9F4-4AFC287A2AA0}</Project>
+      <Name>matrix_square_root_2</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\eigen-prefix\src\eigen-build\unsupported\test\matrix_square_root_3.vcxproj">
+      <Project>{AACBDDDA-6229-39B1-9D5D-ED61425BFA2F}</Project>
+      <Name>matrix_square_root_3</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\eigen-prefix\src\eigen-build\unsupported\test\matrix_square_root_4.vcxproj">
+      <Project>{22579139-E9DF-3150-8CE6-DA3079ECA7EB}</Project>
+      <Name>matrix_square_root_4</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\eigen-prefix\src\eigen-build\unsupported\test\matrix_square_root_5.vcxproj">
+      <Project>{FD44B273-37F0-3A70-8630-A947F8918DFA}</Project>
+      <Name>matrix_square_root_5</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\eigen-prefix\src\eigen-build\unsupported\test\minres_1.vcxproj">
+      <Project>{1AC9D27D-CACD-3A65-9D7C-94CCE7565B23}</Project>
+      <Name>minres_1</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\eigen-prefix\src\eigen-build\unsupported\test\minres_2.vcxproj">
+      <Project>{E0FC4765-DDC7-3209-8A10-E7E93C2F8BA8}</Project>
+      <Name>minres_2</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\eigen-prefix\src\eigen-build\unsupported\test\polynomialsolver_1.vcxproj">
+      <Project>{25781A27-8297-302D-8DF2-07CBCF47B7BF}</Project>
+      <Name>polynomialsolver_1</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\eigen-prefix\src\eigen-build\unsupported\test\polynomialsolver_10.vcxproj">
+      <Project>{E330B484-B750-38DB-8E99-3C1DDAF20247}</Project>
+      <Name>polynomialsolver_10</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\eigen-prefix\src\eigen-build\unsupported\test\polynomialsolver_11.vcxproj">
+      <Project>{72B1F81A-A7A3-3760-88B6-39CF14055352}</Project>
+      <Name>polynomialsolver_11</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\eigen-prefix\src\eigen-build\unsupported\test\polynomialsolver_12.vcxproj">
+      <Project>{6E125212-E5EC-3807-A833-17FB8A633717}</Project>
+      <Name>polynomialsolver_12</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\eigen-prefix\src\eigen-build\unsupported\test\polynomialsolver_2.vcxproj">
+      <Project>{5DD91E25-0E38-3463-B675-BFD9F8CB9025}</Project>
+      <Name>polynomialsolver_2</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\eigen-prefix\src\eigen-build\unsupported\test\polynomialsolver_3.vcxproj">
+      <Project>{504F72E7-E79E-3A5D-AC5B-D721C1250388}</Project>
+      <Name>polynomialsolver_3</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\eigen-prefix\src\eigen-build\unsupported\test\polynomialsolver_4.vcxproj">
+      <Project>{FE59A654-2103-3341-A4AE-2AC363036240}</Project>
+      <Name>polynomialsolver_4</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\eigen-prefix\src\eigen-build\unsupported\test\polynomialsolver_5.vcxproj">
+      <Project>{1567D353-D1EB-3C73-8083-5F8F0D116F10}</Project>
+      <Name>polynomialsolver_5</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\eigen-prefix\src\eigen-build\unsupported\test\polynomialsolver_6.vcxproj">
+      <Project>{D645ED3B-6148-315B-9DAC-A2F40B4B06FC}</Project>
+      <Name>polynomialsolver_6</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\eigen-prefix\src\eigen-build\unsupported\test\polynomialsolver_7.vcxproj">
+      <Project>{60A006A4-EDE0-31B1-8610-CFE22FBD42ED}</Project>
+      <Name>polynomialsolver_7</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\eigen-prefix\src\eigen-build\unsupported\test\polynomialsolver_8.vcxproj">
+      <Project>{A5A87B41-3710-3B51-922C-D1CBFBEAA774}</Project>
+      <Name>polynomialsolver_8</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\eigen-prefix\src\eigen-build\unsupported\test\polynomialsolver_9.vcxproj">
+      <Project>{4A885540-F243-378B-B409-23D7FC74A71D}</Project>
+      <Name>polynomialsolver_9</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\eigen-prefix\src\eigen-build\unsupported\test\polynomialutils_2.vcxproj">
+      <Project>{A373CC82-776B-3584-A1F2-9FD784C25052}</Project>
+      <Name>polynomialutils_2</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\eigen-prefix\src\eigen-build\unsupported\test\polynomialutils_3.vcxproj">
+      <Project>{BF92B7F1-FEB8-3735-8A3D-AA25F78A142E}</Project>
+      <Name>polynomialutils_3</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\eigen-prefix\src\eigen-build\unsupported\test\polynomialutils_4.vcxproj">
+      <Project>{C5D84F3E-E050-33CD-9B89-D69A7BBA81FC}</Project>
+      <Name>polynomialutils_4</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\eigen-prefix\src\eigen-build\unsupported\test\polynomialutils_5.vcxproj">
+      <Project>{11188F0B-9F45-3B46-A886-D6F368C779B8}</Project>
+      <Name>polynomialutils_5</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\eigen-prefix\src\eigen-build\unsupported\test\polynomialutils_6.vcxproj">
+      <Project>{E6346EF1-BAA1-34FA-B3C6-AFC021F1AB6E}</Project>
+      <Name>polynomialutils_6</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\eigen-prefix\src\eigen-build\unsupported\test\polynomialutils_7.vcxproj">
+      <Project>{A45DDF71-40B5-349E-8246-A51E049DA204}</Project>
+      <Name>polynomialutils_7</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\eigen-prefix\src\eigen-build\unsupported\test\polynomialutils_8.vcxproj">
+      <Project>{C7A15A23-6C92-3CFE-AF10-EC13DB39079A}</Project>
+      <Name>polynomialutils_8</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\eigen-prefix\src\eigen-build\unsupported\test\polynomialutils_9.vcxproj">
+      <Project>{10B7EE19-7611-3572-9EEA-D91C0764260E}</Project>
+      <Name>polynomialutils_9</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\eigen-prefix\src\eigen-build\unsupported\test\sparse_extra_1.vcxproj">
+      <Project>{E799BDB9-1AFD-3F7D-B414-FC259A4983E9}</Project>
+      <Name>sparse_extra_1</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\eigen-prefix\src\eigen-build\unsupported\test\sparse_extra_2.vcxproj">
+      <Project>{D168BB74-F4D6-30FB-8024-C1FE328FD1CF}</Project>
+      <Name>sparse_extra_2</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\eigen-prefix\src\eigen-build\unsupported\test\sparse_extra_3.vcxproj">
+      <Project>{B79D0C5B-F5E9-3036-B0E3-AF75DC1611C1}</Project>
+      <Name>sparse_extra_3</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\eigen-prefix\src\eigen-build\unsupported\test\sparse_extra_4.vcxproj">
+      <Project>{162DCA44-B35B-397E-AA25-C5FF20AA481B}</Project>
+      <Name>sparse_extra_4</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\eigen-prefix\src\eigen-build\unsupported\test\sparse_extra_5.vcxproj">
+      <Project>{04FE30E3-9AFF-3B7D-8EB5-A2ECEDE2936C}</Project>
+      <Name>sparse_extra_5</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\eigen-prefix\src\eigen-build\unsupported\test\special_functions_1.vcxproj">
+      <Project>{935B8306-1D00-34FE-86BD-ACBE92E8CDDF}</Project>
+      <Name>special_functions_1</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\eigen-prefix\src\eigen-build\unsupported\test\special_functions_2.vcxproj">
+      <Project>{C0D82073-F9AC-3607-9AC2-33F9C349E01B}</Project>
+      <Name>special_functions_2</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\eigen-prefix\src\eigen-build\unsupported\test\special_functions_3.vcxproj">
+      <Project>{D0A2476E-F2A3-367B-BBB0-4C566B0F317F}</Project>
+      <Name>special_functions_3</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\eigen-prefix\src\eigen-build\unsupported\test\special_functions_4.vcxproj">
+      <Project>{978289C7-FE00-305F-A6C8-04EAFB81B4EC}</Project>
+      <Name>special_functions_4</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\eigen-prefix\src\eigen-build\unsupported\test\special_packetmath_1.vcxproj">
+      <Project>{91A5B67C-2902-343B-9525-C149C2F7188D}</Project>
+      <Name>special_packetmath_1</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\eigen-prefix\src\eigen-build\unsupported\test\special_packetmath_2.vcxproj">
+      <Project>{B4F048C5-230C-3063-A0DE-2DD276357986}</Project>
+      <Name>special_packetmath_2</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\eigen-prefix\src\eigen-build\unsupported\test\special_packetmath_3.vcxproj">
+      <Project>{D14CC1AB-65DD-3684-A074-EB6D3013ED68}</Project>
+      <Name>special_packetmath_3</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\eigen-prefix\src\eigen-build\unsupported\test\special_packetmath_4.vcxproj">
+      <Project>{000DEF2A-8721-3DDE-B5F6-C0D818E86075}</Project>
+      <Name>special_packetmath_4</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\eigen-prefix\src\eigen-build\unsupported\test\splines.vcxproj">
+      <Project>{F407DB8E-3B3D-3FCF-B29B-712F7AB00BFB}</Project>
+      <Name>splines</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

@@ -1,0 +1,10 @@
+# CMake generation dependency list for this directory.
+C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/install/googletest/src/googletest/googlemock/CMakeLists.txt
+C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/install/googletest/src/googletest/googlemock/cmake/gmock.pc.in
+C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/install/googletest/src/googletest/googlemock/cmake/gmock_main.pc.in
+C:/Program Files/CMake/share/cmake-3.24/Modules/CheckCSourceCompiles.cmake
+C:/Program Files/CMake/share/cmake-3.24/Modules/CheckIncludeFile.cmake
+C:/Program Files/CMake/share/cmake-3.24/Modules/CheckLibraryExists.cmake
+C:/Program Files/CMake/share/cmake-3.24/Modules/FindPackageHandleStandardArgs.cmake
+C:/Program Files/CMake/share/cmake-3.24/Modules/FindPackageMessage.cmake
+C:/Program Files/CMake/share/cmake-3.24/Modules/FindThreads.cmake

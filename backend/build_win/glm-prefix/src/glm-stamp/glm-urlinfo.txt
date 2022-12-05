@@ -1,0 +1,12 @@
+# This is a generated file and its contents are an internal implementation detail.
+# The download step will be re-executed if anything in this file changes.
+# No other meaning or use of this file is supported.
+
+method=url
+command=C:/Program Files/CMake/bin/cmake.exe;-P;C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/glm-prefix/src/glm-stamp/download-glm.cmake;COMMAND;C:/Program Files/CMake/bin/cmake.exe;-P;C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/glm-prefix/src/glm-stamp/verify-glm.cmake;COMMAND;C:/Program Files/CMake/bin/cmake.exe;-P;C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/glm-prefix/src/glm-stamp/extract-glm.cmake
+source_dir=C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/install/glm
+work_dir=C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/install
+url(s)=https://github.com/g-truc/glm/releases/download/0.9.9.8/glm-0.9.9.8.7z
+hash=
+no_extract=
+

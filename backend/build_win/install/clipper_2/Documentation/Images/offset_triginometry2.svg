@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="744" height="500">
+  <g transform="translate(-9.844)">
+    <text style="font-size:14px;line-height:1.25;font-family:Helvetica;-inkscape-font-specification:Helvetica" x="448.041" y="53.507">
+      <tspan x="448.041" y="53.507">To approximate a circle using a path of straight</tspan>
+      <tspan x="448.041" y="68.507">edges, calculate the number of segments that</tspan>
+      <tspan x="448.041" y="83.507">will be needed so that the path will never be</tspan>
+      <tspan x="448.041" y="98.507">more than a specified distance from the circle.</tspan>
+      <tspan x="448.041" y="128.507">Given:</tspan>
+      <tspan x="448.041" y="143.507">
+        <tspan style="font-weight:700; fill:#a00">R</tspan> = circle radius</tspan>
+      <tspan x="448.041" y="158.507">
+        <tspan style="font-weight:900; fill:#a00">L</tspan> = maximum 'imprecision' of the flattened path</tspan>
+      <tspan x="448.041" y="173.507">
+        <tspan style="font-weight:700">S</tspan> = no. path segments</tspan>
+      <tspan x="448.041" y="188.507">Angle <tspan style="font-weight:700">ß</tspan> = 360° / S = 2 × π / S</tspan>
+      <tspan x="448.041" y="203.507">△abc is an isosceles and m = midpoint(ab)</tspan>
+      <tspan x="448.041" y="233.507">length(ac) = R</tspan>
+      <tspan x="448.041" y="248.507">length(md) = L</tspan>
+      <tspan x="448.041" y="263.507">length(cm) = R - L</tspan>
+      <tspan x="448.041" y="293.507">cos(ß/2) = length(cm) / R</tspan>
+      <tspan x="448.041" y="308.507">cos(ß/2) = (R - L) / R</tspan>
+      <tspan x="448.041" y="323.507">ß = 2 × cos⁻¹(1 - L / R)</tspan>
+      <tspan x="448.041" y="338.507">2 × cos⁻¹(1 - L / R) = 2 × π / S</tspan>
+      <tspan x="448.041" y="353.507" style="font-weight:700;font-size:14px">S = π / cos⁻¹(1 - L / R)</tspan>
+      <tspan x="448.041" y="383.507">Example: Given an ellipse with radius = 100px</tspan>
+      <tspan x="448.041" y="398.507">and allowing a max. imprecision of ¼ px, the</tspan>
+      <tspan x="448.041" y="413.507">number of segments required is ...</tspan>
+      <tspan x="448.041" y="443.507">S = π / cos⁻¹(1 - 0.25 / 100) = 44 segments </tspan>
+    </text>
+    <ellipse style="color:#000;display:inline;overflow:visible;visibility:visible;fill:none;stroke:#000;stroke-width:1.2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker:none;enable-background:accumulate" cx="225.587" cy="260.992" rx="199.012" ry="199.038"/>
+    <path style="fill:none;stroke:#00c;stroke-width:2.8;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" d="m285.073 451.459-222.1-74.224 1.959-234.165 223.31-70.499 136.054 190.595Z"/>
+    <path style="color:#000;display:inline;overflow:visible;visibility:visible;fill:none;stroke:#000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:4,4;stroke-dashoffset:0;stroke-opacity:1;marker:none;enable-background:accumulate" d="m262.6 242.1 125.6-97.5m-98.3-72.52L234.8 262l190.8 1"/>
+    <text style="color:#000;font-style:normal;font-variant:normal;font-weight:400;font-stretch:normal;line-height:0%;font-family:Helvetica;-inkscape-font-specification:Helvetica;text-indent:0;text-align:start;text-decoration:none;text-decoration-line:none;letter-spacing:0;word-spacing:0;text-transform:none;writing-mode:lr-tb;direction:ltr;baseline-shift:baseline;text-anchor:start;display:inline;overflow:visible;visibility:visible;fill:#000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1px;marker:none;enable-background:accumulate" x="225.704" y="274.274">
+      <tspan x="225.704" y="274.274" style="font-size:14px;line-height:1.25">c</tspan>
+    </text>
+    <text style="color:#000;font-style:normal;font-variant:normal;font-weight:400;font-stretch:normal;line-height:0%;font-family:Helvetica;-inkscape-font-specification:Helvetica;text-indent:0;text-align:start;text-decoration:none;text-decoration-line:none;letter-spacing:0;word-spacing:0;text-transform:none;writing-mode:lr-tb;direction:ltr;baseline-shift:baseline;text-anchor:start;display:inline;overflow:visible;visibility:visible;fill:#000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1px;marker:none;enable-background:accumulate" x="291.904" y="64.874">
+      <tspan x="291.904" y="64.874" style="font-size:14px;line-height:1.25">a</tspan>
+    </text>
+    <text style="color:#000;font-style:normal;font-variant:normal;font-weight:400;font-stretch:normal;line-height:0%;font-family:Helvetica;-inkscape-font-specification:Helvetica;text-indent:0;text-align:start;text-decoration:none;text-decoration-line:none;letter-spacing:0;word-spacing:0;text-transform:none;writing-mode:lr-tb;direction:ltr;baseline-shift:baseline;text-anchor:start;display:inline;overflow:visible;visibility:visible;fill:#000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1px;marker:none;enable-background:accumulate" x="431.904" y="264.974">
+      <tspan x="431.904" y="264.974" style="font-size:14px;line-height:1.25">b</tspan>
+    </text>
+    <text style="color:#000;font-style:normal;font-variant:normal;font-weight:400;font-stretch:normal;line-height:0%;font-family:Helvetica;-inkscape-font-specification:Helvetica;text-indent:0;text-align:start;text-decoration:none;text-decoration-line:none;letter-spacing:0;word-spacing:0;text-transform:none;writing-mode:lr-tb;direction:ltr;baseline-shift:baseline;text-anchor:start;display:inline;overflow:visible;visibility:visible;fill:#000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1px;marker:none;enable-background:accumulate" x="393.004" y="141.474">
+      <tspan x="393.004" y="141.474" style="font-size:14px;line-height:1.25">d</tspan>
+    </text>
+    <text style="color:#000;font-style:normal;font-variant:normal;font-weight:400;font-stretch:normal;line-height:0%;font-family:Helvetica;-inkscape-font-specification:Helvetica;text-indent:0;text-align:start;text-decoration:none;text-decoration-line:none;letter-spacing:0;word-spacing:0;text-transform:none;writing-mode:lr-tb;direction:ltr;baseline-shift:baseline;text-anchor:start;display:inline;overflow:visible;visibility:visible;fill:#000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1px;marker:none;enable-background:accumulate" x="348.104" y="185.415">
+      <tspan x="348.104" y="185.415" style="font-size:14px;line-height:1.25">m</tspan>
+    </text>
+    <path style="color:#000;display:inline;overflow:visible;visibility:visible;fill:none;stroke:#000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:3 3;stroke-dashoffset:0;stroke-opacity:1;marker:none;enable-background:accumulate" d="M280.6 261.2v-.7c0-20.4-14.3-37.6-33.6-42.5"/>
+    <text style="color:#000;font-style:normal;font-variant:normal;font-weight:400;font-stretch:normal;line-height:0%;font-family:Helvetica;-inkscape-font-specification:Helvetica;text-indent:0;text-align:start;text-decoration:none;text-decoration-line:none;letter-spacing:0;word-spacing:0;text-transform:none;writing-mode:lr-tb;direction:ltr;baseline-shift:baseline;text-anchor:start;display:inline;overflow:visible;visibility:visible;fill:#000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1px;marker:none;enable-background:accumulate" x="246.476" y="255.657">
+      <tspan x="246.476" y="255.657" style="font-weight:700;font-size:20px;line-height:1.25">ß</tspan>
+    </text>
+    <path style="color:#000;display:inline;overflow:visible;visibility:visible;fill:none;stroke:#000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker:none;enable-background:accumulate" d="m344.1 152.9-16.2 11.7 11.7 16.2"/>
+    <text style="font-family:Helvetica;display:inline;overflow:visible;visibility:visible;fill:#a00;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1px;marker:none;enable-background:accumulate" x="373.604" y="169.974">
+      <tspan x="373.604" y="169.974" style="font-weight:900;font-size:14px;line-height:1.25">L</tspan>
+    </text>
+    <text style="font-family:Helvetica;display:inline;overflow:visible;visibility:visible;fill:#a00;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1px;marker:none;enable-background:accumulate" x="248.99" y="158.263">
+      <tspan x="248.99" y="158.263" style="font-weight:900;font-size:14px;line-height:1.25">R</tspan>
+    </text>
+    <text style="font-style:normal;font-weight:400;font-size:40px;line-height:0;font-family:sans-serif;fill:#000;fill-opacity:1;stroke:none" x="32.471" y="38.829">
+      <tspan x="32.471" y="38.829" style="font-style:normal;font-variant:normal;font-weight:700;font-stretch:normal;font-size:24px;line-height:1.25;font-family:Helvetica;-inkscape-font-specification:'Helvetica Bold'">Circle and ellipse &apos;flattening&apos;</tspan>
+    </text>
+  </g>
+</svg>

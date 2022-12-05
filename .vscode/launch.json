@@ -1,0 +1,15 @@
+//https://www.youtube.com/watch?v=Rfj40xW9q6w
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Debug",
+      "type": "cppdbg",
+      "request": "launch",
+      "cwd": "${fileDirname}",
+      "miDebuggerPath": "gdb",
+      "program": "${workspaceRoot}/build_win/Release/wood",
+      "args": [],
+    }
+  ]
+}

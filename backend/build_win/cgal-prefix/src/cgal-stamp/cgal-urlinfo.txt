@@ -1,0 +1,12 @@
+# This is a generated file and its contents are an internal implementation detail.
+# The download step will be re-executed if anything in this file changes.
+# No other meaning or use of this file is supported.
+
+method=url
+command=C:/Program Files/CMake/bin/cmake.exe;-P;C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/cgal-prefix/src/cgal-stamp/download-cgal.cmake;COMMAND;C:/Program Files/CMake/bin/cmake.exe;-P;C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/cgal-prefix/src/cgal-stamp/verify-cgal.cmake;COMMAND;C:/Program Files/CMake/bin/cmake.exe;-P;C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/cgal-prefix/src/cgal-stamp/extract-cgal.cmake
+source_dir=C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/install/cgal
+work_dir=C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/install
+url(s)=https://github.com/CGAL/cgal/releases/download/v5.5/CGAL-5.5.zip
+hash=
+no_extract=
+

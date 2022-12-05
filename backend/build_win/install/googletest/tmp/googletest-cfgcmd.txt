@@ -1,0 +1,1 @@
+cmd='C:/Program Files/CMake/bin/cmake.exe;-DCMAKE_INSTALL_PREFIX:PATH=<INSTALL_DIR>;$<$<PLATFORM_ID:Windows>:-Dgtest_force_shared_crt:BOOL=ON>;-GVisual Studio 17 2022;-Ax64;-DCMAKE_GENERATOR_INSTANCE:INTERNAL=C:/Program Files/Microsoft Visual Studio/2022/Community;<SOURCE_DIR><SOURCE_SUBDIR>'
