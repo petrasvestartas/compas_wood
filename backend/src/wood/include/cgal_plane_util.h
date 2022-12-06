@@ -81,7 +81,7 @@ namespace cgal_plane_util {
         result[3] = pl0[3];
     }
 
-    inline bool IsSameDirection(IK::Plane_3 pl0, IK::Plane_3 pl1, bool canBeFlipped = true, double tolerance = 0.0001) {
+    inline bool IsSameDirection(IK::Plane_3& pl0, IK::Plane_3& pl1, bool canBeFlipped = true, double tolerance = 0.0001) {
         auto pl0_v = pl0.orthogonal_vector();
         auto pl1_v = pl1.orthogonal_vector();
         if (canBeFlipped) {
@@ -98,7 +98,7 @@ namespace cgal_plane_util {
         result = PointAt2(plane, s, t);
     }
 
-    inline bool IsSamePosition(IK::Plane_3 pl0, IK::Plane_3 pl1, double tolerance = 0.0001) {
+    inline bool IsSamePosition(IK::Plane_3& pl0, IK::Plane_3& pl1, double tolerance = 0.0001) {
         IK::Point_3 p0 = pl0.point();
         IK::Point_3 p1 = pl1.point();
 
@@ -108,7 +108,9 @@ namespace cgal_plane_util {
         return cgal_vector_util::DistanceSquare(cp0, p1) < tolerance && cgal_vector_util::DistanceSquare(cp1, p0) < tolerance;
     }
 
-    inline bool IsCoplanar(IK::Plane_3 pl0, IK::Plane_3 pl1, bool canBeFlipped = true, double tolerance = 0.01) {
+    inline bool IsCoplanar(IK::Plane_3& pl0, IK::Plane_3& pl1, bool canBeFlipped = true, double tolerance = 0.01) {
         return IsSameDirection(pl0, pl1, canBeFlipped, tolerance) && IsSamePosition(pl0, pl1, tolerance);
     }
+
+
 }

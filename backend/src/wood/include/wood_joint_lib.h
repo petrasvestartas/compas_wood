@@ -2997,7 +2997,7 @@ namespace wood_joint_lib
     // 30-39
     inline void cr_c_ip_0(wood::joint &joint)
     {
-   
+
         joint.name = __func__;
 
         double scale = 1;
@@ -3019,8 +3019,6 @@ namespace wood_joint_lib
 
         joint.m_boolean_type = {wood_cut::insert_between_multiple_edges, wood_cut::insert_between_multiple_edges};
         joint.f_boolean_type = {wood_cut::insert_between_multiple_edges, wood_cut::insert_between_multiple_edges};
-
-
     }
 
     inline void cr_c_ip_1(wood::joint &joint)
@@ -3371,7 +3369,18 @@ namespace wood_joint_lib
     }
 
     // 40-49
-    inline void tt_e_p_0(wood::joint &joint)
+    /**
+     * The simplest top-to-top joint
+     * 1 line segment is generate at the center of the connection area
+     * top-to-top joints have inconsistant connection area, therefore:
+     * a) only the height of the connection volume is taken, not the rectangle
+     * b) joints have to be recomputed each time
+     * c) intersection between line and elements have to be computed to get a correct line length
+     *
+     *
+     * @param joints a list of connections between two elements
+     */
+    inline void tt_e_p_0(wood::joint &joint) // std::vector<wood::element> &elements
     {
         joint.name = __func__;
 
@@ -3953,7 +3962,7 @@ namespace wood_joint_lib
                 unique_joints.insert(std::pair<std::string, wood::joint>(key, temp_joint));
                 jo.orient_to_connection_area(); // and orient to connection volume
 
-                // special case for vidy only when joints must be merged 
+                // special case for vidy only when joints must be merged
                 if (jo.linked_joints.size() > 0 && (id_representing_joint_name == 15 || id_representing_joint_name == 16))
                 {
                     for (auto &linked_joint_id : jo.linked_joints)
@@ -3966,7 +3975,5 @@ namespace wood_joint_lib
             printf("\nCPP   FILE %s    METHOD %s   LINE %i     WHAT %s ", __FILE__, __FUNCTION__, __LINE__, "last");
 #endif
         }
-
-     
     }
 }

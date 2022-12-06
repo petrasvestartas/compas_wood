@@ -76,7 +76,20 @@ public:
     bool intersection_closed_and_open_paths_2D(
         CGAL_Polyline &closed_pline_cutter, CGAL_Polyline &pline_to_cut, IK::Plane_3 &plane, CGAL_Polyline &c,
         int (&edge_pair)[2], std::pair<double, double> &cp_pair);
+        
     void merge_joints(std::vector<wood::joint> &joints, std::vector<std::vector<CGAL_Polyline>> &output);
+
+    /**
+     * Intersect line segments with the neighbors of elements
+     * Lines can be inclined
+     * lines can be shorter or longer
+     * so the length of them has to be updated
+     *
+     * @param joints a list of connections between two elements
+     * @param elements a list of elements
+     */
+    void update_lines_by_intersection(std::vector<wood::joint> &joints, std::vector<wood::element> &elements);
+
 };
 }
 #endif

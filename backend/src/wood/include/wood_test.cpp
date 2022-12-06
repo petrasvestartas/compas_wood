@@ -34,42 +34,6 @@ namespace wood_test
     void test_side_to_top()
     {
 
-        // run ninja-> g++ main.cpp -o main
-        // cmake  --fresh -DGET_LIBS=OFF -DBUILD_MY_PROJECTS=ON -DRELEASE_DEBUG=ON -DCMAKE_BUILD_TYPE="Release" -G "Ninja" .. && cmake  --build . --config Release
-        // cmake --fresh -DGET_LIBS=OFF -DBUILD_MY_PROJECTS=ON -DRELEASE_DEBUG=ON -DCMAKE_BUILD_TYPE="Release"  -G "Visual Studio 17 2022" -A x64 .. && cmake --build . --config Release
-        // cmake  -E time --build . -v --config Release -- -j0
-        // cmake  --build . -v --config Release -- -j0
-        // cmake  --build . --config Release -v
-
-        // #include "stdafx.h"
-
-        // #include "viewer/include/opengl/opengl_meshes.h"
-        // #include "viewer/include/opengl/opengl_cameras.h"
-        // #define gui
-        // //#ifdef(gui) //only declare this if the following header is outside of the precompiled header
-        // #include "viewer/include/imgui/imgui_render.h"
-        // //#endif//only declare this if the following header is outside of the precompiled header
-        // #include "viewer/include/opengl/opengl_globals_geometry.h"
-        // #include "viewer/include/opengl/opengl_render.h"
-
-        // // temp
-        // #include "wood/include/wood_main.h"
-        // #include "wood/include/wood_xml.h" // xml parser and viewer customization
-        // #include "wood/include/wood_test.h"
-
-        // // viewer
-        // #include "wood/include/viewer_wood.h"
-
-        // // data_set
-        // #include "wood/include/wood_data_set.h"
-
-        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        // viewer type and shader location
-        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        opengl_globals::shader_type_0default_1transparent_2shaded_3shadedwireframe_4wireframe_5normals_6explode = 3;
-        opengl_globals::shaders_folder = "C:\\IBOIS57\\_Code\\Software\\CPP\\CMAKE\\super_build\\wood\\src\\viewer\\shaders\\";
-        opengl_globals_geometry::add_grid();
-
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Input
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -840,8 +804,7 @@ namespace wood_test
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Main Method of Wood
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        std::vector<std::vector<CGAL_Polyline>>
-            output_plines;
+        std::vector<std::vector<CGAL_Polyline>> output_plines;
         std::vector<std::vector<wood_cut::cut_type>> output_types;
         std::vector<std::vector<int>> top_face_triangulation;
 

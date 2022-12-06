@@ -1084,10 +1084,64 @@ namespace wood_main
 #ifdef DEBUG_wood_MAIN_LOCAL_SEARCH
                             printf("CPP Type40\n");
 #endif
+                            // top-to-top:
+                            // compute bounding-rectangle around the "joint_area"
+                            // move the bounding-rectangle up and down by the element thickness
+                            // contruct joint_volumes_pairA_pairB from the rectangles and assign them
                             std::cout << "wood_main -> top-to-top not implemented \n";
                             type = 40;
-                            joint_volumes_pairA_pairB[0] = joint_area;
-                            joint_volumes_pairA_pairB[1] = joint_area;
+
+                            // this has to become a function
+                            CGAL_Polyline result;
+                            clipper_util::bounding_rectangle(joint_area, Plane0[i], result);
+
+                            // assign output that are in the same position but will be moved in the next step
+                            joint_volumes_pairA_pairB[0] = result;
+                            joint_volumes_pairA_pairB[1] = result;
+
+                            // get movement direction, this will fail if the insertion direction is pointing to the opposite direction from the element's plane
+                            IK::Vector_3 dir0 = dirSet ? insertion_vectors0[i] : Plane0[i].orthogonal_vector(); // Plane0[i].orthogonal_vector();
+                            IK::Vector_3 dir1 = -dir0;
+                            dir0 *= -1;
+                            dir1 *= -1;
+                            cgal_vector_util::Unitize(dir0);
+                            cgal_vector_util::Unitize(dir1);
+
+                            // get thickness
+                            int next_plane_0 = i == 0 ? 1 : 0;
+                            int next_plane_1 = j == 0 ? 1 : 0;
+                            double distance_0 = std::sqrt(CGAL::squared_distance(Plane0[i], Plane0[next_plane_0]));
+                            double distance_1 = std::sqrt(CGAL::squared_distance(Plane1[j], Plane1[next_plane_1]));
+                            dir0 *= distance_0;
+                            dir1 *= distance_1;
+
+                            // move the bounding boxes rectangles
+                            for (int k = 0; k < 5; k++)
+                            {
+                                joint_volumes_pairA_pairB[0][k] += dir0;
+                                joint_volumes_pairA_pairB[1][k] += dir1;
+                            }
+
+                            // to follow the same notation as other types, take two edge and reconstruct two rectangles
+                            CGAL_Polyline joint_volumes_pairA_pairB_temp0 = {
+                                joint_volumes_pairA_pairB[0][0],
+                                joint_volumes_pairA_pairB[0][1],
+                                joint_volumes_pairA_pairB[1][1],
+                                joint_volumes_pairA_pairB[1][0],
+                                joint_volumes_pairA_pairB[0][0],
+                            };
+
+                            CGAL_Polyline joint_volumes_pairA_pairB_temp1 = {
+                                joint_volumes_pairA_pairB[0][3],
+                                joint_volumes_pairA_pairB[0][2],
+                                joint_volumes_pairA_pairB[1][2],
+                                joint_volumes_pairA_pairB[1][3],
+                                joint_volumes_pairA_pairB[0][3],
+                            };
+
+                            // reassign
+                            joint_volumes_pairA_pairB[0] = joint_volumes_pairA_pairB_temp0;
+                            joint_volumes_pairA_pairB[1] = joint_volumes_pairA_pairB_temp1;
 
                             return true;
                         }

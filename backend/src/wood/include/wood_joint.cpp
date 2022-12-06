@@ -360,6 +360,8 @@ bool joint::orient_to_connection_area()
     return flag0 && flag1;
 }
 
+
+
 // Transfer geometrical information from current to new_joint
 // Duplicate is needed to store geometrical data, not adjacency, to reduce creation time
 void joint::duplicate_geometry(joint &new_joint)

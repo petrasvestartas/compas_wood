@@ -307,9 +307,6 @@ ExternalProject_Add(cgal_dependencies
 ########################################################################
 # GOOGLETEST ///googletest/include
 ######################################################################## 
-  ########################################################################
-# GOOGLETEST ///googletest/include
-######################################################################## 
 set(GOOGLE_TEST_OS "")
 if (WIN32)
     set(GOOGLE_TEST_OS "$<$<PLATFORM_ID:Windows>:-Dgtest_force_shared_crt:BOOL=ON>")

@@ -1080,4 +1080,7 @@ namespace wood
         }
     }
 
+    void element::update_lines_by_intersection(std::vector<wood::joint> &joints, std::vector<wood::element> &elements)
+    {
+    }
 }

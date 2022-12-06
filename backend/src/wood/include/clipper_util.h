@@ -115,10 +115,10 @@ namespace clipper_util
             // CleanPolygon(C[0], GlobalTolerance * scale);//clean polygons
 
             // if (C[0].size() > 3 && Area(C[0]) > GlobalClipperAreaTolerance * scale * scale) {//skip triangles and very small polygons
-            //include triangles based on user input
+            // include triangles based on user input
             bool is_not_triangle = C[0].size() != 3;
             if (!is_not_triangle)
-                    is_not_triangle = include_triangles;
+                is_not_triangle = include_triangles;
 
             if (C[0].size() > 2 && is_not_triangle && std::abs(Area(C[0])) > std::abs(Area(pathA) * GlobalClipperAreaTolerance))
             { // skip triangles and very small polygons
@@ -135,11 +135,11 @@ namespace clipper_util
                 }
                 // CGAL_Debug(999999);
                 c[C[0].size()] = c[0]; // Close
-                }
-                else
-                {
-                    return false;
-                }
+            }
+            else
+            {
+                return false;
+            }
         }
         else
         {
@@ -154,7 +154,6 @@ namespace clipper_util
 
     inline bool offset_2D(
         CGAL_Polyline &p0,
-        // CGAL_Polyline& result,
         IK::Plane_3 &plane,
         double offset,
         double scale = 100000.0)
@@ -242,6 +241,66 @@ namespace clipper_util
         /////////////////////////////////////////////////////////////////////////////////////
         // Output
         /////////////////////////////////////////////////////////////////////////////////////
+        return true;
+    }
+
+    /**
+     * bounding rectangle of a planer polyline
+     * the polyline is oriented to XY plane using the input plane
+     * then oriented back to 3D
+     * a) only the height of the connection volume is taken, not the rectangle
+     * b) joints have to be recomputed each time
+     * c) intersection between line and elements have to be computed to get a correct line length
+     *
+     *
+     * @param polyline planar polyline rotated in space
+     * @param plane polyline's plane
+     * @param result bounding rectangle as CGAl polyline
+     * @return bool if the result is successful, e.g. box is valid or the input polyline has less than 3 points
+     */
+    inline bool bounding_rectangle(CGAL_Polyline &polyline, IK::Plane_3 &plane, CGAL_Polyline &result, double scale = 100000.0)
+    {
+        /////////////////////////////////////////////////////////////////////////////////////
+        // Orient from 3D to 2D
+        /////////////////////////////////////////////////////////////////////////////////////
+        if (polyline.size() < 3)
+            return false;
+
+        CGAL_Polyline polyline_copy = polyline;
+
+        /////////////////////////////////////////////////////////////////////////////////////
+        // Create Transformation
+        /////////////////////////////////////////////////////////////////////////////////////
+        CGAL::Aff_transformation_3<IK> xform_toXY = cgal_xform_util::PlaneToXY(polyline_copy[0], plane);
+        CGAL::Aff_transformation_3<IK> xform_toXY_Inv = xform_toXY.inverse();
+        cgal_polyline_util::Transform(polyline_copy, xform_toXY);
+
+        /////////////////////////////////////////////////////////////////////////////////////
+        // Convert to Clipper
+        /////////////////////////////////////////////////////////////////////////////////////
+        Clipper2Lib::Path64 polyline_clipper(polyline_copy.size() - 1);
+
+        for (int i = 0; i < polyline_copy.size() - 1; i++)
+            polyline_clipper[i] = Clipper2Lib::Point64((int)(polyline_copy[i].x() * scale), (int)(polyline_copy[i].y() * scale));
+
+        /////////////////////////////////////////////////////////////////////////////////////
+        // Get Bounding Box
+        /////////////////////////////////////////////////////////////////////////////////////
+        Clipper2Lib::Rect64 br = Clipper2Lib::Bounds(polyline_clipper);
+
+        /////////////////////////////////////////////////////////////////////////////////////
+        // Convert to CGAL and orient back to 3D
+        /////////////////////////////////////////////////////////////////////////////////////
+        result.reserve(5);
+        result = CGAL_Polyline{
+            IK::Point_3(br.left / scale, br.bottom / scale, 0),
+            IK::Point_3(br.right / scale, br.bottom / scale, 0),
+            IK::Point_3(br.right / scale, br.top / scale, 0),
+            IK::Point_3(br.left / scale, br.top / scale, 0)};
+        for (int i = 0; i < 4; i++)
+            result[i] = result[i].transform(xform_toXY_Inv);
+        result.emplace_back(result[0]);
+
         return true;
     }
 
