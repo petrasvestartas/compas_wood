@@ -1088,7 +1088,7 @@ namespace wood_main
                             // compute bounding-rectangle around the "joint_area"
                             // move the bounding-rectangle up and down by the element thickness
                             // contruct joint_volumes_pairA_pairB from the rectangles and assign them
-                            std::cout << "wood_main -> top-to-top not implemented \n";
+                            //std::cout << "wood_main -> top-to-top not implemented \n";
                             type = 40;
 
                             // this has to become a function
@@ -1099,13 +1099,12 @@ namespace wood_main
                             joint_volumes_pairA_pairB[0] = result;
                             joint_volumes_pairA_pairB[1] = result;
 
-                            // get movement direction, this will fail if the insertion direction is pointing to the opposite direction from the element's plane
+                            // get movement direction. WARNING this will fail if the insertion direction is pointing to the opposite direction from the element's plane
                             IK::Vector_3 dir0 = dirSet ? insertion_vectors0[i] : Plane0[i].orthogonal_vector(); // Plane0[i].orthogonal_vector();
+                            cgal_vector_util::Unitize(dir0);
                             IK::Vector_3 dir1 = -dir0;
                             dir0 *= -1;
                             dir1 *= -1;
-                            cgal_vector_util::Unitize(dir0);
-                            cgal_vector_util::Unitize(dir1);
 
                             // get thickness
                             int next_plane_0 = i == 0 ? 1 : 0;

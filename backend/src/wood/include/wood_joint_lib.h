@@ -3370,7 +3370,8 @@ namespace wood_joint_lib
 
     // 40-49
     /**
-     * The simplest top-to-top joint
+     * top-to-top joint
+     * types: drill
      * 1 line segment is generate at the center of the connection area
      * top-to-top joints have inconsistant connection area, therefore:
      * a) only the height of the connection volume is taken, not the rectangle
@@ -3380,29 +3381,256 @@ namespace wood_joint_lib
      *
      * @param joints a list of connections between two elements
      */
-    inline void tt_e_p_0(wood::joint &joint) // std::vector<wood::element> &elements
+    inline void tt_e_p_0(wood::joint &joint, std::vector<wood::element> &elements) //
     {
         joint.name = __func__;
 
-        double scale = 1;
-        joint.f[0] = {
-            {IK::Point_3(-0.5, 0.5, scale), IK::Point_3(-0.5, -0.5, scale), IK::Point_3(-0.5, -0.5, 0), IK::Point_3(-0.5, 0.5, 0), IK::Point_3(-0.5, 0.5, scale)},
-            {IK::Point_3(-0.5, 0.5, scale), IK::Point_3(-0.5, -0.5, scale), IK::Point_3(-0.5, -0.5, 0), IK::Point_3(-0.5, 0.5, 0), IK::Point_3(-0.5, 0.5, scale)}};
+        // compute the center of the joint_area
+        IK::Point_3 center = cgal_polyline_util::Center(joint.joint_area);
 
-        joint.f[1] = {
-            {IK::Point_3(0.5, 0.5, scale), IK::Point_3(0.5, -0.5, scale), IK::Point_3(0.5, -0.5, 0), IK::Point_3(0.5, 0.5, 0), IK::Point_3(0.5, 0.5, scale)},
-            {IK::Point_3(0.5, 0.5, scale), IK::Point_3(0.5, -0.5, scale), IK::Point_3(0.5, -0.5, 0), IK::Point_3(0.5, 0.5, 0), IK::Point_3(0.5, 0.5, scale)}};
+        // move the center by the direction of rectangle 2nd edge, because it is vertical
+        IK::Vector_3 dir0 = joint.joint_volumes[0][1] - joint.joint_volumes[0][2];
+        cgal_vector_util::Unitize(dir0);
+        IK::Vector_3 dir1 = -dir0;
+        dir0 *= elements[joint.v0].thickness;
+        dir1 *= elements[joint.v1].thickness;
 
-        joint.m[0] = {
-            {IK::Point_3(0.5, 0.5, -scale), IK::Point_3(-0.5, 0.5, -scale), IK::Point_3(-0.5, 0.5, 0), IK::Point_3(0.5, 0.5, 0), IK::Point_3(0.5, 0.5, -scale)},
-            {IK::Point_3(0.5, 0.5, -scale), IK::Point_3(-0.5, 0.5, -scale), IK::Point_3(-0.5, 0.5, 0), IK::Point_3(0.5, 0.5, 0), IK::Point_3(0.5, 0.5, -scale)}};
+        // create polyline segments that represents the drilling holes
+        CGAL_Polyline line0 = {center, center + dir0};
+        CGAL_Polyline line1 = {center, center + dir1};
 
-        joint.m[1] = {
-            {IK::Point_3(0.5, -0.5, -scale), IK::Point_3(-0.5, -0.5, -scale), IK::Point_3(-0.5, -0.5, 0), IK::Point_3(0.5, -0.5, 0), IK::Point_3(0.5, -0.5, -scale)},
-            {IK::Point_3(0.5, -0.5, -scale), IK::Point_3(-0.5, -0.5, -scale), IK::Point_3(-0.5, -0.5, 0), IK::Point_3(0.5, -0.5, 0), IK::Point_3(0.5, -0.5, -scale)}};
+        // output
+        joint.f[0] = {line0, line0};
+        joint.f[1] = {line0, line0};
+        joint.m[0] = {line1, line1};
+        joint.m[1] = {line1, line1};
 
-        joint.m_boolean_type = {wood_cut::insert_between_multiple_edges, wood_cut::insert_between_multiple_edges};
-        joint.f_boolean_type = {wood_cut::insert_between_multiple_edges, wood_cut::insert_between_multiple_edges};
+        joint.m_boolean_type = {wood_cut::drill, wood_cut::drill};
+        joint.f_boolean_type = {wood_cut::drill, wood_cut::drill};
+
+        // WARNING set variable so that it wont be recomputed, because it is run only once | also it must not be orientable
+        joint.orient = false;
+        joint.key += std::to_string(joint.id);
+    }
+
+    /**
+     * top-to-top joint
+     * types: drill
+     * line segments are generated at the inscribed circle of the connection area
+     * top-to-top joints have inconsistant connection area, therefore:
+     * a) only the height of the connection volume is taken, not the rectangle
+     * b) joints have to be recomputed each time
+     * c) intersection between line and elements have to be computed to get a correct line length
+     *
+     *
+     * @param joints a list of connections between two elements
+     */
+    inline void tt_e_p_1(wood::joint &joint, std::vector<wood::element> &elements) //
+    {
+        joint.name = __func__;
+
+        // compute the center of the joint_area
+        IK::Point_3 center = cgal_polyline_util::Center(joint.joint_area);
+
+        // move the center by the direction of rectangle 2nd edge, because it is vertical
+        IK::Vector_3 dir0 = joint.joint_volumes[0][1] - joint.joint_volumes[0][2];
+        cgal_vector_util::Unitize(dir0);
+        IK::Vector_3 dir1 = -dir0;
+        dir0 *= elements[joint.v0].thickness;
+        dir1 *= elements[joint.v1].thickness;
+
+        // create polyline segments that represents the drilling holes
+        CGAL_Polyline line0 = {center, center + dir0};
+        CGAL_Polyline line1 = {center, center + dir1};
+
+        // output
+        joint.f[0] = {line0, line0};
+        joint.f[1] = {line0, line0};
+        joint.m[0] = {line1, line1};
+        joint.m[1] = {line1, line1};
+
+        joint.m_boolean_type = {wood_cut::drill, wood_cut::drill};
+        joint.f_boolean_type = {wood_cut::drill, wood_cut::drill};
+
+        // WARNING set variable so that it wont be recomputed, because it is run only once | also it must not be orientable
+        joint.orient = false;
+        joint.key += std::to_string(joint.id);
+    }
+
+    /**
+     * top-to-top joint
+     * types: drill
+     * line segments are generated at the inscribed rectangle of the connection area
+     * top-to-top joints have inconsistant connection area, therefore:
+     * a) only the height of the connection volume is taken, not the rectangle
+     * b) joints have to be recomputed each time
+     * c) intersection between line and elements have to be computed to get a correct line length
+     *
+     *
+     * @param joints a list of connections between two elements
+     */
+    inline void tt_e_p_2(wood::joint &joint, std::vector<wood::element> &elements) //
+    {
+        joint.name = __func__;
+
+        // compute the center of the joint_area
+        IK::Point_3 center = cgal_polyline_util::Center(joint.joint_area);
+
+        // move the center by the direction of rectangle 2nd edge, because it is vertical
+        IK::Vector_3 dir0 = joint.joint_volumes[0][1] - joint.joint_volumes[0][2];
+        cgal_vector_util::Unitize(dir0);
+        IK::Vector_3 dir1 = -dir0;
+        dir0 *= elements[joint.v0].thickness;
+        dir1 *= elements[joint.v1].thickness;
+
+        // create polyline segments that represents the drilling holes
+        CGAL_Polyline line0 = {center, center + dir0};
+        CGAL_Polyline line1 = {center, center + dir1};
+
+        // output
+        joint.f[0] = {line0, line0};
+        joint.f[1] = {line0, line0};
+        joint.m[0] = {line1, line1};
+        joint.m[1] = {line1, line1};
+
+        joint.m_boolean_type = {wood_cut::drill, wood_cut::drill};
+        joint.f_boolean_type = {wood_cut::drill, wood_cut::drill};
+
+        // WARNING set variable so that it wont be recomputed, because it is run only once | also it must not be orientable
+        joint.orient = false;
+        joint.key += std::to_string(joint.id);
+    }
+
+    /**
+     * top-to-top joint
+     * types: drill
+     * line segments are generated at the inscribed line of the connection area
+     * top-to-top joints have inconsistant connection area, therefore:
+     * a) only the height of the connection volume is taken, not the rectangle
+     * b) joints have to be recomputed each time
+     * c) intersection between line and elements have to be computed to get a correct line length
+     *
+     *
+     * @param joints a list of connections between two elements
+     */
+    inline void tt_e_p_3(wood::joint &joint, std::vector<wood::element> &elements) //
+    {
+        joint.name = __func__;
+
+        // compute the center of the joint_area
+        IK::Point_3 center = cgal_polyline_util::Center(joint.joint_area);
+
+        // move the center by the direction of rectangle 2nd edge, because it is vertical
+        IK::Vector_3 dir0 = joint.joint_volumes[0][1] - joint.joint_volumes[0][2];
+        cgal_vector_util::Unitize(dir0);
+        IK::Vector_3 dir1 = -dir0;
+        dir0 *= elements[joint.v0].thickness;
+        dir1 *= elements[joint.v1].thickness;
+
+        // create polyline segments that represents the drilling holes
+        CGAL_Polyline line0 = {center, center + dir0};
+        CGAL_Polyline line1 = {center, center + dir1};
+
+        // output
+        joint.f[0] = {line0, line0};
+        joint.f[1] = {line0, line0};
+        joint.m[0] = {line1, line1};
+        joint.m[1] = {line1, line1};
+
+        joint.m_boolean_type = {wood_cut::drill, wood_cut::drill};
+        joint.f_boolean_type = {wood_cut::drill, wood_cut::drill};
+
+        // WARNING set variable so that it wont be recomputed, because it is run only once | also it must not be orientable
+        joint.orient = false;
+        joint.key += std::to_string(joint.id);
+    }
+
+    /**
+     * top-to-top joint
+     * types: drill
+     * line segments are generated on the hatch lines of the connection area
+     * top-to-top joints have inconsistant connection area, therefore:
+     * a) only the height of the connection volume is taken, not the rectangle
+     * b) joints have to be recomputed each time
+     * c) intersection between line and elements have to be computed to get a correct line length
+     *
+     *
+     * @param joints a list of connections between two elements
+     */
+    inline void tt_e_p_4(wood::joint &joint, std::vector<wood::element> &elements) //
+    {
+        joint.name = __func__;
+
+        // compute the center of the joint_area
+        IK::Point_3 center = cgal_polyline_util::Center(joint.joint_area);
+
+        // move the center by the direction of rectangle 2nd edge, because it is vertical
+        IK::Vector_3 dir0 = joint.joint_volumes[0][1] - joint.joint_volumes[0][2];
+        cgal_vector_util::Unitize(dir0);
+        IK::Vector_3 dir1 = -dir0;
+        dir0 *= elements[joint.v0].thickness;
+        dir1 *= elements[joint.v1].thickness;
+
+        // create polyline segments that represents the drilling holes
+        CGAL_Polyline line0 = {center, center + dir0};
+        CGAL_Polyline line1 = {center, center + dir1};
+
+        // output
+        joint.f[0] = {line0, line0};
+        joint.f[1] = {line0, line0};
+        joint.m[0] = {line1, line1};
+        joint.m[1] = {line1, line1};
+
+        joint.m_boolean_type = {wood_cut::drill, wood_cut::drill};
+        joint.f_boolean_type = {wood_cut::drill, wood_cut::drill};
+
+        // WARNING set variable so that it wont be recomputed, because it is run only once | also it must not be orientable
+        joint.orient = false;
+        joint.key += std::to_string(joint.id);
+    }
+
+    /**
+     * top-to-top joint
+     * types: drill
+     * line segments are generated on the smoothed, scaled and subdivided edge of the connection area
+     * top-to-top joints have inconsistant connection area, therefore:
+     * a) only the height of the connection volume is taken, not the rectangle
+     * b) joints have to be recomputed each time
+     * c) intersection between line and elements have to be computed to get a correct line length
+     *
+     *
+     * @param joints a list of connections between two elements
+     */
+    inline void tt_e_p_5(wood::joint &joint, std::vector<wood::element> &elements) //
+    {
+        joint.name = __func__;
+
+        // compute the center of the joint_area
+        IK::Point_3 center = cgal_polyline_util::Center(joint.joint_area);
+
+        // move the center by the direction of rectangle 2nd edge, because it is vertical
+        IK::Vector_3 dir0 = joint.joint_volumes[0][1] - joint.joint_volumes[0][2];
+        cgal_vector_util::Unitize(dir0);
+        IK::Vector_3 dir1 = -dir0;
+        dir0 *= elements[joint.v0].thickness;
+        dir1 *= elements[joint.v1].thickness;
+
+        // create polyline segments that represents the drilling holes
+        CGAL_Polyline line0 = {center, center + dir0};
+        CGAL_Polyline line1 = {center, center + dir1};
+
+        // output
+        joint.f[0] = {line0, line0};
+        joint.f[1] = {line0, line0};
+        joint.m[0] = {line1, line1};
+        joint.m[1] = {line1, line1};
+
+        joint.m_boolean_type = {wood_cut::drill, wood_cut::drill};
+        joint.f_boolean_type = {wood_cut::drill, wood_cut::drill};
+
+        // WARNING set variable so that it wont be recomputed, because it is run only once | also it must not be orientable
+        joint.orient = false;
+        joint.key += std::to_string(joint.id);
     }
 
     // 60-69
@@ -3518,6 +3746,11 @@ namespace wood_joint_lib
         joint_names[38] = "side_removal";
         joint_names[39] = "cr_c_ip_9";
         joint_names[40] = "tt_e_p_0";
+        joint_names[41] = "tt_e_p_1";
+        joint_names[42] = "tt_e_p_2";
+        joint_names[43] = "tt_e_p_3";
+        joint_names[44] = "tt_e_p_4";
+        joint_names[45] = "tt_e_p_5";
         joint_names[48] = "side_removal";
         joint_names[58] = "side_removal_ss_e_r_1";
         joint_names[59] = "ss_e_r_9";
@@ -3692,9 +3925,6 @@ namespace wood_joint_lib
             // CGAL_Debug(division_distance);
 
             jo.get_divisions(division_distance);
-            // CGAL_Debug(2);
-            std::string key = jo.get_key();
-            // std::cout << key << std::endl;
 
 #ifdef DEBUG_JOINERY_LIBRARY
             printf("\nCPP   FILE %s    METHOD %s   LINE %i     WHAT %s ID %i SHIFT %f KEY %s DIVISIONS %f   ", __FILE__, __FUNCTION__, __LINE__, "Assigned groups", id_representing_joint_name, jo.shift, key.c_str(), jo.divisions);
@@ -3706,7 +3936,7 @@ namespace wood_joint_lib
 
             // if there is already such joint
             // std::cout << key << "\n";
-            bool is_similar_joint = unique_joints.count(key) == 1;
+            bool is_similar_joint = unique_joints.count(jo.get_key()) == 1;
 #ifdef DEBUG_JOINERY_LIBRARY
             printf("\nCPP   FILE %s    METHOD %s   LINE %i     WHAT %s %i", __FILE__, __FUNCTION__, __LINE__, "Is similar joint", is_similar_joint);
 #endif
@@ -3717,7 +3947,7 @@ namespace wood_joint_lib
             if (is_similar_joint && jo.linked_joints.size() == 0) // skip linked joints, that must be regenerated each time, currently there is no solution to optimize this further due to 4 valence joints
             {
                 std::cout << "wood_joint_lib -> skipping joint \n";
-                auto u_j = unique_joints.at(key);
+                auto u_j = unique_joints.at(jo.get_key());
                 // CGAL_Debug(1);
                 jo.transfer_geometry(u_j);
                 // CGAL_Debug(2);
@@ -3874,15 +4104,29 @@ namespace wood_joint_lib
             case (4):
                 switch (id_representing_joint_name)
                 {
+                case (40):
+                    tt_e_p_0(jo, elements);
+                    break;
+                case (41):
+                    tt_e_p_1(jo, elements);
+                    break;
+                case (42):
+                    tt_e_p_2(jo, elements);
+                    break;
+                case (43):
+                    tt_e_p_3(jo, elements);
+                    break;
+                case (44):
+                    tt_e_p_4(jo, elements);
+                    break;
+                case (45):
+                    tt_e_p_5(jo, elements);
+                    break;
                 case (48):
                     side_removal(jo, elements);
                     break;
                 default:
-                    tt_e_p_0(jo);
-                    // is_joint_implemented = false;
-                    // std::cout << "ERROR: Joint type not implemented yet\n";
-                    //  break;
-                    // wood_joint_lib_xml::read_xml(jo, jo.type); // is it 0 or 12 ?
+                    tt_e_p_0(jo, elements);
                     break;
                 }
                 break;
@@ -3933,7 +4177,7 @@ namespace wood_joint_lib
             // std::cout << "b\n";
             // if (!is_joint_implemented)
             //     continue;
-
+    
             // CGAL_Debug(5);
 #ifdef DEBUG_JOINERY_LIBRARY
             printf("\nCPP   FILE %s    METHOD %s   LINE %i     WHAT %s ", __FILE__, __FUNCTION__, __LINE__, "after unique wood::joint create");
@@ -3959,7 +4203,7 @@ namespace wood_joint_lib
             {
                 wood::joint temp_joint;
                 jo.duplicate_geometry(temp_joint);
-                unique_joints.insert(std::pair<std::string, wood::joint>(key, temp_joint));
+                unique_joints.insert(std::pair<std::string, wood::joint>(jo.get_key(), temp_joint));
                 jo.orient_to_connection_area(); // and orient to connection volume
 
                 // special case for vidy only when joints must be merged
@@ -3974,6 +4218,7 @@ namespace wood_joint_lib
 #ifdef DEBUG_JOINERY_LIBRARY
             printf("\nCPP   FILE %s    METHOD %s   LINE %i     WHAT %s ", __FILE__, __FUNCTION__, __LINE__, "last");
 #endif
+            
         }
     }
 }
