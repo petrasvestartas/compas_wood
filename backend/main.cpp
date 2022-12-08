@@ -17,8 +17,53 @@ TEST(HelloTest, BasicAssertions)
 	EXPECT_EQ(7 * 6, 42);
 }
 
+//#include <polylabel/polylabel.h>
+#include <polylabel/cgal_polylabel.h>
 int main(int argc, char **argv)
 {
+
+	std::vector<CGAL_Polyline> polylines;
+
+	CGAL_Polyline p0{
+		IK::Point_3(-51.268164698738, 124.403259575835, 0),
+		IK::Point_3(-49.9053069162896, 125.207270883064, 0),
+		IK::Point_3(-49.2387999055025, 123.598641360433, 0),
+		IK::Point_3(-51.268164698738, 124.403259575835, 0),
+	};
+
+	CGAL_Polyline p1{
+		IK::Point_3(-80.6608706869908, 113.550451407233, 0),
+		IK::Point_3(-105.295437496349, 124.537127782527, 0),
+		IK::Point_3(-76.4480884206953, 152.30682138802, 0),
+		IK::Point_3(-23.6934094178782, 139.390066049447, 0),
+		IK::Point_3(-40.1282334662578, 100.282298806669, 0),
+		IK::Point_3(-69.6350088663798, 87.7972305312764, 0),
+		IK::Point_3(-74.8538706538141, 108.464053813429, 0),
+		IK::Point_3(-80.6608706869908, 113.550451407233, 0),
+	};
+
+	CGAL_Polyline p2{
+		IK::Point_3(-73.4808769486925, 119.997690099402, 0),
+		IK::Point_3(-90.6424155869293, 123.188472670033, 0),
+		IK::Point_3(-77.6978215210285, 136.742511096638, 0),
+		IK::Point_3(-73.4808769486925, 119.997690099402, 0),
+	};
+
+	polylines.push_back(p0);
+	polylines.push_back(p1);
+	polylines.push_back(p2);
+
+	std::tuple<IK::Point_3, IK::Plane_3, double> result = get_polylabel(polylines, 1.0);
+	std::cout << std::get<0>(result).hx() << " " << std::get<0>(result).hy() << " " << std::get<0>(result).hz() << std::endl;
+	std::cout << std::get<1>(result).orthogonal_vector().hx() << " " << std::get<1>(result).orthogonal_vector().hy() << " " << std::get<1>(result).orthogonal_vector().hz() << std::endl;
+	std::cout << std::get<2>(result) << std::endl;
+	// 	mapbox::geometry::polygon<double>
+	// 		polygon = {
+	// 			{{25.003161, 16.395586}, {0.368594, 27.382262}, {29.215943, 55.151956}, {81.970622, 42.2352}, {65.535798, 3.127433}, {36.029023, -9.357635}, {30.810161, 11.309188}},
+	// 			{{32.183155, 22.842825}, {15.021616, 26.033607}, {27.96621, 39.587646}}}; // Get polygon data from somewhere.
+	// std::array<double, 3> center_and_radius = mapbox::polylabel(polygon, 1.0);
+	// std::cout << center_and_radius[0] << "," << center_and_radius[1] << "," << center_and_radius[2] << std::endl;
+	return 0;
 
 	::testing::InitGoogleTest(&argc, argv);
 	RUN_ALL_TESTS();
@@ -30,10 +75,10 @@ int main(int argc, char **argv)
 	opengl_globals::shaders_folder = "C:\\IBOIS57\\_Code\\Software\\Python\\compas_wood\\backend\\src\\viewer\\shaders\\";
 	opengl_globals_geometry::add_grid();
 	opengl_render::render(wood_test::test_F_get_connection_zones_D_in_top_to_top_corner); // chapel_corner// chapel_one_layer // chapel_simple // chapel
-		// opengl_render::render(wood_test::test_F_three_valence_joint_addition_vidy_D_chapel); // chapel_corner// chapel_one_layer // chapel_simple // chapel
-		// opengl_render::render(wood_test::ss_e_op_4);
+	// opengl_render::render(wood_test::test_F_three_valence_joint_addition_vidy_D_chapel); // chapel_corner// chapel_one_layer // chapel_simple // chapel
+	// opengl_render::render(wood_test::ss_e_op_4);
 
-		return 0;
+	return 0;
 }
 
 // run ninja-> g++ main.cpp -o main

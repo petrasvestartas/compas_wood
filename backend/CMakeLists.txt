@@ -382,7 +382,7 @@ if (BUILD_MY_PROJECTS)
   "${CMAKE_SOURCE_DIR}/src/wood/include/wood_xml.cpp"
   "${CMAKE_SOURCE_DIR}/src/wood/include/cgal_mesh_boolean.cpp"
   "${CMAKE_SOURCE_DIR}/src/viewer/include/opengl/opengl_globals_geometry.cpp"
-   "${CMAKE_SOURCE_DIR}/src/viewer/include/opengl/opengl_globals.cpp"
+  "${CMAKE_SOURCE_DIR}/src/viewer/include/opengl/opengl_globals.cpp"
   
   ) 
   

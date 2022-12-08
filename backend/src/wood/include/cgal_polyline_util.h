@@ -335,15 +335,17 @@ namespace cgal_polyline_util
 
         // YAxis
         planeAxes[2] = CGAL::cross_product(planeAxes[3], planeAxes[1]);
+    }
 
-        // printf("%f", planeAxes[1].squared_length());
-        // printf("%f", planeAxes[2].squared_length());
-        // printf("%f", planeAxes[3].squared_length());
-        // printf("%f", CGAL::approximate_angle(planeAxes[1], planeAxes[2]));
-        // printf("%f", CGAL::approximate_angle(planeAxes[1], planeAxes[3]));
-        // printf("%f", CGAL::approximate_angle(planeAxes[2], planeAxes[3]));
+    inline void get_fast_plane(CGAL_Polyline &polyline, IK::Point_3 &center, IK::Plane_3 &plane)
+    {
+        // origin
+        center = polyline[0]; // IK::Vector_3(polyline[0].x(), polyline[0].y(), polyline[0].z());
 
-        // GetOrthonormalVectors(planeAxes[3], planeAxes[1], planeAxes[2]);
+        // plane
+        IK::Vector_3 average_normal;
+        cgal_vector_util::AverageNormal(polyline, average_normal);
+        plane = IK::Plane_3(center, average_normal);
     }
 
     inline bool LineTwoPlanes(IK::Segment_3 &line, IK::Plane_3 &plane0, IK::Plane_3 &plane1)
@@ -682,7 +684,7 @@ namespace cgal_polyline_util
             pline[0] = pline[pline.size() - 1];
     }
 
-    inline void extend_equally( IK::Segment_3 &segment,  double dist = 0, double proportion = 0)
+    inline void extend_equally(IK::Segment_3 &segment, double dist = 0, double proportion = 0)
     {
         if (dist == 0 && proportion == 0)
             return;
@@ -704,10 +706,7 @@ namespace cgal_polyline_util
             p1 += v * dist;
         }
 
-        segment = IK::Segment_3(p0,p1);
-
-
-
+        segment = IK::Segment_3(p0, p1);
     }
 
     inline void extend_equally(CGAL_Polyline &pline, int sID, double dist = 0, double proportion = 0, bool is_closed = true)
@@ -735,12 +734,14 @@ namespace cgal_polyline_util
         pline[sID] = p0;
         pline[sID + 1] = p1;
 
-        if(pline.size()>2){//not a line
-            if(is_closed){//user give, else you can compute the square distance
-                        if (sID == 0)
-                            pline[pline.size() - 1] = pline[0];
-                        else if ((sID + 1) == pline.size() - 1)
-                            pline[0] = pline[pline.size() - 1];
+        if (pline.size() > 2)
+        { // not a line
+            if (is_closed)
+            { // user give, else you can compute the square distance
+                if (sID == 0)
+                    pline[pline.size() - 1] = pline[0];
+                else if ((sID + 1) == pline.size() - 1)
+                    pline[0] = pline[pline.size() - 1];
             }
         }
     }
