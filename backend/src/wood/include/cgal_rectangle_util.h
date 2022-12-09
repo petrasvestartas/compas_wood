@@ -272,6 +272,7 @@ namespace cgal_rectangle_util
      */
     inline bool bounding_rectangle(CGAL_Polyline &polygon, CGAL_Polyline &result)
     {
+
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Orient polygon to 2D
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -374,4 +375,184 @@ namespace cgal_rectangle_util
         return true;
     }
 
+    /**
+     * @brief Calculate a grid of points inside a polygon
+     *
+     * @param [in] polygon input polyline
+     * @param [in] division_distance distance between points, if 0 the distance is calculated automatically
+     * @param [in] divisions number of divisions, if 0 the number of divisions is calculated automatically
+     * @param [out] points output points
+     * @return bool flag if the result is valid
+     */
+    inline bool grid_of_points_in_a_polygon(CGAL_Polyline &polygon, const double &division_distance, const double &divisions, std::vector<IK::Point_3> &points)
+    {
+
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Orient polygon to 2D
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        CGAL::Aff_transformation_3<IK> xform_to_xy, xform_to_xy_inv;
+        orient_polyline_to_xy_and_back(polygon, xform_to_xy, xform_to_xy_inv);
+        CGAL_Polyline polygon_copy = polygon;
+        cgal_polyline_util::Transform(polygon_copy, xform_to_xy);
+
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // calculate the convex hull
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        auto hull_points = quick_hull(polygon_copy);
+
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // check if no bounding box available
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        if (hull_points.size() <= 2)
+            return false;
+
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // foreach edge of the convex hull
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        IK::Point_2 p0(0, 0);
+        IK::Point_2 p1(0, 0);
+        CGAL::Iso_rectangle_2<IK> rectangle(p0, p1);
+        double min_angle = 0;
+
+        for (int i = 0; i < hull_points.size(); i++)
+        {
+
+            /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            // get polyline index
+            /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            auto next_index = i + 1;
+            auto current = hull_points[i];
+            auto next = hull_points[next_index % hull_points.size()];
+            auto segment = IK::Segment_3(current, next);
+
+            /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            // min / max points
+            /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            double top = -std::numeric_limits<double>::max();
+            double bottom = std::numeric_limits<double>::max();
+            double left = std::numeric_limits<double>::max();
+            double right = -std::numeric_limits<double>::max();
+
+            /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            // get angle of segment to x axis
+            /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            auto angle = internal::angle_to_xaxis(segment);
+
+            /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            // rotate every point and get min and max values for each direction
+            /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            for (auto &p : hull_points)
+            {
+                auto rotated_point = internal::rotate_to_xaxis(p, angle);
+
+                top = std::max(top, rotated_point.hy());
+                bottom = std::min(bottom, rotated_point.hy());
+                left = std::min(left, rotated_point.hx());
+                right = std::max(right, rotated_point.hx());
+            }
+
+            /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            // create a rectangle with the min and max values
+            /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            auto rectangle_temp = CGAL::Iso_rectangle_2<IK>(IK::Point_2(left, bottom), IK::Point_2(right, top));
+
+            // check if this is the first rectangle or if the current one is smaller
+            if (rectangle.is_degenerate() || rectangle_temp.area() < rectangle.area())
+            {
+                rectangle = rectangle_temp;
+                min_angle = angle;
+            }
+        }
+
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Get two rectangle segments for interpolation, rectangle is place on XY axis
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // std::array<IK::Segment_3, 2> two_sides = u_or_v ? std::array<IK::Segment_3, 2>{
+        //                                                       IK::Segment_3(
+        //                                                           IK::Point_3(rectangle.min().hx(), rectangle.min().hy(), 0),
+        //                                                           IK::Point_3(rectangle.min().hx(), rectangle.max().hy(), 0)),
+        //                                                       IK::Segment_3(
+        //                                                           IK::Point_3(rectangle.max().hx(), rectangle.min().hy(), 0),
+        //                                                           IK::Point_3(rectangle.max().hx(), rectangle.max().hy(), 0))}
+        //                                                 : std::array<IK::Segment_3, 2>{IK::Segment_3(IK::Point_3(rectangle.min().hx(), rectangle.max().hy(), 0), IK::Point_3(rectangle.max().hx(), rectangle.max().hy(), 0)), IK::Segment_3(IK::Point_3(rectangle.min().hx(), rectangle.min().hy(), 0), IK::Point_3(rectangle.max().hx(), rectangle.min().hy(), 0))};
+
+        IK::Point_2 center_of_rect_2 = CGAL::midpoint(rectangle.min(), rectangle.max());
+        IK::Point_3 center_of_rect(center_of_rect_2.hx(), center_of_rect_2.hy(), 0);
+        IK::Vector_3 half_dir_u((rectangle.max().hx() - rectangle.min().hx()) * 0.5, 0, 0);
+        IK::Vector_3 half_dir_v(0, (rectangle.max().hy() - rectangle.min().hy()) * 0.5, 0);
+
+        // std::cout << rectangle.min().hx() << " " << rectangle.min().hy() << " " << 0 << std::endl;
+        // std::cout << rectangle.max().hx() << " " << rectangle.max().hy() << " " << 0 << std::endl;
+
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // number of divisions
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        int divisions_u, divisions_v;
+        if (division_distance != 0)
+        {
+            divisions_u = std::min(15.0, std::floor(std::sqrt(half_dir_u.squared_length()) / division_distance));
+            divisions_v = std::min(15.0, std::floor(std::sqrt(half_dir_v.squared_length()) / division_distance));
+        } 
+        else
+        {
+
+            // when divisions are given instead of division distance
+            double smaller_edge_dist = std::min(std::sqrt(half_dir_u.squared_length()), std::sqrt(half_dir_v.squared_length()));
+            double division_distance = smaller_edge_dist / (divisions * 2);
+            divisions_u = divisions_v = divisions;
+            std::cout << smaller_edge_dist << " " << division_distance << " " << divisions << " " << divisions_u << " " << divisions_v << std::endl;
+        }
+
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // change magnitue of u and v vector to the division_sitance
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        half_dir_u = IK::Vector_3(division_distance, 0, 0);
+        half_dir_v = IK::Vector_3(0, division_distance, 0);
+        // std::cout << divisions_u << " " << divisions_v << std::endl;
+
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // move the middle point bottom left corner
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        center_of_rect -= (half_dir_u * divisions_u + half_dir_v * divisions_v);
+        // std::cout << center_of_rect.hx() << " " << center_of_rect.hy() << " " << center_of_rect.hz() << std::endl;
+
+        /////////////////////////////////////////////////////////////////////////////////////
+        // Convert polygon to Clipper
+        /////////////////////////////////////////////////////////////////////////////////////
+        Clipper2Lib::Path64 polyline_clipper(polygon_copy.size() - 1);
+
+        for (int i = 0; i < polygon_copy.size() - 1; i++)
+            polyline_clipper[i] = Clipper2Lib::Point64((int)(polygon_copy[i].x() * 1e6), (int)(polygon_copy[i].y() * 1e6));
+
+        /////////////////////////////////////////////////////////////////////////////////////
+        // Convert to Clipper
+        /////////////////////////////////////////////////////////////////////////////////////
+
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // add points and cull them
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        std::vector<IK::Point_3> result;
+        result.reserve((divisions_u * 2 + 1) * (divisions_v * 2 + 1));
+        for (int i = 0; i < divisions_u * 2 + 1; i++)
+        {
+            for (int j = 0; j < divisions_v * 2 + 1; j++)
+            {
+                IK::Point_3 p = center_of_rect + half_dir_u * i + half_dir_v * j;
+
+                // Convert to clipper and check point inclusion
+                Clipper2Lib::Point64 point_clipper((int)(p.x() * 1e6), (int)(p.y() * 1e6));
+                if (Clipper2Lib::PointInPolygonResult::IsInside == Clipper2Lib::PointInPolygon(point_clipper, polyline_clipper))
+                {
+                    //
+                    // rotate and orient to 3D
+                    p = internal::rotate_to_xaxis(p, -min_angle);
+                    p = p.transform(xform_to_xy_inv);
+                    result.emplace_back(p);
+                    std::cout << p.x() << " " << p.y() << " " << p.z() << std::endl;
+                }
+            }
+        }
+
+        return true;
+    }
 }
