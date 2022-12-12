@@ -59,7 +59,7 @@ namespace cgal_polylabel
      * @param precision precision, the smaller the number the less precise the result, default 1.0
      * @return a tuple that represents the circle (center, plane, radius)
      */
-    std::tuple<IK::Point_3, IK::Plane_3, double> get_polylabel(std::vector<CGAL_Polyline> polylines, double precision = 1.0)
+    std::tuple<IK::Point_3, IK::Plane_3, double> get_polylabel(std::vector<CGAL_Polyline> &polylines, double precision = 1.0)
     {
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -131,5 +131,66 @@ namespace cgal_polylabel
         // Output
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         return std::tuple<IK::Point_3, IK::Plane_3, double>(center, plane, center_and_radius[2]);
+    }
+
+    namespace internal
+    {
+        /**
+         * create point in a circle
+         * the first four inputs are needed to orient the points in 3d
+         * WARNING user must not use this method - this method is used by get_polylabel_circle_division_points method
+         * @param [in] origin plane origin
+         * @param [in] x_axis plane x axis
+         * @param [in] y_axis plane y axis
+         * @param [in] z_axis plane z axis
+         * @param [out] points point divisions
+         * @param [in] number_of_chunks circle divisions
+         * @param [in] radius circle radius
+         */
+        inline void circle_points(const IK::Vector_3 &origin, const IK::Vector_3 &x_axis, const IK::Vector_3 &y_axis, const IK::Vector_3 &z_axis, std::vector<IK::Point_3> &points, int number_of_chunks = 4, double radius = 150)
+        {
+
+            double pi_to_radians = 3.14159265358979323846 / 180.0;
+            double degrees = 0; // <-- correction
+            double chunk_angle = 360 / number_of_chunks;
+            std::vector<IK::Point_3> points;
+            points.reserve(number_of_chunks);
+            CGAL::Aff_transformation_3<IK> xy_to_plane = cgal_xform_util::XYToPlane(origin, x_axis, y_axis, z_axis);
+
+            for (int i = 0; i < number_of_chunks; i++)
+            {
+                degrees = i * chunk_angle;                // <-- correction
+                float radian = (degrees * pi_to_radians); // <-- correction
+                IK::Point_3 p(radius * cos(radian), radius * sin(radian), 0);
+                p = p.transform(xy_to_plane);
+                points.emplace_back(p);
+                // std::cout<< "x -> " << x_p[i] << "y -> " << y_p[i] << "\n";
+            }
+        }
+    }
+
+    /**
+     * get points inscribed in a polylable circle
+     * @param [in] division_direction_in_3d division direction
+     * @param [in] polylines list of polylines that representes the input polylines for the polylabel algorithm
+     * @param [out] points division points
+     * @param [in] division number of points
+     * @param [in] precision tolerance for the polylabel algorithm
+     */
+    inline void get_polylabel_circle_division_points(IK::Vector_3 &division_direction_in_3d, std::vector<CGAL_Polyline> &polylines, std::vector<IK::Point_3> &points, int division = 2, double precision = 1.0)
+    {
+        // run the polylabel algorithm
+        std::tuple<IK::Point_3, IK::Plane_3, double> circle = get_polylabel(polylines, precision);
+        IK::Vector_3 center(std::get<0>(circle).hx(), std::get<0>(circle).hy(), std::get<0>(circle).hz());
+
+        // get the circle plane, with alignment to the division direction if the direction is valid
+        bool is_direction_valid = division_direction_in_3d.hx() != 0.0 && division_direction_in_3d.hy() != 0.0 && division_direction_in_3d.hz() != 0.0;
+        IK::Vector_3 x_axis = is_direction_valid ? division_direction_in_3d : std::get<1>(circle).base1();
+        IK::Vector_3 y_axis = is_direction_valid ? CGAL::cross_product(division_direction_in_3d, std::get<1>(circle).orthogonal_vector()) : std::get<1>(circle).base2();
+        IK::Vector_3 z_axis = std::get<1>(circle).orthogonal_vector();
+
+        // run the division method
+        std::vector<IK::Point_3> points;
+        internal::circle_points(center, x_axis, y_axis, z_axis, points, division, std::get<2>(circle));
     }
 }

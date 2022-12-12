@@ -384,7 +384,7 @@ namespace cgal_rectangle_util
      * @param [out] points output points
      * @return bool flag if the result is valid
      */
-    inline bool grid_of_points_in_a_polygon(CGAL_Polyline &polygon, const double &division_distance, const double &divisions, std::vector<IK::Point_3> &points)
+    inline bool grid_of_points_in_a_polygon(CGAL_Polyline &polygon, const double &division_distance, std::vector<IK::Point_3> &points) // const double &divisions,
     {
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -488,20 +488,20 @@ namespace cgal_rectangle_util
         // number of divisions
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         int divisions_u, divisions_v;
-        if (division_distance != 0)
-        {
-            divisions_u = std::min(15.0, std::floor(std::sqrt(half_dir_u.squared_length()) / division_distance));
-            divisions_v = std::min(15.0, std::floor(std::sqrt(half_dir_v.squared_length()) / division_distance));
-        } 
-        else
-        {
+        // if (division_distance != 0)
+        //{
+        divisions_u = std::min(15.0, std::floor(std::sqrt(half_dir_u.squared_length()) / division_distance));
+        divisions_v = std::min(15.0, std::floor(std::sqrt(half_dir_v.squared_length()) / division_distance));
+        //}
+        // else
+        // {
 
-            // when divisions are given instead of division distance
-            double smaller_edge_dist = std::min(std::sqrt(half_dir_u.squared_length()), std::sqrt(half_dir_v.squared_length()));
-            double division_distance = smaller_edge_dist / (divisions * 2);
-            divisions_u = divisions_v = divisions;
-            std::cout << smaller_edge_dist << " " << division_distance << " " << divisions << " " << divisions_u << " " << divisions_v << std::endl;
-        }
+        //     // when divisions are given instead of division distance
+        //     double smaller_edge_dist = std::min(std::sqrt(half_dir_u.squared_length()), std::sqrt(half_dir_v.squared_length()));
+        //     double division_distance = smaller_edge_dist / (divisions * 2);
+        //     divisions_u = divisions_v = divisions;
+        //     std::cout << smaller_edge_dist << " " << division_distance << " " << divisions << " " << divisions_u << " " << divisions_v << std::endl;
+        // }
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // change magnitue of u and v vector to the division_sitance

@@ -1,6 +1,6 @@
 #pragma once
-//#include "../../stdafx.h"
-//#include "cgal_vector_util.h"
+// #include "../../stdafx.h"
+// #include "cgal_vector_util.h"
 
 namespace cgal_xform_util
 {
@@ -169,8 +169,8 @@ namespace cgal_xform_util
     // https://stackoverflow.com/questions/23270292/a-point-cgal-transformation-between-two-coordinate-systems
     // https://github.com/mcneel/opennurbs/blob/7.x/opennurbs_xform.cpp Line1960
     inline CGAL::Aff_transformation_3<IK> PlaneToPlane(
-        IK::Vector_3 O0, IK::Vector_3 X0, IK::Vector_3 Y0, IK::Vector_3 Z0,
-        IK::Vector_3 O1, IK::Vector_3 X1, IK::Vector_3 Y1, IK::Vector_3 Z1)
+        const IK::Vector_3 &O0, const IK::Vector_3 &X0, const IK::Vector_3 &Y0, const IK::Vector_3 &Z0,
+        const IK::Vector_3 &O1, const IK::Vector_3 &X1, const IK::Vector_3 &Y1, const IK::Vector_3 &Z1)
     {
         // transformation maps P0 to P1, P0+X0 to P1+X1, ...
 
@@ -217,6 +217,11 @@ namespace cgal_xform_util
             Z0.x(), Z0.y(), Z0.z());
 
         return F0 * T0;
+    }
+
+    inline CGAL::Aff_transformation_3<IK> XYToPlane(const IK::Vector_3 &O1, const IK::Vector_3 &X1, const IK::Vector_3 &Y1, const IK::Vector_3 &Z1)
+    {
+        return PlaneToPlane(IK::Vector_3(0, 0, 0), IK::Vector_3(1, 0, 0), IK::Vector_3(0, 1, 0), IK::Vector_3(0, 0, 1), O1, X1, Y1, Z1);
     }
 
     inline CGAL::Aff_transformation_3<IK> Scale(double x, double y, double z)
