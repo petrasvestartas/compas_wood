@@ -153,7 +153,6 @@ namespace cgal_polylabel
             double pi_to_radians = 3.14159265358979323846 / 180.0;
             double degrees = 0; // <-- correction
             double chunk_angle = 360 / number_of_chunks;
-            std::vector<IK::Point_3> points;
             points.reserve(number_of_chunks);
             CGAL::Aff_transformation_3<IK> xy_to_plane = cgal_xform_util::XYToPlane(origin, x_axis, y_axis, z_axis);
 
@@ -190,7 +189,6 @@ namespace cgal_polylabel
         IK::Vector_3 z_axis = std::get<1>(circle).orthogonal_vector();
 
         // run the division method
-        std::vector<IK::Point_3> points;
         internal::circle_points(center, x_axis, y_axis, z_axis, points, division, std::get<2>(circle));
     }
 }

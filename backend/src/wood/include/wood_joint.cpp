@@ -88,23 +88,32 @@ namespace wood
 
     std::string joint::get_key()
     {
-        if (key == "")
+        if (this->key == "") //|| this->key.size() == 0
         {
+            // std::cout << "key is empty" << std::endl;
             std::string key_0 = name;
             std::string key_1 = std::to_string((shift + 0.000000001));
             key_1 = key_1.substr(0, key_1.find(".") + 3);
             std::string key_2 = std::to_string((divisions + 0.000000001));
             key_2 = key_2.substr(0, key_2.find(".") + 3);
             std::string joining = ";";
-            std::string key;
 
-            key.reserve(key_0.size() + joining.size() + key_1.size() + joining.size() + key_2.size() + 1);
-            key += key_0;
-            key += joining;
-            key += key_1;
-            key += joining;
-            key += key_2;
+            this->key.reserve(key_0.size() + joining.size() + key_1.size() + joining.size() + key_2.size() + 1);
+            this->key += key_0;
+            this->key += joining;
+            this->key += key_1;
+            this->key += joining;
+            this->key += key_2;
+            // std::cout << key ;
         }
+        else
+        {
+            // std::cout << "key is not empty " << key.size() << std::endl;
+        }
+        // else
+        // {
+        //     std::cout << "key is not empty" << std::endl;
+        // }
 
         // std::stringstream ss;
         // ss << key_0 << key_1 << key_2;
@@ -114,7 +123,7 @@ namespace wood
         // printf("\n%s", key_1);
         // printf("\n%s", key_2);
         // printf("\n%s\n", key.c_str());
-
+        // std::cout << " key size " << key.size() << std::endl;
         return key;
     }
 

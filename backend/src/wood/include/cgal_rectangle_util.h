@@ -380,7 +380,6 @@ namespace cgal_rectangle_util
      *
      * @param [in] polygon input polyline
      * @param [in] division_distance distance between points, if 0 the distance is calculated automatically
-     * @param [in] divisions number of divisions, if 0 the number of divisions is calculated automatically
      * @param [out] points output points
      * @return bool flag if the result is valid
      */
@@ -548,7 +547,7 @@ namespace cgal_rectangle_util
                     p = internal::rotate_to_xaxis(p, -min_angle);
                     p = p.transform(xform_to_xy_inv);
                     result.emplace_back(p);
-                    std::cout << p.x() << " " << p.y() << " " << p.z() << std::endl;
+                    // std::cout << p.x() << " " << p.y() << " " << p.z() << std::endl;
                 }
             }
         }

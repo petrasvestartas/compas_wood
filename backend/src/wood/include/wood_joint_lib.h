@@ -1,5 +1,5 @@
 #pragma once
-//#include "../../stdafx.h"
+// #include "../../stdafx.h"
 #include "wood_joint.h"
 
 namespace wood_joint_lib_xml
@@ -3944,9 +3944,10 @@ namespace wood_joint_lib
             // CGAL_Debug(id_representing_joint_name);
             // is_similar_joint = false;
             // std::cout << "_joint id: " << jo.id << " " << unique_joints.count(key) << " " << key << std::endl;
+            // std::cout << "key " << jo.get_key() << "links " << jo.linked_joints.size() << std::endl;
             if (is_similar_joint && jo.linked_joints.size() == 0) // skip linked joints, that must be regenerated each time, currently there is no solution to optimize this further due to 4 valence joints
             {
-                std::cout << "wood_joint_lib -> skipping joint \n";
+                // std::cout << "wood_joint_lib -> skipping joint \n";
                 auto u_j = unique_joints.at(jo.get_key());
                 // CGAL_Debug(1);
                 jo.transfer_geometry(u_j);
@@ -4177,7 +4178,7 @@ namespace wood_joint_lib
             // std::cout << "b\n";
             // if (!is_joint_implemented)
             //     continue;
-    
+
             // CGAL_Debug(5);
 #ifdef DEBUG_JOINERY_LIBRARY
             printf("\nCPP   FILE %s    METHOD %s   LINE %i     WHAT %s ", __FILE__, __FUNCTION__, __LINE__, "after unique wood::joint create");
@@ -4218,7 +4219,6 @@ namespace wood_joint_lib
 #ifdef DEBUG_JOINERY_LIBRARY
             printf("\nCPP   FILE %s    METHOD %s   LINE %i     WHAT %s ", __FILE__, __FUNCTION__, __LINE__, "last");
 #endif
-            
         }
     }
 }
