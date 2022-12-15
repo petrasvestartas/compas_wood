@@ -26,7 +26,6 @@ namespace wood_test
 
     void test_F_get_connection_zones_D_in_top_to_top_corner();
 
-
     void test_F_three_valence_joint_addition_vidy_D_chapel_corner();
 
     void test_F_three_valence_joint_addition_vidy_D_chapel_one_layer();
@@ -36,6 +35,8 @@ namespace wood_test
     void test_F_three_valence_joint_addition_vidy_D_chapel();
 
     void ss_e_op_4();
+
+    void beam_node_0();
 }
 
 #endif // WOOD_TEST_H

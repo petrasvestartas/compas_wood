@@ -1010,4 +1010,141 @@ namespace wood_test
         input_polyline_pairs1.emplace_back(joint.f[1]);
         viewer_wood::add(input_polyline_pairs1, 2); // grey
     }
+
+    void beam_node_0()
+    {
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Input for the Main Method
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        // global inputs
+        wood_globals::joint_line_extension = 0;
+        // wood_globals::limit_min_joint_length = 140;
+        //  function inputs
+        bool simple_case = false;
+        wood_xml::path_and_file_for_input_polylines = wood_globals::data_set_input_folder + "in_beam_node_0.xml";
+        std::vector<std::vector<IK::Point_3>> input_polyline_axes;
+        wood_xml::read_xml_polylines(input_polyline_axes, simple_case);
+
+        std::vector<double> joint_types = wood_globals::joint_types;
+        joint_types[1 * 3 + 0] = 150; // division_length
+        int search_type = 0;
+        int output_type = wood_globals::output_geometry_type; // 0 - Plate outlines 1 - joint lines 2 - joint volumes 3 - joint geometry 4 - merge
+        // std::cout << "\n output_type " << output_type << "\n";
+        std::vector<double> scale = {1, 1, 1};
+        std::vector<std::vector<IK::Vector_3>> input_insertion_vectors{};
+        std::vector<std::vector<int>> input_joint_types{};
+        // std::vector<std::vector<int>> input_three_valence_element_indices_and_instruction = {{1}, {16, 10, 11, 17}};
+        std::vector<std::vector<int>> input_three_valence_element_indices_and_instruction = {};
+
+        std::vector<int> input_adjacency = {};
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Main Method of Wood
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        std::vector<std::vector<double>> polylines_segment_radii;
+        std::vector<std::vector<IK::Vector_3>> polylines_segment_direction;
+        for (int i = 0; i < input_polyline_axes.size(); i++)
+        {
+            std::vector<double> polyline_segment_radii;
+            // std::vector<IK::Vector_3> polyline_segment_direction;
+            for (int j = 0; j < input_polyline_axes[i].size(); j++)
+            {
+                polyline_segment_radii.emplace_back(150);
+                // polyline_segment_direction.emplace_back(0.037013, 0.909575, 0.413887);
+            }
+            polylines_segment_radii.emplace_back(polyline_segment_radii);
+            // polylines_segment_direction.emplace_back(polyline_segment_direction);
+        }
+
+        std::vector<int> allowed_types{1};
+
+        double min_distance = 20;
+        double volume_length = 500;
+        double cross_or_side_to_end = 0.91;
+        int flip_male = 1;
+
+        // output of wood::joint areas
+        std::vector<std::array<int, 4>> polyline0_id_segment0_id_polyline1_id_segment1_id;
+        std::vector<std::array<IK::Point_3, 2>> point_pairs;
+        std::vector<std::array<CGAL_Polyline, 4>> volume_pairs;
+        std::vector<CGAL_Polyline> joints_areas;
+        std::vector<int> joints_types;
+
+        // Global Parameters and output wood::joint selection and orientation
+        std::vector<std::vector<CGAL_Polyline>> output_plines;
+        std::vector<std::vector<wood_cut::cut_type>> output_types;
+        bool compute_joints;
+        double division_distance;
+        double shift;
+        bool use_eccentricities_to_scale_joints;
+
+        wood_main::beam_volumes(
+            input_polyline_axes,
+            polylines_segment_radii,
+            polylines_segment_direction,
+            allowed_types,
+            min_distance,
+            volume_length,
+            cross_or_side_to_end,
+            flip_male,
+            // output of wood::joint areas
+            polyline0_id_segment0_id_polyline1_id_segment1_id,
+            point_pairs,
+            volume_pairs,
+            joints_areas,
+            joints_types,
+            // Global Parameters and output wood::joint selection and orientation
+            joint_types,
+            output_plines,
+            output_types,
+            compute_joints,
+            division_distance,
+            shift,
+            output_type,
+            use_eccentricities_to_scale_joints);
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Export
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        wood_xml::path_and_file_for_output_polylines = wood_globals::data_set_output_file;
+        output_plines.clear();
+        for (auto &pline : volume_pairs)
+            for (int j = 0; j < 4; j++)
+                output_plines.emplace_back(std::vector<CGAL_Polyline>{pline[j]});
+
+        wood_xml::write_xml_polylines_and_types(output_plines, output_types);
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Display
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        opengl_globals_geometry::add_grid();
+        viewer_wood::line_thickness = 2;
+
+        switch (output_type)
+        {
+        case (0):
+            viewer_wood::add(input_polyline_axes); // grey
+            viewer_wood::add_areas(joints_areas);
+            break;
+        case (2):
+            viewer_wood::add(input_polyline_axes); // grey
+            viewer_wood::add(volume_pairs);
+            break;
+        case (1):
+        case (3):
+            viewer_wood::add(input_polyline_axes); // grey
+            viewer_wood::line_thickness = 3;
+            viewer_wood::add(output_plines, 0); // grey
+            break;
+
+        case (4):
+
+            viewer_wood::line_thickness = 3;
+            viewer_wood::add(output_plines, 3);   // grey
+            viewer_wood::add_loft(output_plines); // grey
+            break;
+        }
+    }
+
 }

@@ -1088,7 +1088,7 @@ namespace wood_main
                             // compute bounding-rectangle around the "joint_area"
                             // move the bounding-rectangle up and down by the element thickness
                             // contruct joint_volumes_pairA_pairB from the rectangles and assign them
-                            //std::cout << "wood_main -> top-to-top not implemented \n";
+                            // std::cout << "wood_main -> top-to-top not implemented \n";
                             type = 40;
 
                             // this has to become a function
@@ -2777,9 +2777,9 @@ namespace wood_main
 #ifdef DEBUG
         printf("CPP get_joints_geometry\n");
 #endif
-
-        wood::joint jj;
-        wood_joint_lib_xml::read_xml(jj, 0);
+        // std::cout << output_plines.size() << std::endl;
+        //  wood::joint jj;
+        //  wood_joint_lib_xml::read_xml(jj, 0);
     }
 
 #pragma endregion

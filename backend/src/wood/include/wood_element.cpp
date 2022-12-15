@@ -87,16 +87,23 @@ namespace wood
                           //     output[this->id].emplace_back(this->polylines[1]); //cut
                           // }
                 {
+
                     CGAL_Polyline joint_area(joints[std::get<0>(j_mf[i][j])].joint_area);
-                    IK::Vector_3 plane[4];
-                    cgal_polyline_util::AveragePlane(joint_area, plane);
-                    IK::Point_3 origin(plane[0].hx(), plane[0].hy(), plane[0].hz());
-                    IK::Point_3 center = cgal_polyline_util::Center(this->polylines[0]);
-                    IK::Point_3 p0 = origin + plane[3];
-                    IK::Point_3 p1 = origin - plane[3];
-                    if (CGAL::has_smaller_distance_to_point(center, p0, p1))
+                    if (this->polylines.size() > 0)
                     {
-                        std::reverse(joint_area.begin(), joint_area.end());
+                        IK::Vector_3 plane[4];
+                        cgal_polyline_util::AveragePlane(joint_area, plane);
+                        IK::Point_3 origin(plane[0].hx(), plane[0].hy(), plane[0].hz());
+
+                        IK::Point_3 center = cgal_polyline_util::Center(this->polylines[0]);
+                        std::cout << this->polylines.size() << std::endl;
+                        IK::Point_3 p0 = origin + plane[3];
+                        IK::Point_3 p1 = origin - plane[3];
+
+                        if (CGAL::has_smaller_distance_to_point(center, p0, p1))
+                        {
+                            std::reverse(joint_area.begin(), joint_area.end());
+                        }
                     }
                     output[this->id].emplace_back(joint_area);
                     break;
@@ -919,9 +926,9 @@ namespace wood
         // CGAL_Debug(pline0_new);
         // CGAL_Debug(pline1_new);
 
-        //#ifdef DEBUG_wood_ELEMENT
-        //    printf("\nCPP   FILE %s    METHOD %s   LINE %i     WHAT %s ", __FILE__, __FUNCTION__, __LINE__, "Close ");
-        //#endif
+        // #ifdef DEBUG_wood_ELEMENT
+        //     printf("\nCPP   FILE %s    METHOD %s   LINE %i     WHAT %s ", __FILE__, __FUNCTION__, __LINE__, "Close ");
+        // #endif
 
         ///////////////////////////////////////////////////////////////////////////////
         // Add loose elements from top and bottom outlines also

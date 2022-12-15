@@ -96,8 +96,9 @@ int main(int argc, char **argv)
 	opengl_globals::shaders_folder = "C:\\IBOIS57\\_Code\\Software\\Python\\compas_wood\\backend\\src\\viewer\\shaders\\";
 	opengl_globals_geometry::add_grid();
 	// opengl_render::render(wood_test::test_F_get_connection_zones_D_in_top_to_top_corner); // chapel_corner// chapel_one_layer // chapel_simple // chapel
-	opengl_render::render(wood_test::test_F_three_valence_joint_addition_vidy_D_chapel_one_layer); // chapel_corner// chapel_one_layer // chapel_simple // chapel
+	// opengl_render::render(wood_test::test_F_three_valence_joint_addition_vidy_D_chapel_one_layer); // chapel_corner// chapel_one_layer // chapel_simple // chapel
 	// opengl_render::render(wood_test::ss_e_op_4);
+	opengl_render::render(wood_test::beam_node_0);
 
 	return 0;
 }
