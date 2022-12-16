@@ -1,15 +1,42 @@
 # Project for Generating Timber Joints
-Documentation: https://ibois-epfl.github.io/compas_wood/latest/
 
 Author: [Petras Vestartas](https://petrasvestartas.com/About-Petras-Vestartas)
 
 ## :small_red_triangle: Under-construction to-do list :small_red_triangle:
 
-```[tasklist]
-### Tasks
-- [ ] aa
-- [ ] Draft issue title
-```
+### 01 2023 - finalization of joinery methods (top-to-top, clip joint, multi-butterfly connections)
+
+#### top-to-top 
+- [x] single point drill
+- [ ] line drill
+- [x] circle (polylabel) drill
+- [ ] smooth drill
+- [x] hatch drill
+#### clip
+- [ ] take tenon-mortise and adapt to the clipper geometry
+#### multi-butterfly
+- [ ] replicate the joint n-times
+
+### 02 2023 - finalization of beam-panel model integration
+- [ ] continue the model based on " beam_node_0.cpp -> beam_node_0 " , currently only connection areas are generated, but not the joint volumes
+- [ ] separate connection area detection into 3 steps a) cross, b) end-to-end, c) side-to-end
+- [ ] display connection area by type color
+
+### 03 2023 - C++ unit tests from the collected study cases, wrapping the code to pybind11
+- [ ] transfer all NGon joinery tests to this one " beam_node_0.cpp " and write Google Tests
+- [ ] try to clean up the python code that builds correctly, including the documentaion
+- [ ] wrap the two major methods to pybind11
+
+### 04 2023 - documentation, pytest, conda packaging
+- [ ] document how to set up all unit tests
+- [ ] create pytests that are the same as GoogleTests
+- [ ] publish conda package -> meeting with Tom
+
+### 05 2023 - update of the Rhino3D, Grasshopper version, compatibility check with Windows, Mac and Linux
+- [ ] develop a Grasshopper plugin that is completely python based
+- [ ] check compatibility with MAC
+- [ ] check compatibility with Linux
+
 
 
 ## Interface compas_wood
