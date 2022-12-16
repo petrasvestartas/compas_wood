@@ -3,7 +3,7 @@ Documentation: https://ibois-epfl.github.io/compas_wood/latest/
 
 Author: [Petras Vestartas](https://petrasvestartas.com/About-Petras-Vestartas)
 
-## to-do list
+## :small_red_triangle: Under-construction to-do list :small_red_triangle:
 
 ```[tasklist]
 ### Tasks
