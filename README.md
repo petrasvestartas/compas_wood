@@ -19,6 +19,7 @@ Author: [Petras Vestartas](https://petrasvestartas.com/About-Petras-Vestartas)
 
 ### 02 2023 - finalization of beam-panel model integration
 - [ ] continue the model based on " beam_node_0.cpp -> beam_node_0 " , currently only connection areas are generated, but not the joint volumes
+- [ ] use for tests already implemented mesh boolean difference method
 - [ ] separate connection area detection into 3 steps a) cross, b) end-to-end, c) side-to-end
 - [ ] display connection area by type color
 
