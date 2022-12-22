@@ -1,12 +1,18 @@
 # compas_wood backend
 
-This is a test case
+## Commit PREFIX rules
+* ADD "" - new feature
+* FIX "" - bug fix
+* DOC "" - documentation
+* TEST "" - tests
+* TUT "" - tutorials
+* MISC "" - unknown
 
 # git 
 
-Add files to the repository
+## Add files to the repository
 ```
-git add .
+git add --all
 git commit -m "..."
 git push origin backend
 ```
