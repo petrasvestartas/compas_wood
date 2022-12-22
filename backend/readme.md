@@ -105,3 +105,66 @@ Show all the branches:
 ```
 git branch --show-current
 ```
+
+## cpp intellisence
+
+``` json
+{
+    "configurations": [
+        {
+            "browse": {
+                "databaseFilename": "",
+                "limitSymbolsToIncludedHeaders": true
+            },
+            "includePath": [
+                "C:/IBOIS57/_Code/Software/Python/compas_wood/backend/",
+                "C:/IBOIS57/_Code/Software/Python/compas_wood/backend/src/viewer/include/",
+                "C:/IBOIS57/_Code/Software/Python/compas_wood/backend/src/viewer/include/",
+                "C:/IBOIS57/_Code/Software/Python/compas_wood/backend/src/viewer/include/cdt/",
+                "C:/IBOIS57/_Code/Software/Python/compas_wood/backend/src/viewer/include/imgui/",
+                "C:/IBOIS57/_Code/Software/Python/compas_wood/backend/src/viewer/include/opengl/",
+                "C:/IBOIS57/_Code/Software/Python/compas_wood/backend/src/viewer/include/pipe/",
+                "C:/IBOIS57/_Code/Software/Python/compas_wood/backend/src/viewer/include/ply/",
+                "C:/IBOIS57/_Code/Software/Python/compas_wood/backend/src/viewer/include/stb/",
+                "C:/IBOIS57/_Code/Software/Python/compas_wood/backend/src/wood/include/",
+                "C:/IBOIS57/_Code/Software/Python/compas_wood/backend/src/nest/",
+                "C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/install/cdt/CDT/include/",
+                "C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/install/clipper_2/CPP/Clipper2Lib/include/",
+                "C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/install/imgui/",
+                "C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/install/imgui/backends/",
+                "C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/install/glfw/include/",
+                "C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/install/glad/include/",
+                "C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/install/glm/",
+                "C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/install/glm/glm/",
+                "C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/install/glm/glm/detail/",
+                "C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/install/glm/glm/ext/",
+                "C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/install/glm/glm/gtc/",
+                "C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/install/glm/glm/gtx/",
+                "C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/install/glm/glm/simd/",
+                "C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/install/assimp/include/",
+                "C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/install/cgal/include/",
+                "C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/install/eigen/Eigen/",
+                "C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/install/eigen/",
+                "C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/install/boost/include/boost-1_78/",
+                "C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/install/googletest/include/",
+                "C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/install/googletest/include/gtest/",
+                "C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/install/googletest/include/gtest/internal/",
+                "C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/install/googletest/include/gtest/custom/",
+                "C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/install/googletest/include/gmock/",
+                "C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/install/googletest/include/gmock/internal/",
+                "C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/install/googletest/include/gmock/custom/"
+            ],
+            "name": "wood_config",
+            "intelliSenseMode": "gcc-x64",
+            "compilerPath": "C:\\Ninja\\ninja.exe",
+            "cStandard": "c17",
+            "cppStandard": "c++20",
+            "compilerArgs": [
+                ""
+            ],
+            "configurationProvider": "ms-vscode.makefile-tools"
+        }
+    ],
+    "version": 4
+}
+```
