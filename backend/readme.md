@@ -1,8 +1,8 @@
 # compas_wood backend
 
-# CMAKE
+## CMAKE
 
-## Superbuild
+### Superbuild
 
 ```cmake
 ##### Step 1: Create a build directory and cd into it
@@ -25,9 +25,9 @@
 
 
 
-# GIT 
+## GIT 
 
-## Commit PREFIX rules
+### Commit PREFIX rules
 
 ```
 ADD "" - new feature
@@ -38,14 +38,14 @@ TUT "" - tutorials
 MISC "" - unknown
 ```
 
-## Add files to the repository
+### Add files to the repository
 ```
 git add --all
 git commit -m "..."
 git push origin backend
 ```
 
-## git branch
+### git branch
 
 To create a new branch and switch to it at the same time:
 ```
@@ -62,9 +62,9 @@ Show all the branches:
 git branch --show-current
 ```
 
-# VISUAL STUDIO CODE
+## VISUAL STUDIO CODE
 
-## tasks
+### tasks
 
 ```json
 {
@@ -118,7 +118,7 @@ git branch --show-current
 
 ```
 
-## c_cpp_properties
+### c_cpp_properties
 
 ``` json
 {
