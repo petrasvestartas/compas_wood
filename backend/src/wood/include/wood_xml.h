@@ -18,9 +18,9 @@ extern std::string path_and_file_for_output_polylines_simple_case ;
 
     bool read_xml_numbers(std::vector<std::vector<double>> &numbers);
 
-    bool read_xml_polylines(std::vector<std::vector<IK::Point_3>> &polylines, bool simple_case = false);
+    bool read_xml_polylines(std::vector<std::vector<IK::Point_3>> &polylines, const bool& simple_case = false);
 
-    bool write_xml_polylines(std::vector<std::vector<IK::Point_3>> &polylines, bool simple_case = false);
+    bool write_xml_polylines(std::vector<std::vector<IK::Point_3>> &polylines, const bool&  simple_case = false);
 
     bool write_xml_polylines(std::vector<std::vector<std::vector<IK::Point_3>>> &polylines_tree, int id = -1);
 

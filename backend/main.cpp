@@ -11,7 +11,7 @@
 int main(int argc, char **argv)
 {
 
-	 wood_test::run_all_tests();
+	 
 
 	// IK::Segment_3 segment(IK::Point_3(0, 0, 0), IK::Point_3(1, 1, 0));
 	// // std::cout << cgal_rectangle_util::angle_to_xaxis(segment) << "\n";
@@ -77,18 +77,17 @@ int main(int argc, char **argv)
 	// std::cout << center_and_radius[0] << "," << center_and_radius[1] << "," << center_and_radius[2] << std::endl;
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	// GoogleTest
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	wood_test::run_all_tests();
+
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	// Display
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	opengl_globals::shader_type_0default_1transparent_2shaded_3shadedwireframe_4wireframe_5normals_6explode = 2;
 	opengl_globals::shaders_folder = "C:\\IBOIS57\\_Code\\Software\\Python\\compas_wood\\backend\\src\\viewer\\shaders\\";
-	opengl_render::render(wood_test::type_plates_name_joint_linking_vidychapel_corner); // chapel_corner// chapel_one_layer // chapel_simple // chapel
+	opengl_render::render(wood_test::type_geometry_name_cgal_mesh_boolean_0); // chapel_corner// chapel_one_layer // chapel_simple // chapel
 
 	return 0;
 }
 
-// run ninja-> g++ main.cpp -o main
-// cmake  --fresh -DGET_LIBS=OFF -DBUILD_MY_PROJECTS=ON -DRELEASE_DEBUG=ON -DCMAKE_BUILD_TYPE="Release" -G "Ninja" .. && cmake  --build . --config Release
-// cmake --fresh -DGET_LIBS=OFF -DBUILD_MY_PROJECTS=ON -DRELEASE_DEBUG=ON -DCMAKE_BUILD_TYPE="Release"  -G "Visual Studio 17 2022" -A x64 .. && cmake --build . --config Release
-// cmake  -E time --build . -v --config Release -- -j0
-// cmake  --build . -v --config Release -- -j0
-// cmake  --build . --config Release -v

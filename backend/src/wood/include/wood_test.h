@@ -50,11 +50,17 @@ namespace wood_test
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // joinery - helper methods (display, etc.)
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        /**
-         * define OpenGL vizualizer parameters
-         * set properties for saving the screenshot next to xml files e.g. "C:\IBOIS57\_Code\Software\Python\compas_wood\backend\src\wood\dataset"
+         /**
+         *  this function is run first
+         * set properties for saving the screenshot and input xml files e.g. "C:\IBOIS57\_Code\Software\Python\compas_wood\backend\src\wood\dataset"
          */
-        void joinery_plate_display(std::vector<std::vector<IK::Point_3>> &input_polyline_pairs, std::vector<std::vector<CGAL_Polyline>> &output_plines);
+        void set_file_path_for_input_xml_and_screenshot(std::vector<std::vector<IK::Point_3>>& input_polyline_pairs, const std::string &function_name);
+
+        /**
+         * this function is run at the end of the example
+         * define OpenGL vizualizer parameters
+         */
+        void set_plate_display(std::vector<std::vector<IK::Point_3>> &input_polyline_pairs, std::vector<std::vector<CGAL_Polyline>> &output_plines);
 
     }
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

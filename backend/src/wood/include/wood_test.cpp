@@ -9,11 +9,24 @@ namespace wood_test
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // plate and beam - helper methods (display, etc.)
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        void plate_display(std::vector<std::vector<IK::Point_3>> &input_polyline_pairs, std::vector<std::vector<CGAL_Polyline>> &output_plines)
-        {
-            // opengl_globals_geometry::add_grid(false);
-            viewer_wood::line_thickness = 2;
 
+        void set_file_path_for_input_xml_and_screenshot(std::vector<std::vector<IK::Point_3>> &input_polyline_pairs, const std::string &function_name)
+        {
+
+            // input data-set
+            wood_xml::path_and_file_for_input_polylines = wood_globals::data_set_input_folder + function_name + ".xml";
+
+            // read the xml file
+            wood_xml::read_xml_polylines(input_polyline_pairs, false);
+
+            // screenshot directory matches the file name of xml
+            opengl_globals::filename_and_folder_screenshot = wood_xml::path_and_file_for_input_polylines.substr(0, wood_xml::path_and_file_for_input_polylines.size() - 3) + "png";
+        }
+
+        void set_plate_display(std::vector<std::vector<IK::Point_3>> &input_polyline_pairs, std::vector<std::vector<CGAL_Polyline>> &output_plines)
+        {
+            // add geomtry to the opengl viewer
+            viewer_wood::line_thickness = 2;
             switch (wood_globals::output_geometry_type)
             {
             case (0):
@@ -35,10 +48,6 @@ namespace wood_test
                 viewer_wood::add_loft(output_plines); // grey
                 break;
             }
-
-            // Screenshot directory matches the file name of xml
-            opengl_globals::filename_and_folder_screenshot = wood_xml::path_and_file_for_input_polylines.substr(0, wood_xml::path_and_file_for_input_polylines.size() - 3) + "png";
-            // std::cout << "Dir: " << opengl_globals::filename_and_folder_screenshot << "\n";
         }
 
     }
@@ -50,13 +59,10 @@ namespace wood_test
     {
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        // Input
+        // The filename of the xml file and the screenshot directory
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        bool simple_case = false;
-        wood_xml::path_and_file_for_input_polylines = wood_globals::data_set_input_folder + "type_plates_name_hexbox_and_corner.xml";
-
         std::vector<std::vector<IK::Point_3>> input_polyline_pairs;
-        wood_xml::read_xml_polylines(input_polyline_pairs, simple_case);
+        internal::set_file_path_for_input_xml_and_screenshot(input_polyline_pairs, "type_plates_name_hexbox_and_corner");
 
         // Global Parameters and output joint selection and orientation
         double division_length = 300;
@@ -113,26 +119,20 @@ namespace wood_test
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Render         // std::cout << "wood_test.cpp ->"<< __func__ << "\n";
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        internal::plate_display(input_polyline_pairs, output_plines);
+        internal::set_plate_display(input_polyline_pairs, output_plines);
         return true;
     }
 
     bool type_plates_name_top_to_top_pairs()
     {
-        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        // Input for the Main Method
-        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        // global inputs
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // The filename of the xml file and the screenshot directory
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        std::vector<std::vector<IK::Point_3>> input_polyline_pairs;
+        internal::set_file_path_for_input_xml_and_screenshot(input_polyline_pairs, "type_plates_name_top_to_top_pairs");
+
         wood_globals::joint_line_extension = -10;
-        // wood_globals::limit_min_joint_length = 140;
-        //  function inputs
-        bool simple_case = false;
-        wood_xml::path_and_file_for_input_polylines = wood_globals::data_set_input_folder + "type_plates_name_top_to_top_pairs.xml";
-        std::vector<std::vector<IK::Point_3>>
-            input_polyline_pairs;
-        wood_xml::read_xml_polylines(input_polyline_pairs, simple_case);
-
         wood_globals::joint_types[1 * 3 + 0] = 150; // division_length
         int search_type = 0;
         std::vector<double> scale = {1, 1, 1};
@@ -177,7 +177,7 @@ namespace wood_test
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Display
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        internal::plate_display(input_polyline_pairs, output_plines);
+        internal::set_plate_display(input_polyline_pairs, output_plines);
         return true;
     }
 
@@ -185,18 +185,13 @@ namespace wood_test
     {
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        // Input for the Main Method
+        // The filename of the xml file and the screenshot directory
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-        // global inputs
-        wood_globals::joint_line_extension = -10;
-        // wood_globals::limit_min_joint_length = 140;
-        //  function inputs
-        bool simple_case = false;
-        wood_xml::path_and_file_for_input_polylines = wood_globals::data_set_input_folder + "type_plates_name_joint_linking_vidychapel_corner.xml";
         std::vector<std::vector<IK::Point_3>> input_polyline_pairs;
-        wood_xml::read_xml_polylines(input_polyline_pairs, simple_case);
+        internal::set_file_path_for_input_xml_and_screenshot(input_polyline_pairs, "type_plates_name_joint_linking_vidychapel_corner");
+
         wood_globals::joint_types[1 * 3 + 0] = 150; // division_length
+        wood_globals::joint_line_extension = -10;
 
         int search_type = 0;
         std::vector<double> scale = {1, 1, 1};
@@ -349,7 +344,7 @@ namespace wood_test
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Display
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        internal::plate_display(input_polyline_pairs, output_plines);
+        internal::set_plate_display(input_polyline_pairs, output_plines);
         return true;
     }
 
@@ -357,16 +352,13 @@ namespace wood_test
     {
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        // Input for the Main Method
+        // The filename of the xml file and the screenshot directory
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        // global inputs
-        wood_globals::joint_line_extension = -10;
-        //  function inputs
-        bool simple_case = false;
-        wood_xml::path_and_file_for_input_polylines = wood_globals::data_set_input_folder + "type_plates_name_joint_linking_vidychapel_one_layer.xml";
         std::vector<std::vector<IK::Point_3>> input_polyline_pairs;
-        wood_xml::read_xml_polylines(input_polyline_pairs, simple_case);
+        internal::set_file_path_for_input_xml_and_screenshot(input_polyline_pairs, "type_plates_name_joint_linking_vidychapel_one_layer");
+
+        wood_globals::joint_line_extension = -10;
         wood_globals::joint_types[1 * 3 + 0] = 50; // division_length
 
         int search_type = 0;
@@ -412,7 +404,7 @@ namespace wood_test
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Display
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        internal::plate_display(input_polyline_pairs, output_plines);
+        internal::set_plate_display(input_polyline_pairs, output_plines);
         return true;
     }
 
@@ -420,18 +412,12 @@ namespace wood_test
     {
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        // Input for the Main Method
+        // The filename of the xml file and the screenshot directory
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-        // global inputs
-        wood_globals::joint_line_extension = -10;
-        // wood_globals::limit_min_joint_length = 140;
-        //  function inputs
-        bool simple_case = false;
-        wood_xml::path_and_file_for_input_polylines = wood_globals::data_set_input_folder + "type_plates_name_joint_linking_vidychapel_one_axis_two_layers.xml";
         std::vector<std::vector<IK::Point_3>> input_polyline_pairs;
-        wood_xml::read_xml_polylines(input_polyline_pairs, simple_case);
-        // double division_length = 300;
+        internal::set_file_path_for_input_xml_and_screenshot(input_polyline_pairs, "type_plates_name_joint_linking_vidychapel_one_axis_two_layers");
+
+        wood_globals::joint_line_extension = -10;
         std::vector<double> joint_types = wood_globals::joint_types;
         joint_types[1 * 3 + 0] = 50;
         int search_type = 0;
@@ -580,24 +566,20 @@ namespace wood_test
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Display
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        internal::plate_display(input_polyline_pairs, output_plines);
+        internal::set_plate_display(input_polyline_pairs, output_plines);
         return true;
     }
 
     bool type_plates_name_joint_linking_vidychapel_full()
     {
-        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        // Input for the Main Method
-        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        // global inputs
-        wood_globals::joint_line_extension = -10;
-        // wood_globals::limit_min_joint_length = 140;
-        //  function inputs
-        bool simple_case = false;
-        wood_xml::path_and_file_for_input_polylines = wood_globals::data_set_input_folder + "type_plates_name_joint_linking_vidychapel_full.xml";
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // The filename of the xml file and the screenshot directory
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         std::vector<std::vector<IK::Point_3>> input_polyline_pairs;
-        wood_xml::read_xml_polylines(input_polyline_pairs, simple_case);
+        internal::set_file_path_for_input_xml_and_screenshot(input_polyline_pairs, "type_plates_name_joint_linking_vidychapel_full");
+
+        wood_globals::joint_line_extension = -10;
         wood_globals::joint_types[1 * 3 + 0] = 50;
         int search_type = 0;
         // std::cout << "\n output_type " << output_type << "\n";
@@ -698,7 +680,7 @@ namespace wood_test
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Display
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        internal::plate_display(input_polyline_pairs, output_plines);
+        internal::set_plate_display(input_polyline_pairs, output_plines);
         return true;
     }
 
@@ -709,20 +691,13 @@ namespace wood_test
     bool type_beams_name_phanomema_node()
     {
 
-        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        // Input for the Main Method
-        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-        // global inputs
-        wood_globals::joint_line_extension = 0;
-        // wood_globals::limit_min_joint_length = 140;
-        //  function inputs
-        bool simple_case = false;
-        wood_xml::path_and_file_for_input_polylines = wood_globals::data_set_input_folder + "type_beams_name_phanomema_node.xml";
-        opengl_globals::filename_and_folder_screenshot = wood_xml::path_and_file_for_input_polylines.substr(0, wood_xml::path_and_file_for_input_polylines.size() - 3) + "png";
-
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // The filename of the xml file and the screenshot directory
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         std::vector<std::vector<IK::Point_3>> input_polyline_axes;
-        wood_xml::read_xml_polylines(input_polyline_axes, simple_case);
+        internal::set_file_path_for_input_xml_and_screenshot(input_polyline_axes, "type_beams_name_phanomema_node");
+
+        wood_globals::joint_line_extension = 0;
         wood_globals::joint_types[1 * 3 + 0] = 150; // division_length
         int search_type = 0;
         int output_type = wood_globals::output_geometry_type; // 0 - Plate outlines 1 - joint lines 2 - joint volumes 3 - joint geometry 4 - merge
@@ -854,15 +829,13 @@ namespace wood_test
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // viewer type and shader location
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        opengl_globals::shader_type_0default_1transparent_2shaded_3shadedwireframe_4wireframe_5normals_6explode = 3;
-        opengl_globals::shaders_folder = "C:\\IBOIS57\\_Code\\Software\\CPP\\CMAKE\\super_build\\wood\\src\\viewer\\shaders\\";
         opengl_globals_geometry::add_grid();
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        // For screenshot directory and filename
+        // The filename of the xml file and the screenshot directory
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        wood_xml::path_and_file_for_input_polylines = wood_globals::data_set_input_folder + "type_library_name_ss_e_op_4.xml";
-        opengl_globals::filename_and_folder_screenshot = wood_xml::path_and_file_for_input_polylines.substr(0, wood_xml::path_and_file_for_input_polylines.size() - 3) + "png";
+        std::vector<std::vector<IK::Point_3>> input_polyline_pairs;
+        internal::set_file_path_for_input_xml_and_screenshot(input_polyline_pairs, "type_library_name_ss_e_op_4");
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // joint parameters
@@ -1021,10 +994,10 @@ namespace wood_test
     {
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        // For screenshot directory and filename
+        // The filename of the xml file and the screenshot directory
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        wood_xml::path_and_file_for_input_polylines = wood_globals::data_set_input_folder + "type_geometry_name_cgal_mesh_boolean_0.xml";
-        opengl_globals::filename_and_folder_screenshot = wood_xml::path_and_file_for_input_polylines.substr(0, wood_xml::path_and_file_for_input_polylines.size() - 3) + "png";
+        std::vector<std::vector<IK::Point_3>> input_polyline_pairs;
+        internal::set_file_path_for_input_xml_and_screenshot(input_polyline_pairs, "type_geometry_name_cgal_mesh_boolean_0");
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // data-set taken from https://schneide.blog/tag/cc/

@@ -68,7 +68,7 @@ namespace wood_xml
         return true;
     }
 
-    bool read_xml_polylines(std::vector<std::vector<IK::Point_3>> &polylines, bool simple_case)
+    bool read_xml_polylines(std::vector<std::vector<IK::Point_3>> &polylines,const bool& simple_case)
     {
         std::string file_path = simple_case ? path_and_file_for_input_polylines_simple_case : path_and_file_for_input_polylines;
         // printf( " \n %s  \n", file_path.c_str());
@@ -124,7 +124,7 @@ namespace wood_xml
         return true;
     }
 
-    bool write_xml_polylines(std::vector<std::vector<IK::Point_3>> &polylines, bool simple_case)
+    bool write_xml_polylines(std::vector<std::vector<IK::Point_3>> &polylines,const bool& simple_case)
     {
 
         std::string file_path = simple_case ? path_and_file_for_output_polylines_simple_case : path_and_file_for_output_polylines;

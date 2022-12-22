@@ -53,7 +53,7 @@ namespace opengl_globals
     glm::vec4 black(0.0f, 0.0f, 0.0f, 0.1f);
     // glm::vec3 object_color(1.0f, 0.5f, 0.31f);
     glm::vec4 object_color(0.95f, 0.95f, 0.95f, 0.5f);
-    std::string shaders_folder;
+    std::string shaders_folder = "C:\\IBOIS57\\_Code\\Software\\Python\\compas_wood\\backend\\src\\viewer\\shaders\\";
 
     // directories of shaders in "Release" folder
     std::string filename_basic_light_vertex_shader = "\\2.2.basic_lighting.vert";
