@@ -1,11 +1,11 @@
 #pragma once
-//#include "../../../stdafx.h"
+// #include "../../../stdafx.h"
 
-//#include <opengl_shaders.h>
-//#include <opengl_cameras.h>
-//#include <opengl_meshes.h>
-//#include <opengl_polylines.h>
-//#include <opengl_pointclouds.h>
+// #include <opengl_shaders.h>
+// #include <opengl_cameras.h>
+// #include <opengl_meshes.h>
+// #include <opengl_polylines.h>
+// #include <opengl_pointclouds.h>
 
 namespace opengl_render
 {
@@ -285,22 +285,28 @@ namespace opengl_render
 
 		if (glfwGetKey(window, GLFW_KEY_KP_0) == GLFW_PRESS)
 		{
+			// save screenshot in this directory: opengl_globals::filename_and_folder_screenshot
+			if (opengl_globals::filename_and_folder_screenshot.size() > 0)
+			{
+				int width, height;
+				glfwGetFramebufferSize(window, &width, &height);
+				GLsizei nrChannels = 3;
+				GLsizei stride = nrChannels * width;
+				stride += (stride % 4) ? (4 - stride % 4) : 0;
+				GLsizei bufferSize = stride * height;
+				std::vector<char> buffer(bufferSize);
+				glPixelStorei(GL_PACK_ALIGNMENT, 4);
+				glReadBuffer(GL_FRONT);
+				glReadPixels(0, 0, width, height, GL_RGB, GL_UNSIGNED_BYTE, buffer.data());
+				stbi_flip_vertically_on_write(true);
 
-			// void saveImage(char* filepath, GLFWwindow* w) {
-			int width, height;
-			glfwGetFramebufferSize(window, &width, &height);
-			GLsizei nrChannels = 3;
-			GLsizei stride = nrChannels * width;
-			stride += (stride % 4) ? (4 - stride % 4) : 0;
-			GLsizei bufferSize = stride * height;
-			std::vector<char> buffer(bufferSize);
-			glPixelStorei(GL_PACK_ALIGNMENT, 4);
-			glReadBuffer(GL_FRONT);
-			glReadPixels(0, 0, width, height, GL_RGB, GL_UNSIGNED_BYTE, buffer.data());
-			stbi_flip_vertically_on_write(true);
-			std::string output_dir = opengl_globals::shaders_folder + "viewer_" + CurrentDate() + ".png";
-			stbi_write_png(output_dir.c_str(), width, height, nrChannels, buffer.data(), stride);
-			//}
+				std::cout << "opengl_render.cpp -> processInput: the screenshot is saved here: " << opengl_globals::filename_and_folder_screenshot << "\n";
+				stbi_write_png(opengl_globals::filename_and_folder_screenshot.c_str(), width, height, nrChannels, buffer.data(), stride);
+			}
+			else
+			{
+				std::cout << "opengl_render.cpp -> processInput: the screenshot path is wrong, check this path: " << opengl_globals::filename_and_folder_screenshot << "\n";
+			}
 		}
 
 		// TEMP
@@ -376,7 +382,7 @@ namespace opengl_render
 	}
 
 	// while loop  - main properties like clean background
-	inline void loop_start_glfw(void (*function)())
+	inline void loop_start_glfw(bool (*function)())
 	{
 		// Poll and handle events (inputs, window resize, etc.)
 		// You can read the io.WantCaptureMouse, io.WantCaptureKeyboard flags to tell if dear imgui wants to use your inputs.
@@ -415,7 +421,7 @@ namespace opengl_render
 			// opengl_globals_geometry::pointclouds.clear_geo_in_opengl();
 			try
 			{
-				function(); // add geometry
+				bool result = function(); // add geometry
 			}
 			catch (...)
 			{
@@ -493,7 +499,7 @@ namespace opengl_render
 	}
 
 	// all steps
-	inline void render(void (*function)())
+	inline void render(bool (*function)())
 	{
 		// std::cout << "render 0\n";
 		start_glfw();

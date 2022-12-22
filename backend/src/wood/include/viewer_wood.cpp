@@ -176,3 +176,25 @@ void viewer_wood::add_loft(std::vector<std::vector<CGAL_Polyline>> &output_pline
     // auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(stop - start);
     // std::cout << "Time taken by function: " << duration.count() << " ms" << std::endl;
 }
+
+void viewer_wood::add(std::vector<IK::Point_3> &points)
+
+{
+
+    std::vector<float> vertices;
+    std::vector<float> vertices_colors;
+    vertices.reserve(vertices.size() * 3);
+    vertices.reserve(vertices_colors.size() * 3);
+    for (auto &point : points)
+    {
+        vertices.emplace_back(static_cast<float>(point.x()));
+        vertices.emplace_back(static_cast<float>(point.y()));
+        vertices.emplace_back(static_cast<float>(point.z()));
+
+        vertices_colors.emplace_back(0.0f);
+        vertices_colors.emplace_back(0.0f);
+        vertices_colors.emplace_back(0.0f);
+    }
+
+    opengl_globals_geometry::pointclouds.add(vertices, vertices_colors, 0.01f, "mesh_outlines_wood");
+}

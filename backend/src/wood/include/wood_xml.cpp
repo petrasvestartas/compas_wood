@@ -18,7 +18,7 @@ namespace wood_xml
 
     bool read_xml_numbers(std::vector<std::vector<double>> &numbers)
     {
-        std::string file_path = path_and_file_for_input_numbers;
+        std::string file_path = path_and_file_for_input_numbers; 
         // printf( " \n %s  \n", file_path.c_str());
         std::string property_to_read = "input_numbers";
 
@@ -62,7 +62,7 @@ namespace wood_xml
         catch (std::exception &e)
         {
             (void)e;
-            printf("\nwood_xml -> CPP Wrong property, probaby wrong path ");
+            printf("wood_xml -> CPP Wrong property, probaby wrong path \n");
             return false;
         }
         return true;
@@ -78,16 +78,17 @@ namespace wood_xml
         // Check if XML file exists, path_and_file_for_joints is a global path
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        printf("\nwood_xml ->  read_xml_polylines -> ");
+        printf("wood_xml ->  read_xml_polylines -> ");
         printf(file_path.c_str());
+        printf("\n");
         if (!file_exists_0(file_path))
         {
-            printf("\nwood_xml -> wood_xml|read_xml_polylines|File does not exist");
+            printf("wood_xml -> wood_xml|read_xml_polylines|File does not exist \n");
             return false;
         }
         else
         {
-            printf("\nwood_xml -> read_xml_polylines|file exists");
+            printf("wood_xml -> read_xml_polylines|file exists \n");
         }
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -117,7 +118,7 @@ namespace wood_xml
         catch (std::exception &e)
         {
             (void)e;
-            printf("\nnwood_xml -> |read_xml_polylines|CPP Wrong property ");
+            printf("nwood_xml -> |read_xml_polylines|CPP Wrong property \n");
             return false;
         }
         return true;
@@ -164,7 +165,7 @@ namespace wood_xml
         catch (std::exception &e)
         {
             (void)e;
-            printf("\nwood_xml -> CPP Something went wrong, probaby wrong path ");
+            printf("wood_xml -> CPP Something went wrong, probaby wrong path \n");
             return false;
         }
         return true;
@@ -223,7 +224,7 @@ namespace wood_xml
         catch (std::exception &e)
         {
             (void)e;
-            printf("\nwood_xml -> CPP Something went wrong, probaby wrong path ");
+            printf("wood_xml -> CPP Something went wrong, probaby wrong path \n");
             return false;
         }
         return true;
@@ -328,7 +329,7 @@ namespace wood_xml
         catch (std::exception &e)
         {
             (void)e;
-            printf("\nwood_xml -> CPP Something went wrong, probaby wrong path ");
+            printf("wood_xml -> CPP Something went wrong, probaby wrong path \n");
             return false;
         }
         return true;

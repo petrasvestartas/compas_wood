@@ -354,6 +354,6 @@ namespace cgal_mesh_boolean
 
         );
 
-        std::cout << "\n__________________________________________________________\n mesh_boolean_test() \n n_coord_out is 22 ? " << n_coord_out << "\n n_normals_out is 22 ? " << normals_out.size() / 3 << "\n n_faces_out is 40 ? " << n_faces_out << "\n n_facesColors_out is 40 ? " << n_facesColors_out << "\n n_valid_meshes is 2 ? " << n_valid_meshes << "\n__________________________________________________________\n ";
+        std::cout << "\n__________________________________________________________\n mesh_boolean_test() \n n_coord_out is 22 ? " << n_coord_out << "\n n_normals_out is 22 ? " << normals_out.size() / 3 << "\n n_faces_out is 40 ? " << n_faces_out << "\n n_facesColors_out is 40 ? " << n_facesColors_out << "\n n_valid_meshes is 2 ? " << n_valid_meshes << "\n__________________________________________________________\n";
     }
 }

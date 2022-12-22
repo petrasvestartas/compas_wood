@@ -21,6 +21,7 @@ namespace viewer_wood
 
     void add_loft(std::vector<std::vector<CGAL_Polyline>> &output_plines);
 
+    void add(std::vector<IK::Point_3> &points);
 }
 
 #endif // VIEWER_WOOD_H

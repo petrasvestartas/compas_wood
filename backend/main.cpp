@@ -1,27 +1,17 @@
 #include "stdafx.h"
-
 // temp
 // #include "wood_main.h"
 // #include "wood_xml.h"	 // xml parser and viewer customization
 // #include "viewer_wood.h" // viewer
 #include "wood_test.h" // test
 
-#include <gtest/gtest.h>
-
-// Demonstrate some basic assertions.
-TEST(HelloTest, BasicAssertions)
-{
-	// Expect two strings not to be equal.
-	EXPECT_STRNE("hello", "world");
-	// Expect equality.
-	EXPECT_EQ(7 * 6, 42);
-}
-
 // #include <polylabel/polylabel.h>
 #include <polylabel/cgal_polylabel.h>
 #include "src/wood/include/cgal_rectangle_util.h"
 int main(int argc, char **argv)
 {
+
+	 wood_test::run_all_tests();
 
 	// IK::Segment_3 segment(IK::Point_3(0, 0, 0), IK::Point_3(1, 1, 0));
 	// // std::cout << cgal_rectangle_util::angle_to_xaxis(segment) << "\n";
@@ -86,19 +76,12 @@ int main(int argc, char **argv)
 	// std::array<double, 3> center_and_radius = mapbox::polylabel(polygon, 1.0);
 	// std::cout << center_and_radius[0] << "," << center_and_radius[1] << "," << center_and_radius[2] << std::endl;
 
-	::testing::InitGoogleTest(&argc, argv);
-	RUN_ALL_TESTS();
-
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	// Display
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	opengl_globals::shader_type_0default_1transparent_2shaded_3shadedwireframe_4wireframe_5normals_6explode = 2;
 	opengl_globals::shaders_folder = "C:\\IBOIS57\\_Code\\Software\\Python\\compas_wood\\backend\\src\\viewer\\shaders\\";
-	opengl_globals_geometry::add_grid();
-	// opengl_render::render(wood_test::test_F_get_connection_zones_D_in_top_to_top_corner); // chapel_corner// chapel_one_layer // chapel_simple // chapel
-	// opengl_render::render(wood_test::test_F_three_valence_joint_addition_vidy_D_chapel_one_layer); // chapel_corner// chapel_one_layer // chapel_simple // chapel
-	// opengl_render::render(wood_test::ss_e_op_4);
-	opengl_render::render(wood_test::beam_node_0);
+	opengl_render::render(wood_test::type_plates_name_joint_linking_vidychapel_corner); // chapel_corner// chapel_one_layer // chapel_simple // chapel
 
 	return 0;
 }

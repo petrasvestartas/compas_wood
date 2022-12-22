@@ -190,5 +190,7 @@ namespace cgal_polylabel
 
         // run the division method
         internal::circle_points(center, x_axis, y_axis, z_axis, points, division, std::get<2>(circle));
+        std::cout << "run the divison mehtod" << std::endl;
+        viewer_wood::add(points);
     }
 }

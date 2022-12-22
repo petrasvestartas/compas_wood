@@ -55,4 +55,7 @@ namespace wood_globals
     //how to make the local path to the data set folder
     std::string data_set_input_folder = "C:\\IBOIS57\\_Code\\Software\\Python\\compas_wood\\backend\\src\\wood\\dataset\\";
     std::string data_set_output_file = data_set_input_folder + "out.xml";
+
+
+    
 }
