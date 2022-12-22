@@ -219,9 +219,55 @@ namespace cgal_xform_util
         return F0 * T0;
     }
 
-    inline CGAL::Aff_transformation_3<IK> XYToPlane(const IK::Vector_3 &O1, const IK::Vector_3 &X1, const IK::Vector_3 &Y1, const IK::Vector_3 &Z1)
+    inline CGAL::Aff_transformation_3<IK> PlaneToXY(
+        const IK::Vector_3 &O0, const IK::Vector_3 &X0_, const IK::Vector_3 &Y0_, const IK::Vector_3 &Z0_)
     {
-        return PlaneToPlane(IK::Vector_3(0, 0, 0), IK::Vector_3(1, 0, 0), IK::Vector_3(0, 1, 0), IK::Vector_3(0, 0, 1), O1, X1, Y1, Z1);
+
+        IK::Vector_3 X0 = X0_;
+        IK::Vector_3 Y0 = Y0_;
+        IK::Vector_3 Z0 = Z0_;
+
+        cgal_vector_util::Unitize(X0);
+        cgal_vector_util::Unitize(Y0);
+        cgal_vector_util::Unitize(Z0);
+
+        // transformation maps P0 to P1, P0+X0 to P1+X1, ...
+
+        // Move to origin -> T0 translates point P0 to (0,0,0)
+        CGAL::Aff_transformation_3<IK> T0(CGAL::TRANSLATION, IK::Vector_3(0 - O0.x(), 0 - O0.y(), 0 - O0.z()));
+
+        // Rotate ->
+        CGAL::Aff_transformation_3<IK> F0(
+            X0.x(), X0.y(), X0.z(),
+            Y0.x(), Y0.y(), Y0.z(),
+            Z0.x(), Z0.y(), Z0.z());
+
+        return F0 * T0;
+    }
+
+    inline CGAL::Aff_transformation_3<IK> XYToPlane(const IK::Vector_3 &O1, const IK::Vector_3 &X1_, const IK::Vector_3 &Y1_, const IK::Vector_3 &Z1_)
+    {
+
+        // return PlaneToPlane(IK::Vector_3(0, 0, 0), IK::Vector_3(1, 0, 0), IK::Vector_3(0, 1, 0), IK::Vector_3(0, 0, 1), O1, X1, Y1, Z1);
+
+        IK::Vector_3 X1 = X1_;
+        IK::Vector_3 Y1 = Y1_;
+        IK::Vector_3 Z1 = Z1_;
+
+        cgal_vector_util::Unitize(X1);
+        cgal_vector_util::Unitize(Y1);
+        cgal_vector_util::Unitize(Z1);
+
+        // transformation maps P0 to P1, P0+X0 to P1+X1, ...
+        CGAL::Aff_transformation_3<IK> F1(
+            X1.x(), Y1.x(), Z1.x(),
+            X1.y(), Y1.y(), Z1.y(),
+            X1.z(), Y1.z(), Z1.z());
+
+        // Move to 3d -> T1 translates (0,0,0) to point P1
+        CGAL::Aff_transformation_3<IK> T1(CGAL::TRANSLATION, IK::Vector_3(O1.x(), O1.y(), O1.z()));
+
+        return T1 * F1;
     }
 
     inline CGAL::Aff_transformation_3<IK> Scale(double x, double y, double z)

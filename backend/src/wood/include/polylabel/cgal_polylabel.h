@@ -59,7 +59,7 @@ namespace cgal_polylabel
      * @param precision precision, the smaller the number the less precise the result, default 1.0
      * @return a tuple that represents the circle (center, plane, radius)
      */
-    std::tuple<IK::Point_3, IK::Plane_3, double> get_polylabel(std::vector<CGAL_Polyline> &polylines, double precision = 1.0)
+    inline std::tuple<IK::Point_3, IK::Plane_3, double> get_polylabel(const std::vector<CGAL_Polyline> &polylines, double precision = 1.0)
     {
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -161,9 +161,7 @@ namespace cgal_polylabel
                 degrees = i * chunk_angle;                // <-- correction
                 float radian = (degrees * pi_to_radians); // <-- correction
                 IK::Point_3 p(radius * cos(radian), radius * sin(radian), 0);
-                p = p.transform(xy_to_plane);
-                points.emplace_back(p);
-                // std::cout<< "x -> " << x_p[i] << "y -> " << y_p[i] << "\n";
+                points.emplace_back(p.transform(xy_to_plane));
             }
         }
     }
@@ -176,7 +174,7 @@ namespace cgal_polylabel
      * @param [in] division number of points
      * @param [in] precision tolerance for the polylabel algorithm
      */
-    inline void get_polylabel_circle_division_points(IK::Vector_3 &division_direction_in_3d, std::vector<CGAL_Polyline> &polylines, std::vector<IK::Point_3> &points, int division = 2, double precision = 1.0)
+    inline void get_polylabel_circle_division_points(const IK::Vector_3 &division_direction_in_3d, const std::vector<CGAL_Polyline> &polylines, std::vector<IK::Point_3> &points, int division = 2, double scale = 0.75, double precision = 1.0)
     {
         // run the polylabel algorithm
         std::tuple<IK::Point_3, IK::Plane_3, double> circle = get_polylabel(polylines, precision);
@@ -188,9 +186,7 @@ namespace cgal_polylabel
         IK::Vector_3 y_axis = is_direction_valid ? CGAL::cross_product(division_direction_in_3d, std::get<1>(circle).orthogonal_vector()) : std::get<1>(circle).base2();
         IK::Vector_3 z_axis = std::get<1>(circle).orthogonal_vector();
 
-        // run the division method
-        internal::circle_points(center, x_axis, y_axis, z_axis, points, division, std::get<2>(circle));
-        std::cout << "run the divison mehtod" << std::endl;
-        viewer_wood::add(points);
+        // run the division method which is the output -> points
+        internal::circle_points(center, x_axis, y_axis, z_axis, points, division, std::get<2>(circle) * scale);
     }
 }

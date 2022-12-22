@@ -376,14 +376,15 @@ namespace cgal_rectangle_util
     }
 
     /**
-     * @brief Calculate a grid of points inside a polygon
+     * @brief Calculate a grid of points inside a polygon by a) convex hull, b) its bounding box, c) grid of points inside the polygon
      *
      * @param [in] polygon input polyline
      * @param [in] division_distance distance between points, if 0 the distance is calculated automatically
+     * @param [in] max_points number of points
      * @param [out] points output points
      * @return bool flag if the result is valid
      */
-    inline bool grid_of_points_in_a_polygon(CGAL_Polyline &polygon, const double &division_distance, std::vector<IK::Point_3> &points) // const double &divisions,
+    inline bool grid_of_points_in_a_polygon(CGAL_Polyline &polygon, const double &division_distance, const int &max_points, std::vector<IK::Point_3> &points) // const double &divisions,
     {
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -489,8 +490,8 @@ namespace cgal_rectangle_util
         int divisions_u, divisions_v;
         // if (division_distance != 0)
         //{
-        divisions_u = std::min(15.0, std::floor(std::sqrt(half_dir_u.squared_length()) / division_distance));
-        divisions_v = std::min(15.0, std::floor(std::sqrt(half_dir_v.squared_length()) / division_distance));
+        divisions_u = std::min(std::min(20.0, max_points*0.5), std::floor(std::sqrt(half_dir_u.squared_length()) / division_distance));
+        divisions_v = std::min(std::min(20.0, max_points*0.5), std::floor(std::sqrt(half_dir_v.squared_length()) / division_distance));
         //}
         // else
         // {
@@ -521,32 +522,32 @@ namespace cgal_rectangle_util
         Clipper2Lib::Path64 polyline_clipper(polygon_copy.size() - 1);
 
         for (int i = 0; i < polygon_copy.size() - 1; i++)
+        {
             polyline_clipper[i] = Clipper2Lib::Point64((int)(polygon_copy[i].x() * 1e6), (int)(polygon_copy[i].y() * 1e6));
-
-        /////////////////////////////////////////////////////////////////////////////////////
-        // Convert to Clipper
-        /////////////////////////////////////////////////////////////////////////////////////
+        }
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // add points and cull them
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        std::vector<IK::Point_3> result;
-        result.reserve((divisions_u * 2 + 1) * (divisions_v * 2 + 1));
+        // std::vector<IK::Point_3> result;
+        points.reserve((divisions_u * 2 + 1) * (divisions_v * 2 + 1));
         for (int i = 0; i < divisions_u * 2 + 1; i++)
         {
             for (int j = 0; j < divisions_v * 2 + 1; j++)
             {
                 IK::Point_3 p = center_of_rect + half_dir_u * i + half_dir_v * j;
 
-                // Convert to clipper and check point inclusion
-                Clipper2Lib::Point64 point_clipper((int)(p.x() * 1e6), (int)(p.y() * 1e6));
+                // Rotate and convert to clipper and check point inclusion
+                double x_rotated = p.hx() * std::cos(-min_angle) - p.hy() * std::sin(-min_angle);
+                double y_rotated = p.hx() * std::sin(-min_angle) + p.hy() * std::cos(-min_angle);
+                Clipper2Lib::Point64 point_clipper((int)(x_rotated * 1e6), (int)(y_rotated * 1e6));
+
                 if (Clipper2Lib::PointInPolygonResult::IsInside == Clipper2Lib::PointInPolygon(point_clipper, polyline_clipper))
                 {
-                    //
                     // rotate and orient to 3D
                     p = internal::rotate_to_xaxis(p, -min_angle);
                     p = p.transform(xform_to_xy_inv);
-                    result.emplace_back(p);
+                    points.emplace_back(p);
                     // std::cout << p.x() << " " << p.y() << " " << p.z() << std::endl;
                 }
             }

@@ -23,10 +23,13 @@
 // NOTE - file-paths that are different from pc to pc, please change the path before running the code in wood_globals.cpp -> data_set_input_folder
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-#include "cgal_mesh_boolean.h"
+#ifndef WOOD_TEST_H
+#define WOOD_TEST_H
+
 // data structure
 #include "wood_cut.h"
 #include "wood_main.h"
+
 // viewer
 #include "viewer_wood.h"
 #include "wood_xml.h"
@@ -34,13 +37,14 @@
 // joinery
 #include "wood_joint_lib.h"
 #include "wood_joint.h"
-//#include "wood_data_set.h"
 
-//3rd party libraries
+// geometry methods
+#include "cgal_mesh_boolean.h"
+#include <polylabel/cgal_polylabel.h>
+#include "cgal_rectangle_util.h"
+
+// 3rd party libraries
 #include <gtest/gtest.h>
-
-#ifndef WOOD_TEST_H
-#define WOOD_TEST_H
 
 namespace wood_test
 {
@@ -50,11 +54,18 @@ namespace wood_test
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // joinery - helper methods (display, etc.)
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-         /**
+
+        /**
+         *  this function is run first
+         * set properties for saving the screenshot files e.g. "C:\IBOIS57\_Code\Software\Python\compas_wood\backend\src\wood\dataset"
+         */
+        void set_file_path_for_input_xml_and_screenshot(const std::string &function_name);
+
+        /**
          *  this function is run first
          * set properties for saving the screenshot and input xml files e.g. "C:\IBOIS57\_Code\Software\Python\compas_wood\backend\src\wood\dataset"
          */
-        void set_file_path_for_input_xml_and_screenshot(std::vector<std::vector<IK::Point_3>>& input_polyline_pairs, const std::string &function_name);
+        void set_file_path_for_input_xml_and_screenshot(std::vector<std::vector<IK::Point_3>> &input_polyline_pairs, const std::string &function_name);
 
         /**
          * this function is run at the end of the example
@@ -110,7 +121,7 @@ namespace wood_test
      * example for beams
      * multiple beams connected in one node, taken from the Phanome project near Zurich, Switzerland
      */
-    bool  type_beams_name_phanomema_node();
+    bool type_beams_name_phanomema_node();
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // library of joints
@@ -131,10 +142,34 @@ namespace wood_test
      */
     bool type_geometry_name_cgal_mesh_boolean_0();
 
+    /**
+     * example for geometry
+     * get polygon center by an average of points
+     */
+    bool type_geometry_name_polygon_center();
+
+    /**
+     * example for geometry
+     * get polygon center using the polylabel algorithm
+     */
+    bool type_geometry_name_polygon_center_polylabel();
+
+    /**
+     * example for geometry
+     * get polylabel circle division points
+     */
+    bool type_geometry_name_circle_ponts_inscribed_in_a_polygon();
+
+    /**
+     * example for geometry
+     * create minimum bounding box for a set of points using convex hull and cull them using a polygon
+     */
+    bool type_geometry_name_grid_of_points_in_a_polygon();
+
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // GoogleTest
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-     /**
+    /**
      * googletest method that must be run in the main.cpp to check all the functions above
      */
     void run_all_tests();

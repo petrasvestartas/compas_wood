@@ -9,6 +9,14 @@ namespace wood_test
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // plate and beam - helper methods (display, etc.)
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        void set_file_path_for_input_xml_and_screenshot(const std::string &function_name)
+        {
+            // input data-set
+            wood_xml::path_and_file_for_input_polylines = wood_globals::data_set_input_folder + function_name + ".xml";
+
+            // screenshot directory matches the file name of xml
+            opengl_globals::filename_and_folder_screenshot = wood_xml::path_and_file_for_input_polylines.substr(0, wood_xml::path_and_file_for_input_polylines.size() - 3) + "png";
+        }
 
         void set_file_path_for_input_xml_and_screenshot(std::vector<std::vector<IK::Point_3>> &input_polyline_pairs, const std::string &function_name)
         {
@@ -996,8 +1004,7 @@ namespace wood_test
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // The filename of the xml file and the screenshot directory
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        std::vector<std::vector<IK::Point_3>> input_polyline_pairs;
-        internal::set_file_path_for_input_xml_and_screenshot(input_polyline_pairs, "type_geometry_name_cgal_mesh_boolean_0");
+        internal::set_file_path_for_input_xml_and_screenshot("type_geometry_name_cgal_mesh_boolean_0");
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // data-set taken from https://schneide.blog/tag/cc/
@@ -1090,6 +1097,167 @@ namespace wood_test
         return true;
     }
 
+    bool type_geometry_name_polygon_center()
+    {
+        // screenshot
+        internal::set_file_path_for_input_xml_and_screenshot("type_geometry_name_polygon_center");
+
+        // data-set
+        CGAL_Polyline polygon{
+            IK::Point_3(11.2247596176396, -4.60190643733344, 48.9387618537435),
+            IK::Point_3(-5.73799008527948, 27.7396887390699, 38.9994193935361),
+            IK::Point_3(-7.18751465466158, 52.2109764075134, 74.5663582911656),
+            IK::Point_3(1.68332949862521, 18.8956298287167, 52.2485552589767),
+            IK::Point_3(14.0704361211272, 1.10346344393741, 69.2793807577245),
+            IK::Point_3(18.9418950031543, 14.2294672539151, 109.735250000281),
+            IK::Point_3(33.4352381327694, -30.7000564810127, 89.2118909021016),
+            IK::Point_3(11.2247596176396, -4.60190643733344, 48.9387618537435),
+        };
+
+        // main method
+        IK::Point_3 center = cgal_polyline_util::Center(polygon);
+        std::vector<IK::Point_3> points = {center};
+
+        // display
+        opengl_globals_geometry::add_grid();
+        viewer_wood::scale = 10;
+        std::vector<CGAL_Polyline> polylines = {polygon};
+        viewer_wood::add(polylines);
+        viewer_wood::line_thickness = 10;
+        viewer_wood::add(points);
+        viewer_wood::line_thickness = 3;
+        viewer_wood::scale = 1000;
+
+        // test
+        return true;
+    }
+
+    bool type_geometry_name_polygon_center_polylabel()
+    {
+        // screenshot
+        internal::set_file_path_for_input_xml_and_screenshot("type_geometry_name_polygon_center_polylabel");
+
+        // data-set
+        std::vector<CGAL_Polyline>
+            polylines;
+
+        CGAL_Polyline p0{
+            IK::Point_3(-51.268164698738, 124.403259575835, 0),
+            IK::Point_3(-49.9053069162896, 125.207270883064, 0),
+            IK::Point_3(-49.2387999055025, 123.598641360433, 0),
+            IK::Point_3(-51.268164698738, 124.403259575835, 0),
+        };
+
+        CGAL_Polyline p1{
+            IK::Point_3(-80.6608706869908, 113.550451407233, 0),
+            IK::Point_3(-105.295437496349, 124.537127782527, 0),
+            IK::Point_3(-76.4480884206953, 152.30682138802, 0),
+            IK::Point_3(-23.6934094178782, 139.390066049447, 0),
+            IK::Point_3(-40.1282334662578, 100.282298806669, 0),
+            IK::Point_3(-69.6350088663798, 87.7972305312764, 0),
+            IK::Point_3(-74.8538706538141, 108.464053813429, 0),
+            IK::Point_3(-80.6608706869908, 113.550451407233, 0),
+        };
+
+        CGAL_Polyline p2{
+            IK::Point_3(-73.4808769486925, 119.997690099402, 0),
+            IK::Point_3(-90.6424155869293, 123.188472670033, 0),
+            IK::Point_3(-77.6978215210285, 136.742511096638, 0),
+            IK::Point_3(-73.4808769486925, 119.997690099402, 0),
+        };
+
+        polylines.push_back(p0);
+        polylines.push_back(p1);
+        polylines.push_back(p2);
+
+        // main method
+        std::tuple<IK::Point_3, IK::Plane_3, double> result = cgal_polylabel::get_polylabel(polylines, 1.0);
+        IK::Point_3 center = std::get<0>(result);
+        std::vector<IK::Point_3> points = {center};
+
+        // display
+        opengl_globals_geometry::add_grid();
+        viewer_wood::scale = 100;
+        viewer_wood::add(polylines);
+        viewer_wood::line_thickness = 10;
+        viewer_wood::add(points);
+        viewer_wood::line_thickness = 3;
+        viewer_wood::scale = 1000;
+
+        // test
+        return true;
+    }
+
+    bool type_geometry_name_circle_ponts_inscribed_in_a_polygon()
+    {
+
+        // screenshot
+        internal::set_file_path_for_input_xml_and_screenshot("type_geometry_name_circle_ponts_inscribed_in_a_polygon");
+
+        // data-set
+        CGAL_Polyline polygon{
+            IK::Point_3(11.2247596176396, -4.60190643733344, 48.9387618537435),
+            IK::Point_3(-5.73799008527948, 27.7396887390699, 38.9994193935361),
+            IK::Point_3(-7.18751465466158, 52.2109764075134, 74.5663582911656),
+            IK::Point_3(1.68332949862521, 18.8956298287167, 52.2485552589767),
+            IK::Point_3(14.0704361211272, 1.10346344393741, 69.2793807577245),
+            IK::Point_3(18.9418950031543, 14.2294672539151, 109.735250000281),
+            IK::Point_3(33.4352381327694, -30.7000564810127, 89.2118909021016),
+            IK::Point_3(11.2247596176396, -4.60190643733344, 48.9387618537435),
+        };
+
+        // main method
+        std::vector<IK::Point_3> points;
+        cgal_polylabel::get_polylabel_circle_division_points(IK::Vector_3(0, 0, 0), {polygon}, points, 30, 0.75, 1.0);
+
+        // display
+        opengl_globals_geometry::add_grid();
+        viewer_wood::scale = 10;
+        std::vector<CGAL_Polyline> polylines = {polygon};
+        viewer_wood::add(polylines);
+        viewer_wood::line_thickness = 10;
+        viewer_wood::add(points);
+        viewer_wood::line_thickness = 3;
+        viewer_wood::scale = 1000;
+
+        // test
+        return true;
+    }
+
+    bool type_geometry_name_grid_of_points_in_a_polygon()
+    {
+        // screenshot
+        internal::set_file_path_for_input_xml_and_screenshot("type_geometry_name_grid_of_points_in_a_polygon");
+
+        // data-set
+        CGAL_Polyline polygon{
+            IK::Point_3(11.2247596176396, -4.60190643733344, 48.9387618537435),
+            IK::Point_3(-5.73799008527948, 27.7396887390699, 38.9994193935361),
+            IK::Point_3(-7.18751465466158, 52.2109764075134, 74.5663582911656),
+            IK::Point_3(1.68332949862521, 18.8956298287167, 52.2485552589767),
+            IK::Point_3(14.0704361211272, 1.10346344393741, 69.2793807577245),
+            IK::Point_3(18.9418950031543, 14.2294672539151, 109.735250000281),
+            IK::Point_3(33.4352381327694, -30.7000564810127, 89.2118909021016),
+            IK::Point_3(11.2247596176396, -4.60190643733344, 48.9387618537435),
+        };
+
+        // main method
+        std::vector<IK::Point_3> points;
+        cgal_rectangle_util::grid_of_points_in_a_polygon(polygon, 2.5, 100, points);
+
+        // display
+        opengl_globals_geometry::add_grid();
+        viewer_wood::scale = 10;
+        std::vector<CGAL_Polyline> polylines = {polygon};
+        viewer_wood::add(polylines);
+        viewer_wood::line_thickness = 10;
+        viewer_wood::add(points);
+        viewer_wood::line_thickness = 3;
+        viewer_wood::scale = 1000;
+
+        // test
+        return true;
+    }
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // GoogleTest
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1150,6 +1318,26 @@ namespace wood_test
     TEST(wood, type_geometry_name_cgal_mesh_boolean_0)
     {
         EXPECT_EQ(type_geometry_name_cgal_mesh_boolean_0(), true);
+    }
+
+    TEST(wood, type_geometry_name_polygon_center)
+    {
+        EXPECT_EQ(type_geometry_name_polygon_center(), true);
+    }
+
+    TEST(wood, type_geometry_name_polygon_center_polylabel)
+    {
+        EXPECT_EQ(type_geometry_name_polygon_center_polylabel(), true);
+    }
+
+    TEST(wood, type_geometry_name_circle_ponts_inscribed_in_a_polygon)
+    {
+        EXPECT_EQ(type_geometry_name_circle_ponts_inscribed_in_a_polygon(), true);
+    }
+
+    TEST(wood, type_geometry_name_grid_of_points_in_a_polygon)
+    {
+        EXPECT_EQ(type_geometry_name_grid_of_points_in_a_polygon(), true);
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

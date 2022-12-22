@@ -5,6 +5,7 @@ namespace viewer_wood
 {
 
     extern float scale;
+
     extern float line_thickness;
 
     void add(std::vector<std::vector<CGAL_Polyline>> &polyline_groups, int color_type = 0);
@@ -22,6 +23,7 @@ namespace viewer_wood
     void add_loft(std::vector<std::vector<CGAL_Polyline>> &output_plines);
 
     void add(std::vector<IK::Point_3> &points);
+
 }
 
 #endif // VIEWER_WOOD_H

@@ -187,14 +187,14 @@ void viewer_wood::add(std::vector<IK::Point_3> &points)
     vertices.reserve(vertices_colors.size() * 3);
     for (auto &point : points)
     {
-        vertices.emplace_back(static_cast<float>(point.x()));
-        vertices.emplace_back(static_cast<float>(point.y()));
-        vertices.emplace_back(static_cast<float>(point.z()));
+        vertices.emplace_back(static_cast<float>(point.hx() / scale));
+        vertices.emplace_back(static_cast<float>(point.hy() / scale));
+        vertices.emplace_back(static_cast<float>(point.hz() / scale));
 
         vertices_colors.emplace_back(0.0f);
         vertices_colors.emplace_back(0.0f);
         vertices_colors.emplace_back(0.0f);
     }
 
-    opengl_globals_geometry::pointclouds.add(vertices, vertices_colors, 0.01f, "mesh_outlines_wood");
+    opengl_globals_geometry::pointclouds.add(vertices, vertices_colors, line_thickness, "points_wood");
 }
