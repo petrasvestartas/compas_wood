@@ -2,7 +2,7 @@
 
 ## CMake
 
-```
+```cmake
 ##### Step 1: Create a build directory and cd into it
 # cd C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win
 ##### Step 2: Run CMake to download libraries
@@ -17,7 +17,7 @@
 
 ## tasks
 
-```
+```json
 {
 	"version": "2.0.0",
 	"tasks": [
