@@ -176,7 +176,7 @@ git branch --show-current
 ```
 
 
-### cpp launch
+### launch
 ``` json
 //https://www.youtube.com/watch?v=Rfj40xW9q6w
 {
@@ -194,7 +194,7 @@ git branch --show-current
   ]
 }
 ```
-### cpp settings
+### settings
 ``` json
 {
   "python.linting.flake8Enabled": true,
