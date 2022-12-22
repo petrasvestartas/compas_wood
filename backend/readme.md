@@ -15,6 +15,45 @@
 # cmake  --build C:\\IBOIS57\\_Code\\Software\\Python\\compas_wood\\backend\\build_win\\ -v --config Release --parallel 4 &&  C:\\IBOIS57\\_Code\\Software\\Python\\compas_wood\\backend\\build_win\\Release\\wood.exe
 ```
 
+
+
+## Commit PREFIX rules
+
+```
+ADD "" - new feature
+FIX "" - bug fix
+DOC "" - documentation
+TEST "" - tests
+TUT "" - tutorials
+MISC "" - unknown
+```
+
+# git 
+
+## Add files to the repository
+```
+git add --all
+git commit -m "..."
+git push origin backend
+```
+
+## git branch
+
+To create a new branch and switch to it at the same time:
+```
+git checkout -b backend
+```
+
+Show the current branch you are in:
+```
+git branch --show-current
+```
+
+Show all the branches:
+```
+git branch --show-current
+```
+
 ## tasks
 
 ```json
@@ -69,44 +108,7 @@
 
 ```
 
-## Commit PREFIX rules
-
-```
-ADD "" - new feature
-FIX "" - bug fix
-DOC "" - documentation
-TEST "" - tests
-TUT "" - tutorials
-MISC "" - unknown
-```
-
-# git 
-
-## Add files to the repository
-```
-git add --all
-git commit -m "..."
-git push origin backend
-```
-
-## git branch
-
-To create a new branch and switch to it at the same time:
-```
-git checkout -b backend
-```
-
-Show the current branch you are in:
-```
-git branch --show-current
-```
-
-Show all the branches:
-```
-git branch --show-current
-```
-
-## cpp intellisence
+## c_cpp_properties
 
 ``` json
 {
@@ -168,3 +170,340 @@ git branch --show-current
     "version": 4
 }
 ```
+
+
+### cpp launch
+``` json
+//https://www.youtube.com/watch?v=Rfj40xW9q6w
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Debug",
+      "type": "cppdbg",
+      "request": "launch",
+      "cwd": "${fileDirname}",
+      "miDebuggerPath": "gdb",
+      "program": "${workspaceRoot}/build_win/Release/wood",
+      "args": [],
+    }
+  ]
+}
+```
+### cpp settings
+``` json
+{
+  "python.linting.flake8Enabled": true,
+  "python.linting.enabled": true,
+  "C_Cpp_Runner.cCompilerPath": "C:/Ninja/ninja.exe",
+  "C_Cpp_Runner.cppCompilerPath": "g++",
+  "C_Cpp_Runner.debuggerPath": "gdb",
+  "C_Cpp_Runner.cStandard": "gnu17",
+  "C_Cpp_Runner.cppStandard": "",
+  "C_Cpp_Runner.msvcBatchPath": "",
+  "C_Cpp_Runner.useMsvc": false,
+  "C_Cpp_Runner.warnings": [
+    "-Wall",
+    "-Wextra",
+    "-Wpedantic"
+  ],
+  "C_Cpp_Runner.enableWarnings": true,
+  "C_Cpp_Runner.warningsAsError": false,
+  "C_Cpp_Runner.compilerArgs": [],
+  "C_Cpp_Runner.linkerArgs": [],
+  "C_Cpp_Runner.includePaths": [],
+  "C_Cpp_Runner.includeSearch": [
+    "*",
+    "**/*"
+  ],
+  "C_Cpp_Runner.excludeSearch": [
+    "**/build",
+    "**/build/**",
+    "**/.*",
+    "**/.*/**",
+    "**/.vscode",
+    "**/.vscode/**"
+  ],
+  "files.associations": {
+    "limits": "cpp",
+    "fstream": "cpp",
+    "numeric": "cpp",
+    "string": "cpp",
+    "algorithm": "cpp",
+    "array": "cpp",
+    "cmath": "cpp",
+    "cstdarg": "cpp",
+    "cstddef": "cpp",
+    "cstdint": "cpp",
+    "cstdio": "cpp",
+    "cstdlib": "cpp",
+    "cstring": "cpp",
+    "ctime": "cpp",
+    "cwchar": "cpp",
+    "deque": "cpp",
+    "exception": "cpp",
+    "functional": "cpp",
+    "initializer_list": "cpp",
+    "iomanip": "cpp",
+    "ios": "cpp",
+    "iosfwd": "cpp",
+    "iostream": "cpp",
+    "istream": "cpp",
+    "iterator": "cpp",
+    "list": "cpp",
+    "map": "cpp",
+    "memory": "cpp",
+    "new": "cpp",
+    "ostream": "cpp",
+    "random": "cpp",
+    "sstream": "cpp",
+    "stack": "cpp",
+    "stdexcept": "cpp",
+    "streambuf": "cpp",
+    "system_error": "cpp",
+    "tuple": "cpp",
+    "type_traits": "cpp",
+    "typeinfo": "cpp",
+    "unordered_map": "cpp",
+    "unordered_set": "cpp",
+    "utility": "cpp",
+    "vector": "cpp",
+    "xfacet": "cpp",
+    "xhash": "cpp",
+    "xiosbase": "cpp",
+    "xlocale": "cpp",
+    "xlocinfo": "cpp",
+    "xlocmon": "cpp",
+    "xlocnum": "cpp",
+    "xloctime": "cpp",
+    "xmemory": "cpp",
+    "xmemory0": "cpp",
+    "xstddef": "cpp",
+    "xstring": "cpp",
+    "xtr1common": "cpp",
+    "xtree": "cpp",
+    "xutility": "cpp",
+    "chrono": "cpp",
+    "ratio": "cpp",
+    "queue": "cpp",
+    "set": "cpp",
+    "xthread": "cpp",
+    "thread": "cpp",
+    "atomic": "cpp",
+    "bitset": "cpp",
+    "cctype": "cpp",
+    "cfenv": "cpp",
+    "complex": "cpp",
+    "locale": "cpp",
+    "mutex": "cpp",
+    "optional": "cpp",
+    "string_view": "cpp",
+    "strstream": "cpp",
+    "typeindex": "cpp",
+    "variant": "cpp",
+    "xlocbuf": "cpp",
+    "xlocmes": "cpp",
+    "clocale": "cpp",
+    "csetjmp": "cpp",
+    "csignal": "cpp",
+    "cwctype": "cpp",
+    "execution": "cpp"
+  },
+  "C_Cpp.dimInactiveRegions": false,
+  "git.ignoreLimitWarning": true,
+  "cSpell.words": [
+    "Minkowski"
+  ],
+  "workbench.colorCustomizations": {
+    "activityBar.background": "#000000",
+    "statusBar.background": "#333",
+    "sideBar.foreground": "#606060",
+    "sideBar.background": "#000000",
+    "titleBar.activeBackground": "#000000",
+    "terminal.background": "#000000"
+  }
+
+  "editor.tokenColorCustomizations": {
+    "textMateRules": [
+      {
+        "scope": [
+          "constant",
+          "constant.character",
+          "constant.character.escape",
+          "constant.numeric",
+          "constant.numeric.integer",
+          "constant.numeric.float",
+          "constant.numeric.hex",
+          "constant.numeric.octal",
+          "constant.other",
+          "constant.regexp",
+          "constant.rgb-value",
+          "emphasis",
+          "entity",
+          "entity.name",
+          "entity.name.class",
+          "entity.name.function",
+          "entity.name.method",
+          "entity.name.section",
+          "entity.name.selector",
+          "entity.name.tag",
+          "entity.name.type",
+          "entity.other",
+          "entity.other.attribute-name",
+          "entity.other.inherited-class",
+          "invalid",
+          "invalid.deprecated",
+          "invalid.illegal",
+          "keyword",
+          "keyword.control",
+          "keyword.operator",
+          "keyword.operator.new",
+          "keyword.operator.assignment",
+          "keyword.operator.arithmetic",
+          "keyword.operator.logical",
+          "keyword.other",
+          "markup",
+          "markup.bold",
+          "markup.changed",
+          "markup.deleted",
+          "markup.heading",
+          "markup.inline.raw",
+          "markup.inserted",
+          "markup.italic",
+          "markup.list",
+          "markup.list.numbered",
+          "markup.list.unnumbered",
+          "markup.other",
+          "markup.quote",
+          "markup.raw",
+          "markup.underline",
+          "markup.underline.link",
+          "meta",
+          "meta.block",
+          "meta.cast",
+          "meta.class",
+          "meta.function",
+          "meta.function-call",
+          "meta.preprocessor",
+          "meta.return-type",
+          "meta.selector",
+          "meta.tag",
+          "meta.type.annotation",
+          "meta.type",
+          "punctuation.definition.string.begin",
+          "punctuation.definition.string.end",
+          "punctuation.separator",
+          "punctuation.separator.continuation",
+          "punctuation.terminator",
+          "storage",
+          "storage.modifier",
+          "storage.type",
+          "string",
+          "string.interpolated",
+          "string.other",
+          "string.quoted",
+          "string.quoted.double",
+          "string.quoted.other",
+          "string.quoted.single",
+          "string.quoted.triple",
+          "string.regexp",
+          "string.unquoted",
+          "strong",
+          "support",
+          "support.class",
+          "support.constant",
+          "support.function",
+          "support.other",
+          "support.type",
+          "support.type.property-name",
+          "support.variable",
+          "variable",
+          "variable.language",
+          "variable.name",
+          "variable.other",
+          "variable.other.readwrite",
+          "variable.parameter"
+        ],
+        "settings": {
+          "fontStyle": "bold"
+        }
+      },
+      {
+        "scope": [
+          "comment",
+          "punctuation.definition.comment"
+        ],
+        "settings": {
+          "fontStyle": "italic",
+          "foreground": "#000000",
+        }
+      },
+      {
+        "scope": [
+          "constant",
+          "constant.character",
+          "constant.character.escape",
+          "constant.numeric",
+          "constant.numeric.integer",
+          "constant.numeric.float",
+          "constant.numeric.hex",
+          "constant.numeric.octal",
+          "constant.other",
+          "constant.regexp",
+          "constant.rgb-value",
+          "storage",
+          "storage.modifier",
+          "storage.type",
+          "string",
+          "string.interpolated",
+          "string.other",
+          "string.quoted",
+          "string.quoted.double",
+          "string.quoted.other",
+          "string.quoted.single",
+          "string.quoted.triple",
+          "string.regexp",
+          "string.unquoted",
+        ],
+        "settings": {
+          "foreground": "#003cff",
+        }
+      },
+      {
+        "scope": [
+          "variable",
+          "variable.language",
+          "variable.name",
+          "variable.other",
+          "variable.other.readwrite",
+          "variable.parameter"
+        ],
+        "settings": {
+          "foreground": "#d000b7",
+        }
+      },
+      {
+        "scope": [
+          "storage",
+          "storage.modifier",
+          "storage.type",
+          "meta",
+          "meta.block",
+          "meta.cast",
+          "meta.class",
+          "meta.function",
+          "meta.function-call",
+          "meta.preprocessor",
+          "meta.return-type",
+          "meta.selector",
+          "meta.tag",
+          "meta.type.annotation",
+          "meta.type",
+        ],
+        "settings": {
+          "foreground": "#000000",
+        }
+      }
+    ]
+  },
+}
