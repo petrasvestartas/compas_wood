@@ -30,7 +30,28 @@ cmake --fresh -DGET_LIBS=OFF -DBUILD_MY_PROJECTS=ON -DCOMPILE_LIBS=OFF -DRELEASE
 cmake  --build C:\\IBOIS57\\_Code\\Software\\Python\\compas_wood\\backend\\build_win\\ -v --config Release --parallel 4 &&  C:\\IBOIS57\\_Code\\Software\\Python\\compas_wood\\backend\\build_win\\Release\\wood.exe
 ```
 
+## Visual Studio Code Shortcuts
+```
 
+CODING HELP
+Ctrl + Space   =   Autocomplete using IntelliSense.
+CTRL + Enter   =   Copilot on the right side of the window
+
+SELECTION
+Shift + End   =   Select the entire line from start to end.
+Shift + Home   =   Select the entire line from end to start.
+Alt +Shift +arrow keys(←,↑,↓,→)   =  Select custom part of the code.
+
+BUILD
+Ctrl + Shift + B   =   Build your project.
+
+COMMENTS
+Ctrl + K, Ctrl + C   =   Comments the selected lines.
+Ctrl + K, Ctrl + U   =   Uncomments the selected lines.
+Ctrl + K, Ctrl + D   =   Do proper alignment of all the code.
+
+
+```
 
 
 
