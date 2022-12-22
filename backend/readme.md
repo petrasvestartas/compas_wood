@@ -1,12 +1,15 @@
 # compas_wood backend
 
 ## Commit PREFIX rules
-* ADD "" - new feature
-* FIX "" - bug fix
-* DOC "" - documentation
-* TEST "" - tests
-* TUT "" - tutorials
-* MISC "" - unknown
+
+```
+ADD "" - new feature
+FIX "" - bug fix
+DOC "" - documentation
+TEST "" - tests
+TUT "" - tutorials
+MISC "" - unknown
+```
 
 # git 
 
