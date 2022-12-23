@@ -1262,7 +1262,7 @@ namespace wood_test
     bool type_geometry_name_offest_polygon_inside_and_divide_into_points()
     {
         // screenshot
-        internal::set_file_path_for_input_xml_and_screenshot("type_geometry_name_grid_of_points_in_a_polygon");
+        internal::set_file_path_for_input_xml_and_screenshot("type_geometry_name_offest_polygon_inside_and_divide_into_points");
 
         // data-set
         CGAL_Polyline polygon{
@@ -1278,16 +1278,30 @@ namespace wood_test
 
         // main method
         std::vector<IK::Point_3> points;
+        double offset_distance = -2.5;
+        double division_distance = 10;
 
         // offset polygon
         IK::Point_3 center;
         IK::Plane_3 plane;
         CGAL_Polyline polygon_copy = polygon;
         cgal_polyline_util::get_fast_plane(polygon_copy, center, plane);
-        clipper_util::offset_2D(polygon_copy, plane, -2.5);
+        clipper_util::offset_2D(polygon_copy, plane, offset_distance);
 
-        // divide into points
-        // cgal_rectangle_util::grid_of_points_in_a_polygon(polygon, 2.5, 100, points);
+        // interpolate two points in steps
+        for (int i = 0; i < polygon_copy.size() - 1; i++)
+        {
+            std::vector<IK::Point_3> division_points;
+            int divisions = (int)std::min(100.0, std::sqrt(CGAL::squared_distance(polygon_copy[i], polygon_copy[i + 1])) / division_distance);
+            cgal_vector_util::interpolate_points(polygon_copy[i], polygon_copy[i + 1], divisions, division_points, 1);
+            points.insert(points.end(), division_points.begin(), division_points.end());
+        }
+
+        // if the polyline is open
+        if (CGAL::squared_distance(polygon_copy.front(), polygon_copy.back()) > GlobalToleranceSquare)
+        {
+            points.emplace_back(polygon_copy.back());
+        }
 
         // display
         opengl_globals_geometry::add_grid();
@@ -1295,7 +1309,7 @@ namespace wood_test
         std::vector<CGAL_Polyline> polylines = {polygon, polygon_copy};
         viewer_wood::add(polylines);
         viewer_wood::line_thickness = 10;
-        // viewer_wood::add(points);
+        viewer_wood::add(points);
         viewer_wood::line_thickness = 3;
         viewer_wood::scale = 1000;
 

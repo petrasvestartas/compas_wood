@@ -1,6 +1,6 @@
 #pragma once
 
-//#include "../../stdafx.h"
+// #include "../../stdafx.h"
 
 namespace cgal_vector_util
 {
@@ -486,6 +486,62 @@ namespace cgal_vector_util
         else
         {
             return 0;
+        }
+    }
+
+    inline void interpolate_points(const IK::Point_3 &from, const IK::Point_3 &to, const int &steps, std::vector<IK::Point_3> &points, int type_0_noends_1_end_2_oneend = 0)
+    {
+
+        switch (type_0_noends_1_end_2_oneend)
+        {
+        case (0):
+        {
+            points.reserve(steps);
+
+            for (int i = 1; i < steps + 1; i++)
+            {
+                double t = i / (double)(1 + steps);
+
+                points.emplace_back(
+                    from.hx() + t * (to.hx() - from.hx()),
+                    from.hy() + t * (to.hy() - from.hy()),
+                    from.hz() + t * (to.hz() - from.hz()));
+            }
+        }
+        break;
+        case (1):
+        {
+            points.reserve(steps + 2);
+            points.emplace_back(from);
+
+            for (int i = 1; i < steps + 1; i++)
+            {
+                double t = i / (double)(1 + steps);
+
+                points.emplace_back(
+                    from.hx() + t * (to.hx() - from.hx()),
+                    from.hy() + t * (to.hy() - from.hy()),
+                    from.hz() + t * (to.hz() - from.hz()));
+            }
+            points.emplace_back(to);
+        }
+        break;
+        case (2):
+        {
+            points.reserve(steps + 1);
+            points.emplace_back(from);
+
+            for (int i = 1; i < steps + 1; i++)
+            {
+                double t = i / (double)(1 + steps);
+
+                points.emplace_back(
+                    from.hx() + t * (to.hx() - from.hx()),
+                    from.hy() + t * (to.hy() - from.hy()),
+                    from.hz() + t * (to.hz() - from.hz()));
+            }
+        }
+        break;
         }
     }
 }

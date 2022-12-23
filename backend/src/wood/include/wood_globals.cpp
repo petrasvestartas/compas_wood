@@ -1,6 +1,8 @@
 #include "wood_globals.h"
 #include "../../../stdafx.h"
 
+
+
 namespace wood_globals
 {
 
@@ -52,10 +54,8 @@ namespace wood_globals
 
     std::vector<double> joint_types{300, 0.5, 8, 450, 0.64, 15, 450, 0.5, 20, 300, 0.5, 30, 300, 0.5, 40, 300, 0.5, 58, 300, 1.0, 60};
 
-    //how to make the local path to the data set folder
+    // how to make the local path to the data set folder
     std::string data_set_input_folder = "C:\\IBOIS57\\_Code\\Software\\Python\\compas_wood\\backend\\src\\wood\\dataset\\";
     std::string data_set_output_file = data_set_input_folder + "out.xml";
 
-
-    
 }

@@ -50,10 +50,10 @@
 #include <glm/gtx/euler_angles.hpp>
 
 // imgui
-//#include "imgui.h"
-//#include "imgui_impl_glfw.h"
-//#include "imgui_impl_opengl3.h"
-//#include "imgui_my_style.h"
+// #include "imgui.h"
+// #include "imgui_impl_glfw.h"
+// #include "imgui_impl_opengl3.h"
+// #include "imgui_my_style.h"
 
 // assimp
 #include <stb_image.h>
@@ -71,33 +71,33 @@
 #include "src/viewer/include/opengl/opengl_debug.h"
 
 // imgui
-//#include "imgui.h"
+// #include "imgui.h"
 #include "wood_globals.h"
 #include "imgui_impl_glfw.h"
 #define IMGUI_IMPL_OPENGL_LOADER_CUSTOM
 #include "imgui_impl_opengl3.h"
 
-//#include "imgui.h"
-//#include "imgui_impl_opengl3.h"
+// #include "imgui.h"
+// #include "imgui_impl_opengl3.h"
 
 // my lib goemetry
 #include "src/viewer/include/opengl/opengl_shaders.h"
 
 #include "src/viewer/include/opengl/opengl_polylines.h"
 #include "src/viewer/include/opengl/opengl_pointclouds.h"
-//#include <CDT.h>
-// temp
-//#include <CDT.h>
-//#include "src/viewer/include/opengl/opengl_triangulation.h"
+// #include <CDT.h>
+//  temp
+// #include <CDT.h>
+// #include "src/viewer/include/opengl/opengl_triangulation.h"
 #include <CDT.h>                                            //used in opengl_meshes
 #include "src/viewer/include/opengl/opengl_triangulation.h" //used in opengl_meshes
 
 #include "src/viewer/include/opengl/opengl_meshes.h"
 #include "src/viewer/include/opengl/opengl_cameras.h"
 #define gui
-//#ifdef(gui) //only declare this if the following header is outside of the precompiled header
+// #ifdef(gui) //only declare this if the following header is outside of the precompiled header
 #include "src/viewer/include/imgui/imgui_render.h"
-//#endif//only declare this if the following header is outside of the precompiled header
+// #endif//only declare this if the following header is outside of the precompiled header
 #include "src/viewer/include/opengl/opengl_globals_geometry.h"
 #include "src/viewer/include/opengl/opengl_render.h"
 
@@ -105,9 +105,9 @@
 #include "src/viewer/include/opengl/opengl_meshes.h"
 #include "src/viewer/include/opengl/opengl_cameras.h"
 #define gui
-//#ifdef(gui) //only declare this if the following header is outside of the precompiled header
+// #ifdef(gui) //only declare this if the following header is outside of the precompiled header
 #include "src/viewer/include/imgui/imgui_render.h"
-//#endif//only declare this if the following header is outside of the precompiled header
+// #endif//only declare this if the following header is outside of the precompiled header
 #include "src/viewer/include/opengl/opengl_globals_geometry.h"
 #include "src/viewer/include/opengl/opengl_render.h"
 
@@ -159,7 +159,7 @@
 #include <boost/property_tree/xml_parser.hpp>
 
 // CLIPPER
-//#include "clipper.h"
+// #include "clipper.h"
 
 // RTREE
 #include "src/wood/include/rtree.h"
@@ -191,8 +191,8 @@ static std::string path_and_file_for_joints = "";
 // Display
 static std::vector<CGAL_Polyline> viewer_polylines;
 
-    struct FaceInfo2
-    {
+struct FaceInfo2
+{
     FaceInfo2() {}
     int nesting_level;
     bool in_domain()
@@ -236,4 +236,4 @@ using RowMatrixXi = Eigen::Matrix<int, Eigen::Dynamic, Eigen::Dynamic, Eigen::Ro
 #include "clipper_util.h"
 #include "rtree_util.h"
 
-//#include "wood_data_set.h" // data_set, attention do not use this in not a precompiled header it add 10-12 seconds of compilation time, just for temporary testing
+// #include "wood_data_set.h" // data_set, attention do not use this in not a precompiled header it add 10-12 seconds of compilation time, just for temporary testing
