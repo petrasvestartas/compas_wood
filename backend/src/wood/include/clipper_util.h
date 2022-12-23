@@ -1,5 +1,5 @@
 #pragma once
-//#include "../../stdafx.h"
+// #include "../../stdafx.h"
 
 // https://github.com/AngusJohnson/Clipper2
 namespace clipper_util
@@ -155,7 +155,7 @@ namespace clipper_util
     inline bool offset_2D(
         CGAL_Polyline &p0,
         IK::Plane_3 &plane,
-        double offset,
+        const double &offset,
         double scale = 100000.0)
     {
         /////////////////////////////////////////////////////////////////////////////////////
@@ -302,8 +302,5 @@ namespace clipper_util
 
         return true;
     }
-
-
-
 
 }
