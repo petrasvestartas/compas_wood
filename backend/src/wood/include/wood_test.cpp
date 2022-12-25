@@ -1243,7 +1243,7 @@ namespace wood_test
 
         // main method
         std::vector<IK::Point_3> points;
-        cgal_rectangle_util::grid_of_points_in_a_polygon(polygon, 2.5, 100, points);
+        cgal_rectangle_util::grid_of_points_in_a_polygon(polygon, -2.5, 2.5, 100, points);
 
         // display
         opengl_globals_geometry::add_grid();
@@ -1278,35 +1278,48 @@ namespace wood_test
 
         // main method
         std::vector<IK::Point_3> points;
-        double offset_distance = -2.5;
-        double division_distance = 10;
-
-        // offset polygon
-        IK::Point_3 center;
-        IK::Plane_3 plane;
-        CGAL_Polyline polygon_copy = polygon;
-        cgal_polyline_util::get_fast_plane(polygon_copy, center, plane);
-        clipper_util::offset_2D(polygon_copy, plane, offset_distance);
-
-        // interpolate two points in steps
-        for (int i = 0; i < polygon_copy.size() - 1; i++)
-        {
-            std::vector<IK::Point_3> division_points;
-            int divisions = (int)std::min(100.0, std::sqrt(CGAL::squared_distance(polygon_copy[i], polygon_copy[i + 1])) / division_distance);
-            cgal_vector_util::interpolate_points(polygon_copy[i], polygon_copy[i + 1], divisions, division_points, 1);
-            points.insert(points.end(), division_points.begin(), division_points.end());
-        }
-
-        // if the polyline is open
-        if (CGAL::squared_distance(polygon_copy.front(), polygon_copy.back()) > GlobalToleranceSquare)
-        {
-            points.emplace_back(polygon_copy.back());
-        }
+        clipper_util::offset_and_divide_to_points(points, polygon, -2.5, 10);
 
         // display
         opengl_globals_geometry::add_grid();
         viewer_wood::scale = 10;
-        std::vector<CGAL_Polyline> polylines = {polygon, polygon_copy};
+        std::vector<CGAL_Polyline> polylines = {polygon}; //, polygon_copy
+        viewer_wood::add(polylines);
+        viewer_wood::line_thickness = 10;
+        viewer_wood::add(points);
+        viewer_wood::line_thickness = 3;
+        viewer_wood::scale = 1000;
+
+        // test
+        return true;
+    }
+
+    bool type_geometry_name_rectangle_ponts_inscribed_in_a_polygon()
+    {
+
+        // screenshot
+        internal::set_file_path_for_input_xml_and_screenshot("type_geometry_name_rectangle_ponts_inscribed_in_a_polygon");
+
+        // data-set
+        CGAL_Polyline polygon{
+            IK::Point_3(11.2247596176396, -4.60190643733344, 48.9387618537435),
+            IK::Point_3(-5.73799008527948, 27.7396887390699, 38.9994193935361),
+            IK::Point_3(-7.18751465466158, 52.2109764075134, 74.5663582911656),
+            IK::Point_3(1.68332949862521, 18.8956298287167, 52.2485552589767),
+            IK::Point_3(14.0704361211272, 1.10346344393741, 69.2793807577245),
+            IK::Point_3(18.9418950031543, 14.2294672539151, 109.735250000281),
+            IK::Point_3(33.4352381327694, -30.7000564810127, 89.2118909021016),
+            IK::Point_3(11.2247596176396, -4.60190643733344, 48.9387618537435),
+        };
+
+        // main method
+        std::vector<IK::Point_3> points;
+        // clipper_util::offset_and_divide_to_points(points, polygon, -2.5, 10);
+
+        // display
+        opengl_globals_geometry::add_grid();
+        viewer_wood::scale = 10;
+        std::vector<CGAL_Polyline> polylines = {polygon}; //, polygon_copy
         viewer_wood::add(polylines);
         viewer_wood::line_thickness = 10;
         viewer_wood::add(points);
@@ -1316,6 +1329,7 @@ namespace wood_test
         // test
         return false;
     }
+
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // GoogleTest
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1401,6 +1415,11 @@ namespace wood_test
     TEST(wood, type_geometry_name_offest_polygon_inside_and_divide_into_points)
     {
         EXPECT_EQ(type_geometry_name_offest_polygon_inside_and_divide_into_points(), true);
+    }
+
+    TEST(wood, type_geometry_name_rectangle_ponts_inscribed_in_a_polygon)
+    {
+        EXPECT_EQ(type_geometry_name_rectangle_ponts_inscribed_in_a_polygon(), true);
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

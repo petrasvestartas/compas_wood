@@ -152,6 +152,82 @@ namespace clipper_util
         return true;
     }
 
+    inline bool offset_2D_no_orient(
+        CGAL_Polyline &p0,
+        const double &offset,
+        double scale = 100000.0)
+    {
+        /////////////////////////////////////////////////////////////////////////////////////
+        // Orient from 3D to 2D
+        /////////////////////////////////////////////////////////////////////////////////////
+        if (p0.size() > p0.max_size())
+            return false;
+
+        CGAL_Polyline a = p0;
+
+        /////////////////////////////////////////////////////////////////////////////////////
+        // Convert to Clipper
+        /////////////////////////////////////////////////////////////////////////////////////
+        Clipper2Lib::Path64 pathA(a.size() - 1);
+
+        for (int i = 0; i < a.size() - 1; i++)
+        {
+            pathA[i] = Clipper2Lib::Point64((int)(a[i].x() * scale), (int)(a[i].y() * scale));
+        }
+
+        double offset_ = offset * scale;
+        Clipper2Lib::Paths64 C;
+        C.emplace_back(pathA);
+        C = Clipper2Lib::InflatePaths(C, offset_, Clipper2Lib::JoinType::Miter, Clipper2Lib::EndType::Polygon);
+
+        if (C.size() > 0)
+        {
+
+            if (C[0].size() > 3 && std::abs(Area(C[0])) > std::abs(Area(pathA) * GlobalClipperAreaTolerance))
+            { // skip triangles and very small polygons
+
+                // Not Sure if rotation is correct, I doubt that cp_id+1 is needed,
+                int cp_id = 0;
+                double cp_dist = std::pow(pathA[0].x - C[0][0].x, 2) + std::pow(pathA[0].y - C[0][0].y, 2);
+                for (int i = 1; i < C[0].size(); i++)
+                {
+                    double dist = std::pow(pathA[0].x - C[0][i].x, 2) + std::pow(pathA[0].y - C[0][i].y, 2);
+                    if (dist < cp_dist)
+                    {
+                        cp_dist = dist;
+                        cp_id = i;
+                    }
+                }
+                std::rotate(C[0].begin(), C[0].begin() + cp_id, C[0].end());
+                // std::rotate(C[0].begin(), C[0].begin()+ C[0].size()- cp_id, C[0].end());
+
+                p0.clear();
+                p0.resize(C[0].size() + 1);
+
+                for (int i = 0; i < C[0].size(); i++)
+                {
+                    IK::Point_3 p(C[0][i].x / scale, C[0][i].y / scale, 0);
+                    p0[i] = p;
+                }
+
+                p0[C[0].size()] = p0[0]; // Close
+            }
+            else
+            {
+                return false;
+            }
+        }
+        else
+        {
+            return false;
+        }
+
+        /////////////////////////////////////////////////////////////////////////////////////
+        // Output
+        /////////////////////////////////////////////////////////////////////////////////////
+        return true;
+    }
+
     inline bool offset_2D(
         CGAL_Polyline &p0,
         IK::Plane_3 &plane,
@@ -183,17 +259,12 @@ namespace clipper_util
             pathA[i] = Clipper2Lib::Point64((int)(a[i].x() * scale), (int)(a[i].y() * scale));
         }
 
-        // Clipper2Lib::ClipperOffset clipper;
-        // clipper.AddPath(pathA, ClipperLib::JoinType::jtMiter, ClipperLib::EndType::etClosedPolygon);
-        // Clipper2Lib::Paths64 C;
-        // clipper.Execute(C, offset * scale);
 
         double offset_ = offset * scale;
         Clipper2Lib::Paths64 C;
         C.emplace_back(pathA);
         C = Clipper2Lib::InflatePaths(C, offset_, Clipper2Lib::JoinType::Miter, Clipper2Lib::EndType::Polygon);
 
-        // printf("\n offset %f", offset);
 
         if (C.size() > 0)
         {
@@ -303,4 +374,43 @@ namespace clipper_util
         return true;
     }
 
+    /**
+     * offset and divide a planar polyline to points
+     * WARNING: the offset is running the clipper offset algorithm, but only one polyline is outputed
+     * the polyline takes into account 3d outlines
+     * the division method adds all corner points and interpolates corners by a division distance
+     * the method is able to divide open and closed polylines
+     * c) intersection between line and elements have to be computed to get a correct line length
+     *
+     * @param [out] result division points
+     * @param [in] polygon polyline
+     * @param [in] offset_distance distance must be negative to offset the polyline inwards
+     * @param [in] division_distance distance between two points
+     * @return bool if the result is successful, e.g. box is valid or the input polyline has less than 3 points
+     */
+    inline bool offset_and_divide_to_points(std::vector<IK::Point_3> &result, std::vector<IK::Point_3> &polygon, double offset_distance = -2.5, double division_distance = 10)
+    {
+
+        // offset polygon
+        IK::Point_3 center;
+        IK::Plane_3 plane;
+        CGAL_Polyline polygon_copy = polygon;
+        cgal_polyline_util::get_fast_plane(polygon_copy, center, plane);
+        clipper_util::offset_2D(polygon_copy, plane, offset_distance);
+
+        // interpolate two points in steps
+        for (int i = 0; i < polygon_copy.size() - 1; i++)
+        {
+            std::vector<IK::Point_3> division_points;
+            int divisions = (int)std::min(100.0, std::sqrt(CGAL::squared_distance(polygon_copy[i], polygon_copy[i + 1])) / division_distance);
+            cgal_vector_util::interpolate_points(polygon_copy[i], polygon_copy[i + 1], divisions, division_points, 1);
+            result.insert(result.end(), division_points.begin(), division_points.end());
+        }
+
+        // if the polyline is open add the end of the polyline to the points
+        if (CGAL::squared_distance(polygon_copy.front(), polygon_copy.back()) > GlobalToleranceSquare)
+            result.emplace_back(polygon_copy.back());
+
+        return true;
+    }
 }

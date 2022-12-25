@@ -379,12 +379,13 @@ namespace cgal_rectangle_util
      * @brief Calculate a grid of points inside a polygon by a) convex hull, b) its bounding box, c) grid of points inside the polygon
      *
      * @param [in] polygon input polyline
+     * @param [in] offset_distance negative value is inqards offset, positive outwards, 0 is ignored
      * @param [in] division_distance distance between points, if 0 the distance is calculated automatically
      * @param [in] max_points number of points
      * @param [out] points output points
      * @return bool flag if the result is valid
      */
-    inline bool grid_of_points_in_a_polygon(CGAL_Polyline &polygon, const double &division_distance, const int &max_points, std::vector<IK::Point_3> &points) // const double &divisions,
+    inline bool grid_of_points_in_a_polygon(CGAL_Polyline &polygon, const double &offset_distance, const double &division_distance, const int &max_points, std::vector<IK::Point_3> &points) // const double &divisions,
     {
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -394,6 +395,12 @@ namespace cgal_rectangle_util
         orient_polyline_to_xy_and_back(polygon, xform_to_xy, xform_to_xy_inv);
         CGAL_Polyline polygon_copy = polygon;
         cgal_polyline_util::Transform(polygon_copy, xform_to_xy);
+
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // offset polygon if the input is below 0
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        if (offset_distance != 0)
+            clipper_util::offset_2D_no_orient(polygon_copy, offset_distance);
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // calculate the convex hull
@@ -490,8 +497,8 @@ namespace cgal_rectangle_util
         int divisions_u, divisions_v;
         // if (division_distance != 0)
         //{
-        divisions_u = std::min(std::min(20.0, max_points*0.5), std::floor(std::sqrt(half_dir_u.squared_length()) / division_distance));
-        divisions_v = std::min(std::min(20.0, max_points*0.5), std::floor(std::sqrt(half_dir_v.squared_length()) / division_distance));
+        divisions_u = std::min(std::min(20.0, max_points * 0.5), std::floor(std::sqrt(half_dir_u.squared_length()) / division_distance));
+        divisions_v = std::min(std::min(20.0, max_points * 0.5), std::floor(std::sqrt(half_dir_v.squared_length()) / division_distance));
         //}
         // else
         // {

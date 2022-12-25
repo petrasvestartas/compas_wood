@@ -849,4 +849,5 @@ namespace cgal_polyline_util
         return result;
     }
 
+
 }
