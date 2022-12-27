@@ -164,6 +164,40 @@ namespace cgal_polylabel
                 points.emplace_back(p.transform(xy_to_plane));
             }
         }
+
+        /**
+         * get transformation from 3D to 2D and invcerse from a polyline
+         * the 3D plane is computed from the start point of the polyline
+         * and an the sum of the consecutive edges cross products
+         *
+         * @param [in] polyline input CGAL polyline
+         * @param [out] xform_to_xy transformation from 3D to XY
+         * @param [out] xform_to_xy_inv transformation from XY to 3D
+         * @return returns true if the polyline has more than 3 points, else not valid
+         */
+        inline bool orient_polyline_to_xy_and_back(CGAL_Polyline &polyline, CGAL::Aff_transformation_3<IK> &xform_to_xy, CGAL::Aff_transformation_3<IK> &xform_to_xy_inv)
+        {
+
+            /////////////////////////////////////////////////////////////////////////////////////
+            // Orient from 3D to 2D
+            /////////////////////////////////////////////////////////////////////////////////////
+            if (polyline.size() < 3)
+                return false;
+
+            /////////////////////////////////////////////////////////////////////////////////////
+            // Get center polyline plane
+            /////////////////////////////////////////////////////////////////////////////////////
+            IK::Point_3 center;
+            IK::Plane_3 plane;
+            cgal_polyline_util::get_fast_plane(polyline, center, plane);
+
+            /////////////////////////////////////////////////////////////////////////////////////
+            // Create Transformation and assign outputs
+            /////////////////////////////////////////////////////////////////////////////////////
+            xform_to_xy = cgal_xform_util::PlaneToXY(polyline[0], plane);
+            xform_to_xy_inv = xform_to_xy.inverse();
+            return true;
+        }
     }
 
     /**
@@ -188,5 +222,48 @@ namespace cgal_polylabel
 
         // run the division method which is the output -> points
         internal::circle_points(center, x_axis, y_axis, z_axis, points, division, std::get<2>(circle) * scale);
+    }
+
+    /**
+     * iscribe ractangle in a polygon and divide its edges into points
+     * Step 3 - Get center and a plane by the polylabel algorithm
+     * Step 4 - Draw rectangle in the circle in the orientation of the bounding rectangle
+     * Step 5 - Divide the rectangle into points
+     * Step 6 - Orient and rotate to 3D
+     *
+     * @param [in] polygon input polyline
+     * @param [out] result output rectangle
+     * @param [in] division_distance division distance of the edges
+     * @return bool flag if the result is valid
+     */
+    inline bool inscribe_rectangle(CGAL_Polyline &polygon, CGAL_Polyline &result, double division_distance = 0)
+    {
+
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Step 1 - Orient polygon to 2D
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        CGAL::Aff_transformation_3<IK> xform_to_xy, xform_to_xy_inv;
+        internal::orient_polyline_to_xy_and_back(polygon, xform_to_xy, xform_to_xy_inv);
+        CGAL_Polyline polygon_copy = polygon;
+        cgal_polyline_util::Transform(polygon_copy, xform_to_xy);
+
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Step 3 - Get center and a plane by the polylabel algorithm
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Step 4 - Draw rectangle in the circle in the orientation of the bounding rectangle
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Step 5 - Divide the rectangle into points
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Step 6 - Convert to CGAL polyline and rotate to axis and orient to 3D
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        result = polygon_copy;
+
+        return true;
     }
 }

@@ -403,7 +403,7 @@ namespace clipper_util
         {
             std::vector<IK::Point_3> division_points;
             int divisions = (int)std::min(100.0, std::sqrt(CGAL::squared_distance(polygon_copy[i], polygon_copy[i + 1])) / division_distance);
-            cgal_vector_util::interpolate_points(polygon_copy[i], polygon_copy[i + 1], divisions, division_points, 1);
+            cgal_vector_util::interpolate_points(polygon_copy[i], polygon_copy[i + 1], divisions, division_points, 2);
             result.insert(result.end(), division_points.begin(), division_points.end());
         }
 
