@@ -31,7 +31,7 @@
 inline void get_elements(
     std::vector<CGAL_Polyline>& pp,
     std::vector<std::vector<IK::Vector_3>>& insertion_vectors,
-    std::vector<std::vector<int>>& joint_types,
+    std::vector<std::vector<int>>& JOINTS_TYPES,
     std::vector<element>& elements) {
     int n = (int)(pp.size() * 0.5);
     //elements = std::vector<element>(n);
@@ -171,12 +171,12 @@ inline void get_elements(
                     std::reverse(elements[count].edge_vectors.begin() + 2, elements[count].edge_vectors.end());
             }
 
-        if (joint_types.size() > 0)
-            if (joint_types[count].size() > 0) {
-                elements[count].joint_types = joint_types[count];
+        if (JOINTS_TYPES.size() > 0)
+            if (JOINTS_TYPES[count].size() > 0) {
+                elements[count].JOINTS_TYPES = JOINTS_TYPES[count];
                 //This was very nasty bug, because polylines are reverse based on orientation fix | also only shift +2 must be reversed (edges, skip top and bottom)
                 if (reverse_poylines)
-                    std::reverse(elements[count].joint_types.begin() + 2, elements[count].joint_types.end());
+                    std::reverse(elements[count].JOINTS_TYPES.begin() + 2, elements[count].JOINTS_TYPES.end());
             }
 
         count++;
@@ -1174,10 +1174,10 @@ inline bool pair_search(
     //////////////////////////////////////////////////////////////////////////////
     std::vector<CGAL_Polyline> input_polyline_pairs(std::begin(beam_volumes), std::end(beam_volumes));
     std::vector<std::vector<IK::Vector_3>> input_insertion_vectors;
-    std::vector<std::vector<int>> input_joint_types;
+    std::vector<std::vector<int>> input_JOINTS_TYPES;
     std::vector<element> beam_volumes_elements;
 
-    get_elements(input_polyline_pairs, input_insertion_vectors, input_joint_types, beam_volumes_elements);
+    get_elements(input_polyline_pairs, input_insertion_vectors, input_JOINTS_TYPES, beam_volumes_elements);
     //elements = beam_volumes_elements;
     //////////////////////////////////////////////////////////////////////////////
     // search
@@ -1678,7 +1678,7 @@ inline void three_valence_joint_alignment(
 inline void get_connection_zones(
     std::vector<CGAL_Polyline>& input_polyline_pairs,
     std::vector<std::vector<IK::Vector_3>>& input_insertion_vectors,
-    std::vector<std::vector<int>>& input_joint_types,
+    std::vector<std::vector<int>>& input_JOINTS_TYPES,
     std::vector<std::vector<int>>& input_three_valence_element_indices_and_instruction,
     std::vector<int>& input_adjacency,
 
@@ -1688,7 +1688,7 @@ inline void get_connection_zones(
     std::vector<std::vector<int>>& top_face_triangulation,
 
     //Global Parameters
-    std::vector<double>& default_parameters_for_joint_types,
+    std::vector<double>& default_parameters_for_JOINTS_TYPES,
     std::vector<double>& scale,
     int search_type = 0,
     //double division_distance = 300,
@@ -1715,7 +1715,7 @@ inline void get_connection_zones(
     //////////////////////////////////////////////////////////////////////////////
     //Create elements, AABB, OBB, P, Pls, thickness
     //////////////////////////////////////////////////////////////////////////////
-    get_elements(input_polyline_pairs, input_insertion_vectors, input_joint_types, elements);
+    get_elements(input_polyline_pairs, input_insertion_vectors, input_JOINTS_TYPES, elements);
 
 #ifdef DEBUG_MEASURE_TIME
     auto end = std::chrono::high_resolution_clock::now();
@@ -1756,7 +1756,7 @@ inline void get_connection_zones(
     //3-valence joints
     //////////////////////////////////////////////////////////////////////////////
     if (input_three_valence_element_indices_and_instruction.size() > 0)
-        three_valence_joint_alignment(input_three_valence_element_indices_and_instruction, elements, joints, joints_map);// default_parameters_for_joint_types); //plines,
+        three_valence_joint_alignment(input_three_valence_element_indices_and_instruction, elements, joints, joints_map);// default_parameters_for_JOINTS_TYPES); //plines,
 
 #ifdef DEBUG_MEASURE_TIME
     end = std::chrono::high_resolution_clock::now();
@@ -1768,7 +1768,7 @@ inline void get_connection_zones(
     ////////////////////////////////////////////////////////////////////////////////
     //Create and Align Joints 1. Iterate type 2. Select joint based on not/given user joint_type
     ////////////////////////////////////////////////////////////////////////////////
-    joint_library::construct_joint_by_index(elements, joints, default_parameters_for_joint_types, scale);//division_distance, shift,
+    joint_library::construct_joint_by_index(elements, joints, default_parameters_for_JOINTS_TYPES, scale);//division_distance, shift,
     //CGAL_Debug(99999);
 #ifdef DEBUG_MEASURE_TIME
     end = std::chrono::high_resolution_clock::now();
@@ -1870,7 +1870,7 @@ inline void beam_volumes(
     std::vector<int>& joints_types,
 
     //Global Parameters and output joint selection and orientation
-    std::vector<double>& default_parameters_for_joint_types,
+    std::vector<double>& default_parameters_for_JOINTS_TYPES,
     std::vector<std::vector<CGAL_Polyline>>& output_plines,
     std::vector<std::vector<cut_type>>& output_types,
     bool compute_joints = false,
@@ -2272,7 +2272,7 @@ inline void beam_volumes(
         scale.clear();
     }
 
-    joint_library::construct_joint_by_index(elements, joints, default_parameters_for_joint_types, scale);// division_distance, shift,
+    joint_library::construct_joint_by_index(elements, joints, default_parameters_for_JOINTS_TYPES, scale);// division_distance, shift,
 #ifdef DEBUG
     printf("CPP construct_joint_by_index\n");
 #endif

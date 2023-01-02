@@ -18,9 +18,9 @@
 // PROTOCOL FOR IMPLEMENTING NEW TESTS
 // STEP 1 - Example method, with Doxygen type comments in the header files and naming: "type_joinery_plates_name_hexbox_and_corner"
 // STEP 2 - GoogleTest method
-// STEP 3 - Screenshot , click "GLFW_KEY_KP_0" to save the screenshot wood_globals.cpp -> data_set_input_folder (C:\IBOIS57\_Code\Software\Python\compas_wood\backend\src\wood\dataset)
+// STEP 3 - Screenshot , click "GLFW_KEY_KP_0" to save the screenshot wood_globals.cpp -> DATA_SET_INPUT_FOLDER (C:\IBOIS57\_Code\Software\Python\compas_wood\backend\src\wood\dataset)
 // STEP 4 - Run all the tests in the main.cpp like this:  wood_test::run_all_tests();
-// NOTE - file-paths that are different from pc to pc, please change the path before running the code in wood_globals.cpp -> data_set_input_folder
+// NOTE - file-paths that are different from pc to pc, please change the path before running the code in wood_globals.cpp -> DATA_SET_INPUT_FOLDER
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 #ifndef WOOD_TEST_H

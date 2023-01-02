@@ -1,5 +1,5 @@
 #pragma once
-//#include "../../stdafx.h"
+// #include "../../stdafx.h"
 
 // ToDo
 // What happens when 3 beams meet in one node when only two joints are needed, maybe move ends apart from each other or give point id
@@ -282,7 +282,7 @@ namespace cgal_box_search
         unitize(normal);
 
         // The 2 intersection points of intersecting segments are identical.
-        if (CGAL::squared_distance(s0[0], s1[0]) < GlobalTolerance)
+        if (CGAL::squared_distance(s0[0], s1[0]) < wood_globals::DISTANCE)
         {
             p0 = s0[0];
             p1 = s0[0];
@@ -294,7 +294,7 @@ namespace cgal_box_search
             type1 = 0;
             return true;
         }
-        else if (CGAL::squared_distance(s0[0], s1[1]) < GlobalTolerance)
+        else if (CGAL::squared_distance(s0[0], s1[1]) < wood_globals::DISTANCE)
         {
             p0 = s0[0];
             p1 = s0[0];
@@ -306,7 +306,7 @@ namespace cgal_box_search
             type1 = 0;
             return true;
         }
-        else if (CGAL::squared_distance(s0[1], s1[0]) < GlobalTolerance)
+        else if (CGAL::squared_distance(s0[1], s1[0]) < wood_globals::DISTANCE)
         {
             p0 = s0[1];
             p1 = s0[1];
@@ -318,7 +318,7 @@ namespace cgal_box_search
             type1 = 0;
             return true;
         }
-        else if (CGAL::squared_distance(s0[1], s1[1]) < GlobalTolerance)
+        else if (CGAL::squared_distance(s0[1], s1[1]) < wood_globals::DISTANCE)
         {
             p0 = s0[1];
             p1 = s0[1];
@@ -524,13 +524,13 @@ namespace cgal_box_search
         double angle = 90.0 - fabs(CGAL::approximate_angle(v0, v1) - 90);
 
         // The 2 intersection points of intersecting segments are identical.
-        if (CGAL::squared_distance(s0[0], s1[0]) < GlobalTolerance || CGAL::squared_distance(s0[0], s1[1]) < GlobalTolerance)
+        if (CGAL::squared_distance(s0[0], s1[0]) < wood_globals::DISTANCE || CGAL::squared_distance(s0[0], s1[1]) < wood_globals::DISTANCE)
         {
             p0 = s0[0];
             p1 = s0[0];
             return true;
         }
-        else if (CGAL::squared_distance(s0[1], s1[0]) < GlobalTolerance || CGAL::squared_distance(s0[1], s1[1]) < GlobalTolerance)
+        else if (CGAL::squared_distance(s0[1], s1[0]) < wood_globals::DISTANCE || CGAL::squared_distance(s0[1], s1[1]) < wood_globals::DISTANCE)
         {
             p0 = s0[1];
             p1 = s0[1];

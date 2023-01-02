@@ -17,8 +17,8 @@ def test_joints():
     input = data_set_plates.ss_24()
 
     # Compute joint polylines
-    element_pairs_list, joint_areas_polylines, joint_types = joints(input, 0)
-    # print(joint_types)
+    element_pairs_list, joint_areas_polylines, JOINTS_TYPES = joints(input, 0)
+    # print(JOINTS_TYPES)
 
     # Display via Compas_View2
     display(input, joint_areas_polylines, None, 0.01, 0, 0, 0, False, joint_types)  #

@@ -223,6 +223,6 @@ namespace opengl_globals
 
 namespace wood
 {
-    // int output_geometry_type = 0;
+    // int OUTPUT_GEOMETRY_TYPE = 0;
 
 }

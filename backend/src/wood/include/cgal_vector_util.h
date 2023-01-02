@@ -284,7 +284,7 @@ namespace cgal_vector_util
         return rc;
     }
 
-    inline void AverageNormal(CGAL_Polyline &p, IK::Vector_3 &averageNormal, bool closed = true, bool unitize = false)
+    inline void AverageNormal(const CGAL_Polyline &p, IK::Vector_3 &averageNormal, bool closed = true, bool unitize = false)
     {
         size_t len = closed ? p.size() - 1 : p.size();
         averageNormal = IK::Vector_3(0, 0, 0);

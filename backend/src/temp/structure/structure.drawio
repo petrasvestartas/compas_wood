@@ -59,7 +59,7 @@
                 <mxCell id="114" value="std::vector&lt;IK::Vector_3&gt; edge_vectors" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;" parent="21" vertex="1">
                     <mxGeometry y="204.2640448454788" width="400" height="19.362671649497642" as="geometry"/>
                 </mxCell>
-                <mxCell id="113" value="std::vector&lt;int&gt; joint_types" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;" parent="21" vertex="1">
+                <mxCell id="113" value="std::vector&lt;int&gt; JOINTS_TYPES" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;" parent="21" vertex="1">
                     <mxGeometry y="223.62671649497645" width="400" height="19.362671649497642" as="geometry"/>
                 </mxCell>
                 <mxCell id="120" value="IK::Segment_3 axis" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;" parent="21" vertex="1">
@@ -109,28 +109,28 @@
                 <mxCell id="207" value="properties" style="text;strokeColor=none;fillColor=#D88AC6;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;fontStyle=1;fontColor=#ffffff;" parent="28" vertex="1">
                     <mxGeometry y="49.36267164949764" width="400" height="19.36267164949764" as="geometry"/>
                 </mxCell>
-                <mxCell id="30" value="extern int output_geometry_type" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;fontColor=default;whiteSpace=wrap;" parent="28" vertex="1">
+                <mxCell id="30" value="extern int OUTPUT_GEOMETRY_TYPE" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;fontColor=default;whiteSpace=wrap;" parent="28" vertex="1">
                     <mxGeometry y="68.72534329899528" width="400" height="19.36267164949764" as="geometry"/>
                 </mxCell>
-                <mxCell id="31" value="extern bool force_side_to_side_joints_to_be_rotated" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;fontColor=default;whiteSpace=wrap;" parent="28" vertex="1">
+                <mxCell id="31" value="extern bool FORCE_SIDE_TO_SIDE_JOINTS_TO_BE_ROTATED" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;fontColor=default;whiteSpace=wrap;" parent="28" vertex="1">
                     <mxGeometry y="88.08801494849293" width="400" height="19.36267164949764" as="geometry"/>
                 </mxCell>
                 <mxCell id="32" value="extern bool run" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;fontColor=default;whiteSpace=wrap;" parent="28" vertex="1">
                     <mxGeometry y="107.45068659799057" width="400" height="19.36267164949764" as="geometry"/>
                 </mxCell>
-                <mxCell id="139" value="extern double joint_line_extension" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;fontColor=default;whiteSpace=wrap;" parent="28" vertex="1">
+                <mxCell id="139" value="extern double JOINT_LINE_EXTENSION" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;fontColor=default;whiteSpace=wrap;" parent="28" vertex="1">
                     <mxGeometry y="126.81335824748821" width="400" height="19.36267164949764" as="geometry"/>
                 </mxCell>
-                <mxCell id="138" value="extern double limit_min_joint_length" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;fontColor=default;whiteSpace=wrap;" parent="28" vertex="1">
+                <mxCell id="138" value="extern double LIMIT_MIN_JOINT_LENGTH" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;fontColor=default;whiteSpace=wrap;" parent="28" vertex="1">
                     <mxGeometry y="146.17602989698585" width="400" height="19.36267164949764" as="geometry"/>
                 </mxCell>
                 <mxCell id="137" value="extern std::array&lt;std::string, 7&gt; joint_names" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;fontColor=default;whiteSpace=wrap;" parent="28" vertex="1">
                     <mxGeometry y="165.53870154648348" width="400" height="19.36267164949764" as="geometry"/>
                 </mxCell>
-                <mxCell id="136" value="extern std::vector&lt;std::string&gt; existing_types" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;fontColor=default;whiteSpace=wrap;" parent="28" vertex="1">
+                <mxCell id="136" value="extern std::vector&lt;std::string&gt; EXISTING_TYPES" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;fontColor=default;whiteSpace=wrap;" parent="28" vertex="1">
                     <mxGeometry y="184.9013731959811" width="400" height="19.36267164949764" as="geometry"/>
                 </mxCell>
-                <mxCell id="135" value="extern std::vector&lt;double&gt; joint_types" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;fontColor=default;whiteSpace=wrap;" parent="28" vertex="1">
+                <mxCell id="135" value="extern std::vector&lt;double&gt; JOINTS_TYPES" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;fontColor=default;whiteSpace=wrap;" parent="28" vertex="1">
                     <mxGeometry y="204.26404484547874" width="400" height="19.36267164949764" as="geometry"/>
                 </mxCell>
                 <object label="wood_joint_lib" twtes="7" id="35">

@@ -1,5 +1,13 @@
 # compas_wood backend
 
+
+## To-do
+ 
+- [ ] seprate .h and .cpp files, including doxygen documentation
+- [ ] include licensing in every file
+- [ ] update clipper2 library specially for the line-polygon intersection
+- [ ] add conversion from clipper to cgal in 3D, meaning the matrix has to be added
+
 ## CMAKE
 
 ### Superbuild

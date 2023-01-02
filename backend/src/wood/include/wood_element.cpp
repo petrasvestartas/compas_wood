@@ -56,7 +56,7 @@ namespace wood
                             IK::Point_3 output;
                             if (cgal_intersection_util::Intersect(segment, this->planes[l], output))
                             {
-                                if (clipper_util::point_inclusion(this->polylines[l], this->planes[l], output))
+                                if (clipper_util::is_point_inside(this->polylines[l], this->planes[l], output))
                                 {
                                     intersection_points.emplace_back(output);
                                     if (intersection_points.size() == 2)
@@ -164,10 +164,8 @@ namespace wood
         ///////////////////////////////////////////////////////////////////////////////
         // Copy top and bottom polylines
         ///////////////////////////////////////////////////////////////////////////////
-        CGAL_Polyline polyline0;
-        CGAL_Polyline polyline1;
-        cgal_polyline_util::Duplicate(polylines[0], polyline0);
-        cgal_polyline_util::Duplicate(polylines[1], polyline1);
+        CGAL_Polyline polyline0 = polylines[0];
+        CGAL_Polyline polyline1 = polylines[1];
         auto n = polyline0.size() - 1;
         bool debug = false;
         if (debug)
@@ -387,10 +385,8 @@ namespace wood
         /////////////////////////////////////////////////////////////////////////////////////
         // Orient from 3D to 2D
         /////////////////////////////////////////////////////////////////////////////////////
-        CGAL_Polyline a;
-        CGAL_Polyline b;
-        cgal_polyline_util::Duplicate(pline_to_cut, a);
-        cgal_polyline_util::Duplicate(closed_pline_cutter, b);
+        CGAL_Polyline a = pline_to_cut;
+        CGAL_Polyline b = closed_pline_cutter;
 
         /////////////////////////////////////////////////////////////////////////////////////
         // Create Transformation
@@ -501,7 +497,7 @@ namespace wood
                             pts.emplace_back(polynode[j].x / scale, polynode[j].y / scale, 0);
 
                         // Check if curve is closest to new pline if not reverse
-                        if (CGAL::squared_distance(c.back(), pts.front()) > GlobalToleranceSquare && CGAL::squared_distance(c.back(), pts.back()) > GlobalToleranceSquare)
+                        if (CGAL::squared_distance(c.back(), pts.front()) > wood_globals::DISTANCE_SQUARED && CGAL::squared_distance(c.back(), pts.back()) > wood_globals::DISTANCE_SQUARED)
                             std::reverse(c.begin(), c.end());
 
                         // Check if insert able curve end is closest to the main curve end, if not reverse
@@ -536,7 +532,7 @@ namespace wood
                     // CGAL_Debug(t0);
                     if (t0 < 0 || t0 > 1)
                         continue;
-                    if (CGAL::squared_distance(cgal_polyline_util::PointAt(s, t0), c.front()) < GlobalToleranceSquare)
+                    if (CGAL::squared_distance(cgal_polyline_util::PointAt(s, t0), c.front()) < wood_globals::DISTANCE_SQUARED)
                     {
                         t0_ = k + t0;
                         assigned_t0_ = true;
@@ -552,7 +548,7 @@ namespace wood
                     // CGAL_Debug(t1);
                     if (t1 < 0 || t1 > 1)
                         continue;
-                    if (CGAL::squared_distance(cgal_polyline_util::PointAt(s, t1), c.back()) < GlobalToleranceSquare)
+                    if (CGAL::squared_distance(cgal_polyline_util::PointAt(s, t1), c.back()) < wood_globals::DISTANCE_SQUARED)
                     {
                         assigned_t1_ = true;
                         t1_ = k + t1;
@@ -910,7 +906,7 @@ namespace wood
         ///////////////////////////////////////////////////////////////////////////////
         // Close
         ///////////////////////////////////////////////////////////////////////////////
-        if (lastID == this->polylines[0].size() && last_segment0_start.squared_length() > GlobalToleranceSquare)
+        if (lastID == this->polylines[0].size() && last_segment0_start.squared_length() > wood_globals::DISTANCE_SQUARED)
         {
             IK::Point_3 p0;
             IK::Point_3 p1;

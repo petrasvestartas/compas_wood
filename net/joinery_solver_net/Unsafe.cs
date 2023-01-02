@@ -33,7 +33,7 @@ namespace joinery_solver_net
         public static extern int pinvoke_get_connection_zones(
             [MarshalAs(UnmanagedType.LPArray)] int[] f, int f_s, [MarshalAs(UnmanagedType.LPArray)] double[] v, int v_s,
             [MarshalAs(UnmanagedType.LPArray)] int[] vec_f, int vec_f_s, [MarshalAs(UnmanagedType.LPArray)] double[] vec_v, int vec_v_s,
-            [MarshalAs(UnmanagedType.LPArray)] int[] joint_types_f, int joint_types_f_s, [MarshalAs(UnmanagedType.LPArray)] int[] joint_types_v, int joint_types_v_s,
+            [MarshalAs(UnmanagedType.LPArray)] int[] JOINTS_TYPES_f, int JOINTS_TYPES_f_s, [MarshalAs(UnmanagedType.LPArray)] int[] JOINTS_TYPES_v, int JOINTS_TYPES_v_s,
             [MarshalAs(UnmanagedType.LPArray)] int[] threevalence_f, int threevalence_f_s, [MarshalAs(UnmanagedType.LPArray)] int[] threevalence_v, int threevalence_v_s,
             [MarshalAs(UnmanagedType.LPArray)] int[] adjacency_v, int adjacency_v_s,
             [MarshalAs(UnmanagedType.LPArray)] double[] jointparams_v, int jointparams_v_s,

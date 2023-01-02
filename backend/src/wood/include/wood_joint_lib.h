@@ -60,23 +60,23 @@ namespace wood_joint_lib_xml
             // printf(type);
 
             /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-            // Check if XML file exists, path_and_file_for_joints is a global path
+            // Check if XML file exists, wood_globals::PATH_AND_FILE_FOR_JOINTS is a global path
             /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 #ifdef DEBUG_JOINERY_LIBRARY
-            printf("\nCPP File path %s ", path_and_file_for_joints.c_str());
+            printf("\nCPP File path %s ", wood_globals::PATH_AND_FILE_FOR_JOINTS.c_str());
             printf("\nCPP Joint Type %i %s ", type, name.c_str());
 #endif
-            if (!exists_test0(path_and_file_for_joints))
+            if (!exists_test0(wood_globals::PATH_AND_FILE_FOR_JOINTS))
             {
 #ifdef DEBUG_JOINERY_LIBRARY
-                printf("\nCPP File does not exist %s ", path_and_file_for_joints.c_str());
+                printf("\nCPP File does not exist %s ", wood_globals::PATH_AND_FILE_FOR_JOINTS.c_str());
 #endif
 
                 std::ofstream myfile;
                 myfile.open("C:\\Users\\petra\\AppData\\Roaming\\Grasshopper\\Libraries\\compas_wood\\xml_error.txt");
                 myfile << "Do not Exist\n";
-                myfile << path_and_file_for_joints;
+                myfile << wood_globals::PATH_AND_FILE_FOR_JOINTS;
                 myfile.close();
 
                 return false;
@@ -86,14 +86,14 @@ namespace wood_joint_lib_xml
                 // std::ofstream myfile;
                 // myfile.open("C:\\Users\\petra\\AppData\\Roaming\\Grasshopper\\Libraries\\compas_wood\\example.txt");
                 // myfile << "Exists\n";
-                // myfile << path_and_file_for_joints;
+                // myfile << wood_globals::PATH_AND_FILE_FOR_JOINTS;
                 // myfile.close();
             }
             /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
             // Read XML
             /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
             boost::property_tree::ptree tree;
-            boost::property_tree::xml_parser::read_xml(path_and_file_for_joints, tree);
+            boost::property_tree::xml_parser::read_xml(wood_globals::PATH_AND_FILE_FOR_JOINTS, tree);
 
 #ifdef DEBUG_JOINERY_LIBRARY
             printf("\nCPP tree size %zi ", tree.size());
@@ -626,7 +626,7 @@ namespace wood_joint_lib
 
         //        for (int i = 0; i < joint_2.m[0].size(); i++) {
         //            //cgal_polyline_util::reverse_if_clockwise(joint_2.f[0][i], plane_0_0);
-        //            clipper_util::offset_2D(joint_2.m[0][i], plane_0_0, offset_value);//0.1 means more tighter
+        //            clipper_util::offset_in_3d(joint_2.m[0][i], plane_0_0, offset_value);//0.1 means more tighter
         //            //double value = -(2 * wood_cut::conic_offset_opposite) - wood_cut::conic_offset;
         //           //printf("reult %f ", offset_value);
         //           // printf("reult %f ", wood_cut::conic_offset);
@@ -636,7 +636,7 @@ namespace wood_joint_lib
 
         //        for (int i = 0; i < joint_2.m[1].size(); i++) {
         //            //cgal_polyline_util::reverse_if_clockwise(joint_2.f[1][i], plane_0_0);
-        //            clipper_util::offset_2D(joint_2.m[1][i], plane_0_0, offset_value);
+        //            clipper_util::offset_in_3d(joint_2.m[1][i], plane_0_0, offset_value);
         //        }
 
         //        //printf("xml tile reading number of polyines %iz" , joint_2.m[0].size());
@@ -645,8 +645,8 @@ namespace wood_joint_lib
 
         //    //Merge male, by performing boolean union
 
-        //        clipper_util::intersection_2D(jo.m[0][2], joint_2.m[0][0], plane_0_0, jo.m[0][2], 100000, 2);
-        //        clipper_util::intersection_2D(jo.m[1][2], joint_2.m[1][0], plane_0_1, jo.m[1][2], 100000, 2);
+        //        clipper_util:: get_intersection_between_two_polylines(jo.m[0][2], joint_2.m[0][0], plane_0_0, jo.m[0][2], 100000, 2);
+        //        clipper_util:: get_intersection_between_two_polylines(jo.m[1][2], joint_2.m[1][0], plane_0_1, jo.m[1][2], 100000, 2);
 
         //        jo.m[0].insert(jo.m[0].end(), joint_2.m[0].begin(), joint_2.m[0].end());
         //        jo.m[1].insert(jo.m[1].end(), joint_2.m[1].begin(), joint_2.m[1].end());
@@ -659,12 +659,12 @@ namespace wood_joint_lib
 
         //        for (int i = 0; i < joint_2.f[0].size(); i++) {
         //            //cgal_polyline_util::reverse_if_clockwise(joint_2.f[0][i], plane_0_0);
-        //            //clipper_util::offset_2D(joint_2.f[0][i], plane_0_0, wood_cut::conic_offset_opposite);//- wood_cut::conic_offset
+        //            //clipper_util::offset_in_3d(joint_2.f[0][i], plane_0_0, wood_cut::conic_offset_opposite);//- wood_cut::conic_offset
 
         //        }
 
         //        for (int i = 0; i < joint_2.f[1].size(); i++) {
-        //            //clipper_util::offset_2D(joint_2.f[1][i], plane_0_0, wood_cut::conic_offset_opposite);// - wood_cut::conic_offset
+        //            //clipper_util::offset_in_3d(joint_2.f[1][i], plane_0_0, wood_cut::conic_offset_opposite);// - wood_cut::conic_offset
         //        }
 
         //        //Add once for milling
@@ -2177,7 +2177,7 @@ namespace wood_joint_lib
                 for (int i = 0; i < joint_2.m[0].size(); i++)
                 {
                     // cgal_polyline_util::reverse_if_clockwise(joint_2.f[0][i], plane_0_0);
-                    clipper_util::offset_2D(joint_2.m[0][i], plane_0_0, offset_value); // 0.1 means more tighter
+                    clipper_util::offset_in_3d(joint_2.m[0][i], plane_0_0, offset_value); // 0.1 means more tighter
                     // double value = -(2 * wood_cut::conic_offset_opposite) - wood_cut::conic_offset;
                     // printf("reult %f ", offset_value);
                     //  printf("reult %f ", wood_cut::conic_offset);
@@ -2188,7 +2188,7 @@ namespace wood_joint_lib
                 for (int i = 0; i < joint_2.m[1].size(); i++)
                 {
                     // cgal_polyline_util::reverse_if_clockwise(joint_2.f[1][i], plane_0_0);
-                    clipper_util::offset_2D(joint_2.m[1][i], plane_0_0, offset_value);
+                    clipper_util::offset_in_3d(joint_2.m[1][i], plane_0_0, offset_value);
                 }
 
                 // printf("xml tile reading number of polyines %iz" , joint_2.m[0].size());
@@ -2197,8 +2197,8 @@ namespace wood_joint_lib
 
                 // Merge male, by performing boolean union
 
-                clipper_util::intersection_2D(jo.m[0][2], joint_2.m[0][0], plane_0_0, jo.m[0][2], 100000, 2);
-                clipper_util::intersection_2D(jo.m[1][2], joint_2.m[1][0], plane_0_1, jo.m[1][2], 100000, 2);
+                clipper_util::get_intersection_between_two_polylines(jo.m[0][2], joint_2.m[0][0], plane_0_0, jo.m[0][2], 2);
+                clipper_util::get_intersection_between_two_polylines(jo.m[1][2], joint_2.m[1][0], plane_0_1, jo.m[1][2], 2);
 
                 jo.m[0].insert(jo.m[0].end(), joint_2.m[0].begin(), joint_2.m[0].end());
                 jo.m[1].insert(jo.m[1].end(), joint_2.m[1].begin(), joint_2.m[1].end());
@@ -2212,12 +2212,12 @@ namespace wood_joint_lib
                 for (int i = 0; i < joint_2.f[0].size(); i++)
                 {
                     // cgal_polyline_util::reverse_if_clockwise(joint_2.f[0][i], plane_0_0);
-                    // clipper_util::offset_2D(joint_2.f[0][i], plane_0_0, wood_cut::conic_offset_opposite);//- wood_cut::conic_offset
+                    // clipper_util::offset_in_3d(joint_2.f[0][i], plane_0_0, wood_cut::conic_offset_opposite);//- wood_cut::conic_offset
                 }
 
                 for (int i = 0; i < joint_2.f[1].size(); i++)
                 {
-                    // clipper_util::offset_2D(joint_2.f[1][i], plane_0_0, wood_cut::conic_offset_opposite);// - wood_cut::conic_offset
+                    // clipper_util::offset_in_3d(joint_2.f[1][i], plane_0_0, wood_cut::conic_offset_opposite);// - wood_cut::conic_offset
                 }
 
                 // Add once for milling
@@ -3798,24 +3798,24 @@ namespace wood_joint_lib
             // types0+265
             // CGAL_Debug(0);
             int id_representing_joint_name = -1;
-            if (elements[jo.v0].joint_types.size() && elements[jo.v1].joint_types.size())
+            if (elements[jo.v0].JOINTS_TYPES.size() && elements[jo.v1].JOINTS_TYPES.size())
             {
-                int a = std::abs(elements[jo.v0].joint_types[jo.f0_0]);
-                int b = std::abs(elements[jo.v1].joint_types[jo.f1_0]);
+                int a = std::abs(elements[jo.v0].JOINTS_TYPES[jo.f0_0]);
+                int b = std::abs(elements[jo.v1].JOINTS_TYPES[jo.f1_0]);
 
                 // printf("\n %i %i ", a,b);
 
                 id_representing_joint_name = (a > b) ? a : b;
                 // CGAL_Debug(a, b, a);
             }
-            else if (elements[jo.v0].joint_types.size())
+            else if (elements[jo.v0].JOINTS_TYPES.size())
             {
-                id_representing_joint_name = std::abs(elements[jo.v0].joint_types[jo.f0_0]);
+                id_representing_joint_name = std::abs(elements[jo.v0].JOINTS_TYPES[jo.f0_0]);
                 // printf("\n b");
             }
-            else if (elements[jo.v1].joint_types.size())
+            else if (elements[jo.v1].JOINTS_TYPES.size())
             {
-                id_representing_joint_name = std::abs(elements[jo.v1].joint_types[jo.f1_0]);
+                id_representing_joint_name = std::abs(elements[jo.v1].JOINTS_TYPES[jo.f1_0]);
                 // printf("\n c");
             }
 
@@ -3863,7 +3863,7 @@ namespace wood_joint_lib
             { // top-top
                 group = 6;
             }
-            // std::cout << id_representing_joint_name << " " << group << " " << jo.link << " " << elements[jo.v0].joint_types[jo.f0_0] << " " << elements[jo.v1].joint_types[jo.f1_0] << "\n";
+            // std::cout << id_representing_joint_name << " " << group << " " << jo.link << " " << elements[jo.v0].JOINTS_TYPES[jo.f0_0] << " " << elements[jo.v1].JOINTS_TYPES[jo.f1_0] << "\n";
             //  printf("\n %i %i %i", group, id_representing_joint_name, jo.type);
             //  printf("\n ");
 
@@ -4031,7 +4031,7 @@ namespace wood_joint_lib
                     //     std::ofstream myfile2;
                     //     myfile2.open("C:\\Users\\petra\\AppData\\Roaming\\Grasshopper\\Libraries\\compas_wood\\19.txt");
                     //     myfile2 << "Exists\n";
-                    //     myfile2 << path_and_file_for_joints;
+                    //     myfile2 << wood_globals::PATH_AND_FILE_FOR_JOINTS;
                     //     myfile2.close();
                     // }
                     // wont work, because not oriented to connection zones, need additional layer e.g. std::map of all joints
@@ -4191,7 +4191,7 @@ namespace wood_joint_lib
                 // std::ofstream myfile;
                 // myfile.open("C:\\Users\\petra\\AppData\\Roaming\\Grasshopper\\Libraries\\compas_wood\\xml_error.txt");
                 // myfile << "Empty joint\n";
-                // myfile << path_and_file_for_joints;
+                // myfile << wood_globals::PATH_AND_FILE_FOR_JOINTS;
                 // myfile.close();
                 printf("\nwood_joint_lib -> joint name %s between elements %i and %i is empty", jo.name.c_str(), jo.v0, jo.v1);
                 // CGAL_Debug(group);

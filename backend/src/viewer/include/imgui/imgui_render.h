@@ -1,9 +1,9 @@
 #pragma once
-//#include "../../../stdafx.h"
+// #include "../../../stdafx.h"
 
-//#include "imgui_my_style.h"
-//#include "imgui_impl_glfw.h"
-//#include "imgui_impl_opengl3.h"
+// #include "imgui_my_style.h"
+// #include "imgui_impl_glfw.h"
+// #include "imgui_impl_opengl3.h"
 
 namespace imgui_params
 {
@@ -258,8 +258,8 @@ static float f1 = 0.123f, f2 = 0.0f;
 //	//}
 //
 //	//ImGui::BeginChild("Scrolling");
-//	//for (int i = 0; i <  wood_globals::existing_types.size(); i++)
-//	//	ImGui::Text( wood_globals::existing_types[i].c_str(), i);
+//	//for (int i = 0; i <  wood_globals::EXISTING_TYPES.size(); i++)
+//	//	ImGui::Text( wood_globals::EXISTING_TYPES[i].c_str(), i);
 //
 //	//ImGui::EndChild();
 //	ImGui::End();
@@ -338,12 +338,12 @@ inline void loop_middle_imgui()
 
 	// Select joint Types - Sliders
 	ImGui::TextColored(ImVec4(0, 0, 0, 1), "\nSELECT JOINT TYPE");
-	for (int i = 0; i < wood_globals::joint_names.size(); i++)
+	for (int i = 0; i < wood_globals::JOINT_NAMES.size(); i++)
 	{
-		int joint_type = (int)wood_globals::joint_types[i * 3+2];
-		ImGui::SliderInt(wood_globals::joint_names[i].c_str(), &joint_type, i * 10, (i * 10 + 10) - 1);
-		//std::cout << "imgui_render -> joint_type change " << joint_type << "\n";
-		wood_globals::joint_types[i * 3+2] = (double)joint_type;
+		int joint_type = (int)wood_globals::JOINTS_TYPES[i * 3 + 2];
+		ImGui::SliderInt(wood_globals::JOINT_NAMES[i].c_str(), &joint_type, i * 10, (i * 10 + 10) - 1);
+		// std::cout << "imgui_render -> joint_type change " << joint_type << "\n";
+		wood_globals::JOINTS_TYPES[i * 3 + 2] = (double)joint_type;
 	}
 
 	// Run, the code below set the state_chaged bool so that the code is rerun inside render pipeline, by calling the function pointer
@@ -351,11 +351,11 @@ inline void loop_middle_imgui()
 	// ImGui::Checkbox("joint_area_detection", &joint_area_detection);
 
 	// Search type
-	// int state_0 =  wood_globals::output_geometry_type;
-	ImGui::SliderInt("get_joints_geometry", &wood_globals::output_geometry_type, 0, 4);
+	// int state_0 =  wood_globals::OUTPUT_GEOMETRY_TYPE;
+	ImGui::SliderInt("get_joints_geometry", &wood_globals::OUTPUT_GEOMETRY_TYPE, 0, 4);
 
-	wood_globals::run = ImGui::Button("run", ImVec2(100, 100)); // Buttons return true when clicked (most widgets return true when edited/activated)
-	if (wood_globals::run)
+	// wood_globals::RUN = ImGui::Button("run", ImVec2(100, 100)); // Buttons return true when clicked (most widgets return true when edited/activated)
+	if (ImGui::Button("run", ImVec2(100, 100)))
 	{
 		opengl_globals::state_changed = true;
 		std::cout << "imgui_render -> restart \n";
@@ -375,8 +375,8 @@ inline void loop_middle_imgui()
 	ImGui::TextColored(ImVec4(0, 0, 0, 1), "\nEXISTING JOINT TYPES");
 
 	ImGui::BeginChild("Scrolling");
-	for (int i = 0; i < wood_globals::existing_types.size(); i++)
-		ImGui::TextColored(ImVec4(0.5f, 0.5f, 0.5f, 1), wood_globals::existing_types[i].c_str(), i);
+	for (int i = 0; i < wood_globals::EXISTING_TYPES.size(); i++)
+		ImGui::TextColored(ImVec4(0.5f, 0.5f, 0.5f, 1), wood_globals::EXISTING_TYPES[i].c_str(), i);
 	ImGui::EndChild();
 
 	ImGui::End();

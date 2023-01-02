@@ -26,9 +26,9 @@
 ////    std::ios::sync_with_stdio(false);
 ////
 ////    std::vector<std::vector<IK::Vector_3>> input_insertion_vectors;
-////    //std::vector<std::vector<int>> input_joint_types;
-////    std::vector<std::vector<int>> input_joint_types;
-////    input_joint_types.reserve(input_polyline_pairs.size());
+////    //std::vector<std::vector<int>> input_JOINTS_TYPES;
+////    std::vector<std::vector<int>> input_JOINTS_TYPES;
+////    input_JOINTS_TYPES.reserve(input_polyline_pairs.size());
 ////
 ////
 ////
@@ -54,7 +54,7 @@
 ////    std::vector<std::vector<int>> top_face_triangulation;
 ////
 ////    //Global Parameters
-////    std::vector<double> default_parameters_for_joint_types = {
+////    std::vector<double> default_parameters_for_JOINTS_TYPES = {
 ////300,
 ////0.5,
 ////8,
@@ -87,21 +87,21 @@
 ////
 ////        int id = (int)(i*0.5);
 ////
-////        auto input_joint_types_ = std::vector<int>();
+////        auto input_JOINTS_TYPES_ = std::vector<int>();
 ////    
 ////        //Give first two faces empty joint type
-////        input_joint_types_.reserve(input_polyline_pairs[i].size()+1);
-////        input_joint_types_.emplace_back(-1);
-////        input_joint_types_.emplace_back(-1);
+////        input_JOINTS_TYPES_.reserve(input_polyline_pairs[i].size()+1);
+////        input_JOINTS_TYPES_.emplace_back(-1);
+////        input_JOINTS_TYPES_.emplace_back(-1);
 ////    
 ////       //Give the rest of the faces the faces joint type based on distance
 ////        for (int j = 0; j < input_polyline_pairs[i].size()-1; j++) {
-////                    input_joint_types_.emplace_back(24);
+////                    input_JOINTS_TYPES_.emplace_back(24);
 ////        }
 ////
 ////
 ////        
-////        input_joint_types.emplace_back(input_joint_types_);       
+////        input_JOINTS_TYPES.emplace_back(input_JOINTS_TYPES_);       
 ////    }    
 ////    std::vector<int> input_adjacency;
 ////
@@ -116,7 +116,7 @@
 ////    };
 ////    
 ////    for (size_t i = 0; i < input_adjacency.size(); i += 4) {
-////        input_joint_types[input_adjacency[i]][input_adjacency[i + 2]] = 60;
+////        input_JOINTS_TYPES[input_adjacency[i]][input_adjacency[i + 2]] = 60;
 ////    }
 ////
 ////
@@ -125,7 +125,7 @@
 ////        //input
 ////        input_polyline_pairs,
 ////        input_insertion_vectors,
-////        input_joint_types,
+////        input_JOINTS_TYPES,
 ////        input_three_valence_element_indices_and_instruction,
 ////        input_adjacency,
 ////
@@ -135,7 +135,7 @@
 ////        top_face_triangulation,
 ////
 ////        //Global Parameters
-////        default_parameters_for_joint_types,
+////        default_parameters_for_JOINTS_TYPES,
 ////        scale,
 ////        search_type,
 ////        output_type,
@@ -198,9 +198,9 @@
 //    std::ios::sync_with_stdio(false);
 //
 //    std::vector<std::vector<IK::Vector_3>> input_insertion_vectors;
-//    //std::vector<std::vector<int>> input_joint_types;
-//    std::vector<std::vector<int>> input_joint_types;
-//    input_joint_types.reserve(input_polyline_pairs.size());
+//    //std::vector<std::vector<int>> input_JOINTS_TYPES;
+//    std::vector<std::vector<int>> input_JOINTS_TYPES;
+//    input_JOINTS_TYPES.reserve(input_polyline_pairs.size());
 //
 //
 //
@@ -223,12 +223,12 @@
 //
 //        int id = (int)(i * 0.5);
 //
-//        auto input_joint_types_ = std::vector<int>();
+//        auto input_JOINTS_TYPES_ = std::vector<int>();
 //
 //        //Give first two faces empty joint type
-//        input_joint_types_.reserve(input_polyline_pairs[i].size() + 1);
-//        input_joint_types_.emplace_back(-1);
-//        input_joint_types_.emplace_back(-1);
+//        input_JOINTS_TYPES_.reserve(input_polyline_pairs[i].size() + 1);
+//        input_JOINTS_TYPES_.emplace_back(-1);
+//        input_JOINTS_TYPES_.emplace_back(-1);
 //
 //        //Give the rest of the faces the faces joint type based on distance
 //        for (int j = 0; j < input_polyline_pairs[i].size() - 1; j++) {
@@ -236,37 +236,37 @@
 //            if (input_polyline_pairs[i].size() - 1 == 6) {
 //
 //                if (j == 0 || j == 3) {
-//                    input_joint_types_.emplace_back(56);
+//                    input_JOINTS_TYPES_.emplace_back(56);
 //
 //                }
 //                else {
-//                    input_joint_types_.emplace_back(58);
+//                    input_JOINTS_TYPES_.emplace_back(58);
 //                }
 //
 //            }
 //            else {
 //                if (j == 0 || j == 2) {
 //
-//                    input_joint_types_.emplace_back(56);
+//                    input_JOINTS_TYPES_.emplace_back(56);
 //                }
 //                else {
-//                    input_joint_types_.emplace_back(58);
+//                    input_JOINTS_TYPES_.emplace_back(58);
 //                }
 //            }
 //
 //
 //
 //            //int type = CGAL::squared_distance(input_polyline_pairs[i+1][j], input_polyline_pairs[i+1][j + 1]) < 800 ? 56 : 58;
-//           // input_joint_types_.emplace_back(type);
+//           // input_JOINTS_TYPES_.emplace_back(type);
 //        }
 //
 //
 //
-//        input_joint_types.emplace_back(input_joint_types_);
+//        input_JOINTS_TYPES.emplace_back(input_JOINTS_TYPES_);
 //    }
 //
 //    for (size_t i = 0; i < input_adjacency.size(); i += 4)
-//        input_joint_types[input_adjacency[i]][input_adjacency[i + 2]] = 60;
+//        input_JOINTS_TYPES[input_adjacency[i]][input_adjacency[i + 2]] = 60;
 //
 //
 //    //Three valence
@@ -278,7 +278,7 @@
 //    std::vector<std::vector<int>> top_face_triangulation;
 //
 //    //Global Parameters
-//    std::vector<double> default_parameters_for_joint_types = {
+//    std::vector<double> default_parameters_for_JOINTS_TYPES = {
 //300,
 //0.5,
 //8,
@@ -312,7 +312,7 @@
 //        //input
 //        input_polyline_pairs,
 //        input_insertion_vectors,
-//        input_joint_types,
+//        input_JOINTS_TYPES,
 //        input_three_valence_element_indices_and_instruction,
 //        input_adjacency,
 //
@@ -322,7 +322,7 @@
 //        top_face_triangulation,
 //
 //        //Global Parameters
-//        default_parameters_for_joint_types,
+//        default_parameters_for_JOINTS_TYPES,
 //        scale,
 //        search_type,
 //        output_type,

@@ -374,6 +374,7 @@ if (BUILD_MY_PROJECTS)
   ###############################################################################
   add_executable(${PROJECT_NAME} main.cpp 
   "${CMAKE_SOURCE_DIR}/src/wood/include/wood_globals.cpp"
+  "${CMAKE_SOURCE_DIR}/src/wood/include/clipper_util.cpp"
   "${CMAKE_SOURCE_DIR}/src/wood/include/wood_element.cpp"
   "${CMAKE_SOURCE_DIR}/src/wood/include/wood_joint.cpp"
   "${CMAKE_SOURCE_DIR}/src/wood/include/wood_test.cpp"

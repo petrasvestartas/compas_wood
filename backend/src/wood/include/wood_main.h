@@ -32,7 +32,7 @@ namespace wood_main
     void get_elements(
         std::vector<CGAL_Polyline> &pp,
         std::vector<std::vector<IK::Vector_3>> &insertion_vectors,
-        std::vector<std::vector<int>> &joint_types,
+        std::vector<std::vector<int>> &JOINTS_TYPES,
         std::vector<wood::element> &elements);
 
     bool border_to_face(
@@ -129,7 +129,7 @@ namespace wood_main
     void get_connection_zones(
         std::vector<CGAL_Polyline> &input_polyline_pairs,
         std::vector<std::vector<IK::Vector_3>> &input_insertion_vectors,
-        std::vector<std::vector<int>> &input_joint_types,
+        std::vector<std::vector<int>> &input_JOINTS_TYPES,
         std::vector<std::vector<int>> &input_three_valence_element_indices_and_instruction,
         std::vector<int> &input_adjacency,
 
@@ -139,7 +139,7 @@ namespace wood_main
         std::vector<std::vector<int>> &top_face_triangulation,
 
         // Global Parameters
-        std::vector<double> &default_parameters_for_joint_types,
+        std::vector<double> &default_parameters_for_JOINTS_TYPES,
         std::vector<double> &scale,
         int search_type = 0,
         // double division_distance = 300,
@@ -167,7 +167,7 @@ namespace wood_main
         std::vector<int> &joints_types,
 
         // Global Parameters and output wood::joint selection and orientation
-        std::vector<double> &default_parameters_for_joint_types,
+        std::vector<double> &default_parameters_for_JOINTS_TYPES,
         std::vector<std::vector<CGAL_Polyline>> &output_plines,
         std::vector<std::vector<wood_cut::cut_type>> &output_types,
         bool compute_joints = false,

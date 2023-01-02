@@ -1,7 +1,7 @@
 #pragma once
-//#include "../../stdafx.h"
-//#include "cgal_vector_util.h"
-//#include "clipper.h"
+// #include "../../stdafx.h"
+// #include "cgal_vector_util.h"
+// #include "clipper.h"
 
 namespace cgal_polyline_util
 {
@@ -159,7 +159,7 @@ namespace cgal_polyline_util
             double closestDistanceTemp = CGAL::squared_distance(point, PointAt(segment_, t));
             if (closestDistanceTemp < closestDistance)
                 closestDistance = closestDistanceTemp;
-            if (closestDistance < GlobalToleranceSquare)
+            if (closestDistance < wood_globals::DISTANCE_SQUARED)
                 break;
         }
 
@@ -186,7 +186,7 @@ namespace cgal_polyline_util
                 edge = i;
             }
 
-            if (closestDistance < GlobalToleranceSquare)
+            if (closestDistance < wood_globals::DISTANCE_SQUARED)
                 break;
         }
 
@@ -214,7 +214,7 @@ namespace cgal_polyline_util
                 edge = i;
             }
 
-            if (closestDistance < GlobalToleranceSquare)
+            if (closestDistance < wood_globals::DISTANCE_SQUARED)
                 break;
         }
 
@@ -298,20 +298,6 @@ namespace cgal_polyline_util
         return p;
     }
 
-    inline void Duplicate(CGAL_Polyline &input, CGAL_Polyline &output)
-    {
-        // std::vector<int> newVec;
-        // output.reserve(input.size());
-        // std::copy(input.begin(), input.end(), std::back_inserter(output));
-
-        output.clear();
-        output.reserve(input.size());
-        for (int i = 0; i < input.size(); i++)
-        {
-            output.push_back(IK::Point_3(input[i].x(), input[i].y(), input[i].z()));
-        }
-    }
-
     inline void Transform(CGAL_Polyline &input, CGAL::Aff_transformation_3<IK> &transform)
     {
         for (auto it = input.begin(); it != input.end(); ++it)
@@ -337,7 +323,7 @@ namespace cgal_polyline_util
         planeAxes[2] = CGAL::cross_product(planeAxes[3], planeAxes[1]);
     }
 
-    inline void get_fast_plane(CGAL_Polyline &polyline, IK::Point_3 &center, IK::Plane_3 &plane)
+    inline void get_fast_plane(const CGAL_Polyline &polyline, IK::Point_3 &center, IK::Plane_3 &plane)
     {
         // origin
         center = polyline[0]; // IK::Vector_3(polyline[0].x(), polyline[0].y(), polyline[0].z());
@@ -380,13 +366,13 @@ namespace cgal_polyline_util
             // CGAL_Debug(CGAL::squared_distance(plane.projection(segment[0]), segment[0]));
             // CGAL_Debug(CGAL::squared_distance(plane.projection(segment[1]), segment[1]));
 
-            if (CGAL::squared_distance(plane.projection(segment[0]), segment[0]) < GlobalToleranceSquare)
+            if (CGAL::squared_distance(plane.projection(segment[0]), segment[0]) < wood_globals::DISTANCE_SQUARED)
             {
                 // CGAL_Debug(9999);
                 return false;
             }
 
-            if (CGAL::squared_distance(plane.projection(segment[1]), segment[1]) < GlobalToleranceSquare)
+            if (CGAL::squared_distance(plane.projection(segment[1]), segment[1]) < wood_globals::DISTANCE_SQUARED)
             {
                 // CGAL_Debug(9999);
                 return false;
@@ -435,72 +421,6 @@ namespace cgal_polyline_util
         return F0 * T0;
     }
 
-    inline int IsPointPairInside(
-        CGAL_Polyline &polyline, IK::Plane_3 &plane,
-        std::vector<IK::Point_3> &testPoints, std::vector<int> &testPointsID, double scale = 100000.0)
-    {
-        /////////////////////////////////////////////////////////////////////////////////////
-        // Orient from 3D to 2D
-        /////////////////////////////////////////////////////////////////////////////////////
-        CGAL_Polyline a;
-        cgal_polyline_util::Duplicate(polyline, a);
-
-        /////////////////////////////////////////////////////////////////////////////////////
-        // Create Transformation - Orient to XY
-        /////////////////////////////////////////////////////////////////////////////////////
-        CGAL::Aff_transformation_3<IK> xform_toXY = PlaneToXY(polyline[0], plane);
-        Transform(a, xform_toXY);
-
-        std::vector<IK::Point_3> pts(testPoints.size());
-        for (int i = 0; i < testPoints.size(); i++)
-        {
-            pts[i] = IK::Point_3(testPoints[i].x(), testPoints[i].y(), testPoints[i].z());
-            pts[i] = xform_toXY.transform(pts[i]);
-        }
-
-        /////////////////////////////////////////////////////////////////////////////////////
-        // Convert to Clipper
-        /////////////////////////////////////////////////////////////////////////////////////
-        std::vector<Clipper2Lib::Point64> pathA(a.size() - 1);
-        for (int i = 0; i < a.size() - 1; i++)
-        {
-            pathA[i] = Clipper2Lib::Point64((int)(a[i].x() * scale), (int)(a[i].y() * scale));
-            // printf("%f,%f,%f \n", a[i].x(), a[i].y(), a[i].z());
-        }
-
-        /////////////////////////////////////////////////////////////////////////////////////
-        // Check if point is inside polyline
-        /////////////////////////////////////////////////////////////////////////////////////
-
-        // testPointsFlag.clear();
-        // testPointsFlag.resize(testPoints.size());
-
-        int count = 0;
-
-        // printf("-\n");
-        for (int i = 0; i < testPoints.size(); i++)
-        {
-            auto p = Clipper2Lib::Point64((int)(pts[i].x() * scale), (int)(pts[i].y() * scale));
-
-            Clipper2Lib::PointInPolygonResult result = Clipper2Lib::PointInPolygon(p, pathA);
-            // testPointsFlag[i] = result != 0;//0 - false, 1 true, -1 on boundary
-
-            // if (result != 0) {
-            //      printf("CPP Distance %f \n", ClosestDistance(pts[i], a));
-            //     CGAL_Debug(pts[i],true);
-            // }
-
-            if (result != Clipper2Lib::PointInPolygonResult::IsOutside)
-            {
-                testPointsID.push_back(i);
-                count++;
-            }
-        }
-        // printf("-\n");
-
-        return count;
-    }
-
     inline bool PlanePolyline(CGAL_Polyline &c0, CGAL_Polyline &c1,
                               IK::Plane_3 &p0, IK::Plane_3 &p1,
                               IK::Segment_3 &line, std::pair<int, int> &pair)
@@ -547,10 +467,10 @@ namespace cgal_polyline_util
         /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         std::vector<int> ID1;
-        int count0 = IsPointPairInside(c0, p0, pts1, ID1, GlobalClipperScale);
+        int count0 = clipper_util::are_points_inside(c0, p0, pts1, ID1);
 
         std::vector<int> ID0;
-        int count1 = IsPointPairInside(c1, p1, pts0, ID0, GlobalClipperScale);
+        int count1 = clipper_util::are_points_inside(c1, p1, pts0, ID0);
 
         if (count0 == 0 && count1 == 0)
         {
@@ -755,8 +675,7 @@ namespace cgal_polyline_util
     inline bool is_clockwise(CGAL_Polyline &polyline, IK::Plane_3 plane)
     {
         // copy
-        CGAL_Polyline cp;
-        Duplicate(polyline, cp);
+        CGAL_Polyline cp = polyline;
 
         // transform
         CGAL::Aff_transformation_3<IK> xform_toXY = PlaneToXY(polyline[0], plane);
@@ -848,6 +767,5 @@ namespace cgal_polyline_util
         }
         return result;
     }
-
 
 }

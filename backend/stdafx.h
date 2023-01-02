@@ -158,9 +158,6 @@
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/xml_parser.hpp>
 
-// CLIPPER
-// #include "clipper.h"
-
 // RTREE
 #include "src/wood/include/rtree.h"
 
@@ -173,23 +170,6 @@ using CGAL_Polylines = std::list<CGAL_Polyline>;
 typedef typename CGAL::Box_intersection_d::Box_with_info_d<double, 3, std::pair<std::size_t, std::size_t>> Box;
 typedef CGAL::Surface_mesh<IK::Point_3> Mesh;
 namespace PMP = CGAL::Polygon_mesh_processing;
-
-static double GlobalTolerance = 0.01;
-static double GlobalToleranceSquare = 0.0001;
-static double GlobalClipperScale = 1000000.0;
-static double GlobalClipperAreaTolerance = 0.0001;
-static double GlobalExtend[5] = {0.0, 0.0, 0, 0, 0};
-static std::string path_and_file_for_joints = "";
-
-#define ON_IS_FINITE(x) (0x7FF0 != (*((unsigned short *)(&x) + 3) & 0x7FF0))
-#define ON_DBL_MIN 2.22507385850720200e-308
-#define ON_EPSILON 2.2204460492503131e-16
-#define ON_SQRT_EPSILON 1.490116119385000000e-8
-#define ON_ZERO_TOLERANCE 2.3283064365386962890625e-10
-#define ON_DBL_MAX 1.7976931348623158e+308
-
-// Display
-static std::vector<CGAL_Polyline> viewer_polylines;
 
 struct FaceInfo2
 {
@@ -211,10 +191,11 @@ typedef CGALCDT::Point Point;
 typedef CGAL::Polygon_2<IK> Polygon_2;
 typedef CGALCDT::Face_handle Face_handle;
 
+// Eigen for Pybind11
 using RowMatrixXd = Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor>;
 using RowMatrixXi = Eigen::Matrix<int, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor>;
 
-// MY LIBRARY UTILITIES
+// Wood Library Utilities
 
 // Order Matters
 #include "cgal_print.h"
@@ -226,14 +207,12 @@ using RowMatrixXi = Eigen::Matrix<int, Eigen::Dynamic, Eigen::Dynamic, Eigen::Ro
 // Order does not matter
 #include "cgal_box_util.h"
 #include "cgal_data_set.h"
-
 #include "cgal_math_util.h"
-
 #include "cgal_mesh_util.h"
 #include "cgal_plane_util.h"
-#include "cgal_polyline_util.h"
-
 #include "clipper_util.h"
+#include "cgal_polyline_util.h"
 #include "rtree_util.h"
 
-// #include "wood_data_set.h" // data_set, attention do not use this in not a precompiled header it add 10-12 seconds of compilation time, just for temporary testing
+// Display
+static std::vector<CGAL_Polyline> viewer_polylines;

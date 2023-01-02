@@ -84,6 +84,8 @@ void viewer_wood::add(std::vector<std::vector<IK::Point_3>> &input_polyline_pair
 
     for (auto &polyline : input_polyline_pairs)
     {
+        if (polyline.size() == 0)
+            continue;
         vertices.emplace_back(std::vector<float>());
         vertices.back().reserve(polyline.size() * 3);
         for (auto &point : polyline)

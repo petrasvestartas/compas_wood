@@ -80,27 +80,34 @@ namespace cgal_polylabel
             cgal_polyline_util::Transform(polyline, xform_toXY);
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        // Get bounding box length of polylines_copy
+        // Sort polylines based on bounding-box to detect which polylines are holes, this only works if the polygon does not have holes within holes
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         std::vector<double> len = std::vector<double>(polylines_copy.size());
-
-        for (int i = 0; i < polylines_copy.size(); i++)
-        {
-            CGAL::Bbox_3 AABB = CGAL::bbox_3(polylines_copy[i].begin(), polylines_copy[i].end(), IK());
-            auto p0 = IK::Point_3(AABB.xmin(), AABB.ymin(), AABB.zmin());
-            auto p1 = IK::Point_3(AABB.xmax(), AABB.ymax(), AABB.zmax());
-            len[i] = CGAL::squared_distance(p0, p1);
-        }
-        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        // Sort polylines_copy indices by the bounding box length
-        // WARNING orientation is not checked, which should be fine with the Polylabel algorithm
-        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
         std::vector<int> ids(len.size());
         std::iota(begin(ids), end(ids), 0);
-        std::sort(begin(ids), end(ids), [&](int ia, int ib)
-                  { return len[ia] < len[ib]; });
-        std::reverse(begin(ids), end(ids));
+
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Get bounding box length of polylines_copy
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        if (len.size() > 0)
+        {
+            for (int i = 0; i < polylines_copy.size(); i++)
+            {
+                CGAL::Bbox_3 AABB = CGAL::bbox_3(polylines_copy[i].begin(), polylines_copy[i].end(), IK());
+                auto p0 = IK::Point_3(AABB.xmin(), AABB.ymin(), AABB.zmin());
+                auto p1 = IK::Point_3(AABB.xmax(), AABB.ymax(), AABB.zmax());
+                len[i] = CGAL::squared_distance(p0, p1);
+            }
+            /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            // Sort polylines_copy indices by the bounding box length
+            // WARNING orientation is not checked, which should be fine with the Polylabel algorithm
+            /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+            std::vector<int> ids(len.size());
+            std::sort(begin(ids), end(ids), [&](int ia, int ib)
+                      { return len[ia] < len[ib]; });
+            std::reverse(begin(ids), end(ids));
+        }
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Convert polylines_copy to Polylabel datastructure, be aware that the polyline considers all polygons closed, so skip the last point
@@ -117,7 +124,7 @@ namespace cgal_polylabel
         }
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        // Run the Polylabel algorithm
+        // Run the Polylabel algorithm, WARNING numbers are in 2D, first two doubles are center, the third is the radius
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         std::array<double, 3> center_and_radius = mapbox::polylabel(polygon_with_holes, 1.0);
 
@@ -231,38 +238,108 @@ namespace cgal_polylabel
      * Step 5 - Divide the rectangle into points
      * Step 6 - Orient and rotate to 3D
      *
-     * @param [in] polygon input polyline
+     * @param [in] polygons input polylines (with holes)
      * @param [out] result output rectangle
      * @param [in] division_distance division distance of the edges
      * @return bool flag if the result is valid
      */
-    inline bool inscribe_rectangle(CGAL_Polyline &polygon, CGAL_Polyline &result, double division_distance = 0)
+    inline bool inscribe_rectangle(const std::vector<CGAL_Polyline> &polylines, CGAL_Polyline &result, double division_distance = 0, double precision = 1.0)
     {
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        // Step 1 - Orient polygon to 2D
+        // copy polylines
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        CGAL::Aff_transformation_3<IK> xform_to_xy, xform_to_xy_inv;
-        internal::orient_polyline_to_xy_and_back(polygon, xform_to_xy, xform_to_xy_inv);
-        CGAL_Polyline polygon_copy = polygon;
-        cgal_polyline_util::Transform(polygon_copy, xform_to_xy);
+        std::vector<CGAL_Polyline> polylines_copy = polylines;
+        Clipper2Lib::Paths64 polylines_copy_clipper;
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        // Step 3 - Get center and a plane by the polylabel algorithm
+        // Create Transformation to XY plane
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        IK::Point_3 origin;
+        IK::Plane_3 plane;
+        cgal_polyline_util::get_fast_plane(polylines_copy[0], origin, plane);
+
+        CGAL::Aff_transformation_3<IK> xform_toXY = cgal_xform_util::PlaneToXY(origin, plane);
+        CGAL::Aff_transformation_3<IK> xform_toXY_Inv = xform_toXY.inverse();
+        for (auto &polyline : polylines_copy)
+            cgal_polyline_util::Transform(polyline, xform_toXY);
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        // Step 4 - Draw rectangle in the circle in the orientation of the bounding rectangle
+        // Sort polylines based on bounding-box to detect which polylines are holes, this only works if the polygon does not have holes within holes
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        std::vector<double> len = std::vector<double>(polylines_copy.size());
+        std::vector<int> ids(len.size());
+        std::iota(begin(ids), end(ids), 0);
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        // Step 5 - Divide the rectangle into points
+        // Get bounding box length of polylines_copy
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        for (int i = 0; i < polylines_copy.size(); i++)
+        {
+            CGAL::Bbox_3 AABB = CGAL::bbox_3(polylines_copy[i].begin(), polylines_copy[i].end(), IK());
+            auto p0 = IK::Point_3(AABB.xmin(), AABB.ymin(), AABB.zmin());
+            auto p1 = IK::Point_3(AABB.xmax(), AABB.ymax(), AABB.zmax());
+            len[i] = CGAL::squared_distance(p0, p1);
+        }
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Sort polylines_copy indices by the bounding box length
+        // WARNING orientation is not checked, which should be fine with the Polylabel algorithm
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        std::sort(begin(ids), end(ids), [&](int ia, int ib)
+                  { return len[ia] < len[ib]; });
+        std::reverse(begin(ids), end(ids));
+
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Convert polylines_copy to Polylabel datastructure, be aware that the polyline considers all polygons closed, so skip the last point
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        mapbox::geometry::polygon<double> polygon_with_holes(polylines_copy.size());
+
+        for (int i = 0; i < polylines_copy.size(); i++)
+            for (int j = 0; j < polylines_copy[ids[i]].size() - 1; j++)
+                polygon_with_holes[i].emplace_back(polylines_copy[ids[i]][j].x(), polylines_copy[ids[i]][j].y());
+
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Run the Polylabel algorithm, WARNING numbers are in 2D, first two doubles are center, the third is the radius
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        std::array<double, 3> center_and_radius = mapbox::polylabel(polygon_with_holes, precision);
+
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Convert from the Polylabel datastructure to CGAL
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        IK::Point_2 center(center_and_radius[0], center_and_radius[1]);
+        // center = center.transform(xform_toXY_Inv);
+
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Draw two diagoanals, the length of the x,y axes are equal to the biggest bounding-rectangle diagonal length
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        IK::Vector_2 x_axis(len[ids[0]], 0);
+        IK::Vector_2 y_axis(0, len[ids[0]]);
+
+        Clipper2Lib::Paths64 segment0{{Clipper2Lib::Point64((int64_t)(wood_globals::CLIPPER_SCALE * (center_and_radius[0] - x_axis.hx() - y_axis.hx())), (int64_t)(wood_globals::CLIPPER_SCALE * (center_and_radius[1] - x_axis.hy() - y_axis.hy()))),
+                                       Clipper2Lib::Point64((int64_t)(wood_globals::CLIPPER_SCALE * (center_and_radius[0] + x_axis.hx() + y_axis.hx())), (int64_t)(wood_globals::CLIPPER_SCALE * (center_and_radius[1] + x_axis.hy() + y_axis.hy())))}};
+
+        Clipper2Lib::Paths64 segment1{{Clipper2Lib::Point64((int64_t)(wood_globals::CLIPPER_SCALE * (center_and_radius[0] + x_axis.hx() - y_axis.hx())), (int64_t)(wood_globals::CLIPPER_SCALE * (center_and_radius[1] + x_axis.hy() - y_axis.hy()))),
+                                       Clipper2Lib::Point64((int64_t)(wood_globals::CLIPPER_SCALE * (center_and_radius[0] - x_axis.hx() + y_axis.hx())), (int64_t)(wood_globals::CLIPPER_SCALE * (center_and_radius[1] - x_axis.hy() + y_axis.hy())))}};
+
+        Clipper2Lib::Paths64 paths;
+        clipper_util::internal::cgalpolylines_to_clipper_2d(polylines_copy, paths);
+
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Intersect diagonals with all the polygons
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        Clipper2Lib::Paths64 segment0_clipped = Clipper2Lib::Intersect(paths, segment0, Clipper2Lib::FillRule::NonZero);
+        Clipper2Lib::Paths64 segment1_clipped = Clipper2Lib::Intersect(paths, segment1, Clipper2Lib::FillRule::NonZero);
+
+        // IK::Point_2 intersection_point;
+        // double intersection_parameter;
+        // bool has_intersection = cgal_intersection_util::LineLine2D(segment0, segment1, intersection_point, intersection_parameter);
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Step 6 - Convert to CGAL polyline and rotate to axis and orient to 3D
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        result = polygon_copy;
+        clipper_util::internal::cgalpolylines_to_clipper_2d(polylines_copy, paths);
+        // result = rectangle;
 
         return true;
     }

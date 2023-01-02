@@ -41,15 +41,15 @@ void polylines_from_vertices_and_faces_and_properties(
     const RowMatrixXi& face_joints_types_int,
     const RowMatrixXi& three_valence_element_indices_and_instruction,
     const RowMatrixXi& adjacency,
-    const RowMatrixXd& default_parameters_for_joint_types_matrix,
+    const RowMatrixXd& default_parameters_for_JOINTS_TYPES_matrix,
     const RowMatrixXd& scale,
 
     std::vector<CGAL_Polyline>& out_polyline_pairs,
     std::vector<std::vector<IK::Vector_3>>& out_insertion_vectors,
-    std::vector<std::vector<int>>& out_joint_types,
+    std::vector<std::vector<int>>& out_JOINTS_TYPES,
     std::vector<std::vector<int>>& out_three_valence_element_indices_and_instruction,
     std::vector<int>& out_adjacency,
-    std::vector<double>& out_default_parameters_for_joint_types);
+    std::vector<double>& out_default_parameters_for_JOINTS_TYPES);
 
 std::vector<RowMatrixXd> result_from_polylinesVectorVector(std::vector<std::vector<CGAL_Polyline>> polylines);
 
@@ -75,7 +75,7 @@ std::tuple<std::vector<RowMatrixXd>, std::vector<int>> pybind11_get_connection_z
     Eigen::Ref<const RowMatrixXi>& face_joints_types_int,
     Eigen::Ref<const RowMatrixXi>& three_valence_element_indices_and_instruction,
     Eigen::Ref<const RowMatrixXi>& adjacency,
-    Eigen::Ref<const RowMatrixXd>& default_parameters_for_joint_types_matrix,
+    Eigen::Ref<const RowMatrixXd>& default_parameters_for_JOINTS_TYPES_matrix,
     Eigen::Ref<const RowMatrixXd>& scale,
 
     int search_type,
@@ -93,7 +93,7 @@ std::tuple<RowMatrixXi, std::vector<RowMatrixXd>, RowMatrixXi> pybind11_joints(E
 std::tuple<RowMatrixXi, RowMatrixXd> pybind11_intersecting_sequences_of_dD_iso_oriented_boxes(Eigen::Ref<const RowMatrixXd>& V, Eigen::Ref<const RowMatrixXd>& E_R, Eigen::Ref<const RowMatrixXi>& F, double& min_distance);
 
 std::tuple<RowMatrixXi, RowMatrixXd, std::vector<RowMatrixXd>, std::vector<RowMatrixXd>, RowMatrixXi, std::vector<RowMatrixXd> > pybind11_beam_volumes(std::string& file_path, Eigen::Ref<const RowMatrixXd>& V, Eigen::Ref<const RowMatrixXd>& E_R, Eigen::Ref<const RowMatrixXd>& E_N, Eigen::Ref<const RowMatrixXi>& F, Eigen::Ref<const RowMatrixXi>& F_T, double& min_distance, double& volume_length, double& cross_or_side_to_end, int& flip_male,
-    Eigen::Ref <const RowMatrixXd>& input_default_parameters_for_joint_types, bool compute_joints = true, double division_distance = 300, double shift = 0.6, int output_type = 3);
+    Eigen::Ref <const RowMatrixXd>& input_default_parameters_for_JOINTS_TYPES, bool compute_joints = true, double division_distance = 300, double shift = 0.6, int output_type = 3);
 
 std::tuple < std::vector<RowMatrixXd>, std::vector<RowMatrixXd>, RowMatrixXi, RowMatrixXi> pybind11_check_joinery_library_xml(std::string& file_path, int type, double division_dist, double shift);
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -182,7 +182,7 @@ PYBIND11_MODULE(pybind11_joinery_solver, m) {
         pybind11::arg("volume_length"),
         pybind11::arg("cross_or_side_to_end"),
         pybind11::arg("flip_male"),
-        pybind11::arg("input_default_parameters_for_joint_types"),
+        pybind11::arg("input_default_parameters_for_JOINTS_TYPES"),
         pybind11::arg("compute_joints"),
         pybind11::arg("division_distance"),
         pybind11::arg("shift"),

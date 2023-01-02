@@ -12,7 +12,7 @@ namespace wood_test
         void set_file_path_for_input_xml_and_screenshot(const std::string &function_name)
         {
             // input data-set
-            wood_xml::path_and_file_for_input_polylines = wood_globals::data_set_input_folder + function_name + ".xml";
+            wood_xml::path_and_file_for_input_polylines = wood_globals::DATA_SET_INPUT_FOLDER + function_name + ".xml";
 
             // screenshot directory matches the file name of xml
             opengl_globals::filename_and_folder_screenshot = wood_xml::path_and_file_for_input_polylines.substr(0, wood_xml::path_and_file_for_input_polylines.size() - 3) + "png";
@@ -22,7 +22,7 @@ namespace wood_test
         {
 
             // input data-set
-            wood_xml::path_and_file_for_input_polylines = wood_globals::data_set_input_folder + function_name + ".xml";
+            wood_xml::path_and_file_for_input_polylines = wood_globals::DATA_SET_INPUT_FOLDER + function_name + ".xml";
 
             // read the xml file
             wood_xml::read_xml_polylines(input_polyline_pairs, false);
@@ -35,7 +35,7 @@ namespace wood_test
         {
             // add geomtry to the opengl viewer
             viewer_wood::line_thickness = 2;
-            switch (wood_globals::output_geometry_type)
+            switch (wood_globals::OUTPUT_GEOMETRY_TYPE)
             {
             case (0):
             case (2):
@@ -74,18 +74,18 @@ namespace wood_test
 
         // Global Parameters and output joint selection and orientation
         double division_length = 300;
-        wood_globals::joint_types[3 * 1 + 0] = 450;
-        wood_globals::joint_types[3 * 1 + 1] = 0.64;
-        wood_globals::joint_types[3 * 1 + 2] = 10;
-        wood_globals::joint_types[3 * 2 + 0] = 450;
-        wood_globals::joint_types[3 * 2 + 1] = 0.5;
-        wood_globals::joint_types[3 * 2 + 2] = 20;
+        wood_globals::JOINTS_TYPES[3 * 1 + 0] = 450;
+        wood_globals::JOINTS_TYPES[3 * 1 + 1] = 0.64;
+        wood_globals::JOINTS_TYPES[3 * 1 + 2] = 10;
+        wood_globals::JOINTS_TYPES[3 * 2 + 0] = 450;
+        wood_globals::JOINTS_TYPES[3 * 2 + 1] = 0.5;
+        wood_globals::JOINTS_TYPES[3 * 2 + 2] = 20;
 
         bool compute_joints = true;
         int search_type = 0;
         std::vector<double> scale = {1, 1, 1};
         std::vector<std::vector<IK::Vector_3>> input_insertion_vectors;
-        std::vector<std::vector<int>> input_joint_types;
+        std::vector<std::vector<int>> input_JOINTS_TYPES;
         std::vector<std::vector<int>> input_three_valence_element_indices_and_instruction;
         std::vector<int> input_adjacency;
 
@@ -103,7 +103,7 @@ namespace wood_test
             // input
             input_polyline_pairs,
             input_insertion_vectors,
-            input_joint_types,
+            input_JOINTS_TYPES,
             input_three_valence_element_indices_and_instruction,
             input_adjacency,
 
@@ -113,15 +113,15 @@ namespace wood_test
             top_face_triangulation,
 
             // Global Parameters
-            wood_globals::joint_types,
+            wood_globals::JOINTS_TYPES,
             scale,
             search_type,
-            wood_globals::output_geometry_type);
+            wood_globals::OUTPUT_GEOMETRY_TYPE);
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Export
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        wood_xml::path_and_file_for_output_polylines = wood_globals::data_set_output_file;
+        wood_xml::path_and_file_for_output_polylines = wood_globals::DATA_SET_OUTPUT_FILE;
         wood_xml::write_xml_polylines_and_types(output_plines, output_types);
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -140,12 +140,12 @@ namespace wood_test
         std::vector<std::vector<IK::Point_3>> input_polyline_pairs;
         internal::set_file_path_for_input_xml_and_screenshot(input_polyline_pairs, "type_plates_name_top_to_top_pairs");
 
-        wood_globals::joint_line_extension = -10;
-        wood_globals::joint_types[1 * 3 + 0] = 150; // division_length
+        wood_globals::JOINT_LINE_EXTENSION = -10;
+        wood_globals::JOINTS_TYPES[1 * 3 + 0] = 150; // division_length
         int search_type = 0;
         std::vector<double> scale = {1, 1, 1};
         std::vector<std::vector<IK::Vector_3>> input_insertion_vectors{};
-        std::vector<std::vector<int>> input_joint_types{};
+        std::vector<std::vector<int>> input_JOINTS_TYPES{};
         // std::vector<std::vector<int>> input_three_valence_element_indices_and_instruction = {{1}, {16, 10, 11, 17}};
         std::vector<std::vector<int>> input_three_valence_element_indices_and_instruction = {};
 
@@ -162,7 +162,7 @@ namespace wood_test
             // input
             input_polyline_pairs,
             input_insertion_vectors,
-            input_joint_types,
+            input_JOINTS_TYPES,
             input_three_valence_element_indices_and_instruction,
             input_adjacency,
             // output
@@ -170,16 +170,16 @@ namespace wood_test
             output_types,
             top_face_triangulation,
             // Global Parameters
-            wood_globals::joint_types,
+            wood_globals::JOINTS_TYPES,
             scale,
             search_type,
-            wood_globals::output_geometry_type,
+            wood_globals::OUTPUT_GEOMETRY_TYPE,
             0);
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Export
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        wood_xml::path_and_file_for_output_polylines = wood_globals::data_set_output_file;
+        wood_xml::path_and_file_for_output_polylines = wood_globals::DATA_SET_OUTPUT_FILE;
         wood_xml::write_xml_polylines_and_types(output_plines, output_types);
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -198,13 +198,13 @@ namespace wood_test
         std::vector<std::vector<IK::Point_3>> input_polyline_pairs;
         internal::set_file_path_for_input_xml_and_screenshot(input_polyline_pairs, "type_plates_name_joint_linking_vidychapel_corner");
 
-        wood_globals::joint_types[1 * 3 + 0] = 150; // division_length
-        wood_globals::joint_line_extension = -10;
+        wood_globals::JOINTS_TYPES[1 * 3 + 0] = 150; // division_length
+        wood_globals::JOINT_LINE_EXTENSION = -10;
 
         int search_type = 0;
         std::vector<double> scale = {1, 1, 1};
         std::vector<std::vector<IK::Vector_3>> input_insertion_vectors{};
-        std::vector<std::vector<int>> input_joint_types{
+        std::vector<std::vector<int>> input_JOINTS_TYPES{
             {-1, -1, -1, -1, 15, -1}, {-1, -1, 15, -1, -1, -1}, {-1, -1, -1, -1, 15, -1}, {-1, -1, 15, -1, -1, -1}, {-1, -1, -1, -1, 15, -1}, {-1, -1, 15, -1, -1, -1}, {-1, -1, -1, -1, 15, -1}, {-1, -1, -1, 15, -1, -1}, {-1, -1, -1, -1, -1, 15}, {-1, -1, -1, 15, -1, -1}, {-1, -1, -1, -1, 15, -1}, {-1, -1, -1, 15, -1, -1}, {-1, -1, -1, -1, -1, 15}, {-1, -1, -1, 15, -1, -1}, {-1, -1, -1, -1, 15, -1}, {-1, -1, 15, -1, -1, -1}, {-1, -1, -1, -1, -1, 15}, {-1, -1, -1, 15, -1, -1}, {-1, -1, -1, -1, 16, -1}, {-1, -1, 16, -1, -1, -1}, {-1, -1, -1, -1, -1, 16}, {-1, -1, -1, 16, -1, -1}, {-1, -1, -1, -1, 16, -1}, {-1, -1, 16, -1, -1, -1}, {-1, -1, -1, -1, -1, 16}, {-1, -1, -1, 16, -1, -1}, {-1, -1, -1, -1, 16, -1}, {-1, -1, 16, -1, -1, -1}, {-1, -1, -1, -1, -1, 16}, {-1, -1, -1, 16, -1, -1}, {-1, -1, -1, -1, 15, -1}, {-1, -1, 15, -1, -1, -1}, {-1, -1, -1, -1, -1, 15}, {-1, -1, -1, 15, -1, -1}, {-1, -1, -1, -1, 15, -1}, {-1, -1, 15, -1, -1, -1}, {-1, -1, -1, -1, -1, 15}, {-1, -1, -1, 15, -1, -1}, {-1, -1, -1, -1, 15, -1}, {-1, -1, 15, -1, -1, -1}, {-1, -1, -1, -1, -1, 15}, {-1, -1, -1, 15, -1, -1}
 
         };
@@ -329,7 +329,7 @@ namespace wood_test
             // input
             input_polyline_pairs,
             input_insertion_vectors,
-            input_joint_types,
+            input_JOINTS_TYPES,
             input_three_valence_element_indices_and_instruction,
             input_adjacency,
             // output
@@ -337,16 +337,16 @@ namespace wood_test
             output_types,
             top_face_triangulation,
             // Global Parameters
-            wood_globals::joint_types,
+            wood_globals::JOINTS_TYPES,
             scale,
             search_type,
-            wood_globals::output_geometry_type,
+            wood_globals::OUTPUT_GEOMETRY_TYPE,
             0);
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Export
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        wood_xml::path_and_file_for_output_polylines = wood_globals::data_set_output_file;
+        wood_xml::path_and_file_for_output_polylines = wood_globals::DATA_SET_OUTPUT_FILE;
         wood_xml::write_xml_polylines_and_types(output_plines, output_types);
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -366,13 +366,13 @@ namespace wood_test
         std::vector<std::vector<IK::Point_3>> input_polyline_pairs;
         internal::set_file_path_for_input_xml_and_screenshot(input_polyline_pairs, "type_plates_name_joint_linking_vidychapel_one_layer");
 
-        wood_globals::joint_line_extension = -10;
-        wood_globals::joint_types[1 * 3 + 0] = 50; // division_length
+        wood_globals::JOINT_LINE_EXTENSION = -10;
+        wood_globals::JOINTS_TYPES[1 * 3 + 0] = 50; // division_length
 
         int search_type = 0;
         std::vector<double> scale = {1, 1, 1};
         std::vector<std::vector<IK::Vector_3>> input_insertion_vectors{};
-        std::vector<std::vector<int>> input_joint_types{};
+        std::vector<std::vector<int>> input_JOINTS_TYPES{};
         // std::vector<std::vector<int>> input_three_valence_element_indices_and_instruction = {{1}, {16, 10, 11, 17}};
         std::vector<std::vector<int>> input_three_valence_element_indices_and_instruction = {};
 
@@ -388,7 +388,7 @@ namespace wood_test
             // input
             input_polyline_pairs,
             input_insertion_vectors,
-            input_joint_types,
+            input_JOINTS_TYPES,
             input_three_valence_element_indices_and_instruction,
             input_adjacency,
             // output
@@ -396,16 +396,16 @@ namespace wood_test
             output_types,
             top_face_triangulation,
             // Global Parameters
-            wood_globals::joint_types,
+            wood_globals::JOINTS_TYPES,
             scale,
             search_type,
-            wood_globals::output_geometry_type,
+            wood_globals::OUTPUT_GEOMETRY_TYPE,
             0);
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Export
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        wood_xml::path_and_file_for_output_polylines = wood_globals::data_set_output_file;
+        wood_xml::path_and_file_for_output_polylines = wood_globals::DATA_SET_OUTPUT_FILE;
         // xml_parser::write_xml_polylines(output_plines);
         wood_xml::write_xml_polylines_and_types(output_plines, output_types);
 
@@ -425,18 +425,18 @@ namespace wood_test
         std::vector<std::vector<IK::Point_3>> input_polyline_pairs;
         internal::set_file_path_for_input_xml_and_screenshot(input_polyline_pairs, "type_plates_name_joint_linking_vidychapel_one_axis_two_layers");
 
-        wood_globals::joint_line_extension = -10;
-        std::vector<double> joint_types = wood_globals::joint_types;
-        joint_types[1 * 3 + 0] = 50;
+        wood_globals::JOINT_LINE_EXTENSION = -10;
+        std::vector<double> JOINTS_TYPES = wood_globals::JOINTS_TYPES;
+        JOINTS_TYPES[1 * 3 + 0] = 50;
         int search_type = 0;
-        int output_type = wood_globals::output_geometry_type; // 0 - Plate outlines 1 - joint lines 2 - joint volumes 3 - joint geometry 4 - merge
+        int output_type = wood_globals::OUTPUT_GEOMETRY_TYPE; // 0 - Plate outlines 1 - joint lines 2 - joint volumes 3 - joint geometry 4 - merge
         // std::cout << "\n output_type " << output_type << "\n";
         std::vector<double> scale = {1, 1, 1};
         std::vector<std::vector<IK::Vector_3>> input_insertion_vectors{
             {{0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 133.378166, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}}, {{0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 133.378166, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}}, {{0, 0, 0}, {0, 0, 0}, {0, 133.378166, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 133.378166, 0}, {0, 0, 0}}, {{0, 0, 0}, {0, 0, 0}, {0, 133.378166, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 133.378166, 0}, {0, 0, 0}}, {{0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 133.378166, 0}, {0, 0, 0}, {0, 0, 0}}, {{0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 133.378166, 0}, {0, 0, 0}, {0, 0, 0}}, {{0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 133.378166, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}}, {{0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 133.378166, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}}, {{0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 133.378166, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 133.378166, 0}}, {{0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 133.378166, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 133.378166, 0}}, {{0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 133.378166, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}}, {{0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 133.378166, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}}, {{0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 133.378166, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}}, {{0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 133.378166, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}}, {{0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 133.378166, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 133.378166, 0}}, {{0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 133.378166, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 133.378166, 0}}, {{0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 133.378166, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}}, {{0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 133.378166, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}}
 
         };
-        std::vector<std::vector<int>> input_joint_types{
+        std::vector<std::vector<int>> input_JOINTS_TYPES{
             {-1, -1, -1, 16, -1, -1, -1}, {-1, -1, -1, 16, -1, -1, -1}, {-1, -1, 16, -1, -1, -1, 16, -1}, {-1, -1, 16, -1, -1, -1, 16, -1}, {-1, -1, -1, -1, 16, -1, -1}, {-1, -1, -1, -1, 16, -1, -1}, {-1, -1, -1, -1, 16, -1, 15, -1}, {-1, -1, -1, -1, 16, -1, 15, -1}, {-1, -1, -1, 15, -1, 16, -1, -1, -1, 16}, {-1, -1, -1, 15, -1, 16, -1, -1, -1, 16}, {-1, -1, 15, -1, 16, -1, -1, -1}, {-1, -1, 15, -1, 16, -1, -1, -1}, {-1, -1, 15, -1, 16, -1, -1, -1}, {-1, -1, 15, -1, 16, -1, -1, -1}, {-1, -1, -1, -1, -1, 16, -1, 15, -1, 16}, {-1, -1, -1, -1, -1, 16, -1, 15, -1, 16}, {-1, -1, -1, -1, 16, -1, 15, -1}, {-1, -1, -1, -1, 16, -1, 15, -1}
 
         };
@@ -550,7 +550,7 @@ namespace wood_test
             // input
             input_polyline_pairs,
             input_insertion_vectors,
-            input_joint_types,
+            input_JOINTS_TYPES,
             input_three_valence_element_indices_and_instruction,
             input_adjacency,
             // output
@@ -558,7 +558,7 @@ namespace wood_test
             output_types,
             top_face_triangulation,
             // Global Parameters
-            joint_types,
+            JOINTS_TYPES,
             scale,
             search_type,
             output_type,
@@ -567,7 +567,7 @@ namespace wood_test
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Export
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        wood_xml::path_and_file_for_output_polylines = wood_globals::data_set_output_file;
+        wood_xml::path_and_file_for_output_polylines = wood_globals::DATA_SET_OUTPUT_FILE;
         // xml_parser::write_xml_polylines(output_plines);
         wood_xml::write_xml_polylines_and_types(output_plines, output_types);
 
@@ -587,8 +587,8 @@ namespace wood_test
         std::vector<std::vector<IK::Point_3>> input_polyline_pairs;
         internal::set_file_path_for_input_xml_and_screenshot(input_polyline_pairs, "type_plates_name_joint_linking_vidychapel_full");
 
-        wood_globals::joint_line_extension = -10;
-        wood_globals::joint_types[1 * 3 + 0] = 50;
+        wood_globals::JOINT_LINE_EXTENSION = -10;
+        wood_globals::JOINTS_TYPES[1 * 3 + 0] = 50;
         int search_type = 0;
         // std::cout << "\n output_type " << output_type << "\n";
         std::vector<double> scale = {1, 1, 1};
@@ -596,7 +596,7 @@ namespace wood_test
             {{0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 133.378166, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}}, {{0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 133.378166, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}}, {{0, 0, 0}, {0, 0, 0}, {0, 133.378166, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 133.378166, 0}, {0, 0, 0}}, {{0, 0, 0}, {0, 0, 0}, {0, 133.378166, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 133.378166, 0}, {0, 0, 0}}, {{0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 133.378166, 0}, {0, 0, 0}, {0, 0, 0}}, {{0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 133.378166, 0}, {0, 0, 0}, {0, 0, 0}}, {{0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 133.378166, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}}, {{0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 133.378166, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}}, {{0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 133.378166, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 133.378166, 0}}, {{0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 133.378166, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 133.378166, 0}}, {{0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 133.378166, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}}, {{0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 133.378166, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}}, {{0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 133.378166, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}}, {{0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 133.378166, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}}, {{0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 133.378166, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 133.378166, 0}}, {{0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 133.378166, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 133.378166, 0}}, {{0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 133.378166, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}}, {{0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 133.378166, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}}, {{0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 133.378166, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}}, {{0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 133.378166, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}}, {{0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 133.378166, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 133.378166, 0}}, {{0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 133.378166, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 133.378166, 0}}, {{0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 133.378166, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}}, {{0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 133.378166, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}}, {{0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 133.378166, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}}, {{0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 133.378166, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}}, {{0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 133.378166, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 133.378166, 0}}, {{0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 133.378166, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 133.378166, 0}}, {{0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 133.378166, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}}, {{0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 133.378166, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}}, {{0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 133.378166, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}}, {{0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 133.378166, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}}, {{0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 133.378166, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 133.378166, 0}}, {{0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 133.378166, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 133.378166, 0}}, {{0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 133.378166, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}}, {{0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 133.378166, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}}, {{0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 133.378166, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}}, {{0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 133.378166, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}}, {{0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 133.378166, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 133.378166, 0}}, {{0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 133.378166, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 133.378166, 0}}, {{0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 133.378166, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}}, {{0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 133.378166, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}}, {{0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 133.378166, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}}, {{0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 133.378166, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}}, {{0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 133.378166, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 133.378166, 0}}, {{0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 133.378166, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 133.378166, 0}}, {{0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 133.378166, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}}, {{0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 133.378166, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}}, {{0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 133.378166, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}}, {{0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 133.378166, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}}, {{0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 133.378166, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 133.378166, 0}}, {{0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 133.378166, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 133.378166, 0}}, {{0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 133.378166, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}}, {{0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 133.378166, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}}, {{0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 133.378166, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}}, {{0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 133.378166, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}}, {{0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 133.378166, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 133.378166, 0}}, {{0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 133.378166, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 133.378166, 0}}, {{0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 133.378166, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}}, {{0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 133.378166, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}}, {{0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 133.378166, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}}, {{0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 133.378166, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}}, {{0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 133.378166, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 133.378166, 0}}, {{0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 133.378166, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 133.378166, 0}}, {{0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 133.378166, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}}, {{0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 133.378166, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}}, {{0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 133.378166, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}}, {{0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 133.378166, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}}, {{0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 133.378166, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 133.378166, 0}}, {{0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 133.378166, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 133.378166, 0}}, {{0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 133.378166, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}}, {{0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 133.378166, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}}, {{0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 133.378166, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}}, {{0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 133.378166, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}}, {{0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 133.378166, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 133.378166, 0}}, {{0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 133.378166, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 133.378166, 0}}, {{0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 133.378166, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}}, {{0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 133.378166, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}}, {{0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 133.378166, 0}, {0, 0, 0}, {0, 0, 0}}, {{0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 133.378166, 0}, {0, 0, 0}, {0, 0, 0}}, {{0, 0, 0}, {0, 0, 0}, {0, 133.378166, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 133.378166, 0}, {0, 0, 0}}, {{0, 0, 0}, {0, 0, 0}, {0, 133.378166, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 133.378166, 0}, {0, 0, 0}}, {{0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 133.378166, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}}, {{0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 133.378166, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}}
 
         };
-        std::vector<std::vector<int>> input_joint_types{
+        std::vector<std::vector<int>> input_JOINTS_TYPES{
             {-1, -1, -1, 16, -1, -1, -1}, {-1, -1, -1, 16, -1, -1, -1}, {-1, -1, 16, -1, -1, -1, 16, -1}, {-1, -1, 16, -1, -1, -1, 16, -1}, {-1, -1, -1, -1, 16, -1, -1}, {-1, -1, -1, -1, 16, -1, -1}, {-1, -1, -1, -1, 16, -1, 15, -1}, {-1, -1, -1, -1, 16, -1, 15, -1}, {-1, -1, -1, 15, -1, 16, -1, -1, -1, 16}, {-1, -1, -1, 15, -1, 16, -1, -1, -1, 16}, {-1, -1, 15, -1, 16, -1, -1, -1}, {-1, -1, 15, -1, 16, -1, -1, -1}, {-1, -1, 15, -1, 16, -1, -1, -1}, {-1, -1, 15, -1, 16, -1, -1, -1}, {-1, -1, -1, -1, -1, 16, -1, 15, -1, 16}, {-1, -1, -1, -1, -1, 16, -1, 15, -1, 16}, {-1, -1, -1, -1, 16, -1, 15, -1}, {-1, -1, -1, -1, 16, -1, 15, -1}, {-1, -1, -1, -1, 16, -1, 15, -1}, {-1, -1, -1, -1, 16, -1, 15, -1}, {-1, -1, -1, 15, -1, 16, -1, -1, -1, 16}, {-1, -1, -1, 15, -1, 16, -1, -1, -1, 16}, {-1, -1, 15, -1, 16, -1, -1, -1}, {-1, -1, 15, -1, 16, -1, -1, -1}, {-1, -1, 15, -1, 16, -1, -1, -1}, {-1, -1, 15, -1, 16, -1, -1, -1}, {-1, -1, -1, -1, -1, 16, -1, 15, -1, 16}, {-1, -1, -1, -1, -1, 16, -1, 15, -1, 16}, {-1, -1, -1, -1, 16, -1, 15, -1}, {-1, -1, -1, -1, 16, -1, 15, -1}, {-1, -1, -1, -1, 16, -1, 15, -1}, {-1, -1, -1, -1, 16, -1, 15, -1}, {-1, -1, -1, 15, -1, 16, -1, -1, -1, 16}, {-1, -1, -1, 15, -1, 16, -1, -1, -1, 16}, {-1, -1, 15, -1, 16, -1, -1, -1}, {-1, -1, 15, -1, 16, -1, -1, -1}, {-1, -1, 15, -1, 16, -1, -1, -1}, {-1, -1, 15, -1, 16, -1, -1, -1}, {-1, -1, -1, -1, -1, 16, -1, 15, -1, 16}, {-1, -1, -1, -1, -1, 16, -1, 15, -1, 16}, {-1, -1, -1, -1, 16, -1, 15, -1}, {-1, -1, -1, -1, 16, -1, 15, -1}, {-1, -1, -1, -1, 16, -1, 15, -1}, {-1, -1, -1, -1, 16, -1, 15, -1}, {-1, -1, -1, 15, -1, 16, -1, -1, -1, 16}, {-1, -1, -1, 15, -1, 16, -1, -1, -1, 16}, {-1, -1, 15, -1, 16, -1, -1, -1}, {-1, -1, 15, -1, 16, -1, -1, -1}, {-1, -1, 15, -1, 16, -1, -1, -1}, {-1, -1, 15, -1, 16, -1, -1, -1}, {-1, -1, -1, -1, -1, 16, -1, 15, -1, 16}, {-1, -1, -1, -1, -1, 16, -1, 15, -1, 16}, {-1, -1, -1, -1, 16, -1, 15, -1}, {-1, -1, -1, -1, 16, -1, 15, -1}, {-1, -1, -1, -1, 16, -1, 15, -1}, {-1, -1, -1, -1, 16, -1, 15, -1}, {-1, -1, -1, 15, -1, 16, -1, -1, -1, 16}, {-1, -1, -1, 15, -1, 16, -1, -1, -1, 16}, {-1, -1, 15, -1, 16, -1, -1, -1}, {-1, -1, 15, -1, 16, -1, -1, -1}, {-1, -1, 15, -1, 16, -1, -1, -1}, {-1, -1, 15, -1, 16, -1, -1, -1}, {-1, -1, -1, -1, -1, 16, -1, 15, -1, 16}, {-1, -1, -1, -1, -1, 16, -1, 15, -1, 16}, {-1, -1, -1, -1, 16, -1, 15, -1}, {-1, -1, -1, -1, 16, -1, 15, -1}, {-1, -1, -1, -1, 16, -1, 15, -1}, {-1, -1, -1, -1, 16, -1, 15, -1}, {-1, -1, -1, 15, -1, 16, -1, -1, -1, 16}, {-1, -1, -1, 15, -1, 16, -1, -1, -1, 16}, {-1, -1, 15, -1, 16, -1, -1, -1}, {-1, -1, 15, -1, 16, -1, -1, -1}, {-1, -1, 15, -1, 16, -1, -1, -1}, {-1, -1, 15, -1, 16, -1, -1, -1}, {-1, -1, -1, -1, -1, 16, -1, 15, -1, 16}, {-1, -1, -1, -1, -1, 16, -1, 15, -1, 16}, {-1, -1, -1, -1, 16, -1, 15, -1}, {-1, -1, -1, -1, 16, -1, 15, -1}, {-1, -1, -1, -1, 16, -1, -1}, {-1, -1, -1, -1, 16, -1, -1}, {-1, -1, 16, -1, -1, -1, 16, -1}, {-1, -1, 16, -1, -1, -1, 16, -1}, {-1, -1, -1, 16, -1, -1, -1}, {-1, -1, -1, 16, -1, -1, -1}
 
         };
@@ -664,7 +664,7 @@ namespace wood_test
             // input
             input_polyline_pairs,
             input_insertion_vectors,
-            input_joint_types,
+            input_JOINTS_TYPES,
             input_three_valence_element_indices_and_instruction,
             input_adjacency,
             // output
@@ -672,16 +672,16 @@ namespace wood_test
             output_types,
             top_face_triangulation,
             // Global Parameters
-            wood_globals::joint_types,
+            wood_globals::JOINTS_TYPES,
             scale,
             search_type,
-            wood_globals::output_geometry_type,
+            wood_globals::OUTPUT_GEOMETRY_TYPE,
             0);
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Export
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        wood_xml::path_and_file_for_output_polylines = wood_globals::data_set_output_file;
+        wood_xml::path_and_file_for_output_polylines = wood_globals::DATA_SET_OUTPUT_FILE;
         // xml_parser::write_xml_polylines(output_plines);
         wood_xml::write_xml_polylines_and_types(output_plines, output_types);
 
@@ -705,14 +705,14 @@ namespace wood_test
         std::vector<std::vector<IK::Point_3>> input_polyline_axes;
         internal::set_file_path_for_input_xml_and_screenshot(input_polyline_axes, "type_beams_name_phanomema_node");
 
-        wood_globals::joint_line_extension = 0;
-        wood_globals::joint_types[1 * 3 + 0] = 150; // division_length
+        wood_globals::JOINT_LINE_EXTENSION = 0;
+        wood_globals::JOINTS_TYPES[1 * 3 + 0] = 150; // division_length
         int search_type = 0;
-        int output_type = wood_globals::output_geometry_type; // 0 - Plate outlines 1 - joint lines 2 - joint volumes 3 - joint geometry 4 - merge
+        int output_type = wood_globals::OUTPUT_GEOMETRY_TYPE; // 0 - Plate outlines 1 - joint lines 2 - joint volumes 3 - joint geometry 4 - merge
         // std::cout << "\n output_type " << output_type << "\n";
         std::vector<double> scale = {1, 1, 1};
         std::vector<std::vector<IK::Vector_3>> input_insertion_vectors{};
-        std::vector<std::vector<int>> input_joint_types{};
+        std::vector<std::vector<int>> input_JOINTS_TYPES{};
         // std::vector<std::vector<int>> input_three_valence_element_indices_and_instruction = {{1}, {16, 10, 11, 17}};
         std::vector<std::vector<int>> input_three_valence_element_indices_and_instruction = {};
 
@@ -774,19 +774,19 @@ namespace wood_test
             joints_areas,
             joints_types,
             // Global Parameters and output wood::joint selection and orientation
-            wood_globals::joint_types,
+            wood_globals::JOINTS_TYPES,
             output_plines,
             output_types,
             compute_joints,
             division_distance,
             shift,
-            wood_globals::output_geometry_type,
+            wood_globals::OUTPUT_GEOMETRY_TYPE,
             use_eccentricities_to_scale_joints);
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Export
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        wood_xml::path_and_file_for_output_polylines = wood_globals::data_set_output_file;
+        wood_xml::path_and_file_for_output_polylines = wood_globals::DATA_SET_OUTPUT_FILE;
         output_plines.clear();
         for (auto &pline : volume_pairs)
             for (int j = 0; j < 4; j++)
@@ -800,7 +800,7 @@ namespace wood_test
         opengl_globals_geometry::add_grid();
         viewer_wood::line_thickness = 2;
 
-        switch (wood_globals::output_geometry_type)
+        switch (wood_globals::OUTPUT_GEOMETRY_TYPE)
         {
         case (0):
             viewer_wood::add(input_polyline_axes); // grey
@@ -1324,12 +1324,13 @@ namespace wood_test
         // main method
         std::vector<IK::Point_3> points;
         CGAL_Polyline polygon_inscribed_rectangle;
-        cgal_polylabel::inscribe_rectangle(polygon, polygon_inscribed_rectangle, -2.5);
+        cgal_polylabel::inscribe_rectangle({polygon}, polygon_inscribed_rectangle, -2.5);
 
         // display
         opengl_globals_geometry::add_grid();
         viewer_wood::scale = 10;
         std::vector<CGAL_Polyline> polylines = {polygon, polygon_inscribed_rectangle}; //, polygon_copy
+        //std::cout << polygon_inscribed_rectangle[1] << "\n";
         viewer_wood::add(polylines);
         viewer_wood::line_thickness = 10;
         viewer_wood::add(points);

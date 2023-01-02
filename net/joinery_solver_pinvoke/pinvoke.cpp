@@ -272,26 +272,26 @@ PINVOKE int pinvoke_get_connection_zones(
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     std::vector<CGAL_Polyline> input_polyline_pairs;
     std::vector<std::vector<IK::Vector_3>> input_insertion_vectors;
-    std::vector<std::vector<int>> input_joint_types;
+    std::vector<std::vector<int>> input_JOINTS_TYPES;
     std::vector<std::vector<int>> input_three_valence_element_indices_and_instruction;
     std::vector<int> input_adjacency;
-    std::vector<double> default_parameters_for_joint_types;
+    std::vector<double> default_parameters_for_JOINTS_TYPES;
     std::vector<double> scale;
 
     coord_to_list(f, f_s, v, v_s, input_polyline_pairs);
     //if (v_s == vec_v_s && f_s == vec_f_s)
     coord_to_list(vec_f, vec_f_s, vec_v, vec_v_s, input_insertion_vectors);
     //if (f_s == vec_f_s)
-    coord_to_list(jointtypes_f, jointtypes_f_s, jointtypes_v, jointtypes_v_s, input_joint_types);
+    coord_to_list(jointtypes_f, jointtypes_f_s, jointtypes_v, jointtypes_v_s, input_JOINTS_TYPES);
     //if (threevalence_v_s % 4 == 0)
     coord_to_list(threevalence_f, threevalence_f_s, threevalence_v, threevalence_v_s, input_three_valence_element_indices_and_instruction);
     //if (adjacency_v_s % 2 == 0)
     coord_to_list(adjacency_v, adjacency_v_s, input_adjacency);
     //if (jointparams_v_s % 3 == 0)
-    coord_to_list(jointparams_v, jointparams_v_s, default_parameters_for_joint_types);
+    coord_to_list(jointparams_v, jointparams_v_s, default_parameters_for_JOINTS_TYPES);
 
     coord_to_list(scale_v, scale_v_s, scale);
-    //for (auto& o : default_parameters_for_joint_types)
+    //for (auto& o : default_parameters_for_JOINTS_TYPES)
         //CGAL_Debug(o);
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -307,9 +307,9 @@ PINVOKE int pinvoke_get_connection_zones(
     std::vector<std::vector<int>> output_top_face_triangulation;
 
     get_connection_zones(
-        input_polyline_pairs, input_insertion_vectors, input_joint_types, input_three_valence_element_indices_and_instruction, input_adjacency,
+        input_polyline_pairs, input_insertion_vectors, input_JOINTS_TYPES, input_three_valence_element_indices_and_instruction, input_adjacency,
         output_plines, output_top_face_triangulation,
-        default_parameters_for_joint_types, scale,
+        default_parameters_for_JOINTS_TYPES, scale,
         search_type, output_type, triangulate
     );//division_distance, shift,
 
@@ -396,13 +396,13 @@ PINVOKE int pinvoke_find_closest_plateside_to_indexedpoint(
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //run
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    std::vector<std::vector<int>> output_joint_types;
+    std::vector<std::vector<int>> output_JOINTS_TYPES;
 
-    rtree_util::find_closest_plateside_to_indexedpoint(input_polyline_pairs, input_joint_pts, input_joint_ids, output_joint_types);
-    //for (int i = 0; i < output_joint_types.size(); i++) {
+    rtree_util::find_closest_plateside_to_indexedpoint(input_polyline_pairs, input_joint_pts, input_joint_ids, output_JOINTS_TYPES);
+    //for (int i = 0; i < output_JOINTS_TYPES.size(); i++) {
     //    CGAL_Debug(0);
-    //    for (int j = 0; j < output_joint_types[i].size(); j++) {
-    //        CGAL_Debug(output_joint_types[i][j]);
+    //    for (int j = 0; j < output_JOINTS_TYPES[i].size(); j++) {
+    //        CGAL_Debug(output_JOINTS_TYPES[i][j]);
     //    }
     //}
 
@@ -410,7 +410,7 @@ PINVOKE int pinvoke_find_closest_plateside_to_indexedpoint(
     //output_conversion
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //CGAL_Debug(output_plines.size());
-    list_to_coord(output_joint_types, out_f, out_f_s, out_v, out_v_s);
+    list_to_coord(output_JOINTS_TYPES, out_f, out_f_s, out_v, out_v_s);
 
     return 1;
 }

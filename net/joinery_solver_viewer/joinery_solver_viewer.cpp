@@ -27,7 +27,7 @@ int main(int argc, char** argv) {
     //std::vector<int>& joints_types,
 
     ////Global Parameters and output joint selection and orientation
-    //std::vector<double>& default_parameters_for_joint_types,
+    //std::vector<double>& default_parameters_for_JOINTS_TYPES,
     //std::vector<std::vector<CGAL_Polyline>>& joints_oriented_polylines,
     //bool compute_joints = false,
     //double division_distance = 300,
@@ -105,7 +105,7 @@ int main(int argc, char** argv) {
 
     //Global Parameters and output joint selection and orientation
     double division_length = 300;
-    std::vector<double> default_parameters_for_joint_types{
+    std::vector<double> default_parameters_for_JOINTS_TYPES{
         300,
         0.5,
         8,
@@ -163,7 +163,7 @@ int main(int argc, char** argv) {
         joints_types,
 
         //Global Parameters and output joint selection and orientation
-        default_parameters_for_joint_types,
+        default_parameters_for_JOINTS_TYPES,
         output_plines,
         output_types,
         compute_joints,

@@ -45,7 +45,7 @@ public:
 
     std::vector<IK::Vector_3> edge_vectors; // if set
 
-    std::vector<int> joint_types; // if set - used in joint_library | method construct_joint_by_index | if set negative is female
+    std::vector<int> JOINTS_TYPES; // if set - used in joint_library | method construct_joint_by_index | if set negative is female
 
     IK::Segment_3 axis;
 

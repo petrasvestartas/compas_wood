@@ -131,15 +131,15 @@ void polylines_from_vertices_and_faces_and_properties(
     const RowMatrixXi& face_joints_types_int,
     const RowMatrixXi& three_valence_element_indices_and_instruction,
     const RowMatrixXi& adjacency,
-    const RowMatrixXd& default_parameters_for_joint_types_matrix,
+    const RowMatrixXd& default_parameters_for_JOINTS_TYPES_matrix,
     const RowMatrixXd& scale,
 
     std::vector<CGAL_Polyline>& out_polyline_pairs,
     std::vector<std::vector<IK::Vector_3>>& out_insertion_vectors,
-    std::vector<std::vector<int>>& out_joint_types,
+    std::vector<std::vector<int>>& out_JOINTS_TYPES,
     std::vector<std::vector<int>>& out_three_valence_element_indices_and_instruction,
     std::vector<int>& out_adjacency,
-    std::vector<double>& out_default_parameters_for_joint_types,
+    std::vector<double>& out_default_parameters_for_JOINTS_TYPES,
     std::vector<double>& out_scale
 
 ) {
@@ -152,8 +152,8 @@ void polylines_from_vertices_and_faces_and_properties(
     //std::vector< std::vector<IK::Vector_3>> insertion_vectors;
     out_insertion_vectors.reserve(polylines_vertices_count_int.size());
 
-    // std::vector< std::vector<int>> joint_types;
-    out_joint_types.reserve(polylines_vertices_count_int.size());
+    // std::vector< std::vector<int>> JOINTS_TYPES;
+    out_JOINTS_TYPES.reserve(polylines_vertices_count_int.size());
 
     CGAL_Polyline pline;
     int counter = 0;
@@ -196,7 +196,7 @@ void polylines_from_vertices_and_faces_and_properties(
             types.emplace_back(id);
 
             if (types.size() == (lastCount)) {
-                out_joint_types.emplace_back(types);
+                out_JOINTS_TYPES.emplace_back(types);
                 types.clear();                                              //Clear points from the polyline
                 lastCount = polylines_vertices_count_int(++counter, 0) + 1; //Take next polyline Count
             }
@@ -226,10 +226,10 @@ void polylines_from_vertices_and_faces_and_properties(
     //for (auto& e : out_adjacency)
     //    CGAL_Debug(e);
 
-    if (default_parameters_for_joint_types_matrix.size() > 0) {
-        out_default_parameters_for_joint_types.reserve(default_parameters_for_joint_types_matrix.size());
-        for (int i = 0; i < default_parameters_for_joint_types_matrix.size(); i++)
-            out_default_parameters_for_joint_types.emplace_back(default_parameters_for_joint_types_matrix(i, 0));
+    if (default_parameters_for_JOINTS_TYPES_matrix.size() > 0) {
+        out_default_parameters_for_JOINTS_TYPES.reserve(default_parameters_for_JOINTS_TYPES_matrix.size());
+        for (int i = 0; i < default_parameters_for_JOINTS_TYPES_matrix.size(); i++)
+            out_default_parameters_for_JOINTS_TYPES.emplace_back(default_parameters_for_JOINTS_TYPES_matrix(i, 0));
     }
 
     if (scale.size() > 0) {
@@ -379,7 +379,7 @@ std::tuple<std::vector<RowMatrixXd>, std::vector<int>> pybind11_get_connection_z
     Eigen::Ref<const RowMatrixXi>& face_joints_types_int,
     Eigen::Ref<const RowMatrixXi>& three_valence_element_indices_and_instruction,
     Eigen::Ref<const RowMatrixXi>& adjacency,
-    Eigen::Ref<const RowMatrixXd>& default_parameters_for_joint_types_matrix,
+    Eigen::Ref<const RowMatrixXd>& default_parameters_for_JOINTS_TYPES_matrix,
     Eigen::Ref<const RowMatrixXd>& scale,
 
     int search_type = 1,
@@ -399,10 +399,10 @@ std::tuple<std::vector<RowMatrixXd>, std::vector<int>> pybind11_get_connection_z
     //std::vector<CGAL_Polyline> polyline_pairs =  polylines_from_vertices_and_faces(polylines_vertices_XYZ, polylines_vertices_count_int);
     std::vector<CGAL_Polyline> out_polyline_pairs;
     std::vector<std::vector<IK::Vector_3>> out_insertion_vectors;
-    std::vector<std::vector<int>> out_joint_types;
+    std::vector<std::vector<int>> out_JOINTS_TYPES;
     std::vector<std::vector<int>> out_three_valence_element_indices_and_instruction;
     std::vector<int> out_adjacency;
-    std::vector<double> out_default_parameters_for_joint_types;
+    std::vector<double> out_default_parameters_for_JOINTS_TYPES;
     std::vector<double> out_scale;
     polylines_from_vertices_and_faces_and_properties(
 
@@ -412,15 +412,15 @@ std::tuple<std::vector<RowMatrixXd>, std::vector<int>> pybind11_get_connection_z
         face_joints_types_int,
         three_valence_element_indices_and_instruction,
         adjacency,
-        default_parameters_for_joint_types_matrix,
+        default_parameters_for_JOINTS_TYPES_matrix,
         scale,
 
         out_polyline_pairs,
         out_insertion_vectors,
-        out_joint_types,
+        out_JOINTS_TYPES,
         out_three_valence_element_indices_and_instruction,
         out_adjacency,
-        out_default_parameters_for_joint_types,
+        out_default_parameters_for_JOINTS_TYPES,
         out_scale);
 
     std::vector<std::vector<CGAL_Polyline>> output;
@@ -431,7 +431,7 @@ std::tuple<std::vector<RowMatrixXd>, std::vector<int>> pybind11_get_connection_z
     get_connection_zones(
         out_polyline_pairs,
         out_insertion_vectors,
-        out_joint_types,
+        out_JOINTS_TYPES,
         out_three_valence_element_indices_and_instruction,
         out_adjacency,
 
@@ -441,7 +441,7 @@ std::tuple<std::vector<RowMatrixXd>, std::vector<int>> pybind11_get_connection_z
         top_face_triangulation,
 
         //Global Parameters
-        out_default_parameters_for_joint_types,
+        out_default_parameters_for_JOINTS_TYPES,
         out_scale,
         search_type,
 
@@ -495,8 +495,8 @@ std::tuple<std::vector<RowMatrixXi>, RowMatrixXd, RowMatrixXd> pybind11_rtree(Ei
     //////////////////////////////////////////////////////////////////////////////
     std::vector<element> elements;
     std::vector<std::vector<IK::Vector_3>> input_insertion_vectors;
-    std::vector<std::vector<int>> input_joint_types;
-    get_elements(input_polyline_pairs, input_insertion_vectors, input_joint_types, elements);
+    std::vector<std::vector<int>> input_JOINTS_TYPES;
+    get_elements(input_polyline_pairs, input_insertion_vectors, input_JOINTS_TYPES, elements);
 
     //////////////////////////////////////////////////////////////////////////////
     //Create joints, Perform Joint Area Search
@@ -706,8 +706,8 @@ std::tuple<RowMatrixXi, std::vector<RowMatrixXd>, RowMatrixXi> pybind11_joints(E
     //////////////////////////////////////////////////////////////////////////////
     std::vector<element> elements;
     std::vector<std::vector<IK::Vector_3>> input_insertion_vectors;
-    std::vector<std::vector<int>> input_joint_types;
-    get_elements(input_polyline_pairs, input_insertion_vectors, input_joint_types, elements);
+    std::vector<std::vector<int>> input_JOINTS_TYPES;
+    get_elements(input_polyline_pairs, input_insertion_vectors, input_JOINTS_TYPES, elements);
 
     //////////////////////////////////////////////////////////////////////////////
     //Create joints, Perform Joint Area Search
@@ -724,7 +724,7 @@ std::tuple<RowMatrixXi, std::vector<RowMatrixXd>, RowMatrixXi> pybind11_joints(E
     RowMatrixXi element_pairs(joints.size(), 2);
     std::vector<RowMatrixXd> joint_areas;
     joint_areas.reserve(joints.size());
-    RowMatrixXi joint_types(joints.size(), 1);
+    RowMatrixXi JOINTS_TYPES(joints.size(), 1);
 
     for (int i = 0; i < joints.size(); i++) {
         //element pairs
@@ -746,13 +746,13 @@ std::tuple<RowMatrixXi, std::vector<RowMatrixXd>, RowMatrixXi> pybind11_joints(E
         joint_areas.emplace_back(current_joint_areas);
 
         //joint types
-        joint_types(i, 0) = joints[i].type;
+        JOINTS_TYPES(i, 0) = joints[i].type;
     }
 
     //////////////////////////////////////////////////////////////////////////////
     // Output Tuple
     //////////////////////////////////////////////////////////////////////////////
-    return std::make_tuple(element_pairs, joint_areas, joint_types);
+    return std::make_tuple(element_pairs, joint_areas, JOINTS_TYPES);
 }
 
 std::tuple<RowMatrixXi, RowMatrixXd> pybind11_intersecting_sequences_of_dD_iso_oriented_boxes(Eigen::Ref<const RowMatrixXd>& V, Eigen::Ref<const RowMatrixXd>& E_R, Eigen::Ref<const RowMatrixXi>& F, double& min_distance) {
@@ -824,13 +824,13 @@ std::tuple<RowMatrixXi, RowMatrixXd> pybind11_intersecting_sequences_of_dD_iso_o
 }
 
 std::tuple<RowMatrixXi, RowMatrixXd, std::vector<RowMatrixXd>, std::vector<RowMatrixXd>, RowMatrixXi, std::vector<RowMatrixXd> > pybind11_beam_volumes(std::string& file_path, Eigen::Ref<const RowMatrixXd>& V, Eigen::Ref<const RowMatrixXd>& E_R, Eigen::Ref<const RowMatrixXd>& E_N, Eigen::Ref<const RowMatrixXi>& F, Eigen::Ref<const RowMatrixXi>& F_T, double& min_distance, double& volume_length, double& cross_or_side_to_end, int& flip_male,
-    Eigen::Ref <const RowMatrixXd>& input_default_parameters_for_joint_types, bool compute_joints, double division_distance, double shift, int output_type) {
+    Eigen::Ref <const RowMatrixXd>& input_default_parameters_for_JOINTS_TYPES, bool compute_joints, double division_distance, double shift, int output_type) {
     //////////////////////////////////////////////////////////////////////////////
     //Set directory for joint file path .XML
     //////////////////////////////////////////////////////////////////////////////
     path_and_file_for_joints = file_path;
 
-    //default_parameters_for_joint_types, joints_oriented_polylines, true, 300, 0.6, 3
+    //default_parameters_for_JOINTS_TYPES, joints_oriented_polylines, true, 300, 0.6, 3
     //////////////////////////////////////////////////////////////////////////////
     //Convert raw-data to list of Polylines
     //////////////////////////////////////////////////////////////////////////////
@@ -907,13 +907,13 @@ std::tuple<RowMatrixXi, RowMatrixXd, std::vector<RowMatrixXd>, std::vector<RowMa
         //CGAL_Debug(F_T(i, 0));
     }
 
-    std::vector<double> default_parameters_for_joint_types;
+    std::vector<double> default_parameters_for_JOINTS_TYPES;
 
-    if (input_default_parameters_for_joint_types.size() > 0) {
-        default_parameters_for_joint_types.reserve(input_default_parameters_for_joint_types.size());
+    if (input_default_parameters_for_JOINTS_TYPES.size() > 0) {
+        default_parameters_for_JOINTS_TYPES.reserve(input_default_parameters_for_JOINTS_TYPES.size());
 
-        for (int i = 0; i < input_default_parameters_for_joint_types.size(); i++)
-            default_parameters_for_joint_types.emplace_back(input_default_parameters_for_joint_types(i, 0));
+        for (int i = 0; i < input_default_parameters_for_JOINTS_TYPES.size(); i++)
+            default_parameters_for_JOINTS_TYPES.emplace_back(input_default_parameters_for_JOINTS_TYPES(i, 0));
     }
 
     //////////////////////////////////////////////////////////////////////////////
@@ -931,7 +931,7 @@ std::tuple<RowMatrixXi, RowMatrixXd, std::vector<RowMatrixXd>, std::vector<RowMa
     std::vector<std::vector<CGAL_Polyline>> joints_oriented_polylines;
     beam_volumes(polylines, segment_radii, segment_normals, face_types, min_distance, volume_length, cross_or_side_to_end, flip_male,
         polyline0_id_segment0_id_polyline1_id_segment1_id, point_pairs, volume_pairs, joints_areas, joints_types,
-        default_parameters_for_joint_types, joints_oriented_polylines, compute_joints, division_distance, shift, output_type);
+        default_parameters_for_JOINTS_TYPES, joints_oriented_polylines, compute_joints, division_distance, shift, output_type);
 
     //////////////////////////////////////////////////////////////////////////////
     //Convert to output
@@ -942,7 +942,7 @@ std::tuple<RowMatrixXi, RowMatrixXd, std::vector<RowMatrixXd>, std::vector<RowMa
     std::vector<RowMatrixXd> output_joint_areas;
     volumes.reserve(point_pairs.size() * 4);
     output_joint_areas.reserve(joints_areas.size());
-    RowMatrixXi output_joint_types(joints_types.size(), 1);
+    RowMatrixXi output_JOINTS_TYPES(joints_types.size(), 1);
 
     for (size_t i = 0; i < polyline0_id_segment0_id_polyline1_id_segment1_id.size(); i++) {
         neighbours(i, 0) = polyline0_id_segment0_id_polyline1_id_segment1_id[i][0];
@@ -971,12 +971,12 @@ std::tuple<RowMatrixXi, RowMatrixXd, std::vector<RowMatrixXd>, std::vector<RowMa
     }
 
     for (size_t i = 0; i < joints_types.size(); i++) {
-        output_joint_types(i, 0) = joints_types[i];
+        output_JOINTS_TYPES(i, 0) = joints_types[i];
     }
 
     std::tuple<std::vector<RowMatrixXd>, std::vector<int>> joint_geometry_and_index = result_tuple_from_polylinesVector(joints_oriented_polylines, true);
 
-    return std::make_tuple(neighbours, points, volumes, output_joint_areas, output_joint_types, std::get<0>(joint_geometry_and_index));
+    return std::make_tuple(neighbours, points, volumes, output_joint_areas, output_JOINTS_TYPES, std::get<0>(joint_geometry_and_index));
 }
 
 std::tuple < std::vector<RowMatrixXd>, std::vector<RowMatrixXd>, RowMatrixXi, RowMatrixXi> pybind11_check_joinery_library_xml(std::string& file_path, int type, double division_dist, double shift) {

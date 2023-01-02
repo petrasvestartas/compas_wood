@@ -3,7 +3,7 @@
 //#include "rtree.h"
 
 namespace rtree_util {
-    //std::vector<std::vector<int>>& input_joint_types
+    //std::vector<std::vector<int>>& input_JOINTS_TYPES
     // std::vector<int>& input_polyline_pairs_indices
 
     inline IK::Point_3 point_at(const IK::Segment_3& l, double t) {
@@ -186,15 +186,15 @@ namespace rtree_util {
         std::vector<CGAL_Polyline>& input_polyline_pairs,
         std::vector<IK::Point_3>& input_points,
         std::vector<int>& input_id,
-        std::vector<std::vector<int>>& output_joint_types,
+        std::vector<std::vector<int>>& output_JOINTS_TYPES,
         double tol = 0.01) {
         //Create a container to store full empty insertion vectors
         int n = (int)(input_polyline_pairs.size() * 0.5);
 
-        output_joint_types = std::vector<std::vector<int>>(n);
+        output_JOINTS_TYPES = std::vector<std::vector<int>>(n);
 
         for (int i = 0; i < n; i++)
-            output_joint_types[i] = std::vector<int>(input_polyline_pairs[i * 2].size() + 1, -1);
+            output_JOINTS_TYPES[i] = std::vector<int>(input_polyline_pairs[i * 2].size() + 1, -1);
 
         if (input_points.size() == 0) return;
         if (input_points.size() != input_id.size()) return;
@@ -233,7 +233,7 @@ namespace rtree_util {
         for (int i = 0; i < input_points.size(); i++) {//AABB.size()
           //RhinoApp().Print(L" x %f y %f z %f \n", text_dots[i].first.x, text_dots[i].first.y, text_dots[i].first.z);
           //std::vector<int> result;
-            auto callback = [i, &input_polyline_pairs, &input_points, &input_id, &output_joint_types, &collision_count](int foundValue) -> bool
+            auto callback = [i, &input_polyline_pairs, &input_points, &input_id, &output_JOINTS_TYPES, &collision_count](int foundValue) -> bool
             {
                 //RhinoApp().Print(L" __________________ \n");
                 //Get lines points
@@ -248,7 +248,7 @@ namespace rtree_util {
                 if (flag) {
                     int face_or_edge = input_id[i] < 0 ? 0 : 2 + edge;
                     int type = input_id[i] < -100 ? 0 : std::abs(input_id[i]);
-                    output_joint_types[foundValue][face_or_edge] = type;
+                    output_JOINTS_TYPES[foundValue][face_or_edge] = type;
                     //RhinoApp().Print(L" Element %i edge %i \n", foundValue, edge);
                     //RhinoApp().Print(L" Closest Distance 0: %f \n", closest_distance);
                     collision_count++;
@@ -261,7 +261,7 @@ namespace rtree_util {
                 if (flag) {
                     int face_or_edge = input_id[i] < 0 ? 1 : 2 + edge;
                     int type = input_id[i] < -100 ? 0 : std::abs(input_id[i]);
-                    output_joint_types[foundValue][face_or_edge] = std::abs(type);
+                    output_JOINTS_TYPES[foundValue][face_or_edge] = std::abs(type);
                     //RhinoApp().Print(L" Element %i edge %i \n", foundValue, edge);
                     //RhinoApp().Print(L" Closest Distance 1: %f \n", closest_distance);
                     collision_count++;
@@ -276,6 +276,6 @@ namespace rtree_util {
             int nhits = tree.Search(min, max, callback);//callback in this method call callback above
             //RhinoApp().Print(L" ________%i__________ \n", nhits);
         }
-        if (collision_count == 0) output_joint_types.clear();
+        if (collision_count == 0) output_JOINTS_TYPES.clear();
     }
 }
