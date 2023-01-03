@@ -243,7 +243,7 @@ namespace cgal_polylabel
      * @param [in] division_distance division distance of the edges
      * @return bool flag if the result is valid
      */
-    inline bool inscribe_rectangle(const std::vector<CGAL_Polyline> &polylines, CGAL_Polyline &result, double division_distance = 0, double precision = 1.0)
+    inline bool inscribe_rectangle(const std::vector<CGAL_Polyline> &polylines, std::vector<CGAL_Polyline> &result, double division_distance = 0, double precision = 1.0)
     {
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -268,25 +268,27 @@ namespace cgal_polylabel
         // Sort polylines based on bounding-box to detect which polylines are holes, this only works if the polygon does not have holes within holes
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         std::vector<double> len = std::vector<double>(polylines_copy.size());
-        std::vector<int> ids(len.size());
+        std::vector<size_t> ids(len.size());
         std::iota(begin(ids), end(ids), 0);
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Get bounding box length of polylines_copy
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        for (int i = 0; i < polylines_copy.size(); i++)
+        CGAL_Polyline diagonal;
+        for (auto i = 0; i < polylines_copy.size(); i++)
         {
             CGAL::Bbox_3 AABB = CGAL::bbox_3(polylines_copy[i].begin(), polylines_copy[i].end(), IK());
             auto p0 = IK::Point_3(AABB.xmin(), AABB.ymin(), AABB.zmin());
             auto p1 = IK::Point_3(AABB.xmax(), AABB.ymax(), AABB.zmax());
-            len[i] = CGAL::squared_distance(p0, p1);
+            len[i] = std::sqrt(CGAL::squared_distance(p0, p1));
         }
+
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Sort polylines_copy indices by the bounding box length
         // WARNING orientation is not checked, which should be fine with the Polylabel algorithm
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        std::sort(begin(ids), end(ids), [&](int ia, int ib)
+        std::sort(begin(ids), end(ids), [&](size_t ia, size_t ib)
                   { return len[ia] < len[ib]; });
         std::reverse(begin(ids), end(ids));
 
@@ -295,8 +297,8 @@ namespace cgal_polylabel
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         mapbox::geometry::polygon<double> polygon_with_holes(polylines_copy.size());
 
-        for (int i = 0; i < polylines_copy.size(); i++)
-            for (int j = 0; j < polylines_copy[ids[i]].size() - 1; j++)
+        for (auto i = 0; i < polylines_copy.size(); i++)
+            for (auto j = 0; j < polylines_copy[ids[i]].size() - 1; j++)
                 polygon_with_holes[i].emplace_back(polylines_copy[ids[i]][j].x(), polylines_copy[ids[i]][j].y());
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -305,17 +307,65 @@ namespace cgal_polylabel
         std::array<double, 3> center_and_radius = mapbox::polylabel(polygon_with_holes, precision);
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        // Convert from the Polylabel datastructure to CGAL
+        // Find closest edge direction to the center
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        IK::Point_2 center(center_and_radius[0], center_and_radius[1]);
-        // center = center.transform(xform_toXY_Inv);
+        IK::Point_3 center(center_and_radius[0], center_and_radius[1], 0);
+        double distance_from_center_to_polyline_edge = DBL_MAX;
+        size_t edge_id0 = 0;
+        size_t edge_id1 = 0;
+        for (auto i = 0; i < polylines_copy.size(); i++)
+        {
+            for (auto j = 0; j < polylines_copy[i].size() - 1; j++)
+            {
 
+                IK::Segment_3 polyline_segment(polylines_copy[i][j], polylines_copy[i][j + 1]);
+                IK::Point_3 projection = polyline_segment.supporting_line().projection(center);
+                if (polyline_segment.has_on(projection))
+                {
+                    double temp_distance_from_center_to_polyline_edge = CGAL::squared_distance(center, projection);
+                    // std::cout << distance_from_center_to_polyline_edge << " " << temp_distance_from_center_to_polyline_edge << "\n";
+
+                    if (temp_distance_from_center_to_polyline_edge < distance_from_center_to_polyline_edge)
+                    {
+                        distance_from_center_to_polyline_edge = temp_distance_from_center_to_polyline_edge;
+                        edge_id0 = i;
+                        edge_id1 = j;
+                    }
+                }
+                else
+                {
+                    std::cout << "has not \n";
+                }
+            }
+        }
+        std::cout << edge_id0 << " " << edge_id1 << "\n";
+
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Direction
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        IK::Vector_3 x_axis = polylines_copy[edge_id0][edge_id1 + 1] - polylines_copy[edge_id0][edge_id1];
+        double angle = 0.785398163397448309616; // 1.57079632679489661923;
+        angle *= 0;
+        x_axis = IK::Vector_3(x_axis.hx() * std::cos(angle) - x_axis.hy() * std::sin(angle), x_axis.hx() * std::sin(angle) + x_axis.hy() * std::cos(angle), 0);
+        cgal_vector_util::Unitize(x_axis);
+
+        IK::Vector_3 z_axis(0, 0, 1);
+        IK::Vector_3 y_axis = CGAL::cross_product(x_axis, z_axis);
+
+        // run the division method which is the output -> points
+        std::vector<IK::Point_3> four_points;
+        internal::circle_points(IK::Vector_3(center_and_radius[0], center_and_radius[1], 0), x_axis, y_axis, z_axis, four_points, 4, std::get<2>(center_and_radius));
+        four_points.emplace_back(four_points.front());
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Draw two diagoanals, the length of the x,y axes are equal to the biggest bounding-rectangle diagonal length
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        IK::Vector_2 x_axis(len[ids[0]], 0);
-        IK::Vector_2 y_axis(0, len[ids[0]]);
+        // IK::Vector_2 x_axis(len[ids[0]], 0);
+        // IK::Vector_2 y_axis(0, len[ids[0]]);
 
+        // double angle = 1.57079632679489661923;
+        // IK::Vector_3 y_axis(x_axis.hx() * std::cos(angle) - x_axis.hy() * std::sin(angle), x_axis.hx() * std::sin(angle) + x_axis.hy() * std::cos(angle), 0);
+        x_axis *= len[ids[0]];
+        y_axis *= len[ids[0]];
         Clipper2Lib::Paths64 segment0{{Clipper2Lib::Point64((int64_t)(wood_globals::CLIPPER_SCALE * (center_and_radius[0] - x_axis.hx() - y_axis.hx())), (int64_t)(wood_globals::CLIPPER_SCALE * (center_and_radius[1] - x_axis.hy() - y_axis.hy()))),
                                        Clipper2Lib::Point64((int64_t)(wood_globals::CLIPPER_SCALE * (center_and_radius[0] + x_axis.hx() + y_axis.hx())), (int64_t)(wood_globals::CLIPPER_SCALE * (center_and_radius[1] + x_axis.hy() + y_axis.hy())))}};
 
@@ -328,18 +378,78 @@ namespace cgal_polylabel
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Intersect diagonals with all the polygons
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        Clipper2Lib::Paths64 segment0_clipped = Clipper2Lib::Intersect(paths, segment0, Clipper2Lib::FillRule::NonZero);
-        Clipper2Lib::Paths64 segment1_clipped = Clipper2Lib::Intersect(paths, segment1, Clipper2Lib::FillRule::NonZero);
+        Clipper2Lib::Clipper64 c0;
+        c0.AddOpenSubject(segment0);
+        c0.AddClip(paths);
+        Clipper2Lib::Paths64 soln0, soln_open0;
+        c0.Execute(Clipper2Lib::ClipType::Intersection, Clipper2Lib::FillRule::NonZero, soln0, soln_open0);
 
-        // IK::Point_2 intersection_point;
-        // double intersection_parameter;
-        // bool has_intersection = cgal_intersection_util::LineLine2D(segment0, segment1, intersection_point, intersection_parameter);
+        Clipper2Lib::Clipper64 c1;
+        c1.AddOpenSubject(segment1);
+        c1.AddClip(paths);
+        Clipper2Lib::Paths64 soln1, soln_open1;
+        c1.Execute(Clipper2Lib::ClipType::Intersection, Clipper2Lib::FillRule::NonZero, soln1, soln_open1);
+
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Find clipper cut lines closest to the center and select them
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        if (soln_open0.size() == 0 || soln_open1.size() == 0)
+            return false;
+
+        Clipper2Lib::Point64 center_clipper(
+            (int64_t)(wood_globals::CLIPPER_SCALE * center_and_radius[0]),
+            (int64_t)(wood_globals::CLIPPER_SCALE * center_and_radius[1]));
+
+        int64_t squared_distance_to_center = INT64_MAX;
+        size_t id0 = 0;
+        double min_radius;
+        for (size_t i = 0; i < soln_open0.size(); i++)
+        {
+            int64_t temp_squared_distance_to_center = std::pow((center_clipper.x - soln_open0[i][0].x), 2) + std::pow((center_clipper.y - soln_open0[i][0].y), 2);
+            if (temp_squared_distance_to_center < squared_distance_to_center)
+            {
+                // std::cout << squared_distance_to_center << " " << temp_squared_distance_to_center << " " << soln_open0.size() << "\n";
+                squared_distance_to_center = temp_squared_distance_to_center;
+                id0 = i;
+            }
+        }
+
+        squared_distance_to_center = INT64_MAX;
+        size_t id1 = 0;
+        for (size_t i = 0; i < soln_open1.size(); i++)
+        {
+
+            int64_t temp_squared_distance_to_center = std::pow((center_clipper.x - soln_open1[i][0].x), 2) + std::pow((center_clipper.y - soln_open1[i][0].y), 2);
+            if (temp_squared_distance_to_center < squared_distance_to_center)
+            {
+                // std::cout << squared_distance_to_center << " " << temp_squared_distance_to_center << " " << soln_open1.size() << "\n";
+                squared_distance_to_center = temp_squared_distance_to_center;
+                id1 = i;
+            }
+        }
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Find minimal radius
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // for (auto &point)
+        //  Clipper2Lib::Paths64 segment0_clipped = Clipper2Lib::Intersect(paths, segment0, Clipper2Lib::FillRule::NonZero);
+        //  Clipper2Lib::Paths64 segment1_clipped = Clipper2Lib::Intersect(paths, segment1, Clipper2Lib::FillRule::NonZero);
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Step 6 - Convert to CGAL polyline and rotate to axis and orient to 3D
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        clipper_util::internal::cgalpolylines_to_clipper_2d(polylines_copy, paths);
-        // result = rectangle;
+        CGAL_Polyline segment0_clipped, segment1_clipped;
+        CGAL::Aff_transformation_3<IK> identity = CGAL::Identity_transformation();
+         clipper_util::internal::clipper_to_cgalpolyline_3d(soln_open0[id0], identity, segment0_clipped, false); // xform_toXY_Inv
+         clipper_util::internal::clipper_to_cgalpolyline_3d(soln_open1[id1], identity, segment1_clipped, false); // xform_toXY_Inv
+        //clipper_util::internal::clipper_to_cgalpolyline_3d(segment0[0], identity, segment0_clipped, false); // xform_toXY_Inv
+        //clipper_util::internal::clipper_to_cgalpolyline_3d(segment1[0], identity, segment1_clipped, false); // xform_toXY_Inv
+ 
+
+        result = {
+            polylines_copy[0],
+            segment0_clipped,
+            segment1_clipped,
+            four_points};
 
         return true;
     }

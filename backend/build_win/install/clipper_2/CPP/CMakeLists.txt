@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.10)
-project(Clipper2 VERSION 1.0.4 LANGUAGES C CXX)
+project(Clipper2 VERSION 1.0.6 LANGUAGES C CXX)
 
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 set(CMAKE_CXX_STANDARD 17)
@@ -10,24 +10,29 @@ set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 option(CLIPPER2_UTILS "Build utilities" ON)
 option(CLIPPER2_EXAMPLES "Build examples" ON)
 option(CLIPPER2_TESTS "Build tests" ON)
+option(USE_EXTERNAL_GTEST "Use system-wide installed GoogleTest" OFF)
 option(BUILD_SHARED_LIBS "Build shared libs" OFF)
 
 include(GNUInstallDirs)
 
 set(CLIPPER2_INC
+  Clipper2Lib/include/clipper2/clipper.h
   Clipper2Lib/include/clipper2/clipper.core.h
   Clipper2Lib/include/clipper2/clipper.engine.h
-  Clipper2Lib/include/clipper2/clipper.h
+  Clipper2Lib/include/clipper2/clipper.export.h
   Clipper2Lib/include/clipper2/clipper.minkowski.h
   Clipper2Lib/include/clipper2/clipper.offset.h
+  Clipper2Lib/include/clipper2/clipper.rectclip.h
 )
 
 set(CLIPPER2_SRC
   Clipper2Lib/src/clipper.engine.cpp
   Clipper2Lib/src/clipper.offset.cpp
+  Clipper2Lib/src/clipper.rectclip.cpp
 )
 
 set(PCFILE "${CMAKE_CURRENT_BINARY_DIR}/Clipper2.pc")
+set(PCFILEZ "${CMAKE_CURRENT_BINARY_DIR}/Clipper2Z.pc")
 
 # 2d version of Clipper2
 add_library(Clipper2 ${CLIPPER2_INC} ${CLIPPER2_SRC})
@@ -45,7 +50,7 @@ target_include_directories(Clipper2Z
   PUBLIC Clipper2Lib/include
 )
 
-if (WIN32)
+if (MSVC)
   target_compile_options(Clipper2 PRIVATE /W4 /WX)
   target_compile_options(Clipper2Z PRIVATE /W4 /WX)
 else()
@@ -110,14 +115,18 @@ if(CLIPPER2_EXAMPLES)
   add_executable(InflateDemo1 Examples/InflateDemo/InflateDemo1.cpp)
   target_link_libraries(InflateDemo1 PRIVATE Clipper2 Clipper2utils)
 
+  add_executable(RectClipDemo1 Examples/RectClipDemo/RectClipDemo1.cpp)
+  target_link_libraries(RectClipDemo1 PRIVATE Clipper2 Clipper2utils)
+
   add_executable(UsingZ1 Examples/UsingZ/UsingZ1.cpp)
   target_link_libraries(UsingZ1 PRIVATE Clipper2Z Clipper2Zutils)
 
-  set_target_properties(ConsoleDemo1 ConsoleDemo2 InflateDemo1 UsingZ1 PROPERTIES FOLDER Examples)
+  set_target_properties(ConsoleDemo1 ConsoleDemo2 InflateDemo1 RectClipDemo1 UsingZ1 PROPERTIES FOLDER Examples)
   if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
     target_compile_options(ConsoleDemo1 PRIVATE -Wno-unused-result -Wno-unused-function)
     target_compile_options(ConsoleDemo2 PRIVATE -Wno-unused-result -Wno-unused-function)
     target_compile_options(InflateDemo1 PRIVATE -Wno-unused-result -Wno-unused-function)
+    target_compile_options(RectClipDemo1 PRIVATE -Wno-unused-result -Wno-unused-function)
     target_compile_options(UsingZ1 PRIVATE -Wno-unused-result -Wno-unused-function)
   endif()
 endif()
@@ -131,11 +140,14 @@ if(CLIPPER2_TESTS)
     set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
   endif()
   set(BUILD_GMOCK OFF)
+if(USE_EXTERNAL_GTEST)
+  find_package(GTest REQUIRED)
+else()
   include(GoogleTest)
 
   add_subdirectory("${PROJECT_SOURCE_DIR}/Tests/googletest/")
   set_target_properties(gtest gtest_main PROPERTIES FOLDER GTest)
-
+endif()
   set(ClipperTests_SRC
     Tests/TestLines.cpp
     Tests/TestOffsetOrientation.cpp
@@ -146,6 +158,7 @@ if(CLIPPER2_TESTS)
     Tests/TestPolytreeIntersection.cpp
     Tests/TestPolytreeUnion.cpp
     Tests/TestRandomPaths.cpp
+    Tests/TestRectClip.cpp
     Tests/TestTrimCollinear.cpp
   )
   add_executable(ClipperTests ${ClipperTests_SRC})
@@ -181,8 +194,10 @@ if(CLIPPER2_TESTS)
 endif()
 
 CONFIGURE_FILE(Clipper2.pc.cmakein "${PCFILE}" @ONLY)
+set(PCFILE_LIB_SUFFIX "Z")
+CONFIGURE_FILE(Clipper2.pc.cmakein "${PCFILEZ}" @ONLY)
 
 install(TARGETS Clipper2 Clipper2Z
         PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/clipper2
 )
-install(FILES ${PCFILE} DESTINATION ${CMAKE_INSTALL_LIBDIR}/pkgconfig)
+install(FILES ${PCFILE} ${PCFILEZ} DESTINATION ${CMAKE_INSTALL_LIBDIR}/pkgconfig)

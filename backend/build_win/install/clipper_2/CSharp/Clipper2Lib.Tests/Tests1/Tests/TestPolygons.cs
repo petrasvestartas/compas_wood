@@ -7,7 +7,7 @@ namespace Clipper2Lib.UnitTests
   public class TestPolygons
   {
 
-    private bool IsInList(int num, int[] list)
+    private static bool IsInList(int num, int[] list)
     {
       foreach (int i in list) if (i == num) return true;
       return false;
@@ -36,7 +36,7 @@ namespace Clipper2Lib.UnitTests
         c64.AddOpenSubject(subj_open);
         c64.AddClip(clip);
         c64.Execute(clipType, fillrule, solution, solution_open);
-        int measuredCount = solution.Count();
+        int measuredCount = solution.Count;
         long measuredArea = (long)Clipper.Area(solution);
         int countDiff = storedCount > 0 ? Math.Abs(storedCount - measuredCount) : 0;
         long areaDiff = storedArea > 0 ? Math.Abs(storedArea - measuredArea) : 0;
@@ -50,7 +50,7 @@ namespace Clipper2Lib.UnitTests
           Assert.IsTrue(countDiff <= 2);
         }
         else if (IsInList(testNum,
-          new int[] {18, 32, 42, 43, 45, 87, 102, 103, 111, 118, 183 }))
+          new int[] {18, 22, 32, 37, 42, 43, 45, 87, 102, 103, 111, 118, 183 }))
         {
           Assert.IsTrue(countDiff <= 1);
         }
@@ -66,7 +66,7 @@ namespace Clipper2Lib.UnitTests
         {
           Assert.IsTrue(areaDiff <= 8);
         }
-        else if (storedArea > 0 && areaDiff > 100)
+        else if (storedArea > 0)
         {
           Assert.IsTrue(areaDiff / storedArea <= 0.02);
         }

@@ -369,7 +369,7 @@ namespace clipper_util
             }
         }
 
-        void cgalpolyline_to_clipper_2d(const CGAL_Polyline &input, Clipper2Lib::Path64 &output, CGAL::Aff_transformation_3<IK> &xform_to_xy_inv, bool closed_polyline)
+        void cgalpolyline_to_clipper_3d(const CGAL_Polyline &input, Clipper2Lib::Path64 &output, CGAL::Aff_transformation_3<IK> &xform_to_xy_inv, bool closed_polyline)
         {
             // get plane from the first polyline
             IK::Point_3 origin;
@@ -404,7 +404,7 @@ namespace clipper_util
                 }
         }
 
-        void clipper_to_cgalpolyline_2d(const Clipper2Lib::Path64 &input, CGAL::Aff_transformation_3<IK> &xform_to_xy_inv, CGAL_Polyline &output, bool closed_polyline)
+        void clipper_to_cgalpolyline_3d(const Clipper2Lib::Path64 &input, CGAL::Aff_transformation_3<IK> &xform_to_xy_inv, CGAL_Polyline &output, bool closed_polyline)
         {
             // clean the containter and reserve memory
             output.clear();
@@ -461,7 +461,7 @@ namespace clipper_util
             }
         }
 
-        void cgalpolyline_to_clipper_2d(const CGAL_Polyline &input, const IK::Plane_3 &plane, Clipper2Lib::Path64 &output, CGAL::Aff_transformation_3<IK> &xform_to_xy_inv, bool closed_polyline)
+        void cgalpolyline_to_clipper_3d(const CGAL_Polyline &input, const IK::Plane_3 &plane, Clipper2Lib::Path64 &output, CGAL::Aff_transformation_3<IK> &xform_to_xy_inv, bool closed_polyline)
         {
 
             // get transformation from the 3D to xy plane and output its inverse

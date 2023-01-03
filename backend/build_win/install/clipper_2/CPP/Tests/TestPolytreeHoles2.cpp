@@ -15,14 +15,14 @@ void PolyPathContainsPoint(const PolyPath64& pp, const Point64 pt, int& counter)
       else  ++counter;
     }
   }
-  for (auto child : pp)
+  for (const auto& child : pp)
     PolyPathContainsPoint(*child, pt, counter);
 }
 
 bool PolytreeContainsPoint(const PolyPath64& pp, const Point64 pt)
 {
   int counter = 0;
-  for (auto child : pp)
+  for (const auto& child : pp)
     PolyPathContainsPoint(*child, pt, counter);
   EXPECT_GE(counter, 0); //ie 'pt' can't be inside more holes than outers
   return counter != 0;
@@ -31,14 +31,14 @@ bool PolytreeContainsPoint(const PolyPath64& pp, const Point64 pt)
 void GetPolyPathArea(const PolyPath64& pp, double& area)
 {
   area += Area(pp.Polygon());
-  for (auto child : pp)
+  for (const auto& child : pp)
     GetPolyPathArea(*child, area);
 }
 
 double GetPolytreeArea(const PolyPath64& pp)
 {
   double result = 0;
-  for (auto child : pp)
+  for (const auto& child : pp)
     GetPolyPathArea(*child, result);
   return result;
 }
@@ -102,10 +102,10 @@ TEST(Clipper2Tests, TestPolytreeHoles2)
   c.AddClip(clip);
   c.Execute(ct, FillRule::Negative, solution_tree, solution_open);
 
-  const auto solution_paths = PolyTreeToPaths(solution_tree);
+  const auto solution_paths = PolyTreeToPaths64(solution_tree);
 
   ASSERT_FALSE(solution_paths.empty());
-
+  
   const double subject_area         = -Area(subject); //negate (see fillrule)
   const double solution_tree_area   = GetPolytreeArea(solution_tree);
   const double solution_paths_area  = Area(solution_paths);

@@ -1,7 +1,0 @@
-Version 1.0.5 - 2 October 2022
-  Numerous improvements to C++ makefile and revised C++ folder structure (#243, #247)
-  Fixed bug in C++ Point<T> constructor when USINGZ defined (#246)
-  Improved performance by removing time costly round() function calls (#236)
-  Changed Library's C# target framework back to netstandard2.0 (#225)
-  Updated several sample apps.
-

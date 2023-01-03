@@ -170,17 +170,13 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\CMakeFiles\2c610cf292162cd3839b9da01325bd04\clipper_2-download.rule">
-      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Performing download step (download, verify and extract) for 'clipper_2'</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Performing download step (git clone) for 'clipper_2'</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">setlocal
 cd C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\install
 if %errorlevel% neq 0 goto :cmEnd
 C:
 if %errorlevel% neq 0 goto :cmEnd
-"C:\Program Files\CMake\bin\cmake.exe" -P C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/clipper_2-prefix/src/clipper_2-stamp/download-clipper_2.cmake
-if %errorlevel% neq 0 goto :cmEnd
-"C:\Program Files\CMake\bin\cmake.exe" -P C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/clipper_2-prefix/src/clipper_2-stamp/verify-clipper_2.cmake
-if %errorlevel% neq 0 goto :cmEnd
-"C:\Program Files\CMake\bin\cmake.exe" -P C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/clipper_2-prefix/src/clipper_2-stamp/extract-clipper_2.cmake
+"C:\Program Files\CMake\bin\cmake.exe" -P C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/clipper_2-prefix/tmp/clipper_2-gitclone.cmake
 if %errorlevel% neq 0 goto :cmEnd
 "C:\Program Files\CMake\bin\cmake.exe" -E touch C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/clipper_2-prefix/src/clipper_2-stamp/Debug/clipper_2-download
 if %errorlevel% neq 0 goto :cmEnd
@@ -190,20 +186,16 @@ endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
 exit /b %1
 :cmDone
 if %errorlevel% neq 0 goto :VCEnd</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\clipper_2-prefix\src\clipper_2-stamp\download-clipper_2.cmake;C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\clipper_2-prefix\src\clipper_2-stamp\clipper_2-urlinfo.txt;C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\clipper_2-prefix\src\clipper_2-stamp\Debug\clipper_2-mkdir;%(AdditionalInputs)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\clipper_2-prefix\src\clipper_2-stamp\clipper_2-gitinfo.txt;C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\clipper_2-prefix\src\clipper_2-stamp\Debug\clipper_2-mkdir;%(AdditionalInputs)</AdditionalInputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\clipper_2-prefix\src\clipper_2-stamp\Debug\clipper_2-download</Outputs>
       <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</LinkObjects>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Performing download step (download, verify and extract) for 'clipper_2'</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Performing download step (git clone) for 'clipper_2'</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">setlocal
 cd C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\install
 if %errorlevel% neq 0 goto :cmEnd
 C:
 if %errorlevel% neq 0 goto :cmEnd
-"C:\Program Files\CMake\bin\cmake.exe" -P C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/clipper_2-prefix/src/clipper_2-stamp/download-clipper_2.cmake
-if %errorlevel% neq 0 goto :cmEnd
-"C:\Program Files\CMake\bin\cmake.exe" -P C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/clipper_2-prefix/src/clipper_2-stamp/verify-clipper_2.cmake
-if %errorlevel% neq 0 goto :cmEnd
-"C:\Program Files\CMake\bin\cmake.exe" -P C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/clipper_2-prefix/src/clipper_2-stamp/extract-clipper_2.cmake
+"C:\Program Files\CMake\bin\cmake.exe" -P C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/clipper_2-prefix/tmp/clipper_2-gitclone.cmake
 if %errorlevel% neq 0 goto :cmEnd
 "C:\Program Files\CMake\bin\cmake.exe" -E touch C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/clipper_2-prefix/src/clipper_2-stamp/Release/clipper_2-download
 if %errorlevel% neq 0 goto :cmEnd
@@ -213,20 +205,16 @@ endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
 exit /b %1
 :cmDone
 if %errorlevel% neq 0 goto :VCEnd</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\clipper_2-prefix\src\clipper_2-stamp\download-clipper_2.cmake;C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\clipper_2-prefix\src\clipper_2-stamp\clipper_2-urlinfo.txt;C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\clipper_2-prefix\src\clipper_2-stamp\Release\clipper_2-mkdir;%(AdditionalInputs)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\clipper_2-prefix\src\clipper_2-stamp\clipper_2-gitinfo.txt;C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\clipper_2-prefix\src\clipper_2-stamp\Release\clipper_2-mkdir;%(AdditionalInputs)</AdditionalInputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\clipper_2-prefix\src\clipper_2-stamp\Release\clipper_2-download</Outputs>
       <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkObjects>
-      <Message Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">Performing download step (download, verify and extract) for 'clipper_2'</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">Performing download step (git clone) for 'clipper_2'</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">setlocal
 cd C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\install
 if %errorlevel% neq 0 goto :cmEnd
 C:
 if %errorlevel% neq 0 goto :cmEnd
-"C:\Program Files\CMake\bin\cmake.exe" -P C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/clipper_2-prefix/src/clipper_2-stamp/download-clipper_2.cmake
-if %errorlevel% neq 0 goto :cmEnd
-"C:\Program Files\CMake\bin\cmake.exe" -P C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/clipper_2-prefix/src/clipper_2-stamp/verify-clipper_2.cmake
-if %errorlevel% neq 0 goto :cmEnd
-"C:\Program Files\CMake\bin\cmake.exe" -P C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/clipper_2-prefix/src/clipper_2-stamp/extract-clipper_2.cmake
+"C:\Program Files\CMake\bin\cmake.exe" -P C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/clipper_2-prefix/tmp/clipper_2-gitclone.cmake
 if %errorlevel% neq 0 goto :cmEnd
 "C:\Program Files\CMake\bin\cmake.exe" -E touch C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/clipper_2-prefix/src/clipper_2-stamp/MinSizeRel/clipper_2-download
 if %errorlevel% neq 0 goto :cmEnd
@@ -236,20 +224,16 @@ endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
 exit /b %1
 :cmDone
 if %errorlevel% neq 0 goto :VCEnd</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\clipper_2-prefix\src\clipper_2-stamp\download-clipper_2.cmake;C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\clipper_2-prefix\src\clipper_2-stamp\clipper_2-urlinfo.txt;C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\clipper_2-prefix\src\clipper_2-stamp\MinSizeRel\clipper_2-mkdir;%(AdditionalInputs)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\clipper_2-prefix\src\clipper_2-stamp\clipper_2-gitinfo.txt;C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\clipper_2-prefix\src\clipper_2-stamp\MinSizeRel\clipper_2-mkdir;%(AdditionalInputs)</AdditionalInputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\clipper_2-prefix\src\clipper_2-stamp\MinSizeRel\clipper_2-download</Outputs>
       <LinkObjects Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">false</LinkObjects>
-      <Message Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">Performing download step (download, verify and extract) for 'clipper_2'</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">Performing download step (git clone) for 'clipper_2'</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">setlocal
 cd C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\install
 if %errorlevel% neq 0 goto :cmEnd
 C:
 if %errorlevel% neq 0 goto :cmEnd
-"C:\Program Files\CMake\bin\cmake.exe" -P C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/clipper_2-prefix/src/clipper_2-stamp/download-clipper_2.cmake
-if %errorlevel% neq 0 goto :cmEnd
-"C:\Program Files\CMake\bin\cmake.exe" -P C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/clipper_2-prefix/src/clipper_2-stamp/verify-clipper_2.cmake
-if %errorlevel% neq 0 goto :cmEnd
-"C:\Program Files\CMake\bin\cmake.exe" -P C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/clipper_2-prefix/src/clipper_2-stamp/extract-clipper_2.cmake
+"C:\Program Files\CMake\bin\cmake.exe" -P C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/clipper_2-prefix/tmp/clipper_2-gitclone.cmake
 if %errorlevel% neq 0 goto :cmEnd
 "C:\Program Files\CMake\bin\cmake.exe" -E touch C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/clipper_2-prefix/src/clipper_2-stamp/RelWithDebInfo/clipper_2-download
 if %errorlevel% neq 0 goto :cmEnd
@@ -259,18 +243,20 @@ endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
 exit /b %1
 :cmDone
 if %errorlevel% neq 0 goto :VCEnd</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\clipper_2-prefix\src\clipper_2-stamp\download-clipper_2.cmake;C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\clipper_2-prefix\src\clipper_2-stamp\clipper_2-urlinfo.txt;C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\clipper_2-prefix\src\clipper_2-stamp\RelWithDebInfo\clipper_2-mkdir;%(AdditionalInputs)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\clipper_2-prefix\src\clipper_2-stamp\clipper_2-gitinfo.txt;C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\clipper_2-prefix\src\clipper_2-stamp\RelWithDebInfo\clipper_2-mkdir;%(AdditionalInputs)</AdditionalInputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\clipper_2-prefix\src\clipper_2-stamp\RelWithDebInfo\clipper_2-download</Outputs>
       <LinkObjects Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">false</LinkObjects>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\CMakeFiles\2c610cf292162cd3839b9da01325bd04\clipper_2-update.rule">
-      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">No update step for 'clipper_2'</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Performing update step for 'clipper_2'</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">setlocal
-"C:\Program Files\CMake\bin\cmake.exe" -E echo_append
+cd C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\install\clipper_2
 if %errorlevel% neq 0 goto :cmEnd
-"C:\Program Files\CMake\bin\cmake.exe" -E touch C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/clipper_2-prefix/src/clipper_2-stamp/Debug/clipper_2-update
+C:
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -P C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/clipper_2-prefix/tmp/clipper_2-gitupdate.cmake
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -281,11 +267,14 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\clipper_2-prefix\src\clipper_2-stamp\Debug\clipper_2-download;%(AdditionalInputs)</AdditionalInputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\clipper_2-prefix\src\clipper_2-stamp\Debug\clipper_2-update</Outputs>
       <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</LinkObjects>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">No update step for 'clipper_2'</Message>
+      <VerifyInputsAndOutputsExist Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</VerifyInputsAndOutputsExist>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Performing update step for 'clipper_2'</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">setlocal
-"C:\Program Files\CMake\bin\cmake.exe" -E echo_append
+cd C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\install\clipper_2
 if %errorlevel% neq 0 goto :cmEnd
-"C:\Program Files\CMake\bin\cmake.exe" -E touch C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/clipper_2-prefix/src/clipper_2-stamp/Release/clipper_2-update
+C:
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -P C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/clipper_2-prefix/tmp/clipper_2-gitupdate.cmake
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -296,11 +285,14 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\clipper_2-prefix\src\clipper_2-stamp\Release\clipper_2-download;%(AdditionalInputs)</AdditionalInputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\clipper_2-prefix\src\clipper_2-stamp\Release\clipper_2-update</Outputs>
       <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkObjects>
-      <Message Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">No update step for 'clipper_2'</Message>
+      <VerifyInputsAndOutputsExist Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</VerifyInputsAndOutputsExist>
+      <Message Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">Performing update step for 'clipper_2'</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">setlocal
-"C:\Program Files\CMake\bin\cmake.exe" -E echo_append
+cd C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\install\clipper_2
 if %errorlevel% neq 0 goto :cmEnd
-"C:\Program Files\CMake\bin\cmake.exe" -E touch C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/clipper_2-prefix/src/clipper_2-stamp/MinSizeRel/clipper_2-update
+C:
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -P C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/clipper_2-prefix/tmp/clipper_2-gitupdate.cmake
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -311,11 +303,14 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\clipper_2-prefix\src\clipper_2-stamp\MinSizeRel\clipper_2-download;%(AdditionalInputs)</AdditionalInputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\clipper_2-prefix\src\clipper_2-stamp\MinSizeRel\clipper_2-update</Outputs>
       <LinkObjects Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">false</LinkObjects>
-      <Message Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">No update step for 'clipper_2'</Message>
+      <VerifyInputsAndOutputsExist Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">false</VerifyInputsAndOutputsExist>
+      <Message Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">Performing update step for 'clipper_2'</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">setlocal
-"C:\Program Files\CMake\bin\cmake.exe" -E echo_append
+cd C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\install\clipper_2
 if %errorlevel% neq 0 goto :cmEnd
-"C:\Program Files\CMake\bin\cmake.exe" -E touch C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/clipper_2-prefix/src/clipper_2-stamp/RelWithDebInfo/clipper_2-update
+C:
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -P C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/clipper_2-prefix/tmp/clipper_2-gitupdate.cmake
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -326,6 +321,7 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\clipper_2-prefix\src\clipper_2-stamp\RelWithDebInfo\clipper_2-download;%(AdditionalInputs)</AdditionalInputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\clipper_2-prefix\src\clipper_2-stamp\RelWithDebInfo\clipper_2-update</Outputs>
       <LinkObjects Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">false</LinkObjects>
+      <VerifyInputsAndOutputsExist Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">false</VerifyInputsAndOutputsExist>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
@@ -345,6 +341,7 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\clipper_2-prefix\src\clipper_2-stamp\Debug\clipper_2-update;%(AdditionalInputs)</AdditionalInputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\clipper_2-prefix\src\clipper_2-stamp\Debug\clipper_2-patch</Outputs>
       <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</LinkObjects>
+      <VerifyInputsAndOutputsExist Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</VerifyInputsAndOutputsExist>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">No patch step for 'clipper_2'</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">setlocal
 "C:\Program Files\CMake\bin\cmake.exe" -E echo_append
@@ -360,6 +357,7 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\clipper_2-prefix\src\clipper_2-stamp\Release\clipper_2-update;%(AdditionalInputs)</AdditionalInputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\clipper_2-prefix\src\clipper_2-stamp\Release\clipper_2-patch</Outputs>
       <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkObjects>
+      <VerifyInputsAndOutputsExist Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</VerifyInputsAndOutputsExist>
       <Message Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">No patch step for 'clipper_2'</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">setlocal
 "C:\Program Files\CMake\bin\cmake.exe" -E echo_append
@@ -375,6 +373,7 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\clipper_2-prefix\src\clipper_2-stamp\MinSizeRel\clipper_2-update;%(AdditionalInputs)</AdditionalInputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\clipper_2-prefix\src\clipper_2-stamp\MinSizeRel\clipper_2-patch</Outputs>
       <LinkObjects Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">false</LinkObjects>
+      <VerifyInputsAndOutputsExist Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">false</VerifyInputsAndOutputsExist>
       <Message Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">No patch step for 'clipper_2'</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">setlocal
 "C:\Program Files\CMake\bin\cmake.exe" -E echo_append
@@ -390,6 +389,7 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\clipper_2-prefix\src\clipper_2-stamp\RelWithDebInfo\clipper_2-update;%(AdditionalInputs)</AdditionalInputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\clipper_2-prefix\src\clipper_2-stamp\RelWithDebInfo\clipper_2-patch</Outputs>
       <LinkObjects Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">false</LinkObjects>
+      <VerifyInputsAndOutputsExist Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">false</VerifyInputsAndOutputsExist>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
@@ -651,6 +651,7 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\clipper_2-prefix\src\clipper_2-stamp\Debug\clipper_2-install;C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\clipper_2-prefix\src\clipper_2-stamp\Debug\clipper_2-mkdir;C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\clipper_2-prefix\src\clipper_2-stamp\Debug\clipper_2-download;C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\clipper_2-prefix\src\clipper_2-stamp\Debug\clipper_2-update;C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\clipper_2-prefix\src\clipper_2-stamp\Debug\clipper_2-patch;C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\clipper_2-prefix\src\clipper_2-stamp\Debug\clipper_2-configure;C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\clipper_2-prefix\src\clipper_2-stamp\Debug\clipper_2-build;%(AdditionalInputs)</AdditionalInputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\CMakeFiles\Debug\clipper_2-complete</Outputs>
       <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</LinkObjects>
+      <VerifyInputsAndOutputsExist Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</VerifyInputsAndOutputsExist>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Completed 'clipper_2'</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">setlocal
 "C:\Program Files\CMake\bin\cmake.exe" -E make_directory C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/CMakeFiles/Release
@@ -668,6 +669,7 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\clipper_2-prefix\src\clipper_2-stamp\Release\clipper_2-install;C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\clipper_2-prefix\src\clipper_2-stamp\Release\clipper_2-mkdir;C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\clipper_2-prefix\src\clipper_2-stamp\Release\clipper_2-download;C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\clipper_2-prefix\src\clipper_2-stamp\Release\clipper_2-update;C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\clipper_2-prefix\src\clipper_2-stamp\Release\clipper_2-patch;C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\clipper_2-prefix\src\clipper_2-stamp\Release\clipper_2-configure;C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\clipper_2-prefix\src\clipper_2-stamp\Release\clipper_2-build;%(AdditionalInputs)</AdditionalInputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\CMakeFiles\Release\clipper_2-complete</Outputs>
       <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkObjects>
+      <VerifyInputsAndOutputsExist Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</VerifyInputsAndOutputsExist>
       <Message Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">Completed 'clipper_2'</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">setlocal
 "C:\Program Files\CMake\bin\cmake.exe" -E make_directory C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/CMakeFiles/MinSizeRel
@@ -685,6 +687,7 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\clipper_2-prefix\src\clipper_2-stamp\MinSizeRel\clipper_2-install;C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\clipper_2-prefix\src\clipper_2-stamp\MinSizeRel\clipper_2-mkdir;C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\clipper_2-prefix\src\clipper_2-stamp\MinSizeRel\clipper_2-download;C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\clipper_2-prefix\src\clipper_2-stamp\MinSizeRel\clipper_2-update;C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\clipper_2-prefix\src\clipper_2-stamp\MinSizeRel\clipper_2-patch;C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\clipper_2-prefix\src\clipper_2-stamp\MinSizeRel\clipper_2-configure;C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\clipper_2-prefix\src\clipper_2-stamp\MinSizeRel\clipper_2-build;%(AdditionalInputs)</AdditionalInputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\CMakeFiles\MinSizeRel\clipper_2-complete</Outputs>
       <LinkObjects Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">false</LinkObjects>
+      <VerifyInputsAndOutputsExist Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">false</VerifyInputsAndOutputsExist>
       <Message Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">Completed 'clipper_2'</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">setlocal
 "C:\Program Files\CMake\bin\cmake.exe" -E make_directory C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/CMakeFiles/RelWithDebInfo
@@ -702,6 +705,7 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\clipper_2-prefix\src\clipper_2-stamp\RelWithDebInfo\clipper_2-install;C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\clipper_2-prefix\src\clipper_2-stamp\RelWithDebInfo\clipper_2-mkdir;C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\clipper_2-prefix\src\clipper_2-stamp\RelWithDebInfo\clipper_2-download;C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\clipper_2-prefix\src\clipper_2-stamp\RelWithDebInfo\clipper_2-update;C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\clipper_2-prefix\src\clipper_2-stamp\RelWithDebInfo\clipper_2-patch;C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\clipper_2-prefix\src\clipper_2-stamp\RelWithDebInfo\clipper_2-configure;C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\clipper_2-prefix\src\clipper_2-stamp\RelWithDebInfo\clipper_2-build;%(AdditionalInputs)</AdditionalInputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\CMakeFiles\RelWithDebInfo\clipper_2-complete</Outputs>
       <LinkObjects Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">false</LinkObjects>
+      <VerifyInputsAndOutputsExist Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">false</VerifyInputsAndOutputsExist>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>

@@ -34,7 +34,7 @@ PROJECT_NAME           = Eigen-unsupported
 
 # EIGEN_VERSION is set in the root CMakeLists.txt
 
-PROJECT_NUMBER         = "3.4.0 (git rev 44fe539150419c933d0c661a39c91fa796b8a912)"
+PROJECT_NUMBER         = "3.4.0 (git rev a8bab0d8ae0601392287526840ddcb1af3bb85a6)"
 
 # Using the PROJECT_BRIEF tag one can provide an optional one line description
 # for a project that appears at the top of each page and should give viewer

@@ -180,7 +180,7 @@ namespace clipper_util
          * @param [out] xform_to_xy_inv orientation matrix to 3D
          * @param [in] closed_polyline skips the last point from the cgal polyline
          */
-        void cgalpolyline_to_clipper_2d(const CGAL_Polyline &input, Clipper2Lib::Path64 &output, CGAL::Aff_transformation_3<IK> &xform_to_xy_inv, bool closed_polyline = true);
+        void cgalpolyline_to_clipper_3d(const CGAL_Polyline &input, Clipper2Lib::Path64 &output, CGAL::Aff_transformation_3<IK> &xform_to_xy_inv, bool closed_polyline = true);
 
         /**
          * Convert clipper polyline to cgal polyline
@@ -190,7 +190,7 @@ namespace clipper_util
          * @param [out] output cgal polyline
          * @param [in] closed_polyline adds the first point from the clipper polyline to the end
          */
-        void clipper_to_cgalpolyline_2d(const Clipper2Lib::Path64 &input, CGAL::Aff_transformation_3<IK> &xform_to_xy_inv, CGAL_Polyline &output, bool closed_polyline = true);
+        void clipper_to_cgalpolyline_3d(const Clipper2Lib::Path64 &input, CGAL::Aff_transformation_3<IK> &xform_to_xy_inv, CGAL_Polyline &output, bool closed_polyline = true);
 
         /**
          * Convert cgal polylines to clipper polylines
@@ -212,7 +212,7 @@ namespace clipper_util
          * @param [out] xform_to_xy_inv orientation matrix to 3D
          * @param [in] closed_polyline skips the last point from the cgal polyline
          */
-        void cgalpolyline_to_clipper_2d(const CGAL_Polyline &input, const IK::Plane_3 &plane, Clipper2Lib::Path64 &output, CGAL::Aff_transformation_3<IK> &xform_to_xy_inv, bool closed_polyline = true);
+        void cgalpolyline_to_clipper_3d(const CGAL_Polyline &input, const IK::Plane_3 &plane, Clipper2Lib::Path64 &output, CGAL::Aff_transformation_3<IK> &xform_to_xy_inv, bool closed_polyline = true);
     }
 
     /**

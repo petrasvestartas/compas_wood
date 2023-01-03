@@ -109,7 +109,8 @@ if (GET_LIBS)
   # CLIPPER2
   ####################################################################### 
   ExternalProject_Add(clipper_2
-      URL https://github.com/AngusJohnson/Clipper2/releases/download/Clipper2_1.0.5/Clipper2_1.0.5.zip
+      GIT_REPOSITORY https://github.com/AngusJohnson/Clipper2.git
+      GIT_TAG main
       CMAKE_ARGS
         -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
         -DCMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER}

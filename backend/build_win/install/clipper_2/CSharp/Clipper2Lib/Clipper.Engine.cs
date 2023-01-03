@@ -1,7 +1,6 @@
 ﻿/*******************************************************************************
 * Author    :  Angus Johnson                                                   *
-* Version   :  Clipper2 - ver.1.0.5                                            *
-* Date      :  2 October 2022                                                  *
+* Date      :  19 November 2022                                                *
 * Website   :  http://www.angusj.com                                           *
 * Copyright :  Angus Johnson 2010-2022                                         *
 * Purpose   :  This is the main polygon clipping module                        *
@@ -15,6 +14,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
+using System.Runtime.ConstrainedExecution;
 
 namespace Clipper2Lib
 {
@@ -145,7 +145,7 @@ namespace Clipper2Lib
     public Active? frontEdge;
     public Active? backEdge;
     public OutPt? pts;
-    public PolyPathBase? polypath;
+    public PolyPathNode? polypath;
     public Rect64 bounds;
     public Path64 path;
     public bool isOpen;
@@ -245,6 +245,7 @@ namespace Clipper2Lib
     public delegate void ZCallback64(Point64 bot1, Point64 top1,
         Point64 bot2, Point64 top2, ref Point64 intersectPt);
 
+    public long DefaultZ { get; set; }
     protected ZCallback64? _zCallback;
 #endif
     public ClipperBase()
@@ -280,6 +281,8 @@ namespace Clipper2Lib
           intersectPt = new Point64(intersectPt.X, intersectPt.Y, e2.bot.Z);
         else if (XYCoordsEqual(intersectPt, e2.top))
           intersectPt = new Point64(intersectPt.X, intersectPt.Y, e2.top.Z);
+        else
+          intersectPt = new Point64(intersectPt.X, intersectPt.Y, DefaultZ);
         _zCallback(e1.bot, e1.top, e2.bot, e2.top, ref intersectPt);
       }
       else
@@ -292,6 +295,8 @@ namespace Clipper2Lib
           intersectPt = new Point64(intersectPt.X, intersectPt.Y, e1.bot.Z);
         else if (XYCoordsEqual(intersectPt, e1.top))
           intersectPt = new Point64(intersectPt.X, intersectPt.Y, e1.top.Z);
+        else
+          intersectPt = new Point64(intersectPt.X, intersectPt.Y, DefaultZ);
         _zCallback(e2.bot, e2.top, e1.bot, e1.top, ref intersectPt);
       }
     }
@@ -401,35 +406,6 @@ namespace Clipper2Lib
     private static bool IsSamePolyType(Active ae1, Active ae2)
     {
       return ae1.localMin.polytype == ae2.localMin.polytype;
-    }
-
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    private static Point64 GetIntersectPoint(Active ae1, Active ae2)
-    {
-      double b1, b2;
-      if (InternalClipper.IsAlmostZero(ae1.dx - ae2.dx)) return ae1.top;
-
-      if (InternalClipper.IsAlmostZero(ae1.dx))
-      {
-        if (IsHorizontal(ae2)) return new Point64(ae1.bot.X, ae2.bot.Y);
-        b2 = ae2.bot.Y - (ae2.bot.X / ae2.dx);
-        return new Point64(ae1.bot.X, (long) Math.Round(ae1.bot.X / ae2.dx + b2));
-      }
-
-      if (InternalClipper.IsAlmostZero(ae2.dx))
-      {
-        if (IsHorizontal(ae1)) return new Point64(ae2.bot.X, ae1.bot.Y);
-        b1 = ae1.bot.Y - (ae1.bot.X / ae1.dx);
-        return new Point64(ae2.bot.X, (long) Math.Round(ae2.bot.X / ae1.dx + b1));
-      }
-      b1 = ae1.bot.X - ae1.bot.Y * ae1.dx;
-      b2 = ae2.bot.X - ae2.bot.Y * ae2.dx;
-      double q = (b2 - b1) / (ae1.dx - ae2.dx);
-      return (Math.Abs(ae1.dx) < Math.Abs(ae2.dx))
-        //? new Point64((long) Math.Round(ae1.dx * q + b1), (long) Math.Round(q))
-        //: new Point64((long) Math.Round(ae2.dx * q + b2), (long) Math.Round(q));
-        ? new Point64((long)(ae1.dx * q + b1), (long)(q))
-        : new Point64((long)(ae2.dx * q + b2), (long)(q));
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -1884,33 +1860,34 @@ namespace Clipper2Lib
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private void AddNewIntersectNode(Active ae1, Active ae2, long topY)
     {
-      Point64 pt = GetIntersectPoint(ae1, ae2);
+      if (!InternalClipper.GetIntersectPt(
+        ae1.bot, ae1.top, ae2.bot, ae2.top, out Point64 ip))
+          ip = new Point64(ae1.curX, topY);
 
-      // rounding errors can occasionally place the calculated intersection
-      // point either below or above the scanbeam, so check and correct ...
-      if (pt.Y > _currentBotY)
+      if (ip.Y > _currentBotY || ip.Y < topY)
       {
-        // ae.curr.y is still the bottom of scanbeam
-        // use the more vertical of the 2 edges to derive pt.x ...
-        if (Math.Abs(ae1.dx) < Math.Abs(ae2.dx))
-          pt = new Point64(TopX(ae1, _currentBotY), _currentBotY);
-        else
-          pt = new Point64(TopX(ae2, _currentBotY), _currentBotY);
+        double absDx1 = Math.Abs(ae1.dx);
+        double absDx2 = Math.Abs(ae2.dx);
+        if (absDx1 > 100 && absDx2 > 100)
+        {
+          if (absDx1 > absDx2)
+            ip = InternalClipper.GetClosestPtOnSegment(ip, ae1.bot, ae1.top);
+          else
+            ip = InternalClipper.GetClosestPtOnSegment(ip, ae2.bot, ae2.top);
+        }
+        else if (absDx1 > 100)
+          ip = InternalClipper.GetClosestPtOnSegment(ip, ae1.bot, ae1.top);
+        else if (absDx2 > 100)
+          ip = InternalClipper.GetClosestPtOnSegment(ip, ae2.bot, ae2.top);
+        else 
+        {
+          if (ip.Y < topY) ip.Y = topY; 
+          else ip.Y = _currentBotY;
+          if (absDx1 < absDx2) ip.X = TopX(ae1, ip.Y); 
+          else ip.X = TopX(ae2, topY);
+        }
       }
-      else if (pt.Y < topY)
-      {
-        // topY is at the top of the scanbeam
-        if (ae1.top.Y == topY)
-          pt = new Point64(ae1.top.X, topY);
-        else if (ae2.top.Y == topY)
-          pt = new Point64(ae2.top.X, topY);
-        else if (Math.Abs(ae1.dx) < Math.Abs(ae2.dx))
-          pt = new Point64(ae1.curX, topY);
-        else
-          pt = new Point64(ae2.curX, topY);
-      }
-
-      IntersectNode node = new IntersectNode(pt, ae1, ae2);
+      IntersectNode node = new IntersectNode(ip, ae1, ae2);
       _intersectList.Add(node);
     }
 
@@ -2280,13 +2257,12 @@ namespace Clipper2Lib
 
         if (NextVertex(horz).pt.Y != horz.top.Y) break;
 
-
         // there must be a following (consecutive) horizontal
         if (IsHotEdge(horz))
           AddOutPt(horz, horz.top);
         UpdateEdgeIntoAEL(horz);
 
-        if (PreserveCollinear && HorzIsSpike(horz))
+        if (PreserveCollinear && !horzIsOpen && HorzIsSpike(horz))
           TrimHorz(horz, true);
 
         isLeftToRight = ResetHorzDirection(horz, maxPair, out leftX, out rightX);
@@ -2422,20 +2398,25 @@ namespace Clipper2Lib
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    private static bool AreReallyClose(Point64 pt1, Point64 pt2)
+    private static bool PtsReallyClose(Point64 pt1, Point64 pt2)
     {
       return (Math.Abs(pt1.X - pt2.X) < 2) && (Math.Abs(pt1.Y - pt2.Y) < 2);
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private static bool IsVerySmallTriangle(OutPt op)
+	  {
+		  return op.next!.next == op.prev &&
+			(PtsReallyClose(op.prev.pt, op.next.pt) ||
+				PtsReallyClose(op.pt, op.next.pt) ||
+				PtsReallyClose(op.pt, op.prev.pt));
+	  }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private static bool IsValidClosedPath(OutPt? op)
     {
-      return (op != null && 
-        op.next != op && op.next != op.prev &&
-        // also treat inconsequential polygons as invalid
-        !(op.next!.next == op.prev &&
-        (AreReallyClose(op.pt, op.next.pt) ||
-        AreReallyClose(op.pt, op.prev.pt))));
+      return (op != null && op.next != op &&
+        (op.next != op.prev || !IsVerySmallTriangle(op)));
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -3240,7 +3221,7 @@ namespace Clipper2Lib
     private void CleanCollinear(OutRec? outrec)
     {
       outrec = GetRealOutRec(outrec);
-      if (outrec == null || outrec.isOpen || 
+        if (outrec == null || outrec.isOpen || 
         outrec.frontEdge != null || !ValidateClosedPathEx(ref outrec.pts)) 
           return;
 
@@ -3268,21 +3249,47 @@ namespace Clipper2Lib
         op2 = op2.next;
         if (op2 == startOp) break;
       }
-      FixSelfIntersects(ref outrec.pts!);
+      FixSelfIntersects(outrec);
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    private OutPt DoSplitOp(ref OutPt outRecOp, OutPt splitOp)
+    private void DoSplitOp(OutRec outrec, OutPt splitOp)
     {
-      OutPt prevOp = splitOp.prev, nextNextOp = splitOp.next!.next!;
+      // splitOp.prev -> splitOp &&
+      // splitOp.next -> splitOp.next.next are intersecting
+      OutPt prevOp = splitOp.prev;
+      OutPt nextNextOp = splitOp.next!.next!;
+      outrec.pts = prevOp;
       OutPt result = prevOp;
+
       InternalClipper.GetIntersectPoint(
           prevOp.pt, splitOp.pt, splitOp.next.pt, nextNextOp.pt, out PointD ipD);
       Point64 ip = new Point64(ipD);
 
-      double area1 = Area(outRecOp);
-      double area2 = AreaTriangle(ip, splitOp.pt, splitOp.next.pt);
+#if USINGZ
+      if (_zCallback != null)
+        _zCallback(prevOp.pt, splitOp.pt, splitOp.next.pt, nextNextOp.pt, ref ip);
+#endif
 
+      double area1 = Area(prevOp);
+      double absArea1 = Math.Abs(area1);
+      
+      if (absArea1 < 2)
+      {
+        SafeDisposeOutPts(ref splitOp);
+        return;
+      }
+
+      // nb: area1 is the path's area *before* splitting, whereas area2 is
+      // the area of the triangle containing splitOp & splitOp.next.
+      // So the only way for these areas to have the same sign is if
+      // the split triangle is larger than the path containing prevOp or
+      // if there's more than one self=intersection.
+      double area2 = AreaTriangle(ip, splitOp.pt, splitOp.next.pt);
+      double absArea2 = Math.Abs(area2);
+
+      // de-link splitOp and splitOp.next from the path
+      // while inserting the intersection point
       if (ip == prevOp.pt || ip == nextNextOp.pt)
       {
         nextNextOp.prev = prevOp;
@@ -3298,12 +3305,12 @@ namespace Clipper2Lib
       SafeDeleteOutPtJoiners(splitOp.next);
       SafeDeleteOutPtJoiners(splitOp);
 
-      if ((Math.Abs(area2) >= 1) &&
-          ((Math.Abs(area2) > Math.Abs(area1)) ||
+      if (absArea2 > 1 &&
+          (absArea2 > absArea1 ||
            ((area2 > 0) == (area1 > 0))))
       {
-        OutRec newOutRec = new OutRec()
-        { idx = _outrecList.Count };
+        OutRec newOutRec = new OutRec();
+        newOutRec.idx = _outrecList.Count;
         _outrecList.Add(newOutRec);
         newOutRec.owner = prevOp.outrec.owner;
         newOutRec.polypath = null;
@@ -3315,30 +3322,28 @@ namespace Clipper2Lib
         splitOp.prev = newOp;
         splitOp.next.next = newOp;
       }
-      return result;
+      //else { splitOp = null; splitOp.next = null; }
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    private void FixSelfIntersects(ref OutPt op)
+    private void FixSelfIntersects(OutRec outrec)
     {
-      if (!IsValidClosedPath(op)) return;
-      OutPt op2 = op;
+      OutPt op2 = outrec.pts!;
       for (; ; )
       {
         // triangles can't self-intersect
         if (op2.prev == op2.next!.next) break;
-        if (InternalClipper.SegmentsIntersect(op2.prev.pt,
+        if (InternalClipper.SegsIntersect(op2.prev.pt,
                 op2.pt, op2.next.pt, op2.next.next!.pt))
         {
-          if (op2 == op || op2.next == op) op = op2.prev;
-          op2 = DoSplitOp(ref op, op2);
-          op = op2;
+          DoSplitOp(outrec, op2);
+          if (outrec.pts == null) return;
+          op2 = outrec.pts;
           continue;
         }
-
-        op2 = op2.next;
-
-        if (op2 == op) break;
+        else
+          op2 = op2.next;
+        if (op2 == outrec.pts) break;
       }
     }
 
@@ -3374,7 +3379,9 @@ namespace Clipper2Lib
         else
           op2 = op2.next!;
       }
-      return true;
+
+      if (path.Count == 3 && IsVerySmallTriangle(op2)) return false;
+      else return true;
     }
 
 
@@ -3481,7 +3488,7 @@ namespace Clipper2Lib
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    protected bool BuildTree(PolyPathBase polytree, Paths64 solutionOpen)
+    protected bool BuildTree(PolyPathNode polytree, Paths64 solutionOpen)
     {
       polytree.Clear();
       solutionOpen.Clear();
@@ -3522,7 +3529,7 @@ namespace Clipper2Lib
             DeepCheckOwner(outrec, outrec.owner);
         }
 
-        PolyPathBase ownerPP;
+        PolyPathNode ownerPP;
         if (outrec.owner != null && outrec.owner.polypath != null)
           ownerPP = outrec.owner.polypath;
         else
@@ -3647,6 +3654,8 @@ namespace Clipper2Lib
 
   public class ClipperD : ClipperBase
   {
+    private static string precision_range_error = "Error: Precision is out of range.";
+
     private readonly double _scale;
     private readonly double _invScale;
 
@@ -3668,7 +3677,7 @@ namespace Clipper2Lib
     public ClipperD(int roundingDecimalPrecision = 2)
     {
       if (roundingDecimalPrecision < -8 || roundingDecimalPrecision > 8)
-        throw new ClipperLibException("Error - RoundingDecimalPrecision exceeds the allowed range.");
+        throw new ClipperLibException(precision_range_error);
       _scale = Math.Pow(10, roundingDecimalPrecision);
       _invScale = 1 / _scale;
     }
@@ -3818,29 +3827,66 @@ namespace Clipper2Lib
     }
   } // ClipperD class
 
-  public abstract class PolyPathBase : IEnumerable
+  public abstract class PolyPathNode : IEnumerable
   {
-    internal PolyPathBase? _parent;
-    internal List<PolyPathBase> _childs = new List<PolyPathBase>();
+    internal PolyPathNode? _parent;
+    internal List<PolyPathNode> _childs = new List<PolyPathNode>();
 
-    public PolyPathEnum GetEnumerator()
+    public IEnumerator GetEnumerator()
     {
-      return new PolyPathEnum(_childs);
+      return new NodeEnumerator(_childs);
     }
-    IEnumerator IEnumerable.GetEnumerator()
+    private class NodeEnumerator : IEnumerator
     {
-      return GetEnumerator();
-    }
+      private int position = -1;
+      private readonly List<PolyPathNode> _nodes;
+
+      [MethodImpl(MethodImplOptions.AggressiveInlining)]
+      public NodeEnumerator(List<PolyPathNode> nodes)
+      {
+        _nodes = new List<PolyPathNode>(nodes);
+      }
+
+      [MethodImpl(MethodImplOptions.AggressiveInlining)]
+      private IEnumerator getEnumerator()
+      {
+        return (IEnumerator) this;
+      }
+
+      [MethodImpl(MethodImplOptions.AggressiveInlining)]
+      public bool MoveNext()
+      {
+        position++;
+        return (position < _nodes.Count);
+      }
+
+      [MethodImpl(MethodImplOptions.AggressiveInlining)]
+      public void Reset()
+      {
+        position = -1;
+      }
+
+      public object Current
+      {
+        get
+        {
+          if (position < 0 || position >= _nodes.Count)
+            throw new InvalidOperationException();
+          return _nodes[position];
+        }
+      }
+
+    };
 
     public bool IsHole => GetIsHole();
 
-    public PolyPathBase(PolyPathBase? parent = null) { _parent = parent; }
+    public PolyPathNode(PolyPathNode? parent = null) { _parent = parent; }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private bool GetIsHole()
     {
       bool result = true;
-      PolyPathBase? pp = _parent;
+      PolyPathNode? pp = _parent;
       while (pp != null)
       {
         result = !result;
@@ -3852,7 +3898,7 @@ namespace Clipper2Lib
 
     public int Count => _childs.Count;
 
-    internal abstract PolyPathBase AddChild(Path64 p);
+    internal abstract PolyPathNode AddChild(Path64 p);
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public void Clear()
@@ -3861,52 +3907,16 @@ namespace Clipper2Lib
     }
   } // PolyPathBase class
 
-  public class PolyPathEnum : IEnumerator
-  {
-    public List<PolyPathBase> _ppbList;
-    private int position = -1;
-    public PolyPathEnum(List<PolyPathBase> childs)
-    {
-      _ppbList = childs;
-    }
-
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public bool MoveNext()
-    {
-      position++;
-      return (position < _ppbList.Count);
-    }
-
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public void Reset()
-    {
-      position = -1;
-    }
-
-    public PolyPathBase Current
-    {
-      get
-      {
-        if (position < 0 || position >= _ppbList.Count)
-          throw new InvalidOperationException();
-        return _ppbList[position];
-      }
-    }
-
-    object IEnumerator.Current => Current;
-
-  }
-
-  public class PolyPath64 : PolyPathBase
+  public class PolyPath64 : PolyPathNode
   {
     public Path64? Polygon { get; private set; } // polytree root's polygon == null
 
-    public PolyPath64(PolyPathBase? parent = null) : base(parent) {}
+    public PolyPath64(PolyPathNode? parent = null) : base(parent) {}
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    internal override PolyPathBase AddChild(Path64 p)
+    internal override PolyPathNode AddChild(Path64 p)
     {
-      PolyPathBase newChild = new PolyPath64(this);
+      PolyPathNode newChild = new PolyPath64(this);
       (newChild as PolyPath64)!.Polygon = p;
       _childs.Add(newChild);
       return newChild;
@@ -3926,7 +3936,7 @@ namespace Clipper2Lib
     public double Area()
     {
       double result = Polygon == null ? 0 : Clipper.Area(Polygon);
-      foreach (PolyPathBase polyPathBase in _childs)
+      foreach (PolyPathNode polyPathBase in _childs)
       {
         PolyPath64 child = (PolyPath64) polyPathBase;
         result += child.Area();
@@ -3935,17 +3945,17 @@ namespace Clipper2Lib
     }
   }
 
-  public class PolyPathD : PolyPathBase
+  public class PolyPathD : PolyPathNode
   {
     internal double Scale { get; set; }
     public PathD? Polygon { get; private set; }
 
-    public PolyPathD(PolyPathBase? parent = null) : base(parent) {}
+    public PolyPathD(PolyPathNode? parent = null) : base(parent) {}
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    internal override PolyPathBase AddChild(Path64 p)
+    internal override PolyPathNode AddChild(Path64 p)
     {
-      PolyPathBase newChild = new PolyPathD(this);
+      PolyPathNode newChild = new PolyPathD(this);
       (newChild as PolyPathD)!.Scale = Scale;
       (newChild as PolyPathD)!.Polygon = Clipper.ScalePathD(p, 1 / Scale);
       _childs.Add(newChild);
@@ -3966,7 +3976,7 @@ namespace Clipper2Lib
     public double Area()
     {
       double result = Polygon == null ? 0 : Clipper.Area(Polygon);
-      foreach (PolyPathBase polyPathBase in _childs)
+      foreach (PolyPathNode polyPathBase in _childs)
       {
         PolyPathD child = (PolyPathD) polyPathBase;
         result += child.Area();

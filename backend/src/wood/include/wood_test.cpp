@@ -1323,14 +1323,14 @@ namespace wood_test
 
         // main method
         std::vector<IK::Point_3> points;
-        CGAL_Polyline polygon_inscribed_rectangle;
+        std::vector<CGAL_Polyline> polygon_inscribed_rectangle;
         cgal_polylabel::inscribe_rectangle({polygon}, polygon_inscribed_rectangle, -2.5);
 
         // display
         opengl_globals_geometry::add_grid();
         viewer_wood::scale = 10;
-        std::vector<CGAL_Polyline> polylines = {polygon, polygon_inscribed_rectangle}; //, polygon_copy
-        //std::cout << polygon_inscribed_rectangle[1] << "\n";
+        std::vector<CGAL_Polyline> polylines = polygon_inscribed_rectangle; //, polygon_copy
+        // std::cout << polygon_inscribed_rectangle[1] << "\n";
         viewer_wood::add(polylines);
         viewer_wood::line_thickness = 10;
         viewer_wood::add(points);

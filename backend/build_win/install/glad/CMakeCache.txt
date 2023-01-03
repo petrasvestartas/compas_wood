@@ -221,7 +221,7 @@ GLAD_SOURCE_DIR:STATIC=C:/IBOIS57/_Code/Software/Python/compas_wood/backend/buil
 GLAD_SPEC:STRING=gl
 
 //Path to a program.
-PYTHON_EXECUTABLE:FILEPATH=C:/Python38/python.exe
+PYTHON_EXECUTABLE:FILEPATH=C:/Users/petra/.conda/envs/wood-dev/python.exe
 
 
 ########################
@@ -343,7 +343,7 @@ CMAKE_STATIC_LINKER_FLAGS_RELWITHDEBINFO-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_VERBOSE_MAKEFILE
 CMAKE_VERBOSE_MAKEFILE-ADVANCED:INTERNAL=1
 //Details about finding PythonInterp
-FIND_PACKAGE_MESSAGE_DETAILS_PythonInterp:INTERNAL=[C:/Python38/python.exe][v3.8.3()]
+FIND_PACKAGE_MESSAGE_DETAILS_PythonInterp:INTERNAL=[C:/Users/petra/.conda/envs/wood-dev/python.exe][v3.8.12()]
 //ADVANCED property for variable: PYTHON_EXECUTABLE
 PYTHON_EXECUTABLE-ADVANCED:INTERNAL=1
 
