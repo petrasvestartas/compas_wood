@@ -1208,7 +1208,8 @@ namespace wood_test
 
         // main method
         std::vector<IK::Point_3> points;
-        cgal_polylabel::get_polylabel_circle_division_points(IK::Vector_3(0, 0, 0), {polygon}, points, 30, 0.75, 1.0);
+
+        cgal_polylabel::get_polylabel_circle_division_points(IK::Vector_3(0, 0, 0), {polygon}, points, 4, 0.75, 1.0, true);
 
         // display
         opengl_globals_geometry::add_grid();
@@ -1287,7 +1288,7 @@ namespace wood_test
 
         // main method
         std::vector<IK::Point_3> points;
-        clipper_util::offset_and_divide_to_points(points, polygon, -2.5, 10);
+        clipper_util::offset_and_divide_to_points(points, polygon, -2.5, 4);
 
         // display
         opengl_globals_geometry::add_grid();
@@ -1314,8 +1315,8 @@ namespace wood_test
             IK::Point_3(11.2247596176396, -4.60190643733344, 48.9387618537435),
             IK::Point_3(-5.73799008527948, 27.7396887390699, 38.9994193935361),
             IK::Point_3(-7.18751465466158, 52.2109764075134, 74.5663582911656),
-            IK::Point_3(1.68332949862521, 18.8956298287167, 52.2485552589767),
-            IK::Point_3(14.0704361211272, 1.10346344393741, 69.2793807577245),
+            //IK::Point_3(1.68332949862521, 18.8956298287167, 52.2485552589767),
+            //IK::Point_3(14.0704361211272, 1.10346344393741, 69.2793807577245),
             IK::Point_3(18.9418950031543, 14.2294672539151, 109.735250000281),
             IK::Point_3(33.4352381327694, -30.7000564810127, 89.2118909021016),
             IK::Point_3(11.2247596176396, -4.60190643733344, 48.9387618537435),
@@ -1324,7 +1325,7 @@ namespace wood_test
         // main method
         std::vector<IK::Point_3> points;
         std::vector<CGAL_Polyline> polygon_inscribed_rectangle;
-        cgal_polylabel::inscribe_rectangle({polygon}, polygon_inscribed_rectangle, -2.5);
+        cgal_polylabel::inscribe_rectangle({polygon}, polygon_inscribed_rectangle,points, -2.5);
 
         // display
         opengl_globals_geometry::add_grid();

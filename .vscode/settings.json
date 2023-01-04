@@ -127,7 +127,8 @@
     "scoped_allocator": "cpp",
     "shared_mutex": "cpp",
     "valarray": "cpp",
-    "*.ipp": "cpp"
+    "*.ipp": "cpp",
+    "pointers": "cpp"
   },
   "C_Cpp.dimInactiveRegions": false,
   "git.ignoreLimitWarning": true,
