@@ -73,14 +73,14 @@ namespace clipper_util
             return rc;
         }
 
-        CGAL::Aff_transformation_3<IK> plane_to_xy(IK::Point_3 origin, IK::Plane_3 plane)
+        CGAL::Aff_transformation_3<IK> plane_to_xy(const IK::Point_3 &origin, const IK::Plane_3 &plane)
         {
             auto x0 = plane.base1();
             auto y0 = plane.base2();
             auto z0 = plane.orthogonal_vector();
-            cgal_vector_util::Unitize(x0);
-            cgal_vector_util::Unitize(y0);
-            cgal_vector_util::Unitize(z0);
+            unitize(x0);
+            unitize(y0);
+            unitize(z0);
 
             // Move to origin -> T0 translates point P0 to (0,0,0)
             CGAL::Aff_transformation_3<IK> t0(CGAL::TRANSLATION, IK::Vector_3(-origin.x(), -origin.y(), -origin.z()));

@@ -4,6 +4,243 @@
 #include <CGAL/Largest_empty_iso_rectangle_2.h>
 namespace cgal_polylabel
 {
+
+    namespace internal
+    {
+
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Main geometry methods used in clipper_util to be used as self-contained header and source file
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        inline double length(double x, double y, double z)
+        {
+
+            double len;
+            x = fabs(x);
+            y = fabs(y);
+            z = fabs(z);
+            if (y >= x && y >= z)
+            {
+                len = x;
+                x = y;
+                y = len;
+            }
+            else if (z >= x && z >= y)
+            {
+                len = x;
+                x = z;
+                z = len;
+            }
+
+            // 15 September 2003 Dale Lear
+            //     For small denormalized doubles (positive but smaller
+            //     than DBL_MIN), some compilers/FPUs set 1.0/x to +INF.
+            //     Without the ON_DBL_MIN test we end up with
+            //     microscopic vectors that have infinte length!
+            //
+            //     This code is absolutely necessary.  It is a critical
+            //     part of the bug fix for RR 11217.
+            if (x > ON_DBL_MIN)
+            {
+                y /= x;
+                z /= x;
+                len = x * sqrt(1.0 + y * y + z * z);
+            }
+            else if (x > 0.0 && ON_IS_FINITE(x))
+                len = x;
+            else
+                len = 0.0;
+
+            return len;
+        }
+
+        inline bool unitize(IK::Vector_3 &vector)
+        {
+            bool rc = false;
+            // Since x,y,z are floats, d will not be denormalized and the
+            // ON_DBL_MIN tests in ON_2dVector::Unitize() are not needed.
+
+            double d = length(vector.hx(), vector.hy(), vector.hz());
+            if (d > 0.0)
+            {
+                double dx = vector.hx();
+                double dy = vector.hy();
+                double dz = vector.hz();
+                vector = IK::Vector_3(
+                    (dx / d),
+                    (dy / d),
+                    (dz / d));
+                rc = true;
+            }
+            return rc;
+        }
+
+        inline CGAL::Aff_transformation_3<IK> plane_to_xy(const IK::Point_3 &origin, IK::Vector_3 &x0, IK::Vector_3 &y0, IK::Vector_3 &z0)
+        {
+            unitize(x0);
+            unitize(y0);
+            unitize(z0);
+
+            // Move to origin -> T0 translates point P0 to (0,0,0)
+            CGAL::Aff_transformation_3<IK> t0(CGAL::TRANSLATION, IK::Vector_3(-origin.x(), -origin.y(), -origin.z()));
+
+            // Rotate ->
+            CGAL::Aff_transformation_3<IK> f0(
+                x0.x(), x0.y(), x0.z(),
+                y0.x(), y0.y(), y0.z(),
+                z0.x(), z0.y(), z0.z());
+
+            return f0 * t0;
+        }
+
+        inline CGAL::Aff_transformation_3<IK> plane_to_xy(const IK::Point_3 &origin, const IK::Plane_3 &plane)
+        {
+            auto x0 = plane.base1();
+            auto y0 = plane.base2();
+            auto z0 = plane.orthogonal_vector();
+            cgal_vector_util::Unitize(x0);
+            cgal_vector_util::Unitize(y0);
+            cgal_vector_util::Unitize(z0);
+
+            // Move to origin -> T0 translates point P0 to (0,0,0)
+            CGAL::Aff_transformation_3<IK> t0(CGAL::TRANSLATION, IK::Vector_3(-origin.x(), -origin.y(), -origin.z()));
+
+            // Rotate ->
+            CGAL::Aff_transformation_3<IK> f0(
+                x0.x(), x0.y(), x0.z(),
+                y0.x(), y0.y(), y0.z(),
+                z0.x(), z0.y(), z0.z());
+
+            return f0 * t0;
+        }
+
+        inline void get_average_normal(const CGAL_Polyline &polyline, IK::Vector_3 &average_normal)
+        {
+            size_t len = CGAL::squared_distance(polyline.front(), polyline.back()) < wood_globals::DISTANCE_SQUARED ? polyline.size() - 1 : polyline.size();
+            average_normal = IK::Vector_3(0, 0, 0);
+
+            for (int i = 0; i < len; i++)
+            {
+                auto prev = ((i - 1) + len) % len;
+                auto next = ((i + 1) + len) % len;
+                average_normal = average_normal + CGAL::cross_product(polyline[i] - polyline[prev], polyline[next] - polyline[i]);
+            }
+        }
+
+        inline void get_fast_plane(const CGAL_Polyline &polyline, IK::Point_3 &center, IK::Plane_3 &plane)
+        {
+            // origin
+            center = polyline[0];
+
+            // plane
+            IK::Vector_3 average_normal;
+            get_average_normal(polyline, average_normal);
+            plane = IK::Plane_3(center, average_normal);
+        }
+
+        inline void get_fast_plane(const CGAL_Polyline &polyline, IK::Point_3 &origin, IK::Vector_3 &x_axis, IK::Vector_3 &y_axis, IK::Vector_3 &z_axis)
+        {
+            // origin
+            origin = polyline[0];
+
+            // plane
+            IK::Vector_3 average_normal;
+            get_average_normal(polyline, average_normal);
+            IK::Plane_3 plane(origin, average_normal);
+
+            x_axis = plane.base1();
+            y_axis = plane.base2();
+            z_axis = plane.orthogonal_vector();
+        }
+
+        inline void get_average_plane_axes_oriented_to_longest_edge(const CGAL_Polyline &polyline, IK::Point_3 &origin, IK::Vector_3 &x_axis, IK::Vector_3 &y_axis, IK::Vector_3 &z_axis)
+        {
+            size_t len = CGAL::squared_distance(polyline.front(), polyline.back()) < wood_globals::DISTANCE_SQUARED ? polyline.size() - 1 : polyline.size();
+            z_axis = IK::Vector_3(0, 0, 0);
+
+            double max_length = 0;
+            for (int i = 0; i < len; i++)
+            {
+                auto prev = ((i - 1) + len) % len;
+                auto next = ((i + 1) + len) % len;
+                z_axis = z_axis + CGAL::cross_product(polyline[i] - polyline[prev], polyline[next] - polyline[i]);
+
+                double temp_max_length = CGAL::squared_distance(polyline[i], polyline[next]);
+                if (temp_max_length > max_length)
+                {
+                    max_length = temp_max_length;
+                    x_axis = polyline[next] - polyline[i];
+                    origin = polyline[i];
+                }
+            }
+            y_axis = CGAL::cross_product(x_axis, z_axis);
+        }
+
+        /**
+         * create point in a circle
+         * the first four inputs are needed to orient the points in 3d
+         * WARNING user must not use this method - this method is used by get_polylabel_circle_division_points method
+         * @param [in] origin plane origin
+         * @param [in] x_axis plane x axis
+         * @param [in] y_axis plane y axis
+         * @param [in] z_axis plane z axis
+         * @param [out] points point divisions
+         * @param [in] number_of_chunks circle divisions
+         * @param [in] radius circle radius
+         */
+        inline void circle_points(const IK::Vector_3 &origin, const IK::Vector_3 &x_axis, const IK::Vector_3 &y_axis, const IK::Vector_3 &z_axis, std::vector<IK::Point_3> &points, int number_of_chunks = 4, double radius = 150)
+        {
+
+            double pi_to_radians = 3.14159265358979323846 / 180.0;
+            double degrees = 0; // <-- correction
+            double chunk_angle = 360 / number_of_chunks;
+            points.reserve(number_of_chunks);
+            CGAL::Aff_transformation_3<IK> xy_to_plane = cgal_xform_util::XYToPlane(origin, x_axis, y_axis, z_axis);
+
+            for (int i = 0; i < number_of_chunks; i++)
+            {
+                degrees = i * chunk_angle;                       // <-- correction
+                float radian = ((45 + degrees) * pi_to_radians); // <-- correction
+                IK::Point_3 p(radius * cos(radian), radius * sin(radian), 0);
+                points.emplace_back(p.transform(xy_to_plane));
+            }
+        }
+
+        /**
+         * get transformation from 3D to 2D and invcerse from a polyline
+         * the 3D plane is computed from the start point of the polyline
+         * and an the sum of the consecutive edges cross products
+         *
+         * @param [in] polyline input CGAL polyline
+         * @param [out] xform_to_xy transformation from 3D to XY
+         * @param [out] xform_to_xy_inv transformation from XY to 3D
+         * @return returns true if the polyline has more than 3 points, else not valid
+         */
+        inline bool orient_polyline_to_xy_and_back(CGAL_Polyline &polyline, CGAL::Aff_transformation_3<IK> &xform_to_xy, CGAL::Aff_transformation_3<IK> &xform_to_xy_inv)
+        {
+
+            /////////////////////////////////////////////////////////////////////////////////////
+            // Orient from 3D to 2D
+            /////////////////////////////////////////////////////////////////////////////////////
+            if (polyline.size() < 3)
+                return false;
+
+            /////////////////////////////////////////////////////////////////////////////////////
+            // Get center polyline plane
+            /////////////////////////////////////////////////////////////////////////////////////
+            IK::Point_3 center;
+            IK::Plane_3 plane;
+            cgal_polyline_util::get_fast_plane(polyline, center, plane);
+
+            /////////////////////////////////////////////////////////////////////////////////////
+            // Create Transformation and assign outputs
+            /////////////////////////////////////////////////////////////////////////////////////
+            xform_to_xy = cgal_xform_util::PlaneToXY(polyline[0], plane);
+            xform_to_xy_inv = xform_to_xy.inverse();
+            return true;
+        }
+    }
+
     /**
      * inscribe circle in a polygon (with or without holes)
      * the polyline is oriented to XY plane using the input plane
@@ -63,7 +300,7 @@ namespace cgal_polylabel
     {
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        // copy polylines
+        // copy polylines for orienting from 3D to 2D
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         std::vector<CGAL_Polyline> polylines_copy = polylines;
 
@@ -138,73 +375,6 @@ namespace cgal_polylabel
         // Output
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         return std::tuple<IK::Point_3, IK::Plane_3, double>(center, plane, center_and_radius[2]);
-    }
-
-    namespace internal
-    {
-        /**
-         * create point in a circle
-         * the first four inputs are needed to orient the points in 3d
-         * WARNING user must not use this method - this method is used by get_polylabel_circle_division_points method
-         * @param [in] origin plane origin
-         * @param [in] x_axis plane x axis
-         * @param [in] y_axis plane y axis
-         * @param [in] z_axis plane z axis
-         * @param [out] points point divisions
-         * @param [in] number_of_chunks circle divisions
-         * @param [in] radius circle radius
-         */
-        inline void circle_points(const IK::Vector_3 &origin, const IK::Vector_3 &x_axis, const IK::Vector_3 &y_axis, const IK::Vector_3 &z_axis, std::vector<IK::Point_3> &points, int number_of_chunks = 4, double radius = 150)
-        {
-
-            double pi_to_radians = 3.14159265358979323846 / 180.0;
-            double degrees = 0; // <-- correction
-            double chunk_angle = 360 / number_of_chunks;
-            points.reserve(number_of_chunks);
-            CGAL::Aff_transformation_3<IK> xy_to_plane = cgal_xform_util::XYToPlane(origin, x_axis, y_axis, z_axis);
-
-            for (int i = 0; i < number_of_chunks; i++)
-            {
-                degrees = i * chunk_angle;                       // <-- correction
-                float radian = ((45 + degrees) * pi_to_radians); // <-- correction
-                IK::Point_3 p(radius * cos(radian), radius * sin(radian), 0);
-                points.emplace_back(p.transform(xy_to_plane));
-            }
-        }
-
-        /**
-         * get transformation from 3D to 2D and invcerse from a polyline
-         * the 3D plane is computed from the start point of the polyline
-         * and an the sum of the consecutive edges cross products
-         *
-         * @param [in] polyline input CGAL polyline
-         * @param [out] xform_to_xy transformation from 3D to XY
-         * @param [out] xform_to_xy_inv transformation from XY to 3D
-         * @return returns true if the polyline has more than 3 points, else not valid
-         */
-        inline bool orient_polyline_to_xy_and_back(CGAL_Polyline &polyline, CGAL::Aff_transformation_3<IK> &xform_to_xy, CGAL::Aff_transformation_3<IK> &xform_to_xy_inv)
-        {
-
-            /////////////////////////////////////////////////////////////////////////////////////
-            // Orient from 3D to 2D
-            /////////////////////////////////////////////////////////////////////////////////////
-            if (polyline.size() < 3)
-                return false;
-
-            /////////////////////////////////////////////////////////////////////////////////////
-            // Get center polyline plane
-            /////////////////////////////////////////////////////////////////////////////////////
-            IK::Point_3 center;
-            IK::Plane_3 plane;
-            cgal_polyline_util::get_fast_plane(polyline, center, plane);
-
-            /////////////////////////////////////////////////////////////////////////////////////
-            // Create Transformation and assign outputs
-            /////////////////////////////////////////////////////////////////////////////////////
-            xform_to_xy = cgal_xform_util::PlaneToXY(polyline[0], plane);
-            xform_to_xy_inv = xform_to_xy.inverse();
-            return true;
-        }
     }
 
     /**
@@ -303,7 +473,7 @@ namespace cgal_polylabel
      * @return bool flag if the result is valid
      */
 
-    inline bool inscribe_rectangle(const std::vector<CGAL_Polyline> &polylines, std::vector<CGAL_Polyline> &result, std::vector<IK::Point_3> &points, double division_distance = 0, double precision = 1.0)
+    inline bool inscribe_rectangle(const std::vector<CGAL_Polyline> &polylines, std::vector<CGAL_Polyline> &result, std::vector<IK::Point_3> &points, IK::Segment_3 &direction, double scale = 0, double precision = 1.0, double rectangle_division_distance = 10)
     {
         // issues
         // 1 - Check which line is good for oriented display ir by scaling a little git
@@ -315,74 +485,125 @@ namespace cgal_polylabel
         std::vector<CGAL_Polyline> polylines_copy = polylines;
         // Clipper2Lib::Paths64 polylines_copy_clipper;
 
+        // IK::Point_3 origin;
+        // IK::Plane_3 plane;
+        // cgal_polyline_util::get_fast_plane(polylines_copy[0], origin, plane);
+
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // user direction
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        IK::Point_3 o;
+        IK::Vector_3 x, y, z;
+        if (direction.squared_length() > wood_globals::DISTANCE_SQUARED)
+        {
+
+            internal::get_fast_plane(polylines_copy[0], o, x, y, z);
+            x = direction.to_vector();
+            y = CGAL::cross_product(x, z);
+        }
+        else
+        {
+            // this was never checked
+            internal::get_average_plane_axes_oriented_to_longest_edge(polylines_copy[0], o, x, y, z);
+        }
+
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Create Transformation to XY plane
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        IK::Point_3 origin;
-        IK::Plane_3 plane;
-        cgal_polyline_util::get_fast_plane(polylines_copy[0], origin, plane);
-
-        CGAL::Aff_transformation_3<IK> xform_toXY = cgal_xform_util::PlaneToXY(origin, plane);
+        CGAL::Aff_transformation_3<IK> xform_toXY = internal::plane_to_xy(o, x, y, z);
         CGAL::Aff_transformation_3<IK> xform_toXY_Inv = xform_toXY.inverse();
 
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Count how many points we have
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        size_t point_count = 0;
+
+        for (auto &polyline : polylines_copy)
+            point_count += polyline.size();
+
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Compute 2D bounding box to get a division step, the division step is equal to = diagonal_length/(20*precision)
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         std::vector<IK::Point_2> points_2d;
+        points_2d.reserve(point_count);
+
         for (auto &polyline : polylines_copy)
         {
             cgal_polyline_util::Transform(polyline, xform_toXY);
             for (auto &p : polyline)
-            {
-                std::cout << p << "\n";
                 points_2d.push_back(IK::Point_2(p.hx(), p.hy()));
-            }
             points_2d.pop_back();
         }
 
-        CGAL::Bbox_2 bbox = CGAL::bbox_2(points_2d.begin(), points_2d.end());
+        CGAL::Bbox_2 bbox = CGAL::bbox_2(points_2d.begin(), points_2d.end(), IK());
+        auto diagonal = {IK::Point_3(bbox.xmin(), bbox.ymin(), 0), IK::Point_3(bbox.xmax(), bbox.ymax(), 0)};
+        double squared_diagonal_length = CGAL::squared_distance(IK::Point_3(bbox.xmin(), bbox.ymin(), 0), IK::Point_3(bbox.xmax(), bbox.ymax(), 0));
+        double step_division = std::sqrt(squared_diagonal_length) / (50.0 * precision);
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        // Compute the inscribed area
+        // Get iso rectangle as the first input for the algorithm
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         IK::Iso_rectangle_2 bbox_rectangle(bbox);
         CGAL::Largest_empty_iso_rectangle_2<IK> empty_rect(bbox_rectangle); //(IK::Iso_rectangle_2(bbox));
 
-        points.emplace_back(IK::Point_3(bbox_rectangle.xmin(), bbox_rectangle.ymin(), 0));
-        // std::cout << points.back() << "\n";
-        points.emplace_back(IK::Point_3(bbox_rectangle.xmax(), bbox_rectangle.xmax(), 0));
-        // std::cout << points.back() << "\n";
-        //  for (auto &polyline : polylines_copy)
-        //      for (auto &point : polyline)
-        //          empty_rect.push_back(IK::Point_2(point.hx(), point.hy()));
+        // points.emplace_back(IK::Point_3(bbox_rectangle.xmin(), bbox_rectangle.ymin(), 0));
+        // points.emplace_back(IK::Point_3(bbox_rectangle.xmax(), bbox_rectangle.ymax(), 0));
 
-        // interpolate two points in steps
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Interpolate edge points in by the precomputed division step
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         CGAL_Polyline division_points;
         for (auto &polyline : polylines_copy)
             for (int i = 0; i < polyline.size() - 1; i++)
             {
                 division_points.clear();
-                int divisions = (int)std::min(100.0, std::sqrt(CGAL::squared_distance(polyline[i], polyline[i + 1])) / 5);
+                int divisions = (int)std::min(100.0, std::sqrt(CGAL::squared_distance(polyline[i], polyline[i + 1])) / step_division);
                 cgal_vector_util::interpolate_points(polyline[i], polyline[i + 1], divisions, division_points, 2);
-                // std::cout << polyline[i] << "\n";
+
                 for (auto &point : division_points)
                     empty_rect.push_back(IK::Point_2(point.hx(), point.hy()));
 
-                points.insert(points.end(), division_points.begin(), division_points.end());
+                // points.insert(points.end(), division_points.begin(), division_points.end());
             }
 
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Get the largest empty iso rectangle
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         IK::Iso_rectangle_2 rectangle = empty_rect.get_largest_empty_iso_rectangle();
-        // IK::Iso_rectangle_2 rectangle(bbox);
+        double x_dist = (1 - scale) * std::abs(rectangle.max().hx() - rectangle.min().hx());
+        double y_dist = (1 - scale) * std::abs(rectangle.max().hy() - rectangle.min().hy());
+
         CGAL_Polyline rect = {
-            IK::Point_3(rectangle.min().hx(), rectangle.min().hy(), 0),
-            IK::Point_3(rectangle.min().hx(), rectangle.max().hy(), 0),
-            IK::Point_3(rectangle.max().hx(), rectangle.max().hy(), 0),
-            IK::Point_3(rectangle.max().hx(), rectangle.min().hy(), 0),
-            IK::Point_3(rectangle.min().hx(), rectangle.min().hy(), 0),
+            IK::Point_3(rectangle.min().hx() + x_dist, rectangle.min().hy() + y_dist, 0),
+            IK::Point_3(rectangle.min().hx() + x_dist, rectangle.max().hy() - y_dist, 0),
+            IK::Point_3(rectangle.max().hx() - x_dist, rectangle.max().hy() - y_dist, 0),
+            IK::Point_3(rectangle.max().hx() - x_dist, rectangle.min().hy() + y_dist, 0),
+            IK::Point_3(rectangle.min().hx() + x_dist, rectangle.min().hy() + y_dist, 0),
         };
+
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Orient Back to 3D
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        for (auto &point : rect)
+            point = point.transform(xform_toXY_Inv);
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Output
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        for (int i = 0; i < rect.size() - 1; i++)
+        {
+            division_points.clear();
+            int divisions = (int)std::min(25.0, std::sqrt(CGAL::squared_distance(rect[i], rect[i + 1])) / rectangle_division_distance);
+            cgal_vector_util::interpolate_points(rect[i], rect[i + 1], divisions, division_points, 2);
+            points.insert(points.end(), division_points.begin(), division_points.end());
+        }
+
+        // points = rect;
         result = {
+            // diagonal,
+            polylines[0],
             rect};
-        return false;
+        return true;
         // /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // // Sort polylines based on bounding-box to detect which polylines are holes, this only works if the polygon does not have holes within holes
         // /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

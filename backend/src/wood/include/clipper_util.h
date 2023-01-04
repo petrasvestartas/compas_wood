@@ -54,7 +54,7 @@ namespace clipper_util
          * @param [in] plane three vectors for rotation around the origin
          * @return transformation matrix, that is equal the rotation multiplied by translation
          */
-        CGAL::Aff_transformation_3<IK> plane_to_xy(IK::Point_3 origin, IK::Plane_3 plane);
+        CGAL::Aff_transformation_3<IK> plane_to_xy(const IK::Point_3 &origin, const IK::Plane_3 &plane);
 
         /**
          * The average normal computed my the sum of the concentric cross-products
