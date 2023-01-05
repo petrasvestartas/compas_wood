@@ -338,7 +338,7 @@ namespace rhino_util {
         }
 
         public static bool IsClockwise(Polyline cp, Plane plane) {
-            cp.Transform(Transform.PlaneToPlane(plane, Plane.WorldXY));
+            cp.Transform(Transform.plane_to_plane(plane, Plane.WorldXY));
             cp.Transform(Transform.PlanarProjection(Plane.WorldXY));
             if (!cp.IsClosed) {
                 cp.Add(cp[0]);

@@ -352,7 +352,7 @@ namespace wood
         {
             // scale 2d
             // std::cout << scale[0] << " " << scale[1] << " " << scale[2] << std::endl;
-            auto xform_scale = cgal_xform_util::Scale(scale[0], scale[1], scale[2]);
+            auto xform_scale = cgal_xform_util::scale(scale[0], scale[1], scale[2]);
             transform(xform_scale, xform_scale);
         }
 

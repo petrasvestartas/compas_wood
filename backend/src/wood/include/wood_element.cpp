@@ -168,8 +168,6 @@ namespace wood
         CGAL_Polyline polyline1 = polylines[1];
         auto n = polyline0.size() - 1;
         bool debug = false;
-        if (debug)
-            CGAL_Debug(-4);
 
         ///////////////////////////////////////////////////////////////////////////////
         // Sorts joints by edges
@@ -236,8 +234,6 @@ namespace wood
                     IK::Segment_3 prev_segment_0(polyline0[next], polyline0[nextnext]);
                     IK::Segment_3 next_segment_1(polyline1[prev], polyline1[i]);
                     IK::Segment_3 prev_segment_1(polyline1[next], polyline1[nextnext]);
-                    if (debug)
-                        CGAL_Debug(4);
 
                     ///////////////////////////////////////////////////////////////////////////////
                     // Intersect them with side lines, same principle must work on both polygons
@@ -391,7 +387,7 @@ namespace wood
         /////////////////////////////////////////////////////////////////////////////////////
         // Create Transformation
         /////////////////////////////////////////////////////////////////////////////////////
-        CGAL::Aff_transformation_3<IK> xform_toXY = cgal_xform_util::PlaneToXY(b[0], plane);
+        CGAL::Aff_transformation_3<IK> xform_toXY = cgal_xform_util::plane_to_xy(b[0], plane);
         CGAL::Aff_transformation_3<IK> xform_toXY_Inv = xform_toXY.inverse();
         cgal_polyline_util::Transform(a, xform_toXY);
         cgal_polyline_util::Transform(b, xform_toXY);
@@ -576,8 +572,7 @@ namespace wood
         }
         catch (const std::exception &ex)
         {
-            CGAL_Debug(scale);
-            CGAL_Debug(max_coordinate);
+            std::cout << "wood_element.cpp -> parameters: scale " << scale << "max_coordinate " << max_coordinate << "\n";
             printf("\nCPP   FILE %s    METHOD %s   LINE %i     WHAT %s   ", __FILE__, __FUNCTION__, __LINE__, ex.what());
         }
 

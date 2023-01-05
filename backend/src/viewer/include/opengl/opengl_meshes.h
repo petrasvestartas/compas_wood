@@ -120,7 +120,7 @@ namespace opengl_geometry
 			//}
 
 			//// Transform points back to original positions.
-			// Transform xform = Transform.PlaneToPlane(Plane.WorldXY, m_plane);
+			// Transform xform = Transform.plane_to_plane(Plane.WorldXY, m_plane);
 			// for (int i = 0; i < m_points.Count; ++i)
 			//	m_points[i] = m_plane.PointAt(m_points[i].X, m_points[i].Y, m_points[i].Z);
 

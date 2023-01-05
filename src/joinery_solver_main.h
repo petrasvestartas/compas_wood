@@ -90,7 +90,7 @@ inline void get_elements(
         cgal_polyline_util::AveragePlane(pp[i], planeAxes);
 
         //Create Transformation
-        CGAL::Aff_transformation_3<IK> xform_toXY = cgal_xform_util::VectorsToXY(planeAxes[0], planeAxes[1], planeAxes[2], planeAxes[3]);
+        CGAL::Aff_transformation_3<IK> xform_toXY = cgal_xform_util::vectors_to_xy(planeAxes[0], planeAxes[1], planeAxes[2], planeAxes[3]);
         CGAL::Aff_transformation_3<IK> xform_toXY_Inv = xform_toXY.inverse();
 
         //Transform the merged polyline to xy and compute xyBounding Box
@@ -783,7 +783,7 @@ inline bool face_to_face(
                             x = CGAL::cross_product(y, z);
                             viewer_polylines.emplace_back(CGAL_Polyline{ y_line[0] ,y_line[1] });
 
-                            CGAL::Aff_transformation_3<IK> xform = cgal_xform_util::VectorsToXY(o, x, y, z);
+                            CGAL::Aff_transformation_3<IK> xform = cgal_xform_util::vectors_to_xy(o, x, y, z);
 
                             ////////////////////////////////////////////////////////////////////////////////
                             //Decide min or max rectangle

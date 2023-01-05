@@ -1,5 +1,6 @@
 #include "../../../stdafx.h"
 #include "cgal_mesh_boolean.h"
+
 namespace cgal_mesh_boolean
 {
 

@@ -10,7 +10,7 @@ namespace wood
     {
         // Methods
 
-        bool change_basis(CGAL_Polyline &rect0, CGAL_Polyline &rect1, CGAL::Aff_transformation_3<IK> &xform); // first get 2x ChangeBasis transformation matrices
+        bool change_basis(CGAL_Polyline &rect0, CGAL_Polyline &rect1, CGAL::Aff_transformation_3<IK> &xform); // first get 2x change_basis transformation matrices
 
     public:
         /////////////////////////////////////////////////////////////////////////////////////////

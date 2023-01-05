@@ -225,7 +225,7 @@ namespace opengl_transform
 
 	////https://stackoverflow.com/questions/23270292/a-point-cgal-transformation-between-two-coordinate-systems
 	// //https://github.com/mcneel/opennurbs/blob/7.x/opennurbs_xform.cpp Line1960
-	// inline CGAL::Aff_transformation_3<IK> PlaneToPlane(
+	// inline CGAL::Aff_transformation_3<IK> plane_to_plane(
 	//	IK::Vector_3 O0, IK::Vector_3 X0, IK::Vector_3 Y0, IK::Vector_3 Z0,
 	//	IK::Vector_3 O1, IK::Vector_3 X1, IK::Vector_3 Y1, IK::Vector_3 Z1) {
 	//	// transformation maps P0 to P1, P0+X0 to P1+X1, ...
@@ -334,7 +334,7 @@ namespace opengl_transform
 	//   }
 
 	////rotate in plane
-	//   inline void RotationAroundAxis(
+	//   inline void Rotation_around_axis(
 	//       double sin_angle,
 	//       double cos_angle,
 	//       IK::Vector_3 axis,
@@ -433,7 +433,7 @@ namespace opengl_transform
 	//       }
 	//   }
 
-	//   inline void AxisRotation(double angle, IK::Vector_3& axis, CGAL::Aff_transformation_3<IK>& rot) {
+	//   inline void Axis_rotation(double angle, IK::Vector_3& axis, CGAL::Aff_transformation_3<IK>& rot) {
 	//       //create matrix of the rotation
 	//       IK::RT
 	//           c = cos(angle),

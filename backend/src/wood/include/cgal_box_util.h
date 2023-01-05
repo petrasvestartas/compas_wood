@@ -16,29 +16,11 @@ namespace cgal_box_util {
 
         );
 
-        // IK::Point_3 v = plane[0] + s * plane[1] + t * plane[2] + c * plane[3];
-
-        //CGAL_Debug(plane[0]);
-        //CGAL_Debug(plane[1]);
-        //CGAL_Debug(plane[2]);
-        //CGAL_Debug(plane[3]);
-        //CGAL_Debug(v);
-
-        //return IK::Point_3(v.x(), v.y(), v.z());
     }
 
     inline void GetCorners(IK::Vector_3(&box)[5], CGAL_Polyline& corners) {
         corners = CGAL_Polyline(8);
 
-        //corners[0] = PointAt(box, -box[4].x(), -box[4].y(), -box[4].z());
-        //corners[1] = PointAt(box, -box[4].x(), -box[4].y(), box[4].z());
-        //corners[3] = PointAt(box, -box[4].x(), box[4].y(), box[4].z());
-        //corners[2] = PointAt(box, -box[4].x(), box[4].y(), -box[4].z());
-
-        //corners[4] = PointAt(box, box[4].x(), -box[4].y(), -box[4].z());
-        //corners[5] = PointAt(box, box[4].x(), -box[4].y(), box[4].z());
-        //corners[7] = PointAt(box, box[4].x(), box[4].y(), box[4].z());
-        //corners[6] = PointAt(box, box[4].x(), box[4].y(), -box[4].z());
 
         corners[0] = PointAt(box, box[4].x(), box[4].y(), -box[4].z());
         corners[1] = PointAt(box, -box[4].x(), box[4].y(), -box[4].z());
@@ -197,10 +179,6 @@ namespace cgal_box_util {
             getSeparatingPlane(RPos, box1.AxisZ ^ box2.AxisZ, box1, box2));
     }
 
-    //inline crossProduct
-    //vec3 operator^ (const vec3& rhs) const {
-    //    return{ y * rhs.z - z * rhs.y, z * rhs.x - x * rhs.z, x * rhs.y - y * rhs.x };
-
     inline bool GetCollisionNative(const IK::Vector_3(&box1)[5], const IK::Vector_3(&box2)[5]) {
         //Test
         // create two obbs
@@ -236,55 +214,4 @@ namespace cgal_box_util {
         return getCollision(A, B);
     }
 
-    //PINVOKE inline bool OBBCollide(
-    //    float APosX, float APosY, float APosZ,//set the first obb's properties
-    //    float AHalfSizeX, float AHalfSizeY, float AHalfSizeZ,//set the half size
-    //    float AAxis0X, float AAxis0Y, float AAxis0Z,//set XAxis
-    //    float AAxis1X, float AAxis1Y, float AAxis1Z,//set YAxis
-    //    float AAxis2X, float AAxis2Y, float AAxis2Z,//set ZAxis
-    //
-    //    float BPosX, float BPosY, float BPosZ,//set the first obb's properties
-    //    float BHalfSizeX, float BHalfSizeY, float BHalfSizeZ,//set the half size
-    //    float BAxis0X, float BAxis0Y, float BAxis0Z,//set XAxis
-    //    float BAxis1X, float BAxis1Y, float BAxis1Z,//set YAxis
-    //    float BAxis2X, float BAxis2Y, float BAxis2Z//set ZAxis
-    //
-    //
-    //) {
-    //
-    //    //Test
-    //    // create two obbs
-    //    OBB A, B;
-    //
-    //    // set the first obb's properties
-    //    A.Pos = { APosX, APosY, APosZ }; // set its center position
-    //
-    //    // set the half size
-    //    A.Half_size.x = AHalfSizeX;
-    //    A.Half_size.y = AHalfSizeY;
-    //    A.Half_size.z = AHalfSizeZ;
-    //
-    //    // set the axes orientation
-    //    A.AxisX = { AAxis0X, AAxis0Y, AAxis0Z };
-    //    A.AxisY = { AAxis1X, AAxis1Y, AAxis1Z };
-    //    A.AxisZ = { AAxis2X, AAxis2Y, AAxis2Z };
-    //
-    //    // set the second obb's properties
-    //    B.Pos = { BPosX, BPosY, BPosZ }; // set its center position
-    //
-    //    // set the half size
-    //    B.Half_size.x = BHalfSizeX;
-    //    B.Half_size.y = BHalfSizeY;
-    //    B.Half_size.z = BHalfSizeZ;
-    //
-    //    // set the axes orientation
-    //    B.AxisX = { BAxis0X, BAxis0Y, BAxis0Z };
-    //    B.AxisY = { BAxis1X, BAxis1Y, BAxis1Z };
-    //    B.AxisZ = { BAxis2X, BAxis2Y, BAxis2Z };
-    //
-    //    // run the code and get the result as a message
-    //    return getCollision(A, B);
-    //
-    //
-    //}
 }

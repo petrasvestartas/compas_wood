@@ -20,7 +20,7 @@
 
 #ifndef CLIPPER_UTIL_H
 #define CLIPPER_UTIL_H
-//
+
 namespace clipper_util
 {
     namespace internal

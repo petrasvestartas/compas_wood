@@ -132,7 +132,7 @@ namespace joinery_solver_net
         {
             if (base_plane == Plane.Unset || base_plane.ZAxis.X < -1E+100)
                 compute_base_plane();
-            transform(Transform.PlaneToPlane(this.base_plane, target_plane));
+            transform(Transform.plane_to_plane(this.base_plane, target_plane));
         }
 
         public override string ToString()

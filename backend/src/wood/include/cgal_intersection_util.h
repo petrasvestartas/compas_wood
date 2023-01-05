@@ -44,7 +44,7 @@ namespace cgal_intersection_util
         return rc;
     }
 
-    inline CGAL::Aff_transformation_3<IK> PlaneToXY(
+    inline CGAL::Aff_transformation_3<IK> plane_to_xy(
         IK::Point_3 O0, IK::Plane_3 plane)
     {
         auto X0 = plane.base1();
@@ -142,7 +142,7 @@ namespace cgal_intersection_util
 
     //      //Works only if segments are not co-linear
     //         IK::Plane_3 plane(s0[0], normal);
-    //         CGAL::Aff_transformation_3<IK> xform = PlaneToXY(s0[0], plane);
+    //         CGAL::Aff_transformation_3<IK> xform = plane_to_xy(s0[0], plane);
     //         CGAL::Aff_transformation_3<IK> xform_Inv = xform.inverse();
 
     //         IK::Point_3 p0_0 = xform.transform(s0[0]);
@@ -287,7 +287,7 @@ namespace cgal_intersection_util
     inline bool LineLine3D(IK::Segment_3 &cutter_line, IK::Segment_3 &segment, IK::Point_3 &output)
     {
         IK::Plane_3 plane(cutter_line[0], CGAL::cross_product(cutter_line.to_vector(), segment.to_vector()));
-        CGAL::Aff_transformation_3<IK> xform = PlaneToXY(cutter_line[0], plane);
+        CGAL::Aff_transformation_3<IK> xform = plane_to_xy(cutter_line[0], plane);
         CGAL::Aff_transformation_3<IK> xform_Inv = xform.inverse();
 
         IK::Point_3 p0_0 = xform.transform(cutter_line[0]);

@@ -397,7 +397,7 @@ namespace cgal_polyline_util
         return true;
     }
 
-    inline CGAL::Aff_transformation_3<IK> PlaneToXY(
+    inline CGAL::Aff_transformation_3<IK> plane_to_xy(
         IK::Point_3 O0, IK::Plane_3 plane)
     {
         auto X0 = plane.base1();
@@ -678,7 +678,7 @@ namespace cgal_polyline_util
         CGAL_Polyline cp = polyline;
 
         // transform
-        CGAL::Aff_transformation_3<IK> xform_toXY = PlaneToXY(polyline[0], plane);
+        CGAL::Aff_transformation_3<IK> xform_toXY = plane_to_xy(polyline[0], plane);
         Transform(cp, xform_toXY);
 
         // check if closed

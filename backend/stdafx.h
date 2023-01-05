@@ -198,7 +198,7 @@ using RowMatrixXi = Eigen::Matrix<int, Eigen::Dynamic, Eigen::Dynamic, Eigen::Ro
 // Wood Library Utilities
 
 // Order Matters
-#include "cgal_print.h"
+// #include "cgal_print.h"
 #include "cgal_box_search.h"
 #include "cgal_vector_util.h"
 #include "cgal_intersection_util.h"
@@ -206,7 +206,7 @@ using RowMatrixXi = Eigen::Matrix<int, Eigen::Dynamic, Eigen::Dynamic, Eigen::Ro
 
 // Order does not matter
 #include "cgal_box_util.h"
-#include "cgal_data_set.h"
+// #include "cgal_data_set.h"
 #include "cgal_math_util.h"
 #include "cgal_mesh_util.h"
 #include "cgal_plane_util.h"

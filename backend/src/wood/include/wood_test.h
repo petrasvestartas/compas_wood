@@ -40,7 +40,7 @@
 
 // geometry methods
 #include "cgal_mesh_boolean.h"
-#include <polylabel/cgal_polylabel.h>
+#include "cgal_inscribe_util.h"
 #include "cgal_rectangle_util.h"
 
 // 3rd party libraries
@@ -172,11 +172,11 @@ namespace wood_test
      */
     bool type_geometry_name_offest_polygon_inside_and_divide_into_points();
 
-     /**
+    /**
      * example for geometry
      * inscribe rectangle in a polygon and divide its edges by points)
      */
-    bool type_geometry_name_rectangle_ponts_inscribed_in_a_polygon();
+    bool type_geometry_name_rectangle_points_inscribed_in_polygon();
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // GoogleTest

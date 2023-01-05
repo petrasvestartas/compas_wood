@@ -134,14 +134,6 @@ namespace cgal_vector_util
         return v;
     };
 
-    // inline void RotatePlane(
-    //     double angle,           // angle in radians
-    //     const ON_3dVector& axis // axis of rotation
-    //)
-    //{
-    //     return Rotate(sin(angle), cos(angle), axis);
-    // }
-
     inline IK::Point_3 ToPoint(IK::Vector_3 &a)
     {
         return IK::Point_3(a.x(), a.y(), a.z());

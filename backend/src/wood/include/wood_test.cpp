@@ -1171,7 +1171,7 @@ namespace wood_test
         polylines.push_back(p2);
 
         // main method
-        std::tuple<IK::Point_3, IK::Plane_3, double> result = cgal_polylabel::get_polylabel(polylines, 1.0);
+        std::tuple<IK::Point_3, IK::Plane_3, double> result = cgal_inscribe_util::get_polylabel(polylines, 1.0);
         IK::Point_3 center = std::get<0>(result);
         std::vector<IK::Point_3> points = {center};
 
@@ -1209,7 +1209,7 @@ namespace wood_test
         // main method
         std::vector<IK::Point_3> points;
 
-        cgal_polylabel::get_polylabel_circle_division_points(IK::Vector_3(0, 0, 0), {polygon}, points, 4, 0.75, 1.0, true);
+        cgal_inscribe_util::get_polylabel_circle_division_points(IK::Vector_3(0, 0, 0), {polygon}, points, 4, 0.75, 1.0, true);
 
         // display
         opengl_globals_geometry::add_grid();
@@ -1304,7 +1304,7 @@ namespace wood_test
         return true;
     }
 
-    bool type_geometry_name_rectangle_ponts_inscribed_in_a_polygon()
+    bool type_geometry_name_rectangle_points_inscribed_in_polygon()
     {
 
         // screenshot
@@ -1324,16 +1324,17 @@ namespace wood_test
 
         // main method
         std::vector<IK::Point_3> points;
-        std::vector<CGAL_Polyline> polygon_inscribed_rectangle;
+        CGAL_Polyline polygon_inscribed_rectangle;
         IK::Segment_3 segment;
-        double division_distance = 10;
-        cgal_polylabel::inscribe_rectangle({polygon}, polygon_inscribed_rectangle, points, segment, 0.95, 1, 10);
+        double division_distance = -10; // negative value = grid, positive = edge division
+        double scale = 0.95;
+        double precision = 1;
+        cgal_inscribe_util::inscribe_rectangle_in_convex_polygon({polygon}, polygon_inscribed_rectangle, points, segment, scale, precision, division_distance);
 
         // display
         opengl_globals_geometry::add_grid();
         viewer_wood::scale = 10;
-        std::vector<CGAL_Polyline> polylines = polygon_inscribed_rectangle; //, polygon_copy
-        // std::cout << polygon_inscribed_rectangle[1] << "\n";
+        std::vector<CGAL_Polyline> polylines = {polygon_inscribed_rectangle, polygon}; //, polygon_copy
         viewer_wood::add(polylines);
         viewer_wood::line_thickness = 10;
         viewer_wood::add(points);
@@ -1341,7 +1342,7 @@ namespace wood_test
         viewer_wood::scale = 1000;
 
         // test
-        return false;
+        return true;
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1431,9 +1432,9 @@ namespace wood_test
         EXPECT_EQ(type_geometry_name_offest_polygon_inside_and_divide_into_points(), true);
     }
 
-    TEST(wood, type_geometry_name_rectangle_ponts_inscribed_in_a_polygon)
+    TEST(wood, type_geometry_name_rectangle_points_inscribed_in_polygon)
     {
-        EXPECT_EQ(type_geometry_name_rectangle_ponts_inscribed_in_a_polygon(), true);
+        EXPECT_EQ(type_geometry_name_rectangle_points_inscribed_in_polygon(), true);
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -47,8 +47,8 @@ namespace rhino_util {
 
             Plane plane = (p0.DistanceTo(p1) < (r0 + r1) * 0.5 * 0.01) ? new Plane(new Point3d(p0), dir) : new Plane(new Point3d(p0), p1 - p0);
             //Plane plane =  new Plane(new Point3d(p0), dir) ;
-            Transform xform = Transform.PlaneToPlane(plane, new Plane(Point3d.Origin, Vector3d.YAxis, Vector3d.ZAxis));
-            Transform xformI = Transform.PlaneToPlane(new Plane(Point3d.Origin, Vector3d.YAxis, Vector3d.ZAxis), plane);
+            Transform xform = Transform.plane_to_plane(plane, new Plane(Point3d.Origin, Vector3d.YAxis, Vector3d.ZAxis));
+            Transform xformI = Transform.plane_to_plane(new Plane(Point3d.Origin, Vector3d.YAxis, Vector3d.ZAxis), plane);
             p0_.Transform(xform);
             p1_.Transform(xform);
 

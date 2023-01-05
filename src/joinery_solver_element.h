@@ -439,7 +439,7 @@ inline bool element::intersection_closed_and_open_paths_2D(
     /////////////////////////////////////////////////////////////////////////////////////
     //Create Transformation
     /////////////////////////////////////////////////////////////////////////////////////
-    CGAL::Aff_transformation_3<IK> xform_toXY = cgal_xform_util::PlaneToXY(b[0], plane);
+    CGAL::Aff_transformation_3<IK> xform_toXY = cgal_xform_util::plane_to_xy(b[0], plane);
     CGAL::Aff_transformation_3<IK> xform_toXY_Inv = xform_toXY.inverse();
     cgal_polyline_util::Transform(a, xform_toXY);
     cgal_polyline_util::Transform(b, xform_toXY);

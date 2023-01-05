@@ -765,7 +765,7 @@ namespace rhino_util
 
         public static void Orient(this Polyline polyline, Plane source, Plane target)
         {
-            Transform transform = Rhino.Geometry.Transform.PlaneToPlane(source, target);
+            Transform transform = Rhino.Geometry.Transform.plane_to_plane(source, target);
             polyline.Transform(transform);
         }
 
@@ -880,7 +880,7 @@ namespace rhino_util
 
             polyline.Add(polyline[0]);
 
-            polyline.Transform(Rhino.Geometry.Transform.PlaneToPlane(Plane.WorldXY, plane));
+            polyline.Transform(Rhino.Geometry.Transform.plane_to_plane(Plane.WorldXY, plane));
 
             return polyline;
         }
@@ -1512,7 +1512,7 @@ namespace rhino_util
         public static bool IsClockwiseClosedPolyline(this Polyline p, Plane plane)
         {
             Polyline polygon = new Polyline(p);
-            polygon.Transform(Rhino.Geometry.Transform.PlaneToPlane(plane, Plane.WorldXY));
+            polygon.Transform(Rhino.Geometry.Transform.plane_to_plane(plane, Plane.WorldXY));
 
             double sum = 0;
 
@@ -3142,8 +3142,8 @@ namespace rhino_util
 
             double tolerance = Rhino.RhinoDoc.ActiveDoc.ModelAbsoluteTolerance;
 
-            Transform xform = Rhino.Geometry.Transform.PlaneToPlane(P, Plane.WorldXY);
-            Transform xformI = Rhino.Geometry.Transform.PlaneToPlane(Plane.WorldXY, P);
+            Transform xform = Rhino.Geometry.Transform.plane_to_plane(P, Plane.WorldXY);
+            Transform xformI = Rhino.Geometry.Transform.plane_to_plane(Plane.WorldXY, P);
 
             //Transform to XY Plane
             Polyline[] plines = new Polyline[plines3D.Count];

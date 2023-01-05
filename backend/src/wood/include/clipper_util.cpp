@@ -1,7 +1,6 @@
 #include "../../../stdafx.h"
 #include "clipper_util.h"
 
-//
 namespace clipper_util
 {
     namespace internal
