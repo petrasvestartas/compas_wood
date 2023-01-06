@@ -371,6 +371,12 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
       <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/CMakeFiles/wood.dir/MinSizeRel/cmake_pch.hxx;%(ForcedIncludeFiles)</ForcedIncludeFiles>
       <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/CMakeFiles/wood.dir/RelWithDebInfo/cmake_pch.hxx;%(ForcedIncludeFiles)</ForcedIncludeFiles>
     </ClCompile>
+    <ClCompile Include="C:\IBOIS57\_Code\Software\Python\compas_wood\backend\src\wood\include\cgal_rectangle_util.cpp">
+      <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/CMakeFiles/wood.dir/Debug/cmake_pch.hxx;%(ForcedIncludeFiles)</ForcedIncludeFiles>
+      <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/CMakeFiles/wood.dir/Release/cmake_pch.hxx;%(ForcedIncludeFiles)</ForcedIncludeFiles>
+      <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/CMakeFiles/wood.dir/MinSizeRel/cmake_pch.hxx;%(ForcedIncludeFiles)</ForcedIncludeFiles>
+      <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/CMakeFiles/wood.dir/RelWithDebInfo/cmake_pch.hxx;%(ForcedIncludeFiles)</ForcedIncludeFiles>
+    </ClCompile>
     <ClCompile Include="C:\IBOIS57\_Code\Software\Python\compas_wood\backend\src\wood\include\clipper_util.cpp">
       <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/CMakeFiles/wood.dir/Debug/cmake_pch.hxx;%(ForcedIncludeFiles)</ForcedIncludeFiles>
       <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/CMakeFiles/wood.dir/Release/cmake_pch.hxx;%(ForcedIncludeFiles)</ForcedIncludeFiles>

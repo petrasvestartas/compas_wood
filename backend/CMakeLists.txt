@@ -387,6 +387,7 @@ if (BUILD_MY_PROJECTS)
   "${CMAKE_SOURCE_DIR}/src/wood/include/cgal_inscribe_util.cpp"
   "${CMAKE_SOURCE_DIR}/src/wood/include/cgal_xform_util.cpp"
   "${CMAKE_SOURCE_DIR}/src/wood/include/cgal_math_util.cpp"
+  "${CMAKE_SOURCE_DIR}/src/wood/include/cgal_rectangle_util.cpp"
   "${CMAKE_SOURCE_DIR}/src/wood/include/clipper_util.cpp"
   "${CMAKE_SOURCE_DIR}/src/wood/include/wood_element.cpp"
   "${CMAKE_SOURCE_DIR}/src/wood/include/wood_joint.cpp"
