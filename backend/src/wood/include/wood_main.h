@@ -1,26 +1,26 @@
-//#include "../../stdafx.h"
+// #include "../../stdafx.h"
 
-//#include "cgal_box_search.h"
+// #include "cgal_box_search.h"
 
-//#include "cgal_intersection_util.h"
+// #include "cgal_intersection_util.h"
 
-//#include "cgal_print.h"
-//#include "cgal_vector_util.h"
-//#include "cgal_xform_util.h"
+// #include "cgal_print.h"
+// #include "cgal_vector_util.h"
+// #include "cgal_xform_util.h"
 
-//#include "cgal_box_util.h"
-//#include "cgal_data_set.h"
-//#include "cgal_math_util.h"
-//#include "cgal_mesh_util.h"
-//#include "cgal_plane_util.h"
-//#include "cgal_polyline_util.h"
+// #include "cgal_box_util.h"
+// #include "cgal_data_set.h"
+// #include "cgal_math_util.h"
+// #include "cgal_mesh_util.h"
+// #include "cgal_plane_util.h"
+// #include "cgal_polyline_util.h"
 //
-//#include "clipper_util.h"
-//#include "rtree_util.h"
+// #include "clipper_util.h"
+// #include "rtree_util.h"
 
 #include "wood_cut.h"
-#include "wood_element.h"
-//#include "wood_joint.h"
+#include "wood_joint.h"
+#include "wood_element.h" //wood eleement has: #include "wood_joint.h"
 #include "wood_joint_lib.h"
 
 #ifndef WOOD_MAIN_H
@@ -82,7 +82,7 @@ namespace wood_main
     bool pair_search(
 
         // Input
-        std::vector<wood::element> &elements,             // real wood::element
+        std::vector<wood::element> &elements,       // real wood::element
         std::array<CGAL_Polyline, 4> &beam_volumes, // wood::joint volumes
         const int &polyline_id_0,
         const int &polyline_id_1,
