@@ -173,6 +173,18 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </ProjectReference>
+    <ProjectReference Include="C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\Clipper2.vcxproj">
+      <Project>{48216797-83C6-35DC-BB0E-BC0AB9A00EB3}</Project>
+      <Name>Clipper2</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\STB.vcxproj">
+      <Project>{7AEE947E-638C-3F44-B6CA-A62F9946E6D9}</Project>
+      <Name>STB</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\imgui_lib.vcxproj">
+      <Project>{A9F3206D-571C-344B-AA65-291FD5C8DE40}</Project>
+      <Name>imgui_lib</Name>
+    </ProjectReference>
     <ProjectReference Include="C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\wood.vcxproj">
       <Project>{6E8BF861-17A5-3584-8FAC-2A42BFF2E5B5}</Project>
       <Name>wood</Name>

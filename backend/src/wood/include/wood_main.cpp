@@ -98,8 +98,8 @@ namespace wood_main
                     fabs((1.0 + wood_globals::DISTANCE * 1) * (AABBXY.zmax() - AABBXY.zmin()) * 0.5))};
             // CGAL_Debug(1.0 + wood_globals::DISTANCE * 0.00001);
 
-            cgal_box_util::TransformPlaneOrPlane(box, xform_toXY_Inv);
-            cgal_box_util::Assign(box, elements[(int)(i * 0.5)].oob, 5);
+            cgal_box_util::transform_plane_as_vector_array(box, xform_toXY_Inv);
+            cgal_box_util::assign(box, elements[(int)(i * 0.5)].oob, 5);
 
             //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
             // Check orientation of polylines and reverse if needed
@@ -1379,7 +1379,7 @@ namespace wood_main
             // std::vector<int> result;
             auto callback = [&result, i, &elements](int foundValue) -> bool
             {
-                if (i < foundValue && cgal_box_util::GetCollision(elements[i].oob, elements[foundValue].oob))
+                if (i < foundValue && cgal_box_util::get_collision(elements[i].oob, elements[foundValue].oob))
                 {
                     result.emplace_back(i);
                     result.emplace_back(foundValue);

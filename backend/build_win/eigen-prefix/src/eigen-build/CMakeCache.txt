@@ -105,10 +105,10 @@ BLAS_vecLib_LIBRARY:FILEPATH=BLAS_vecLib_LIBRARY-NOTFOUND
 BUILD_TESTING:BOOL=ON
 
 //The directory containing a CMake configuration file for Boost.
-Boost_DIR:PATH=C:/Users/petra/.conda/envs/wood-dev/Library/lib/cmake/Boost-1.74.0
+Boost_DIR:PATH=Boost_DIR-NOTFOUND
 
 //Path to a file.
-Boost_INCLUDE_DIR:PATH=C:/Users/petra/.conda/envs/wood-dev/Library/include
+Boost_INCLUDE_DIR:PATH=C:/IBOIS57/_Code/Software/CPP/Boost
 
 //Path to a file.
 CHOLMOD_INCLUDES:PATH=CHOLMOD_INCLUDES-NOTFOUND
@@ -614,12 +614,6 @@ FFTW_LIB:FILEPATH=FFTW_LIB-NOTFOUND
 GITCOMMAND:FILEPATH=C:/Program Files/Git/cmd/git.exe
 
 //Path to a file.
-GMP_INCLUDES:PATH=C:/Users/petra/.conda/envs/wood-dev/Library/mingw-w64/include
-
-//Path to a library.
-GMP_LIBRARIES:FILEPATH=C:/Users/petra/.conda/envs/wood-dev/Library/lib/gmp.lib
-
-//Path to a file.
 GOOGLEHASH_INCLUDES:PATH=GOOGLEHASH_INCLUDES-NOTFOUND
 
 //Installation directory of HWLOC library
@@ -651,13 +645,10 @@ MEMORYCHECK_COMMAND:FILEPATH=MEMORYCHECK_COMMAND-NOTFOUND
 MEMORYCHECK_SUPPRESSIONS_FILE:FILEPATH=
 
 //Path to a file.
-MPFR_INCLUDES:PATH=C:/Users/petra/.conda/envs/wood-dev/Library/include
+MPFR_INCLUDES:PATH=C:/msys64/mingw64/include
 
 //Path to a library.
-MPFR_LIBRARIES:FILEPATH=C:/Users/petra/.conda/envs/wood-dev/Library/lib/mpfr.lib
-
-//Path to a file.
-MPREAL_INCLUDES:PATH=MPREAL_INCLUDES-NOTFOUND
+MPFR_LIBRARIES:FILEPATH=MPFR_LIBRARIES-NOTFOUND
 
 //Path to a library.
 OMP_gomp_LIBRARY:FILEPATH=OMP_gomp_LIBRARY-NOTFOUND
@@ -684,7 +675,7 @@ PKG_CONFIG_ARGN:STRING=
 //pkg-config executable
 PKG_CONFIG_EXECUTABLE:FILEPATH=C:/msys64/mingw64/bin/pkg-config.exe
 
-QT_QMAKE_EXECUTABLE:FILEPATH=C:/Users/petra/.conda/envs/wood-dev/Library/bin/qmake.exe
+QT_QMAKE_EXECUTABLE:FILEPATH=NOTFOUND
 
 //Name of the computer/site where compile is being run
 SITE:STRING=DESKTOP-OD073GK
@@ -706,9 +697,6 @@ UMFPACK_INCLUDES:PATH=UMFPACK_INCLUDES-NOTFOUND
 
 //Path to a library.
 UMFPACK_LIBRARIES:FILEPATH=UMFPACK_LIBRARIES-NOTFOUND
-
-//The directory containing a CMake configuration file for boost_headers.
-boost_headers_DIR:PATH=C:/Users/petra/.conda/envs/wood-dev/Library/lib/cmake/boost_headers-1.74.0
 
 //Dependencies for the target
 eigen_lapack_LIB_DEPENDS:STATIC=general;eigen_blas;
@@ -778,6 +766,8 @@ BLAS_sunperf_LIBRARY-ADVANCED:INTERNAL=1
 BLAS_vecLib_LIBRARY-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: Boost_DIR
 Boost_DIR-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: Boost_INCLUDE_DIR
+Boost_INCLUDE_DIR-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CHOLMOD_INCLUDES
 CHOLMOD_INCLUDES-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CHOLMOD_LIBRARIES
@@ -1041,21 +1031,13 @@ FFTW_INCLUDES-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: FFTW_LIB
 FFTW_LIB-ADVANCED:INTERNAL=1
 //Details about finding Boost
-FIND_PACKAGE_MESSAGE_DETAILS_Boost:INTERNAL=[C:/Users/petra/.conda/envs/wood-dev/Library/lib/cmake/Boost-1.74.0/BoostConfig.cmake][c ][v1.74.0(1.53.0)]
-//Details about finding GMP
-FIND_PACKAGE_MESSAGE_DETAILS_GMP:INTERNAL=[C:/Users/petra/.conda/envs/wood-dev/Library/mingw-w64/include][C:/Users/petra/.conda/envs/wood-dev/Library/lib/gmp.lib][v()]
-//Details about finding MPFR
-FIND_PACKAGE_MESSAGE_DETAILS_MPFR:INTERNAL=[C:/Users/petra/.conda/envs/wood-dev/Library/include][C:/Users/petra/.conda/envs/wood-dev/Library/lib/mpfr.lib][TRUE][v(1.0.0)]
+FIND_PACKAGE_MESSAGE_DETAILS_Boost:INTERNAL=[C:/IBOIS57/_Code/Software/CPP/Boost][c ][v1.77.0(1.53.0)]
 //Details about finding PkgConfig
 FIND_PACKAGE_MESSAGE_DETAILS_PkgConfig:INTERNAL=[C:/msys64/mingw64/bin/pkg-config.exe][v1.8.0()]
 //Details about finding Threads
 FIND_PACKAGE_MESSAGE_DETAILS_Threads:INTERNAL=[TRUE][v()]
 //ADVANCED property for variable: GITCOMMAND
 GITCOMMAND-ADVANCED:INTERNAL=1
-//ADVANCED property for variable: GMP_INCLUDES
-GMP_INCLUDES-ADVANCED:INTERNAL=1
-//ADVANCED property for variable: GMP_LIBRARIES
-GMP_LIBRARIES-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: GOOGLEHASH_INCLUDES
 GOOGLEHASH_INCLUDES-ADVANCED:INTERNAL=1
 HWLOC_CFLAGS:INTERNAL=
@@ -1103,8 +1085,6 @@ MEMORYCHECK_SUPPRESSIONS_FILE-ADVANCED:INTERNAL=1
 MPFR_INCLUDES-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: MPFR_LIBRARIES
 MPFR_LIBRARIES-ADVANCED:INTERNAL=1
-//ADVANCED property for variable: MPREAL_INCLUDES
-MPREAL_INCLUDES-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: OMP_gomp_LIBRARY
 OMP_gomp_LIBRARY-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: OMP_iomp5_LIBRARY
@@ -1154,14 +1134,20 @@ SUPERLU_LIBRARIES-ADVANCED:INTERNAL=1
 UMFPACK_INCLUDES-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: UMFPACK_LIBRARIES
 UMFPACK_LIBRARIES-ADVANCED:INTERNAL=1
+//Components requested for this build tree.
+_Boost_COMPONENTS_SEARCHED:INTERNAL=
+//Last used Boost_INCLUDE_DIR value.
+_Boost_INCLUDE_DIR_LAST:INTERNAL=C:/IBOIS57/_Code/Software/CPP/Boost
+//Last used Boost_NAMESPACE value.
+_Boost_NAMESPACE_LAST:INTERNAL=boost
+//Last used Boost_USE_MULTITHREADED value.
+_Boost_USE_MULTITHREADED_LAST:INTERNAL=TRUE
 //Result of TRY_COMPILE
 _CompileResult:INTERNAL=TRUE
 //CMAKE_INSTALL_PREFIX during last run
 _GNUInstallDirs_LAST_CMAKE_INSTALL_PREFIX:INTERNAL=C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/install/eigen
 __pkg_config_checked_HWLOC:INTERNAL=1
 __pkg_config_checked_PKG_FFTW:INTERNAL=1
-//ADVANCED property for variable: boost_headers_DIR
-boost_headers_DIR-ADVANCED:INTERNAL=1
 //The Visual Studio Release with Service Pack
 my_service_pack:INTERNAL=19.31.31104.0
 //Test standard_math_library_linked_to_automatically

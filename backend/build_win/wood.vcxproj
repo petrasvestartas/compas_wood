@@ -114,8 +114,29 @@
       <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
       <ProxyFileName>%(Filename)_p.c</ProxyFileName>
     </Midl>
+    <PostBuildEvent>
+      <Message>	</Message>
+      <Command>setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -E copy_if_different C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/install/cgal/auxiliary/gmp/lib/libgmp-10.dll C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/Release
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -E copy_if_different C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/install/cgal/auxiliary/gmp/lib/libmpfr-4.dll C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/Release
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+    </PostBuildEvent>
     <Link>
-      <AdditionalDependencies>Clipper2.lib;opengl32.lib;imgui_lib.lib;glfw3.lib;glad.lib;assimp.lib;stb.lib;zlibstatic.lib;libgmp-10.lib;libmpfr-4.lib;gtest.lib;gmock.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
+      <AdditionalDependencies>Debug\Clipper2.lib;opengl32.lib;Debug\imgui_lib.lib;glfw3.lib;glad.lib;assimp.lib;stb.lib;zlibstatic.lib;libgmp-10.lib;libmpfr-4.lib;gtest.lib;gmock.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/install/glfw/src;C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/install/glfw/src/$(Configuration);C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/install/glad;C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/install/glad/$(Configuration);C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/install/assimp/lib;C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/install/assimp/lib/$(Configuration);C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/install/assimp/contrib/zlib;C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/install/assimp/contrib/zlib/$(Configuration);C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/Release;C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/Release/$(Configuration);C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/install/cgal/auxiliary/gmp/lib;C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/install/cgal/auxiliary/gmp/lib/$(Configuration);C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/install/googletest/lib;C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/install/googletest/lib/$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalOptions>%(AdditionalOptions) /machine:x64</AdditionalOptions>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -158,8 +179,29 @@
       <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
       <ProxyFileName>%(Filename)_p.c</ProxyFileName>
     </Midl>
+    <PostBuildEvent>
+      <Message>	</Message>
+      <Command>setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -E copy_if_different C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/install/cgal/auxiliary/gmp/lib/libgmp-10.dll C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/Release
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -E copy_if_different C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/install/cgal/auxiliary/gmp/lib/libmpfr-4.dll C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/Release
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+    </PostBuildEvent>
     <Link>
-      <AdditionalDependencies>Clipper2.lib;opengl32.lib;imgui_lib.lib;glfw3.lib;glad.lib;assimp.lib;stb.lib;zlibstatic.lib;libgmp-10.lib;libmpfr-4.lib;gtest.lib;gmock.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
+      <AdditionalDependencies>Release\Clipper2.lib;opengl32.lib;Release\imgui_lib.lib;glfw3.lib;glad.lib;assimp.lib;stb.lib;zlibstatic.lib;libgmp-10.lib;libmpfr-4.lib;gtest.lib;gmock.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/install/glfw/src;C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/install/glfw/src/$(Configuration);C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/install/glad;C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/install/glad/$(Configuration);C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/install/assimp/lib;C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/install/assimp/lib/$(Configuration);C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/install/assimp/contrib/zlib;C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/install/assimp/contrib/zlib/$(Configuration);C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/Release;C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/Release/$(Configuration);C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/install/cgal/auxiliary/gmp/lib;C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/install/cgal/auxiliary/gmp/lib/$(Configuration);C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/install/googletest/lib;C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/install/googletest/lib/$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalOptions>%(AdditionalOptions) /machine:x64</AdditionalOptions>
       <GenerateDebugInformation>false</GenerateDebugInformation>
@@ -202,8 +244,29 @@
       <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
       <ProxyFileName>%(Filename)_p.c</ProxyFileName>
     </Midl>
+    <PostBuildEvent>
+      <Message>	</Message>
+      <Command>setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -E copy_if_different C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/install/cgal/auxiliary/gmp/lib/libgmp-10.dll C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/Release
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -E copy_if_different C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/install/cgal/auxiliary/gmp/lib/libmpfr-4.dll C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/Release
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+    </PostBuildEvent>
     <Link>
-      <AdditionalDependencies>Clipper2.lib;opengl32.lib;imgui_lib.lib;glfw3.lib;glad.lib;assimp.lib;stb.lib;zlibstatic.lib;libgmp-10.lib;libmpfr-4.lib;gtest.lib;gmock.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
+      <AdditionalDependencies>MinSizeRel\Clipper2.lib;opengl32.lib;MinSizeRel\imgui_lib.lib;glfw3.lib;glad.lib;assimp.lib;stb.lib;zlibstatic.lib;libgmp-10.lib;libmpfr-4.lib;gtest.lib;gmock.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/install/glfw/src;C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/install/glfw/src/$(Configuration);C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/install/glad;C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/install/glad/$(Configuration);C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/install/assimp/lib;C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/install/assimp/lib/$(Configuration);C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/install/assimp/contrib/zlib;C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/install/assimp/contrib/zlib/$(Configuration);C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/Release;C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/Release/$(Configuration);C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/install/cgal/auxiliary/gmp/lib;C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/install/cgal/auxiliary/gmp/lib/$(Configuration);C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/install/googletest/lib;C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/install/googletest/lib/$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalOptions>%(AdditionalOptions) /machine:x64</AdditionalOptions>
       <GenerateDebugInformation>false</GenerateDebugInformation>
@@ -245,8 +308,29 @@
       <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
       <ProxyFileName>%(Filename)_p.c</ProxyFileName>
     </Midl>
+    <PostBuildEvent>
+      <Message>	</Message>
+      <Command>setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -E copy_if_different C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/install/cgal/auxiliary/gmp/lib/libgmp-10.dll C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/Release
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -E copy_if_different C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/install/cgal/auxiliary/gmp/lib/libmpfr-4.dll C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/Release
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+    </PostBuildEvent>
     <Link>
-      <AdditionalDependencies>Clipper2.lib;opengl32.lib;imgui_lib.lib;glfw3.lib;glad.lib;assimp.lib;stb.lib;zlibstatic.lib;libgmp-10.lib;libmpfr-4.lib;gtest.lib;gmock.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
+      <AdditionalDependencies>RelWithDebInfo\Clipper2.lib;opengl32.lib;RelWithDebInfo\imgui_lib.lib;glfw3.lib;glad.lib;assimp.lib;stb.lib;zlibstatic.lib;libgmp-10.lib;libmpfr-4.lib;gtest.lib;gmock.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/install/glfw/src;C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/install/glfw/src/$(Configuration);C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/install/glad;C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/install/glad/$(Configuration);C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/install/assimp/lib;C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/install/assimp/lib/$(Configuration);C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/install/assimp/contrib/zlib;C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/install/assimp/contrib/zlib/$(Configuration);C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/Release;C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/Release/$(Configuration);C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/install/cgal/auxiliary/gmp/lib;C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/install/cgal/auxiliary/gmp/lib/$(Configuration);C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/install/googletest/lib;C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/install/googletest/lib/$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalOptions>%(AdditionalOptions) /machine:x64</AdditionalOptions>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -454,6 +538,14 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
       <Name>ZERO_CHECK</Name>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </ProjectReference>
+    <ProjectReference Include="C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\Clipper2.vcxproj">
+      <Project>{48216797-83C6-35DC-BB0E-BC0AB9A00EB3}</Project>
+      <Name>Clipper2</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win\imgui_lib.vcxproj">
+      <Project>{A9F3206D-571C-344B-AA65-291FD5C8DE40}</Project>
+      <Name>imgui_lib</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
