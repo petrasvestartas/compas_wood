@@ -383,6 +383,7 @@ if (BUILD_MY_PROJECTS)
   ###############################################################################
   add_executable(${PROJECT_NAME} main.cpp 
   "${CMAKE_SOURCE_DIR}/src/wood/include/wood_globals.cpp"
+  "${CMAKE_SOURCE_DIR}/src/wood/include/cgal_box_util.cpp"
   "${CMAKE_SOURCE_DIR}/src/wood/include/rtree_util.cpp"
   "${CMAKE_SOURCE_DIR}/src/wood/include/cgal_inscribe_util.cpp"
   "${CMAKE_SOURCE_DIR}/src/wood/include/cgal_xform_util.cpp"

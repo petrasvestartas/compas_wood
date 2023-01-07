@@ -10,6 +10,9 @@
     <ClCompile Include="C:\IBOIS57\_Code\Software\Python\compas_wood\backend\src\wood\include\wood_globals.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="C:\IBOIS57\_Code\Software\Python\compas_wood\backend\src\wood\include\cgal_box_util.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="C:\IBOIS57\_Code\Software\Python\compas_wood\backend\src\wood\include\rtree_util.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
