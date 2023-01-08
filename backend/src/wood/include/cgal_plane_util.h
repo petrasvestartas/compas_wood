@@ -1,116 +1,86 @@
-#pragma once
-//#include "../../stdafx.h"
-//#include "cgal_intersection_util.h"
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// DEVELOPER:
+// Petras Vestartas, petasvestartas@gmail.com
+// Funding: NCCR Digital Fabrication and EPFL
+//
+// HISTORY:
+// 1) The first version was written during the PhD 8928 thesis of Petras Vestartas called:
+// Design-to-Fabrication Workflow for Raw-Sawn-Timber using Joinery Solver, 2017-2021
+// 2) The translation from C# to C++ was started during the funding of NCCR in two steps
+// A - standalone C++ version of the joinery solver and B - integration to COMPAS framework (Python Pybind11)
+//
+// RESTRICTIONS:
+// The code cannot be used for commercial reasons
+// If you would like to use or change the code for research or educational reasons,
+// please contact the developer first
+//
+// 3RD PARTY LIBRARIES:
+// None
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-namespace cgal_plane_util {
-    inline IK::Plane_3 offset(IK::Plane_3& mainPlane, double d) {
-        IK::Vector_3 normal = mainPlane.orthogonal_vector();
-        cgal_vector_util::Unitize(normal);
-        normal *= d;
+#ifndef CGAL_PLANE_UTIL_H
+#define CGAL_PLANE_UTIL_H
 
-        return IK::Plane_3(mainPlane.point() + normal, normal);
+namespace cgal_plane_util
+{
+    namespace internal
+    {
+        /**
+         * Get length of a 3D vector, taken from the OpenNURBS library: https://github.com/mcneel/opennurbs
+         *
+         * @param [in] x The first coordinate of the vector
+         * @param [in] y The second coordinate of the vector
+         * @param [in] z The third coordinate of the vector
+         * @return The length of the vector
+         */
+        double length(double x, double y, double z);
+
+        /**
+         * Unitize the vector by dividing its coordinates by its length
+         *
+         * @param [in, out] vector 3D vector
+         * @return true if the vector length is not equal to zero
+         */
+        bool unitize(IK::Vector_3 &vector);
     }
 
-    inline IK::Vector_3 PointAt2(IK::Vector_3(&input)[4], double s, double t) {
-        return (input[0] + s * input[1] + t * input[2]);
-    }
+    /**
+     * Move a plane by a distance along its normal
+     *
+     * @param [in] plane plane whose origin is move by the unitized normal
+     * @param [in] distance distance to move the plane origin
+     * @return moved plane
+     */
+    IK::Plane_3 translate_by_normal(const IK::Plane_3 &plane, const double &distance);
 
-    inline IK::Vector_3 PointAt(IK::Vector_3(&input)[4], double s, double t, double c) {
-        return (input[0] + s * input[1] + t * input[2] + c * input[3]);
-    }
+    /**
+     * Check if two planes have the same or flipped normal
+     *
+     * @param [in] plane0 first plane
+     * @param [in] plane1 second plane
+     * @param [in] can_be_flipped bool flag to indicate if the normal can be flipped
+     * @return true if two planes ponting to the same or flipped normal
+     */
+    bool is_same_direction(const IK::Plane_3 &plane0, const IK::Plane_3 &plane1, bool can_be_flipped = true);
 
-    inline CGAL_Polyline PlaneToLine(IK::Point_3& point, IK::Plane_3& plane, double x = 1, double y = 1, double z = 1) {
-        CGAL_Polyline axes(2);
-        IK::Point_3 center = point;
-        IK::Vector_3 n = plane.orthogonal_vector();
-        cgal_vector_util::Unitize(n);
-        n *= x;
-        IK::Point_3 normal = point + n; // +
-        axes[0] = center;
-        axes[1] = normal;
+    /**
+     * Check if two planes are in the same position
+     *
+     * @param [in] plane0 first plane
+     * @param [in] plane1 second plane
+     * @return true origins are very close to each other
+     */
+    bool is_same_position(const IK::Plane_3 &plane0, const IK::Plane_3 &plane1);
 
-        return axes;
-    }
-
-    inline CGAL_Polyline PlaneToPolyline(IK::Plane_3& plane, double x = 1, double y = 1, double z = 1) {
-        auto point = plane.point();
-        auto X0 = plane.base1();
-        auto Y0 = plane.base2();
-        auto Z0 = plane.orthogonal_vector();
-        cgal_vector_util::Unitize(X0);
-        cgal_vector_util::Unitize(Y0);
-        cgal_vector_util::Unitize(Z0);
-
-        CGAL_Polyline axes(6);
-
-        axes[0] = (point);
-        axes[1] = (point + X0 * x * 1.25);
-        axes[2] = (point);
-        axes[3] = (point + Y0 * y);
-        axes[4] = (point);
-        axes[5] = (point + Z0 * z);
-
-        return axes;
-    }
-
-    inline CGAL_Polyline PlaneToPolyline(IK::Vector_3(&input)[4], double x = 1, double y = 1, double z = 1) {
-        CGAL_Polyline axes(6);
-
-        axes[0] = (cgal_vector_util::ToPoint(input[0]));
-        axes[1] = (cgal_vector_util::ToPoint(input[0]) + input[1] * x * 1.25);
-        axes[2] = (cgal_vector_util::ToPoint(input[0]));
-        axes[3] = (cgal_vector_util::ToPoint(input[0]) + input[2] * y);
-        axes[4] = (cgal_vector_util::ToPoint(input[0]));
-        axes[5] = (cgal_vector_util::ToPoint(input[0]) + input[3] * z);
-
-        return axes;
-    }
-
-    inline void Assign(IK::Vector_3(&source)[4], IK::Vector_3(&target)[4], int n) {
-        for (int i = 0; i < n; i++)
-            target[i] = source[i];
-    }
-
-    inline void AveragePlaneOrigin(IK::Vector_3(&pl0)[4], IK::Vector_3(&pl1)[4], IK::Vector_3(&result)[4]) {
-        IK::Vector_3 mid;
-        cgal_vector_util::MidVector(pl0[0], pl0[1], mid);
-
-        result[0] = mid;
-        result[1] = pl0[1];
-        result[2] = pl0[2];
-        result[3] = pl0[3];
-    }
-
-    inline bool IsSameDirection(IK::Plane_3& pl0, IK::Plane_3& pl1, bool canBeFlipped = true, double tolerance = 0.0001) {
-        auto pl0_v = pl0.orthogonal_vector();
-        auto pl1_v = pl1.orthogonal_vector();
-        if (canBeFlipped) {
-            return cgal_vector_util::IsParallelTo(pl0_v, pl1_v, tolerance) != 0;
-        } else {
-            return cgal_vector_util::IsParallelTo(pl0_v, pl1_v, tolerance) == -1;
-        }
-    }
-
-    inline void ClosestPointTo(IK::Vector_3(&plane)[4], IK::Vector_3& p, IK::Vector_3& result) {
-        const IK::Vector_3 v(p.x() - plane[0].x(), p.y() - plane[0].y(), p.z() - plane[0].z());
-        double s = v * plane[1];
-        double t = v * plane[2];
-        result = PointAt2(plane, s, t);
-    }
-
-    inline bool IsSamePosition(IK::Plane_3& pl0, IK::Plane_3& pl1, double tolerance = 0.0001) {
-        IK::Point_3 p0 = pl0.point();
-        IK::Point_3 p1 = pl1.point();
-
-        IK::Point_3 cp0 = pl0.projection(p1);
-        IK::Point_3 cp1 = pl1.projection(p0);
-
-        return cgal_vector_util::DistanceSquare(cp0, p1) < tolerance && cgal_vector_util::DistanceSquare(cp1, p0) < tolerance;
-    }
-
-    inline bool IsCoplanar(IK::Plane_3& pl0, IK::Plane_3& pl1, bool canBeFlipped = true, double tolerance = 0.01) {
-        return IsSameDirection(pl0, pl1, canBeFlipped, tolerance) && IsSamePosition(pl0, pl1, tolerance);
-    }
-
-
+    /**
+     * Check if two planes have the same or flipped normal and share the same origin
+     *
+     * @param [in] plane0 first plane
+     * @param [in] plane1 second plane
+     * @param [in] can_be_flipped bool flag to indicate if the normal can be flipped
+     * @return true if two planes are pointing to the same or flipped normal and share the same origin
+     */
+    bool is_coplanar(const IK::Plane_3 &plane0, const IK::Plane_3 &plane1, bool can_be_flipped = true);
 }
+
+#endif // CGAL_PLANE_UTIL_H

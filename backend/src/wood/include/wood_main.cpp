@@ -615,7 +615,7 @@ namespace wood_main
             for (int j = 0; j < Plane1.size(); j++)
             {
                 // Check if polygons are co-planar
-                bool coplanar = cgal_plane_util::IsCoplanar(Plane0[i], Plane1[j], false, wood_globals::DISTANCE); // O(n*n) +10 ms
+                bool coplanar = cgal_plane_util::is_coplanar(Plane0[i], Plane1[j], false); // O(n*n) +10 ms
 
 #ifdef DEBUG_wood_MAIN_LOCAL_SEARCH
                 if (coplanar)
@@ -992,8 +992,8 @@ namespace wood_main
                                     // Intersect current top and bottom wood::element planes, including the offseted wood::joint face planes with |......................| end planes
                                     ////////////////////////////////////////////////////////////////////////////////
                                     double d0 = 0.5 * std::sqrt(CGAL::squared_distance(Plane0[0].point(), Plane0[1].projection(Plane0[0].point())));
-                                    IK::Plane_3 offset_plane_0 = cgal_plane_util::offset(Plane0[i], -d0);
-                                    IK::Plane_3 offset_plane_1 = cgal_plane_util::offset(Plane0[i], d0);
+                                    IK::Plane_3 offset_plane_0 = cgal_plane_util::translate_by_normal(Plane0[i], -d0);
+                                    IK::Plane_3 offset_plane_1 = cgal_plane_util::translate_by_normal(Plane0[i], d0);
 
                                     IK::Plane_3 loopOfPlanes0[4] = {
                                         offset_plane_0,
@@ -1638,10 +1638,10 @@ namespace wood_main
             if (in_s0_s1_e20_e31[i][2] != in_s0_s1_e20_e31[i][3])
             {
                 if (
-                    !cgal_plane_util::IsSameDirection(elements[in_s0_s1_e20_e31[i][0]].planes[0],
-                                                      elements[in_s0_s1_e20_e31[i][3]].planes[0]) ||
-                    !cgal_plane_util::IsSameDirection(elements[in_s0_s1_e20_e31[i][1]].planes[0],
-                                                      elements[in_s0_s1_e20_e31[i][2]].planes[0]))
+                    !cgal_plane_util::is_same_direction(elements[in_s0_s1_e20_e31[i][0]].planes[0],
+                                                        elements[in_s0_s1_e20_e31[i][3]].planes[0]) ||
+                    !cgal_plane_util::is_same_direction(elements[in_s0_s1_e20_e31[i][1]].planes[0],
+                                                        elements[in_s0_s1_e20_e31[i][2]].planes[0]))
                 {
                     std::cout << "wood_main.cpp -> three_valence_joint_addition_vidy -> planes are not parallel \n";
                     std::cout << "wood_main.cpp -> three_valence_joint_addition_vidy ->"
@@ -2293,7 +2293,7 @@ namespace wood_main
             for (int i = 0; i < elements.size(); i++)
             {
                 int v, f;
-                cgal_mesh_util::mesh_from_polylines(output_plines[i], elements[i].planes[0], top_face_triangulation[i], v, f);
+                cgal_polyline_mesh_util::mesh_from_polylines(output_plines[i], elements[i].planes[0], top_face_triangulation[i], v, f);
             }
         }
     }

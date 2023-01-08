@@ -170,7 +170,7 @@ void viewer_wood::add_loft(std::vector<std::vector<CGAL_Polyline>> &output_pline
     std::vector<int> out_triangles;
 
     for (auto &polylines : output_plines)
-        cgal_mesh_util::closed_mesh_from_polylines_vnf(polylines, out_vertices, out_normals, out_triangles);
+        cgal_polyline_mesh_util::closed_mesh_from_polylines_vnf(polylines, out_vertices, out_normals, out_triangles, viewer_wood::scale);
 
     opengl_globals_geometry::meshes.add(out_vertices, out_normals, out_triangles, colors::white);
 
