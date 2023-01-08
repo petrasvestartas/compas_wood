@@ -493,7 +493,8 @@ namespace wood_main
 
         // Intersection lMax with midPlane
         IK::Point_3 midPlane_lMax;
-        cgal_intersection_util::PlaneLineIntersection(midPlane, lMax, midPlane_lMax);
+        cgal_intersection_util::line_plane(lMax, midPlane, midPlane_lMax);
+        // cgal_intersection_util::PlaneLineIntersection(midPlane, lMax, midPlane_lMax);
 
         // Get max distance from middle point of min line
         int maxID = CGAL::squared_distance(lMax[0], midPlane_lMax) > CGAL::squared_distance(lMax[1], midPlane_lMax) ? 0 : 1;
@@ -512,7 +513,7 @@ namespace wood_main
 
         // intersection mid plane with four lines and move it in both directions
         // CGAL_Polyline joint_area;
-        cgal_intersection_util::Plane4LinesIntersection(midPlane, cx0_py0__cy0_px0, cx0_py1__cy1_px0, cx1_py1__cy1_px1, cx1_py0__cy0_px1, joint_area);
+        cgal_intersection_util::plane_4lines(midPlane, cx0_py0__cy0_px0, cx0_py1__cy1_px0, cx1_py1__cy1_px1, cx1_py0__cy0_px1, joint_area);
 
         //////////////////////////////////////////////////////////////////////////////
         // Move rectangles in opposite direction
@@ -665,12 +666,12 @@ namespace wood_main
 
                             // Intersect: a) clipper region, b) center plane
 
-                            bool isLine = cgal_intersection_util::PolylinePlane(joint_area, averagePlane0, alignmentSegment, joint_line0);
+                            bool isLine = cgal_intersection_util::polyline_plane(joint_area, averagePlane0, alignmentSegment, joint_line0);
 
                             // Planes to get a quad
                             if (isLine && joint_line0.squared_length() > wood_globals::DISTANCE)
                             { //
-                                bool isQuad = cgal_intersection_util::QuadFromLineAndTopBottomPlanes(Plane0[i], joint_line0, Plane0[0], Plane0[1], joint_quads0);
+                                bool isQuad = cgal_intersection_util::get_quad_from_line_topbottomplanes(Plane0[i], joint_line0, Plane0[0], Plane0[1], joint_quads0);
                             }
                             else
                             {
@@ -698,12 +699,12 @@ namespace wood_main
 
                             IK::Segment_3 alignmentSegment(CGAL::midpoint(Polyline1[0][i - 2], Polyline1[1][i - 2]), CGAL::midpoint(Polyline1[0][i - 1], Polyline1[1][i - 1]));
 
-                            bool isLine = cgal_intersection_util::PolylinePlane(joint_area, averagePlane1, alignmentSegment, joint_line1);
+                            bool isLine = cgal_intersection_util::polyline_plane(joint_area, averagePlane1, alignmentSegment, joint_line1);
 
                             // Planes to get a quad
                             if (isLine && joint_line1.squared_length() > wood_globals::DISTANCE)
                             { //
-                                bool isQuad = cgal_intersection_util::QuadFromLineAndTopBottomPlanes(Plane1[j], joint_line1, Plane1[0], Plane1[1], joint_quads1);
+                                bool isQuad = cgal_intersection_util::get_quad_from_line_topbottomplanes(Plane1[j], joint_line1, Plane1[0], Plane1[1], joint_quads1);
                             }
                             else
                             {
@@ -922,11 +923,11 @@ namespace wood_main
                                     IK::Line_3 lj_l_90(lJ[0], lJ_v_90);
 
                                     IK::Point_3 pl0_0_p;
-                                    cgal_intersection_util::LinePlane(lj_l_90, Plane0[0], pl0_0_p);
+                                    cgal_intersection_util::line_plane(lj_l_90, Plane0[0], pl0_0_p);
                                     IK::Point_3 pl1_0_p;
-                                    cgal_intersection_util::LinePlane(lj_l_90, Plane1[0], pl1_0_p);
+                                    cgal_intersection_util::line_plane(lj_l_90, Plane1[0], pl1_0_p);
                                     IK::Point_3 pl1_1_p;
-                                    cgal_intersection_util::LinePlane(lj_l_90, Plane1[1], pl1_1_p);
+                                    cgal_intersection_util::line_plane(lj_l_90, Plane1[1], pl1_1_p);
 
                                     IK::Plane_3 planes[4];
                                     planes[1] = Plane0[0];
@@ -947,8 +948,8 @@ namespace wood_main
                                     ////////////////////////////////////////////////////////////////////////////////
                                     // Intersect End plane |-----------------------| with top and bottom planes
                                     ////////////////////////////////////////////////////////////////////////////////
-                                    cgal_intersection_util::plane_4_planes_open(plEnd0, planes, joint_volumes_pairA_pairB[0]);
-                                    cgal_intersection_util::plane_4_planes_open(plEnd1, planes, joint_volumes_pairA_pairB[1]);
+                                    cgal_intersection_util::plane_4planes_open(plEnd0, planes, joint_volumes_pairA_pairB[0]);
+                                    cgal_intersection_util::plane_4planes_open(plEnd1, planes, joint_volumes_pairA_pairB[1]);
 
                                     ////////////////////////////////////////////////////////////////////////////////
                                     // Check the orientation of the volume, must consistent for non-simetrical joints
@@ -1011,10 +1012,10 @@ namespace wood_main
                                     ////////////////////////////////////////////////////////////////////////////////
                                     // Intersect End plane |-----------------------| with top and bottom planes
                                     ////////////////////////////////////////////////////////////////////////////////
-                                    cgal_intersection_util::plane_4_planes(plEnd0, loopOfPlanes0, joint_volumes_pairA_pairB[0]);
-                                    cgal_intersection_util::plane_4_planes(plEnd1, loopOfPlanes0, joint_volumes_pairA_pairB[1]);
-                                    cgal_intersection_util::plane_4_planes(plEnd0, loopOfPlanes1, joint_volumes_pairA_pairB[2]);
-                                    cgal_intersection_util::plane_4_planes(plEnd1, loopOfPlanes1, joint_volumes_pairA_pairB[3]);
+                                    cgal_intersection_util::plane_4planes(plEnd0, loopOfPlanes0, joint_volumes_pairA_pairB[0]);
+                                    cgal_intersection_util::plane_4planes(plEnd1, loopOfPlanes0, joint_volumes_pairA_pairB[1]);
+                                    cgal_intersection_util::plane_4planes(plEnd0, loopOfPlanes1, joint_volumes_pairA_pairB[2]);
+                                    cgal_intersection_util::plane_4planes(plEnd1, loopOfPlanes1, joint_volumes_pairA_pairB[3]);
                                     type = 12;
                                 }
                             }
@@ -1044,7 +1045,7 @@ namespace wood_main
                             // For other cases you need to find a way to get opposite plane i.e. mesh intersection
                             //////////////////////////////////////////////////////////////////////////////////////
                             IK::Vector_3 offset_vector;
-                            cgal_intersection_util::orthogonal_vector_between_two_plane_pairs(*plane0_0, *plane1_0, *plane1_1, offset_vector);
+                            cgal_intersection_util::get_orthogonal_vector_between_two_plane_pairs(*plane0_0, *plane1_0, *plane1_1, offset_vector);
 
                             // dir = i > j ? insertion_vectors0[i]: insertion_vectors1[j];
                             // dirSet = true;
@@ -1052,7 +1053,7 @@ namespace wood_main
                             {
                                 IK::Vector_3 offset_vector_;
                                 // CGAL::cross_product(dir, plane0_0->orthogonal_vector())
-                                bool flag = cgal_intersection_util::vector_two_planes(dir, *plane1_0, *plane1_1, offset_vector_);
+                                bool flag = cgal_intersection_util::scale_vector_to_distance_of_2planes(dir, *plane1_0, *plane1_1, offset_vector_);
                                 if (flag)
                                     offset_vector = offset_vector_;
                             }
@@ -1791,16 +1792,16 @@ namespace wood_main
             std::array<IK::Line_3, 2> l = is_parallel_01 ? std::array<IK::Line_3, 2>{l1, l0} : std::array<IK::Line_3, 2>{l0, l1};
 
             IK::Point_3 p00;
-            cgal_intersection_util::LinePlane(l[0], plane00_far, p00);
+            cgal_intersection_util::line_plane(l[0], plane00_far, p00);
 
             IK::Point_3 p01;
-            cgal_intersection_util::LinePlane(l[0], plane01_near, p01);
+            cgal_intersection_util::line_plane(l[0], plane01_near, p01);
 
             IK::Point_3 p10;
-            cgal_intersection_util::LinePlane(l[1], plane10_far, p10);
+            cgal_intersection_util::line_plane(l[1], plane10_far, p10);
 
             IK::Point_3 p11;
-            cgal_intersection_util::LinePlane(l[1], plane11_near, p11);
+            cgal_intersection_util::line_plane(l[1], plane11_near, p11);
 
             // when only one neighbor is given
             if (in_s0_s1_e20_e31[i][2] == in_s0_s1_e20_e31[i][3])
@@ -2034,8 +2035,8 @@ namespace wood_main
                 IK::Segment_3 s2(joints[id_0].joint_volumes[j + 0][2], joints[id_0].joint_volumes[j + 1][2]);
                 IK::Segment_3 s3(joints[id_0].joint_volumes[j + 0][3], joints[id_0].joint_volumes[j + 1][3]);
 
-                cgal_intersection_util::Plane4LinesIntersection(plane0_0, s0, s1, s2, s3, joints[id_0].joint_volumes[j]);
-                cgal_intersection_util::Plane4LinesIntersection(plane0_1, s0, s1, s2, s3, joints[id_0].joint_volumes[j + 1]);
+                cgal_intersection_util::plane_4lines(plane0_0, s0, s1, s2, s3, joints[id_0].joint_volumes[j]);
+                cgal_intersection_util::plane_4lines(plane0_1, s0, s1, s2, s3, joints[id_0].joint_volumes[j + 1]);
             }
 
             for (int j = 0; j < 4; j += 2)
@@ -2048,8 +2049,8 @@ namespace wood_main
                 IK::Segment_3 s2(joints[id_1].joint_volumes[j + 0][2], joints[id_1].joint_volumes[j + 1][2]);
                 IK::Segment_3 s3(joints[id_1].joint_volumes[j + 0][3], joints[id_1].joint_volumes[j + 1][3]);
 
-                cgal_intersection_util::Plane4LinesIntersection(plane1_0, s0, s1, s2, s3, joints[id_1].joint_volumes[j]);
-                cgal_intersection_util::Plane4LinesIntersection(plane1_1, s0, s1, s2, s3, joints[id_1].joint_volumes[j + 1]);
+                cgal_intersection_util::plane_4lines(plane1_0, s0, s1, s2, s3, joints[id_1].joint_volumes[j]);
+                cgal_intersection_util::plane_4lines(plane1_1, s0, s1, s2, s3, joints[id_1].joint_volumes[j + 1]);
             }
         }
     }

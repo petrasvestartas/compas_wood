@@ -1,896 +1,265 @@
-#pragma once
-
-// #include "../../stdafx.h"
-
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// DEVELOPER:
+// Petras Vestartas, petasvestartas@gmail.com
+// Funding: NCCR Digital Fabrication and EPFL
+//
+// HISTORY:
+// 1) The first version was written during the PhD 8928 thesis of Petras Vestartas called:
+// Design-to-Fabrication Workflow for Raw-Sawn-Timber using Joinery Solver, 2017-2021
+// 2) The translation from C# to C++ was started during the funding of NCCR in two steps
+// A - standalone C++ version of the joinery solver and B - integration to COMPAS framework (Python Pybind11)
+//
+// RESTRICTIONS:
+// The code cannot be used for commercial reasons
+// If you would like to use or change the code for research or educational reasons,
+// please contact the developer first
+//
+// 3RD PARTY LIBRARIES:
+// The implementations is following the OpenNURBS library:
 // PlanePlanePlane
 // PlanePlane
 // LinePlane
-//  LineLine not implemented
+// LineLine not implemented
 // https://github.com/mcneel/opennurbs/blob/c20e599d1ff8f08a55d3dddf5b39e37e8b5cac06/opennurbs_intersect.cpp
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+#ifndef CGAL_INTERSECTION_UTIL_H
+#define CGAL_INTERSECTION_UTIL_H
+
 namespace cgal_intersection_util
 {
-    inline IK::Point_3 point_at(const IK::Segment_3 &l, double t)
+    namespace internal
     {
-        const double s = 1.0 - t;
 
-        return IK::Point_3(
-            (l[0].x() == l[1].x()) ? l[0].x() : s * l[0].x() + t * l[1].x(),
-            (l[0].y() == l[1].y()) ? l[0].y() : s * l[0].y() + t * l[1].y(),
-            (l[0].z() == l[1].z()) ? l[0].z() : s * l[0].z() + t * l[1].z());
-    }
-
-    inline bool closest_point_to(const IK::Point_3 &point, const IK::Segment_3 &s, double &t)
-    {
-        bool rc = false;
-
-        const IK::Vector_3 D = s.to_vector();
-        const double DoD = D.squared_length();
-
-        if (DoD > 0.0)
-        {
-            if ((point - s[0]).squared_length() <= (point - s[1]).squared_length())
-                t = ((point - s[0]) * D) / DoD;
-            else
-                t = 1.0 + ((point - s[1]) * D) / DoD;
-
-            rc = true;
-        }
-        else
-        { // (GBA) Closest point to a degenerate line works as well
-            t = 0.0;
-            rc = true;
-        }
-
-        return rc;
-    }
-
-    inline CGAL::Aff_transformation_3<IK> plane_to_xy(
-        IK::Point_3 O0, IK::Plane_3 plane)
-    {
-        auto X0 = plane.base1();
-        auto Y0 = plane.base2();
-        auto Z0 = plane.orthogonal_vector();
-        cgal_vector_util::Unitize(X0);
-        cgal_vector_util::Unitize(Y0);
-        cgal_vector_util::Unitize(Z0);
-
-        // transformation maps P0 to P1, P0+X0 to P1+X1, ...
-
-        // Move to origin -> T0 translates point P0 to (0,0,0)
-        CGAL::Aff_transformation_3<IK> T0(CGAL::TRANSLATION, IK::Vector_3(0 - O0.x(), 0 - O0.y(), 0 - O0.z()));
-
-        // Rotate ->
-        CGAL::Aff_transformation_3<IK> F0(
-            X0.x(), X0.y(), X0.z(),
-            Y0.x(), Y0.y(), Y0.z(),
-            Z0.x(), Z0.y(), Z0.z());
-
-        return F0 * T0;
-    }
-   
-
-    inline IK::Point_3 PointAt(IK::Segment_3 &l, double t)
-    {
-        // s[0].z()
-        //  26 Feb 2003 Dale Lear
-        //      Changed
-        //           return (1-t)*from + t*to;
-        //      to the following so that axis aligned lines will
-        //      return exact answers for large values of t.
-        //      See RR 9683.
-
-        const double s = 1.0 - t;
-
-        return IK::Point_3(
-            (l[0].x() == l[1].x()) ? l[0].x() : s * l[0].x() + t * l[1].x(),
-            (l[0].y() == l[1].y()) ? l[0].y() : s * l[0].y() + t * l[1].y(),
-            (l[0].z() == l[1].z()) ? l[0].z() : s * l[0].z() + t * l[1].z());
-    }
-
-    inline bool ClosestPointTo(const IK::Point_3 &point, IK::Segment_3 &s, double &t)
-    {
-        bool rc = false;
-        // if (t) {
-        const IK::Vector_3 D = s.to_vector();
-
-        const double DoD = D.squared_length();
-        // CGAL_Debug(DoD);
-
-        if (DoD > 0.0)
-        {
-            if ((point - s[0]).squared_length() <= (point - s[1]).squared_length())
-            {
-                t = ((point - s[0]) * D) / DoD;
-            }
-            else
-            {
-                t = 1.0 + ((point - s[1]) * D) / DoD;
-            }
-
-            rc = true;
-        }
-        else
-        {
-            t = 0.0;
-            rc = true; // (GBA) Closest point to a degenerate line works as well
-        }
-        // }
-        return rc;
-    }
-
-    inline bool ClosestPointTo(const IK::Point_2 &point, const IK::Segment_2 &s, double &t)
-    {
-        bool rc = false;
-        // if (t) {
-        const IK::Vector_2 D = s.to_vector();
-
-        const double DoD = D.squared_length();
-        // CGAL_Debug(DoD);
-
-        if (DoD > 0.0)
-        {
-            if ((point - s[0]).squared_length() <= (point - s[1]).squared_length())
-            {
-                t = ((point - s[0]) * D) / DoD;
-            }
-            else
-            {
-                t = 1.0 + ((point - s[1]) * D) / DoD;
-            }
-
-            rc = true;
-        }
-        else
-        {
-            t = 0.0;
-            rc = true; // (GBA) Closest point to a degenerate line works as well
-        }
-        // }
-        return rc;
-    }
-
-    inline bool LineLine3D(IK::Segment_3 &cutter_line, IK::Segment_3 &segment, IK::Point_3 &output)
-    {
-        IK::Plane_3 plane(cutter_line[0], CGAL::cross_product(cutter_line.to_vector(), segment.to_vector()));
-        CGAL::Aff_transformation_3<IK> xform = plane_to_xy(cutter_line[0], plane);
-        CGAL::Aff_transformation_3<IK> xform_Inv = xform.inverse();
-
-        IK::Point_3 p0_0 = xform.transform(cutter_line[0]);
-        IK::Point_3 p0_1 = xform.transform(cutter_line[1]);
-
-        IK::Point_3 p1_0 = xform.transform(segment[0]);
-        IK::Point_3 p1_1 = xform.transform(segment[1]);
-
-        IK::Line_2 l0(IK::Point_2(p0_0.hx(), p0_0.hy()), IK::Point_2(p0_1.hx(), p0_1.hy()));
-        IK::Line_2 l1(IK::Point_2(p1_0.hx(), p1_0.hy()), IK::Point_2(p1_1.hx(), p1_1.hy()));
-
-        // Colinearity check!!!!!!!!
-
-        const auto result = CGAL::intersection(l0, l1);
-
-        if (result)
-        {
-            if (const IK::Point_2 *p = boost::get<IK::Point_2>(&*result))
-            {
-                output = IK::Point_3(p->hx(), p->hy(), 0);
-                output = xform_Inv.transform(output);
-                // cgal_intersection_util::ClosestPointTo(*p, cutter_line, t);
-            }
-            else
-            {
-                return false;
-            }
-        }
-        else
-        {
-            return false;
-        }
-
-        return true;
-    }
-
-    inline bool LineLine2D(IK::Segment_2 &cutter_line, IK::Segment_2 &segment, IK::Point_2 &output, double &t)
-    {
-        const auto result = CGAL::intersection(cutter_line, segment);
-
-        if (result)
-        {
-            if (const IK::Point_2 *p = boost::get<IK::Point_2>(&*result))
-            {
-                output = *p;
-                // cgal_intersection_util::ClosestPointTo(*p, cutter_line, t);
-            }
-        }
-
-        return false;
-    }
-
-    inline void line_line_line(IK::Segment_3 &l0, IK::Segment_3 &middle, IK::Segment_3 &l1,
-                               IK::Point_3 &p0, IK::Point_3 &p1,
-                               double &middle_t_0, double &middle_t_1)
-    {
-        // IK::Line_3 l0_(IK::Point_3(-1242.9339929999999, -680.04568599999982, 711.26441699999987), IK::Point_3(-1740.1076069999997, -680.04568599999982, 711.26441699999987));
-        // IK::Line_3 l1_(IK::Point_3(-1242.933992, -680.04568600000005, 711.26441699999998), IK::Point_3(-1242.933992, -196.286, 535.190291));
-        //
-
-        auto result0 = CGAL::intersection((l0.supporting_line()), (middle.supporting_line()));
-        // auto result1 = CGAL::intersection(ie(l1), ie(middle));
-
-        if (result0)
-        {
-            p0 = (*boost::get<IK::Point_3>(&*result0));
-            // printf("Good\n");
-            // CGAL_Debug(p0, true);
-        }
-        else
-        {
-            printf("Bad\n");
-        }
-    }
-
-    inline int Solve3x3(
-
-        const double (&row0)[3], const double (&row1)[3], const double (&row2)[3],
-        double d0, double d1, double d2,
-        double *x_addr, double *y_addr, double *z_addr,
-        double *pivot_ratio)
-    {
-        /* Solve a 3x3 linear system using Gauss-Jordan elimination
-         * with full pivoting.
+        /**
+         * Get length of a 3D vector, taken from the OpenNURBS library: https://github.com/mcneel/opennurbs
+         *
+         * @param [in] x The first coordinate of the vector
+         * @param [in] y The second coordinate of the vector
+         * @param [in] z The third coordinate of the vector
+         * @return The length of the vector
          */
-        int i, j;
-        double *p0;
-        double *p1;
-        double *p2;
-        double x, y, workarray[12], maxpiv, minpiv;
+        double length(double x, double y, double z);
 
-        const int sizeof_row = 3 * sizeof(row0[0]);
+        /**
+         * Unitize the vector by dividing its coordinates by its length
+         *
+         * @param [in, out] vector 3D vector
+         * @return true if the vector length is not equal to zero
+         */
+        bool unitize(IK::Vector_3 &vector);
 
-        *pivot_ratio = *x_addr = *y_addr = *z_addr = 0.0;
-        x = fabs(row0[0]);
-        i = j = 0;
-        y = fabs(row0[1]);
-        if (y > x)
-        {
-            x = y;
-            j = 1;
-        }
-        y = fabs(row0[2]);
-        if (y > x)
-        {
-            x = y;
-            j = 2;
-        }
-        y = fabs(row1[0]);
-        if (y > x)
-        {
-            x = y;
-            i = 1;
-            j = 0;
-        }
-        y = fabs(row1[1]);
-        if (y > x)
-        {
-            x = y;
-            i = 1;
-            j = 1;
-        }
-        y = fabs(row1[2]);
-        if (y > x)
-        {
-            x = y;
-            i = 1;
-            j = 2;
-        }
-        y = fabs(row2[0]);
-        if (y > x)
-        {
-            x = y;
-            i = 2;
-            j = 0;
-        }
-        y = fabs(row2[1]);
-        if (y > x)
-        {
-            x = y;
-            i = 2;
-            j = 1;
-        }
-        y = fabs(row2[2]);
-        if (y > x)
-        {
-            x = y;
-            i = 2;
-            j = 2;
-        }
-        if (x == 0.0)
-            return 0;
-        maxpiv = minpiv = fabs(x);
-        p0 = workarray;
-        switch (i)
-        {
-        case 1: /* swap rows 0 and 1 */
-            memcpy(p0, row1, sizeof_row);
-            p0[3] = d1;
-            p0 += 4;
-            memcpy(p0, row0, sizeof_row);
-            p0[3] = d0;
-            p0 += 4;
-            memcpy(p0, row2, sizeof_row);
-            p0[3] = d2;
-            break;
-        case 2: /* swap rows 0 and 2 */
-            memcpy(p0, row2, sizeof_row);
-            p0[3] = d2;
-            p0 += 4;
-            memcpy(p0, row1, sizeof_row);
-            p0[3] = d1;
-            p0 += 4;
-            memcpy(p0, row0, sizeof_row);
-            p0[3] = d0;
-            break;
-        default:
-            memcpy(p0, row0, sizeof_row);
-            p0[3] = d0;
-            p0 += 4;
-            memcpy(p0, row1, sizeof_row);
-            p0[3] = d1;
-            p0 += 4;
-            memcpy(p0, row2, sizeof_row);
-            p0[3] = d2;
-            break;
-        }
-        switch (j)
-        {
-        case 1: /* swap columns 0 and 1 */
-            p0 = x_addr;
-            x_addr = y_addr;
-            y_addr = p0;
-            p0 = &workarray[0];
-            x = p0[0];
-            p0[0] = p0[1];
-            p0[1] = x;
-            p0 += 4;
-            x = p0[0];
-            p0[0] = p0[1];
-            p0[1] = x;
-            p0 += 4;
-            x = p0[0];
-            p0[0] = p0[1];
-            p0[1] = x;
-            break;
-        case 2: /* swap columns 0 and 2 */
-            p0 = x_addr;
-            x_addr = z_addr;
-            z_addr = p0;
-            p0 = &workarray[0];
-            x = p0[0];
-            p0[0] = p0[2];
-            p0[2] = x;
-            p0 += 4;
-            x = p0[0];
-            p0[0] = p0[2];
-            p0[2] = x;
-            p0 += 4;
-            x = p0[0];
-            p0[0] = p0[2];
-            p0[2] = x;
-            break;
-        }
+        /**
+         * The transformation matrix from the plane to XY plane
+         *
+         * @param [in] origin point for translation from origin
+         * @param [in] plane three vectors for rotation around the origin
+         * @return transformation matrix, that is equal the rotation multiplied by translation
+         */
+        CGAL::Aff_transformation_3<IK> plane_to_xy(const IK::Point_3 &origin, const IK::Plane_3 &plane);
 
-        x = 1.0 / workarray[0];
-        /* debugger set workarray[0] = 1 */
-        p0 = p1 = workarray + 1;
-        *p1++ *= x;
-        *p1++ *= x;
-        *p1++ *= x;
-        x = -(*p1++);
-        /* debugger set workarray[4] = 0 */
-        if (x == 0.0)
-            p1 += 3;
-        else
-        {
-            *p1++ += x * (*p0++);
-            *p1++ += x * (*p0++);
-            *p1++ += x * (*p0);
-            p0 -= 2;
-        }
-        x = -(*p1++);
-        /* debugger set workarray[8] = 0 */
-        if (x != 0.0)
-        {
-            *p1++ += x * (*p0++);
-            *p1++ += x * (*p0++);
-            *p1++ += x * (*p0);
-            p0 -= 2;
-        }
+        /**
+         * Check if two vectors are parallel or anti-parallel or not-paralel
+         * tolerance wood_globals::ANGLE
+         *
+         * @param [in] v0 first vector
+         * @param [in] v1 second vector
+         * @return 1: this and other vectors are and parallel
+         * -1: this and other vectors are anti-parallel
+         * 0: this and other vectors are not parallel or at least one of the vectors is zero
+         */
+        int is_parallel_to(const IK::Vector_3 &v0, const IK::Vector_3 &v1);
 
-        x = fabs(workarray[5]);
-        i = j = 0;
-        y = fabs(workarray[6]);
-        if (y > x)
-        {
-            x = y;
-            j = 1;
-        }
-        y = fabs(workarray[9]);
-        if (y > x)
-        {
-            x = y;
-            i = 1;
-            j = 0;
-        }
-        y = fabs(workarray[10]);
-        if (y > x)
-        {
-            x = y;
-            i = j = 1;
-        }
-        if (x == 0.0)
-            return 1; // rank = 1;
-        y = fabs(x);
-        if (y > maxpiv)
-            maxpiv = y;
-        else if (y < minpiv)
-            minpiv = y;
-        if (j)
-        {
-            /* swap columns 1 and 2 */
-            p0 = workarray + 1;
-            p1 = p0 + 1;
-            x = *p0;
-            *p0 = *p1;
-            *p1 = x;
-            p0 += 4;
-            p1 += 4;
-            x = *p0;
-            *p0 = *p1;
-            *p1 = x;
-            p0 += 4;
-            p1 += 4;
-            x = *p0;
-            *p0 = *p1;
-            *p1 = x;
-            p0 += 4;
-            p1 += 4;
-            p0 = y_addr;
-            y_addr = z_addr;
-            z_addr = p0;
-        }
+        /**
+         * Solve a 3x3 linear system using Gauss-Jordan elimination with full pivoting.
+         * https://github.com/hansec/opennurbs/blob/a149d1172e1564c677fd7729e9eb33628ba191bd/opennurbs_math.cpp 2732
+         * @param [in] row0 first row of 3x3 matrix
+         * @param [in] row1 second row of 3x3 matrix
+         * @param [in] row2 third row of 3x3 matrix
+         * @param [in] d0
+         * @param [in] d1
+         * @param [in] d2 (d0,d1,d2) right hand column of system
+         * @param [in] x_addr first unknown
+         * @param [in] y_addr second unknown
+         * @param [in] z_addr third unknown
+         * @param [out] pivot_ratio if not NULL, the pivot ration is
+                returned here.  If the pivot ratio is "small",
+                then the matrix may be singular or ill
+                conditioned. You should test the results
+                before you use them.  "Small" depends on the
+                precision of the input coefficients and the
+                use of the solution.  If you can't figure out
+                what "small" means in your case, then you
+                must check the solution before you use it.
+         * @return    The rank of the 3x3 matrix (0,1,2, or 3)
+         * If ON_Solve3x3() is successful (returns 3), then
+         * the solution is returned in
+         * (*x_addr, *y_addr, *z_addr) and *pivot_ratio = min(|pivots|)/max(|pivots|).
+         * If the return code is < 3, then (0,0,0) is returned as the "solution".
+         */
+        int solve3x3(const double (&row0)[3], const double (&row1)[3], const double (&row2)[3],
+                     double d0, double d1, double d2,
+                     double *x_addr, double *y_addr, double *z_addr,
+                     double *pivot_ratio);
 
-        if (i)
-        {
-            /* pivot is in row 2 */
-            p0 = workarray + 1;
-            p1 = p0 + 8;
-            p2 = p0 + 4;
-        }
-        else
-        {
-            /* pivot is in row 1 */
-            p0 = workarray + 1;
-            p1 = p0 + 4;
-            p2 = p0 + 8;
-        }
-
-        /* debugger set workarray[5+4*i] = 1 */
-        x = 1.0 / (*p1++);
-        *p1++ *= x;
-        *p1 *= x;
-        p1--;
-        x = -(*p0++);
-        /* debugger set p0[-1] = 0 */
-        if (x != 0.0)
-        {
-            *p0++ += x * (*p1++);
-            *p0 += x * (*p1);
-            p0--;
-            p1--;
-        }
-        x = -(*p2++);
-        /* debugger set p2[-1] = 0 */
-        if (x != 0.0)
-        {
-            *p2++ += x * (*p1++);
-            *p2 += x * (*p1);
-            p2--;
-            p1--;
-        }
-        x = *p2++;
-        if (x == 0.0)
-            return 2; // rank = 2;
-        y = fabs(x);
-        if (y > maxpiv)
-            maxpiv = y;
-        else if (y < minpiv)
-            minpiv = y;
-        /* debugger set p2[-1] = 1 */
-        *p2 /= x;
-        x = -(*p1++);
-        if (x != 0.0)
-            *p1 += x * (*p2);
-        /* debugger set p1[-1] = 0 */
-        x = -(*p0++);
-        if (x != 0.0)
-            *p0 += x * (*p2);
-        /* debugger set p0[-1] = 0 */
-        *x_addr = workarray[3];
-        if (i)
-        {
-            *y_addr = workarray[11];
-            *z_addr = workarray[7];
-        }
-        else
-        {
-            *y_addr = workarray[7];
-            *z_addr = workarray[11];
-        }
-        *pivot_ratio = minpiv / maxpiv;
-        return 3;
+        double value_at(const IK::Plane_3 &Pl, const IK::Point_3 &P);
     }
 
-    inline bool Intersect(IK::Plane_3 &R, IK::Plane_3 &S, IK::Plane_3 &T,
-                          IK::Point_3 &P)
-    {
-        double pr = 0.0;
-        double x, y, z;
+    /**
+     * Get the intersection of two segments (internally line-line intersection)
+     * The lines are oriented from 3D plane to 2D and the result is oriented back to 3d
+     * WARNING: the lines must not be parallel, this case is not handled
+     *
+     * @param [in] cutter_line first plane
+     * @param [in] segment second plane
+     * @param [out] output point output
+     * @return true if line and a segment interescts
+     */
+    bool line_line_3d(const IK::Segment_3 &cutter_line, const IK::Segment_3 &segment, IK::Point_3 &output);
 
-        const double R_[3] = {R.a(), R.b(), R.c()};
-        const double S_[3] = {S.a(), S.b(), S.c()};
-        const double T_[3] = {T.a(), T.b(), T.c()};
+    /**
+     * Get the intersection of two segments (internally line-line intersection)
+     * WARNING: the planes must not be parallel, this case is checked internal
+     *
+     * @param [in] plane_0 first plane
+     * @param [in] plane_1 second plane
+     * @param [in] plane_2 third plane
+     * @param [out] output the point output
+     * @return true if the solve3x3 reutrs the rank 3
+     */
+    bool plane_plane_plane(const IK::Plane_3 &plane_0, const IK::Plane_3 &plane_1, const IK::Plane_3 &plane_2, IK::Point_3 &output);
 
-        const int rank = Solve3x3(
-            //&R.plane_equation.x, &S.plane_equation.x, &T.plane_equation.x,
-            R_, S_, T_,
-            -R.d(), -S.d(), -T.d(),
-            &x, &y, &z, &pr);
-        P = IK::Point_3(x, y, z);
-        return (rank == 3) ? true : false;
-    }
+    /**
+     * Get the intersection of two planes (internally plane-plane-plane intersection)
+     * The third plane is computed by the cross product of the first two
+     * Since the line is infinite, the origin of the third plane is irrelevant
+     * WARNING: the planes must not be parallel, this case is checked internal
+     *
+     * @param [in] plane_0 first plane
+     * @param [in] plane_1 second plane
+     * @param [out] output the line output
+     * @return true if the solve3x3 reutrs the rank 3
+     */
+    bool plane_plane(const IK::Plane_3 &plane_0, const IK::Plane_3 &plane_1, IK::Line_3 &output);
 
-    inline bool Intersect(IK::Plane_3 &R, IK::Plane_3 &S, IK::Line_3 &L)
-    {
-        IK::Vector_3 d = CGAL::cross_product(S.orthogonal_vector(), R.orthogonal_vector());
-        IK::Point_3 p = CGAL::midpoint(R.point(), S.point());
-        IK::Plane_3 T(p, d);
+    /**
+     * Get the intersection of a line and a plane
+     *
+     * @param [in] line segment
+     * @param [in] plane plane
+     * @param [out] output the point output
+     * @param [out] is_finite true if the line is finite, still the point will be outputed
+     * @return true the intersection is sucsessful or point is outside the line, incase the finite search is used
+     */
+    bool line_plane(const IK::Segment_3 &line, const IK::Plane_3 &plane, IK::Point_3 &output, bool is_finite = false);
 
-        IK::Point_3 l0;
-        bool rc = Intersect(R, S, T, l0);
-        L = IK::Line_3(l0, l0 + d);
+    /**
+     * Get the intersection of a line and a plane
+     *
+     * @param [in] line infinite line
+     * @param [in] plane plane
+     * @param [out] output the point output
+     * @param [out] is_finite true if the line is finite, still the point will be outputed
+     * @return true the intersection is sucsessful or point is outside the line, incase the finite search is used
+     */
+    void line_plane(const IK::Line_3 &line, const IK::Plane_3 &plane, IK::Point_3 &output, bool is_finite = false);
 
-        return rc;
-    }
+    /**
+     * Get the intersection of plane with four other planes
+     * Two planes are given
+     * Other two are contructed from a line segment
+     *
+     * @param [in] collision_face plnae of the timber plate side often
+     * @param [in] line segment, from which the top and bottom planes are computed
+     * @param [in] plane0 first plane
+     * @param [in] plane1 second plane
+     * @param [out] output CGAL_Polyline of size 5, meaning the rectangle end point is duplicated
+     * @return true the intersection is sucsessful all the four plane_plane_plane intersections were successful
+     */
+    bool get_quad_from_line_topbottomplanes(const IK::Plane_3 &collision_face, const IK::Segment_3 &line, const IK::Plane_3 &plane0, const IK::Plane_3 &plane1, CGAL_Polyline &output);
 
-    inline double ValueAt(IK::Plane_3 &Pl, IK::Point_3 &P)
-    {
-        return (Pl.a() * P.hx() + Pl.b() * P.hy() + Pl.c() * P.hz() + Pl.d());
-    }
+    /**
+     * Scale vector by line and two plane intersection
+     * WARNING: this method is very specific to the use case of plane_to_face mehtod in the wood_main.cpp
+     *
+     * @param [in] dir vector to intersect with the planes
+     * @param [in] line segment, from which the top and bottom planes are computed
+     * @param [in] plane0 first plane
+     * @param [in] plane1 second plane
+     * @param [out] output vector whose length is scaled to the distance between the two planes
+     * @return true, if the output_vector_length / plane_ortho_length < 10, then the vector is valid
+     */
+    bool scale_vector_to_distance_of_2planes(const IK::Vector_3 &dir, const IK::Plane_3 &plane0, const IK::Plane_3 &plane1, IK::Vector_3 &output);
 
-    inline bool Intersect(
-        IK::Segment_3 &L,
-        IK::Plane_3 &Pl,
-        IK::Point_3 &P
+    /**
+     * Intersect plane_pair0_0 with plane_pair1_0 and plane_pair1_1 and return the orthogonal vector between the two lines
+     * Two planes are given
+     * Other two are contructed from a line segment
+     *
+     * @param [in] plane_pair0_0 first plane
+     * @param [in] plane_pair1_0 second plane
+     * @param [in] plane_pair1_1 third plane
+     * @param [out] output vector
+     * @return true, if the two plane intersections are successful, but the line paralleism is not checked
+     */
+    bool get_orthogonal_vector_between_two_plane_pairs(const IK::Plane_3 &plane_pair0_0, const IK::Plane_3 &plane_pair1_0, const IK::Plane_3 &plane_pair1_1, IK::Vector_3 &output);
 
-        // double* line_parameter
-    )
-    {
-        bool rc = false;
-        double a, b, d, fd, t;
+    /**
+     * Get a closed quad from four planes and the main_plane intersection
+     *
+     * @param [in] main_plane the plane that intersects the four planes
+     * @param [in] sequence_of_planes C-type array of four planes
+     * @param [out] output quad CGAL polyline
+     * @return true, if the four plane intersections are successful
+     */
+    bool plane_4planes(const IK::Plane_3 &main_plane, const IK::Plane_3 (&sequence_of_planes)[4], CGAL_Polyline &output);
 
-        auto pt0 = L[0];
-        auto pt1 = L[1];
-        a = ValueAt(Pl, pt0);
-        b = ValueAt(Pl, pt1);
-        d = a - b;
-        if (d == 0.0)
-        {
-            if (fabs(a) < fabs(b))
-                t = 0.0;
-            else if (fabs(b) < fabs(a))
-                t = 1.0;
-            else
-                t = 0.5;
-        }
-        else
-        {
-            d = 1.0 / d;
-            fd = fabs(d);
-            if (fd > 1.0 && (fabs(a) >= ON_DBL_MAX / fd || fabs(b) >= ON_DBL_MAX / fd))
-            {
-                // double overflow - line may be (nearly) parallel to plane
-                t = 0.5;
-            }
-            else
-            {
-                t = a / (a - b); // = a*d;  a/(a-b) has more precision than a*d
-                rc = true;
-            }
-        }
+    /**
+     * Get a closed quad from four planes and the main_plane intersection, the outline is open, the last point is not the first point
+     *
+     * @param [in] main_plane
+     * @param [in] sequence_of_planes C-type array of four planes
+     * @param [out] output quad CGAL polyline
+     * @return true, if the four plane intersections are successful
+     */
+    bool plane_4planes_open(const IK::Plane_3 &main_plane, const IK::Plane_3 (&sequence_of_planes)[4], CGAL_Polyline &output);
 
-        // if (line_parameter)
-        //     *line_parameter = t;
+    /**
+     * Get a closed quad from four planes and the main_plane intersection, the outline is open, the last point is not the first point
+     *
+     * @param [in] main_plane the plane that intersect the four lines
+     * @param [in] l0 the first line segment
+     * @param [in] l1 the second line segment
+     * @param [in] l2 the third line segment
+     * @param [in] l3 the fourth line segment
+     * @param [out] output quad CGAL polyline
+     * @return true, if the four plane and line intersections are successful
+     */
+    bool plane_4lines(IK::Plane_3 &plane, IK::Segment_3 &l0, IK::Segment_3 &l1, IK::Segment_3 &l2, IK::Segment_3 &l3, CGAL_Polyline &output);
 
-        // s[0].z()
-        //  26 Feb 2003 Dale Lear
-        //      Changed
-        //           return (1-t)*from + t*to;
-        //      to the following so that axis aligned lines will
-        //      return exact answers for large values of t.
-        //      See RR 9683.
+    /**
+     * Get the intersection of two segments (internally line-line intersection)
+     * Plane normals are checked for parallelism tolerance 0.1
+     *
+     * @param [in] plane_0 first plane
+     * @param [in] plane_1 second plane
+     * @param [in] plane_2 third plane
+     * @param [out] output the point output
+     * @return true if the solve3x3 reutrs the rank 3 and planes are not parallel
+     */
+    bool plane_plane_plane_with_parallel_check(const IK::Plane_3 &plane0, const IK::Plane_3 &plane1, const IK::Plane_3 &plane2, IK::Point_3 &output);
 
-        const double s = 1.0 - t;
-
-        P = IK::Point_3(
-            (L[0].x() == L[1].x()) ? L[0].x() : s * L[0].x() + t * L[1].x(),
-            (L[0].y() == L[1].y()) ? L[0].y() : s * L[0].y() + t * L[1].y(),
-            (L[0].z() == L[1].z()) ? L[0].z() : s * L[0].z() + t * L[1].z());
-
-        // if (finite && (t < 0 || t>1))
-        //     return false;
-
-        return rc;
-    }
-
-    inline bool QuadFromLineAndTopBottomPlanes(IK::Plane_3 &collision_face, IK::Segment_3 &l, IK::Plane_3 &pl0, IK::Plane_3 &pl1, CGAL_Polyline &quad)
-    {
-        IK::Vector_3 dir = l.to_vector();
-        IK::Plane_3 line_pl0_EK(l[0], dir);
-        IK::Plane_3 line_pl1_EK(l[1], dir);
-
-        // IK_to_EK ie; EK_to_IK ei;
-        // auto result0 = CGAL::intersection(ie(line_pl0_EK), ie(pl0), ie(collision_face));
-        // auto result1 = CGAL::intersection(ie(line_pl0_EK), ie(pl1), ie(collision_face));
-        // auto result2 = CGAL::intersection(ie(line_pl1_EK), ie(pl1), ie(collision_face));
-        // auto result3 = CGAL::intersection(ie(line_pl1_EK), ie(pl0), ie(collision_face));
-        // IK::Point_3 p0 = ei(*boost::get<EK::Point_3>(&*result0));
-        // IK::Point_3 p1 = ei(*boost::get<EK::Point_3>(&*result1));
-        // IK::Point_3 p2 = ei(*boost::get<EK::Point_3>(&*result2));
-        // IK::Point_3 p3 = ei(*boost::get<EK::Point_3>(&*result3));
-
-        IK::Point_3 p0;
-        cgal_intersection_util::Intersect(line_pl0_EK, pl0, collision_face, p0);
-        IK::Point_3 p1;
-        cgal_intersection_util::Intersect(line_pl0_EK, pl1, collision_face, p1);
-        IK::Point_3 p2;
-        cgal_intersection_util::Intersect(line_pl1_EK, pl1, collision_face, p2);
-        IK::Point_3 p3;
-        cgal_intersection_util::Intersect(line_pl1_EK, pl0, collision_face, p3);
-        quad = {p0, p1, p2, p3, p0};
-
-        return true;
-    }
-
-    inline bool vector_two_planes(IK::Vector_3 &dir, IK::Plane_3 &plane0, IK::Plane_3 &plane1, IK::Vector_3 &output)
-    {
-        // printf("vector_two_planes \n");
-        // IK::Line_3 line(IK::Point_3(0, 0, 0), v);
-
-        // auto result0 = CGAL::intersection(plane0, line);
-        // auto result1 = CGAL::intersection(plane1, line);
-
-        // auto p0 = *boost::get<IK::Point_3>(&*result0);
-        // auto p1 = *boost::get<IK::Point_3>(&*result1);
-
-        // return p1 - p0;
-
-        // check validity
-        bool dirSet = (std::abs(dir.hx()) + std::abs(dir.hy()) + std::abs(dir.hz())) > wood_globals::DISTANCE; // == CGAL::NULL_VECTOR;
-        if (!dirSet)
-            return dirSet;
-
-        IK::Segment_3 line(IK::Point_3(0, 0, 0), IK::Point_3(dir.hx(), dir.hy(), dir.hz()));
-        IK::Point_3 p0;
-        IK::Point_3 p1;
-        cgal_intersection_util::Intersect(line, plane0, p0);
-        cgal_intersection_util::Intersect(line, plane1, p1);
-        output = p1 - p0;
-
-        // Check scale
-        double dist_ortho = (plane1.projection(plane0.point()) - plane0.point()).squared_length();
-        double dist = output.squared_length();
-        dirSet = dist / dist_ortho < 10;
-        return dirSet;
-        // return true;
-    }
-
-    inline void orthogonal_vector_between_two_plane_pairs(IK::Plane_3 &plane_pair0_0, IK::Plane_3 &plane_pair1_0, IK::Plane_3 &plane_pair1_1, IK::Vector_3 &output)
-    {
-        IK::Line_3 l0;
-        IK::Line_3 l1;
-        cgal_intersection_util::Intersect(plane_pair0_0, plane_pair1_0, l0);
-        cgal_intersection_util::Intersect(plane_pair0_0, plane_pair1_1, l1);
-
-        output = l1.point() - l0.projection(l1.point());
-    }
-
-    inline void plane_4_planes(IK::Plane_3 &mainPlane, IK::Plane_3 (&sequence_of_planes)[4], CGAL_Polyline &quad)
-    {
-        // auto result0 = CGAL::intersection(sequence_of_planes[0], sequence_of_planes[1], mainPlane);
-        // auto result1 = CGAL::intersection(sequence_of_planes[1], sequence_of_planes[2], mainPlane);
-        // auto result2 = CGAL::intersection(sequence_of_planes[2], sequence_of_planes[3], mainPlane);
-        // auto result3 = CGAL::intersection(sequence_of_planes[3], sequence_of_planes[0], mainPlane);
-
-        // return {
-        //  *boost::get<IK::Point_3>(&*result0),
-        //*boost::get<IK::Point_3>(&*result1),
-        //*boost::get<IK::Point_3>(&*result2),
-        //*boost::get<IK::Point_3>(&*result3),
-        //*boost::get<IK::Point_3>(&*result0)
-        // };
-
-        IK::Point_3 p0;
-        cgal_intersection_util::Intersect(sequence_of_planes[0], sequence_of_planes[1], mainPlane, p0);
-        IK::Point_3 p1;
-        cgal_intersection_util::Intersect(sequence_of_planes[1], sequence_of_planes[2], mainPlane, p1);
-        IK::Point_3 p2;
-        cgal_intersection_util::Intersect(sequence_of_planes[2], sequence_of_planes[3], mainPlane, p2);
-        IK::Point_3 p3;
-        cgal_intersection_util::Intersect(sequence_of_planes[3], sequence_of_planes[0], mainPlane, p3);
-        quad = {p0, p1, p2, p3, p0};
-    }
-
-    inline void plane_4_planes_open(IK::Plane_3 &mainPlane, IK::Plane_3 (&sequence_of_planes)[4], CGAL_Polyline &quad)
-    {
-        // auto result0 = CGAL::intersection(sequence_of_planes[0], sequence_of_planes[1], mainPlane);
-        // auto result1 = CGAL::intersection(sequence_of_planes[1], sequence_of_planes[2], mainPlane);
-        // auto result2 = CGAL::intersection(sequence_of_planes[2], sequence_of_planes[3], mainPlane);
-        // auto result3 = CGAL::intersection(sequence_of_planes[3], sequence_of_planes[0], mainPlane);
-
-        // return {
-        //  *boost::get<IK::Point_3>(&*result0),
-        //*boost::get<IK::Point_3>(&*result1),
-        //*boost::get<IK::Point_3>(&*result2),
-        //*boost::get<IK::Point_3>(&*result3),
-        //*boost::get<IK::Point_3>(&*result0)
-        // };
-
-        IK::Point_3 p0;
-        cgal_intersection_util::Intersect(sequence_of_planes[0], sequence_of_planes[1], mainPlane, p0);
-        IK::Point_3 p1;
-        cgal_intersection_util::Intersect(sequence_of_planes[1], sequence_of_planes[2], mainPlane, p1);
-        IK::Point_3 p2;
-        cgal_intersection_util::Intersect(sequence_of_planes[2], sequence_of_planes[3], mainPlane, p2);
-        IK::Point_3 p3;
-        cgal_intersection_util::Intersect(sequence_of_planes[3], sequence_of_planes[0], mainPlane, p3);
-        quad = {p0, p1, p2, p3};
-    }
-
-    inline void LinePlane(IK::Line_3 &line, IK::Plane_3 &plane, IK::Point_3 &output)
-    {
-        auto segment = IK::Segment_3(line.point(), line.point() + line.to_vector());
-        cgal_intersection_util::Intersect(segment, plane, output);
-
-        // auto result = CGAL::intersection(line, plane);
-        ///*    if (!result)
-        //        CGAL_Debug(0);*/
-        // auto point = *boost::get<IK::Point_3>(&*result);
-        // return point;
-    }
-
-    inline void SegmentPlane(IK::Segment_3 &segment, IK::Plane_3 &plane, IK::Point_3 &output)
-    {
-        cgal_intersection_util::Intersect(segment, plane, output);
-        /* if (!result)
-             CGAL_Debug(0);*/
-        // auto point = *boost::get<IK::Point_3>(&*result);
-    }
-
-    inline bool Plane4LinesIntersection(IK::Plane_3 &plane, IK::Segment_3 &l0, IK::Segment_3 &l1, IK::Segment_3 &l2, IK::Segment_3 &l3, CGAL_Polyline &output)
-    {
-        // printf("CPP %f \n", l0.squared_length());
-        // printf("CPP %f  %f %f %f \n", plane.a(), plane.b(), plane.c(), plane.d() );
-
-        IK::Point_3 p0;
-        cgal_intersection_util::Intersect(l0, plane, p0);
-        IK::Point_3 p1;
-        cgal_intersection_util::Intersect(l1, plane, p1);
-        IK::Point_3 p2;
-        cgal_intersection_util::Intersect(l2, plane, p2);
-        IK::Point_3 p3;
-        cgal_intersection_util::Intersect(l3, plane, p3);
-        output = {p0, p1, p2, p3, p0};
-        // auto result0 = CGAL::intersection(l0.supporting_line(), plane);
-        ////if (!result0) printf("CPP result0");
-
-        // auto result1 = CGAL::intersection(l1.supporting_line(), plane);
-        ////if (!result1)printf("CPP result1");
-
-        // auto result2 = CGAL::intersection(l2.supporting_line(), plane);
-        ////if (!result2) printf("CPP result2");
-
-        // auto result3 = CGAL::intersection(l3.supporting_line(), plane);
-        ////if (!result3)  printf("CPP result3");
-
-        // output = {
-        //*boost::get<IK::Point_3>(&*result0),
-        //*boost::get<IK::Point_3>(&*result1),
-        //*boost::get<IK::Point_3>(&*result2),
-        //*boost::get<IK::Point_3>(&*result3),
-        //*boost::get<IK::Point_3>(&*result0)
-        // };
-
-        return true;
-    }
-
-    inline bool PlaneLineIntersection(IK::Plane_3 &plane, IK::Segment_3 &l0, IK::Point_3 &output)
-    {
-        return cgal_intersection_util::Intersect(l0, plane, output);
-        // auto result0 = CGAL::intersection(l0, plane);
-        // output = *boost::get<IK::Point_3>(&*result0);
-        // return true;
-    }
-
-    inline bool plane_plane_plane(IK::Plane_3 &plane0, IK::Plane_3 &plane1, IK::Plane_3 &plane2, IK::Point_3 &p0, IK::Segment_3 &segment, double &t
-                                  /*IK::Point_3& p0, IK::Point_3& p1,
-                          double& middle_t_0, double& middle_t_1*/
-    )
-    {
-        // CGAL_Debug(cgal_vector_util::IsParallelTo(plane0.orthogonal_vector(), plane1.orthogonal_vector(),0.11));
-
-        auto plane0_v = plane0.orthogonal_vector();
-        auto plane1_v = plane1.orthogonal_vector();
-        auto plane2_v = plane2.orthogonal_vector();
-        bool flag = cgal_vector_util::IsParallelTo(plane0_v, plane1_v, 0.11) == 0 &&
-                    cgal_vector_util::IsParallelTo(plane0_v, plane2_v, 0.11) == 0 &&
-                    cgal_vector_util::IsParallelTo(plane1_v, plane2_v, 0.11) == 0;
-
-        if (flag)
-            flag = cgal_intersection_util::Intersect(plane0, plane1, plane2, p0);
-
-        return flag;
-    }
-
-    inline bool PolylinePlane(CGAL_Polyline &polyline, IK::Plane_3 &plane, IK::Segment_3 &alignmentSegment, IK::Segment_3 &result)
-    {
-        ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        // Intersect polyline segments one by one, until two points are found, if any
-        ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        IK::Point_3 pts[2];
-        int count = 0;
-
-        for (int i = 0; i < polyline.size() - 1; i++)
-        {
-            IK::Segment_3 segment(polyline[i], polyline[i + 1]);
-
-            // IK::Point_3 p0;
-            // bool flag = cgal_intersection_util::Intersect(segment, plane, p0);
-
-            // if (flag) {
-            //     pts[count] = p0;
-            //     count++;
-            //     if (count == 2)
-            //         break;
-            // }
-
-            auto result = CGAL::intersection(segment, plane);
-
-            if (result)
-            {
-                if (const IK::Point_3 *p = boost::get<IK::Point_3>(&*result))
-                {
-                    pts[count] = *p;
-                    count++;
-                    if (count == 2)
-                        break;
-                } // if point type
-            }     // result exists
-        }
-
-        ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        // Align intersection points according to an average polygon edge direction
-        ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        if (count == 2)
-        {
-            if (CGAL::squared_distance(alignmentSegment[0], pts[0]) < CGAL::squared_distance(alignmentSegment[0], pts[1]))
-                result = IK::Segment_3(pts[0], pts[1]);
-            else
-                result = IK::Segment_3(pts[1], pts[0]);
-
-            return true;
-        }
-        else
-        {
-            return false;
-        }
-    }
+    /**
+     * Get the intersection of polyline and plane
+     * WARNING: this method is used imprecise CGAL - boost method, it is not recommended to use it, it is probably causing non-planarity in the merge function
+     *
+     * @param [in] polyline CGAl_Polyline
+     * @param [in] plane The plane that intersect the polylin
+     * @param [in] alignment_segment Align intersection points according to an average polygon edge direction
+     * @param [out] output the segment output
+     * @return true if two points are returned from the intersection
+     */
+    bool polyline_plane(const CGAL_Polyline &polyline, const IK::Plane_3 &plane, IK::Segment_3 &alignment_segment, IK::Segment_3 &output);
 }
+
+#endif // CGAL_INTERSECTION_UTIL_H

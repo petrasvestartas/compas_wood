@@ -386,6 +386,7 @@ if (BUILD_MY_PROJECTS)
   "${CMAKE_SOURCE_DIR}/src/wood/include/cgal_box_util.cpp"
   "${CMAKE_SOURCE_DIR}/src/wood/include/rtree_util.cpp"
   "${CMAKE_SOURCE_DIR}/src/wood/include/cgal_inscribe_util.cpp"
+  "${CMAKE_SOURCE_DIR}/src/wood/include/cgal_intersection_util.cpp"
   "${CMAKE_SOURCE_DIR}/src/wood/include/cgal_xform_util.cpp"
   "${CMAKE_SOURCE_DIR}/src/wood/include/cgal_math_util.cpp"
   "${CMAKE_SOURCE_DIR}/src/wood/include/cgal_plane_util.cpp"

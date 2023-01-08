@@ -10,6 +10,7 @@ namespace wood_globals
     // Tolerances for distance search
     double DISTANCE = 0.01;
     double DISTANCE_SQUARED = 0.0001;
+    double ANGLE = 0.11;
 
     // File names
     std::string PATH_AND_FILE_FOR_JOINTS = "";

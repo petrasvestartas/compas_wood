@@ -54,7 +54,7 @@ namespace wood
                         {
 
                             IK::Point_3 output;
-                            if (cgal_intersection_util::Intersect(segment, this->planes[l], output))
+                            if (cgal_intersection_util::line_plane(segment, this->planes[l], output))
                             {
                                 if (clipper_util::is_point_inside(this->polylines[l], this->planes[l], output))
                                 {
@@ -183,7 +183,7 @@ namespace wood
                 IK::Segment_3 element_edge(polyline0[i], polyline0[i + 1]);
                 IK::Point_3 joint_point = joints[std::get<0>(j_mf[i + 2][j])](std::get<1>(j_mf[i + 2][j]), true).back()[0];
                 double t;
-                cgal_intersection_util::ClosestPointTo(joint_point, element_edge, t);
+                cgal_polyline_util::ClosestPointTo(joint_point, element_edge, t);
                 std::get<2>(j_mf[i + 2][j]) = t;
             }
 
@@ -250,17 +250,17 @@ namespace wood
 
                     IK::Vector_3 v(0, 0, 2);
 
-                    bool flag0 = cgal_intersection_util::plane_plane_plane(planes[2 + prev], joint_line_plane_0_prev, planes[0], p0_int, joint_line_0, t0_int);
+                    bool flag0 = cgal_intersection_util::plane_plane_plane(planes[2 + prev], joint_line_plane_0_prev, planes[0], p0_int); //, joint_line_0, t0_int
 
                     // output.push_back({ p0_int + v,joint_line_0[0]+ v,cgal_polyline_util::Center(polylines[2 + prev]) + v,cgal_polyline_util::Center(polylines[0]) + v });
 
-                    bool flag1 = cgal_intersection_util::plane_plane_plane(planes[2 + next], joint_line_plane_0_next, planes[0], p1_int, joint_line_0, t1_int);
+                    bool flag1 = cgal_intersection_util::plane_plane_plane(planes[2 + next], joint_line_plane_0_next, planes[0], p1_int); //, joint_line_0, t1_int
                     // output.push_back({ p1_int + v ,joint_line_0[0] + v,cgal_polyline_util::Center(polylines[2 + next]) + v,cgal_polyline_util::Center(polylines[0]) + v });
 
-                    bool flag2 = cgal_intersection_util::plane_plane_plane(planes[2 + prev], joint_line_plane_1_prev, planes[1], p2_int, joint_line_1, t2_int);
+                    bool flag2 = cgal_intersection_util::plane_plane_plane(planes[2 + prev], joint_line_plane_1_prev, planes[1], p2_int); //, joint_line_1, t2_int
                     // output.push_back({ p2_int + v,joint_line_1[0] + v,cgal_polyline_util::Center(polylines[2 + prev]) + v,cgal_polyline_util::Center(polylines[1]) + v });
 
-                    bool flag3 = cgal_intersection_util::plane_plane_plane(planes[2 + next], joint_line_plane_1_next, planes[1], p3_int, joint_line_1, t3_int);
+                    bool flag3 = cgal_intersection_util::plane_plane_plane(planes[2 + next], joint_line_plane_1_next, planes[1], p3_int); //, joint_line_1, t3_int
                     // output.push_back({ p3_int + v,joint_line_1[0] + v,cgal_polyline_util::Center(polylines[2 + next]) + v,cgal_polyline_util::Center(polylines[1]) + v });
 
                     ///////////////////////////////////////////////////////////////////////////////
@@ -585,7 +585,7 @@ namespace wood
     void element::merge_joints(std::vector<wood::joint> &joints, std::vector<std::vector<CGAL_Polyline>> &output)
     {
         // OPTIMIZE CASE(5) BECAUSE EDGE ARE KNOWN, BUT CHECK ALSO CROSS JOINT ENSURE THAT YOU TAKE CROSSING EDGES
-        // CHANGE TO 2D METHOD, TO AVOID MULTIPLE THE SAME MATRIX CREATION FOR ORIENTATION TO 2D I.E. CLIPPER AND LINELINE3D
+        // CHANGE TO 2D METHOD, TO AVOID MULTIPLE THE SAME MATRIX CREATION FOR ORIENTATION TO 2D I.E. CLIPPER AND line_line_3d
         // you are in a loop
         // only for objects that has one element as a wood::joint and edges to insert are known
         // List order: top0 bottom0 top1 bottom1 ... topN bottomN
@@ -690,10 +690,10 @@ namespace wood
                     IK::Plane_3 joint_line_plane_1_prev = IK::Plane_3(joint_line_1[0], planes[2 + id].orthogonal_vector()); // IK::Plane_3(prev_segment_1[0], planes[2 + id].orthogonal_vector());
                     IK::Plane_3 joint_line_plane_1_next(joint_line_1[0], planes[2 + id].orthogonal_vector());
 
-                    bool flag0 = cgal_intersection_util::plane_plane_plane(planes[2 + prev], joint_line_plane_0_prev, planes[0], p0_int, joint_line_0, t0_int);
-                    bool flag1 = cgal_intersection_util::plane_plane_plane(planes[2 + next], joint_line_plane_0_next, planes[0], p1_int, joint_line_0, t1_int);
-                    bool flag2 = cgal_intersection_util::plane_plane_plane(planes[2 + prev], joint_line_plane_1_prev, planes[1], p2_int, joint_line_1, t2_int);
-                    bool flag3 = cgal_intersection_util::plane_plane_plane(planes[2 + next], joint_line_plane_1_next, planes[1], p3_int, joint_line_1, t3_int);
+                    bool flag0 = cgal_intersection_util::plane_plane_plane(planes[2 + prev], joint_line_plane_0_prev, planes[0], p0_int); //, joint_line_0, t0_int
+                    bool flag1 = cgal_intersection_util::plane_plane_plane(planes[2 + next], joint_line_plane_0_next, planes[0], p1_int); //, joint_line_0, t1_int
+                    bool flag2 = cgal_intersection_util::plane_plane_plane(planes[2 + prev], joint_line_plane_1_prev, planes[1], p2_int); //, joint_line_1, t2_int
+                    bool flag3 = cgal_intersection_util::plane_plane_plane(planes[2 + next], joint_line_plane_1_next, planes[1], p3_int); //, joint_line_1, t3_int
 
                     ///////////////////////////////////////////////////////////////////////////////
                     // 2 Relocate side segments points to intersection points
@@ -703,7 +703,7 @@ namespace wood
                     {
                         IK::Point_3 p0;
                         IK::Point_3 p1;
-                        if (cgal_intersection_util::LineLine3D(last_segment0, joint_line_0, p0) && cgal_intersection_util::LineLine3D(last_segment1, joint_line_1, p1))
+                        if (cgal_intersection_util::line_line_3d(last_segment0, joint_line_0, p0) && cgal_intersection_util::line_line_3d(last_segment1, joint_line_1, p1))
                         {
                             p0_int = p0;
                             p2_int = p1;
@@ -905,7 +905,7 @@ namespace wood
         {
             IK::Point_3 p0;
             IK::Point_3 p1;
-            if (cgal_intersection_util::LineLine3D(last_segment0_start, last_segment0, p0) && cgal_intersection_util::LineLine3D(last_segment1_start, last_segment1, p1))
+            if (cgal_intersection_util::line_line_3d(last_segment0_start, last_segment0, p0) && cgal_intersection_util::line_line_3d(last_segment1_start, last_segment1, p1))
             {
                 pline0_new[0] = p0;
                 pline1_new[0] = p1;

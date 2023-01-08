@@ -19,6 +19,9 @@
     <ClCompile Include="C:\IBOIS57\_Code\Software\Python\compas_wood\backend\src\wood\include\cgal_inscribe_util.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="C:\IBOIS57\_Code\Software\Python\compas_wood\backend\src\wood\include\cgal_intersection_util.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="C:\IBOIS57\_Code\Software\Python\compas_wood\backend\src\wood\include\cgal_xform_util.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>

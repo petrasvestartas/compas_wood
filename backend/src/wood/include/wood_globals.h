@@ -33,10 +33,11 @@ namespace wood_globals
     // Clipper2 library mostly used in clipper_util
     extern int64_t CLIPPER_SCALE;
     extern double CLIPPER_AREA;
-
+    
     // Tolerances for distance search
     extern double DISTANCE;         // GlobalTolerance
     extern double DISTANCE_SQUARED; // GlobalToleranceSquare
+    extern double ANGLE;            // GlobalAngleTolerance
 
     // File names
     extern std::string PATH_AND_FILE_FOR_JOINTS; // path_and_file_for_joints
