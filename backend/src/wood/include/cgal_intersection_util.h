@@ -250,7 +250,16 @@ namespace cgal_intersection_util
     bool plane_plane_plane_with_parallel_check(const IK::Plane_3 &plane0, const IK::Plane_3 &plane1, const IK::Plane_3 &plane2, IK::Point_3 &output);
 
     /**
-     * Get the intersection of polyline and plane
+     * Adjust the line segment by interescting with two planes
+     *
+     * @param [out] line planar polyline
+     * @param [in] plane0 plane origin, as the first point of the polyline
+     * @param [in] plane1 plane whose normal is the average of the cross-products of the segments
+     */
+    bool line_two_planes(IK::Segment_3 &line, const IK::Plane_3 &plane0, const IK::Plane_3 &plane1);
+
+    /**
+     * Get the intersection of polyline and plane as a line segment
      * WARNING: this method is used imprecise CGAL - boost method, it is not recommended to use it, it is probably causing non-planarity in the merge function
      *
      * @param [in] polyline CGAl_Polyline
@@ -259,7 +268,30 @@ namespace cgal_intersection_util
      * @param [out] output the segment output
      * @return true if two points are returned from the intersection
      */
-    bool polyline_plane(const CGAL_Polyline &polyline, const IK::Plane_3 &plane, IK::Segment_3 &alignment_segment, IK::Segment_3 &output);
+    bool polyline_plane_to_line(const CGAL_Polyline &polyline, const IK::Plane_3 &plane, IK::Segment_3 &alignment_segment, IK::Segment_3 &output);
+
+    /**
+     * Intersect all polyline's segments with a plane
+     *
+     * @param [in] polyline vector of points
+     * @param [in] plane plane that is intersecting the polyline
+     * @param [out] points intersection points
+     * @param [out] edge_ids intersection edge ids
+     */
+    bool polyline_plane(const CGAL_Polyline &polyline, const IK::Plane_3 &plane, std::vector<IK::Point_3> &points, std::vector<int> &edge_ids);
+
+    /**
+     * Intersect two polyline with two planes
+     * This method is used for cross joint generation
+     *
+     * @param [in] c0 vector of points
+     * @param [in] c1 plane that is intersecting the polyline
+     * @param [in] p0 intersection points
+     * @param [in] p1 intersection edge ids
+     * @param [out] line intersection line ids common to the two intersection
+     * @param [out] pair intersection edge ids
+     */
+    bool polyline_plane_cross_joint(CGAL_Polyline &c0, CGAL_Polyline &c1, IK::Plane_3 &p0, IK::Plane_3 &p1, IK::Segment_3 &line, std::pair<int, int> &pair);
 }
 
 #endif // CGAL_INTERSECTION_UTIL_H

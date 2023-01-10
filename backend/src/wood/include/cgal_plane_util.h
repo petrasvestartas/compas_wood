@@ -81,6 +81,19 @@ namespace cgal_plane_util
      * @return true if two planes are pointing to the same or flipped normal and share the same origin
      */
     bool is_coplanar(const IK::Plane_3 &plane0, const IK::Plane_3 &plane1, bool can_be_flipped = true);
+
+    /**
+     * Check if two vectors are parallel or anti-parallel or not-paralel
+     * tolerance wood_globals::ANGLE
+     *
+     * @param [in] v0 first vector
+     * @param [in] v1 second vector
+     * @return 1: this and other vectors are and parallel
+     * -1: this and other vectors are anti-parallel
+     * 0: this and other vectors are not parallel or at least one of the vectors is zero
+     */
+    int is_parallel_to(const IK::Vector_3 &v0, const IK::Vector_3 &v1);
+
 }
 
 #endif // CGAL_PLANE_UTIL_H

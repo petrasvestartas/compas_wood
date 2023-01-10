@@ -380,12 +380,12 @@ namespace wood_joint_lib
         // offset vector
         /////////////////////////////////////////////////////////////////////////////////
         IK::Vector_3 f0_0_normal = elements[jo.v0].planes[jo.f0_0].orthogonal_vector();
-        cgal_vector_util::Unitize(f0_0_normal);
+        cgal_vector_util::unitize(f0_0_normal);
         // v0 *= (jo.scale[2] + jo.shift);
         f0_0_normal *= (jo.scale[2]);
 
         IK::Vector_3 f1_0_normal = elements[jo.v1].planes[jo.f1_0].orthogonal_vector();
-        cgal_vector_util::Unitize(f1_0_normal);
+        cgal_vector_util::unitize(f1_0_normal);
         f1_0_normal *= (jo.scale[2] + 2); // Forced for safety
 
         /////////////////////////////////////////////////////////////////////////////////
@@ -404,7 +404,7 @@ namespace wood_joint_lib
             // get convex_concave corners
             std::vector<bool> convex_corner0;
 
-            cgal_polyline_util::convex_corner(elements[jo.v0].polylines[0], convex_corner0);
+            cgal_polyline_util::get_convex_corners(elements[jo.v0].polylines[0], convex_corner0);
 
             int id = 15;
 
@@ -412,23 +412,23 @@ namespace wood_joint_lib
             double scale0_1 = convex_corner0[(jo.f0_0 - 2 + 1) % convex_corner0.size()] ? jo.scale[0] : 0;
 
             std::vector<bool> convex_corner1;
-            cgal_polyline_util::convex_corner(elements[jo.v1].polylines[0], convex_corner1);
+            cgal_polyline_util::get_convex_corners(elements[jo.v1].polylines[0], convex_corner1);
             double scale1_0 = convex_corner1[jo.f1_0 - 2] ? jo.scale[0] : 0;
             double scale1_1 = convex_corner1[(jo.f1_0 - 2 + 1) % convex_corner1.size()] ? jo.scale[0] : 0;
 
             // currrent
-            cgal_polyline_util::Extend(pline0, 0, scale0_0, scale0_1);
-            cgal_polyline_util::Extend(pline0, 2, scale0_1, scale0_0);
+            cgal_polyline_util::extend(pline0, 0, scale0_0, scale0_1);
+            cgal_polyline_util::extend(pline0, 2, scale0_1, scale0_0);
 
             // neighbor
-            cgal_polyline_util::Extend(pline1, 0, scale1_0, scale1_1);
-            cgal_polyline_util::Extend(pline1, 2, scale1_1, scale1_0);
+            cgal_polyline_util::extend(pline1, 0, scale1_0, scale1_1);
+            cgal_polyline_util::extend(pline1, 2, scale1_1, scale1_0);
 
-            // Extend vertical
-            cgal_polyline_util::Extend(pline0, 1, jo.scale[1], jo.scale[1]);
-            cgal_polyline_util::Extend(pline0, 3, jo.scale[1], jo.scale[1]);
-            cgal_polyline_util::Extend(pline1, 1, jo.scale[1], jo.scale[1]);
-            cgal_polyline_util::Extend(pline1, 3, jo.scale[1], jo.scale[1]);
+            // extend vertical
+            cgal_polyline_util::extend(pline0, 1, jo.scale[1], jo.scale[1]);
+            cgal_polyline_util::extend(pline0, 3, jo.scale[1], jo.scale[1]);
+            cgal_polyline_util::extend(pline1, 1, jo.scale[1], jo.scale[1]);
+            cgal_polyline_util::extend(pline1, 3, jo.scale[1], jo.scale[1]);
         }
 
         /////////////////////////////////////////////////////////////////////////////////
@@ -439,7 +439,7 @@ namespace wood_joint_lib
         CGAL_Polyline pline1_moved = pline1;  // side 1
 
         IK::Vector_3 f0_1_normal = f0_0_normal;
-        cgal_vector_util::Unitize(f0_1_normal);
+        cgal_vector_util::unitize(f0_1_normal);
         f0_1_normal *= (jo.scale[2] + 2) + jo.shift; // Forced offset for safety
 
         // Move twice to remove one side and the cut surface around
@@ -463,14 +463,14 @@ namespace wood_joint_lib
         half_dist = 10; // Change to scale
 
         IK::Vector_3 z_axis = f0_0_normal;
-        cgal_vector_util::Unitize(z_axis);
+        cgal_vector_util::unitize(z_axis);
 
         z_axis *= jo.scale[2] / half_dist;
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////
         // Get average line
         IK::Segment_3 average_line;
-        cgal_polyline_util::LineLineOverlapAverage(jo.joint_lines[0], jo.joint_lines[1], average_line);
+        cgal_polyline_util::line_line_overlap_average(jo.joint_lines[0], jo.joint_lines[1], average_line);
         viewer_polylines.emplace_back(CGAL_Polyline({average_line[0], average_line[1]}));
 
         // Get average thickness
@@ -478,7 +478,7 @@ namespace wood_joint_lib
 
         // Move points up and down using cross product
         auto x_axis = CGAL::cross_product(z_axis, average_line.to_vector());
-        cgal_vector_util::Unitize(x_axis);
+        cgal_vector_util::unitize(x_axis);
 
         IK::Point_3 p0 = CGAL::midpoint(average_line[0], average_line[1]) + x_axis * half_thickness;
         IK::Point_3 p1 = CGAL::midpoint(average_line[0], average_line[1]) - x_axis * half_thickness;
@@ -487,12 +487,12 @@ namespace wood_joint_lib
 
         // set y-axis
         auto y_axis = average_line.to_vector();
-        cgal_vector_util::Unitize(y_axis);
+        cgal_vector_util::unitize(y_axis);
         /////////////////////////////////////////////////////////////////////////////////////////////////////
         //
         // y_axis = result.to_vector();
         // y_axis = (IK::Segment_3(jo.joint_lines[1][0], jo.joint_lines[1][1])).to_vector();
-        // cgal_vector_util::Unitize(y_axis);
+        // cgal_vector_util::unitize(y_axis);
 
         CGAL_Polyline rect0 = {
             p0 - y_axis * half_dist * 1 - z_axis * half_dist,
@@ -1440,7 +1440,7 @@ namespace wood_joint_lib
             p_rect_2_mid_1,
             p_rect_2_mid_0};
 
-        // Extend
+        // extend
         double y_extend_len = jo.scale[1];
         cgal_polyline_util::extend_equally(rect_half_0, 1, y_extend_len);
         cgal_polyline_util::extend_equally(rect_half_0, 3, y_extend_len);
@@ -1841,12 +1841,12 @@ namespace wood_joint_lib
         // offset vector
         /////////////////////////////////////////////////////////////////////////////////
         IK::Vector_3 f0_0_normal = elements[jo.v0].planes[jo.f0_0].orthogonal_vector();
-        cgal_vector_util::Unitize(f0_0_normal);
+        cgal_vector_util::unitize(f0_0_normal);
         // v0 *= (jo.scale[2] + jo.shift);
         f0_0_normal *= (jo.scale[2]);
 
         IK::Vector_3 f1_0_normal = elements[jo.v1].planes[jo.f1_0].orthogonal_vector();
-        cgal_vector_util::Unitize(f1_0_normal);
+        cgal_vector_util::unitize(f1_0_normal);
         f1_0_normal *= (jo.scale[2] + 2); // Forced for safety
 
         /////////////////////////////////////////////////////////////////////////////////
@@ -1865,7 +1865,7 @@ namespace wood_joint_lib
             // get convex_concave corners
             std::vector<bool> convex_corner0;
 
-            cgal_polyline_util::convex_corner(elements[jo.v0].polylines[0], convex_corner0);
+            cgal_polyline_util::get_convex_corners(elements[jo.v0].polylines[0], convex_corner0);
 
             int id = 15;
 
@@ -1873,23 +1873,23 @@ namespace wood_joint_lib
             double scale0_1 = convex_corner0[(jo.f0_0 - 2 + 1) % convex_corner0.size()] ? jo.scale[0] : 0;
 
             std::vector<bool> convex_corner1;
-            cgal_polyline_util::convex_corner(elements[jo.v1].polylines[0], convex_corner1);
+            cgal_polyline_util::get_convex_corners(elements[jo.v1].polylines[0], convex_corner1);
             double scale1_0 = convex_corner1[jo.f1_0 - 2] ? jo.scale[0] : 0;
             double scale1_1 = convex_corner1[(jo.f1_0 - 2 + 1) % convex_corner1.size()] ? jo.scale[0] : 0;
 
             // currrent
-            cgal_polyline_util::Extend(pline0, 0, scale0_0, scale0_1);
-            cgal_polyline_util::Extend(pline0, 2, scale0_1, scale0_0);
+            cgal_polyline_util::extend(pline0, 0, scale0_0, scale0_1);
+            cgal_polyline_util::extend(pline0, 2, scale0_1, scale0_0);
 
             // neighbor
-            cgal_polyline_util::Extend(pline1, 0, scale1_0, scale1_1);
-            cgal_polyline_util::Extend(pline1, 2, scale1_1, scale1_0);
+            cgal_polyline_util::extend(pline1, 0, scale1_0, scale1_1);
+            cgal_polyline_util::extend(pline1, 2, scale1_1, scale1_0);
 
-            // Extend vertical
-            cgal_polyline_util::Extend(pline0, 1, jo.scale[1], jo.scale[1]);
-            cgal_polyline_util::Extend(pline0, 3, jo.scale[1], jo.scale[1]);
-            cgal_polyline_util::Extend(pline1, 1, jo.scale[1], jo.scale[1]);
-            cgal_polyline_util::Extend(pline1, 3, jo.scale[1], jo.scale[1]);
+            // extend vertical
+            cgal_polyline_util::extend(pline0, 1, jo.scale[1], jo.scale[1]);
+            cgal_polyline_util::extend(pline0, 3, jo.scale[1], jo.scale[1]);
+            cgal_polyline_util::extend(pline1, 1, jo.scale[1], jo.scale[1]);
+            cgal_polyline_util::extend(pline1, 3, jo.scale[1], jo.scale[1]);
         }
 
         /////////////////////////////////////////////////////////////////////////////////
@@ -1900,7 +1900,7 @@ namespace wood_joint_lib
         CGAL_Polyline pline1_moved = pline1;  // side 1
 
         IK::Vector_3 f0_1_normal = f0_0_normal;
-        cgal_vector_util::Unitize(f0_1_normal);
+        cgal_vector_util::unitize(f0_1_normal);
         f0_1_normal *= (jo.scale[2] + 2) + jo.shift; // Forced offset for safety
 
         // Move twice to remove one side and the cut surface around
@@ -1924,14 +1924,14 @@ namespace wood_joint_lib
         half_dist = 10; // Change to scale
 
         IK::Vector_3 z_axis = f0_0_normal;
-        cgal_vector_util::Unitize(z_axis);
+        cgal_vector_util::unitize(z_axis);
 
         z_axis *= jo.scale[2] / half_dist;
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////
         // Get average line
         IK::Segment_3 average_line;
-        cgal_polyline_util::LineLineOverlapAverage(jo.joint_lines[0], jo.joint_lines[1], average_line);
+        cgal_polyline_util::line_line_overlap_average(jo.joint_lines[0], jo.joint_lines[1], average_line);
         viewer_polylines.emplace_back(CGAL_Polyline({average_line[0], average_line[1]}));
 
         // Get average thickness
@@ -1939,7 +1939,7 @@ namespace wood_joint_lib
 
         // Move points up and down using cross product
         auto x_axis = CGAL::cross_product(z_axis, average_line.to_vector());
-        cgal_vector_util::Unitize(x_axis);
+        cgal_vector_util::unitize(x_axis);
 
         IK::Point_3 p0 = CGAL::midpoint(average_line[0], average_line[1]) + x_axis * half_thickness;
         IK::Point_3 p1 = CGAL::midpoint(average_line[0], average_line[1]) - x_axis * half_thickness;
@@ -1948,12 +1948,12 @@ namespace wood_joint_lib
 
         // set y-axis
         auto y_axis = average_line.to_vector();
-        cgal_vector_util::Unitize(y_axis);
+        cgal_vector_util::unitize(y_axis);
         /////////////////////////////////////////////////////////////////////////////////////////////////////
         //
         // y_axis = result.to_vector();
         // y_axis = (IK::Segment_3(jo.joint_lines[1][0], jo.joint_lines[1][1])).to_vector();
-        // cgal_vector_util::Unitize(y_axis);
+        // cgal_vector_util::unitize(y_axis);
 
         CGAL_Polyline rect0 = {
             p0 - y_axis * half_dist * 1 - z_axis * half_dist,
@@ -2950,7 +2950,7 @@ namespace wood_joint_lib
         double z = 0.5;
 
         IK::Point_3 p[16] = {
-            IK::Point_3(a, -a, 0), IK::Point_3(-a, -a, 0), IK::Point_3(-a, a, 0), IK::Point_3(a, a, 0),                                 // Center
+            IK::Point_3(a, -a, 0), IK::Point_3(-a, -a, 0), IK::Point_3(-a, a, 0), IK::Point_3(a, a, 0),                                 // center
             IK::Point_3(a + c, -a - c, 0), IK::Point_3(-a - c, -a - c, 0), IK::Point_3(-a - c, a + c, 0), IK::Point_3(a + c, a + c, 0), // CenterOffset
             IK::Point_3(b, -b, z), IK::Point_3(-b, -b, z), IK::Point_3(-b, b, z), IK::Point_3(b, b, z),                                 // Top
             IK::Point_3(b, -b, -z), IK::Point_3(-b, -b, -z), IK::Point_3(-b, b, -z), IK::Point_3(b, b, -z)                              // Bottom
@@ -2961,7 +2961,7 @@ namespace wood_joint_lib
         joint.f[0].reserve(9 * 2);
         // Construct polylines from points
         joint.f[0] = {
-            {p[0] + v0, p[1] - v0, p[2] - v0, p[3] + v0, p[0] + v0}, // Center
+            {p[0] + v0, p[1] - v0, p[2] - v0, p[3] + v0, p[0] + v0}, // center
 
             {p[1] - v0, p[0] + v0, p[0 + 8] + v0, p[1 + 8] - v0, p[1] - v0}, // TopSide0
             {p[3] + v0, p[2] - v0, p[2 + 8] - v0, p[3 + 8] + v0, p[3] + v0}, // TopSide1
@@ -3085,7 +3085,7 @@ namespace wood_joint_lib
         double z = 0.5;
 
         IK::Point_3 p[16] = {
-            IK::Point_3(a, -a, 0), IK::Point_3(-a, -a, 0), IK::Point_3(-a, a, 0), IK::Point_3(a, a, 0),                                 // Center
+            IK::Point_3(a, -a, 0), IK::Point_3(-a, -a, 0), IK::Point_3(-a, a, 0), IK::Point_3(a, a, 0),                                 // center
             IK::Point_3(a + c, -a - c, 0), IK::Point_3(-a - c, -a - c, 0), IK::Point_3(-a - c, a + c, 0), IK::Point_3(a + c, a + c, 0), // CenterOffset
             IK::Point_3(b, -b, z), IK::Point_3(-b, -b, z), IK::Point_3(-b, b, z), IK::Point_3(b, b, z),                                 // Top
             IK::Point_3(b, -b, -z), IK::Point_3(-b, -b, -z), IK::Point_3(-b, b, -z), IK::Point_3(b, b, -z)                              // Bottom
@@ -3099,7 +3099,7 @@ namespace wood_joint_lib
         // Construct polylines from points
         joint.f[0] = {
 
-            {p[0] + v0, p[1] - v0, p[2] - v0, p[3] + v0, p[0] + v0}, // Center
+            {p[0] + v0, p[1] - v0, p[2] - v0, p[3] + v0, p[0] + v0}, // center
 
             {p[1] - v0, p[0] + v0, p[0 + 8] + v0, p[1 + 8] - v0, p[1] - v0}, // wood_cut::slice TopSide0
             {p[3] + v0, p[2] - v0, p[2 + 8] - v0, p[3 + 8] + v0, p[3] + v0}, // wood_cut::slice TopSide1
@@ -3135,7 +3135,7 @@ namespace wood_joint_lib
         };
 
         ///////////////////////////////////////////////////////////////////////////////////////////////////////
-        // Extend rectangles to both sides to compensate for irregularities
+        // extend rectangles to both sides to compensate for irregularities
         ///////////////////////////////////////////////////////////////////////////////////////////////////////
 
         // to sides
@@ -3291,11 +3291,11 @@ namespace wood_joint_lib
         joint.name = __func__;
 
         // compute the center of the joint_area
-        IK::Point_3 center = cgal_polyline_util::Center(joint.joint_area);
+        IK::Point_3 center = cgal_polyline_util::center(joint.joint_area);
 
         // move the center by the direction of rectangle 2nd edge, because it is vertical
         IK::Vector_3 dir0 = joint.joint_volumes[0][1] - joint.joint_volumes[0][2];
-        cgal_vector_util::Unitize(dir0);
+        cgal_vector_util::unitize(dir0);
         IK::Vector_3 dir1 = -dir0;
         dir0 *= elements[joint.v0].thickness;
         dir1 *= elements[joint.v1].thickness;
@@ -3323,11 +3323,11 @@ namespace wood_joint_lib
         joint.name = __func__;
 
         // compute the center of the joint_area
-        IK::Point_3 center = cgal_polyline_util::Center(joint.joint_area);
+        IK::Point_3 center = cgal_polyline_util::center(joint.joint_area);
 
         // move the center by the direction of rectangle 2nd edge, because it is vertical
         IK::Vector_3 dir0 = joint.joint_volumes[0][1] - joint.joint_volumes[0][2];
-        cgal_vector_util::Unitize(dir0);
+        cgal_vector_util::unitize(dir0);
         IK::Vector_3 dir1 = -dir0;
         dir0 *= elements[joint.v0].thickness;
         dir1 *= elements[joint.v1].thickness;
@@ -3355,11 +3355,11 @@ namespace wood_joint_lib
         joint.name = __func__;
 
         // compute the center of the joint_area
-        IK::Point_3 center = cgal_polyline_util::Center(joint.joint_area);
+        IK::Point_3 center = cgal_polyline_util::center(joint.joint_area);
 
         // move the center by the direction of rectangle 2nd edge, because it is vertical
         IK::Vector_3 dir0 = joint.joint_volumes[0][1] - joint.joint_volumes[0][2];
-        cgal_vector_util::Unitize(dir0);
+        cgal_vector_util::unitize(dir0);
         IK::Vector_3 dir1 = -dir0;
         dir0 *= elements[joint.v0].thickness;
         dir1 *= elements[joint.v1].thickness;
@@ -3387,11 +3387,11 @@ namespace wood_joint_lib
         joint.name = __func__;
 
         // compute the center of the joint_area
-        IK::Point_3 center = cgal_polyline_util::Center(joint.joint_area);
+        IK::Point_3 center = cgal_polyline_util::center(joint.joint_area);
 
         // move the center by the direction of rectangle 2nd edge, because it is vertical
         IK::Vector_3 dir0 = joint.joint_volumes[0][1] - joint.joint_volumes[0][2];
-        cgal_vector_util::Unitize(dir0);
+        cgal_vector_util::unitize(dir0);
         IK::Vector_3 dir1 = -dir0;
         dir0 *= elements[joint.v0].thickness;
         dir1 *= elements[joint.v1].thickness;
@@ -3419,11 +3419,11 @@ namespace wood_joint_lib
         joint.name = __func__;
 
         // compute the center of the joint_area
-        IK::Point_3 center = cgal_polyline_util::Center(joint.joint_area);
+        IK::Point_3 center = cgal_polyline_util::center(joint.joint_area);
 
         // move the center by the direction of rectangle 2nd edge, because it is vertical
         IK::Vector_3 dir0 = joint.joint_volumes[0][1] - joint.joint_volumes[0][2];
-        cgal_vector_util::Unitize(dir0);
+        cgal_vector_util::unitize(dir0);
         IK::Vector_3 dir1 = -dir0;
         dir0 *= elements[joint.v0].thickness;
         dir1 *= elements[joint.v1].thickness;
@@ -3451,11 +3451,11 @@ namespace wood_joint_lib
         joint.name = __func__;
 
         // compute the center of the joint_area
-        IK::Point_3 center = cgal_polyline_util::Center(joint.joint_area);
+        IK::Point_3 center = cgal_polyline_util::center(joint.joint_area);
 
         // move the center by the direction of rectangle 2nd edge, because it is vertical
         IK::Vector_3 dir0 = joint.joint_volumes[0][1] - joint.joint_volumes[0][2];
-        cgal_vector_util::Unitize(dir0);
+        cgal_vector_util::unitize(dir0);
         IK::Vector_3 dir1 = -dir0;
         dir0 *= elements[joint.v0].thickness;
         dir1 *= elements[joint.v1].thickness;
@@ -3495,7 +3495,7 @@ namespace wood_joint_lib
         // Get center rectangle
         CGAL_Polyline mid_rectangle = cgal_polyline_util::tween_two_polylines(joint.joint_volumes[0], joint.joint_volumes[1], 0.5);
 
-        // X-Axis Extend polyline in scale[0]
+        // X-Axis extend polyline in scale[0]
         cgal_polyline_util::extend_equally(mid_rectangle, 1, joint.scale[0] + 0);
         cgal_polyline_util::extend_equally(mid_rectangle, 3, joint.scale[0] + 0);
 
@@ -3510,7 +3510,7 @@ namespace wood_joint_lib
         mid_rectangle[3] += v;
         mid_rectangle[4] += v;
 
-        cgal_vector_util::Unitize(v);
+        cgal_vector_util::unitize(v);
         v *= joint.scale[1] + temp_scale_y;
         mid_rectangle[0] += v;
         mid_rectangle[3] += v;
@@ -3518,9 +3518,9 @@ namespace wood_joint_lib
 
         // Z-AxisOffset by normal, scale value gives the offset from the center
         IK::Vector_3 z_axis;
-        cgal_vector_util::AverageNormal(mid_rectangle, z_axis, true, true);
+        cgal_vector_util::average_normal(mid_rectangle, z_axis);
         IK::Vector_3 z_axis_offset_from_center = z_axis * offset_from_center;
-        double len = cgal_vector_util::LengthVec(z_axis);
+        double len = cgal_vector_util::length(z_axis.x(), z_axis.y(), z_axis.z());
 
         z_axis *= (joint.scale[2] + temp_scale_z);
 
@@ -3534,7 +3534,7 @@ namespace wood_joint_lib
         cgal_polyline_util::move(rect3, -z_axis);
         cgal_polyline_util::move(rect0, z_axis_offset_from_center);
         cgal_polyline_util::move(rect2, -z_axis_offset_from_center);
-        // printf("\n Length %f %f %f", len, joint.scale[2], temp_scale_z);
+        // printf("\n length %f %f %f", len, joint.scale[2], temp_scale_z);
         // rect0=cgal_polyline_util::tween_two_polylines(rect0, rect1, 0.25);//joint.shift
         // rect2=cgal_polyline_util::tween_two_polylines(rect2, rect3, 0.25);
         // viewer_polylines.emplace_back(rect0);

@@ -34,7 +34,13 @@
     <ClCompile Include="C:\IBOIS57\_Code\Software\Python\compas_wood\backend\src\wood\include\cgal_polyline_mesh_util.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="C:\IBOIS57\_Code\Software\Python\compas_wood\backend\src\wood\include\cgal_polyline_util.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="C:\IBOIS57\_Code\Software\Python\compas_wood\backend\src\wood\include\cgal_rectangle_util.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\IBOIS57\_Code\Software\Python\compas_wood\backend\src\wood\include\cgal_vector_util.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="C:\IBOIS57\_Code\Software\Python\compas_wood\backend\src\wood\include\clipper_util.cpp">

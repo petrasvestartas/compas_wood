@@ -1115,7 +1115,7 @@ namespace wood_test
         };
 
         // main method
-        IK::Point_3 center = cgal_polyline_util::Center(polygon);
+        IK::Point_3 center = cgal_polyline_util::center(polygon);
         std::vector<IK::Point_3> points = {center};
 
         // display

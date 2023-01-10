@@ -67,6 +67,23 @@ namespace cgal_plane_util
             }
             return rc;
         }
+
+        int is_parallel_to(const IK::Vector_3 &v0, const IK::Vector_3 &v1)
+        {
+            int rc = 0;
+
+            double ll = length(v0.x(), v0.y(), v0.z()) * length(v1.x(), v1.y(), v1.z());
+            if (ll > 0.0)
+            {
+                const double cos_angle = (v0.x() * v1.x() + v0.y() * v1.y() + v0.z() * v1.z()) / ll;
+                const double cos_tol = cos(wood_globals::ANGLE);
+                if (cos_angle >= cos_tol)
+                    rc = 1;
+                else if (cos_angle <= -cos_tol)
+                    rc = -1;
+            }
+            return rc;
+        }
     }
 
     /**
@@ -99,9 +116,9 @@ namespace cgal_plane_util
         IK::Vector_3 plane1_v = plane1.orthogonal_vector();
 
         if (can_be_flipped)
-            return cgal_vector_util::IsParallelTo(plane0_v, plane1_v, wood_globals::DISTANCE_SQUARED) != 0;
+            return internal::is_parallel_to(plane0_v, plane1_v) != 0;
         else
-            return cgal_vector_util::IsParallelTo(plane0_v, plane1_v, wood_globals::DISTANCE_SQUARED) == -1;
+            return internal::is_parallel_to(plane0_v, plane1_v) == -1;
     }
 
     /**
@@ -119,7 +136,7 @@ namespace cgal_plane_util
         IK::Point_3 cp0 = plane0.projection(p1);
         IK::Point_3 cp1 = plane1.projection(p0);
 
-        return cgal_vector_util::DistanceSquare(cp0, p1) < wood_globals::DISTANCE_SQUARED && cgal_vector_util::DistanceSquare(cp1, p0) < wood_globals::DISTANCE_SQUARED;
+        return CGAL::squared_distance(cp0, p1) < wood_globals::DISTANCE_SQUARED && CGAL::squared_distance(cp1, p0) < wood_globals::DISTANCE_SQUARED;
     }
 
     /**

@@ -164,7 +164,7 @@ namespace cgal_rectangle_util
         CGAL::Aff_transformation_3<IK> xform_to_xy, xform_to_xy_inv;
         internal::orient_polyline_to_xy_and_back(polygon, xform_to_xy, xform_to_xy_inv);
         CGAL_Polyline polygon_copy = polygon;
-        cgal_polyline_util::Transform(polygon_copy, xform_to_xy);
+        cgal_polyline_util::transform(polygon_copy, xform_to_xy);
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // calculate the convex hull
@@ -265,7 +265,7 @@ namespace cgal_rectangle_util
         CGAL::Aff_transformation_3<IK> xform_to_xy, xform_to_xy_inv;
         internal::orient_polyline_to_xy_and_back(polygon, xform_to_xy, xform_to_xy_inv);
         CGAL_Polyline polygon_copy = polygon;
-        cgal_polyline_util::Transform(polygon_copy, xform_to_xy);
+        cgal_polyline_util::transform(polygon_copy, xform_to_xy);
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // offset polygon if the input is below 0

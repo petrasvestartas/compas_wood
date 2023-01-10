@@ -7,6 +7,69 @@ namespace cgal_polyline_mesh_util
     namespace internal
     {
 
+        double length(double x, double y, double z)
+        {
+
+            double len;
+            x = fabs(x);
+            y = fabs(y);
+            z = fabs(z);
+            if (y >= x && y >= z)
+            {
+                len = x;
+                x = y;
+                y = len;
+            }
+            else if (z >= x && z >= y)
+            {
+                len = x;
+                x = z;
+                z = len;
+            }
+
+            // 15 September 2003 Dale Lear
+            //     For small denormalized doubles (positive but smaller
+            //     than DBL_MIN), some compilers/FPUs set 1.0/x to +INF.
+            //     Without the ON_DBL_MIN test we end up with
+            //     microscopic vectors that have infinte length!
+            //
+            //     This code is absolutely necessary.  It is a critical
+            //     part of the bug fix for RR 11217.
+            if (x > ON_DBL_MIN)
+            {
+                y /= x;
+                z /= x;
+                len = x * sqrt(1.0 + y * y + z * z);
+            }
+            else if (x > 0.0 && ON_IS_FINITE(x))
+                len = x;
+            else
+                len = 0.0;
+
+            return len;
+        }
+
+        bool unitize(IK::Vector_3 &vector)
+        {
+            bool rc = false;
+            // Since x,y,z are floats, d will not be denormalized and the
+            // ON_DBL_MIN tests in ON_2dVector::Unitize() are not needed.
+
+            double d = length(vector.hx(), vector.hy(), vector.hz());
+            if (d > 0.0)
+            {
+                double dx = vector.hx();
+                double dy = vector.hy();
+                double dz = vector.hz();
+                vector = IK::Vector_3(
+                    (dx / d),
+                    (dy / d),
+                    (dz / d));
+                rc = true;
+            }
+            return rc;
+        }
+
         void mark_domains(CGALCDT &ct, Face_handle start, int index, std::list<CGALCDT::Edge> &border)
         {
             if (start->info().nesting_level != -1)
@@ -62,9 +125,9 @@ namespace cgal_polyline_mesh_util
             auto x_axis = plane.base1();
             auto y_axis = plane.base2();
             auto z_axis = plane.orthogonal_vector();
-            cgal_vector_util::Unitize(x_axis);
-            cgal_vector_util::Unitize(y_axis);
-            cgal_vector_util::Unitize(z_axis);
+            internal::unitize(x_axis);
+            internal::unitize(y_axis);
+            internal::unitize(z_axis);
 
             // transformation maps P0 to P1, P0+X0 to P1+X1, ...
 
@@ -475,7 +538,7 @@ namespace cgal_polyline_mesh_util
             auto next = ((i + 1) + len) % len;
             average_normal = average_normal + CGAL::cross_product(polylines[lastID][i] - polylines[lastID][prev], polylines[lastID][next] - polylines[lastID][i]);
         }
-        cgal_vector_util::Unitize(average_normal);
+        internal::unitize(average_normal);
 
         // flip if needed
         IK::Plane_3 base_plane(polylines[lastID][0], average_normal);
@@ -752,7 +815,7 @@ namespace cgal_polyline_mesh_util
             IK::Point_3 coord_1(out_vertices_temp[b0 * 3 + 0], out_vertices_temp[b0 * 3 + 1], out_vertices_temp[b0 * 3 + 2]);
             IK::Point_3 coord_2(out_vertices_temp[c0 * 3 + 0], out_vertices_temp[c0 * 3 + 1], out_vertices_temp[c0 * 3 + 2]);
             IK::Vector_3 normal_0 = -CGAL::cross_product(coord_0 - coord_1, coord_2 - coord_1);
-            cgal_vector_util::Unitize(normal_0);
+            internal::unitize(normal_0);
             // std::cout << normal_0.hx() << " " << normal_0.hy() << " " << normal_0.hz() << "\n";
             // std::cout << coord_1.hx() << " " << coord_1.hy() << " " << coord_1.hz() << "\n";
 

@@ -98,9 +98,9 @@ namespace cgal_inscribe_util
             auto x0 = plane.base1();
             auto y0 = plane.base2();
             auto z0 = plane.orthogonal_vector();
-            cgal_vector_util::Unitize(x0);
-            cgal_vector_util::Unitize(y0);
-            cgal_vector_util::Unitize(z0);
+            internal::unitize(x0);
+            internal::unitize(y0);
+            internal::unitize(z0);
 
             // Move to origin -> T0 translates point P0 to (0,0,0)
             CGAL::Aff_transformation_3<IK> t0(CGAL::TRANSLATION, IK::Vector_3(-origin.x(), -origin.y(), -origin.z()));
@@ -114,7 +114,7 @@ namespace cgal_inscribe_util
             return f0 * t0;
         }
 
-         void get_average_normal(const CGAL_Polyline &polyline, IK::Vector_3 &average_normal)
+        void get_average_normal(const CGAL_Polyline &polyline, IK::Vector_3 &average_normal)
         {
             size_t len = CGAL::squared_distance(polyline.front(), polyline.back()) < wood_globals::DISTANCE_SQUARED ? polyline.size() - 1 : polyline.size();
             average_normal = IK::Vector_3(0, 0, 0);
@@ -194,7 +194,7 @@ namespace cgal_inscribe_util
             }
         }
 
-         bool orient_polyline_to_xy_and_back(CGAL_Polyline &polyline, CGAL::Aff_transformation_3<IK> &xform_to_xy, CGAL::Aff_transformation_3<IK> &xform_to_xy_inv)
+        bool orient_polyline_to_xy_and_back(CGAL_Polyline &polyline, CGAL::Aff_transformation_3<IK> &xform_to_xy, CGAL::Aff_transformation_3<IK> &xform_to_xy_inv)
         {
 
             /////////////////////////////////////////////////////////////////////////////////////
@@ -217,6 +217,8 @@ namespace cgal_inscribe_util
             xform_to_xy_inv = xform_to_xy.inverse();
             return true;
         }
+
+
     }
 
     std::tuple<IK::Point_3, IK::Plane_3, double> get_polylabel(const std::vector<CGAL_Polyline> &polylines, double precision)
@@ -237,7 +239,7 @@ namespace cgal_inscribe_util
         CGAL::Aff_transformation_3<IK> xform_toXY = cgal_xform_util::plane_to_xy(origin, plane);
         CGAL::Aff_transformation_3<IK> xform_toXY_Inv = xform_toXY.inverse();
         for (auto &polyline : polylines_copy)
-            cgal_polyline_util::Transform(polyline, xform_toXY);
+            cgal_polyline_util::transform(polyline, xform_toXY);
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Sort polylines based on bounding-box to detect which polylines are holes, this only works if the polygon does not have holes within holes
@@ -423,7 +425,7 @@ namespace cgal_inscribe_util
 
         for (auto &polyline : polylines_copy)
         {
-            cgal_polyline_util::Transform(polyline, xform_toXY);
+            cgal_polyline_util::transform(polyline, xform_toXY);
             for (auto &p : polyline)
                 points_2d.push_back(IK::Point_2(p.hx(), p.hy()));
             points_2d.pop_back();

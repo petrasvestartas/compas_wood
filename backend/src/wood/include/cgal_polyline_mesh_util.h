@@ -28,6 +28,24 @@ namespace cgal_polyline_mesh_util
     namespace internal
     {
 
+                /**
+         * Get length of a 3D vector, taken from the OpenNURBS library: https://github.com/mcneel/opennurbs
+         *
+         * @param [in] x The first coordinate of the vector
+         * @param [in] y The second coordinate of the vector
+         * @param [in] z The third coordinate of the vector
+         * @return The length of the vector
+         */
+        double length(double x, double y, double z);
+
+        /**
+         * Unitize the vector by dividing its coordinates by its length
+         *
+         * @param [in, out] vector 3D vector
+         * @return true if the vector length is not equal to zero
+         */
+        bool unitize(IK::Vector_3 &vector);
+
         /**
          * this functuon is used to mark facets that are inside the domain bounded by the polygon
          * it is used by mark_domains()

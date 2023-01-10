@@ -318,12 +318,12 @@ namespace wood
             // Check this one if it fine for timber plate joints
             // Why do we need to give a distance if it is only 2D scale?
             // Does the distance measurement between 1 and 2 vertex would be valid in all cases? If not should it be or not?
-            unit_scale_distance = cgal_vector_util::Distance(joint_volumes[0][1], joint_volumes[0][2]);
+            unit_scale_distance = std::sqrt(CGAL::squared_distance(joint_volumes[0][1], joint_volumes[0][2]));
 
             IK::Segment_3 volume_segment(joint_volumes[0][0], joint_volumes[1][0]);
             IK::Vector_3 vec = volume_segment.to_vector() * 0.5;
             IK::Vector_3 vec_unit = volume_segment.to_vector();
-            cgal_vector_util::Unitize(vec_unit);
+            cgal_vector_util::unitize(vec_unit);
             vec_unit *= (unit_scale_distance * 0.5);
 
             cgal_polyline_util::move(joint_volumes[0], vec);
@@ -337,7 +337,7 @@ namespace wood
                 IK::Segment_3 volume_segment(joint_volumes[2][0], joint_volumes[3][0]);
                 vec = volume_segment.to_vector() * 0.5;
                 vec_unit = volume_segment.to_vector();
-                cgal_vector_util::Unitize(vec_unit);
+                cgal_vector_util::unitize(vec_unit);
                 vec_unit *= (unit_scale_distance * 0.5);
 
                 cgal_polyline_util::move(joint_volumes[2], vec);

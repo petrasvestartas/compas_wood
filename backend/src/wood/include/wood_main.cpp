@@ -67,13 +67,13 @@ namespace wood_main
             //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
             // Create Planes
             IK::Vector_3 planeAxes[4];
-            cgal_polyline_util::AveragePlane(pp[i], planeAxes);
+            cgal_polyline_util::get_average_plane(pp[i], planeAxes);
 
             // Create Transformation
             CGAL::Aff_transformation_3<IK> xform_toXY = cgal_xform_util::plane_to_xy(planeAxes[0], planeAxes[1], planeAxes[2], planeAxes[3]);
             CGAL::Aff_transformation_3<IK> xform_toXY_Inv = xform_toXY.inverse();
 
-            // Transform the merged polyline to xy and compute xyBounding Box
+            // transform the merged polyline to xy and compute xyBounding Box
 
             for (auto it = twoPolylines.begin(); it != twoPolylines.end(); ++it)
             {
@@ -120,11 +120,11 @@ namespace wood_main
 
             elements[count].planes = std::vector<IK::Plane_3>(1 + pp[i].size());
 
-            // IK::Point_3 origin = cgal_polyline_util::Center(pp[i]);
+            // IK::Point_3 origin = cgal_polyline_util::center(pp[i]);
             IK::Vector_3 normal;
-            cgal_vector_util::AverageNormal(pp[i], normal, true, false);
-            elements[count].planes[0] = IK::Plane_3(cgal_polyline_util::Center(pp[i]), normal);
-            elements[count].planes[1] = IK::Plane_3(cgal_polyline_util::Center(pp[i + 1]), -normal);
+            cgal_vector_util::average_normal(pp[i], normal);
+            elements[count].planes[0] = IK::Plane_3(cgal_polyline_util::center(pp[i]), normal);
+            elements[count].planes[1] = IK::Plane_3(cgal_polyline_util::center(pp[i + 1]), -normal);
             elements[count].thickness = std::sqrt(CGAL::squared_distance(pp[i][0], elements[count].planes[1].projection(pp[i][0])));
             // CGAL_Debug(elements[count].thickness);
 
@@ -213,9 +213,9 @@ namespace wood_main
             CGAL_Polyline projection_points = {Polyline0[0][f - 2], Polyline0[1][f - 2], Polyline0[0][f - 1], Polyline0[1][f - 1]};
 
             IK::Segment_3 average_line;
-            cgal_polyline_util::LineLineAverage(edge_0, edge_1, average_line);
+            cgal_polyline_util::line_line_average(edge_0, edge_1, average_line);
             // IK::Segment_3 average_line = cgal_polyline_util::LineLineMaximumOverlap(edge_0, edge_1);
-            cgal_polyline_util::LineFromProjectedPoints(average_line, projection_points, average_line);
+            cgal_polyline_util::line_from_projected_points(average_line, projection_points, average_line);
             // viewer_polylines.emplace_back(CGAL_Polyline({ average_line[0], average_line[1] }));
             joint_lines[0] = {average_line[0], average_line[1]};
             joint_lines[1] = joint_lines[0];
@@ -228,15 +228,15 @@ namespace wood_main
 
             // Move points up and down using cross product
             IK::Vector_3 z_axis = Plane0[f].orthogonal_vector();
-            cgal_vector_util::Unitize(z_axis);
+            cgal_vector_util::unitize(z_axis);
 
             // set x-axis
             auto x_axis = average_line.to_vector();
-            cgal_vector_util::Unitize(x_axis);
+            cgal_vector_util::unitize(x_axis);
 
             // set y-axis
             auto y_axis = CGAL::cross_product(z_axis, x_axis);
-            cgal_vector_util::Unitize(y_axis);
+            cgal_vector_util::unitize(y_axis);
 
             // IK::Point_3 p0 = CGAL::midpoint(average_line[0], average_line[1]) + x_axis * y_offset *0.5;
             // IK::Point_3 p1 = CGAL::midpoint(average_line[0], average_line[1]) - x_axis * y_offset *0.5;
@@ -320,7 +320,7 @@ namespace wood_main
         IK::Segment_3 centerIntersectionLineMax;
 
         //
-        //    if (!cgal_polyline_util::PlanePolyline(Polyline0[0], Polyline1[0], Plane0[0], Plane1[0], centerIntersectionLine, centerIntersectionLineMax)) {
+        //    if (!cgal_polyline_util::plane_polyline(Polyline0[0], Polyline1[0], Plane0[0], Plane1[0], centerIntersectionLine, centerIntersectionLineMax)) {
         ///*        CGAL_Debug(centerIntersectionLine[0],true);
         //        CGAL_Debug(centerIntersectionLine[1],true)*/;
         //        //jointLine = { centerIntersectionLine[0],centerIntersectionLine[1] };
@@ -359,25 +359,25 @@ namespace wood_main
         IK::Segment_3 cx0_py0__cy0_px0;
         std::pair<int, int> edge_pair_e0_0__e1_0; //
 
-        if (!cgal_polyline_util::PlanePolyline(*cx0, *cy0, *px0, *py0, cx0_py0__cy0_px0, edge_pair_e0_0__e1_0))
+        if (!cgal_intersection_util::polyline_plane_cross_joint(*cx0, *cy0, *px0, *py0, cx0_py0__cy0_px0, edge_pair_e0_0__e1_0))
             return false; //, cx0_py0__cy0_px0_Max
         // printf("A");
 
         IK::Segment_3 cx0_py1__cy1_px0;
         std::pair<int, int> edge_pair_e0_0__e1_1;
-        if (!cgal_polyline_util::PlanePolyline(*cx0, *cy1, *px0, *py1, cx0_py1__cy1_px0, edge_pair_e0_0__e1_1))
+        if (!cgal_intersection_util::polyline_plane_cross_joint(*cx0, *cy1, *px0, *py1, cx0_py1__cy1_px0, edge_pair_e0_0__e1_1))
             return false; //, cx0_py1__cy1_px0_Max
         // printf("B");
 
         IK::Segment_3 cx1_py0__cy0_px1;
         std::pair<int, int> edge_pair_e0_1__e1_0;
-        if (!cgal_polyline_util::PlanePolyline(*cx1, *cy0, *px1, *py0, cx1_py0__cy0_px1, edge_pair_e0_1__e1_0))
+        if (!cgal_intersection_util::polyline_plane_cross_joint(*cx1, *cy0, *px1, *py0, cx1_py0__cy0_px1, edge_pair_e0_1__e1_0))
             return false; //, cx1_py0__cy0_px1_Max
         // printf("C");
 
         IK::Segment_3 cx1_py1__cy1_px1;
         std::pair<int, int> edge_pair_e0_1__e1_1;
-        if (!cgal_polyline_util::PlanePolyline(*cx1, *cy1, *px1, *py1, cx1_py1__cy1_px1, edge_pair_e0_1__e1_1))
+        if (!cgal_intersection_util::polyline_plane_cross_joint(*cx1, *cy1, *px1, *py1, cx1_py1__cy1_px1, edge_pair_e0_1__e1_1))
             return false; //,cx1_py1__cy1_px1_Max
 
         face_ids.first[0] = edge_pair_e0_0__e1_0.first + 2;
@@ -429,29 +429,29 @@ namespace wood_main
         //*--------------*
         //////////////////////////////////////////////////////////////////////////////
         IK::Segment_3 c;
-        cgal_polyline_util::MidLine(cx0_py1__cy1_px0, cx1_py0__cy0_px1, c);
-        cgal_polyline_util::ScaleLine(c, 10);
+        cgal_polyline_util::get_middle_line(cx0_py1__cy1_px0, cx1_py0__cy0_px1, c);
+        cgal_polyline_util::scale_line(c, 10);
 
         // Find Max gap
         double cpt0[4];
-        cgal_polyline_util::ClosestPointTo(cx0_py0__cy0_px0[0], c, cpt0[0]);
-        cgal_polyline_util::ClosestPointTo(cx0_py1__cy1_px0[0], c, cpt0[1]);
-        cgal_polyline_util::ClosestPointTo(cx1_py0__cy0_px1[0], c, cpt0[2]);
-        cgal_polyline_util::ClosestPointTo(cx1_py1__cy1_px1[0], c, cpt0[3]);
+        cgal_polyline_util::closest_point_to(cx0_py0__cy0_px0[0], c, cpt0[0]);
+        cgal_polyline_util::closest_point_to(cx0_py1__cy1_px0[0], c, cpt0[1]);
+        cgal_polyline_util::closest_point_to(cx1_py0__cy0_px1[0], c, cpt0[2]);
+        cgal_polyline_util::closest_point_to(cx1_py1__cy1_px1[0], c, cpt0[3]);
         std::sort(cpt0, cpt0 + 4);
 
         double cpt1[4];
-        cgal_polyline_util::ClosestPointTo(cx0_py0__cy0_px0[1], c, cpt1[0]);
-        cgal_polyline_util::ClosestPointTo(cx0_py1__cy1_px0[1], c, cpt1[1]);
-        cgal_polyline_util::ClosestPointTo(cx1_py0__cy0_px1[1], c, cpt1[2]);
-        cgal_polyline_util::ClosestPointTo(cx1_py1__cy1_px1[1], c, cpt1[3]);
+        cgal_polyline_util::closest_point_to(cx0_py0__cy0_px0[1], c, cpt1[0]);
+        cgal_polyline_util::closest_point_to(cx0_py1__cy1_px0[1], c, cpt1[1]);
+        cgal_polyline_util::closest_point_to(cx1_py0__cy0_px1[1], c, cpt1[2]);
+        cgal_polyline_util::closest_point_to(cx1_py1__cy1_px1[1], c, cpt1[3]);
         std::sort(cpt1, cpt1 + 4);
 
         double cpt[8] = {cpt0[0], cpt0[1], cpt0[2], cpt0[3], cpt1[0], cpt1[1], cpt1[2], cpt1[3]};
         std::sort(cpt, cpt + 8);
 
-        IK::Segment_3 lMin(cgal_polyline_util::PointAt(c, cpt0[3]), cgal_polyline_util::PointAt(c, cpt1[0]));
-        IK::Segment_3 lMax(cgal_polyline_util::PointAt(c, cpt[0]), cgal_polyline_util::PointAt(c, cpt[7]));
+        IK::Segment_3 lMin(cgal_polyline_util::point_at(c, cpt0[3]), cgal_polyline_util::point_at(c, cpt1[0]));
+        IK::Segment_3 lMax(cgal_polyline_util::point_at(c, cpt[0]), cgal_polyline_util::point_at(c, cpt[7]));
 
         //////////////////////////////////////////////////////////////////////////////
         // When elements are not planar there are two options: 1) Rectangular beams are 3D overaly 2) Plate is connected to sharp corner in an angle
@@ -480,15 +480,14 @@ namespace wood_main
         //    //Rhino.Geometry.Intersect.Intersection.LineBox(lMax, box, 0.01, out Interval lineParams);
 
         //    ////Remake maxLine
-        //    //lMax = new Line(lMax.PointAt(lineParams.T0), lMax.PointAt(lineParams.T1));
+        //    //lMax = new Line(lMax.point_at(lineParams.T0), lMax.point_at(lineParams.T1));
         //}
 
         //////////////////////////////////////////////////////////////////////////////
         // RE-Define wood::joint area from lines
         //////////////////////////////////////////////////////////////////////////////
         // lMin mid plane
-        IK::Point_3 lMinMid;
-        cgal_vector_util::MidPointConst(lMin.min(), lMin.max(), lMinMid);
+        IK::Point_3 lMinMid = CGAL::midpoint(lMin.min(), lMin.max());
         IK::Plane_3 midPlane(lMinMid, lMin.to_vector()); // Min line mid-plane
 
         // Intersection lMax with midPlane
@@ -505,8 +504,8 @@ namespace wood_main
         // IK::Point_3 origin(0,0,0);
         // IK::Vector_3 v_copy = v;
         // IK::Vector_3 v_align = cx0_py0__cy0_px0.to_vector();
-        // cgal_vector_util::Unitize(v_copy);
-        // cgal_vector_util::Unitize(v_align);
+        // cgal_vector_util::unitize(v_copy);
+        // cgal_vector_util::unitize(v_align);
 
         // if (CGAL::squared_distance(origin + v_align, origin + v_copy) > CGAL::squared_distance(origin - v_align, origin + v_copy))
         // v *= -1;
@@ -543,7 +542,7 @@ namespace wood_main
 
         ////std::rotate(joint_area_oriented.begin(), joint_area_oriented.begin() + 1, joint_area_oriented.end());
 
-        // IK::Point_3 center = cgal_polyline_util::Center(*cx0);//not center but closest point, check all and tak closest
+        // IK::Point_3 center = cgal_polyline_util::center(*cx0);//not center but closest point, check all and tak closest
         // if (CGAL::squared_distance(IK::Point_3(joint_area_oriented[0]) + v, center) > CGAL::squared_distance(IK::Point_3(joint_area_oriented[0]) - v, center))
         //	v *= -1;
 
@@ -566,15 +565,15 @@ namespace wood_main
         // does not work
         if (wood_globals::EXTEND[0] + wood_globals::EXTEND[1] > 0)
         {
-            cgal_polyline_util::Extend(joint_volumes_pairA_pairB[0], 0, 0, 0, wood_globals::EXTEND[0], wood_globals::EXTEND[0]);
-            cgal_polyline_util::Extend(joint_volumes_pairA_pairB[0], 2, 0, 0, wood_globals::EXTEND[0], wood_globals::EXTEND[0]);
-            cgal_polyline_util::Extend(joint_volumes_pairA_pairB[0], 1, 0, 0, wood_globals::EXTEND[1], wood_globals::EXTEND[1]);
-            cgal_polyline_util::Extend(joint_volumes_pairA_pairB[0], 3, 0, 0, wood_globals::EXTEND[1], wood_globals::EXTEND[1]);
+            cgal_polyline_util::extend(joint_volumes_pairA_pairB[0], 0, 0, 0, wood_globals::EXTEND[0], wood_globals::EXTEND[0]);
+            cgal_polyline_util::extend(joint_volumes_pairA_pairB[0], 2, 0, 0, wood_globals::EXTEND[0], wood_globals::EXTEND[0]);
+            cgal_polyline_util::extend(joint_volumes_pairA_pairB[0], 1, 0, 0, wood_globals::EXTEND[1], wood_globals::EXTEND[1]);
+            cgal_polyline_util::extend(joint_volumes_pairA_pairB[0], 3, 0, 0, wood_globals::EXTEND[1], wood_globals::EXTEND[1]);
 
-            cgal_polyline_util::Extend(joint_volumes_pairA_pairB[1], 0, 0, 0, wood_globals::EXTEND[0], wood_globals::EXTEND[0]);
-            cgal_polyline_util::Extend(joint_volumes_pairA_pairB[1], 2, 0, 0, wood_globals::EXTEND[0], wood_globals::EXTEND[0]);
-            cgal_polyline_util::Extend(joint_volumes_pairA_pairB[1], 1, 0, 0, wood_globals::EXTEND[1], wood_globals::EXTEND[1]);
-            cgal_polyline_util::Extend(joint_volumes_pairA_pairB[1], 3, 0, 0, wood_globals::EXTEND[1], wood_globals::EXTEND[1]);
+            cgal_polyline_util::extend(joint_volumes_pairA_pairB[1], 0, 0, 0, wood_globals::EXTEND[0], wood_globals::EXTEND[0]);
+            cgal_polyline_util::extend(joint_volumes_pairA_pairB[1], 2, 0, 0, wood_globals::EXTEND[0], wood_globals::EXTEND[0]);
+            cgal_polyline_util::extend(joint_volumes_pairA_pairB[1], 1, 0, 0, wood_globals::EXTEND[1], wood_globals::EXTEND[1]);
+            cgal_polyline_util::extend(joint_volumes_pairA_pairB[1], 3, 0, 0, wood_globals::EXTEND[1], wood_globals::EXTEND[1]);
         }
 
         // For the sake of consistency
@@ -653,7 +652,7 @@ namespace wood_main
 
                         // jointArea1 = jointArea0;//default case (Top-top)
                         IK::Segment_3 joint_line0(IK::Point_3(0, 0, 0), IK::Point_3(0, 0, 0));
-                        IK::Plane_3 averagePlane0(CGAL::midpoint(Polyline0[0][0], Polyline0[1][0]), Plane0[0].orthogonal_vector()); // Center Plane
+                        IK::Plane_3 averagePlane0(CGAL::midpoint(Polyline0[0][0], Polyline0[1][0]), Plane0[0].orthogonal_vector()); // center Plane
                         CGAL_Polyline joint_quads0;
                         if (i > 1)
                         { // Side-Top  or Side-Side
@@ -666,7 +665,7 @@ namespace wood_main
 
                             // Intersect: a) clipper region, b) center plane
 
-                            bool isLine = cgal_intersection_util::polyline_plane(joint_area, averagePlane0, alignmentSegment, joint_line0);
+                            bool isLine = cgal_intersection_util::polyline_plane_to_line(joint_area, averagePlane0, alignmentSegment, joint_line0);
 
                             // Planes to get a quad
                             if (isLine && joint_line0.squared_length() > wood_globals::DISTANCE)
@@ -686,7 +685,7 @@ namespace wood_main
                         // Intersect second time for the side-side connection
 
                         IK::Segment_3 joint_line1(IK::Point_3(0, 0, 0), IK::Point_3(0, 0, 0));
-                        IK::Plane_3 averagePlane1(CGAL::midpoint(Polyline1[0][0], Polyline1[1][0]), Plane1[0].orthogonal_vector()); // Center Plane
+                        IK::Plane_3 averagePlane1(CGAL::midpoint(Polyline1[0][0], Polyline1[1][0]), Plane1[0].orthogonal_vector()); // center Plane
                         CGAL_Polyline joint_quads1;
 
                         if (j > 1)
@@ -699,7 +698,7 @@ namespace wood_main
 
                             IK::Segment_3 alignmentSegment(CGAL::midpoint(Polyline1[0][i - 2], Polyline1[1][i - 2]), CGAL::midpoint(Polyline1[0][i - 1], Polyline1[1][i - 1]));
 
-                            bool isLine = cgal_intersection_util::polyline_plane(joint_area, averagePlane1, alignmentSegment, joint_line1);
+                            bool isLine = cgal_intersection_util::polyline_plane_to_line(joint_area, averagePlane1, alignmentSegment, joint_line1);
 
                             // Planes to get a quad
                             if (isLine && joint_line1.squared_length() > wood_globals::DISTANCE)
@@ -774,7 +773,7 @@ namespace wood_main
                             auto v0 = joint_line0[0] - joint_line0[1];
                             auto v1 = joint_line1[0] - joint_line1[1];
 
-                            if (cgal_vector_util::IsParallelTo(v0, v1, wood_globals::DISTANCE) == 0 || wood_globals::FORCE_SIDE_TO_SIDE_JOINTS_TO_BE_ROTATED)
+                            if (cgal_vector_util::is_parallel_to(v0, v1) == 0 || wood_globals::FORCE_SIDE_TO_SIDE_JOINTS_TO_BE_ROTATED)
                             { // wood_globals::DISTANCE
 #ifdef DEBUG_wood_MAIN_LOCAL_SEARCH
                                 printf("Elements Are rotated");
@@ -792,19 +791,19 @@ namespace wood_main
                                 // Create Plane to XY transformation matrix
                                 ////////////////////////////////////////////////////////////////////////////////
                                 IK::Vector_3 o(average_segment[0].hx(), average_segment[0].hy(), average_segment[0].hz());
-                                IK::Vector_3 x = average_segment.to_vector();   // cgal_vector_util::Unitize(x);
-                                IK::Vector_3 z = Plane0[i].orthogonal_vector(); // cgal_vector_util::Unitize(z);
-                                IK::Vector_3 y = CGAL::cross_product(x, z);     // cgal_vector_util::Unitize(y);
-                                cgal_vector_util::Unitize(y);
+                                IK::Vector_3 x = average_segment.to_vector();   // cgal_vector_util::unitize(x);
+                                IK::Vector_3 z = Plane0[i].orthogonal_vector(); // cgal_vector_util::unitize(z);
+                                IK::Vector_3 y = CGAL::cross_product(x, z);     // cgal_vector_util::unitize(y);
+                                cgal_vector_util::unitize(y);
 
                                 // Reorient axis using first wood::element orientation - Plane0 and Plane1
-                                IK::Point_3 center = cgal_polyline_util::Center(Polyline0[i]);
+                                IK::Point_3 center = cgal_polyline_util::center(Polyline0[i]);
                                 double thickness = std::max(
-                                    cgal_vector_util::Distance(Plane0[0].point(), Plane0[1].projection(Plane0[0].point())),
-                                    cgal_vector_util::Distance(Plane1[0].point(), Plane1[1].projection(Plane1[0].point())));
+                                    std::sqrt(CGAL::squared_distance(Plane0[0].point(), Plane0[1].projection(Plane0[0].point()))),
+                                    std::sqrt(CGAL::squared_distance(Plane1[0].point(), Plane1[1].projection(Plane1[0].point()))));
                                 y *= thickness * 2;
                                 IK::Segment_3 y_line(center + y, center - y);
-                                cgal_polyline_util::LineTwoPlanes(y_line, Plane0[0], Plane1[1]);
+                                cgal_intersection_util::line_two_planes(y_line, Plane0[0], Plane1[1]);
                                 y = y_line[1] - y_line[0];
                                 x = CGAL::cross_product(y, z);
                                 viewer_polylines.emplace_back(CGAL_Polyline{y_line[0], y_line[1]});
@@ -827,7 +826,7 @@ namespace wood_main
                                 ////////////////////////////////////////////////////////////////////////////////
                                 // 2D - Get boundary ractangle
                                 ////////////////////////////////////////////////////////////////////////////////
-                                cgal_polyline_util::Transform(joint_area_copy, xform);
+                                cgal_polyline_util::transform(joint_area_copy, xform);
                                 auto AABB = CGAL::bbox_3(joint_area_copy.begin(), joint_area_copy.end(), IK());
                                 IK::Segment_3 segmentX(IK::Point_3(AABB.xmin(), AABB.ymin(), AABB.zmin()), IK::Point_3(AABB.xmax(), AABB.ymin(), AABB.zmin()));
                                 IK::Segment_3 segmentY(IK::Point_3(AABB.xmin(), AABB.ymin(), AABB.zmin()), IK::Point_3(AABB.xmin(), AABB.ymax(), AABB.zmin()));
@@ -837,7 +836,7 @@ namespace wood_main
                                 // 2D Orient to 3D
                                 ////////////////////////////////////////////////////////////////////////////////
                                 CGAL::Aff_transformation_3<IK> xformInv = xform.inverse();
-                                cgal_polyline_util::Transform(average_rectangle, xformInv);
+                                cgal_polyline_util::transform(average_rectangle, xformInv);
 
                                 ////////////////////////////////////////////////////////////////////////////////
                                 // Create Joint rectangles by an offset of wood::element thickness
@@ -850,7 +849,7 @@ namespace wood_main
                                     // CGAL_Debug((dir.x() + dir.y() + dir.z()));
                                 }
 
-                                cgal_vector_util::Unitize(offset_vector);
+                                cgal_vector_util::unitize(offset_vector);
                                 double d0 = 0.5 * std::sqrt(CGAL::squared_distance(Plane0[0].point(), Plane0[1].projection(Plane0[0].point())));
                                 offset_vector *= d0;
 
@@ -874,7 +873,7 @@ namespace wood_main
                                 // Get Overlap-Line // scale it down ?
                                 ////////////////////////////////////////////////////////////////////////////////
                                 IK::Segment_3 lJ;
-                                cgal_polyline_util::LineLineOverlapAverage(joint_line0, joint_line1, lJ);
+                                cgal_polyline_util::line_line_overlap_average(joint_line0, joint_line1, lJ);
                                 // CGAL_Debug(std::sqrt(joint_line0.squared_length()), std::sqrt(joint_line1.squared_length()), std::sqrt(lJ.squared_length()));
                                 joint_lines[0] = {lJ[0], lJ[1]};
                                 joint_lines[1] = joint_lines[0];
@@ -898,8 +897,8 @@ namespace wood_main
                                 // returns an approximation of the signed dihedral angle in the tetrahedron pqrs of edge pq.
                                 // The sign is negative if orientation(p, q, r, s) is CGAL::NEGATIVEand positive otherwise.The angle is given in degrees.
                                 ////////////////////////////////////////////////////////////////////////////////
-                                IK::Point_3 centerPoint0 = averagePlane0.projection(cgal_polyline_util::Center(Polyline0[0]));
-                                IK::Point_3 centerPoint1 = averagePlane1.projection(cgal_polyline_util::Center(Polyline1[0]));
+                                IK::Point_3 centerPoint0 = averagePlane0.projection(cgal_polyline_util::center(Polyline0[0]));
+                                IK::Point_3 centerPoint1 = averagePlane1.projection(cgal_polyline_util::center(Polyline1[0]));
                                 auto dihedralAngle = std::abs(CGAL::approximate_dihedral_angle(lJ[0], lJ[1], centerPoint0, centerPoint1));
 
                                 if (dihedralAngle < 20)
@@ -1102,7 +1101,7 @@ namespace wood_main
 
                             // get movement direction. WARNING this will fail if the insertion direction is pointing to the opposite direction from the element's plane
                             IK::Vector_3 dir0 = dirSet ? insertion_vectors0[i] : Plane0[i].orthogonal_vector(); // Plane0[i].orthogonal_vector();
-                            cgal_vector_util::Unitize(dir0);
+                            cgal_vector_util::unitize(dir0);
                             IK::Vector_3 dir1 = -dir0;
                             dir0 *= -1;
                             dir1 *= -1;
@@ -1775,8 +1774,8 @@ namespace wood_main
             IK::Line_3 projection_line_0(plane01_near.projection(joints[id].joint_volumes[0][0]), plane01_near.projection(joints[id].joint_volumes[0][1]));
             IK::Line_3 projection_line_1(plane01_near.projection(joints[id].joint_volumes[0][1]), plane01_near.projection(joints[id].joint_volumes[0][2]));
 
-            bool is_parallel_00 = cgal_vector_util::IsParallelTo(projection_line_0.to_vector(), l0.to_vector(), 0.01) == 0;
-            bool is_parallel_01 = cgal_vector_util::IsParallelTo(projection_line_1.to_vector(), l1.to_vector(), 0.01) == 0;
+            bool is_parallel_00 = cgal_vector_util::is_parallel_to(projection_line_0.to_vector(), l0.to_vector()) == 0;
+            bool is_parallel_01 = cgal_vector_util::is_parallel_to(projection_line_1.to_vector(), l1.to_vector()) == 0;
 
             // std::cout << "is parallel: " << is_parallel_00 << " " << is_parallel_01 << "\n";
 
@@ -1864,7 +1863,7 @@ namespace wood_main
             for (int j = 0; j < 4; j++)
             {
                 IK::Vector_3 v = joint_volumes_1[0][j] - joint_volumes_1[0][j + 1];
-                if (cgal_vector_util::IsParallelTo(translation_vectors[1], v, 0.01) == 1)
+                if (cgal_vector_util::is_parallel_to(translation_vectors[1], v) == 1)
                 {
                     shift = j;
                     break;
@@ -1880,10 +1879,10 @@ namespace wood_main
             std::array<CGAL_Polyline, 2> joint_lines_1 = {joints[id].joint_lines[0], joints[id].joint_lines[1]};
             for (int j = 0; j < 2; j++)
             {
-                cgal_polyline_util::Transform(joint_volumes_0[j], translation[0]);
-                cgal_polyline_util::Transform(joint_volumes_1[j], translation[1]);
-                cgal_polyline_util::Transform(joint_lines_0[j], translation[0]);
-                cgal_polyline_util::Transform(joint_lines_1[j], translation[1]);
+                cgal_polyline_util::transform(joint_volumes_0[j], translation[0]);
+                cgal_polyline_util::transform(joint_volumes_1[j], translation[1]);
+                cgal_polyline_util::transform(joint_lines_0[j], translation[0]);
+                cgal_polyline_util::transform(joint_lines_1[j], translation[1]);
             }
 
             /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1992,9 +1991,9 @@ namespace wood_main
                                    : IK::Segment_3(joints[id_1].joint_lines[0][1], joints[id_1].joint_lines[0][0]);
 
             IK::Segment_3 l;
-            cgal_polyline_util::line_line_overlap_average_segments(l0, l1, l);
+            cgal_polyline_util::line_line_overlap_average(l0, l1, l);
             double thickness = elements[joints[id_0].v0].thickness;
-            cgal_polyline_util::ExtendLine(l, -thickness, -thickness);
+            cgal_polyline_util::extend_line(l, -thickness, -thickness);
 
             //////////////////////////////////////////////////////////////////////////////////////////////////
             // Both sides of joints must have the same alignment else there will be a collision
@@ -2712,7 +2711,7 @@ namespace wood_main
             scale.clear();
             for (int i = 0; i < point_pairs.size(); i++)
             {
-                double L = cgal_vector_util::Distance(point_pairs[i][0], point_pairs[i][1]);
+                double L = std::sqrt(CGAL::squared_distance(point_pairs[i][0], point_pairs[i][1]));
                 double L_ = L;
                 L *= 0.5;
 

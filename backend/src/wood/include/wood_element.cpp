@@ -16,7 +16,7 @@ namespace wood
     {
         // you are in a loop
         // printf("/n %i", id);
-        for (int i = 0; i < j_mf.size(); i++)
+        for (size_t i = 0; i < j_mf.size(); i++)
         { // loop wood::joint id
             for (size_t j = 0; j < j_mf[i].size(); j++)
             { // loop joints per each face + 1 undefined
@@ -43,14 +43,14 @@ namespace wood
 
                     if (this->central_polyline.size() > 0)
                     {
-                        int e = -1;
+                        size_t e = -1;
                         IK::Point_3 cp;
                         double dist = cgal_polyline_util::closest_distance_and_point(segment[0], this->central_polyline, e, cp);
                     }
                     else
                     {
 
-                        for (int l = 0; l < this->planes.size(); l++)
+                        for (size_t l = 0; l < this->planes.size(); l++)
                         {
 
                             IK::Point_3 output;
@@ -68,9 +68,9 @@ namespace wood
                         if (intersection_points.size() == 2)
                         {
                             double t0;
-                            cgal_polyline_util::ClosestPointTo(intersection_points[0], segment, t0);
+                            cgal_polyline_util::closest_point_to(intersection_points[0], segment, t0);
                             double t1;
-                            cgal_polyline_util::ClosestPointTo(intersection_points[1], segment, t1);
+                            cgal_polyline_util::closest_point_to(intersection_points[1], segment, t1);
                             if (t0 > t1)
                                 std::reverse(intersection_points.begin(), intersection_points.end());
                             joints[std::get<0>(j_mf[i][j])](std::get<1>(j_mf[i][j]), true)[k] = intersection_points;
@@ -92,10 +92,10 @@ namespace wood
                     if (this->polylines.size() > 0)
                     {
                         IK::Vector_3 plane[4];
-                        cgal_polyline_util::AveragePlane(joint_area, plane);
+                        cgal_polyline_util::get_average_plane(joint_area, plane);
                         IK::Point_3 origin(plane[0].hx(), plane[0].hy(), plane[0].hz());
 
-                        IK::Point_3 center = cgal_polyline_util::Center(this->polylines[0]);
+                        IK::Point_3 center = cgal_polyline_util::center(this->polylines[0]);
                         std::cout << this->polylines.size() << std::endl;
                         IK::Point_3 p0 = origin + plane[3];
                         IK::Point_3 p1 = origin - plane[3];
@@ -183,7 +183,7 @@ namespace wood
                 IK::Segment_3 element_edge(polyline0[i], polyline0[i + 1]);
                 IK::Point_3 joint_point = joints[std::get<0>(j_mf[i + 2][j])](std::get<1>(j_mf[i + 2][j]), true).back()[0];
                 double t;
-                cgal_polyline_util::ClosestPointTo(joint_point, element_edge, t);
+                cgal_polyline_util::closest_point_to(joint_point, element_edge, t);
                 std::get<2>(j_mf[i + 2][j]) = t;
             }
 
@@ -389,8 +389,8 @@ namespace wood
         /////////////////////////////////////////////////////////////////////////////////////
         CGAL::Aff_transformation_3<IK> xform_toXY = cgal_xform_util::plane_to_xy(b[0], plane);
         CGAL::Aff_transformation_3<IK> xform_toXY_Inv = xform_toXY.inverse();
-        cgal_polyline_util::Transform(a, xform_toXY);
-        cgal_polyline_util::Transform(b, xform_toXY);
+        cgal_polyline_util::transform(a, xform_toXY);
+        cgal_polyline_util::transform(b, xform_toXY);
 
         /////////////////////////////////////////////////////////////////////////////////////
         // Polylines will not be exactly on the origin due to rounding errors, so make z = 0
@@ -524,11 +524,11 @@ namespace wood
                 {
                     IK::Segment_3 s(b[k], b[k + 1]);
                     double t0;
-                    cgal_polyline_util::ClosestPointTo(c.front(), s, t0);
+                    cgal_polyline_util::closest_point_to(c.front(), s, t0);
                     // CGAL_Debug(t0);
                     if (t0 < 0 || t0 > 1)
                         continue;
-                    if (CGAL::squared_distance(cgal_polyline_util::PointAt(s, t0), c.front()) < wood_globals::DISTANCE_SQUARED)
+                    if (CGAL::squared_distance(cgal_polyline_util::point_at(s, t0), c.front()) < wood_globals::DISTANCE_SQUARED)
                     {
                         t0_ = k + t0;
                         assigned_t0_ = true;
@@ -540,11 +540,11 @@ namespace wood
                 {
                     IK::Segment_3 s(b[k], b[k + 1]);
                     double t1;
-                    cgal_polyline_util::ClosestPointTo(c.back(), s, t1);
+                    cgal_polyline_util::closest_point_to(c.back(), s, t1);
                     // CGAL_Debug(t1);
                     if (t1 < 0 || t1 > 1)
                         continue;
-                    if (CGAL::squared_distance(cgal_polyline_util::PointAt(s, t1), c.back()) < wood_globals::DISTANCE_SQUARED)
+                    if (CGAL::squared_distance(cgal_polyline_util::point_at(s, t1), c.back()) < wood_globals::DISTANCE_SQUARED)
                     {
                         assigned_t1_ = true;
                         t1_ = k + t1;
@@ -559,7 +559,7 @@ namespace wood
                     std::swap(cp_pair.first, cp_pair.second);
                     std::reverse(c.begin(), c.end());
                 }
-                // Transform to 3D space
+                // transform to 3D space
                 for (int i = 0; i < c.size(); i++)
                     c[i] = c[i].transform(xform_toXY_Inv);
 
