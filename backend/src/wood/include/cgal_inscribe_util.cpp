@@ -412,7 +412,7 @@ namespace cgal_inscribe_util
             xform_toXY = internal::plane_to_xy(o, x, y, z);
 
         // without rotation the algorithm does not work, is it a bug of CGAL?
-        CGAL::Aff_transformation_3<IK> rot = cgal_xform_util::axis_rotation(0.00001, IK::Vector_3(0, 0, 1));
+        CGAL::Aff_transformation_3<IK> rot = cgal_xform_util::axis_rotation(0.0001, IK::Vector_3(0, 0, 1));
         xform_toXY = rot * xform_toXY;
 
         CGAL::Aff_transformation_3<IK>

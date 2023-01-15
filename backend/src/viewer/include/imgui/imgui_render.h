@@ -287,6 +287,11 @@ inline void loop_middle_imgui()
 	//	}
 	//	ImGui::EndMenuBar();
 	// }
+
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	// CAMERA
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 	ImGui::Text("%.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
 
 	if (ImGui::Button("pe", ImVec2(40, 40)))
@@ -336,15 +341,47 @@ inline void loop_middle_imgui()
 		opengl_cameras::set_camera();
 	}
 
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	// JOINTS_PARAMETERS_AND_TYPES
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	if (ImGui::CollapsingHeader("DIVISION LENGTH VALUES"))
+	{
+
+		// Set shift value
+		ImGui::TextColored(ImVec4(0, 0, 0, 1), "\nSELECT DIVISION LENGTH VALUE");
+		for (int i = 0; i < wood_globals::JOINT_NAMES.size(); i++)
+		{
+			float joint_type = (float)wood_globals::JOINTS_PARAMETERS_AND_TYPES[i * 3 + 0];
+			ImGui::SliderFloat((wood_globals::JOINT_NAMES[i] + " division_length").c_str(), &joint_type, 0.1, 400);
+			wood_globals::JOINTS_PARAMETERS_AND_TYPES[i * 3 + 0] = (double)joint_type;
+		}
+	}
+
+	// IMGUI_DEMO_MARKER("Help");
+	if (ImGui::CollapsingHeader("SHIFT VALUES"))
+	{
+
+		// Set shift value
+		ImGui::TextColored(ImVec4(0, 0, 0, 1), "\nSELECT SHIFT VALUE");
+		for (int i = 0; i < wood_globals::JOINT_NAMES.size(); i++)
+		{
+			float joint_type = (float)wood_globals::JOINTS_PARAMETERS_AND_TYPES[i * 3 + 1];
+			ImGui::SliderFloat((wood_globals::JOINT_NAMES[i] + " shift").c_str(), &joint_type, 0.0, 1.0);
+			wood_globals::JOINTS_PARAMETERS_AND_TYPES[i * 3 + 1] = (double)joint_type;
+		}
+	}
 	// Select joint Types - Sliders
 	ImGui::TextColored(ImVec4(0, 0, 0, 1), "\nSELECT JOINT TYPE");
 	for (int i = 0; i < wood_globals::JOINT_NAMES.size(); i++)
 	{
 		int joint_type = (int)wood_globals::JOINTS_PARAMETERS_AND_TYPES[i * 3 + 2];
 		ImGui::SliderInt(wood_globals::JOINT_NAMES[i].c_str(), &joint_type, i * 10, (i * 10 + 10) - 1);
-		// std::cout << "imgui_render -> joint_type change " << joint_type << "\n";
 		wood_globals::JOINTS_PARAMETERS_AND_TYPES[i * 3 + 2] = (double)joint_type;
 	}
+
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	// OUTPUT_GEOMETRY_TYPE
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	// Run, the code below set the state_chaged bool so that the code is rerun inside render pipeline, by calling the function pointer
 	ImGui::TextColored(ImVec4(0, 0, 0, 1), "\nSOLVER \n0 - joint area \n1 - joint lines \n2 - joint volumes \n3 - joint geometry \n4 - merge joints");

@@ -141,8 +141,8 @@ namespace wood_test
         internal::set_file_path_for_input_xml_and_screenshot(input_polyline_pairs, "type_plates_name_top_to_top_pairs");
 
         wood_globals::JOINT_VOLUME_EXTENSION[2] = -10;
-        wood_globals::JOINTS_PARAMETERS_AND_TYPES[4 * 3 + 0] = 10;   // this property is assigned to the individual joint.division_length
-        wood_globals::JOINTS_PARAMETERS_AND_TYPES[4 * 3 + 1] = 0.95; // this property is assignes to the individual joint.shift parameter
+        // wood_globals::JOINTS_PARAMETERS_AND_TYPES[4 * 3 + 0] = 10;   // this property is assigned to the individual joint.division_length
+        // wood_globals::JOINTS_PARAMETERS_AND_TYPES[4 * 3 + 1] = 0.95; // this property is assignes to the individual joint.shift parameter
 
         int search_type = 0;
         std::vector<double> scale = {1, 1, 1};
