@@ -200,6 +200,7 @@ using RowMatrixXi = Eigen::Matrix<int, Eigen::Dynamic, Eigen::Dynamic, Eigen::Ro
 // Order Matters
 // #include "cgal_print.h"
 #include "cgal_box_search.h"
+#include "cgal_inscribe_util.h"
 #include "cgal_vector_util.h"
 #include "cgal_intersection_util.h"
 #include "cgal_xform_util.h"
@@ -212,6 +213,7 @@ using RowMatrixXi = Eigen::Matrix<int, Eigen::Dynamic, Eigen::Dynamic, Eigen::Ro
 #include "cgal_plane_util.h"
 #include "clipper_util.h"
 #include "cgal_polyline_util.h"
+#include "cgal_rectangle_util.h"
 #include "rtree_util.h"
 
 // Display

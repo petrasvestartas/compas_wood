@@ -24,7 +24,7 @@
 #include "wood_element.h"
 #include "wood_joint.h"
 
-namespace wood_joint_lib
+             namespace wood_joint_lib
 {
     namespace internal
     {
@@ -105,7 +105,7 @@ namespace wood_joint_lib
         void interpolate_points(const IK::Point_3 &from, const IK::Point_3 &to, const int &steps, const bool &include_ends, std::vector<IK::Point_3> &interpolated_points);
 
         /**
-         * Get the transformation matrix for the totation in 3 axis
+         * Get the transformation matrix for the rotation in 3 axis
          *
          * @param [in] x_axis rotation in x axis
          * @param [in] y_axis rotation in y axis
@@ -312,7 +312,8 @@ namespace wood_joint_lib
     /**
      * Unit joint - Top-to-top edge plane joints - plate drill for one line segment at the center of the intersection area
      * types: drill
-     * 1 line segment is generate at the center of the connection area
+     * center of the joint_area
+     *
      * top-to-top joints have inconsistant connection area, therefore:
      * a) only the height of the connection volume is taken, not the rectangle
      * b) joints have to be recomputed each time
@@ -326,7 +327,8 @@ namespace wood_joint_lib
     /**
      * Unit joint - Top-to-top edge plane joints - plate drill in an inscribed circle
      * types: drill
-     * line segments are generated at the inscribed circle of the connection area
+     * center of the joint_area using the polylabel algorithm
+     *
      * top-to-top joints have inconsistant connection area, therefore:
      * a) only the height of the connection volume is taken, not the rectangle
      * b) joints have to be recomputed each time
@@ -340,7 +342,9 @@ namespace wood_joint_lib
     /**
      * Unit joint - Top-to-top edge plane joints - plate drill in an inscribed rectangle
      * types: drill
-     * line segments are generated at the inscribed rectangle of the connection area
+     * circle of points using the polylabel algorithm
+     * UI needed for the number of divisions and radius scale
+     *
      * top-to-top joints have inconsistant connection area, therefore:
      * a) only the height of the connection volume is taken, not the rectangle
      * b) joints have to be recomputed each time
@@ -355,7 +359,9 @@ namespace wood_joint_lib
     /**
      * Unit joint - Top-to-top edge plane joints - plate drill in an inscribed line and shifted
      * types: drill
-     * line segments are generated at the inscribed line of the connection area
+     * offset of the polygon
+     * UI needed for the number of divisions and offset distance
+     *
      * top-to-top joints have inconsistant connection area, therefore:
      * a) only the height of the connection volume is taken, not the rectangle
      * b) joints have to be recomputed each time
@@ -370,7 +376,9 @@ namespace wood_joint_lib
     /**
      * Unit joint - Top-to-top edge plane joints - plate drill the rectangle or cropped grid
      * types: drill
-     * line segments are generated on the hatch lines of the connection area
+     * Hatch of grid points in the intersection area
+     * UI needed for the number of divisions and offset distance
+     *
      * top-to-top joints have inconsistant connection area, therefore:
      * a) only the height of the connection volume is taken, not the rectangle
      * b) joints have to be recomputed each time
@@ -385,7 +393,9 @@ namespace wood_joint_lib
     /**
      * Unit joint - Top-to-top edge plane joints - plate drill in the offset of the polygon
      * types: drill
-     * line segments are generated on the smoothed, scaled and subdivided edge of the connection area
+     * Grid of points in the rectangle inscribed in the intersection area
+     * UI needed for the number of divisions and offset distance
+     *
      * top-to-top joints have inconsistant connection area, therefore:
      * a) only the height of the connection volume is taken, not the rectangle
      * b) joints have to be recomputed each time

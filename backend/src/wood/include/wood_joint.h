@@ -55,14 +55,33 @@ namespace wood
         std::array<std::vector<CGAL_Polyline>, 2> f;
         std::vector<wood_cut::cut_type> f_boolean_type; // 0 - do not merge, 1 - edge insertion, 2 - hole 3 - insert between multiple edges hole
 
-        // if this property is enable, joint volume rectangles are moved within unit_scale_distance, this property is equal to first element thickness
+
+
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Joint geometrical parameters for
+        // a) enable orientation
+        // b) enable unit scale
+        // c) parametric joint changes
+        // d) scale of the joint volume
+        // e) computed parameters for computed the key, while creating the cache of precomputed joints and constucting initial joints
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        // Unit scale
+        //if this property is enabled, joint volume rectangles are moved within unit_scale_distance, this property is equal to first element thickness
         bool unit_scale = false;
         double unit_scale_distance = 0;
+
+        //Enable orientation or the joint is compute in place e.g. screws are computed in place, while other are pre-computed and oriented
         bool orient = true;
+
+        //User parameter
+        double division_length = 10;
+        double shift = 0.5;
+
+        // scale of the joint volume
         std::array<double, 3> scale = {1, 1, 1};
 
-        // Geometrical divisions
-        double shift = 0.5;
+        //computed parameters
         int divisions = 1;
         double length = 1;
         bool compute_geometrical_divisions = true;

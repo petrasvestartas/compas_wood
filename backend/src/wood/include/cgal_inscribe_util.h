@@ -25,8 +25,6 @@
 #include <polylabel/polylabel.h>
 #include <CGAL/Largest_empty_iso_rectangle_2.h>
 
-
-
 namespace cgal_inscribe_util
 {
 
@@ -161,7 +159,9 @@ namespace cgal_inscribe_util
      * @param [in] polylines list of polylines that representes the input polylines for the polylabel algorithm
      * @param [out] points division points
      * @param [in] division number of points
+     * @param [in] scale scale of the circle
      * @param [in] precision tolerance for the polylabel algorithm
+     * @param [in] orient_to_closest_edge if true, the points are oriented to the closest edge
      */
     void get_polylabel_circle_division_points(const IK::Vector_3 &division_direction_in_3d, const std::vector<CGAL_Polyline> &polylines, std::vector<IK::Point_3> &points, int division = 4, double scale = 0.75, double precision = 1.0, bool orient_to_closest_edge = true);
 
@@ -180,8 +180,7 @@ namespace cgal_inscribe_util
      * @return bool flag if the result is valid
      */
     bool inscribe_rectangle_in_convex_polygon(const std::vector<CGAL_Polyline> &polylines, CGAL_Polyline &result, std::vector<IK::Point_3> &points, IK::Segment_3 &direction, double scale = 0, double precision = 1.0, double rectangle_division_distance = 10);
-    
 
 }
 
-#endif 
+#endif

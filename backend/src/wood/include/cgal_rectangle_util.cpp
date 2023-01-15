@@ -245,7 +245,7 @@ namespace cgal_rectangle_util
             IK::Point_3(rectangle.max().hx(), rectangle.min().hy(), 0),
         };
 
-        // rotate axis algined box back
+        // rotate axis aligned box back
         for (auto &p : result)
         {
             p = internal::rotate_to_xaxis(p, -min_angle);
@@ -278,6 +278,7 @@ namespace cgal_rectangle_util
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         if (polygon_copy.size() == 5)
         {
+
             /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
             // get divisions of each edge and take the smallest division
             /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -286,15 +287,15 @@ namespace cgal_rectangle_util
             double edge_dist_10 = std::sqrt(CGAL::squared_distance(polygon_copy[1], polygon_copy[2]));
             double edge_dist_11 = std::sqrt(CGAL::squared_distance(polygon_copy[0], polygon_copy[3]));
 
-            int divisions_u = (int)(std::min(std::ceil(edge_dist_00 / division_distance), std::ceil(edge_dist_01 / division_distance)));
-            int divisions_v = (int)(std::min(std::ceil(edge_dist_10 / division_distance), std::ceil(edge_dist_11 / division_distance)));
+            int divisions_u = (int)(std::min((int)(edge_dist_00 / division_distance), (int)(edge_dist_01 / division_distance)));
+            int divisions_v = (int)(std::min((int)(edge_dist_10 / division_distance), (int)(edge_dist_11 / division_distance)));
 
             /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
             // divide two edges into divisions points and then interpolate these points
             /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
             std::vector<IK::Point_3> division_points_edge_0, division_points_edge_2;
-            division_points_edge_0.reserve(divisions_u);
-            division_points_edge_2.reserve(divisions_v);
+            division_points_edge_0.reserve(divisions_u + 2);
+            division_points_edge_2.reserve(divisions_v + 2);
             cgal_vector_util::interpolate_points(polygon_copy[0], polygon_copy[1], divisions_u, division_points_edge_0, 1);
             cgal_vector_util::interpolate_points(polygon_copy[3], polygon_copy[2], divisions_u, division_points_edge_2, 1);
 
@@ -303,6 +304,8 @@ namespace cgal_rectangle_util
             {
                 std::vector<IK::Point_3> temp_divisions;
                 cgal_vector_util::interpolate_points(division_points_edge_0[i], division_points_edge_2[i], divisions_v, temp_divisions, 1);
+                for (auto &p : temp_divisions)
+                    p = p.transform(xform_to_xy_inv);
                 points.insert(points.end(), temp_divisions.begin(), temp_divisions.end());
             }
         }
@@ -404,8 +407,8 @@ namespace cgal_rectangle_util
             int divisions_u, divisions_v;
             // if (division_distance != 0)
             //{
-            divisions_u = std::min(std::min(20.0, max_points * 0.5), std::floor(std::sqrt(half_dir_u.squared_length()) / division_distance));
-            divisions_v = std::min(std::min(20.0, max_points * 0.5), std::floor(std::sqrt(half_dir_v.squared_length()) / division_distance));
+            divisions_u = std::min(std::min(20.0, max_points * 0.5), (2 * std::floor(std::sqrt(half_dir_u.squared_length())) / division_distance));
+            divisions_v = std::min(std::min(20.0, max_points * 0.5), (2 * std::floor(std::sqrt(half_dir_v.squared_length())) / division_distance));
 
             //}
             // else

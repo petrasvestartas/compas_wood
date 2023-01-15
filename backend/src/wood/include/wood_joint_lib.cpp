@@ -3313,7 +3313,7 @@ namespace wood_joint_lib
         joint.m_boolean_type = {wood_cut::drill, wood_cut::drill};
         joint.f_boolean_type = {wood_cut::drill, wood_cut::drill};
 
-        // WARNING set variable so that it wont be recomputed, because it is run only once | also it must not be orientable
+        // WARNING: set variable so that it wont be recomputed, because it is run only once | also it must not be orientable
         joint.orient = false;
         joint.key += std::to_string(joint.id);
     }
@@ -3322,8 +3322,10 @@ namespace wood_joint_lib
     {
         joint.name = __func__;
 
-        // compute the center of the joint_area
-        IK::Point_3 center = cgal_polyline_util::center(joint.joint_area);
+        // compute the inscribed rectangle and subdivide it into points
+        // WARNING the offset distance and division has to come from user
+        std::tuple<IK::Point_3, IK::Plane_3, double> result = cgal_inscribe_util::get_polylabel({joint.joint_area}, 1.0);
+        IK::Point_3 center = std::get<0>(result);
 
         // move the center by the direction of rectangle 2nd edge, because it is vertical
         IK::Vector_3 dir0 = joint.joint_volumes[0][1] - joint.joint_volumes[0][2];
@@ -3345,7 +3347,7 @@ namespace wood_joint_lib
         joint.m_boolean_type = {wood_cut::drill, wood_cut::drill};
         joint.f_boolean_type = {wood_cut::drill, wood_cut::drill};
 
-        // WARNING set variable so that it wont be recomputed, because it is run only once | also it must not be orientable
+        // WARNING: set variable so that it wont be recomputed, because it is run only once | also it must not be orientable
         joint.orient = false;
         joint.key += std::to_string(joint.id);
     }
@@ -3354,8 +3356,12 @@ namespace wood_joint_lib
     {
         joint.name = __func__;
 
-        // compute the center of the joint_area
-        IK::Point_3 center = cgal_polyline_util::center(joint.joint_area);
+        // compute the inscribed rectangle and subdivide it into points
+        // WARNING the offset distance and division has to come from user
+        std::vector<IK::Point_3> points;
+        double scale = joint.shift;
+        double number_of_points = joint.division_length;
+        cgal_inscribe_util::get_polylabel_circle_division_points(IK::Vector_3(0, 0, 0), {joint.joint_area}, points, number_of_points, scale, 1.0, true); //  joint.divisions, joint.shift 6, 0.75, 1.0, true
 
         // move the center by the direction of rectangle 2nd edge, because it is vertical
         IK::Vector_3 dir0 = joint.joint_volumes[0][1] - joint.joint_volumes[0][2];
@@ -3364,18 +3370,31 @@ namespace wood_joint_lib
         dir0 *= elements[joint.v0].thickness;
         dir1 *= elements[joint.v1].thickness;
 
-        // create polyline segments that represents the drilling holes
-        CGAL_Polyline line0 = {center, center + dir0};
-        CGAL_Polyline line1 = {center, center + dir1};
-
         // output
-        joint.f[0] = {line0, line0};
-        joint.f[1] = {line0, line0};
-        joint.m[0] = {line1, line1};
-        joint.m[1] = {line1, line1};
-
-        joint.m_boolean_type = {wood_cut::drill, wood_cut::drill};
-        joint.f_boolean_type = {wood_cut::drill, wood_cut::drill};
+        joint.f[0].reserve(points.size() * 2);
+        joint.f[1].reserve(points.size() * 2);
+        joint.m[0].reserve(points.size() * 2);
+        joint.m[1].reserve(points.size() * 2);
+        joint.m_boolean_type.reserve(points.size() * 2);
+        joint.f_boolean_type.reserve(points.size() * 2);
+        for (auto &point : points)
+        {
+            // create polyline segments that represents the drilling holes
+            CGAL_Polyline line0 = {point, point + dir0};
+            CGAL_Polyline line1 = {point, point + dir1};
+            joint.f[0].emplace_back(line0);
+            joint.f[0].emplace_back(line0);
+            joint.f[1].emplace_back(line0);
+            joint.f[1].emplace_back(line0);
+            joint.m[0].emplace_back(line1);
+            joint.m[0].emplace_back(line1);
+            joint.m[1].emplace_back(line1);
+            joint.m[1].emplace_back(line1);
+            joint.m_boolean_type.emplace_back(wood_cut::drill);
+            joint.m_boolean_type.emplace_back(wood_cut::drill);
+            joint.f_boolean_type.emplace_back(wood_cut::drill);
+            joint.f_boolean_type.emplace_back(wood_cut::drill);
+        }
 
         // WARNING set variable so that it wont be recomputed, because it is run only once | also it must not be orientable
         joint.orient = false;
@@ -3386,8 +3405,12 @@ namespace wood_joint_lib
     {
         joint.name = __func__;
 
-        // compute the center of the joint_area
-        IK::Point_3 center = cgal_polyline_util::center(joint.joint_area);
+        // compute the inscribed rectangle and subdivide it into points
+        // WARNING the offset distance and division has to come from user
+        std::vector<IK::Point_3> points;
+        double offset_distance = joint.shift;
+        double division_distance = joint.division_length; // negative value = grid, positive = edge division
+        clipper_util::offset_and_divide_to_points(points, joint.joint_area, offset_distance, division_distance);
 
         // move the center by the direction of rectangle 2nd edge, because it is vertical
         IK::Vector_3 dir0 = joint.joint_volumes[0][1] - joint.joint_volumes[0][2];
@@ -3396,18 +3419,33 @@ namespace wood_joint_lib
         dir0 *= elements[joint.v0].thickness;
         dir1 *= elements[joint.v1].thickness;
 
-        // create polyline segments that represents the drilling holes
-        CGAL_Polyline line0 = {center, center + dir0};
-        CGAL_Polyline line1 = {center, center + dir1};
-
         // output
-        joint.f[0] = {line0, line0};
-        joint.f[1] = {line0, line0};
-        joint.m[0] = {line1, line1};
-        joint.m[1] = {line1, line1};
-
-        joint.m_boolean_type = {wood_cut::drill, wood_cut::drill};
-        joint.f_boolean_type = {wood_cut::drill, wood_cut::drill};
+        joint.f[0].reserve(points.size() * 2);
+        joint.f[1].reserve(points.size() * 2);
+        joint.m[0].reserve(points.size() * 2);
+        joint.m[1].reserve(points.size() * 2);
+        joint.m_boolean_type.reserve(points.size() * 2);
+        joint.f_boolean_type.reserve(points.size() * 2);
+        for (auto &point : points)
+        {
+            // create polyline segments that represents the drilling holes
+            CGAL_Polyline line0 = {point, point + dir0};
+            CGAL_Polyline line1 = {point, point + dir1};
+            double offset_distance = -joint.shift; // negative means offset inwards
+            double division_distance = joint.division_length;
+            joint.f[0].emplace_back(line0);
+            joint.f[0].emplace_back(line0);
+            joint.f[1].emplace_back(line0);
+            joint.f[1].emplace_back(line0);
+            joint.m[0].emplace_back(line1);
+            joint.m[0].emplace_back(line1);
+            joint.m[1].emplace_back(line1);
+            joint.m[1].emplace_back(line1);
+            joint.m_boolean_type.emplace_back(wood_cut::drill);
+            joint.m_boolean_type.emplace_back(wood_cut::drill);
+            joint.f_boolean_type.emplace_back(wood_cut::drill);
+            joint.f_boolean_type.emplace_back(wood_cut::drill);
+        }
 
         // WARNING set variable so that it wont be recomputed, because it is run only once | also it must not be orientable
         joint.orient = false;
@@ -3419,7 +3457,10 @@ namespace wood_joint_lib
         joint.name = __func__;
 
         // compute the center of the joint_area
-        IK::Point_3 center = cgal_polyline_util::center(joint.joint_area);
+        std::vector<IK::Point_3> points;
+        double offset_distance = -joint.shift; // negative means offset inwards
+        double division_distance = joint.division_length;
+        cgal_rectangle_util::grid_of_points_in_a_polygon(joint.joint_area, offset_distance, division_distance, 100, points);
 
         // move the center by the direction of rectangle 2nd edge, because it is vertical
         IK::Vector_3 dir0 = joint.joint_volumes[0][1] - joint.joint_volumes[0][2];
@@ -3428,18 +3469,31 @@ namespace wood_joint_lib
         dir0 *= elements[joint.v0].thickness;
         dir1 *= elements[joint.v1].thickness;
 
-        // create polyline segments that represents the drilling holes
-        CGAL_Polyline line0 = {center, center + dir0};
-        CGAL_Polyline line1 = {center, center + dir1};
-
         // output
-        joint.f[0] = {line0, line0};
-        joint.f[1] = {line0, line0};
-        joint.m[0] = {line1, line1};
-        joint.m[1] = {line1, line1};
-
-        joint.m_boolean_type = {wood_cut::drill, wood_cut::drill};
-        joint.f_boolean_type = {wood_cut::drill, wood_cut::drill};
+        joint.f[0].reserve(points.size() * 2);
+        joint.f[1].reserve(points.size() * 2);
+        joint.m[0].reserve(points.size() * 2);
+        joint.m[1].reserve(points.size() * 2);
+        joint.m_boolean_type.reserve(points.size() * 2);
+        joint.f_boolean_type.reserve(points.size() * 2);
+        for (auto &point : points)
+        {
+            // create polyline segments that represents the drilling holes
+            CGAL_Polyline line0 = {point, point + dir0};
+            CGAL_Polyline line1 = {point, point + dir1};
+            joint.f[0].emplace_back(line0);
+            joint.f[0].emplace_back(line0);
+            joint.f[1].emplace_back(line0);
+            joint.f[1].emplace_back(line0);
+            joint.m[0].emplace_back(line1);
+            joint.m[0].emplace_back(line1);
+            joint.m[1].emplace_back(line1);
+            joint.m[1].emplace_back(line1);
+            joint.m_boolean_type.emplace_back(wood_cut::drill);
+            joint.m_boolean_type.emplace_back(wood_cut::drill);
+            joint.f_boolean_type.emplace_back(wood_cut::drill);
+            joint.f_boolean_type.emplace_back(wood_cut::drill);
+        }
 
         // WARNING set variable so that it wont be recomputed, because it is run only once | also it must not be orientable
         joint.orient = false;
@@ -3450,8 +3504,15 @@ namespace wood_joint_lib
     {
         joint.name = __func__;
 
-        // compute the center of the joint_area
-        IK::Point_3 center = cgal_polyline_util::center(joint.joint_area);
+        // compute the inscribed rectangle and subdivide it into points
+        // WARNING the division has to come from user
+        std::vector<IK::Point_3> points;
+        CGAL_Polyline polygon_inscribed_rectangle;
+        IK::Segment_3 segment;
+        double scale = joint.shift;
+        double division_length = joint.division_length; // negative value = grid, positive = edge division
+        double precision = 1;
+        cgal_inscribe_util::inscribe_rectangle_in_convex_polygon({joint.joint_area}, polygon_inscribed_rectangle, points, segment, scale, precision, division_length);
 
         // move the center by the direction of rectangle 2nd edge, because it is vertical
         IK::Vector_3 dir0 = joint.joint_volumes[0][1] - joint.joint_volumes[0][2];
@@ -3460,18 +3521,38 @@ namespace wood_joint_lib
         dir0 *= elements[joint.v0].thickness;
         dir1 *= elements[joint.v1].thickness;
 
-        // create polyline segments that represents the drilling holes
-        CGAL_Polyline line0 = {center, center + dir0};
-        CGAL_Polyline line1 = {center, center + dir1};
-
         // output
-        joint.f[0] = {line0, line0};
-        joint.f[1] = {line0, line0};
-        joint.m[0] = {line1, line1};
-        joint.m[1] = {line1, line1};
 
-        joint.m_boolean_type = {wood_cut::drill, wood_cut::drill};
-        joint.f_boolean_type = {wood_cut::drill, wood_cut::drill};
+        joint.f[0].reserve(points.size() * 2);
+        joint.f[1].reserve(points.size() * 2);
+        joint.m[0].reserve(points.size() * 2);
+        joint.m[1].reserve(points.size() * 2);
+        joint.m_boolean_type.reserve(points.size() * 2);
+        joint.f_boolean_type.reserve(points.size() * 2);
+        // joint.f[0].emplace_back(polygon_inscribed_rectangle);
+        // joint.f[0].emplace_back(polygon_inscribed_rectangle);
+        // joint.f[1].emplace_back(polygon_inscribed_rectangle);
+        // joint.f[1].emplace_back(polygon_inscribed_rectangle);
+        // joint.f_boolean_type.emplace_back(wood_cut::mill);
+        // joint.f_boolean_type.emplace_back(wood_cut::mill);
+        for (auto &point : points)
+        {
+            // create polyline segments that represents the drilling holes
+            CGAL_Polyline line0 = {point, point + dir0};
+            CGAL_Polyline line1 = {point, point + dir1};
+            joint.f[0].emplace_back(line0);
+            joint.f[0].emplace_back(line0);
+            joint.f[1].emplace_back(line0);
+            joint.f[1].emplace_back(line0);
+            joint.m[0].emplace_back(line1);
+            joint.m[0].emplace_back(line1);
+            joint.m[1].emplace_back(line1);
+            joint.m[1].emplace_back(line1);
+            joint.m_boolean_type.emplace_back(wood_cut::drill);
+            joint.m_boolean_type.emplace_back(wood_cut::drill);
+            joint.f_boolean_type.emplace_back(wood_cut::drill);
+            joint.f_boolean_type.emplace_back(wood_cut::drill);
+        }
 
         // WARNING set variable so that it wont be recomputed, because it is run only once | also it must not be orientable
         joint.orient = false;
@@ -3563,7 +3644,6 @@ namespace wood_joint_lib
     void construct_joint_by_index(std::vector<wood::element> &elements, std::vector<wood::joint> &joints, std::vector<double> &default_parameters_for_four_types, std::vector<double> &scale)
     {
 
-        // const double& division_distance_, const double& shift_,
         /////////////////////////////////////////////////////////////////////
         // You must define new wood::joint each time you internalize it
         /////////////////////////////////////////////////////////////////////
@@ -3608,9 +3688,6 @@ namespace wood_joint_lib
         joint_names[59] = "ss_e_r_9";
         joint_names[60] = "b_0";
 
-#ifdef DEBUG_JOINERY_LIBRARY
-        printf("\nCPP   FILE %s    METHOD %s   LINE %i     WHAT %s ", __FILE__, __FUNCTION__, __LINE__, "construct_joint_by_index");
-#endif
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Most joints are often the same
         // Store parameters as a string: "joint_type ; divisions, not dist ; shift"
@@ -3622,53 +3699,38 @@ namespace wood_joint_lib
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         std::map<std::string, wood::joint> unique_joints;
 
-        double division_distance = 1000;
+        double division_length = 1000;
         double shift = 0.5;
 
-#ifdef DEBUG_JOINERY_LIBRARY
-        printf("\nCPP   FILE %s    METHOD %s   LINE %i     WHAT %s   ", __FILE__, __FUNCTION__, __LINE__, "Before Joint Iteration");
-#endif
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Iterate joints constructed during search methods
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         std::vector<int> ids_to_remove;
         ids_to_remove.reserve(joints.size());
         int counter = 0;
-        // CGAL_Debug(joints.size());
 
         for (auto &jo : joints)
         {
-
-            // printf("\n %i %i %i %i %i", jo.v0, jo.v1, jo.f0_0, jo.f1_0, jo.type);
-            // CGAL_Debug(counter);
 
             counter++;
             if (jo.link) // skip link jont because they are generated inside main wood::joint and then orient below
                 continue;
 
             // Select user given type
-            // types0+265
-            // CGAL_Debug(0);
             int id_representing_joint_name = -1;
             if (elements[jo.v0].JOINTS_TYPES.size() && elements[jo.v1].JOINTS_TYPES.size())
             {
                 int a = std::abs(elements[jo.v0].JOINTS_TYPES[jo.f0_0]);
                 int b = std::abs(elements[jo.v1].JOINTS_TYPES[jo.f1_0]);
-
-                // printf("\n %i %i ", a,b);
-
                 id_representing_joint_name = (a > b) ? a : b;
-                // CGAL_Debug(a, b, a);
             }
             else if (elements[jo.v0].JOINTS_TYPES.size())
             {
                 id_representing_joint_name = std::abs(elements[jo.v0].JOINTS_TYPES[jo.f0_0]);
-                // printf("\n b");
             }
             else if (elements[jo.v1].JOINTS_TYPES.size())
             {
                 id_representing_joint_name = std::abs(elements[jo.v1].JOINTS_TYPES[jo.f1_0]);
-                // printf("\n c");
             }
 
             // When users gives an input -> default_parameters_for_four_types
@@ -3680,7 +3742,6 @@ namespace wood_joint_lib
             // Select first by local search, only then by user given index, or by default
             // This setting produces joints without geometry, do you need to delete these joints?
             /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-            // CGAL_Debug(1);
 
             int group = -1;
             if (id_representing_joint_name == 0)
@@ -3715,32 +3776,35 @@ namespace wood_joint_lib
             { // top-top
                 group = 6;
             }
-            // std::cout << id_representing_joint_name << " " << group << " " << jo.link << " " << elements[jo.v0].JOINTS_TYPES[jo.f0_0] << " " << elements[jo.v1].JOINTS_TYPES[jo.f1_0] << "\n";
-            //  printf("\n %i %i %i", group, id_representing_joint_name, jo.type);
-            //  printf("\n ");
 
-            // define scale
-
+            /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            // Joint scale that can be defined
+            // a) by wood_globals, when the scale input is empty
+            // b) by user
+            // TODO: think if this this property can be replaced by wood_global::JOINT_VOLUME_EXTENSION property only
+            /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
             if (scale.size() > 0)
             {
                 if (scale.size() < 3)
-                    jo.scale = {scale[0], scale[0], scale[0]};
+                    if (scale.size() == 0)
+                        jo.scale = {wood_globals::JOINT_VOLUME_EXTENSION[0], wood_globals::JOINT_VOLUME_EXTENSION[1], wood_globals::JOINT_VOLUME_EXTENSION[2]};
+                    else
+                        jo.scale = {scale[0], scale[0], scale[0]};
                 else if (scale.size() == 3)
                     jo.scale = {scale[0], scale[1], scale[2]};
                 else
                     jo.scale = {scale[group * 3 + 0], scale[group * 3 + 1], scale[group * 3 + 2]};
             }
-            // CGAL_Debug(jo.scale[0], jo.scale[1], jo.scale[2]);
 
-            // printf("\n");
-            // CGAL_Debug(group);
-            // CGAL_Debug(id_representing_joint_name);
-            // CGAL_Debug(jo.type);
-            // printf("\n");
-
+            /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            // Set the properties of the joint from the global parameters to local joint parameters
+            // jo.shift
+            // jo.divisions
+            // Set unit distance, this value is a distance between wood::joint volume rectangles, in case this property is set->unit_scale = true
+            /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
             if (default_parameters_given)
             {
-                division_distance = default_parameters_for_four_types[(long long)(number_of_parameters * group + 0)];
+                division_length = default_parameters_for_four_types[(long long)(number_of_parameters * group + 0)];
                 jo.shift = default_parameters_for_four_types[(long long)(number_of_parameters * group + 1)];
                 if (id_representing_joint_name == -1) // for cases when wood::joint types per each edge are not defined
                     id_representing_joint_name = (int)default_parameters_for_four_types[(number_of_parameters * group + 2)];
@@ -3760,27 +3824,9 @@ namespace wood_joint_lib
                 // printf("%i %i %i \n ", jo.type, jo.v0, jo.v1);
                 // std::cout << "Joint is not skipped \n";
             }
-
-            /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-            // Set unit distance, this value is a distance between wood::joint volume rectangles, in case this property is set -> unit_scale = true
-            /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-            // CGAL_Debug(2);
-            // CGAL_Debug(division_distance);
-            // CGAL_Debug(id_representing_joint_name);
-            // std::ofstream f;
-            // f.open("C:\\Users\\petra\\AppData\\Roaming\\Grasshopper\\Libraries\\compas_wood\\xml_error.txt");
-            // f << "construct_joint_by_index\n";
-            // f << id_representing_joint_name;
-            // f.close();
             jo.name = jo.linked_joints.size() > 0 ? joint_names[id_representing_joint_name] + "_linked" : joint_names[id_representing_joint_name];
             jo.unit_scale_distance = elements[jo.v0].thickness * jo.scale[2];
-            // CGAL_Debug(division_distance);
-
-            jo.get_divisions(division_distance);
-
-#ifdef DEBUG_JOINERY_LIBRARY
-            printf("\nCPP   FILE %s    METHOD %s   LINE %i     WHAT %s ID %i SHIFT %f KEY %s DIVISIONS %f   ", __FILE__, __FUNCTION__, __LINE__, "Assigned groups", id_representing_joint_name, jo.shift, key.c_str(), jo.divisions);
-#endif
+            jo.get_divisions(division_length); // the division_length is assigne to the division_length property, and divisions are computed only if there is a line, for top-to-top connections this line does not exist, so the division is set to 1
 
             /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
             // Assign geometry to joints that currently contains only adjacency
@@ -3789,9 +3835,7 @@ namespace wood_joint_lib
             // if there is already such joint
             // std::cout << key << "\n";
             bool is_similar_joint = unique_joints.count(jo.get_key()) == 1;
-#ifdef DEBUG_JOINERY_LIBRARY
-            printf("\nCPP   FILE %s    METHOD %s   LINE %i     WHAT %s %i", __FILE__, __FUNCTION__, __LINE__, "Is similar joint", is_similar_joint);
-#endif
+
             // CGAL_Debug(0);
             // CGAL_Debug(id_representing_joint_name);
             // is_similar_joint = false;
@@ -3808,10 +3852,6 @@ namespace wood_joint_lib
                 // CGAL_Debug(3);
                 continue;
             }
-            // CGAL_Debug(4);
-#ifdef DEBUG_JOINERY_LIBRARY
-            printf("\nCPP   FILE %s    METHOD %s   LINE %i     WHAT %s ", __FILE__, __FUNCTION__, __LINE__, "transfer_geometry");
-#endif
 
             // else create a new joint
             // std::cout << group << "\n";
@@ -4031,10 +4071,6 @@ namespace wood_joint_lib
             // if (!is_joint_implemented)
             //     continue;
 
-            // CGAL_Debug(5);
-#ifdef DEBUG_JOINERY_LIBRARY
-            printf("\nCPP   FILE %s    METHOD %s   LINE %i     WHAT %s ", __FILE__, __FUNCTION__, __LINE__, "after unique wood::joint create");
-#endif
             /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
             // Add to wood::joint map because this wood::joint was not present
             /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -4050,7 +4086,6 @@ namespace wood_joint_lib
                 // CGAL_Debug(id_representing_joint_name);
                 continue;
             }
-            // continue;
 
             if (jo.orient)
             {
@@ -4067,10 +4102,6 @@ namespace wood_joint_lib
                     jo.remove_geo_from_linked_joint_and_merge_with_current_joint(joints);
                 }
             }
-
-#ifdef DEBUG_JOINERY_LIBRARY
-            printf("\nCPP   FILE %s    METHOD %s   LINE %i     WHAT %s ", __FILE__, __FUNCTION__, __LINE__, "last");
-#endif
         }
     }
 }

@@ -2,12 +2,16 @@
 
 
 ## To-do
- 
-- [ ] seprate .h and .cpp files, including doxygen documentation
-- [ ] include licensing in every file
-- [ ] update clipper2 library specially for the line-polygon intersection
-- [ ] add conversion from clipper to cgal in 3D, meaning the matrix has to be added
 
+- wood_join_lib
+- [ ] implement drilling methods for top-to-top connections
+- [ ] add snap-fit joint for top-to-side connection
+- [ ] butterfly n-times
+
+
+## Library Notes
+
+- For geometry library files cgal_name_util.h/cpp create self contained headers, internal to the file functions must be in the "internal" namespace.
 ## CMAKE
 
 ### Superbuild

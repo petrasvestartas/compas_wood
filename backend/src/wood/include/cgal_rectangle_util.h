@@ -160,7 +160,7 @@ namespace cgal_rectangle_util
      * @brief Calculate a grid of points inside a polygon by a) convex hull, b) its bounding box, c) grid of points inside the polygon
      *
      * @param [in] polygon input polyline
-     * @param [in] offset_distance negative value is inqards offset, positive outwards, 0 is ignored
+     * @param [in] offset_distance negative value is inwards offset, positive outwards, 0 is ignored. If the offset distance is too big, the initial polygon will be used without offset
      * @param [in] division_distance distance between points, if 0 the distance is calculated automatically
      * @param [in] max_points number of points
      * @param [out] points output points

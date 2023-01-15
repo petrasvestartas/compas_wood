@@ -218,7 +218,6 @@ namespace cgal_inscribe_util
             return true;
         }
 
-
     }
 
     std::tuple<IK::Point_3, IK::Plane_3, double> get_polylabel(const std::vector<CGAL_Polyline> &polylines, double precision)
@@ -403,11 +402,21 @@ namespace cgal_inscribe_util
             internal::get_average_plane_axes_oriented_to_longest_edge(polylines_copy[0], o, x, y, z);
         }
 
+        // if (polylines_copy[0].size() != 5)
+        //     return true;
+
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Create Transformation to XY plane
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        CGAL::Aff_transformation_3<IK> xform_toXY = internal::plane_to_xy(o, x, y, z);
-        CGAL::Aff_transformation_3<IK> xform_toXY_Inv = xform_toXY.inverse();
+        CGAL::Aff_transformation_3<IK>
+            xform_toXY = internal::plane_to_xy(o, x, y, z);
+
+        // without rotation the algorithm does not work, is it a bug of CGAL?
+        CGAL::Aff_transformation_3<IK> rot = cgal_xform_util::axis_rotation(0.00001, IK::Vector_3(0, 0, 1));
+        xform_toXY = rot * xform_toXY;
+
+        CGAL::Aff_transformation_3<IK>
+            xform_toXY_Inv = xform_toXY.inverse();
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Count how many points we have
@@ -440,21 +449,26 @@ namespace cgal_inscribe_util
         // Get iso rectangle as the first input for the algorithm
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         IK::Iso_rectangle_2 bbox_rectangle(bbox);
-        CGAL::Largest_empty_iso_rectangle_2<IK> empty_rect(bbox_rectangle); //(IK::Iso_rectangle_2(bbox));
+        CGAL::Largest_empty_iso_rectangle_2<IK> empty_rect(bbox_rectangle);
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Interpolate edge points in by the precomputed division step
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
         CGAL_Polyline division_points;
+        CGAL_Polyline division_points_temp;
         for (auto &polyline : polylines_copy)
             for (int i = 0; i < polyline.size() - 1; i++)
             {
                 division_points.clear();
                 int divisions = (int)std::min(100.0, std::sqrt(CGAL::squared_distance(polyline[i], polyline[i + 1])) / step_division);
                 cgal_vector_util::interpolate_points(polyline[i], polyline[i + 1], divisions, division_points, 2);
+                division_points_temp.insert(division_points_temp.end(), division_points.begin(), division_points.end());
 
                 for (auto &point : division_points)
+                {
                     empty_rect.push_back(IK::Point_2(point.hx(), point.hy()));
+                }
             }
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -495,6 +509,13 @@ namespace cgal_inscribe_util
                 cgal_vector_util::interpolate_points(rect[i], rect[i + 1], divisions, division_points, 2);
                 points.insert(points.end(), division_points.begin(), division_points.end());
             }
+            // cgal_polyline_util::transform(division_points_temp, xform_toXY_Inv);
+            // points.clear();
+            // points.insert(points.end(), division_points_temp.begin(), division_points_temp.end());
+            //  auto p0_min = (IK::Point_3(bbox.xmin(), bbox.ymin(), 0)).transform(xform_toXY_Inv);
+            //  auto p0_max = (IK::Point_3(bbox.xmax(), bbox.ymax(), 0)).transform(xform_toXY_Inv);
+            //  points.emplace_back(p0_min);
+            //  points.emplace_back(p0_max);
         }
         else if (rectangle_division_distance < -wood_globals::DISTANCE)
         {

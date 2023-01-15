@@ -340,10 +340,10 @@ inline void loop_middle_imgui()
 	ImGui::TextColored(ImVec4(0, 0, 0, 1), "\nSELECT JOINT TYPE");
 	for (int i = 0; i < wood_globals::JOINT_NAMES.size(); i++)
 	{
-		int joint_type = (int)wood_globals::JOINTS_TYPES[i * 3 + 2];
+		int joint_type = (int)wood_globals::JOINTS_PARAMETERS_AND_TYPES[i * 3 + 2];
 		ImGui::SliderInt(wood_globals::JOINT_NAMES[i].c_str(), &joint_type, i * 10, (i * 10 + 10) - 1);
 		// std::cout << "imgui_render -> joint_type change " << joint_type << "\n";
-		wood_globals::JOINTS_TYPES[i * 3 + 2] = (double)joint_type;
+		wood_globals::JOINTS_PARAMETERS_AND_TYPES[i * 3 + 2] = (double)joint_type;
 	}
 
 	// Run, the code below set the state_chaged bool so that the code is rerun inside render pipeline, by calling the function pointer

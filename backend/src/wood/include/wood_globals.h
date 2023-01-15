@@ -33,7 +33,7 @@ namespace wood_globals
     // Clipper2 library mostly used in clipper_util
     extern int64_t CLIPPER_SCALE;
     extern double CLIPPER_AREA;
-    
+
     // Tolerances for distance search
     extern double DISTANCE;         // GlobalTolerance
     extern double DISTANCE_SQUARED; // GlobalToleranceSquare
@@ -45,15 +45,13 @@ namespace wood_globals
     extern std::string DATA_SET_OUTPUT_FILE;
 
     // Wood library
-    extern double EXTEND[5]; // Joint volume extension
+    extern double JOINT_VOLUME_EXTENSION[5]; // useful for plates to avoid collision with corner - negative, while on beam the value has to be positive
     extern int OUTPUT_GEOMETRY_TYPE;
     extern bool FORCE_SIDE_TO_SIDE_JOINTS_TO_BE_ROTATED; // when all joints are computed as if sides are rotated, it was implemented in the Touch Wood ZAZ
-    extern double JOINT_LINE_EXTENSION;                  // useful for plates to avoid collision with corner - negative, while on beam the value has to be positive
     extern double LIMIT_MIN_JOINT_LENGTH;                // minimum edge length on which the joint can be generated
     extern std::array<std::string, 7> JOINT_NAMES;
     extern std::vector<std::string> EXISTING_TYPES;
-    extern std::vector<double> JOINTS_TYPES;
-
+    extern std::vector<double> JOINTS_PARAMETERS_AND_TYPES;
 }
 
 #endif

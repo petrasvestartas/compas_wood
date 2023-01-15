@@ -409,11 +409,14 @@ namespace wood
 
     void joint::get_divisions(double &division_distance)
     {
+        division_length = division_distance;
+
         if (compute_geometrical_divisions)
         {
             if (joint_lines[0].size() > 0)
             {                                                                          // if joint line exists, we can use that line for the length of the joint
                 length = CGAL::squared_distance(joint_lines[0][0], joint_lines[0][1]); // Math.Abs(500);
+                std::cout << length << std::endl;
                 // printf("\n EDGE LENGTH\n");
                 // CGAL_Debug(length);
                 // printf("\n EDGE LENGTH\n");

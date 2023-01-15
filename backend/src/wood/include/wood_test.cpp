@@ -74,12 +74,12 @@ namespace wood_test
 
         // Global Parameters and output joint selection and orientation
         double division_length = 300;
-        wood_globals::JOINTS_TYPES[3 * 1 + 0] = 450;
-        wood_globals::JOINTS_TYPES[3 * 1 + 1] = 0.64;
-        wood_globals::JOINTS_TYPES[3 * 1 + 2] = 10;
-        wood_globals::JOINTS_TYPES[3 * 2 + 0] = 450;
-        wood_globals::JOINTS_TYPES[3 * 2 + 1] = 0.5;
-        wood_globals::JOINTS_TYPES[3 * 2 + 2] = 20;
+        wood_globals::JOINTS_PARAMETERS_AND_TYPES[3 * 1 + 0] = 450;
+        wood_globals::JOINTS_PARAMETERS_AND_TYPES[3 * 1 + 1] = 0.64;
+        wood_globals::JOINTS_PARAMETERS_AND_TYPES[3 * 1 + 2] = 10;
+        wood_globals::JOINTS_PARAMETERS_AND_TYPES[3 * 2 + 0] = 450;
+        wood_globals::JOINTS_PARAMETERS_AND_TYPES[3 * 2 + 1] = 0.5;
+        wood_globals::JOINTS_PARAMETERS_AND_TYPES[3 * 2 + 2] = 20;
 
         bool compute_joints = true;
         int search_type = 0;
@@ -113,7 +113,7 @@ namespace wood_test
             top_face_triangulation,
 
             // Global Parameters
-            wood_globals::JOINTS_TYPES,
+            wood_globals::JOINTS_PARAMETERS_AND_TYPES,
             scale,
             search_type,
             wood_globals::OUTPUT_GEOMETRY_TYPE);
@@ -140,8 +140,10 @@ namespace wood_test
         std::vector<std::vector<IK::Point_3>> input_polyline_pairs;
         internal::set_file_path_for_input_xml_and_screenshot(input_polyline_pairs, "type_plates_name_top_to_top_pairs");
 
-        wood_globals::JOINT_LINE_EXTENSION = -10;
-        wood_globals::JOINTS_TYPES[1 * 3 + 0] = 150; // division_length
+        wood_globals::JOINT_VOLUME_EXTENSION[2] = -10;
+        wood_globals::JOINTS_PARAMETERS_AND_TYPES[4 * 3 + 0] = 10;   // this property is assigned to the individual joint.division_length
+        wood_globals::JOINTS_PARAMETERS_AND_TYPES[4 * 3 + 1] = 0.95; // this property is assignes to the individual joint.shift parameter
+
         int search_type = 0;
         std::vector<double> scale = {1, 1, 1};
         std::vector<std::vector<IK::Vector_3>> input_insertion_vectors{};
@@ -170,7 +172,7 @@ namespace wood_test
             output_types,
             top_face_triangulation,
             // Global Parameters
-            wood_globals::JOINTS_TYPES,
+            wood_globals::JOINTS_PARAMETERS_AND_TYPES,
             scale,
             search_type,
             wood_globals::OUTPUT_GEOMETRY_TYPE,
@@ -198,8 +200,8 @@ namespace wood_test
         std::vector<std::vector<IK::Point_3>> input_polyline_pairs;
         internal::set_file_path_for_input_xml_and_screenshot(input_polyline_pairs, "type_plates_name_joint_linking_vidychapel_corner");
 
-        wood_globals::JOINTS_TYPES[1 * 3 + 0] = 150; // division_length
-        wood_globals::JOINT_LINE_EXTENSION = -10;
+        wood_globals::JOINTS_PARAMETERS_AND_TYPES[1 * 3 + 0] = 150; // division_length
+        wood_globals::JOINT_VOLUME_EXTENSION[2] = -10;
 
         int search_type = 0;
         std::vector<double> scale = {1, 1, 1};
@@ -337,7 +339,7 @@ namespace wood_test
             output_types,
             top_face_triangulation,
             // Global Parameters
-            wood_globals::JOINTS_TYPES,
+            wood_globals::JOINTS_PARAMETERS_AND_TYPES,
             scale,
             search_type,
             wood_globals::OUTPUT_GEOMETRY_TYPE,
@@ -366,8 +368,8 @@ namespace wood_test
         std::vector<std::vector<IK::Point_3>> input_polyline_pairs;
         internal::set_file_path_for_input_xml_and_screenshot(input_polyline_pairs, "type_plates_name_joint_linking_vidychapel_one_layer");
 
-        wood_globals::JOINT_LINE_EXTENSION = -10;
-        wood_globals::JOINTS_TYPES[1 * 3 + 0] = 50; // division_length
+        wood_globals::JOINT_VOLUME_EXTENSION[2] = -10;
+        wood_globals::JOINTS_PARAMETERS_AND_TYPES[1 * 3 + 0] = 50; // division_length
 
         int search_type = 0;
         std::vector<double> scale = {1, 1, 1};
@@ -396,7 +398,7 @@ namespace wood_test
             output_types,
             top_face_triangulation,
             // Global Parameters
-            wood_globals::JOINTS_TYPES,
+            wood_globals::JOINTS_PARAMETERS_AND_TYPES,
             scale,
             search_type,
             wood_globals::OUTPUT_GEOMETRY_TYPE,
@@ -425,8 +427,8 @@ namespace wood_test
         std::vector<std::vector<IK::Point_3>> input_polyline_pairs;
         internal::set_file_path_for_input_xml_and_screenshot(input_polyline_pairs, "type_plates_name_joint_linking_vidychapel_one_axis_two_layers");
 
-        wood_globals::JOINT_LINE_EXTENSION = -10;
-        std::vector<double> JOINTS_TYPES = wood_globals::JOINTS_TYPES;
+        wood_globals::JOINT_VOLUME_EXTENSION[2] = -10;
+        std::vector<double> JOINTS_TYPES = wood_globals::JOINTS_PARAMETERS_AND_TYPES;
         JOINTS_TYPES[1 * 3 + 0] = 50;
         int search_type = 0;
         int output_type = wood_globals::OUTPUT_GEOMETRY_TYPE; // 0 - Plate outlines 1 - joint lines 2 - joint volumes 3 - joint geometry 4 - merge
@@ -587,8 +589,8 @@ namespace wood_test
         std::vector<std::vector<IK::Point_3>> input_polyline_pairs;
         internal::set_file_path_for_input_xml_and_screenshot(input_polyline_pairs, "type_plates_name_joint_linking_vidychapel_full");
 
-        wood_globals::JOINT_LINE_EXTENSION = -10;
-        wood_globals::JOINTS_TYPES[1 * 3 + 0] = 50;
+        wood_globals::JOINT_VOLUME_EXTENSION[2] = -10;
+        wood_globals::JOINTS_PARAMETERS_AND_TYPES[1 * 3 + 0] = 50;
         int search_type = 0;
         // std::cout << "\n output_type " << output_type << "\n";
         std::vector<double> scale = {1, 1, 1};
@@ -672,7 +674,7 @@ namespace wood_test
             output_types,
             top_face_triangulation,
             // Global Parameters
-            wood_globals::JOINTS_TYPES,
+            wood_globals::JOINTS_PARAMETERS_AND_TYPES,
             scale,
             search_type,
             wood_globals::OUTPUT_GEOMETRY_TYPE,
@@ -705,8 +707,8 @@ namespace wood_test
         std::vector<std::vector<IK::Point_3>> input_polyline_axes;
         internal::set_file_path_for_input_xml_and_screenshot(input_polyline_axes, "type_beams_name_phanomema_node");
 
-        wood_globals::JOINT_LINE_EXTENSION = 0;
-        wood_globals::JOINTS_TYPES[1 * 3 + 0] = 150; // division_length
+        wood_globals::JOINT_VOLUME_EXTENSION[2] = 0;
+        wood_globals::JOINTS_PARAMETERS_AND_TYPES[1 * 3 + 0] = 150; // division_length
         int search_type = 0;
         int output_type = wood_globals::OUTPUT_GEOMETRY_TYPE; // 0 - Plate outlines 1 - joint lines 2 - joint volumes 3 - joint geometry 4 - merge
         // std::cout << "\n output_type " << output_type << "\n";
@@ -774,7 +776,7 @@ namespace wood_test
             joints_areas,
             joints_types,
             // Global Parameters and output wood::joint selection and orientation
-            wood_globals::JOINTS_TYPES,
+            wood_globals::JOINTS_PARAMETERS_AND_TYPES,
             output_plines,
             output_types,
             compute_joints,

@@ -605,6 +605,7 @@ namespace clipper_util
                 {
                     IK::Point_3 p(C[0][i].x / wood_globals::CLIPPER_SCALE, C[0][i].y / wood_globals::CLIPPER_SCALE, 0);
                     p = p.transform(xform_to_xy_Inv); // Rotate back to 3D
+
                     intersection_result[i] = p;
                 }
 

@@ -18,10 +18,15 @@ namespace wood_globals
     std::string DATA_SET_OUTPUT_FILE = DATA_SET_INPUT_FOLDER + "out.xml";
 
     // Wood library
-    double EXTEND[5] = {0.0, 0.0, 0.0, 0, 0};
+    double JOINT_VOLUME_EXTENSION[5] = {
+        0.0, // x
+        0.0, // y
+        0.0, // z
+        0,
+        0};
+
     int OUTPUT_GEOMETRY_TYPE = 3;
     bool FORCE_SIDE_TO_SIDE_JOINTS_TO_BE_ROTATED = false;
-    double JOINT_LINE_EXTENSION = 0;
     double LIMIT_MIN_JOINT_LENGTH = 0;
 
     std::array<std::string, 7> JOINT_NAMES = {
@@ -65,6 +70,13 @@ namespace wood_globals
         "JOINT_NAMES[60] = b_0;",
     };
 
-    std::vector<double> JOINTS_TYPES{300, 0.5, 8, 450, 0.64, 15, 450, 0.5, 20, 300, 0.5, 30, 300, 0.5, 40, 300, 0.5, 58, 300, 1.0, 60};
-
+    std::vector<double> JOINTS_PARAMETERS_AND_TYPES{
+        300, 0.5, 8,   // 1-9 ss_e_ip (side-to-side edge in-plane)
+        450, 0.64, 15, // 10-19 ss_e_op (side-to-side edge out-of-plane)
+        450, 0.5, 20,  // 20-29 ts_e_p (top-to-side edge plane)
+        300, 0.5, 30,  // 30-39 cr_c_ip (cross cutting in-plane)
+        6, 0.95, 40,   // 40-49 tt_e_p  (top-to-top edge plane)
+        300, 0.5, 58,  // 50-59 ss_e_r (side-to-side edge rotated)
+        300, 1.0, 60   // 60-69 b (boundary)
+    };
 }

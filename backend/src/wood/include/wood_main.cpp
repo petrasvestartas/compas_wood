@@ -498,7 +498,7 @@ namespace wood_main
         // Get max distance from middle point of min line
         int maxID = CGAL::squared_distance(lMax[0], midPlane_lMax) > CGAL::squared_distance(lMax[1], midPlane_lMax) ? 0 : 1;
         IK::Vector_3 v = maxID == 1 ? lMax[1] - midPlane_lMax : -(lMax[0] - midPlane_lMax);
-        v *= (1 + wood_globals::EXTEND[2]);
+        v *= (1 + wood_globals::JOINT_VOLUME_EXTENSION[2]);
 
         // Align v direction in comparison to orignal 4 lines if possible
         // IK::Point_3 origin(0,0,0);
@@ -563,17 +563,17 @@ namespace wood_main
         // jointArea1 = rm.Translate(lMax.direction().Unit() * ((1 + this.extend[2]) + 0.00) * maxLength);//For some reason extend by 1.5
 
         // does not work
-        if (wood_globals::EXTEND[0] + wood_globals::EXTEND[1] > 0)
+        if (wood_globals::JOINT_VOLUME_EXTENSION[0] + wood_globals::JOINT_VOLUME_EXTENSION[1] > 0)
         {
-            cgal_polyline_util::extend(joint_volumes_pairA_pairB[0], 0, 0, 0, wood_globals::EXTEND[0], wood_globals::EXTEND[0]);
-            cgal_polyline_util::extend(joint_volumes_pairA_pairB[0], 2, 0, 0, wood_globals::EXTEND[0], wood_globals::EXTEND[0]);
-            cgal_polyline_util::extend(joint_volumes_pairA_pairB[0], 1, 0, 0, wood_globals::EXTEND[1], wood_globals::EXTEND[1]);
-            cgal_polyline_util::extend(joint_volumes_pairA_pairB[0], 3, 0, 0, wood_globals::EXTEND[1], wood_globals::EXTEND[1]);
+            cgal_polyline_util::extend(joint_volumes_pairA_pairB[0], 0, 0, 0, wood_globals::JOINT_VOLUME_EXTENSION[0], wood_globals::JOINT_VOLUME_EXTENSION[0]);
+            cgal_polyline_util::extend(joint_volumes_pairA_pairB[0], 2, 0, 0, wood_globals::JOINT_VOLUME_EXTENSION[0], wood_globals::JOINT_VOLUME_EXTENSION[0]);
+            cgal_polyline_util::extend(joint_volumes_pairA_pairB[0], 1, 0, 0, wood_globals::JOINT_VOLUME_EXTENSION[1], wood_globals::JOINT_VOLUME_EXTENSION[1]);
+            cgal_polyline_util::extend(joint_volumes_pairA_pairB[0], 3, 0, 0, wood_globals::JOINT_VOLUME_EXTENSION[1], wood_globals::JOINT_VOLUME_EXTENSION[1]);
 
-            cgal_polyline_util::extend(joint_volumes_pairA_pairB[1], 0, 0, 0, wood_globals::EXTEND[0], wood_globals::EXTEND[0]);
-            cgal_polyline_util::extend(joint_volumes_pairA_pairB[1], 2, 0, 0, wood_globals::EXTEND[0], wood_globals::EXTEND[0]);
-            cgal_polyline_util::extend(joint_volumes_pairA_pairB[1], 1, 0, 0, wood_globals::EXTEND[1], wood_globals::EXTEND[1]);
-            cgal_polyline_util::extend(joint_volumes_pairA_pairB[1], 3, 0, 0, wood_globals::EXTEND[1], wood_globals::EXTEND[1]);
+            cgal_polyline_util::extend(joint_volumes_pairA_pairB[1], 0, 0, 0, wood_globals::JOINT_VOLUME_EXTENSION[0], wood_globals::JOINT_VOLUME_EXTENSION[0]);
+            cgal_polyline_util::extend(joint_volumes_pairA_pairB[1], 2, 0, 0, wood_globals::JOINT_VOLUME_EXTENSION[0], wood_globals::JOINT_VOLUME_EXTENSION[0]);
+            cgal_polyline_util::extend(joint_volumes_pairA_pairB[1], 1, 0, 0, wood_globals::JOINT_VOLUME_EXTENSION[1], wood_globals::JOINT_VOLUME_EXTENSION[1]);
+            cgal_polyline_util::extend(joint_volumes_pairA_pairB[1], 3, 0, 0, wood_globals::JOINT_VOLUME_EXTENSION[1], wood_globals::JOINT_VOLUME_EXTENSION[1]);
         }
 
         // For the sake of consistency
@@ -627,7 +627,7 @@ namespace wood_main
 
                     // Perform 2D Intersection 20 ms
                     bool include_triangles = i < 2 && j < 2;
-                    bool hasIntersection = clipper_util::get_intersection_between_two_polylines(Polyline0[i], Polyline1[j], Plane0[i], joint_area, include_triangles); // +20 ms 10000.0; GlobalClipperScale
+                    bool hasIntersection = clipper_util::get_intersection_between_two_polylines(Polyline0[i], Polyline1[j], Plane0[i], joint_area, 0, include_triangles); // +20 ms 10000.0; GlobalClipperScale
 
 #ifdef DEBUG_wood_MAIN_LOCAL_SEARCH
                     printf("CPP hasIntersection %i\n", hasIntersection);
@@ -716,11 +716,11 @@ namespace wood_main
                         }
 
                         ////////////////////////////////////////////////////////////////////////////////
-                        // extend wood::joint line, for plates it is negative, for beam positive e.g. wood_globals::JOINT_LINE_EXTENSION = -20;
+                        // extend wood::joint line, for plates it is negative, for beam positive e.g. wood_globals::JOINT_VOLUME_EXTENSION[2] = -20;
                         // check the limit so that the lines would not be 0 or inverse
                         ////////////////////////////////////////////////////////////////////////////////
 
-                        double JOINT_LINE_EXTENSION_limit = (wood_globals::JOINT_LINE_EXTENSION * 2) * (wood_globals::JOINT_LINE_EXTENSION * 2);
+                        double JOINT_LINE_EXTENSION_limit = (wood_globals::JOINT_VOLUME_EXTENSION[2] * 2) * (wood_globals::JOINT_VOLUME_EXTENSION[2] * 2);
 
                         double joint_line0_squared_length = joint_line0.squared_length();
                         double joint_line1_squared_length = joint_line1.squared_length();
@@ -733,8 +733,8 @@ namespace wood_main
                             if (JOINT_LINE_EXTENSION_limit > joint_line1.squared_length() - LIMIT_MIN_JOINT_LENGTH_squared)
                                 return false;
 
-                        cgal_polyline_util::extend_equally(joint_line0, wood_globals::JOINT_LINE_EXTENSION);
-                        cgal_polyline_util::extend_equally(joint_line1, wood_globals::JOINT_LINE_EXTENSION);
+                        cgal_polyline_util::extend_equally(joint_line0, wood_globals::JOINT_VOLUME_EXTENSION[2]);
+                        cgal_polyline_util::extend_equally(joint_line1, wood_globals::JOINT_VOLUME_EXTENSION[2]);
 
                         ////////////////////////////////////////////////////////////////////////////////
                         // ToDo set edge direction - Check Insertion angle if edge axis is assigned
@@ -2074,13 +2074,12 @@ namespace wood_main
         std::vector<double> &default_parameters_for_JOINTS_TYPES,
         std::vector<double> &scale,
         int search_type,
-        // double division_distance = 300,
-        // double shift = 0.6,
         int output_type,
         int triangulate
 
     )
     {
+
 
 #ifdef DEBUG_MEASURE_TIME
         auto begin = std::chrono::high_resolution_clock::now();
