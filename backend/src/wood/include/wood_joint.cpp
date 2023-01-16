@@ -310,16 +310,23 @@ namespace wood
     bool joint::orient_to_connection_area()
     {
 
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Unit scale to avoid z-axis stretching
+        // The strech factor is equal to the 2nd joint volume edge length
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         if (unit_scale)
-        { //&& unit_scale_distance > 0
+        {
 
-            // Distance between two rectangles
-            // if(unit_scale_two_directions)
-            // Check this one if it fine for timber plate joints
-            // Why do we need to give a distance if it is only 2D scale?
-            // Does the distance measurement between 1 and 2 vertex would be valid in all cases? If not should it be or not?
+            /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            // Distance between two rectangles is equal to the joint volume second edge length
+            /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
             unit_scale_distance = std::sqrt(CGAL::squared_distance(joint_volumes[0][1], joint_volumes[0][2]));
 
+            /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            // First pair of joint volumes
+            // The joint volumes are move in z-axis, so that the joint geometry would not be stretched
+            // The distance of the movement is equal to the joint-volume rectangle edge length
+            /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
             IK::Segment_3 volume_segment(joint_volumes[0][0], joint_volumes[1][0]);
             IK::Vector_3 vec = volume_segment.to_vector() * 0.5;
             IK::Vector_3 vec_unit = volume_segment.to_vector();
@@ -331,7 +338,10 @@ namespace wood
             cgal_polyline_util::move(joint_volumes[0], -vec_unit);
             cgal_polyline_util::move(joint_volumes[1], vec_unit);
 
-            // The same as above
+            /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            // Second pair of joint volumes
+            // If two pairs of joint volumes are given, then two transformations must be calculated, the code is the same as above
+            /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
             if (joint_volumes[2].size() > 0)
             {
                 IK::Segment_3 volume_segment(joint_volumes[2][0], joint_volumes[3][0]);
@@ -347,17 +357,23 @@ namespace wood
             }
         }
 
-        // scale, implemented first time for round wood cross joint intersection
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Scale transformation
+        // To increase the joint for cases like cross joints or raw timber
+        // This proption was implemented first time for round wood cross joint intersection
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         if (scale[0] != 1.0 || scale[1] != 1.0 || scale[2] != 1.0)
         {
-            // scale 2d
-            // std::cout << scale[0] << " " << scale[1] << " " << scale[2] << std::endl;
             auto xform_scale = cgal_xform_util::scale(scale[0], scale[1], scale[2]);
             transform(xform_scale, xform_scale);
         }
 
-        viewer_polylines.emplace_back(joint_volumes[0]);
-        viewer_polylines.emplace_back(joint_volumes[1]);
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Create 2 change-of-basis transformations for the joint volume of the female and male parts
+        // There can be two cases:
+        // 1. The joint volume is made from 1 pair of rectangles e.g. side-to-side edge in-plane joint
+        // 2. The joint volume is made from 2 pairs of rectangles e.g. side-to-side edge out-of-plane joint
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         CGAL::Aff_transformation_3<IK> xform0;
         bool flag0 = change_basis(joint_volumes[0], joint_volumes[1], xform0);
 
@@ -367,7 +383,7 @@ namespace wood
         transform(xform0, xform1);
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        // output
+        // output, true if the two transformations are successful
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         return flag0 && flag1;

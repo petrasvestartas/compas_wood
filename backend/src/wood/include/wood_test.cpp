@@ -833,6 +833,185 @@ namespace wood_test
     // library of joints
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+    bool type_library_name_ss_e_ip_2()
+    {
+
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // viewer type and shader location
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        opengl_globals_geometry::add_grid();
+
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // The filename of the xml file and the screenshot directory
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        std::vector<std::vector<IK::Point_3>> input_polyline_pairs;
+        internal::set_file_path_for_input_xml_and_screenshot(input_polyline_pairs, "type_library_name_ss_e_op_4");
+
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // joint parameters
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        wood::joint joint;
+
+        // name
+        joint.name = "ss_e_ip_2";
+
+        // parameters that comes from the joint
+        bool default_values = true;
+        double edge_length = !default_values ? joint.length : 1000;
+        int divisions = !default_values ? joint.divisions : 5;
+        double joint_volume_edge_length = !default_values ? std::sqrt(CGAL::squared_distance(joint.joint_volumes[0][1], joint.joint_volumes[0][2])) : 40;
+
+        // scale down the edge, since wood_joint ->  bool joint::orient_to_connection_area() make the distance between joint volumes equal to 2nd joint volume edge
+        edge_length *= joint.scale[2];
+
+        // normalization to the unit space, joint_volume_edge_length is used for parametrization
+        double move_length_scaled = edge_length / (divisions * joint_volume_edge_length);
+        double total_length_scaled = edge_length / joint_volume_edge_length;
+
+        // movement vectors to translate the unit joint to the end of the edge and then to its middle
+        IK::Vector_3 dir(0, 0, 1);
+        IK::Vector_3 move_from_center_to_the_end = dir * ((total_length_scaled * 0.5) - (move_length_scaled * 0.5));
+        IK::Vector_3 move_length_dir = -dir * move_length_scaled;
+
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Male default shape
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        std::vector<CGAL_Polyline>
+            male_0 = {
+                {
+                    IK::Point_3(0, -0.5, -0.1166666667),
+                    IK::Point_3(-0.5, -0.5, -0.4),
+                    IK::Point_3(-0.5, -0.5, 0.4),
+                    IK::Point_3(0, -0.5, 0.1166666667),
+                },
+                {
+                    IK::Point_3(0, -0.5, -0.1166666667),
+                    IK::Point_3(0, -0.5, 0.1166666667),
+                }};
+
+        std::vector<CGAL_Polyline> male_1 = {
+            {
+                IK::Point_3(0, 0.5, -0.1166666667),
+                IK::Point_3(-0.5, 0.5, -0.4),
+                IK::Point_3(-0.5, 0.5, 0.4),
+                IK::Point_3(0, 0.5, 0.1166666667),
+            },
+
+            {
+                IK::Point_3(0, 0.5, -0.1166666667),
+                IK::Point_3(0, 0.5, 0.1166666667),
+            }};
+
+        std::vector<wood_cut::cut_type> male_types{
+            wood_cut::edge_insertion,
+            wood_cut::edge_insertion};
+
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // female default shape
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        std::vector<CGAL_Polyline> female_0 = {
+            {
+                IK::Point_3(0, -0.5, -0.1166666667),
+                IK::Point_3(0.5, -0.5, -0.4),
+                IK::Point_3(0.5, -0.5, 0.4),
+                IK::Point_3(0, -0.5, 0.1166666667),
+            },
+            {
+                IK::Point_3(0, -0.5, -0.1166666667),
+                IK::Point_3(0, -0.5, 0.1166666667),
+            }};
+
+        std::vector<CGAL_Polyline> female_1 = {
+            {
+                IK::Point_3(0, 0.5, -0.1166666667),
+                IK::Point_3(0.5, 0.5, -0.4),
+                IK::Point_3(0.5, 0.5, 0.4),
+                IK::Point_3(0, 0.5, 0.1166666667),
+            },
+            {
+                IK::Point_3(0, 0.5, -0.1166666667),
+                IK::Point_3(0, 0.5, 0.1166666667),
+            }};
+
+        std::vector<wood_cut::cut_type> female_types{
+            wood_cut::edge_insertion,
+            wood_cut::edge_insertion};
+
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Reserve memory for multiple copies
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        joint.m[0].reserve(male_0.size() * divisions);
+        joint.m[1].reserve(male_1.size() * divisions);
+        joint.m_boolean_type.reserve(male_types.size() * divisions);
+        joint.f[0].reserve(female_0.size() * divisions);
+        joint.f[1].reserve(female_1.size() * divisions);
+        joint.f_boolean_type.reserve(female_types.size() * divisions);
+
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Copy the default shapes and move them
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        for (auto i = 0; i < divisions; i++)
+        {
+
+            // Add to the list
+            auto size_before_m = joint.m[0].size();
+            joint.m[0].insert(joint.m[0].end(), male_0.begin(), male_0.end());
+            auto size_after_m = joint.m[0].size();
+            joint.m[1].insert(joint.m[1].end(), male_1.begin(), male_1.end());
+            joint.m_boolean_type.insert(joint.m_boolean_type.end(), male_types.begin(), male_types.end());
+
+            auto size_before_f = joint.f[0].size();
+            joint.f[0].insert(joint.f[0].end(), female_0.begin(), female_0.end());
+            auto size_after_f = joint.f[0].size();
+            joint.f[1].insert(joint.f[1].end(), female_1.begin(), female_1.end());
+            joint.f_boolean_type.insert(joint.f_boolean_type.end(), female_types.begin(), female_types.end());
+
+            // move joints that are positioned at the center to the end of the segment and then back by half of the division length
+            for (auto j = size_before_m; j < size_after_m; j++)
+            {
+                for (auto &p : joint.m[0][j])
+                    p += move_from_center_to_the_end + move_length_dir * i;
+
+                for (auto &p : joint.m[1][j])
+                    p += move_from_center_to_the_end + move_length_dir * i;
+            }
+
+            for (auto j = size_before_f; j < size_after_f; j++)
+            {
+                for (auto &p : joint.f[0][j])
+                    p += move_from_center_to_the_end + move_length_dir * i;
+
+                for (auto &p : joint.f[1][j])
+                    p += move_from_center_to_the_end + move_length_dir * i;
+            }
+        }
+
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // is unit scale
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        joint.unit_scale = true;
+
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // joint for preview
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        viewer_wood::scale = 1.0;
+        std::vector<std::vector<CGAL_Polyline>> input_polyline_pairs0;
+        input_polyline_pairs0.emplace_back(joint.m[0]);
+        input_polyline_pairs0.emplace_back(joint.m[1]);
+        viewer_wood::add(input_polyline_pairs0, 0); // grey
+        std::vector<std::vector<CGAL_Polyline>> input_polyline_pairs1;
+        input_polyline_pairs1.emplace_back(joint.f[0]);
+        input_polyline_pairs1.emplace_back(joint.f[1]);
+        CGAL_Polyline default_segment = {IK::Point_3(0, 0, -total_length_scaled * 0.5), IK::Point_3(0, 0, total_length_scaled * 0.5)};
+        input_polyline_pairs1.push_back({default_segment});
+        viewer_wood::add(input_polyline_pairs1, 2); // grey
+        // reset
+        viewer_wood::scale = 1000;
+        return true;
+    }
+
     bool type_library_name_ss_e_op_4()
     {
 
@@ -1395,6 +1574,11 @@ namespace wood_test
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // library of joints
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    TEST(wood, type_library_name_ss_e_ip_2)
+    {
+        EXPECT_EQ(type_library_name_ss_e_ip_2(), true);
+    }
+
     TEST(wood, type_library_name_ss_e_op_4)
     {
         EXPECT_EQ(type_library_name_ss_e_op_4(), true);

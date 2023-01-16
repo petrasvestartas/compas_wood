@@ -3408,7 +3408,7 @@ namespace wood_joint_lib
         // compute the inscribed rectangle and subdivide it into points
         // WARNING the offset distance and division has to come from user
         std::vector<IK::Point_3> points;
-        double offset_distance = joint.shift;
+        double offset_distance = -joint.shift;
         double division_distance = joint.division_length; // negative value = grid, positive = edge division
         clipper_util::offset_and_divide_to_points(points, joint.joint_area, offset_distance, division_distance);
 
