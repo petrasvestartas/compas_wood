@@ -8,14 +8,15 @@ Author: [Petras Vestartas](https://petrasvestartas.com/About-Petras-Vestartas)
 
 #### top-to-top 
 - [x] single point drill
-- [ ] line drill
+- [x] line drill
 - [x] circle (polylabel) drill
-- [ ] smooth drill
+- [x] smooth drill
 - [x] hatch drill
-#### clip
-- [ ] take tenon-mortise and adapt to the clipper geometry
 #### multi-butterfly
 - [ ] replicate the joint n-times
+#### clip
+- [ ] take tenon-mortise and adapt to the clipper geometry
+
 
 ### 02 2023 - finalization of beam-panel model integration
 - [ ] continue the model based on " beam_node_0.cpp -> beam_node_0 " , currently only connection areas are generated, but not the joint volumes
