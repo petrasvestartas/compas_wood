@@ -694,6 +694,66 @@ namespace wood_test
         return true;
     }
 
+    bool type_plates_name_side_to_side_edge_inplane_2_butterflies()
+    {
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // The filename of the xml file and the screenshot directory
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        std::vector<std::vector<IK::Point_3>> input_polyline_pairs;
+        internal::set_file_path_for_input_xml_and_screenshot(input_polyline_pairs, "type_plates_name_side_to_side_edge_inplane_2_butterflies");
+
+        // wood_globals::JOINTS_PARAMETERS_AND_TYPES[0 * 3 + 0] = 150; // division_length
+        // wood_globals::JOINTS_PARAMETERS_AND_TYPES[0 * 3 + 2] = 3; // joint type
+        // wood_globals::JOINT_VOLUME_EXTENSION[2] = -10;
+
+        int search_type = 0;
+        std::vector<double> scale = {1, 1, 1};
+        std::vector<std::vector<IK::Vector_3>> input_insertion_vectors{};
+        std::vector<std::vector<int>> input_JOINTS_TYPES;
+        // std::vector<std::vector<int>> input_three_valence_element_indices_and_instruction = {{1}, {16, 10, 11, 17}};
+        std::vector<std::vector<int>> input_three_valence_element_indices_and_instruction;
+
+        std::vector<int> input_adjacency;
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Main Method of Wood
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        std::vector<std::vector<CGAL_Polyline>>
+            output_plines;
+        std::vector<std::vector<wood_cut::cut_type>> output_types;
+        std::vector<std::vector<int>> top_face_triangulation;
+
+        wood_main::get_connection_zones(
+            // input
+            input_polyline_pairs,
+            input_insertion_vectors,
+            input_JOINTS_TYPES,
+            input_three_valence_element_indices_and_instruction,
+            input_adjacency,
+            // output
+            output_plines,
+            output_types,
+            top_face_triangulation,
+            // Global Parameters
+            wood_globals::JOINTS_PARAMETERS_AND_TYPES,
+            scale,
+            search_type,
+            wood_globals::OUTPUT_GEOMETRY_TYPE,
+            0);
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Export
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        wood_xml::path_and_file_for_output_polylines = wood_globals::DATA_SET_OUTPUT_FILE;
+        wood_xml::write_xml_polylines_and_types(output_plines, output_types);
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Display
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        internal::set_plate_display(input_polyline_pairs, output_plines);
+        return false;
+    }
+
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // beam methods
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -858,7 +918,7 @@ namespace wood_test
 
         // parameters that comes from the joint
         bool default_values = true;
-        double edge_length = !default_values ? joint.length : 1000;
+        double edge_length = !default_values ? std::sqrt(CGAL::squared_distance(joint.joint_lines[0][0], joint.joint_lines[0][1])) : 1000;
         int divisions = !default_values ? joint.divisions : 5;
         double joint_volume_edge_length = !default_values ? std::sqrt(CGAL::squared_distance(joint.joint_volumes[0][1], joint.joint_volumes[0][2])) : 40;
 
@@ -880,27 +940,31 @@ namespace wood_test
         std::vector<CGAL_Polyline>
             male_0 = {
                 {
-                    IK::Point_3(0, -0.5, -0.1166666667),
-                    IK::Point_3(-0.5, -0.5, -0.4),
-                    IK::Point_3(-0.5, -0.5, 0.4),
+
                     IK::Point_3(0, -0.5, 0.1166666667),
+                    IK::Point_3(-0.5, -0.5, 0.4),
+                    IK::Point_3(-0.5, -0.5, -0.4),
+                    IK::Point_3(0, -0.5, -0.1166666667),
                 },
                 {
-                    IK::Point_3(0, -0.5, -0.1166666667),
+
                     IK::Point_3(0, -0.5, 0.1166666667),
+                    IK::Point_3(0, -0.5, -0.1166666667),
                 }};
 
         std::vector<CGAL_Polyline> male_1 = {
             {
-                IK::Point_3(0, 0.5, -0.1166666667),
-                IK::Point_3(-0.5, 0.5, -0.4),
-                IK::Point_3(-0.5, 0.5, 0.4),
+
                 IK::Point_3(0, 0.5, 0.1166666667),
+                IK::Point_3(-0.5, 0.5, 0.4),
+                IK::Point_3(-0.5, 0.5, -0.4),
+                IK::Point_3(0, 0.5, -0.1166666667),
             },
 
             {
-                IK::Point_3(0, 0.5, -0.1166666667),
+
                 IK::Point_3(0, 0.5, 0.1166666667),
+                IK::Point_3(0, 0.5, -0.1166666667),
             }};
 
         std::vector<wood_cut::cut_type> male_types{
@@ -913,26 +977,30 @@ namespace wood_test
 
         std::vector<CGAL_Polyline> female_0 = {
             {
-                IK::Point_3(0, -0.5, -0.1166666667),
-                IK::Point_3(0.5, -0.5, -0.4),
-                IK::Point_3(0.5, -0.5, 0.4),
+
                 IK::Point_3(0, -0.5, 0.1166666667),
+                IK::Point_3(0.5, -0.5, 0.4),
+                IK::Point_3(0.5, -0.5, -0.4),
+                IK::Point_3(0, -0.5, -0.1166666667),
             },
             {
-                IK::Point_3(0, -0.5, -0.1166666667),
+
                 IK::Point_3(0, -0.5, 0.1166666667),
+                IK::Point_3(0, -0.5, -0.1166666667),
             }};
 
         std::vector<CGAL_Polyline> female_1 = {
             {
-                IK::Point_3(0, 0.5, -0.1166666667),
-                IK::Point_3(0.5, 0.5, -0.4),
-                IK::Point_3(0.5, 0.5, 0.4),
+
                 IK::Point_3(0, 0.5, 0.1166666667),
+                IK::Point_3(0.5, 0.5, 0.4),
+                IK::Point_3(0.5, 0.5, -0.4),
+                IK::Point_3(0, 0.5, -0.1166666667),
             },
             {
-                IK::Point_3(0, 0.5, -0.1166666667),
+
                 IK::Point_3(0, 0.5, 0.1166666667),
+                IK::Point_3(0, 0.5, -0.1166666667),
             }};
 
         std::vector<wood_cut::cut_type> female_types{
@@ -942,51 +1010,66 @@ namespace wood_test
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Reserve memory for multiple copies
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        joint.m[0].reserve(male_0.size() * divisions);
-        joint.m[1].reserve(male_1.size() * divisions);
-        joint.m_boolean_type.reserve(male_types.size() * divisions);
-        joint.f[0].reserve(female_0.size() * divisions);
-        joint.f[1].reserve(female_1.size() * divisions);
-        joint.f_boolean_type.reserve(female_types.size() * divisions);
+        joint.m[0].reserve(2);
+        joint.m[1].reserve(2);
+        joint.m_boolean_type.reserve(2);
+        joint.f[0].reserve(2);
+        joint.f[1].reserve(2);
+        joint.f_boolean_type.reserve(2);
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Copy the default shapes and move them
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        auto a = joint.m[0];
+        joint.m[0].emplace_back(CGAL_Polyline());
+        joint.m[1].emplace_back(CGAL_Polyline());
+        joint.f[0].emplace_back(CGAL_Polyline());
+        joint.f[1].emplace_back(CGAL_Polyline());
+
+        joint.m[0].back().reserve(male_0[0].size() * divisions);
+        joint.m[1].back().reserve(male_1[0].size() * divisions);
+        joint.f[0].back().reserve(female_0[0].size() * divisions);
+        joint.f[1].back().reserve(female_1[0].size() * divisions);
+
         for (auto i = 0; i < divisions; i++)
         {
 
-            // Add to the list
-            auto size_before_m = joint.m[0].size();
-            joint.m[0].insert(joint.m[0].end(), male_0.begin(), male_0.end());
-            auto size_after_m = joint.m[0].size();
-            joint.m[1].insert(joint.m[1].end(), male_1.begin(), male_1.end());
-            joint.m_boolean_type.insert(joint.m_boolean_type.end(), male_types.begin(), male_types.end());
-
-            auto size_before_f = joint.f[0].size();
-            joint.f[0].insert(joint.f[0].end(), female_0.begin(), female_0.end());
-            auto size_after_f = joint.f[0].size();
-            joint.f[1].insert(joint.f[1].end(), female_1.begin(), female_1.end());
-            joint.f_boolean_type.insert(joint.f_boolean_type.end(), female_types.begin(), female_types.end());
+            // copy the first outline, be sure that the point order is correct, so that the non-internsecting polyline can be created, else reverse it
+            CGAL_Polyline male_moved_0 = male_0[0];
+            CGAL_Polyline male_moved_1 = male_1[0];
+            CGAL_Polyline female_moved_0 = female_0[0];
+            CGAL_Polyline female_moved_1 = female_1[0];
 
             // move joints that are positioned at the center to the end of the segment and then back by half of the division length
-            for (auto j = size_before_m; j < size_after_m; j++)
-            {
-                for (auto &p : joint.m[0][j])
-                    p += move_from_center_to_the_end + move_length_dir * i;
+            for (auto &p : male_moved_0)
+                p += move_from_center_to_the_end + move_length_dir * i;
 
-                for (auto &p : joint.m[1][j])
-                    p += move_from_center_to_the_end + move_length_dir * i;
-            }
+            for (auto &p : male_moved_1)
+                p += move_from_center_to_the_end + move_length_dir * i;
 
-            for (auto j = size_before_f; j < size_after_f; j++)
-            {
-                for (auto &p : joint.f[0][j])
-                    p += move_from_center_to_the_end + move_length_dir * i;
+            for (auto &p : female_moved_0)
+                p += move_from_center_to_the_end + move_length_dir * i;
 
-                for (auto &p : joint.f[1][j])
-                    p += move_from_center_to_the_end + move_length_dir * i;
-            }
+            for (auto &p : female_moved_1)
+                p += move_from_center_to_the_end + move_length_dir * i;
+
+            // merge with the main outline
+            joint.m[0].back().insert(joint.m[0].back().end(), male_moved_0.begin(), male_moved_0.end());
+            joint.m[1].back().insert(joint.m[1].back().end(), male_moved_1.begin(), male_moved_1.end());
+            joint.f[0].back().insert(joint.f[0].back().end(), female_moved_0.begin(), female_moved_0.end());
+            joint.f[1].back().insert(joint.f[1].back().end(), female_moved_1.begin(), female_moved_1.end());
         }
+
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Add the insertion lines
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        joint.m[0].emplace_back(CGAL_Polyline{joint.m[0].front().front(), joint.m[0].front().back()});
+        joint.m[1].emplace_back(CGAL_Polyline{joint.m[1].front().front(), joint.m[1].front().back()});
+        joint.f[0].emplace_back(CGAL_Polyline{joint.f[0].front().front(), joint.f[0].front().back()});
+        joint.f[1].emplace_back(CGAL_Polyline{joint.f[1].front().front(), joint.f[1].front().back()});
+
+        joint.f_boolean_type = female_types;
+        joint.m_boolean_type = male_types;
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // is unit scale
@@ -1561,6 +1644,11 @@ namespace wood_test
     TEST(wood, type_plates_name_joint_linking_vidychapel_full)
     {
         EXPECT_EQ(type_plates_name_joint_linking_vidychapel_full(), true);
+    }
+
+    TEST(wood, type_plates_name_side_to_side_edge_inplane_2_butterflies)
+    {
+        EXPECT_EQ(type_plates_name_side_to_side_edge_inplane_2_butterflies(), true);
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
