@@ -735,9 +735,9 @@ namespace wood_joint_lib
         IK::Vector_3 move_from_center_to_the_end = dir * ((total_length_scaled * 0.5) - (move_length_scaled * 0.5));
         IK::Vector_3 move_length_dir = -dir * move_length_scaled;
 
-        std::cout << "divisions" << divisions << "\n";
-        std::cout << "edge_length" << edge_length << "\n";
-        std::cout << "joint_volume_edge_length" << joint_volume_edge_length << "\n";
+        // std::cout << "divisions" << divisions << "\n";
+        // std::cout << "edge_length" << edge_length << "\n";
+        // std::cout << "joint_volume_edge_length" << joint_volume_edge_length << "\n";
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Male default shape

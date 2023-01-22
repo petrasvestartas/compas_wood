@@ -25,7 +25,7 @@ namespace wood_globals
         0,
         0};
 
-    int OUTPUT_GEOMETRY_TYPE = 3;
+    int OUTPUT_GEOMETRY_TYPE = 4;
     bool FORCE_SIDE_TO_SIDE_JOINTS_TO_BE_ROTATED = false;
     double LIMIT_MIN_JOINT_LENGTH = 0;
 
@@ -71,7 +71,7 @@ namespace wood_globals
     };
 
     std::vector<double> JOINTS_PARAMETERS_AND_TYPES{
-        300, 0.5, 8,   // 1-9 ss_e_ip (side-to-side edge in-plane)
+        300, 0.5, 3,   // 1-9 ss_e_ip (side-to-side edge in-plane)
         450, 0.64, 15, // 10-19 ss_e_op (side-to-side edge out-of-plane)
         450, 0.5, 20,  // 20-29 ts_e_p (top-to-side edge plane)
         300, 0.5, 30,  // 30-39 cr_c_ip (cross cutting in-plane)

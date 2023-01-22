@@ -71,7 +71,7 @@ namespace wood_test
          * this function is run at the end of the example
          * define OpenGL vizualizer parameters
          */
-        void set_plate_display(std::vector<std::vector<IK::Point_3>> &input_polyline_pairs, std::vector<std::vector<CGAL_Polyline>> &output_plines);
+        void set_plate_display(std::vector<std::vector<IK::Point_3>> &input_polyline_pairs, std::vector<std::vector<CGAL_Polyline>> &output_plines, bool add_loft = true);
 
     }
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

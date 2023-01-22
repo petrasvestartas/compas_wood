@@ -213,11 +213,11 @@ namespace wood
                     ///////////////////////////////////////////////////////////////////////////////
                     // Take last lines Element outline can be not in the same order as wood::joint outlines Take wood::joint segment and measure its point to the plane
                     ///////////////////////////////////////////////////////////////////////////////
-                    bool flag =
+                    bool is_geo_reversed =
                         CGAL::squared_distance(planes[0].projection(joints[std::get<0>(j_mf[i + 2][j])](std::get<1>(j_mf[i + 2][j]), true).back()[0]), joints[std::get<0>(j_mf[i + 2][j])](std::get<1>(j_mf[i + 2][j]), true).back()[0]) >
                         CGAL::squared_distance(planes[0].projection(joints[std::get<0>(j_mf[i + 2][j])](std::get<1>(j_mf[i + 2][j]), false).back()[0]), joints[std::get<0>(j_mf[i + 2][j])](std::get<1>(j_mf[i + 2][j]), false).back()[0]);
 
-                    if (flag)
+                    if (is_geo_reversed)
                         joints[std::get<0>(j_mf[i + 2][j])].reverse(std::get<1>(j_mf[i + 2][j]));
 
                     IK::Segment_3 joint_line_0(joints[std::get<0>(j_mf[i + 2][j])](std::get<1>(j_mf[i + 2][j]), true).back()[0], joints[std::get<0>(j_mf[i + 2][j])](std::get<1>(j_mf[i + 2][j]), true).back()[1]);
@@ -250,17 +250,17 @@ namespace wood
 
                     IK::Vector_3 v(0, 0, 2);
 
-                    bool flag0 = cgal_intersection_util::plane_plane_plane(planes[2 + prev], joint_line_plane_0_prev, planes[0], p0_int); //, joint_line_0, t0_int
+                    bool flag0 = cgal_intersection_util::plane_plane_plane_with_parallel_check(planes[2 + prev], joint_line_plane_0_prev, planes[0], p0_int); //, joint_line_0, t0_int
 
                     // output.push_back({ p0_int + v,joint_line_0[0]+ v,cgal_polyline_util::Center(polylines[2 + prev]) + v,cgal_polyline_util::Center(polylines[0]) + v });
 
-                    bool flag1 = cgal_intersection_util::plane_plane_plane(planes[2 + next], joint_line_plane_0_next, planes[0], p1_int); //, joint_line_0, t1_int
+                    bool flag1 = cgal_intersection_util::plane_plane_plane_with_parallel_check(planes[2 + next], joint_line_plane_0_next, planes[0], p1_int); //, joint_line_0, t1_int
                     // output.push_back({ p1_int + v ,joint_line_0[0] + v,cgal_polyline_util::Center(polylines[2 + next]) + v,cgal_polyline_util::Center(polylines[0]) + v });
 
-                    bool flag2 = cgal_intersection_util::plane_plane_plane(planes[2 + prev], joint_line_plane_1_prev, planes[1], p2_int); //, joint_line_1, t2_int
+                    bool flag2 = cgal_intersection_util::plane_plane_plane_with_parallel_check(planes[2 + prev], joint_line_plane_1_prev, planes[1], p2_int); //, joint_line_1, t2_int
                     // output.push_back({ p2_int + v,joint_line_1[0] + v,cgal_polyline_util::Center(polylines[2 + prev]) + v,cgal_polyline_util::Center(polylines[1]) + v });
 
-                    bool flag3 = cgal_intersection_util::plane_plane_plane(planes[2 + next], joint_line_plane_1_next, planes[1], p3_int); //, joint_line_1, t3_int
+                    bool flag3 = cgal_intersection_util::plane_plane_plane_with_parallel_check(planes[2 + next], joint_line_plane_1_next, planes[1], p3_int); //, joint_line_1, t3_int
                     // output.push_back({ p3_int + v,joint_line_1[0] + v,cgal_polyline_util::Center(polylines[2 + next]) + v,cgal_polyline_util::Center(polylines[1]) + v });
 
                     ///////////////////////////////////////////////////////////////////////////////
@@ -282,20 +282,20 @@ namespace wood
                     ///////////////////////////////////////////////////////////////////////////////
                     bool flip = CGAL::has_smaller_distance_to_point(
                         polyline0[i],
-                        joints[std::get<0>(j_mf[i + 2][j])](std::get<1>(j_mf[i + 2][j]), !flag)[0].front(),
-                        joints[std::get<0>(j_mf[i + 2][j])](std::get<1>(j_mf[i + 2][j]), !flag)[0].back());
+                        joints[std::get<0>(j_mf[i + 2][j])](std::get<1>(j_mf[i + 2][j]), !is_geo_reversed)[0].front(),
+                        joints[std::get<0>(j_mf[i + 2][j])](std::get<1>(j_mf[i + 2][j]), !is_geo_reversed)[0].back());
                     ;
                     if (!flip)
                     {
                         // bottom
                         std::reverse(
-                            joints[std::get<0>(j_mf[i + 2][j])](std::get<1>(j_mf[i + 2][j]), !flag)[0].begin(),
-                            joints[std::get<0>(j_mf[i + 2][j])](std::get<1>(j_mf[i + 2][j]), !flag)[0].end());
+                            joints[std::get<0>(j_mf[i + 2][j])](std::get<1>(j_mf[i + 2][j]), !is_geo_reversed)[0].begin(),
+                            joints[std::get<0>(j_mf[i + 2][j])](std::get<1>(j_mf[i + 2][j]), !is_geo_reversed)[0].end());
 
                         // top
                         std::reverse(
-                            joints[std::get<0>(j_mf[i + 2][j])](std::get<1>(j_mf[i + 2][j]), flag)[0].begin(),
-                            joints[std::get<0>(j_mf[i + 2][j])](std::get<1>(j_mf[i + 2][j]), flag)[0].end());
+                            joints[std::get<0>(j_mf[i + 2][j])](std::get<1>(j_mf[i + 2][j]), is_geo_reversed)[0].begin(),
+                            joints[std::get<0>(j_mf[i + 2][j])](std::get<1>(j_mf[i + 2][j]), is_geo_reversed)[0].end());
                     }
                 } // if wood::joint edge
             }     // for j
@@ -349,11 +349,11 @@ namespace wood
                     continue;
 
                 // Check hole position
-                bool flag =
+                bool is_geo_reversed =
                     CGAL::squared_distance(planes[0].projection(joints[std::get<0>(j_mf[i][j])](std::get<1>(j_mf[i][j]), true).back()[0]), joints[std::get<0>(j_mf[i][j])](std::get<1>(j_mf[i][j]), true).back()[0]) >
                     CGAL::squared_distance(planes[0].projection(joints[std::get<0>(j_mf[i][j])](std::get<1>(j_mf[i][j]), false).back()[0]), joints[std::get<0>(j_mf[i][j])](std::get<1>(j_mf[i][j]), false).back()[0]);
 
-                if (flag)
+                if (is_geo_reversed)
                     joints[std::get<0>(j_mf[i][j])].reverse(std::get<1>(j_mf[i][j]));
 
                 for (int k = 0; k < joints[std::get<0>(j_mf[i][j])](std::get<1>(j_mf[i][j]), true).size() - 1; k++)
@@ -374,9 +374,7 @@ namespace wood
     }
 
     // inline bool element::intersection_closed_and_open_paths_2D(CGAL_Polyline& closed_pline_cutter, std::pair<int, int>& edge_pair, CGAL_Polyline& pline_to_cut, IK::Plane_3& plane, CGAL_Polyline& c, CGAL_Polyline& output, std::pair<double, double>& cp_pair) {
-    bool element::intersection_closed_and_open_paths_2D(
-        CGAL_Polyline &closed_pline_cutter, CGAL_Polyline &pline_to_cut, IK::Plane_3 &plane, CGAL_Polyline &c,
-        int (&edge_pair)[2], std::pair<double, double> &cp_pair)
+    bool element::intersection_closed_and_open_paths_2D(CGAL_Polyline &closed_pline_cutter, CGAL_Polyline &pline_to_cut, IK::Plane_3 &plane, CGAL_Polyline &c, int (&edge_pair)[2], std::pair<double, double> &cp_pair)
     {
         /////////////////////////////////////////////////////////////////////////////////////
         // Orient from 3D to 2D
@@ -584,12 +582,16 @@ namespace wood
 
     void element::merge_joints(std::vector<wood::joint> &joints, std::vector<std::vector<CGAL_Polyline>> &output)
     {
+
         // OPTIMIZE CASE(5) BECAUSE EDGE ARE KNOWN, BUT CHECK ALSO CROSS JOINT ENSURE THAT YOU TAKE CROSSING EDGES
         // CHANGE TO 2D METHOD, TO AVOID MULTIPLE THE SAME MATRIX CREATION FOR ORIENTATION TO 2D I.E. CLIPPER AND line_line_3d
         // you are in a loop
         // only for objects that has one element as a wood::joint and edges to insert are known
         // List order: top0 bottom0 top1 bottom1 ... topN bottomN
 
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Copy the top and bottom polylines
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         CGAL_Polyline pline0 = this->polylines[0];
         CGAL_Polyline pline1 = this->polylines[1];
 
@@ -606,68 +608,128 @@ namespace wood
         IK::Segment_3 last_segment1;
         int lastID = -1;
 
-#ifdef DEBUG_wood_ELEMENT
-        printf("\nCPP   FILE %s    METHOD %s   LINE %i     WHAT %s ", __FILE__, __FUNCTION__, __LINE__, "Loops starts");
-#endif
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Iterate edge joints ( skip the top and bottom autlines that cannot be merged)
+        // "i" refers to the element edge
+        // "j" refers to number of joints on one edge, currently "j" is always equals to 0
+        //
+        // ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+        // ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+        // ░░░░░░░░░░░░░░░░░░░░░┌─────────────────────────┬───────────────────────────┬┐░░░░
+        // ░░░░░░░░░░░░░░░░░░┌──┘░░░░░░░░░░░░░░░░░░░░░░┌──┘░░│░░░░░░░░░░░░░░░░░░░░░░┌─┘│░░░░
+        // ░░░░░░░░░░░░░░░░┌─┘░░░░░░░░░░░░░░░░░░░░░░░┌─┘░░░░░│░░░░░░░░░░░░░░░░░░░┌──┘░░│░░░░
+        // ░░░░░░░░░░░░░┌──┘░░░░░░░i=0░░░░░░░░░░░░┌──┘░░i=5░░│░░░░░░i=4░░░░░░░░┌─┘░░░░░│░░░░
+        // ░░░░░░░░░░┌──┘░░░░░░(skipped)░░░░░░░┌──┘iter edges│░j_mf.size()=0░┌─┘░░░░░░░│░░░░
+        // ░░░░░░░░┌─┘░░░░░░░░░░░░░░░░░░░░░░┌──┘j_mf.size()=6│░░░░░░░░░░░░░┌─┘░░░░░░░░░│░░░░
+        // ░░░░░┌──┘░░░░░░░░░░░░░░░░░░░░░┌──┘joints_per_edge:│░░░░░░░░░░┌──┘░░░░i=3░░░░│░░░░
+        // ░░░░─┴────────────────────────┴──────────────────┬───────────┤j_mf.size()=0┌┘░░░░
+        // ░░░░│░░░░░░░░░░░░░░░░░░░░░░░░│j_mf[i].size()=1┌──┘░░░░░░░░░░░│░░░░░░░░░░░┌─┘░░░░░
+        // ░░░░│░░░░░░░░░░░░░░░░░░░░░░░░│░░░░░░░░░░░░░┌──┘░░░░░░░░░░░░░░│░░░░░░░░┌──┘░░░░░░░
+        // ░░░░│░░░░░░░░░░░░░░░░░░░░░░░░│░░░░░░░░░░┌──┘░░░░░░░░░░░░░░░░░│░░░░░░┌─┘░░░░░░░░░░
+        // ░░░░│░░░░░░░░░░i=2░░░░░░░░░░░│░░░░░░░┌──┘░░░░░░░i=2░░░░░░░░░░│░░░░┌─┘░░░░░░░░░░░░
+        // ░░░░│░░░░░j_mf.size()=0░░░░░░│░░░░┌──┘░░░░░░j_mf.size()=0░░░░│░░┌─┘░░░░░░░░░░░░░░
+        // ░░░░│░░░░░░░░░░░░░░░░░░░░░░░░│░░┌─┘░░░░░░░░░░░░░░░░░░░░░░░░░░├──┘░░░░░░░░░░░░░░░░
+        // ░░░░────────────────────────────┴────────────────────────────┘░░░░░░░░░░░░░░░░░░░
+        // ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+        //
+        //
+        // j_mf contains 3 properties:
+        // 1. int - joint id
+        // 2. bool - male/female
+        // 3. std::pair<double, double> - parameters on edge
+        //
+        // https://fsymbols.com/draw/
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         for (int i = 2; i < this->j_mf.size(); i++)
         {
             for (int j = 0; j < this->j_mf[i].size(); j++)
-            { //
-                ///////////////////////////////////////////////////////////////////////////////
-                // Skip undefined names and if tiles has more than 1 polyline to insert
-                ///////////////////////////////////////////////////////////////////////////////
+            {
+                /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                // Get properties for the better readability, because tuple indexing is not so readable
+                /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                int joint_id = std::get<0>(j_mf[i][j]);
                 bool male_or_female = std::get<1>(j_mf[i][j]);
-                if (joints[std::get<0>(j_mf[i][j])].name == "")
+
+                /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                // Sanity checks:
+                // Check undefined names, if yes continue
+                // Check empty outlines, if yes continue
+                // Check the if top and bottom joint oulines are different from the plane order, if yes reverse the order
+                /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+                if (joints[joint_id].name == "")
                     continue;
 
-#ifdef DEBUG_wood_ELEMENT
-                printf("\nCPP   FILE %s    METHOD %s   LINE %i     WHAT %s num of elements %zi ", __FILE__, __FUNCTION__, __LINE__, "Good Name", joints[std::get<0>(j_mf[i][j])](male_or_female, true).size());
-#endif
-
-                // if (joints[std::get<0>(j_mf[i][j])](male_or_female, true).size() != 2)
-                // continue;
-                if (joints[std::get<0>(j_mf[i][j])](male_or_female, false).size() == 0)
+                if (joints[joint_id](male_or_female, false).size() == 0)
                     continue;
-                ///////////////////////////////////////////////////////////////////////////////
-                // Check if wood::joint outline is on top or bottom face, if not reverse the order
-                // Take the last lines Element outline can be not in the same order as wood::joint outlines Take wood::joint segment and measure its point to the plane
-                ///////////////////////////////////////////////////////////////////////////////
 
-                bool flag =
-                    CGAL::squared_distance(planes[0].projection(joints[std::get<0>(j_mf[i][j])](male_or_female, true)[1][0]), joints[std::get<0>(j_mf[i][j])](male_or_female, true)[1][0]) >
-                    CGAL::squared_distance(planes[0].projection(joints[std::get<0>(j_mf[i][j])](male_or_female, false)[1][0]), joints[std::get<0>(j_mf[i][j])](male_or_female, false)[1][0]);
+                bool is_geo_reversed =
+                    CGAL::squared_distance(planes[0].projection(joints[joint_id](male_or_female, true)[1][0]), joints[joint_id](male_or_female, true)[1][0]) >
+                    CGAL::squared_distance(planes[0].projection(joints[joint_id](male_or_female, false)[1][0]), joints[joint_id](male_or_female, false)[1][0]);
 
-                if (flag)
-                    joints[std::get<0>(j_mf[i][j])].reverse(std::get<1>(j_mf[i][j]));
+                if (is_geo_reversed)
+                    joints[joint_id].reverse(male_or_female);
 
-#ifdef DEBUG_wood_ELEMENT
-                printf("\nCPP   FILE %s    METHOD %s   LINE %i     WHAT %s %zi ", __FILE__, __FUNCTION__, __LINE__, "Intersect rectangle or line", joints[std::get<0>(j_mf[i][j])](std::get<1>(j_mf[i][j]), true).back().size());
-#endif
+                /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                // Intersect line (2 points) or rectangle (5 points)
+                /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-                ///////////////////////////////////////////////////////////////////////////////
-                // Intersect rectangle or line
-                // Check the number of guid line, should either 2 (line) or 5 (rectangle) vertices
-                ///////////////////////////////////////////////////////////////////////////////
-#ifdef DEBUG_wood_ELEMENT
-                printf("\nCPP   FILE %s    METHOD %s   LINE %i     WHAT %s %zi ", __FILE__, __FUNCTION__, __LINE__, "Case ", joints[std::get<0>(j_mf[i][j])](std::get<1>(j_mf[i][j]), true)[1].size());
-#endif
-                switch (joints[std::get<0>(j_mf[i][j])](std::get<1>(j_mf[i][j]), true)[1].size())
+                switch (joints[joint_id](male_or_female, true)[1].size())
                 {
+                    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                    // Single line joint geometry
+                    //
+                    // ░░░░░░░░░░░░┌────┐░░░░┌────┐░░░░░░░░░░░
+                    // ░░░░░░░░░░░░│░░░░│░░░░│░░░░│░░░░░░░░░░░
+                    // ░░░░░░░░░░░░│░░░░│░░░░│░░░░│░░░░░░░░░░░
+                    // ░█─────┐████│████│████│████│████┌────█░
+                    // ░░░░░░░│░░░░│░░░░│░░░░│░░░░│░░░░│░░░░░░
+                    // ░░░░░░░│░░░░│░░░░│░░░░│░░░░│░░░░│░░░░░░
+                    // ░░░░░░░└────┘░░░░└────┘░░░░└────┘░░░░░░
+                    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
                 case (2):
-                { // Reposition end points
-#ifdef DEBUG_wood_ELEMENT
-                    printf("\nCPP   FILE %s    METHOD %s   LINE %i     WHAT %s ", __FILE__, __FUNCTION__, __LINE__, "Intersect rectangle or line CASE 2 ");
-#endif
-                    int id = i - 2;
+                {
+
+                    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                    // Get top and bottom line of the joint
+                    //
+                    // ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+                    // ░█████████████████████████████████████░
+                    // ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+                    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+                    IK::Segment_3 joint_line_0(joints[joint_id](male_or_female, true)[1][0], joints[joint_id](male_or_female, true)[1][1]);
+                    IK::Segment_3 joint_line_1(joints[joint_id](male_or_female, false)[1][0], joints[joint_id](male_or_female, false)[1][1]);
+
+                    ///////////////////////////////////////////////////////////////////////////////
+                    // Get the joint line plane
+                    //
+                    // ░░┌───┐░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+                    // ░█│ * │██████████████████████████████░
+                    // ░░└───┘░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+                    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                    IK::Plane_3 joint_line_plane_0(joint_line_0[0], planes[i].orthogonal_vector());
+                    IK::Plane_3 joint_line_plane_1(joint_line_1[0], planes[i].orthogonal_vector());
+
+                    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                    // Properties of the polyline
+                    // n - number of points in the outline
+                    // id - index of the current polyline point
+                    //
+                    // ░░░░░░░░░░prev░░░░░░░░░░░░░░░░░░░░id░░░
+                    // ░░░░░░░░░░░░░░██████████████████╔═░░░░░
+                    // ░░░░░░░░░░░┌──┘░░░░░░░░░░░░░░╔══╝░░░░░░
+                    // ░░░░░░░░░┌─┘░░░░░░░░░░░░░░╔══╝░░░░░░░░░
+                    // ░░░░░░┌──┘░░░░░░░░░░░░░░╔═╝░░░░░░░░░░░░
+                    // ░░░░░█████████████████══╝░░░░░░░░░░░░░░
+                    // nextnext░░░░░░░░░░░░next░░░░░░░░░░░░░░░
+                    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
                     auto n = pline0.size() - 1;
+                    int id = i - 2;
 
-                    IK::Segment_3 joint_line_0(joints[std::get<0>(j_mf[id + 2][j])](std::get<1>(j_mf[id + 2][j]), true)[1][0], joints[std::get<0>(j_mf[id + 2][j])](std::get<1>(j_mf[id + 2][j]), true)[1][1]);
-                    IK::Segment_3 joint_line_1(joints[std::get<0>(j_mf[id + 2][j])](std::get<1>(j_mf[id + 2][j]), false)[1][0], joints[std::get<0>(j_mf[id + 2][j])](std::get<1>(j_mf[id + 2][j]), false)[1][1]);
-
-                    ///////////////////////////////////////////////////////////////////////////////
-                    // Take last lines
-                    ///////////////////////////////////////////////////////////////////////////////
                     auto prev = (((id - 1) % n) + n) % n;
                     auto next = (((id + 1) % n) + n) % n;
                     auto nextnext = (((id + 2) % n) + n) % n;
@@ -677,46 +739,77 @@ namespace wood
                     IK::Segment_3 next_segment_1(pline1[prev], pline1[id]);
                     IK::Segment_3 prev_segment_1(pline1[next], pline1[nextnext]);
 
-                    ///////////////////////////////////////////////////////////////////////////////
-                    // Intersect them with side lines, same principle must work on both polygons
-                    ///////////////////////////////////////////////////////////////////////////////
-                    // 1 Perform intersection line-line (needs implementation from rhino)
-                    // 3 If intersecting relocate wood::joint line points --|*---------*|--, if not overlaping do not change |  *-----*  |.
+                    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                    // Intersect:
+                    // Top or bottom plane
+                    // Line plane
+                    // Previous or next polyline segment plane
+                    //
+                    // WARNING: When two side planes are paralel the interseciton is not valid
+                    // TODO: this method can be replace by line-line intersection, currently it is done by internsecting 3 planes, which is also working
+                    //
+                    // ░░░░░░░░░░░┌─────────────────────┬┐░░░░░░░░░░
+                    // ░░░░░░░░░┌─┘░░░░░planes[0]░░░░┌──┘│░░░░░░░░░░
+                    // ░░░░░░░┌─┘░░░░░██████░░░░░░┌──┘░░░│░░░░░░░░░░
+                    // ░░░░░┌─┘░░░░░██████░░░░░┌──┘██░░░░│░░░░░░░░░░
+                    // ░░░┌─┘░░░░░░░░░░░░░░░┌──┘░████░░░┌┘░░░░░░░░░░
+                    // ░░░├────────────────┬┘░░░░███░┌──┘░░░░░░░░░░░
+                    // ░░░│░░░░░████░░░░░░░│░░░░░┌───┘░░░░░░░░░░░░░░
+                    // ░░░│░░░░░████░░░░░░░│░┌───┘░░░░░░░░░░░░░░░░░░
+                    // ░░░└────────────────┴─┘░░░░joint_line_plane_0
+                    // ░░░░░planes[2 + prev]░░░░░░░░░░░░░░░░░░░░░░░░
+                    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
                     IK::Point_3 p0_int, p1_int, p2_int, p3_int;
-                    double t0_int, t1_int, t2_int, t3_int;
+                    bool is_intersected_0 = cgal_intersection_util::plane_plane_plane_with_parallel_check(planes[2 + prev], joint_line_plane_0, planes[0], p0_int);
+                    bool is_intersected_1 = cgal_intersection_util::plane_plane_plane_with_parallel_check(planes[2 + next], joint_line_plane_0, planes[0], p1_int);
 
-                    IK::Plane_3 joint_line_plane_0_prev = IK::Plane_3(joint_line_0[0], planes[2 + id].orthogonal_vector()); // IK::Plane_3(prev_segment_0[0], planes[2 + id].orthogonal_vector());
-                    IK::Plane_3 joint_line_plane_0_next(joint_line_0[0], planes[2 + id].orthogonal_vector());
-                    IK::Plane_3 joint_line_plane_1_prev = IK::Plane_3(joint_line_1[0], planes[2 + id].orthogonal_vector()); // IK::Plane_3(prev_segment_1[0], planes[2 + id].orthogonal_vector());
-                    IK::Plane_3 joint_line_plane_1_next(joint_line_1[0], planes[2 + id].orthogonal_vector());
+                    bool is_intersected_2 = cgal_intersection_util::plane_plane_plane_with_parallel_check(planes[2 + prev], joint_line_plane_1, planes[1], p2_int);
+                    bool is_intersected_3 = cgal_intersection_util::plane_plane_plane_with_parallel_check(planes[2 + next], joint_line_plane_1, planes[1], p3_int);
 
-                    bool flag0 = cgal_intersection_util::plane_plane_plane(planes[2 + prev], joint_line_plane_0_prev, planes[0], p0_int); //, joint_line_0, t0_int
-                    bool flag1 = cgal_intersection_util::plane_plane_plane(planes[2 + next], joint_line_plane_0_next, planes[0], p1_int); //, joint_line_0, t1_int
-                    bool flag2 = cgal_intersection_util::plane_plane_plane(planes[2 + prev], joint_line_plane_1_prev, planes[1], p2_int); //, joint_line_1, t2_int
-                    bool flag3 = cgal_intersection_util::plane_plane_plane(planes[2 + next], joint_line_plane_1_next, planes[1], p3_int); //, joint_line_1, t3_int
+                    // if (!is_intersected_0 || !is_intersected_1 || !is_intersected_2 || !is_intersected_3)
+                    // {
+                    //     std::cout << is_intersected_0 << " " << is_intersected_1 << " " << is_intersected_2 << " " << is_intersected_3 << std::endl;
+                    //     return;
+                    // }
 
-                    ///////////////////////////////////////////////////////////////////////////////
-                    // 2 Relocate side segments points to intersection points
-                    ///////////////////////////////////////////////////////////////////////////////
-
+                    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                    // Relocate end point of the polygon
+                    // WARNING: Replace line_line_3d with a plane method because it is using boost
+                    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
                     if (lastID == i - 1)
                     {
                         IK::Point_3 p0;
                         IK::Point_3 p1;
-                        if (cgal_intersection_util::line_line_3d(last_segment0, joint_line_0, p0) && cgal_intersection_util::line_line_3d(last_segment1, joint_line_1, p1))
+                        bool do_previous_with_joint_line_intersect_0 = cgal_intersection_util::line_line_3d(last_segment0, joint_line_0, p0);
+                        bool do_previous_with_joint_line_intersect_1 = cgal_intersection_util::line_line_3d(last_segment1, joint_line_1, p1);
+
+                        if (do_previous_with_joint_line_intersect_0 && do_previous_with_joint_line_intersect_0)
                         {
                             p0_int = p0;
                             p2_int = p1;
                         }
+
+                        // if (!do_previous_with_joint_line_intersect_0 || !do_previous_with_joint_line_intersect_0)
+                        // {
+                        //     std::cout << do_previous_with_joint_line_intersect_0 << " " << do_previous_with_joint_line_intersect_1 << std::endl;
+                        //     return;
+                        // }
                     }
 
-                    if (flag0)
+                    ///////////////////////////////////////////////////////////////////////////////
+                    // Relocate side segments points to intersection points
+                    // If intersecting relocate wood::joint line points --|*---------*|--,
+                    // Else overlaping do not change |  *-----*  |.
+                    ///////////////////////////////////////////////////////////////////////////////
+
+                    if (is_intersected_0)
                         pline0[id] = p0_int;
-                    if (flag1)
+                    if (is_intersected_1)
                         pline0[next] = p1_int;
-                    if (flag2)
+                    if (is_intersected_2)
                         pline1[id] = p2_int;
-                    if (flag3)
+                    if (is_intersected_3)
                         pline1[next] = p3_int;
 
                     last_segment0 = joint_line_0;
@@ -728,25 +821,17 @@ namespace wood
                     }
 
                     lastID = i;
+
                     ///////////////////////////////////////////////////////////////////////////////
                     // 3 Check orientation of wood::joint outlines, if needed flip
                     ///////////////////////////////////////////////////////////////////////////////
-                    bool flip = CGAL::has_smaller_distance_to_point(
-                        pline0[id],
-                        joints[std::get<0>(j_mf[id + 2][j])](std::get<1>(j_mf[id + 2][j]), !flag)[0].front(),
-                        joints[std::get<0>(j_mf[id + 2][j])](std::get<1>(j_mf[id + 2][j]), !flag)[0].back());
+                    bool is_geo_flipped = CGAL::has_smaller_distance_to_point(pline0[id], joints[joint_id](male_or_female, !is_geo_reversed)[0].front(), joints[joint_id](male_or_female, !is_geo_reversed)[0].back());
 
-                    if (!flip)
+                    if (!is_geo_flipped)
                     {
-                        // bottom
-                        std::reverse(
-                            joints[std::get<0>(j_mf[id + 2][j])](std::get<1>(j_mf[id + 2][j]), !flag)[0].begin(),
-                            joints[std::get<0>(j_mf[id + 2][j])](std::get<1>(j_mf[id + 2][j]), !flag)[0].end());
-
-                        // top
-                        std::reverse(
-                            joints[std::get<0>(j_mf[id + 2][j])](std::get<1>(j_mf[id + 2][j]), flag)[0].begin(),
-                            joints[std::get<0>(j_mf[id + 2][j])](std::get<1>(j_mf[id + 2][j]), flag)[0].end());
+                        // flip the polyline goemetry of the bottom and top outlines (I ignnore the line )
+                        std::reverse(joints[joint_id](male_or_female, !is_geo_reversed)[0].begin(), joints[joint_id](male_or_female, !is_geo_reversed)[0].end());
+                        std::reverse(joints[joint_id](male_or_female, is_geo_reversed)[0].begin(), joints[joint_id](male_or_female, is_geo_reversed)[0].end());
                     }
 
                     ///////////////////////////////////////////////////////////////////////////////
@@ -759,10 +844,22 @@ namespace wood
                     point_count += joints[std::get<0>(j_mf[id + 2][j])](std::get<1>(j_mf[id + 2][j]), true)[0].size();
                     break;
                 }
+                    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                    // Rectangle line joint geometry
+                    //
+                    // ░│░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░│░
+                    // ░│███████████████████████████████████│░
+                    // ░│░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░│░
+                    // ░└───────────────────────────────────┘░
+                    // ░█░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░█░
+                    // ░█████████████████████████████████████░
+                    // ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+                    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
                 case (5):
                 { // two edges
                     int edge_pair[2];
-                    joints[std::get<0>(j_mf[i][j])].get_edge_ids(std::get<1>(j_mf[i][j]), edge_pair[0], edge_pair[1]);
+                    joints[joint_id].get_edge_ids(male_or_female, edge_pair[0], edge_pair[1]);
                     if (edge_pair[0] > edge_pair[1])
                         std::swap(edge_pair[0], edge_pair[1]);
 
@@ -779,7 +876,7 @@ namespace wood
                         ///////////////////////////////////////////////////////////////////////////////
                         std::pair<double, double> cp_pair_0(0.0, 0.0);
                         CGAL_Polyline joint_pline_0;
-                        bool result0 = intersection_closed_and_open_paths_2D(pline0, joints[std::get<0>(j_mf[i][j])](std::get<1>(j_mf[i][j]), true).front(), this->planes[0], joint_pline_0, edge_pair, cp_pair_0);
+                        bool result0 = intersection_closed_and_open_paths_2D(pline0, joints[joint_id](male_or_female, true).front(), this->planes[0], joint_pline_0, edge_pair, cp_pair_0);
                         if (!result0)
                             continue;
 
@@ -789,9 +886,7 @@ namespace wood
 
                         std::pair<double, double> cp_pair_1(0.0, 0.0);
                         CGAL_Polyline joint_pline_1;
-                        bool result1 = intersection_closed_and_open_paths_2D(pline1, joints[std::get<0>(j_mf[i][j])](std::get<1>(j_mf[i][j]), false).front(), this->planes[1], joint_pline_1, edge_pair, cp_pair_1);
-                        // CGAL_Debug(pline1);
-                        // CGAL_Debug(joints[std::get<0>(j_mf[i][j])](std::get<1>(j_mf[i][j]), false).front());
+                        bool result1 = intersection_closed_and_open_paths_2D(pline1, joints[joint_id](male_or_female, false).front(), this->planes[1], joint_pline_1, edge_pair, cp_pair_1);
                         if (!result1)
                             continue;
 #ifdef DEBUG_wood_ELEMENT
@@ -808,14 +903,6 @@ namespace wood
 #ifdef DEBUG_wood_ELEMENT
                         printf("\nCPP   FILE %s    METHOD %s   LINE %i     WHAT %s ", __FILE__, __FUNCTION__, __LINE__, "Output of Case 5 ");
 #endif
-
-                        // CGAL_Debug((cp_pair_0.first + cp_pair_0.first) * 0.5, cp_pair_0.first, cp_pair_0.second);
-                        // CGAL_Debug((cp_pair_1.first + cp_pair_1.first) * 0.5, cp_pair_1.first, cp_pair_1.second);
-
-                        // CGAL_Debug(joint_pline_1.size());
-                        // for (size_t i = 0; i < joint_pline_1.size(); i++) {
-                        //     CGAL_Debug(joint_pline_1[i]);
-                        // }
                     }
 
                     break;
@@ -910,16 +997,14 @@ namespace wood
                 pline0_new[0] = p0;
                 pline1_new[0] = p1;
             }
+            // else
+            // {
+            //     return;
+            // }
         }
 
         pline0_new.emplace_back(pline0_new.front());
         pline1_new.emplace_back(pline1_new.front());
-        // CGAL_Debug(pline0_new);
-        // CGAL_Debug(pline1_new);
-
-        // #ifdef DEBUG_wood_ELEMENT
-        //     printf("\nCPP   FILE %s    METHOD %s   LINE %i     WHAT %s ", __FILE__, __FUNCTION__, __LINE__, "Close ");
-        // #endif
 
         ///////////////////////////////////////////////////////////////////////////////
         // Add loose elements from top and bottom outlines also
@@ -929,46 +1014,50 @@ namespace wood
         { // iterate top only
             for (size_t j = 0; j < j_mf[i].size(); j++)
             {
-                if (joints[std::get<0>(j_mf[i][j])].name == "")
+
+                int joint_id = std::get<0>(j_mf[i][j]);
+                bool male_or_female = std::get<1>(j_mf[i][j]);
+
+                if (joints[joint_id].name == "")
                     continue;
 
-                if (joints[std::get<0>(j_mf[i][j])](std::get<1>(j_mf[i][j]), true).size() == 0)
+                if (joints[joint_id](male_or_female, true).size() == 0)
                     continue;
-                if (joints[std::get<0>(j_mf[i][j])](std::get<1>(j_mf[i][j]), false).size() == 0)
+                if (joints[joint_id](male_or_female, false).size() == 0)
                     continue;
 
                 ///////////////////////////////////////////////////////////////////////////////
                 // Check hole position
                 ///////////////////////////////////////////////////////////////////////////////
-                bool flag =
-                    CGAL::squared_distance(planes[0].projection(joints[std::get<0>(j_mf[i][j])](std::get<1>(j_mf[i][j]), true).back()[0]), joints[std::get<0>(j_mf[i][j])](std::get<1>(j_mf[i][j]), true).back()[0]) >
-                    CGAL::squared_distance(planes[0].projection(joints[std::get<0>(j_mf[i][j])](std::get<1>(j_mf[i][j]), false).back()[0]), joints[std::get<0>(j_mf[i][j])](std::get<1>(j_mf[i][j]), false).back()[0]);
+                bool is_geo_reversed =
+                    CGAL::squared_distance(planes[0].projection(joints[joint_id](male_or_female, true).back()[0]), joints[joint_id](male_or_female, true).back()[0]) >
+                    CGAL::squared_distance(planes[0].projection(joints[joint_id](male_or_female, false).back()[0]), joints[joint_id](male_or_female, false).back()[0]);
 
-                if (flag)
-                    joints[std::get<0>(j_mf[i][j])].reverse(std::get<1>(j_mf[i][j]));
+                if (is_geo_reversed)
+                    joints[joint_id].reverse(male_or_female);
 
                 ///////////////////////////////////////////////////////////////////////////////
                 // Check Winding
                 ///////////////////////////////////////////////////////////////////////////////
-                for (int k = 0; k < joints[std::get<0>(j_mf[i][j])](std::get<1>(j_mf[i][j]), true).size() - 1; k++)
+                for (int k = 0; k < joints[joint_id](male_or_female, true).size() - 1; k++)
                 {
                     // Orient to 2D and check the winding
-                    bool is_clockwise = cgal_polyline_util::is_clockwise(joints[std::get<0>(j_mf[i][j])](std::get<1>(j_mf[i][j]), true)[k], planes[0]);
+                    bool is_clockwise = cgal_polyline_util::is_clockwise(joints[joint_id](male_or_female, true)[k], planes[0]);
 
                     if (!is_clockwise)
                     {
                         std::reverse(
-                            std::begin(joints[std::get<0>(j_mf[i][j])](std::get<1>(j_mf[i][j]), true)[k]),
-                            std::end(joints[std::get<0>(j_mf[i][j])](std::get<1>(j_mf[i][j]), true)[k]));
+                            std::begin(joints[joint_id](male_or_female, true)[k]),
+                            std::end(joints[joint_id](male_or_female, true)[k]));
 
                         std::reverse(
-                            std::begin(joints[std::get<0>(j_mf[i][j])](std::get<1>(j_mf[i][j]), false)[k]),
-                            std::end(joints[std::get<0>(j_mf[i][j])](std::get<1>(j_mf[i][j]), false)[k]));
+                            std::begin(joints[joint_id](male_or_female, false)[k]),
+                            std::end(joints[joint_id](male_or_female, false)[k]));
                     }
 
                     // Add holes
-                    output[this->id].emplace_back(joints[std::get<0>(j_mf[i][j])](std::get<1>(j_mf[i][j]), true)[k]);
-                    output[this->id].emplace_back(joints[std::get<0>(j_mf[i][j])](std::get<1>(j_mf[i][j]), false)[k]);
+                    output[this->id].emplace_back(joints[joint_id](male_or_female, true)[k]);
+                    output[this->id].emplace_back(joints[joint_id](male_or_female, false)[k]);
                 }
             }
         }
@@ -978,12 +1067,15 @@ namespace wood
         {
             for (int j = 0; j < this->j_mf[i].size(); j++)
             {
-                if (joints[std::get<0>(j_mf[i][j])].name == "")
+                int joint_id = std::get<0>(j_mf[i][j]);
+                bool male_or_female = std::get<1>(j_mf[i][j]);
+
+                if (joints[joint_id].name == "")
                     continue;
 
-                if (joints[std::get<0>(j_mf[i][j])](std::get<1>(j_mf[i][j]), true).size() == 0)
+                if (joints[joint_id](male_or_female, true).size() == 0)
                     continue;
-                if (joints[std::get<0>(j_mf[i][j])](std::get<1>(j_mf[i][j]), false).size() == 0)
+                if (joints[joint_id](male_or_female, false).size() == 0)
                     continue;
 
                 ///////////////////////////////////////////////////////////////////////////////
@@ -991,25 +1083,12 @@ namespace wood
                 ///////////////////////////////////////////////////////////////////////////////
                 std::vector<int> id_of_holes;
 
-                // printf("\n");
-                // CGAL_Debug(joints[std::get<0>(j_mf[i][j])].f.size());
-                // CGAL_Debug(joints[std::get<0>(j_mf[i][j])].f_boolean_type.size());
-                // CGAL_Debug(joints[std::get<0>(j_mf[i][j])].m.size());
-                // CGAL_Debug(joints[std::get<0>(j_mf[i][j])].m_boolean_type.size());
-
-                // CGAL_Debug(joints[std::get<0>(j_mf[i][j])](std::get<1>(j_mf[i][j]), true).size());//polylines
-                // CGAL_Debug(joints[std::get<0>(j_mf[i][j])](std::get<1>(j_mf[i][j])).size());//types
-
-                for (int k = 0; k < joints[std::get<0>(j_mf[i][j])](std::get<1>(j_mf[i][j])).size(); k += 2)
+                for (int k = 0; k < joints[joint_id](male_or_female).size(); k += 2)
                 {
-                    if (joints[std::get<0>(j_mf[i][j])](std::get<1>(j_mf[i][j]))[k] == wood_cut::hole) //
+                    if (joints[joint_id](male_or_female)[k] == wood_cut::hole) //
                         id_of_holes.emplace_back((int)(k));
 
-                    std::string s(1, joints[std::get<0>(j_mf[i][j])](std::get<1>(j_mf[i][j]))[k]);
-                    // printf("\n");
-                    // printf(s.c_str());
-
-                    // CGAL_Debug(joints[std::get<0>(j_mf[i][j])](std::get<1>(j_mf[i][j]))[k]);
+                    std::string s(1, joints[joint_id](male_or_female)[k]);
                 }
 
                 if (id_of_holes.size() == 0)
@@ -1018,49 +1097,35 @@ namespace wood
                 ///////////////////////////////////////////////////////////////////////////////
                 // Check hole position
                 ///////////////////////////////////////////////////////////////////////////////
-                bool flag =
-                    CGAL::squared_distance(planes[0].projection(joints[std::get<0>(j_mf[i][j])](std::get<1>(j_mf[i][j]), true).back()[0]), joints[std::get<0>(j_mf[i][j])](std::get<1>(j_mf[i][j]), true).back()[0]) >
-                    CGAL::squared_distance(planes[0].projection(joints[std::get<0>(j_mf[i][j])](std::get<1>(j_mf[i][j]), false).back()[0]), joints[std::get<0>(j_mf[i][j])](std::get<1>(j_mf[i][j]), false).back()[0]);
+                bool is_geo_reversed =
+                    CGAL::squared_distance(planes[0].projection(joints[joint_id](male_or_female, true).back()[0]), joints[joint_id](male_or_female, true).back()[0]) >
+                    CGAL::squared_distance(planes[0].projection(joints[joint_id](male_or_female, false).back()[0]), joints[joint_id](male_or_female, false).back()[0]);
 
-                if (flag)
-                    joints[std::get<0>(j_mf[i][j])].reverse(std::get<1>(j_mf[i][j]));
+                if (is_geo_reversed)
+                    joints[joint_id].reverse(male_or_female);
 
                 ///////////////////////////////////////////////////////////////////////////////
                 // Check Winding and add holes
                 ///////////////////////////////////////////////////////////////////////////////
-                // CGAL_Debug(joints[std::get<0>(j_mf[i][j])].m_boolean_type.size());
-                // CGAL_Debug(joints[std::get<0>(j_mf[i][j])].f_boolean_type.size());
-
                 for (auto &k : id_of_holes)
                 {
-                    // CGAL_Debug(joints[std::get<0>(j_mf[i][j])](std::get<1>(j_mf[i][j]), true).size());
-                    // CGAL_Debug(joints[std::get<0>(j_mf[i][j])](std::get<1>(j_mf[i][j]), false).size());
-                    // CGAL_Debug(k);
 
                     // Orient to 2D and check the winding using top outline
-                    bool is_clockwise = cgal_polyline_util::is_clockwise(joints[std::get<0>(j_mf[i][j])](std::get<1>(j_mf[i][j]), true)[k], planes[0]);
+                    bool is_clockwise = cgal_polyline_util::is_clockwise(joints[std::get<0>(j_mf[i][j])](male_or_female, true)[k], planes[0]);
 
                     if (!is_clockwise)
                     {
                         std::reverse(
-                            std::begin(joints[std::get<0>(j_mf[i][j])](std::get<1>(j_mf[i][j]), true)[k]),
-                            std::end(joints[std::get<0>(j_mf[i][j])](std::get<1>(j_mf[i][j]), true)[k]));
+                            std::begin(joints[joint_id](male_or_female, true)[k]),
+                            std::end(joints[joint_id](male_or_female, true)[k]));
 
                         std::reverse(
-                            std::begin(joints[std::get<0>(j_mf[i][j])](std::get<1>(j_mf[i][j]), false)[k]),
-                            std::end(joints[std::get<0>(j_mf[i][j])](std::get<1>(j_mf[i][j]), false)[k]));
+                            std::begin(joints[joint_id](male_or_female, false)[k]),
+                            std::end(joints[joint_id](male_or_female, false)[k]));
                     }
 
-                    // Add holes
-                    // CGAL_Debug(0);
-                    // CGAL_Debug(joints[std::get<0>(j_mf[i][j])](std::get<1>(j_mf[i][j]), true)[k]);
-                    // CGAL_Debug(0);
-                    // CGAL_Debug(joints[std::get<0>(j_mf[i][j])](std::get<1>(j_mf[i][j]), false)[k]);
-                    // CGAL_Debug(0);
-                    output[this->id].emplace_back(joints[std::get<0>(j_mf[i][j])](std::get<1>(j_mf[i][j]), true)[k]);
-                    output[this->id].emplace_back(joints[std::get<0>(j_mf[i][j])](std::get<1>(j_mf[i][j]), false)[k]);
-                    // CGAL_Debug(joints[std::get<0>(j_mf[i][j])](std::get<1>(j_mf[i][j]), true)[k]);
-                    // CGAL_Debug(joints[std::get<0>(j_mf[i][j])](std::get<1>(j_mf[i][j]), false)[k]);
+                    output[this->id].emplace_back(joints[joint_id](male_or_female, true)[k]);
+                    output[this->id].emplace_back(joints[joint_id](male_or_female, false)[k]);
                 }
             }
         }

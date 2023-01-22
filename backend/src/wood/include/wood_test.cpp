@@ -31,7 +31,7 @@ namespace wood_test
             opengl_globals::filename_and_folder_screenshot = wood_xml::path_and_file_for_input_polylines.substr(0, wood_xml::path_and_file_for_input_polylines.size() - 3) + "png";
         }
 
-        void set_plate_display(std::vector<std::vector<IK::Point_3>> &input_polyline_pairs, std::vector<std::vector<CGAL_Polyline>> &output_plines)
+        void set_plate_display(std::vector<std::vector<IK::Point_3>> &input_polyline_pairs, std::vector<std::vector<CGAL_Polyline>> &output_plines, bool add_loft)
         {
             // add geomtry to the opengl viewer
             viewer_wood::line_thickness = 2;
@@ -52,8 +52,9 @@ namespace wood_test
             case (4):
 
                 viewer_wood::line_thickness = 4;
-                viewer_wood::add(output_plines, 3);   // grey
-                viewer_wood::add_loft(output_plines); // grey
+                viewer_wood::add(output_plines, 3); // grey
+                if (add_loft)
+                    viewer_wood::add_loft(output_plines); // grey
                 break;
             }
         }
@@ -750,7 +751,7 @@ namespace wood_test
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Display
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        internal::set_plate_display(input_polyline_pairs, output_plines);
+        internal::set_plate_display(input_polyline_pairs, output_plines, true);
         return false;
     }
 

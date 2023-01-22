@@ -480,7 +480,7 @@ namespace cgal_intersection_util
 
         // 3 plane intersection
         IK::Point_3 output_p;
-        bool rc = plane_plane_plane(plane_0, plane_1, plane_2, output_p);
+        bool rc = plane_plane_plane_with_parallel_check(plane_0, plane_1, plane_2, output_p);
 
         // infinite line by give the direction of the 3-plane intersection as the cross product of the first two planes
         output = IK::Line_3(output_p, output_p + d);
@@ -560,10 +560,10 @@ namespace cgal_intersection_util
         IK::Plane_3 line_pl1(line[1], dir);
 
         IK::Point_3 p0, p1, p2, p3;
-        bool result0 = plane_plane_plane(line_pl0, plane0, collision_face, p0);
-        bool result1 = plane_plane_plane(line_pl0, plane1, collision_face, p1);
-        bool result2 = plane_plane_plane(line_pl1, plane1, collision_face, p2);
-        bool result3 = plane_plane_plane(line_pl1, plane0, collision_face, p3);
+        bool result0 = plane_plane_plane_with_parallel_check(line_pl0, plane0, collision_face, p0);
+        bool result1 = plane_plane_plane_with_parallel_check(line_pl0, plane1, collision_face, p1);
+        bool result2 = plane_plane_plane_with_parallel_check(line_pl1, plane1, collision_face, p2);
+        bool result3 = plane_plane_plane_with_parallel_check(line_pl1, plane0, collision_face, p3);
         output = {p0, p1, p2, p3, p0};
 
         return result0 && result1 && result2 && result3;
@@ -606,10 +606,10 @@ namespace cgal_intersection_util
     bool plane_4planes(const IK::Plane_3 &main_plane, const IK::Plane_3 (&sequence_of_planes)[4], CGAL_Polyline &output)
     {
         IK::Point_3 p0, p1, p2, p3;
-        bool result0 = plane_plane_plane(sequence_of_planes[0], sequence_of_planes[1], main_plane, p0);
-        bool result1 = plane_plane_plane(sequence_of_planes[1], sequence_of_planes[2], main_plane, p1);
-        bool result2 = plane_plane_plane(sequence_of_planes[2], sequence_of_planes[3], main_plane, p2);
-        bool result3 = plane_plane_plane(sequence_of_planes[3], sequence_of_planes[0], main_plane, p3);
+        bool result0 = plane_plane_plane_with_parallel_check(sequence_of_planes[0], sequence_of_planes[1], main_plane, p0);
+        bool result1 = plane_plane_plane_with_parallel_check(sequence_of_planes[1], sequence_of_planes[2], main_plane, p1);
+        bool result2 = plane_plane_plane_with_parallel_check(sequence_of_planes[2], sequence_of_planes[3], main_plane, p2);
+        bool result3 = plane_plane_plane_with_parallel_check(sequence_of_planes[3], sequence_of_planes[0], main_plane, p3);
         output = {p0, p1, p2, p3, p0};
         return result0 && result1 && result2 && result3;
     }
@@ -617,10 +617,10 @@ namespace cgal_intersection_util
     bool plane_4planes_open(const IK::Plane_3 &main_plane, const IK::Plane_3 (&sequence_of_planes)[4], CGAL_Polyline &output)
     {
         IK::Point_3 p0, p1, p2, p3;
-        bool result0 = plane_plane_plane(sequence_of_planes[0], sequence_of_planes[1], main_plane, p0);
-        bool result1 = plane_plane_plane(sequence_of_planes[1], sequence_of_planes[2], main_plane, p1);
-        bool result2 = plane_plane_plane(sequence_of_planes[2], sequence_of_planes[3], main_plane, p2);
-        bool result3 = plane_plane_plane(sequence_of_planes[3], sequence_of_planes[0], main_plane, p3);
+        bool result0 = plane_plane_plane_with_parallel_check(sequence_of_planes[0], sequence_of_planes[1], main_plane, p0);
+        bool result1 = plane_plane_plane_with_parallel_check(sequence_of_planes[1], sequence_of_planes[2], main_plane, p1);
+        bool result2 = plane_plane_plane_with_parallel_check(sequence_of_planes[2], sequence_of_planes[3], main_plane, p2);
+        bool result3 = plane_plane_plane_with_parallel_check(sequence_of_planes[3], sequence_of_planes[0], main_plane, p3);
         output = {p0, p1, p2, p3};
         return result0 && result1 && result2 && result3;
     }

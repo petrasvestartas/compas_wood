@@ -432,10 +432,10 @@ namespace wood
             if (joint_lines[0].size() > 0)
             {                                                                          // if joint line exists, we can use that line for the length of the joint
                 length = CGAL::squared_distance(joint_lines[0][0], joint_lines[0][1]); // Math.Abs(500);
-                std::cout << length << std::endl;
-                // printf("\n EDGE LENGTH\n");
-                // CGAL_Debug(length);
-                // printf("\n EDGE LENGTH\n");
+                // std::cout << length << std::endl;
+                //  printf("\n EDGE LENGTH\n");
+                //  CGAL_Debug(length);
+                //  printf("\n EDGE LENGTH\n");
 
                 divisions = (int)std::ceil(std::sqrt(length) / (division_distance));
                 // CGAL_Debug(std::sqrt(length));
