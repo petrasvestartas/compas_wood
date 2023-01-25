@@ -13,7 +13,7 @@ Author: [Petras Vestartas](https://petrasvestartas.com/About-Petras-Vestartas)
 - [x] smooth drill
 - [x] hatch drill
 #### multi-butterfly
-- [ ] replicate the joint n-times
+- [x] replicate the joint n-times
 #### clip
 - [ ] take tenon-mortise and adapt to the clipper geometry
 
