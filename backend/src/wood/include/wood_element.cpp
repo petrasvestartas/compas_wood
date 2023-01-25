@@ -606,7 +606,7 @@ namespace wood
         IK::Segment_3 last_segment1_start(IK::Point_3(0, 0, 0), IK::Point_3(0, 0, 0));
         IK::Segment_3 last_segment0;
         IK::Segment_3 last_segment1;
-        int lastID = -1;
+        int last_id = -1;
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Iterate edge joints ( skip the top and bottom autlines that cannot be merged)
@@ -641,6 +641,7 @@ namespace wood
         // https://fsymbols.com/draw/
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+        // std::cout << "New Polygon" << std::endl;
         for (int i = 2; i < this->j_mf.size(); i++)
         {
             for (int j = 0; j < this->j_mf[i].size(); j++)
@@ -767,34 +768,67 @@ namespace wood
                     bool is_intersected_2 = cgal_intersection_util::plane_plane_plane_with_parallel_check(planes[2 + prev], joint_line_plane_1, planes[1], p2_int);
                     bool is_intersected_3 = cgal_intersection_util::plane_plane_plane_with_parallel_check(planes[2 + next], joint_line_plane_1, planes[1], p3_int);
 
-                    // if (!is_intersected_0 || !is_intersected_1 || !is_intersected_2 || !is_intersected_3)
-                    // {
-                    //     std::cout << is_intersected_0 << " " << is_intersected_1 << " " << is_intersected_2 << " " << is_intersected_3 << std::endl;
-                    //     return;
-                    // }
-
                     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                    // Relocate end point of the polygon
+                    // Relocate end-point, on the 2d iteration
+                    // The check asks if the previously looped edge had joint, because it can only interesect with neigbor edge (they must not be parallel too)
+                    // 0 - 0 1 -
+                    // 0 - 0 1 1 -
+                    // 0 1 1 1 1 1 -
+                    // - 0 1 1 -
+                    // 0 1 1 1 1 -
+                    // where "0" means that the previous edge was did not contain a joint, "1" - vice-versa, "-" - no joint is in the joint joint lsit
+                    // the lines are always in the same plane
                     // WARNING: Replace line_line_3d with a plane method because it is using boost
+                    //
+                    // ░░░░░░░░░░░░░░░░░░joint_line_prev)░░░░░░░░░░░░░░░░░░░░░░░░░░
+                    // ░░░░░░░░░░░░░░████████████████████░░░█░intersection point ░░
+                    // ░░░░░░░░░░░   ░░░░░░░░░░░░░░░   ░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+                    // ░░░░░░░░░   ░░░░░░░░░░░░░░   ░░███░░░░joint_line░░░░░░░░░░░░
+                    // ░░░░░░░   ░░░░░░░░░░░░░░   ░░███░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+                    // ░░░░░                    ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+                    // ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+                    //
+                    // perform this intersection only if the two lines are not one the edge
                     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                    if (lastID == i - 1)
+
+                    IK::Line_3 temp_segment_0(this->polylines[0][i - 2], this->polylines[0][i - 1]);
+                    IK::Line_3 temp_segment_1(this->polylines[1][i - 2], this->polylines[1][i - 1]);
+                    bool geometry_distance_to_edge_0 = CGAL::squared_distance(joint_line_0[0], temp_segment_0.projection(joint_line_0[0])) > wood_globals::DISTANCE_SQUARED;
+                    bool geometry_distance_to_edge_1 = CGAL::squared_distance(joint_line_1[0], temp_segment_1.projection(joint_line_1[0])) > wood_globals::DISTANCE_SQUARED;
+
+                    if (last_id == i - 1 && (geometry_distance_to_edge_0 || geometry_distance_to_edge_1))
                     {
+
                         IK::Point_3 p0;
                         IK::Point_3 p1;
-                        bool do_previous_with_joint_line_intersect_0 = cgal_intersection_util::line_line_3d(last_segment0, joint_line_0, p0);
-                        bool do_previous_with_joint_line_intersect_1 = cgal_intersection_util::line_line_3d(last_segment1, joint_line_1, p1);
 
-                        if (do_previous_with_joint_line_intersect_0 && do_previous_with_joint_line_intersect_0)
+                        IK::Plane_3 plane_joint_line_0(joint_line_0[0], planes[i - 2].orthogonal_vector());    // current
+                        IK::Plane_3 plane_last_segment_0(last_segment0[0], planes[i - 1].orthogonal_vector()); // previous
+
+                        IK::Plane_3 plane_joint_line_1(joint_line_1[0], planes[i - 2].orthogonal_vector());    // current
+                        IK::Plane_3 plane_last_segment_1(last_segment1[0], planes[i - 1].orthogonal_vector()); // previous
+
+                        bool is_joint_line_interesected_0 = cgal_intersection_util::plane_plane_plane_with_parallel_check(plane_joint_line_0, plane_last_segment_0, planes[0], p0);
+                        bool is_joint_line_interesected_1 = cgal_intersection_util::plane_plane_plane_with_parallel_check(plane_joint_line_1, planes[i - 1], plane_last_segment_1, p1);
+
+                        if (is_joint_line_interesected_0 && is_joint_line_interesected_1)
                         {
                             p0_int = p0;
                             p2_int = p1;
                         }
 
-                        // if (!do_previous_with_joint_line_intersect_0 || !do_previous_with_joint_line_intersect_0)
-                        // {
-                        //     std::cout << do_previous_with_joint_line_intersect_0 << " " << do_previous_with_joint_line_intersect_1 << std::endl;
-                        //     return;
-                        // }
+                        // IF ERROR USE THE FOLLOWING
+                        //      // bool do_previous_with_joint_line_intersect_0 = cgal_intersection_util::line_line_3d(last_segment0, joint_line_0, p0);
+                        //      // bool do_previous_with_joint_line_intersect_1 = cgal_intersection_util::line_line_3d(last_segment1, joint_line_1, p1);
+
+                        //     p0 = this->polylines[0][i - 2];
+                        //     p1 = this->polylines[1][i - 2];
+
+                        //     // if (do_previous_with_joint_line_intersect_0 && do_previous_with_joint_line_intersect_0)
+                        //     // {
+                        //     //     p0_int = p0;
+                        //     //     p2_int = p1;
+                        //     // }
                     }
 
                     ///////////////////////////////////////////////////////////////////////////////
@@ -820,16 +854,29 @@ namespace wood
                         last_segment1_start = joint_line_1;
                     }
 
-                    lastID = i;
+                    last_id = i;
 
                     ///////////////////////////////////////////////////////////////////////////////
-                    // 3 Check orientation of wood::joint outlines, if needed flip
+                    // Check orientation of wood::joint outlines, if needed flip
+                    // The check is made by measuring the distance between edge outline first and last points
+                    // And the edge end point
+                    //
+                    // ░░░░░░░░░░░░░3░░░░░░░░░░░░░░░░4░░░░0, ignore ░
+                    // ░░░░░░░░░░░░░███░░░░░░░░░░░░░███│││░░due to░░░
+                    // ░░░░░░░░░░░░░░░░░░░█░█░░░░░█░░░░░░░arbitrary░░
+                    // ░░░░░░░░░░░░░█░░░░░░░░░░░█░░░░░░░░░░first ░░░░
+                    // ░░░░░░░░░░░█░░░░█░█░░░░░░░░░░░░░░░░░point░░░░░
+                    // ░░░░░███░░░░░░░░░░░░░░███░░░░░░░░░░░░░░░░░░░░░
+                    // ░░░░2░░░░░░░░░░░░░░░░1░░░░░░edge 0 to 1st pt░░
                     ///////////////////////////////////////////////////////////////////////////////
-                    bool is_geo_flipped = CGAL::has_smaller_distance_to_point(pline0[id], joints[joint_id](male_or_female, !is_geo_reversed)[0].front(), joints[joint_id](male_or_female, !is_geo_reversed)[0].back());
 
-                    if (!is_geo_flipped)
+                    bool is_geo_flipped = CGAL::has_smaller_distance_to_point(
+                        pline0[id + 1],
+                        joints[joint_id](male_or_female, !is_geo_reversed)[0].front(),
+                        joints[joint_id](male_or_female, !is_geo_reversed)[0].back());
+
+                    if (is_geo_flipped)
                     {
-                        // flip the polyline goemetry of the bottom and top outlines (I ignnore the line )
                         std::reverse(joints[joint_id](male_or_female, !is_geo_reversed)[0].begin(), joints[joint_id](male_or_female, !is_geo_reversed)[0].end());
                         std::reverse(joints[joint_id](male_or_female, is_geo_reversed)[0].begin(), joints[joint_id](male_or_female, is_geo_reversed)[0].end());
                     }
@@ -988,7 +1035,7 @@ namespace wood
         ///////////////////////////////////////////////////////////////////////////////
         // Close
         ///////////////////////////////////////////////////////////////////////////////
-        if (lastID == this->polylines[0].size() && last_segment0_start.squared_length() > wood_globals::DISTANCE_SQUARED)
+        if (last_id == this->polylines[0].size() && last_segment0_start.squared_length() > wood_globals::DISTANCE_SQUARED)
         {
             IK::Point_3 p0;
             IK::Point_3 p1;

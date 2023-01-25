@@ -2080,7 +2080,6 @@ namespace wood_main
     )
     {
 
-
 #ifdef DEBUG_MEASURE_TIME
         auto begin = std::chrono::high_resolution_clock::now();
 #endif
@@ -2218,8 +2217,10 @@ namespace wood_main
 
         try
         {
-            for (int i = 0; i < elements.size(); i++)
-            { // takes 30-50 ms just to copy-paste polyline geometry
+
+            // size_t start = 35;
+            for (auto i = 0; i < elements.size(); i++) // elements.size()
+            {                                          // takes 30-50 ms just to copy-paste polyline geometry
 
                 switch (output_type)
                 {

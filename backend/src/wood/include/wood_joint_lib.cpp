@@ -707,7 +707,7 @@ namespace wood_joint_lib
         joint.m_boolean_type = {wood_cut::edge_insertion, wood_cut::edge_insertion};
     }
 
-    void ss_e_ip_2(wood::joint &joint)
+    void ss_e_ip_2(wood::joint &joint, std::vector<wood::element> &elements)
     {
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -716,12 +716,14 @@ namespace wood_joint_lib
 
         // name
         joint.name = "ss_e_ip_2";
+        joint.unit_scale_distance = elements[joint.v0].thickness;
 
         // parameters that comes from the joint
         bool default_values = false;
-        double edge_length = !default_values ? std::sqrt(CGAL::squared_distance(joint.joint_lines[0][0], joint.joint_lines[0][1])) : 1000;
+        double edge_length = !default_values ? std::sqrt(CGAL::squared_distance(joint.joint_lines[0][0], joint.joint_lines[0][1])) : 1000; // std::sqrt(CGAL::squared_distance(joint.joint_lines[0][0], joint.joint_lines[0][1])) : 1000;
         int divisions = !default_values ? joint.divisions : 5;
-        double joint_volume_edge_length = !default_values ? std::sqrt(CGAL::squared_distance(joint.joint_volumes[0][1], joint.joint_volumes[0][2])) : 40;
+        double joint_volume_edge_length = !default_values ? joint.unit_scale_distance : 40; // std::sqrt(CGAL::squared_distance(joint.joint_volumes[0][1], joint.joint_volumes[0][2])) : 40;
+
 
         // scale down the edge, since wood_joint ->  bool joint::orient_to_connection_area() make the distance between joint volumes equal to 2nd joint volume edge
         edge_length *= joint.scale[2];
@@ -757,60 +759,53 @@ namespace wood_joint_lib
                     IK::Point_3(0, -0.5, -0.1166666667),
                 }};
 
-        std::vector<CGAL_Polyline> male_1 = {
-            {
+        std::vector<CGAL_Polyline> male_1 = {{
 
-                IK::Point_3(0, 0.5, 0.1166666667),
-                IK::Point_3(-0.5, 0.5, 0.4),
-                IK::Point_3(-0.5, 0.5, -0.4),
-                IK::Point_3(0, 0.5, -0.1166666667),
-            },
+                                                 IK::Point_3(0, 0.5, 0.1166666667),
+                                                 IK::Point_3(-0.5, 0.5, 0.4),
+                                                 IK::Point_3(-0.5, 0.5, -0.4),
+                                                 IK::Point_3(0, 0.5, -0.1166666667),
+                                             },
 
-            {
+                                             {
 
-                IK::Point_3(0, 0.5, 0.1166666667),
-                IK::Point_3(0, 0.5, -0.1166666667),
-            }};
+                                                 IK::Point_3(0, 0.5, 0.1166666667),
+                                                 IK::Point_3(0, 0.5, -0.1166666667),
+                                             }};
 
-        std::vector<wood_cut::cut_type> male_types{
-            wood_cut::edge_insertion,
-            wood_cut::edge_insertion};
+        std::vector<wood_cut::cut_type> male_types{wood_cut::edge_insertion, wood_cut::edge_insertion};
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // female default shape
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        std::vector<CGAL_Polyline> female_0 = {
-            {
+        std::vector<CGAL_Polyline> female_0 = {{
 
-                IK::Point_3(0, -0.5, 0.1166666667),
-                IK::Point_3(0.5, -0.5, 0.4),
-                IK::Point_3(0.5, -0.5, -0.4),
-                IK::Point_3(0, -0.5, -0.1166666667),
-            },
-            {
+                                                   IK::Point_3(0, -0.5, 0.1166666667),
+                                                   IK::Point_3(0.5, -0.5, 0.4),
+                                                   IK::Point_3(0.5, -0.5, -0.4),
+                                                   IK::Point_3(0, -0.5, -0.1166666667),
+                                               },
+                                               {
 
-                IK::Point_3(0, -0.5, 0.1166666667),
-                IK::Point_3(0, -0.5, -0.1166666667),
-            }};
+                                                   IK::Point_3(0, -0.5, 0.1166666667),
+                                                   IK::Point_3(0, -0.5, -0.1166666667),
+                                               }};
 
-        std::vector<CGAL_Polyline> female_1 = {
-            {
+        std::vector<CGAL_Polyline> female_1 = {{
 
-                IK::Point_3(0, 0.5, 0.1166666667),
-                IK::Point_3(0.5, 0.5, 0.4),
-                IK::Point_3(0.5, 0.5, -0.4),
-                IK::Point_3(0, 0.5, -0.1166666667),
-            },
-            {
+                                                   IK::Point_3(0, 0.5, 0.1166666667),
+                                                   IK::Point_3(0.5, 0.5, 0.4),
+                                                   IK::Point_3(0.5, 0.5, -0.4),
+                                                   IK::Point_3(0, 0.5, -0.1166666667),
+                                               },
+                                               {
 
-                IK::Point_3(0, 0.5, 0.1166666667),
-                IK::Point_3(0, 0.5, -0.1166666667),
-            }};
+                                                   IK::Point_3(0, 0.5, 0.1166666667),
+                                                   IK::Point_3(0, 0.5, -0.1166666667),
+                                               }};
 
-        std::vector<wood_cut::cut_type> female_types{
-            wood_cut::edge_insertion,
-            wood_cut::edge_insertion};
+        std::vector<wood_cut::cut_type> female_types{wood_cut::edge_insertion, wood_cut::edge_insertion};
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Reserve memory for multiple copies
@@ -838,7 +833,6 @@ namespace wood_joint_lib
 
         for (auto i = 0; i < divisions; i++)
         {
-
             // copy the first outline, be sure that the point order is correct, so that the non-internsecting polyline can be created, else reverse it
             CGAL_Polyline male_moved_0 = male_0[0];
             CGAL_Polyline male_moved_1 = male_1[0];
@@ -868,7 +862,8 @@ namespace wood_joint_lib
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Add the insertion lines
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        joint.m[0].emplace_back(CGAL_Polyline{joint.m[0].front().front(), joint.m[0].front().back()});
+        joint.m[0]
+            .emplace_back(CGAL_Polyline{joint.m[0].front().front(), joint.m[0].front().back()});
         joint.m[1].emplace_back(CGAL_Polyline{joint.m[1].front().front(), joint.m[1].front().back()});
         joint.f[0].emplace_back(CGAL_Polyline{joint.f[0].front().front(), joint.f[0].front().back()});
         joint.f[1].emplace_back(CGAL_Polyline{joint.f[1].front().front(), joint.f[1].front().back()});
@@ -4064,7 +4059,7 @@ namespace wood_joint_lib
                     break;
 
                 case (3):
-                    ss_e_ip_2(jo);
+                    ss_e_ip_2(jo, elements);
                     break;
                 case (8):
                     side_removal(jo, elements);

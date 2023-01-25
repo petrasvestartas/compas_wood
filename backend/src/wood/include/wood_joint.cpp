@@ -320,8 +320,9 @@ namespace wood
             /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
             // Distance between two rectangles is equal to the joint volume second edge length
             /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-            unit_scale_distance = std::sqrt(CGAL::squared_distance(joint_volumes[0][1], joint_volumes[0][2]));
-
+            unit_scale_distance = unit_scale_distance == 0 ? std::floor(std::sqrt(CGAL::squared_distance(joint_volumes[0][1], joint_volumes[0][2]))) : unit_scale_distance;
+            // std::cout << std::sqrt(CGAL::squared_distance(joint_volumes[0][0], joint_volumes[0][1])) << std::endl;
+            // std::cout << std::sqrt(CGAL::squared_distance(joint_volumes[0][1], joint_volumes[0][2])) << std::endl;
             /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
             // First pair of joint volumes
             // The joint volumes are move in z-axis, so that the joint geometry would not be stretched

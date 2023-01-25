@@ -24,7 +24,7 @@
 #include "wood_element.h"
 #include "wood_joint.h"
 
-             namespace wood_joint_lib
+namespace wood_joint_lib
 {
     namespace internal
     {
@@ -152,7 +152,7 @@
      *
      * @param [in, out] joint node, to which geometry will be added
      */
-    void ss_e_ip_2(wood::joint &joint);
+    void ss_e_ip_2(wood::joint &joint, std::vector<wood::element> &elements);
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Side-to-side edge out-of-plane joints 10-19
