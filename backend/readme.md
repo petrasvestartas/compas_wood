@@ -4,9 +4,9 @@
 ## To-do
 
 - wood_join_lib
-- [ ] implement drilling methods for top-to-top connections
+- [x] implement drilling methods for top-to-top connections
 - [ ] add snap-fit joint for top-to-side connection
-- [ ] butterfly n-times
+- [x] butterfly n-times
 
 
 ## Library Notes
