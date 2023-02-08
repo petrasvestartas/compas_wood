@@ -282,6 +282,14 @@ namespace wood_joint_lib
      */
     void ts_e_p_4(wood::joint &joint);
 
+    /**
+     * Unit joint - Top-to-side edge plane joints - snap-fit joints
+     *
+     * @param [in, out] joint node, to which geometry will be added
+     * @param [in] elements elements are needed to determina the joint thickness, since two plates can have different thicknesses
+     */
+    void ts_e_p_5(wood::joint &joint);
+
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Cross cutting in-plane joints 30-39
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

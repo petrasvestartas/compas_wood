@@ -57,6 +57,7 @@ namespace wood_globals
         "JOINT_NAMES[22] = ts_e_p_2;",
         "JOINT_NAMES[23] = ts_e_p_3;",
         "JOINT_NAMES[24] = ts_e_p_4;",
+        "JOINT_NAMES[25] = ts_e_p_5;",
         "JOINT_NAMES[28] = side_removal;",
         "JOINT_NAMES[29] = ts_e_p_9;",
         "JOINT_NAMES[30] = cr_c_ip_0;",
