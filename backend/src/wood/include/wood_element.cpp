@@ -137,12 +137,19 @@ namespace wood
                 case (3):
 
                     // k+=2 means skipping bounding lines or rectangles that are used in other method when joints have to be merged with polygons
+                    // std::cout << " new line \n";
                     for (int k = 0; k < joints[std::get<0>(j_mf[i][j])](std::get<1>(j_mf[i][j]), true).size(); k += 2)
                     {
-                        output[this->id].emplace_back(joints[std::get<0>(j_mf[i][j])](std::get<1>(j_mf[i][j]), true)[k]);     // cut
-                        output[this->id].emplace_back(joints[std::get<0>(j_mf[i][j])](std::get<1>(j_mf[i][j]), false)[k]);    // direction
-                        output_cut_types[this->id].emplace_back(joints[std::get<0>(j_mf[i][j])](std::get<1>(j_mf[i][j]))[k]); // type
+                        // std::cout << k << " ";
+                        output[this->id].emplace_back(joints[std::get<0>(j_mf[i][j])](std::get<1>(j_mf[i][j]), true)[k]);  // cut
+                        output[this->id].emplace_back(joints[std::get<0>(j_mf[i][j])](std::get<1>(j_mf[i][j]), false)[k]); // direction
+                        if (joints[std::get<0>(j_mf[i][j])](std::get<1>(j_mf[i][j])).size() > k)
+                            output_cut_types[this->id].emplace_back(joints[std::get<0>(j_mf[i][j])](std::get<1>(j_mf[i][j]))[k]); // type
+                        else
+                            std::cout << "\n ERROR in wood_element.cpp -> get_joints_geometry -> case3 cut_types are not equal to the number of the joint outlines ";
                     }
+                    // std::cout << " outlines count: " << output[this->id].size() << " ";
+                    // std::cout << " new line \n";
 
                     break;
                 default:
@@ -869,6 +876,7 @@ namespace wood
                     // ░░░░░███░░░░░░░░░░░░░░███░░░░░░░░░░░░░░░░░░░░░
                     // ░░░░2░░░░░░░░░░░░░░░░1░░░░░░edge 0 to 1st pt░░
                     ///////////////////////////////////////////////////////////////////////////////
+                    std::cout << "ERROR wood_element Line 879 " << std::endl;
 
                     bool is_geo_flipped = CGAL::has_smaller_distance_to_point(
                         pline0[id + 1],
@@ -891,6 +899,7 @@ namespace wood
                     point_count += joints[std::get<0>(j_mf[id + 2][j])](std::get<1>(j_mf[id + 2][j]), true)[0].size();
                     break;
                 }
+
                     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
                     // Rectangle line joint geometry
                     //
@@ -904,7 +913,9 @@ namespace wood
                     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
                 case (5):
-                { // two edges
+                {
+
+                    // two edges
                     int edge_pair[2];
                     joints[joint_id].get_edge_ids(male_or_female, edge_pair[0], edge_pair[1]);
                     if (edge_pair[0] > edge_pair[1])
@@ -1056,9 +1067,20 @@ namespace wood
         ///////////////////////////////////////////////////////////////////////////////
         // Add loose elements from top and bottom outlines also
         // Also check the winding
+        //
+        // ░░░for multiple holes there is one big hole░░░░for one outline there is one line or one rectangle ░
+        // ░░░░░░░░░not a copy of every hole░░░░░░░░░░░░░░░░░░░░██████████████████████████████████░░░░░░░░░░░░
+        // ░░░████████████████████████████████████████░░░░░░░░░░│░░░░░░░░░░┌──────────┐░░░░░░░░░░│░░░░░░░░░░░░
+        // ░░░█┌────────────────┐░┌─────────────────┐█░░░░░░░░░░│░░░░░░░░░░│░░░░░░░░░░│░░░░░░░░░░│░░░░░░░░░░░░
+        // ░░░█│░░░░░░░░░░░░░░░░│░│░░░░░░░░░░░░░░░░░│█░░░░░░░░░░│░░░░░░░░░░│░░░░░░░░░░│░░░░░░░░░░│░░░░░░░░░░░░
+        // ░░░█└────────────────┘░└─────────────────┘█░░░░░░░░░░│░░░░░░░░░░│░░░░░░░░░░│░░░░░░░░░░│░░░░░░░░░░░░
+        // ░░░████████████████████████████████████████░░░░░░░░░░│░░░░░░░░░░│░░░░░░░░░░│░░░░░░░░░░│░░░░░░░░░░░░
+        // ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░└──────────┘░░░░░░░░░░└──────────┘░░░░░░░░░░░░
+        // ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+        //
         ///////////////////////////////////////////////////////////////////////////////
         for (int i = 0; i < 2; i++)
-        { // iterate top only
+        { // iterate top outlines only, as i is always 0 and 1
             for (size_t j = 0; j < j_mf[i].size(); j++)
             {
 
@@ -1084,9 +1106,9 @@ namespace wood
                     joints[joint_id].reverse(male_or_female);
 
                 ///////////////////////////////////////////////////////////////////////////////
-                // Check Winding
+                // Check Winding | we skip the last outline which is the biggest rectangle, if there are multiple holes, it will still have one boundary rectangle
                 ///////////////////////////////////////////////////////////////////////////////
-                for (int k = 0; k < joints[joint_id](male_or_female, true).size() - 1; k++)
+                for (int k = 0; k < joints[joint_id](male_or_female, true).size() - 1; k++) // we skip the last outline, because it marks the boundary of all holes
                 {
                     // Orient to 2D and check the winding
                     bool is_clockwise = cgal_polyline_util::is_clockwise(joints[joint_id](male_or_female, true)[k], planes[0]);
@@ -1110,10 +1132,12 @@ namespace wood
         }
 
         // Collect holes for sides, this was first implemented for miter joints
+
         for (int i = 2; i < this->j_mf.size(); i++)
         {
             for (int j = 0; j < this->j_mf[i].size(); j++)
             {
+
                 int joint_id = std::get<0>(j_mf[i][j]);
                 bool male_or_female = std::get<1>(j_mf[i][j]);
 
@@ -1132,6 +1156,7 @@ namespace wood
 
                 for (int k = 0; k < joints[joint_id](male_or_female).size(); k += 2)
                 {
+
                     if (joints[joint_id](male_or_female)[k] == wood_cut::hole) //
                         id_of_holes.emplace_back((int)(k));
 
@@ -1171,6 +1196,8 @@ namespace wood
                             std::end(joints[joint_id](male_or_female, false)[k]));
                     }
 
+                    // std::cout << "i, j, k : " << i << " " << j << " " << k << std::endl;
+
                     output[this->id].emplace_back(joints[joint_id](male_or_female, true)[k]);
                     output[this->id].emplace_back(joints[joint_id](male_or_female, false)[k]);
                 }
@@ -1180,6 +1207,7 @@ namespace wood
 #ifdef DEBUG_wood_ELEMENT
         printf("\nCPP   FILE %s    METHOD %s   LINE %i     WHAT %s %i %i %i %i ", __FILE__, __FUNCTION__, __LINE__, "Add elements  ", pline0_new.size(), pline1_new.size(), this->id, output.size());
 #endif
+
         ///////////////////////////////////////////////////////////////////////////////
         // Output
         ///////////////////////////////////////////////////////////////////////////////

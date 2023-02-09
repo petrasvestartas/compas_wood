@@ -664,9 +664,6 @@ namespace cgal_box_search
 
     )
     {
-#ifdef DEBUG
-        CGAL_Debug(polylines.size(), polylines_segment_radii.size());
-#endif
 
         // CGAL_Debug(polylines.size());
         /////////////////////////////////////////////////////////////////////
@@ -748,9 +745,6 @@ namespace cgal_box_search
                 //  s0 = IK::Segment_3(s0[0] - v0, s0[1] + v0);
                 //  s1 = IK::Segment_3(s1[0] - v1, s1[1] + v1);
                 double distance = CGAL::squared_distance(s0, s1);
-#ifdef DEBUG
-                CGAL_Debug(b1.info().first, b2.info().first, distance);
-#endif
 
                 if (distance < min_distance * min_distance)
                 {
@@ -812,11 +806,6 @@ namespace cgal_box_search
             if (!r)
                 continue;
             point_pairs.emplace_back(std::array<IK::Point_3, 2>{p0, p1});
-
-#ifdef DEBUG
-            CGAL_Debug(p0);
-            CGAL_Debug(p1);
-#endif
         }
     }
 }

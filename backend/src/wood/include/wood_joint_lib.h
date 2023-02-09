@@ -16,6 +16,31 @@
 //
 // 3RD PARTY LIBRARIES:
 // Boost for reading XML files
+//
+// INSTRUCTIONS:
+// Joint geometry is added as a list of outlines with the last item as a boundary e.g. one line or rectangle
+// The number of cut types is equal to the number of outlines + 1 boundary e.g.:
+//
+//
+// ...
+// joint.f[0].emplace_back(female_moved_0);
+// joint.f[1].emplace_back(female_moved_1);
+// joint.f[0].emplace_back(std::initializer_list<IK::Point_3>{joint.f[0].front()[0], joint.f[0].front()[3], joint.f[0].back()[2], joint.f[0].back()[1], joint.f[0].front()[0]});
+// joint.f[1].emplace_back(std::initializer_list<IK::Point_3>{joint.f[1].front()[0], joint.f[1].front()[3], joint.f[1].back()[2], joint.f[1].back()[1], joint.f[1].front()[0]});
+// joint.f_boolean_type = std::vector<wood_cut::cut_type>(joint.f[0].size(), wood_cut::hole);
+// ...
+//
+// ░░░for multiple holes there is one big hole░░░░for one outline there is one line or one rectangle ░
+// ░░░░░░░░░not a copy of every hole░░░░░░░░░░░░░░░░░░░░██████████████████████████████████░░░░░░░░░░░░
+// ░░░████████████████████████████████████████░░░░░░░░░░│░░░░░░░░░░┌──────────┐░░░░░░░░░░│░░░░░░░░░░░░
+// ░░░█┌────────────────┐░┌─────────────────┐█░░░░░░░░░░│░░░░░░░░░░│░░░░░░░░░░│░░░░░░░░░░│░░░░░░░░░░░░
+// ░░░█│░░░░░░░░░░░░░░░░│░│░░░░░░░░░░░░░░░░░│█░░░░░░░░░░│░░░░░░░░░░│░░░░░░░░░░│░░░░░░░░░░│░░░░░░░░░░░░
+// ░░░█└────────────────┘░└─────────────────┘█░░░░░░░░░░│░░░░░░░░░░│░░░░░░░░░░│░░░░░░░░░░│░░░░░░░░░░░░
+// ░░░████████████████████████████████████████░░░░░░░░░░│░░░░░░░░░░│░░░░░░░░░░│░░░░░░░░░░│░░░░░░░░░░░░
+// ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░└──────────┘░░░░░░░░░░└──────────┘░░░░░░░░░░░░
+// ░░░░░░░░https://fsymbols.com/draw/░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+//
+// Also do not forget that there are joint male outlines, there are two list of outlines to represent the top and the bottom outlines
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 #ifndef WOOD_JOINT_LIB_H

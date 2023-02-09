@@ -2327,9 +2327,6 @@ namespace wood_main
 
     )
     {
-#ifdef DEBUG
-        CGAL_Debug(polylines.size(), polylines_segment_radii.size());
-#endif
 
         //////////////////////////////////////////////////////////////////////////////
         // Main Properties: elements, joints, joints_map

@@ -8,7 +8,7 @@
       "request": "launch",
       "cwd": "${fileDirname}",
       "miDebuggerPath": "gdb",
-      "program": "${workspaceRoot}/build_win/Release/wood",
+      "program": "C:\\IBOIS57\\_Code\\Software\\Python\\compas_wood\\backend\\build_win\\Debug\\wood.exe",
       "args": [],
     }
   ]

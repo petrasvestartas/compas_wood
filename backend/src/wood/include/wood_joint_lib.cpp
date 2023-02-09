@@ -2643,8 +2643,6 @@ namespace wood_joint_lib
             joint.f[0].emplace_back(std::initializer_list<IK::Point_3>{joint.m[0][0][i + 0], joint.m[0][0][i + 3], joint.m[1][0][i + 3], joint.m[1][0][i + 0], joint.m[0][0][i + 0]});
             joint.f[1].emplace_back(std::initializer_list<IK::Point_3>{joint.m[0][0][i + 1], joint.m[0][0][i + 2], joint.m[1][0][i + 2], joint.m[1][0][i + 1], joint.m[0][0][i + 1]});
         }
-        // CGAL_Debug(20);
-
         joint.f[0].emplace_back(std::initializer_list<IK::Point_3>{joint.f[0][0][0], joint.f[0][0][3], joint.f[0][size - 2][3], joint.f[0][size - 2][0], joint.f[0][0][0]});
         joint.f[1].emplace_back(std::initializer_list<IK::Point_3>{joint.f[1][0][0], joint.f[1][0][3], joint.f[1][size - 2][3], joint.f[1][size - 2][0], joint.f[1][0][0]});
 
@@ -3099,81 +3097,66 @@ namespace wood_joint_lib
 
         joint.name = __func__;
 
+        // name
+
+        // parameters that comes from the joint
+        bool default_values = !true;
+
+        double edge_length = !default_values ? std::sqrt(CGAL::squared_distance(joint.joint_lines[0][0], joint.joint_lines[0][1])) : 1000;
+        int divisions = !default_values ? joint.divisions : 5;
+        double joint_volume_edge_length = !default_values ? std::sqrt(CGAL::squared_distance(joint.joint_volumes[0][1], joint.joint_volumes[0][2])) : 40;
+        //  scale down the edge, since wood_joint ->  bool joint::orient_to_connection_area() make the distance between joint volumes equal to 2nd joint volume edge
+        edge_length *= joint.scale[2];
+
+        // normalization to the unit space, joint_volume_edge_length is used for parametrization
+        double move_length_scaled = edge_length / (divisions * joint_volume_edge_length);
+        double total_length_scaled = edge_length / joint_volume_edge_length;
+
+        // movement vectors to translate the unit joint to the end of the edge and then to its middle
+        IK::Vector_3 dir(0, 0, 1);
+        IK::Vector_3 move_from_center_to_the_end = dir * ((total_length_scaled * 0.5) - (move_length_scaled * 0.5));
+        IK::Vector_3 move_length_dir = -dir * move_length_scaled;
+
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        // temp
+        // Male default shape
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        joint.f[0] = {
-            {
-                IK::Point_3(-0.499996349848395, -0.499996349847212, 1.10464309849788),
-                IK::Point_3(-0.499996349848395, -0.499996349847212, -1.104643098498),
-                IK::Point_3(0.499996349844421, -0.499996349847317, -1.104643098498),
-                IK::Point_3(0.499996349844421, -0.499996349847317, 1.10464309849788),
-                IK::Point_3(-0.499996349848395, -0.499996349847212, 1.10464309849788),
-            },
-            {
-                IK::Point_3(-0.499996349848395, -0.499996349847212, 1.10464309849788),
-                IK::Point_3(-0.499996349848395, -0.499996349847212, -1.104643098498),
-                IK::Point_3(0.499996349844421, -0.499996349847317, -1.104643098498),
-                IK::Point_3(0.499996349844421, -0.499996349847317, 1.10464309849788),
-                IK::Point_3(-0.499996349848395, -0.499996349847212, 1.10464309849788),
-            },
+        std::vector<CGAL_Polyline>
+            male_0 = {
+                {
 
-        };
+                    IK::Point_3(-0.499996349848395, -0.499996349847159, 1.62789509252326),
+                    IK::Point_3(-0.499996349848395, -3.40695187221018, 1.62789509252326),
+                    IK::Point_3(-0.499996349848395, -3.40695187221018, 1.10464309849792),
+                    IK::Point_3(-0.499996349848395, -0.0232556441796868, 1.10464309849801),
+                    IK::Point_3(-0.499996349848395, -0.0232556441796339, 0.843017101485296),
+                    IK::Point_3(-0.499996349848395, 0.49999634984571, 0.843017101485296),
+                    IK::Point_3(-0.499996349848395, 0.49999634984571, 1.19185176416881),
+                    IK::Point_3(-0.499996349848395, 0.6038871791861, 1.19185176416881),
+                    IK::Point_3(-0.499996349848395, 1.01079104575736, 1.04650398805065),
+                    IK::Point_3(-0.499996349848395, 1.01079104575736, 0.261625997012692),
+                    IK::Point_3(-0.499996349848395, -3.40695187221018, 0.261625997012692),
+                    IK::Point_3(-0.499996349848395, -3.40695187221018, -0.261625997012652),
+                    IK::Point_3(-0.499996349848395, 1.01079104575736, -0.261625997012652),
+                    IK::Point_3(-0.499996349848395, 1.01079104575736, -1.04650398805062),
+                    IK::Point_3(-0.499996349848395, 0.6038871791861, -1.19185176416877),
+                    IK::Point_3(-0.499996349848395, 0.49999634984571, -1.19185176416877),
+                    IK::Point_3(-0.499996349848395, 0.49999634984571, -0.843017101485257),
+                    IK::Point_3(-0.499996349848395, -0.0232556441796339, -0.843017101485257),
+                    IK::Point_3(-0.499996349848395, -0.0232556441796868, -1.10464309849797),
+                    IK::Point_3(-0.499996349848395, -3.40695187221018, -1.10464309849788),
+                    IK::Point_3(-0.499996349848395, -3.40695187221018, -1.62789509252322),
+                    IK::Point_3(-0.499996349848395, -0.499996349847159, -1.62789509252322),
+                },
+                {
 
-        joint.f[1] = {
-            {
-                IK::Point_3(-0.499996349848395, 0.499996349845604, 1.104643098498),
-                IK::Point_3(-0.499996349848395, 0.499996349845604, -1.10464309849788),
-                IK::Point_3(0.499996349844421, 0.499996349845499, -1.10464309849788),
-                IK::Point_3(0.499996349844421, 0.499996349845499, 1.104643098498),
-                IK::Point_3(-0.499996349848395, 0.499996349845604, 1.104643098498),
-            },
-            {
-                IK::Point_3(-0.499996349848395, 0.499996349845604, 1.104643098498),
-                IK::Point_3(-0.499996349848395, 0.499996349845604, -1.10464309849788),
-                IK::Point_3(0.499996349844421, 0.499996349845499, -1.10464309849788),
-                IK::Point_3(0.499996349844421, 0.499996349845499, 1.104643098498),
-                IK::Point_3(-0.499996349848395, 0.499996349845604, 1.104643098498),
-            }
+                    IK::Point_3(-0.499996349848395, -0.499996349847159, 1.62789509252326),
+                    IK::Point_3(-0.499996349848395, -0.499996349847159, -1.62789509252322),
+                }};
 
-        };
-
-        // Joint lines, always the last line or rectangle is not a wood::joint but an cutting wood::element
-        joint.m[0] = {
+        std::vector<CGAL_Polyline> male_1 = {
             {
-                IK::Point_3(-0.499996349848395, -0.499996349847159, 1.62789509252326),
-                IK::Point_3(-0.499996349848395, -3.40695187221018, 1.62789509252326),
-                IK::Point_3(-0.499996349848395, -3.40695187221018, 1.10464309849792),
-                IK::Point_3(-0.499996349848395, -0.0232556441796868, 1.10464309849801),
-                IK::Point_3(-0.499996349848395, -0.0232556441796339, 0.843017101485296),
-                IK::Point_3(-0.499996349848395, 0.49999634984571, 0.843017101485296),
-                IK::Point_3(-0.499996349848395, 0.49999634984571, 1.19185176416881),
-                IK::Point_3(-0.499996349848395, 0.6038871791861, 1.19185176416881),
-                IK::Point_3(-0.499996349848395, 1.01079104575736, 1.04650398805065),
-                IK::Point_3(-0.499996349848395, 1.01079104575736, 0.261625997012692),
-                IK::Point_3(-0.499996349848395, -3.40695187221018, 0.261625997012692),
-                IK::Point_3(-0.499996349848395, -3.40695187221018, -0.261625997012652),
-                IK::Point_3(-0.499996349848395, 1.01079104575736, -0.261625997012652),
-                IK::Point_3(-0.499996349848395, 1.01079104575736, -1.04650398805062),
-                IK::Point_3(-0.499996349848395, 0.6038871791861, -1.19185176416877),
-                IK::Point_3(-0.499996349848395, 0.49999634984571, -1.19185176416877),
-                IK::Point_3(-0.499996349848395, 0.49999634984571, -0.843017101485257),
-                IK::Point_3(-0.499996349848395, -0.0232556441796339, -0.843017101485257),
-                IK::Point_3(-0.499996349848395, -0.0232556441796868, -1.10464309849797),
-                IK::Point_3(-0.499996349848395, -3.40695187221018, -1.10464309849788),
-                IK::Point_3(-0.499996349848395, -3.40695187221018, -1.62789509252322),
-                IK::Point_3(-0.499996349848395, -0.499996349847159, -1.62789509252322),
-            },
-            {
-                IK::Point_3(-0.499996349848395, -0.499996349847159, 1.62789509252326),
-                IK::Point_3(-0.499996349848395, -0.499996349847159, -1.62789509252322),
-            },
 
-        };
-
-        joint.m[1] = {
-            {
                 IK::Point_3(0.499996349844421, -0.49999634984737, 1.62789509252334),
                 IK::Point_3(0.499996349844421, -3.40695187221039, 1.62789509252334),
                 IK::Point_3(0.499996349844421, -3.40695187221039, 1.10464309849799),
@@ -3197,14 +3180,126 @@ namespace wood_joint_lib
                 IK::Point_3(0.499996349844421, -3.40695187221039, -1.62789509252314),
                 IK::Point_3(0.499996349844421, -0.49999634984737, -1.62789509252314),
             },
+
             {
                 IK::Point_3(0.499996349844421, -0.49999634984737, 1.62789509252334),
                 IK::Point_3(0.499996349844421, -0.49999634984737, -1.62789509252314),
-            },
-        };
+            }};
 
-        joint.f_boolean_type = {wood_cut::hole, wood_cut::hole};
-        joint.m_boolean_type = {wood_cut::edge_insertion, wood_cut::edge_insertion};
+        std::vector<wood_cut::cut_type> male_types{
+            wood_cut::edge_insertion,
+            wood_cut::edge_insertion};
+
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // female default shape
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        std::vector<CGAL_Polyline> female_0 = {
+            {
+
+                IK::Point_3(-0.499996349848395, -0.499996349847212, 1.10464309849788),
+                IK::Point_3(-0.499996349848395, -0.499996349847212, -1.104643098498),
+                IK::Point_3(0.499996349844421, -0.499996349847317, -1.104643098498),
+                IK::Point_3(0.499996349844421, -0.499996349847317, 1.10464309849788),
+                IK::Point_3(-0.499996349848395, -0.499996349847212, 1.10464309849788),
+            },
+            {
+
+                IK::Point_3(-0.499996349848395, -0.499996349847212, 1.10464309849788),
+                IK::Point_3(-0.499996349848395, -0.499996349847212, -1.104643098498),
+                IK::Point_3(0.499996349844421, -0.499996349847317, -1.104643098498),
+                IK::Point_3(0.499996349844421, -0.499996349847317, 1.10464309849788),
+                IK::Point_3(-0.499996349848395, -0.499996349847212, 1.10464309849788),
+            }};
+
+        std::vector<CGAL_Polyline> female_1 = {
+            {
+                IK::Point_3(-0.499996349848395, 0.499996349845604, 1.104643098498),
+                IK::Point_3(-0.499996349848395, 0.499996349845604, -1.10464309849788),
+                IK::Point_3(0.499996349844421, 0.499996349845499, -1.10464309849788),
+                IK::Point_3(0.499996349844421, 0.499996349845499, 1.104643098498),
+                IK::Point_3(-0.499996349848395, 0.499996349845604, 1.104643098498),
+            },
+            {
+
+                IK::Point_3(-0.499996349848395, 0.499996349845604, 1.104643098498),
+                IK::Point_3(-0.499996349848395, 0.499996349845604, -1.10464309849788),
+                IK::Point_3(0.499996349844421, 0.499996349845499, -1.10464309849788),
+                IK::Point_3(0.499996349844421, 0.499996349845499, 1.104643098498),
+                IK::Point_3(-0.499996349848395, 0.499996349845604, 1.104643098498),
+            }};
+
+        std::vector<wood_cut::cut_type> female_types{
+            wood_cut::hole,
+            wood_cut::hole};
+
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Reserve memory for multiple copies
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        joint.m[0].reserve(2);
+        joint.m[1].reserve(2);
+        joint.m_boolean_type.reserve(2);
+        joint.f[0].reserve(2 * divisions);
+        joint.f[1].reserve(2 * divisions);
+        joint.f_boolean_type.reserve(2 * divisions);
+
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Copy the default shapes and move them
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        joint.m[0].emplace_back(CGAL_Polyline());
+        joint.m[1].emplace_back(CGAL_Polyline());
+
+        joint.m[0].back().reserve(male_0[0].size() * divisions);
+        joint.m[1].back().reserve(male_1[0].size() * divisions);
+
+        for (auto i = 0; i < divisions; i++)
+        {
+
+            // copy the first outline, be sure that the point order is correct, so that the non-internsecting polyline can be created, else reverse it
+            CGAL_Polyline male_moved_0 = male_0[0];
+            CGAL_Polyline male_moved_1 = male_1[0];
+
+            // move joints that are positioned at the center to the end of the segment and then back by half of the division length
+            for (auto &p : male_moved_0)
+                p += move_from_center_to_the_end + move_length_dir * i;
+
+            for (auto &p : male_moved_1)
+                p += move_from_center_to_the_end + move_length_dir * i;
+
+            // merge with the main outline
+            joint.m[0].back().insert(joint.m[0].back().end(), male_moved_0.begin(), male_moved_0.end());
+            joint.m[1].back().insert(joint.m[1].back().end(), male_moved_1.begin(), male_moved_1.end());
+        }
+
+        for (auto i = 0; i < divisions; i++)
+        {
+
+            // copy the first outline, be sure that the point order is correct, so that the non-internsecting polyline can be created, else reverse it
+            CGAL_Polyline female_moved_0 = female_0[0];
+            CGAL_Polyline female_moved_1 = female_1[0];
+
+            // move joints that are positioned at the center to the end of the segment and then back by half of the division length
+            for (auto &p : female_moved_0)
+                p += move_from_center_to_the_end + move_length_dir * i;
+
+            for (auto &p : female_moved_1)
+                p += move_from_center_to_the_end + move_length_dir * i;
+
+            // merge with the main outline
+            joint.f[0].emplace_back(female_moved_0);
+            joint.f[1].emplace_back(female_moved_1);
+        }
+        joint.f[0].emplace_back(std::initializer_list<IK::Point_3>{joint.f[0].front()[0], joint.f[0].front()[3], joint.f[0].back()[2], joint.f[0].back()[1], joint.f[0].front()[0]});
+        joint.f[1].emplace_back(std::initializer_list<IK::Point_3>{joint.f[1].front()[0], joint.f[1].front()[3], joint.f[1].back()[2], joint.f[1].back()[1], joint.f[1].front()[0]});
+        joint.f_boolean_type = std::vector<wood_cut::cut_type>(joint.f[0].size(), wood_cut::hole);
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Add the insertion lines
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        joint.m[0].emplace_back(CGAL_Polyline{joint.m[0].front().front(), joint.m[0].front().back()});
+        joint.m[1].emplace_back(CGAL_Polyline{joint.m[1].front().front(), joint.m[1].front().back()});
+
+        joint.m_boolean_type = male_types;
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // is unit scale
@@ -3217,7 +3312,6 @@ namespace wood_joint_lib
 
     void cr_c_ip_0(wood::joint &joint)
     {
-
         joint.name = __func__;
 
         double scale = 1;
@@ -3243,7 +3337,6 @@ namespace wood_joint_lib
 
     void cr_c_ip_1(wood::joint &joint)
     {
-
         joint.name = __func__;
         // double shift = 0.5;
 
@@ -3378,7 +3471,6 @@ namespace wood_joint_lib
 
     void cr_c_ip_2(wood::joint &joint)
     {
-
         joint.name = __func__;
         // double shift = 0.5;
 
@@ -3949,7 +4041,6 @@ namespace wood_joint_lib
 
     void construct_joint_by_index(std::vector<wood::element> &elements, std::vector<wood::joint> &joints, std::vector<double> &default_parameters_for_four_types, std::vector<double> &scale)
     {
-
         /////////////////////////////////////////////////////////////////////
         // You must define new wood::joint each time you internalize it
         /////////////////////////////////////////////////////////////////////
