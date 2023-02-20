@@ -32,7 +32,7 @@ Author: [Petras Vestartas](https://petrasvestartas.com/About-Petras-Vestartas)
 #### unit-tests 
 - [ ] add units tests from MOOC to CPP data-sets: Annen (corner cases, full arch)
 - [ ] add units tests from MOOC to CPP data-sets: Cross joints (IBOIS pavilion, planarized shell)
-- [ ] add units tests from MOOC to CPP data-sets: Folded plates arch
+- [x] add units tests from MOOC to CPP data-sets: Folded plates arch
 - [ ] add units tests from MOOC to CPP data-sets: VDA pavilion
 - [ ] add units tests from MOOC to CPP data-sets: Reciprocal with cross joints
 - [ ] add units tests from MOOC to CPP data-sets: Reciprocal with Mixed Joint (cross + finger + tenon+mortise)
