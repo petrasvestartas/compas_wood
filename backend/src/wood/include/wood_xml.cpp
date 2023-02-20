@@ -1,7 +1,6 @@
 #include "../../../stdafx.h"
 #include "wood_xml.h"
 
-
 namespace wood_xml
 {
     std::string path_and_file_for_input_numbers = "C:\\IBOIS57\\_Code\\Software\\Python\\compas_wood\\net\\data\\input_numbers.xml";
@@ -18,7 +17,7 @@ namespace wood_xml
 
     bool read_xml_numbers(std::vector<std::vector<double>> &numbers)
     {
-        std::string file_path = path_and_file_for_input_numbers; 
+        std::string file_path = path_and_file_for_input_numbers;
         // printf( " \n %s  \n", file_path.c_str());
         std::string property_to_read = "input_numbers";
 
@@ -68,7 +67,7 @@ namespace wood_xml
         return true;
     }
 
-    bool read_xml_polylines(std::vector<std::vector<IK::Point_3>> &polylines,const bool& simple_case)
+    bool read_xml_polylines(std::vector<std::vector<IK::Point_3>> &polylines, const bool &simple_case, bool remove_duplicates)
     {
         std::string file_path = simple_case ? path_and_file_for_input_polylines_simple_case : path_and_file_for_input_polylines;
         // printf( " \n %s  \n", file_path.c_str());
@@ -109,7 +108,15 @@ namespace wood_xml
                         double x = point.second.get<double>("x");
                         double y = point.second.get<double>("y");
                         double z = point.second.get<double>("z");
-                        polyline.emplace_back(x, y, z);
+                        IK::Point_3 p(x, y, z);
+
+                        // skip duplicate points
+                        if (remove_duplicates)
+                            if (polyline.size() > 0)
+                                if (CGAL::squared_distance(polyline.back(), p) < wood_globals::DISTANCE_SQUARED)
+                                    continue;
+
+                        polyline.emplace_back(p);
                     }
                     polylines.emplace_back(polyline);
                 }
@@ -124,7 +131,7 @@ namespace wood_xml
         return true;
     }
 
-    bool write_xml_polylines(std::vector<std::vector<IK::Point_3>> &polylines,const bool& simple_case)
+    bool write_xml_polylines(std::vector<std::vector<IK::Point_3>> &polylines, const bool &simple_case)
     {
 
         std::string file_path = simple_case ? path_and_file_for_output_polylines_simple_case : path_and_file_for_output_polylines;

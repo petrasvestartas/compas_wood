@@ -18,14 +18,14 @@ namespace wood_test
             opengl_globals::filename_and_folder_screenshot = wood_xml::path_and_file_for_input_polylines.substr(0, wood_xml::path_and_file_for_input_polylines.size() - 3) + "png";
         }
 
-        void set_file_path_for_input_xml_and_screenshot(std::vector<std::vector<IK::Point_3>> &input_polyline_pairs, const std::string &function_name)
+        void set_file_path_for_input_xml_and_screenshot(std::vector<std::vector<IK::Point_3>> &input_polyline_pairs, const std::string &function_name, bool remove_duplicate_points)
         {
 
             // input data-set h
             wood_xml::path_and_file_for_input_polylines = wood_globals::DATA_SET_INPUT_FOLDER + function_name + ".xml";
 
             // read the xml file
-            wood_xml::read_xml_polylines(input_polyline_pairs, false);
+            wood_xml::read_xml_polylines(input_polyline_pairs, false, remove_duplicate_points);
 
             // screenshot directory matches the file name of xml
             opengl_globals::filename_and_folder_screenshot = wood_xml::path_and_file_for_input_polylines.substr(0, wood_xml::path_and_file_for_input_polylines.size() - 3) + "png";
@@ -38,6 +38,8 @@ namespace wood_test
             switch (wood_globals::OUTPUT_GEOMETRY_TYPE)
             {
             case (0):
+                viewer_wood::add(input_polyline_pairs); // grey
+                break;
             case (2):
                 viewer_wood::add(input_polyline_pairs); // grey
                 viewer_wood::add_areas(output_plines);
@@ -367,11 +369,11 @@ namespace wood_test
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         std::vector<std::vector<IK::Point_3>> input_polyline_pairs;
-        internal::set_file_path_for_input_xml_and_screenshot(input_polyline_pairs, "type_plates_name_joint_linking_vidychapel_one_layer");
+        internal::set_file_path_for_input_xml_and_screenshot(input_polyline_pairs, "type_plates_name_joint_linking_vidychapel_one_layer", true);
 
         wood_globals::JOINT_VOLUME_EXTENSION[2] = -15;
         wood_globals::JOINTS_PARAMETERS_AND_TYPES[1 * 3 + 0] = 50; // division_length
-        wood_globals::JOINTS_PARAMETERS_AND_TYPES[1 * 3 + 2] = 10; // division_length
+        // wood_globals::JOINTS_PARAMETERS_AND_TYPES[1 * 3 + 2] = 10; // division_length
 
         int search_type = 0;
         std::vector<double> scale = {1, 1, 1};
@@ -411,6 +413,11 @@ namespace wood_test
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         wood_xml::path_and_file_for_output_polylines = wood_globals::DATA_SET_OUTPUT_FILE;
         // xml_parser::write_xml_polylines(output_plines);
+
+        std::vector<std::vector<CGAL_Polyline>> input_polyline_pairs_2;
+        for (int i = 0; i < input_polyline_pairs.size(); i += 2)
+            input_polyline_pairs_2.emplace_back(std::vector<CGAL_Polyline>{input_polyline_pairs[i + 0], input_polyline_pairs[i + 1]});
+        // wood_xml::write_xml_polylines_and_types(input_polyline_pairs_2, output_types);
         wood_xml::write_xml_polylines_and_types(output_plines, output_types);
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -65,7 +65,7 @@ namespace wood_test
          *  this function is run first
          * set properties for saving the screenshot and input xml files e.g. "C:\IBOIS57\_Code\Software\Python\compas_wood\backend\src\wood\dataset"
          */
-        void set_file_path_for_input_xml_and_screenshot(std::vector<std::vector<IK::Point_3>> &input_polyline_pairs, const std::string &function_name);
+        void set_file_path_for_input_xml_and_screenshot(std::vector<std::vector<IK::Point_3>> &input_polyline_pairs, const std::string &function_name, bool remove_duplicate_points = false);
 
         /**
          * this function is run at the end of the example
