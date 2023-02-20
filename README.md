@@ -22,7 +22,7 @@ Author: [Petras Vestartas](https://petrasvestartas.com/About-Petras-Vestartas)
 - [x] take tenon-mortise and adapt to the clipper geometry
 
 
-### 02 2023 - finalization of beam-panel model integration
+### 02 2023 - finalization of the plate algorithms - MOOC delivery
 
 #### bug fixes
 - [x] merge function clean-up
@@ -44,7 +44,7 @@ Author: [Petras Vestartas](https://petrasvestartas.com/About-Petras-Vestartas)
 - [ ] rewrite Pybind11 for compas
 - [ ] test compas_wood on MAC
 
-### 03 2023 - C++ unit tests from the collected study cases, wrapping the code to pybind11
+### 03 2023 - finalization of beam-panel model integration | C++ unit tests from the collected study cases, wrapping the code to pybind11
 - [ ] continue the model based on " beam_node_0.cpp -> beam_node_0 " , currently only connection areas are generated, but not the joint volumes
 - [ ] use for tests already implemented mesh boolean difference method
 - [ ] separate connection area detection into 3 steps a) cross, b) end-to-end, c) side-to-end
