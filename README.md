@@ -25,6 +25,7 @@ Author: [Petras Vestartas](https://petrasvestartas.com/About-Petras-Vestartas)
 ### 02 2023 - finalization of beam-panel model integration
 - [x] merge function clean-up
 - [ ] finger joint parameterization 
+- [ ] update the CGAL version for Inscribed Rectangle bug fix made by CGAL guys
 - [ ] add units tests from MOOC to CPP data-sets
 - [ ] compile a simple "Hello World" package that runs CPP files in COMPAS, follow the documentation I did before
 - [ ] check if the process is running via Git-Hub actions
