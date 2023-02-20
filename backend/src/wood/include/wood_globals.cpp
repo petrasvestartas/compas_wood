@@ -18,10 +18,10 @@ namespace wood_globals
     std::string DATA_SET_OUTPUT_FILE = DATA_SET_INPUT_FOLDER + "out.xml";
 
     // Wood library
-    double JOINT_VOLUME_EXTENSION[5] = {
-        0.0, // x
-        0.0, // y
-        0.0, // z
+    double JOINT_VOLUME_EXTENSION[5] = { // this property is used within local searches: plane_to_face and face_to_face
+        0.0,                             // x
+        0.0,                             // y
+        0.0,                             // z
         0,
         0};
 
@@ -80,4 +80,6 @@ namespace wood_globals
         300, 0.5, 58,  // 50-59 ss_e_r (side-to-side edge rotated)
         300, 1.0, 60   // 60-69 b (boundary)
     };
+
+    size_t RUN_COUNT = 0;
 }

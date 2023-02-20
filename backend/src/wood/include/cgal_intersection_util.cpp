@@ -713,10 +713,16 @@ namespace cgal_intersection_util
             IK::Segment_3 segment(polyline[i], polyline[i + 1]);
 
             if (CGAL::squared_distance(plane.projection(segment[0]), segment[0]) < wood_globals::DISTANCE_SQUARED)
+            {
+                // std::cout << "polylines are coincident \n";
                 return false;
+            }
 
             if (CGAL::squared_distance(plane.projection(segment[1]), segment[1]) < wood_globals::DISTANCE_SQUARED)
+            {
+                // std::cout << "polylines are coincident \n";
                 return false;
+            }
 
             const auto result = CGAL::intersection(segment, plane);
 
@@ -727,13 +733,13 @@ namespace cgal_intersection_util
                     edge_ids.emplace_back(i);
                 } // if point type
         }
-
-        return points.size() == 0;
+        //std::cout << "points.size() " << points.size() << std::endl;
+        return points.size() == 2;
     }
 
     bool polyline_plane_cross_joint(CGAL_Polyline &c0, CGAL_Polyline &c1, IK::Plane_3 &p0, IK::Plane_3 &p1, IK::Segment_3 &line, std::pair<int, int> &pair)
     {
-        bool debug = false;
+        bool debug = true;
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Perform both events
@@ -741,12 +747,28 @@ namespace cgal_intersection_util
         std::vector<IK::Point_3> pts0;
         std::vector<int> edge_ids_0;
         if (!polyline_plane(c0, p1, pts0, edge_ids_0))
+        {
+            if (debug)
+            {
+                for (auto &p_temp : c0)
+                    std::cout << (p_temp) << std::endl;
+                std::cout << " " << std::endl;
+                for (auto &p_temp : c1)
+                    std::cout << (p_temp) << std::endl;
+                printf("CPP polyline_plane(c0, p1, pts0, edge_ids_0) \n");
+            }
+
             return false;
+        }
 
         std::vector<IK::Point_3> pts1;
         std::vector<int> edge_ids_1;
         if (!polyline_plane(c1, p0, pts1, edge_ids_1))
+        {
+            if (debug)
+                printf("CPP polyline_plane(c1, p0, pts1, edge_ids_1) \n");
             return false;
+        }
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Check1: if there are 2 intersections

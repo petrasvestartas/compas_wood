@@ -592,7 +592,7 @@ namespace wood_joint_lib
 
     void ss_e_ip_0(wood::joint &joint)
     {
-        joint.name = "ss_e_ip_0";
+        joint.name = __func__;
 
         // Joint lines, always the last line or rectangle is not a wood::joint but an cutting wood::element
         joint.f[0] = {
@@ -618,7 +618,7 @@ namespace wood_joint_lib
     void ss_e_ip_1(wood::joint &joint)
     {
         // CGAL_Debug(0);
-        joint.name = "ss_e_ip_1";
+        joint.name = __func__;
 
         // Resize arrays
         joint.f[0].reserve(2);
@@ -715,7 +715,7 @@ namespace wood_joint_lib
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         // name
-        joint.name = "ss_e_ip_2";
+        joint.name = __func__;
         joint.unit_scale_distance = elements[joint.v0].thickness;
 
         // parameters that comes from the joint
@@ -894,73 +894,13 @@ namespace wood_joint_lib
         // return true;
     }
 
-    // void ss_e_ip_2(wood::joint &joint)
-    // {
-    //     joint.name = "ss_e_ip_2"; // butterfly x-fix
-
-    //     // Joint lines, always the last line or rectangle is not a wood::joint but an cutting wood::element
-
-    //     joint.f[0] = {
-    //         {
-    //             IK::Point_3(0, -0.5, -0.1166666667),
-    //             IK::Point_3(0.5, -0.5, -0.4),
-    //             IK::Point_3(0.5, -0.5, 0.4),
-    //             IK::Point_3(0, -0.5, 0.1166666667),
-    //         },
-    //         {
-    //             IK::Point_3(0, -0.5, -0.1166666667),
-    //             IK::Point_3(0, -0.5, 0.1166666667),
-    //         }};
-
-    //     joint.f[1] = {
-    //         {
-    //             IK::Point_3(0, 0.5, -0.1166666667),
-    //             IK::Point_3(0.5, 0.5, -0.4),
-    //             IK::Point_3(0.5, 0.5, 0.4),
-    //             IK::Point_3(0, 0.5, 0.1166666667),
-    //         },
-    //         {
-    //             IK::Point_3(0, 0.5, -0.1166666667),
-    //             IK::Point_3(0, 0.5, 0.1166666667),
-    //         }};
-
-    //     joint.m[0] = {
-    //         {
-    //             IK::Point_3(0, -0.5, -0.1166666667),
-    //             IK::Point_3(-0.5, -0.5, -0.4),
-    //             IK::Point_3(-0.5, -0.5, 0.4),
-    //             IK::Point_3(0, -0.5, 0.1166666667),
-    //         },
-    //         {
-    //             IK::Point_3(0, -0.5, -0.1166666667),
-    //             IK::Point_3(0, -0.5, 0.1166666667),
-    //         }};
-
-    //     joint.m[1] = {
-    //         {
-    //             IK::Point_3(0, 0.5, -0.1166666667),
-    //             IK::Point_3(-0.5, 0.5, -0.4),
-    //             IK::Point_3(-0.5, 0.5, 0.4),
-    //             IK::Point_3(0, 0.5, 0.1166666667),
-    //         },
-
-    //         {
-    //             IK::Point_3(0, 0.5, -0.1166666667),
-    //             IK::Point_3(0, 0.5, 0.1166666667),
-    //         }};
-
-    //     joint.f_boolean_type = {wood_cut::edge_insertion, wood_cut::edge_insertion};
-    //     joint.m_boolean_type = {wood_cut::edge_insertion, wood_cut::edge_insertion};
-    //     joint.unit_scale = true;
-    // }
-
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Side-to-side edge out-of-plane joints 10-19
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     void ss_e_op_0(wood::joint &joint)
     {
-        joint.name = "ss_e_op_0";
+        joint.name = __func__;
 
         // Joint lines, always the last line or rectangle is not a wood::joint but an cutting wood::element
         joint.f[0] = {{IK::Point_3(0.5, 0.5, -0.357142857142857), IK::Point_3(0.5, -0.5, -0.357142857142857), IK::Point_3(0.5, -0.5, -0.214285714285714), IK::Point_3(0.5, 0.5, -0.214285714285714), IK::Point_3(0.5, 0.5, -0.0714285714285715), IK::Point_3(0.5, -0.5, -0.0714285714285713), IK::Point_3(0.5, -0.5, 0.0714285714285715), IK::Point_3(0.5, 0.5, 0.0714285714285714), IK::Point_3(0.5, 0.5, 0.214285714285714), IK::Point_3(0.5, -0.5, 0.214285714285714), IK::Point_3(0.5, -0.5, 0.357142857142857), IK::Point_3(0.5, 0.5, 0.357142857142857)},
@@ -981,7 +921,7 @@ namespace wood_joint_lib
 
     void ss_e_op_1(wood::joint &joint)
     {
-        joint.name = "ss_e_op_1";
+        joint.name = __func__;
 
         // Resize arrays
         joint.f[0].reserve(2);
@@ -1119,7 +1059,7 @@ namespace wood_joint_lib
 
     void ss_e_op_2(wood::joint &joint)
     {
-        joint.name = "ss_e_op_2";
+        joint.name = __func__;
 
         // Resize arrays
         joint.f[0].reserve(2);
@@ -1261,7 +1201,7 @@ namespace wood_joint_lib
     void ss_e_op_3(wood::joint &joint)
     {
         // Miter tenon-mortise
-        joint.name = "ss_e_op_3";
+        joint.name = __func__;
 
         // Joint lines, always the last line or rectangle is not a wood::joint but an cutting wood::element
         joint.f[0] = {
@@ -1370,7 +1310,7 @@ namespace wood_joint_lib
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // wood::joint parameters
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        joint.name = "ss_e_op_4";
+        joint.name = __func__;
         int number_of_tenons = joint.divisions;
 
         std::array<double, 2>
@@ -1539,14 +1479,14 @@ namespace wood_joint_lib
 
         { // wood::joint can have no links
             ss_e_op_4(jo, 0.5, true, true, -0.75, 0.5, -0.5, 0.5, -0.5, 0.5);
-            jo.name = "ss_e_op_5";
+            jo.name = __func__;
             // std::cout << "ss_e_op_5" << std::endl;
             return;
         }
         else
         {
             ss_e_op_4(jo, 0.25, false, true, -0.5, 0.5, -0.5, 0.5, -0.5, 0.5);
-            jo.name = "ss_e_op_5";
+            jo.name = __func__;
         }
 
         // std::cout << "ss_e_op_5" << std::endl;
@@ -1589,7 +1529,7 @@ namespace wood_joint_lib
     void ss_e_op_6(wood::joint &jo, std::vector<wood::joint> &all_joints)
     {
         ss_e_op_5(jo, all_joints, true);
-        jo.name = "ss_e_op_6";
+        jo.name = __func__;
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2340,7 +2280,7 @@ namespace wood_joint_lib
 
     void ts_e_p_0(wood::joint &joint)
     {
-        joint.name = "__func__";
+        joint.name = __func__;
 
         joint.f[0] = {{IK::Point_3(-0.5, -0.5, 0.357142857142857), IK::Point_3(0.5, -0.5, 0.357142857142857), IK::Point_3(0.5, -0.5, 0.214285714285714), IK::Point_3(-0.5, -0.5, 0.214285714285714), IK::Point_3(-0.5, -0.5, 0.357142857142857)},
                       {IK::Point_3(-0.5, -0.5, 0.0714285714285715), IK::Point_3(0.5, -0.5, 0.0714285714285715), IK::Point_3(0.5, -0.5, -0.0714285714285713), IK::Point_3(-0.5, -0.5, -0.0714285714285713), IK::Point_3(-0.5, -0.5, 0.0714285714285715)},
@@ -3963,7 +3903,7 @@ namespace wood_joint_lib
 
     void b_0(wood::joint &joint)
     {
-        joint.name = "b_0";
+        joint.name = __func__;
         joint.orient = false; // prevents wood::joint from copying
 
         double temp_scale_y = 5;
@@ -4186,7 +4126,10 @@ namespace wood_joint_lib
             {
                 if (scale.size() < 3)
                     if (scale.size() == 0)
+                    {
+                        // std::cout << "Scale is not defined, using default scale: " << wood_globals::JOINT_VOLUME_EXTENSION[0] << " " << wood_globals::JOINT_VOLUME_EXTENSION[1] << " " << wood_globals::JOINT_VOLUME_EXTENSION[2] << std::endl;
                         jo.scale = {wood_globals::JOINT_VOLUME_EXTENSION[0], wood_globals::JOINT_VOLUME_EXTENSION[1], wood_globals::JOINT_VOLUME_EXTENSION[2]};
+                    }
                     else
                         jo.scale = {scale[0], scale[0], scale[0]};
                 else if (scale.size() == 3)

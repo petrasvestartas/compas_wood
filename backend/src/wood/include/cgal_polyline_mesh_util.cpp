@@ -482,7 +482,7 @@ namespace cgal_polyline_mesh_util
         return std::make_tuple(vertices, faces);
     }
 
-    void closed_mesh_from_polylines_vnf(const std::vector<CGAL_Polyline> &polylines_with_holes, std::vector<float> &out_vertices, std::vector<float> &out_normals, std::vector<int> &out_triangles, const double &scale)
+    void closed_mesh_from_polylines_vnf(const std::vector<CGAL_Polyline> &polylines_with_holes_not_clean, std::vector<float> &out_vertices, std::vector<float> &out_normals, std::vector<int> &out_triangles, const double &scale)
     {
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Sanity Check
@@ -491,7 +491,16 @@ namespace cgal_polyline_mesh_util
         // RowMatrixXi f_empty(0, 0);
         // auto empty_tuple = std::make_tuple(v_empty, f_empty);
 
-        if (polylines_with_holes.size() % 2 == 1)
+        std::vector<CGAL_Polyline> polylines_with_holes;
+        polylines_with_holes.reserve(polylines_with_holes_not_clean.size());
+
+        // ignore line segments with less than 2 points
+        for (auto &polyline : polylines_with_holes_not_clean)
+            if (polyline.size() > 2)
+                polylines_with_holes.emplace_back(polyline);
+
+        // if there polyline pairs are not even, return empty mesh
+        if (polylines_with_holes_not_clean.size() % 2 == 1)
             return;
 
         for (auto i = 0; i < polylines_with_holes.size(); i += 2)

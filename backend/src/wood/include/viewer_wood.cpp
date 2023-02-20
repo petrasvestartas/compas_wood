@@ -172,7 +172,8 @@ void viewer_wood::add_loft(std::vector<std::vector<CGAL_Polyline>> &output_pline
     for (auto &polylines : output_plines)
         cgal_polyline_mesh_util::closed_mesh_from_polylines_vnf(polylines, out_vertices, out_normals, out_triangles, viewer_wood::scale);
 
-    opengl_globals_geometry::meshes.add(out_vertices, out_normals, out_triangles, colors::white);
+    if (out_vertices.size() > 2 && out_normals.size() > 2 && out_triangles.size() > 2)
+        opengl_globals_geometry::meshes.add(out_vertices, out_normals, out_triangles, colors::white);
 
     // auto stop = std::chrono::high_resolution_clock::now();
     // auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(stop - start);

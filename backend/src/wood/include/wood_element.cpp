@@ -572,6 +572,7 @@ namespace wood
             }
             else
             {
+                std::cout << "intersection_closed_and_open_paths_2D -> No intersection found\n";
                 return false;
             }
         }
@@ -590,7 +591,7 @@ namespace wood
     void element::merge_joints(std::vector<wood::joint> &joints, std::vector<std::vector<CGAL_Polyline>> &output)
     {
 
-        // std::cout << "merge function \n";
+        std::cout << "merge function \n";
 
         // OPTIMIZE CASE(5) BECAUSE EDGE ARE KNOWN, BUT CHECK ALSO CROSS JOINT ENSURE THAT YOU TAKE CROSSING EDGES
         // CHANGE TO 2D METHOD, TO AVOID MULTIPLE THE SAME MATRIX CREATION FOR ORIENTATION TO 2D I.E. CLIPPER AND line_line_3d
@@ -983,6 +984,8 @@ namespace wood
                 case (5):
                 {
 
+                    std::cout << "Intersect rectangle or line CASE 5 \n";
+
                     // two edges
                     int edge_pair[2];
                     joints[joint_id].get_edge_ids(male_or_female, edge_pair[0], edge_pair[1]);
@@ -1002,22 +1005,33 @@ namespace wood
                         ///////////////////////////////////////////////////////////////////////////////
                         std::pair<double, double> cp_pair_0(0.0, 0.0);
                         CGAL_Polyline joint_pline_0;
+
+                        for (auto &temp_p : pline0)
+                        {
+                            std::cout << temp_p << "\n";
+                        }
+                        std::cout << "\n";
+                        for (auto &temp_p : joints[joint_id](male_or_female, true).front())
+                        {
+                            std::cout << temp_p << "\n";
+                        }
+
                         bool result0 = intersection_closed_and_open_paths_2D(pline0, joints[joint_id](male_or_female, true).front(), this->planes[0], joint_pline_0, edge_pair, cp_pair_0);
                         if (!result0)
                             continue;
 
-#ifdef DEBUG_wood_ELEMENT
+                        // #ifdef DEBUG_wood_ELEMENT
                         printf("\nCPP   FILE %s    METHOD %s   LINE %i     WHAT %s ", __FILE__, __FUNCTION__, __LINE__, "First Intersection ");
-#endif
+                        // #endif
 
                         std::pair<double, double> cp_pair_1(0.0, 0.0);
                         CGAL_Polyline joint_pline_1;
                         bool result1 = intersection_closed_and_open_paths_2D(pline1, joints[joint_id](male_or_female, false).front(), this->planes[1], joint_pline_1, edge_pair, cp_pair_1);
                         if (!result1)
                             continue;
-#ifdef DEBUG_wood_ELEMENT
+                        // #ifdef DEBUG_wood_ELEMENT
                         printf("\nCPP   FILE %s    METHOD %s   LINE %i     WHAT %s ", __FILE__, __FUNCTION__, __LINE__, "Second Intersection ");
-#endif
+                        // #endif
 
                         sorted_by_id_plines_0.insert(
                             std::make_pair(
@@ -1026,9 +1040,9 @@ namespace wood
                         sorted_by_id_plines_1.insert(std::make_pair((cp_pair_1.first + cp_pair_1.first) * 0.5, std::pair<std::pair<double, double>, CGAL_Polyline>{cp_pair_1, joint_pline_1}));
 
                         point_count += joint_pline_1.size();
-#ifdef DEBUG_wood_ELEMENT
+                        // #ifdef DEBUG_wood_ELEMENT
                         printf("\nCPP   FILE %s    METHOD %s   LINE %i     WHAT %s ", __FILE__, __FUNCTION__, __LINE__, "Output of Case 5 ");
-#endif
+                        // #endif
                     }
 
                     break;

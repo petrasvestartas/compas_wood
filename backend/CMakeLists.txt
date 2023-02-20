@@ -232,8 +232,9 @@ INSTALL_COMMAND "" #installer for now is empty
 ########################################################################
 # CGAL
 ######################################################################## 
+
 ExternalProject_Add(cgal
-  URL https://github.com/CGAL/cgal/releases/download/v5.5/CGAL-5.5.zip
+  URL https://github.com/CGAL/cgal/releases/download/v5.5.1/CGAL-5.5.1-library.zip
   #GIT_REPOSITORY https://github.com/CGAL/cgal.git
   #GIT_TAG v5.4.1
   CMAKE_ARGS

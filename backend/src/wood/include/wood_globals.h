@@ -52,6 +52,9 @@ namespace wood_globals
     extern std::array<std::string, 7> JOINT_NAMES;
     extern std::vector<std::string> EXISTING_TYPES;
     extern std::vector<double> JOINTS_PARAMETERS_AND_TYPES;
+
+    // Wood viewer
+    extern size_t RUN_COUNT;
 }
 
 #endif

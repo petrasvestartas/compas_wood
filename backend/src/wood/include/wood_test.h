@@ -121,19 +121,115 @@ namespace wood_test
 
     /**
      * example for plates
+     * in_plane hexshell - reduce the thickness of the joint
+     */
+    bool type_plates_name_side_to_side_edge_inplane_hexshell();
+
+    /**
+     * example for plates
+     * in_plane nine rectangles - show insertion direction
+     * be aware that the insertion direction is the normal of the joint-volume-rectangle,
+     * in other words, it is the insertion direction that is rotate 90 degrees
+     */
+    bool type_plates_name_side_to_side_edge_inplane_differentdirections();
+
+    /**
+     * example for plates
+     * out_of_plane finger joints
+     */
+    bool
+    type_plates_name_side_to_side_edge_outofplane_folding();
+
+    /**
+     * example for plates
+     * out_of_plane finger joints, ending with miters at the corner in a form of a box
+     */
+    bool type_plates_name_side_to_side_edge_outofplane_box();
+
+    /**
+     * example for plates
+     * out_of_plane finger joints, ending with miters at the corner in a form of a tetrahedron
+     */
+    bool type_plates_name_side_to_side_edge_outofplane_tetra();
+
+    /**
+     * example for plates
+     * out_of_plane finger joints, ending with miters at the corner in a form of a dodecahedron
+     */
+    bool type_plates_name_side_to_side_edge_outofplane_dodecahedron();
+
+    /**
+     * example for plates
+     * out_of_plane finger joints, ending with miters at the corner in a form of a icosahedron
+     */
+    bool type_plates_name_side_to_side_edge_outofplane_icosacahedron();
+
+    /**
+     * example for plates
+     * out_of_plane finger joints, ending with miters at the corner in a form of a icosahedron
+     */
+    bool type_plates_name_side_to_side_edge_outofplane_octahedron();
+
+    /**
+     * example for plates
+     * in_plane and out_of_plane finger joints, simple two plates corners that shows different rotations between plates
+     */
+    bool type_plates_name_side_to_side_edge_inplane_outofplane_simple_corners();
+
+    /**
+     * example for plates
+     * in_plane and out_of_plane finger joints in one assembly
+     */
+    bool type_plates_name_side_to_side_edge_inplane_outofplane_simple_corners_combined();
+
+    /**
+     * example for plates
+     * in_plane and out_of_plane finger joints in one assembly
+     */
+    bool type_plates_name_side_to_side_edge_inplane_outofplane_simple_corners_different_lengths();
+
+    /**
+     * example for plates
+     * in_plane and out_of_plane finger joints and top_to_top joints in one assembly - Rossiniere First Version from timber boards
+     * look how simply we can change the planarity tolerance: wood_globals::DISTANCE_SQUARED *= 100;
+     * THERE IS A BUG IN THE VIEWER, DISPLAY DISAPPEARS AFTER GOING FROM 4 TO 3 TO 4 MODE
+     */
+    bool type_plates_name_side_to_side_edge_outofplane_inplane_and_top_to_top_hexboxes();
+
+    /**
+     * example for plates
      * in_plane top_to_side snap fit
      */
     bool type_plates_name_top_to_side_snap_fit();
 
-        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        // beam methods
-        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    /**
+     * example for plates
+     * in_plane top_to_side in a 4 side box
+     */
+    bool type_plates_name_top_to_side_box();
 
-        /**
-         * example for beams
-         * multiple beams connected in one node, taken from the Phanome project near Zurich, Switzerland
-         */
-        bool type_beams_name_phanomema_node();
+    /**
+     * example for plates
+     * in_plane top_to_side cornder from the Annen project and some T-Joints
+     */
+    bool type_plates_name_top_to_side_corners();
+
+    /**
+     * example for plates
+     * cross joints, side-to-side in-plane and out-of-plane joints
+     */
+    bool type_plates_name_cross_and_sides_corner();
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // beam methods
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    /**
+     * example for beams
+     * multiple beams connected in one node, taken from the Phanome project near Zurich, Switzerland
+     */
+    bool
+    type_beams_name_phanomema_node();
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // library of joints
@@ -193,11 +289,11 @@ namespace wood_test
      * example for geometry
      * offset polygon and divided into points by distance
      */
-    bool type_geometry_name_offest_polygon_inside_and_divide_into_points();
+    bool type_geometry_name_offset_polygon_inside_and_divide_into_points();
 
     /**
      * example for geometry
-     * inscribe rectangle in a polygon and divide its edges by points)
+     * inscribe rectangle in a polygon and divide its edges by points
      */
     bool type_geometry_name_rectangle_points_inscribed_in_polygon();
 

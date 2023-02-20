@@ -395,6 +395,7 @@ inline void loop_middle_imgui()
 	if (ImGui::Button("run", ImVec2(100, 100)))
 	{
 		opengl_globals::state_changed = true;
+		wood_globals::RUN_COUNT++;
 		std::cout << "imgui_render -> restart \n";
 	}
 

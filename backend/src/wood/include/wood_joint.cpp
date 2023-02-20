@@ -366,6 +366,7 @@ namespace wood
         if (scale[0] != 1.0 || scale[1] != 1.0 || scale[2] != 1.0)
         {
             auto xform_scale = cgal_xform_util::scale(scale[0], scale[1], scale[2]);
+            //std::cout << "Scale transformation: " << scale[0] << " " << scale[1] << " " << scale[2] << std::endl;
             transform(xform_scale, xform_scale);
         }
 
