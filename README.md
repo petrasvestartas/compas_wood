@@ -6,7 +6,11 @@ Author: [Petras Vestartas](https://petrasvestartas.com/About-Petras-Vestartas)
 
 ### 01 2023 - finalization of joinery methods (top-to-top, clip joint, multi-butterfly connections)
 
+#### CPP
+- [x] separate header only library structure to CPP and H files
+
 #### top-to-top 
+
 - [x] single point drill
 - [x] line drill
 - [x] circle (polylabel) drill
@@ -21,12 +25,17 @@ Author: [Petras Vestartas](https://petrasvestartas.com/About-Petras-Vestartas)
 ### 02 2023 - finalization of beam-panel model integration
 - [x] merge function clean-up
 - [ ] finger joint parameterization 
+- [ ] add units tests from MOOC to CPP data-sets
+- [ ] compile a simple "Hello World" package that runs CPP files in COMPAS, follow the documentation I did before
+- [ ] check if the process is running via Git-Hub actions
+- [ ] rewrite Pybind11 for compas
+- [ ] test compas_wood on MAC
+
+### 03 2023 - C++ unit tests from the collected study cases, wrapping the code to pybind11
 - [ ] continue the model based on " beam_node_0.cpp -> beam_node_0 " , currently only connection areas are generated, but not the joint volumes
 - [ ] use for tests already implemented mesh boolean difference method
 - [ ] separate connection area detection into 3 steps a) cross, b) end-to-end, c) side-to-end
 - [ ] display connection area by type color
-
-### 03 2023 - C++ unit tests from the collected study cases, wrapping the code to pybind11
 - [ ] transfer all NGon joinery tests to this one " beam_node_0.cpp " and write Google Tests
 - [ ] try to clean up the python code that builds correctly, including the documentaion
 - [ ] wrap the two major methods to pybind11
