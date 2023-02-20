@@ -24,9 +24,15 @@ Author: [Petras Vestartas](https://petrasvestartas.com/About-Petras-Vestartas)
 
 ### 02 2023 - finalization of beam-panel model integration
 - [x] merge function clean-up
-- [ ] finger joint parameterization 
+- [x] finger joint parameterization 
 - [ ] update the CGAL version for Inscribed Rectangle bug fix made by CGAL guys
-- [ ] add units tests from MOOC to CPP data-sets
+- [ ] add units tests from MOOC to CPP data-sets: Annen (corner cases, full arch)
+- [ ] add units tests from MOOC to CPP data-sets: Cross joints (IBOIS pavilion, planarized shell)
+- [ ] add units tests from MOOC to CPP data-sets: Folded plates arch
+- [ ] add units tests from MOOC to CPP data-sets: VDA pavilion
+- [ ] add units tests from MOOC to CPP data-sets: Reciprocal with cross joints
+- [ ] add units tests from MOOC to CPP data-sets: Reciprocal with Mixed Joint (cross + finger + tenon+mortise)
+- [ ] add units tests from MOOC to CPP data-sets: RTree search + OOBB
 - [ ] compile a simple "Hello World" package that runs CPP files in COMPAS, follow the documentation I did before
 - [ ] check if the process is running via Git-Hub actions
 - [ ] rewrite Pybind11 for compas
