@@ -94,6 +94,20 @@ namespace wood
         // bool sort_by_third(const std::tuple<int, bool, double> &a, const std::tuple<int, bool, double> &b);
 
         void get_joints_geometry_as_closed_polylines_replacing_edges(std::vector<wood::joint> &joints, std::vector<std::vector<CGAL_Polyline>> &output);
+
+        /**
+         * ATTENTION THIS IS A SPECIFIC CLIPPER FUNCTION TO CLIP USING OPEN PATHS TO OBTAIN CLEAN END POINTS
+         * // https://github.com/AngusJohnson/Clipper2/blob/main/CPP/Clipper2Lib/include/clipper2/clipper.h
+         *
+         * @param closed_pline_cutter plate outline
+         * @param pline_to_cut joint outline
+         * @param plane plane for orientation to XY axies
+         * @param c output
+         * @param edge_pair not used
+         * @param cp_pair plate outline segment parameters to correctly insert joint between the outline points
+         * @return true if intersection is found
+         */
+
         bool intersection_closed_and_open_paths_2D(
             CGAL_Polyline &closed_pline_cutter, CGAL_Polyline &pline_to_cut, IK::Plane_3 &plane, CGAL_Polyline &c,
             int (&edge_pair)[2], std::pair<double, double> &cp_pair);

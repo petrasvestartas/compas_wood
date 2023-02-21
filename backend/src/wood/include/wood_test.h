@@ -220,16 +220,64 @@ namespace wood_test
      */
     bool type_plates_name_cross_and_sides_corner();
 
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    // beam methods
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    /**
+     * example for plates
+     * cross joints, simple pair wise cases
+     */
+    bool type_plates_name_cross_corners();
 
     /**
-     * example for beams
-     * multiple beams connected in one node, taken from the Phanome project near Zurich, Switzerland
+     * example for plates
+     * cross joints, vda corner of the two layer system using hexagons
      */
-    bool
-    type_beams_name_phanomema_node();
+    bool type_plates_name_cross_vda_corner();
+
+    /**
+     * example for plates
+     * cross joints, vda example of a single layer system using hexagons
+     * ERROR THERE IS A BUG WHEN THE THIS DATA SET IS SCALED 8 TIMES OR MORE
+     */
+    bool type_plates_name_cross_vda_hexshell();
+
+    /**
+     * example for plates
+     * cross joints, hexagonal meshes edges rotated by normal to create a reciprocal structure
+     */
+    bool type_plates_name_cross_vda_hexshell_reciprocal();
+
+    /**
+     * example for plates
+     * cross joints, square reciprocal structure taken from an architecture museum
+     * in reality joints are connected by metal holders
+     */
+    bool type_plates_name_cross_square_reciprocal_two_sides();
+
+    /**
+     * example for plates
+     * cross joints, square reciprocal structure
+     * Iseya Town House in Tokyo, Japan
+     */
+    bool type_plates_name_cross_square_reciprocal_iseya();
+
+         /**
+     * example for plates
+     * cross joints, plate cross and side joints
+     * Ibois pavilion, this model has no proper insertion sequence
+     */
+    bool type_plates_name_cross_ibois_pavilion();
+
+    
+
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // beam methods
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        /**
+         * example for beams
+         * multiple beams connected in one node, taken from the Phanome project near Zurich, Switzerland
+         */
+        bool
+        type_beams_name_phanomema_node();
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // library of joints

@@ -499,7 +499,14 @@ namespace wood_main
         // Get max distance from middle point of min line
         int maxID = CGAL::squared_distance(lMax[0], midPlane_lMax) > CGAL::squared_distance(lMax[1], midPlane_lMax) ? 0 : 1;
         IK::Vector_3 v = maxID == 1 ? lMax[1] - midPlane_lMax : -(lMax[0] - midPlane_lMax);
-        v *= (1 + wood_globals::JOINT_VOLUME_EXTENSION[2]);
+
+        // exten only when user gives positive values
+        if (wood_globals::JOINT_VOLUME_EXTENSION[2] > 0)
+        {
+            double length = cgal_vector_util::length(v.hx(), v.hy(), v.hz());
+            double target_length = length + wood_globals::JOINT_VOLUME_EXTENSION[2];
+            v *= (target_length / length);
+        }
 
         // Align v direction in comparison to orignal 4 lines if possible
         // IK::Point_3 origin(0,0,0);
@@ -566,15 +573,15 @@ namespace wood_main
         // does not work
         if (wood_globals::JOINT_VOLUME_EXTENSION[0] + wood_globals::JOINT_VOLUME_EXTENSION[1] > 0)
         {
-            cgal_polyline_util::extend(joint_volumes_pairA_pairB[0], 0, 0, 0, wood_globals::JOINT_VOLUME_EXTENSION[0], wood_globals::JOINT_VOLUME_EXTENSION[0]);
-            cgal_polyline_util::extend(joint_volumes_pairA_pairB[0], 2, 0, 0, wood_globals::JOINT_VOLUME_EXTENSION[0], wood_globals::JOINT_VOLUME_EXTENSION[0]);
-            cgal_polyline_util::extend(joint_volumes_pairA_pairB[0], 1, 0, 0, wood_globals::JOINT_VOLUME_EXTENSION[1], wood_globals::JOINT_VOLUME_EXTENSION[1]);
-            cgal_polyline_util::extend(joint_volumes_pairA_pairB[0], 3, 0, 0, wood_globals::JOINT_VOLUME_EXTENSION[1], wood_globals::JOINT_VOLUME_EXTENSION[1]);
+            cgal_polyline_util::extend(joint_volumes_pairA_pairB[0], 0, wood_globals::JOINT_VOLUME_EXTENSION[0], wood_globals::JOINT_VOLUME_EXTENSION[0]);
+            cgal_polyline_util::extend(joint_volumes_pairA_pairB[0], 2, wood_globals::JOINT_VOLUME_EXTENSION[0], wood_globals::JOINT_VOLUME_EXTENSION[0]);
+            cgal_polyline_util::extend(joint_volumes_pairA_pairB[0], 1, wood_globals::JOINT_VOLUME_EXTENSION[1], wood_globals::JOINT_VOLUME_EXTENSION[1]);
+            cgal_polyline_util::extend(joint_volumes_pairA_pairB[0], 3, wood_globals::JOINT_VOLUME_EXTENSION[1], wood_globals::JOINT_VOLUME_EXTENSION[1]);
 
-            cgal_polyline_util::extend(joint_volumes_pairA_pairB[1], 0, 0, 0, wood_globals::JOINT_VOLUME_EXTENSION[0], wood_globals::JOINT_VOLUME_EXTENSION[0]);
-            cgal_polyline_util::extend(joint_volumes_pairA_pairB[1], 2, 0, 0, wood_globals::JOINT_VOLUME_EXTENSION[0], wood_globals::JOINT_VOLUME_EXTENSION[0]);
-            cgal_polyline_util::extend(joint_volumes_pairA_pairB[1], 1, 0, 0, wood_globals::JOINT_VOLUME_EXTENSION[1], wood_globals::JOINT_VOLUME_EXTENSION[1]);
-            cgal_polyline_util::extend(joint_volumes_pairA_pairB[1], 3, 0, 0, wood_globals::JOINT_VOLUME_EXTENSION[1], wood_globals::JOINT_VOLUME_EXTENSION[1]);
+            cgal_polyline_util::extend(joint_volumes_pairA_pairB[1], 0, wood_globals::JOINT_VOLUME_EXTENSION[0], wood_globals::JOINT_VOLUME_EXTENSION[0]);
+            cgal_polyline_util::extend(joint_volumes_pairA_pairB[1], 2, wood_globals::JOINT_VOLUME_EXTENSION[0], wood_globals::JOINT_VOLUME_EXTENSION[0]);
+            cgal_polyline_util::extend(joint_volumes_pairA_pairB[1], 1, wood_globals::JOINT_VOLUME_EXTENSION[1], wood_globals::JOINT_VOLUME_EXTENSION[1]);
+            cgal_polyline_util::extend(joint_volumes_pairA_pairB[1], 3, wood_globals::JOINT_VOLUME_EXTENSION[1], wood_globals::JOINT_VOLUME_EXTENSION[1]);
         }
 
         // For the sake of consistency

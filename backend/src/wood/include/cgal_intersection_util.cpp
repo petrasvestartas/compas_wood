@@ -723,23 +723,29 @@ namespace cgal_intersection_util
                 // std::cout << "polylines are coincident \n";
                 return false;
             }
+            IK::Point_3 output_point;
+            bool result = line_plane(segment, plane, output_point, true);
 
-            const auto result = CGAL::intersection(segment, plane);
+            // const auto result = CGAL::intersection(segment, plane);
 
             if (result)
-                if (const IK::Point_3 *p = boost::get<IK::Point_3>(&*result))
-                {
-                    points.emplace_back(*p);
-                    edge_ids.emplace_back(i);
-                } // if point type
-        }
-        //std::cout << "points.size() " << points.size() << std::endl;
+            {
+                points.emplace_back(output_point);
+                edge_ids.emplace_back(i);
+            }
+            // if (const IK::Point_3 *p = boost::get<IK::Point_3>(&*result))
+            ///{
+            // points.emplace_back(*p);
+
+        } // if point type
+
+        // std::cout << "points.size() " << points.size() << std::endl;
         return points.size() == 2;
     }
 
     bool polyline_plane_cross_joint(CGAL_Polyline &c0, CGAL_Polyline &c1, IK::Plane_3 &p0, IK::Plane_3 &p1, IK::Segment_3 &line, std::pair<int, int> &pair)
     {
-        bool debug = true;
+        bool debug = false;
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Perform both events
@@ -755,7 +761,7 @@ namespace cgal_intersection_util
                 std::cout << " " << std::endl;
                 for (auto &p_temp : c1)
                     std::cout << (p_temp) << std::endl;
-                printf("CPP polyline_plane(c0, p1, pts0, edge_ids_0) \n");
+                printf("CPP cgal_intersection_util -> polyline_plane(c0, p1, pts0, edge_ids_0) \n");
             }
 
             return false;
@@ -856,5 +862,4 @@ namespace cgal_intersection_util
 
         return false;
     }
-
 }

@@ -96,7 +96,7 @@ namespace wood
                         IK::Point_3 origin(plane[0].hx(), plane[0].hy(), plane[0].hz());
 
                         IK::Point_3 center = cgal_polyline_util::center(this->polylines[0]);
-                        std::cout << this->polylines.size() << std::endl;
+                        //std::cout << this->polylines.size() << std::endl;
                         IK::Point_3 p0 = origin + plane[3];
                         IK::Point_3 p1 = origin - plane[3];
 
@@ -383,112 +383,120 @@ namespace wood
     // inline bool element::intersection_closed_and_open_paths_2D(CGAL_Polyline& closed_pline_cutter, std::pair<int, int>& edge_pair, CGAL_Polyline& pline_to_cut, IK::Plane_3& plane, CGAL_Polyline& c, CGAL_Polyline& output, std::pair<double, double>& cp_pair) {
     bool element::intersection_closed_and_open_paths_2D(CGAL_Polyline &closed_pline_cutter, CGAL_Polyline &pline_to_cut, IK::Plane_3 &plane, CGAL_Polyline &c, int (&edge_pair)[2], std::pair<double, double> &cp_pair)
     {
+
+        // ATTENTION THIS IS A SPECIFIC CLIPPER FUNCTION TO CLIP USING OPEN PATHS TO OBTAIN CLEAN END POINTS
+
         /////////////////////////////////////////////////////////////////////////////////////
         // Orient from 3D to 2D
         /////////////////////////////////////////////////////////////////////////////////////
-        CGAL_Polyline a = pline_to_cut;
-        CGAL_Polyline b = closed_pline_cutter;
+        CGAL_Polyline plate_outline = closed_pline_cutter;
+        CGAL_Polyline joint_outline = pline_to_cut;
 
         /////////////////////////////////////////////////////////////////////////////////////
         // Create Transformation
         /////////////////////////////////////////////////////////////////////////////////////
-        CGAL::Aff_transformation_3<IK> xform_toXY = cgal_xform_util::plane_to_xy(b[0], plane);
+        CGAL::Aff_transformation_3<IK> xform_toXY = cgal_xform_util::plane_to_xy(plate_outline[0], plane);
         CGAL::Aff_transformation_3<IK> xform_toXY_Inv = xform_toXY.inverse();
-        cgal_polyline_util::transform(a, xform_toXY);
-        cgal_polyline_util::transform(b, xform_toXY);
+        cgal_polyline_util::transform(plate_outline, xform_toXY);
+        cgal_polyline_util::transform(joint_outline, xform_toXY);
 
-        /////////////////////////////////////////////////////////////////////////////////////
-        // Polylines will not be exactly on the origin due to rounding errors, so make z = 0
-        /////////////////////////////////////////////////////////////////////////////////////
+        // /////////////////////////////////////////////////////////////////////////////////////
+        // // Polylines will not be exactly on the origin due to rounding errors, so make z = 0
+        // /////////////////////////////////////////////////////////////////////////////////////
 
-        for (int i = 0; i < a.size(); i++)
-            a[i] = IK::Point_3(a[i].hx(), a[i].hy(), 0);
+        // for (int i = 0; i < a.size(); i++)
+        //     a[i] = IK::Point_3(a[i].hx(), a[i].hy(), 0);
 
-        for (int i = 0; i < b.size(); i++)
-            b[i] = IK::Point_3(b[i].hx(), b[i].hy(), 0);
+        // for (int i = 0; i < b.size(); i++)
+        //     b[i] = IK::Point_3(b[i].hx(), b[i].hy(), 0);
 
         /////////////////////////////////////////////////////////////////////////////////////
         // Find Max Coordinate to get Scale factor
         /////////////////////////////////////////////////////////////////////////////////////
 
         double max_coordinate = 0;
-        for (int i = 0; i < a.size() - 1; i++)
+        for (int i = 0; i < joint_outline.size() - 1; i++) // plate
         {
-            if (max_coordinate < std::abs(a[i].hx()))
-                max_coordinate = std::abs(a[i].hx());
+            if (max_coordinate < std::abs(joint_outline[i].hx()))
+                max_coordinate = std::abs(joint_outline[i].hx());
 
-            if (max_coordinate < std::abs(a[i].hy()))
-                max_coordinate = std::abs(a[i].hy());
+            if (max_coordinate < std::abs(joint_outline[i].hy()))
+                max_coordinate = std::abs(joint_outline[i].hy());
         }
 
-        for (int i = 0; i < b.size() - 1; i++)
+        for (int i = 0; i < plate_outline.size() - 1; i++) // joint
         {
-            if (max_coordinate < std::abs(b[i].hx()))
-                max_coordinate = std::abs(b[i].hx());
+            if (max_coordinate < std::abs(plate_outline[i].hx()))
+                max_coordinate = std::abs(plate_outline[i].hx());
 
-            if (max_coordinate < std::abs(a[i].hy()))
-                max_coordinate = std::abs(b[i].hy());
+            if (max_coordinate < std::abs(plate_outline[i].hy()))
+                max_coordinate = std::abs(plate_outline[i].hy());
         }
 
-        double scale = std::pow(10, 16 - cgal_math_util::count_digits(max_coordinate));
-        // CGAL_Debug(scale);
+        double scale = std::pow(10, 8 - cgal_math_util::count_digits(std::ceil(max_coordinate)));
+        // std::cout << max_coordinate << " " << cgal_math_util::count_digits(max_coordinate) << std::endl;
+        //  scale = 100000;
         /////////////////////////////////////////////////////////////////////////////////////
         // Convert to Clipper
         /////////////////////////////////////////////////////////////////////////////////////
-        std::vector<Clipper2Lib::Point64> pathA(a.size());
-        std::vector<Clipper2Lib::Point64> pathB(b.size() - 1);
+        Clipper2Lib::Paths64 clipper_plate_outlines;
+        clipper_plate_outlines.emplace_back(std::vector<Clipper2Lib::Point64>());
+        clipper_plate_outlines.back().reserve(plate_outline.size() - 1);
 
-        for (int i = 0; i < a.size(); i++)
+        Clipper2Lib::Paths64 clipper_joint_outlines;
+        clipper_joint_outlines.emplace_back(std::vector<Clipper2Lib::Point64>());
+        clipper_joint_outlines.back().reserve(joint_outline.size());
+
+        // printf("\n");
+        for (int i = 0; i < plate_outline.size() - 1; i++) // this outline has no duplicate end point because it is "closed path"
         {
-            pathA[i] = Clipper2Lib::Point64((int)(a[i].x() * scale), (int)(a[i].y() * scale));
-            // printf("%f,%f,%f \n", a[i].x(), a[i].y(), a[i].z());
+            clipper_plate_outlines.back().emplace_back((int)(plate_outline[i].x() * scale), (int)(plate_outline[i].y() * scale));
+            // printf("%f %f %f \n", a[i].x(), a[i].y(), a[i].z());
         }
         // printf("\n");
-        for (int i = 0; i < b.size() - 1; i++)
+        for (int i = 0; i < joint_outline.size(); i++) // this outline has duplicate end points because it is "open path"
         {
-            pathB[i] = Clipper2Lib::Point64((int)(b[i].x() * scale), (int)(b[i].y() * scale));
-            // printf("%f,%f,%f \n", b[i].x(), b[i].y(), b[i].z());
+            clipper_joint_outlines.back().emplace_back((int)(joint_outline[i].x() * scale), (int)(joint_outline[i].y() * scale));
+            // printf("%f %f %f \n", b[i].x(), b[i].y(), b[i].z());
         }
 
+        // printf("\n");
         try
         {
-            // elements[i].get_joints_geometry_as_closed_polylines_replacing_edges(joints, plines);
 
-            // ClipperLib::Clipper clipper;
+            // https://github.com/AngusJohnson/Clipper2/blob/main/CPP/Clipper2Lib/include/clipper2/clipper.h
+            Clipper2Lib::Paths64 clipper_result_closed;
+            Clipper2Lib::Paths64 clipper_result_open;
+            Clipper2Lib::Clipper64 clipper;
+            clipper.AddOpenSubject(clipper_joint_outlines);
+            clipper.AddClip(clipper_plate_outlines);
+            clipper.Execute(Clipper2Lib::ClipType::Intersection, Clipper2Lib::FillRule::NonZero, clipper_result_closed, clipper_result_open);
 
-            // clipper.AddPath(pathA, ClipperLib::ptSubject, false);
-            // clipper.AddPath(pathB, ClipperLib::ptClip, true);
-            // //ClipperLib::Paths C;
-            // ClipperLib::PolyTree C;
-            // clipper.Execute(ClipperLib::ctIntersection, C, ClipperLib::pftEvenOdd, ClipperLib::pftEvenOdd);
-
-            Clipper2Lib::Paths64 pathA_;
-            Clipper2Lib::Paths64 pathB_;
-            pathA_.emplace_back(pathA);
-            pathB_.emplace_back(pathB);
-            Clipper2Lib::Paths64 C = Clipper2Lib::Intersect(pathA_, pathB_, Clipper2Lib::FillRule::EvenOdd);
-
-            // CGAL_Debug(C.ChildCount());
-            if (C.size() > 0)
+            if (clipper_result_open.size() > 0)
             {
+
                 // Calculate number of points
-                c.reserve(C[0].size());
+                c.reserve(clipper_result_open[0].size());
                 // CGAL_Debug(count);
 
-                // polynode = C.GetFirst();
                 int count = 0;
-                for (auto &polynode : C)
-                //    while (polynode)
+                for (auto &polynode : clipper_result_open)
+
                 {
                     // do stuff with polynode here
                     if (polynode.size() <= 1)
                         continue;
 
-                    // Check if seam is correctly placed
+                    // scale back to original coordinates
                     if (count == 0)
                     {
+                        // std::cout << "\n";
                         for (size_t j = 0; j < polynode.size(); j++)
+                        {
                             c.emplace_back(polynode[j].x / scale, polynode[j].y / scale, 0);
+                            // std::cout << polynode[j].x / scale << " " << polynode[j].y / scale << " " << 0 << std::endl;
+                        }
+                        // std::cout << "\n";
                     }
                     else
                     { // if there are multiple segments
@@ -508,14 +516,8 @@ namespace wood
                         for (size_t j = 1; j < pts.size(); j++)
                             c.emplace_back(pts[j]);
                     }
-                    // if (count >0) {
-                    //		for (size_t j = 0; j < polynode->Contour.size(); j++)
-                    //			c.emplace_back(polynode->Contour[j].X / scale, polynode->Contour[j].Y / scale, 0);
-                    // }
 
-                    // polynode = polynode->GetNext();
                     count++;
-                    // break;
                 }
 
                 ///////////////////////////////////////////////////////////////////////////////
@@ -524,55 +526,93 @@ namespace wood
                 double t0_, t1_;
                 bool assigned_t0_ = false;
                 bool assigned_t1_ = false;
-                // for (int k = edge_pair[0]; k <= edge_pair[1]; k++) {
-                for (int k = 0; k <= b.size() - 1; k++)
+
+                // orient the intersection result to the "b" polyline that represents the plate
+                // iterate through the plate outline
+                // itarate through segments,
+                // the two points of the resulting polyline segment that touches the plate segment is the point for orientation
+                // the shift the vector so that the first and the end points are actually touching
+                //
+                // ░░░░s0░░░░░░░░░░░░░░░░░░░░░░
+                // ░░░┌───█═══█───┐░░░░░░░░░░░░
+                // ░░░│░p0║░░░░p1░│░░s3░░░░░░░░
+                // s1░│░░░█═══█░░░│░░░░░░░░░░░░
+                // ░░░│░p1░░░░░p2░│░░b░░░░░░░░░
+                // ░░░│░░░░░░░░░░░│░░░░░░░░░░░░
+                // ░░░└───────────┘░░░░░░░░░░░░
+                // ░░░░░░░░░c░░░s2░░░░░░░░░░░░░
+
+                // find the closest point to the plate segment, output point indices and paramters on the plate edge
+                // bool nearest_id_0 = -1;
+                // bool nearest_id_1 = -1;
+                double t0 = -1;
+                double t1 = -1;
+
+                //std::cout << "\n";
+                for (size_t i = 0; i < plate_outline.size() - 1; i++)
                 {
-                    IK::Segment_3 s(b[k], b[k + 1]);
-                    double t0;
-                    cgal_polyline_util::closest_point_to(c.front(), s, t0);
-                    // CGAL_Debug(t0);
-                    if (t0 < 0 || t0 > 1)
-                        continue;
-                    if (CGAL::squared_distance(cgal_polyline_util::point_at(s, t0), c.front()) < wood_globals::DISTANCE_SQUARED)
+                    IK::Segment_3 s(plate_outline[i], plate_outline[(i + 1)]);
+
+                    for (size_t j = 0; j < 2; j++)
                     {
-                        t0_ = k + t0;
-                        assigned_t0_ = true;
-                        break;
+                        size_t id = j == 0 ? 0 : c.size() - 1; // take only the first and last points
+                        double dist_to_plate_segment = CGAL::squared_distance(s, c[id]);
+
+                        if (id == 0 && dist_to_plate_segment < wood_globals::DISTANCE_SQUARED)
+                        {
+                            cgal_polyline_util::closest_point_to(c[0], s, t0);
+                            t0 += i;
+                        }
+                        else if (id == c.size() - 1 && dist_to_plate_segment < wood_globals::DISTANCE_SQUARED)
+                        {
+                            cgal_polyline_util::closest_point_to(c[c.size() - 1], s, t1);
+                            t1 += i;
+                        }
                     }
+
+                    if (t0 != -1 && t1 != -1)
+                        break;
                 }
 
-                for (int k = 0; k <= b.size() - 1; k++)
-                {
-                    IK::Segment_3 s(b[k], b[k + 1]);
-                    double t1;
-                    cgal_polyline_util::closest_point_to(c.back(), s, t1);
-                    // CGAL_Debug(t1);
-                    if (t1 < 0 || t1 > 1)
-                        continue;
-                    if (CGAL::squared_distance(cgal_polyline_util::point_at(s, t1), c.back()) < wood_globals::DISTANCE_SQUARED)
-                    {
-                        assigned_t1_ = true;
-                        t1_ = k + t1;
-                        break;
-                    }
-                }
-
-                // CGAL_Debug(assigned_t0_ && assigned_t1_);
-                cp_pair = std::pair<double, double>(t0_, t1_);
-                if (t0_ > t1_)
-                {
-                    std::swap(cp_pair.first, cp_pair.second);
-                    std::reverse(c.begin(), c.end());
-                }
                 // transform to 3D space
                 for (int i = 0; i < c.size(); i++)
                     c[i] = c[i].transform(xform_toXY_Inv);
 
-                return assigned_t0_ && assigned_t1_;
+                for (int i = 0; i < plate_outline.size(); i++)
+                    plate_outline[i] = plate_outline[i].transform(xform_toXY_Inv);
+
+                // reverse if the clipper result is flipped
+                // sort intersection polyling so that the two points are in the correct order
+                bool reverse_flag = (t0 > t1);
+                reverse_flag = std::floor(t0) == 0 && std::floor(t1) == c.size() - 1 ? !reverse_flag : reverse_flag;
+                if (reverse_flag)
+                {
+                    std::swap(t0, t1);
+                    std::reverse(c.begin(), c.end());
+                }
+                else
+                {
+                }
+
+                // std::cout << "\n";
+                // for (auto &p : plate_outline)
+                //     std::cout << p << "\n";
+                // std::cout << "\n";
+                // for (auto &p : c)
+                //     std::cout << p << "\n";
+                // std::cout << "\n";
+
+                // std::cout << "\nt0 " << t0 << " t1 " << t1 << "\n ";
+
+                if (t0 != -1 && t1 != -1)
+                {
+                    cp_pair = std::pair<double, double>(t0, t1);
+                    return true;
+                }
             }
             else
             {
-                std::cout << "intersection_closed_and_open_paths_2D -> No intersection found\n";
+                //std::cout << "intersection_closed_and_open_paths_2D -> No intersection found\n";
                 return false;
             }
         }
@@ -591,7 +631,7 @@ namespace wood
     void element::merge_joints(std::vector<wood::joint> &joints, std::vector<std::vector<CGAL_Polyline>> &output)
     {
 
-        std::cout << "merge function \n";
+        //std::cout << "merge function \n";
 
         // OPTIMIZE CASE(5) BECAUSE EDGE ARE KNOWN, BUT CHECK ALSO CROSS JOINT ENSURE THAT YOU TAKE CROSSING EDGES
         // CHANGE TO 2D METHOD, TO AVOID MULTIPLE THE SAME MATRIX CREATION FOR ORIENTATION TO 2D I.E. CLIPPER AND line_line_3d
@@ -606,8 +646,13 @@ namespace wood
         CGAL_Polyline pline1 = this->polylines[1];
         std::vector<IK::Plane_3> joint_planes = planes;
 
-        std::map<double, std::pair<std::pair<double, double>, CGAL_Polyline>> sorted_by_id_plines_0;
-        std::map<double, std::pair<std::pair<double, double>, CGAL_Polyline>> sorted_by_id_plines_1;
+        // scale is used to convert the t0 and t1 parameter of the curve to size_t key value,
+        // since double are not allowed as key in map
+        // "scale_0" is used for segment id and "scale_1" is parameter on the line
+        double scale_0 = 1000000;
+        double scale_1 = 1000;
+        std::map<size_t, std::pair<std::pair<double, double>, CGAL_Polyline>> sorted_by_id_plines_0;
+        std::map<size_t, std::pair<std::pair<double, double>, CGAL_Polyline>> sorted_by_id_plines_1;
 
         std::vector<bool> flags0(pline0.size() - 1);
         std::vector<bool> flags1(pline1.size() - 1);
@@ -946,14 +991,14 @@ namespace wood
 
                     sorted_by_id_plines_0.insert(
                         std::make_pair(
-                            cp_pair.first, // id + 0.1
+                            (size_t)(scale_0 * std::floor(cp_pair.first)) + (size_t)(scale_1 * std::fmod(cp_pair.first, 1)), // id + 0.1
                             std::pair<std::pair<double, double>, CGAL_Polyline>{
                                 cp_pair, // id + 0.1, id + 0.9
                                 joints[std::get<0>(j_mf[id + 2][j])](std::get<1>(j_mf[id + 2][j]), true)[0]}));
 
                     sorted_by_id_plines_1.insert(
                         std::make_pair(
-                            cp_pair.first, // id + 0.1
+                            (size_t)(scale_0 * std::floor(cp_pair.first)) + (size_t)(scale_1 * std::fmod(cp_pair.first, 1)), // id + 0.1
                             std::pair<std::pair<double, double>, CGAL_Polyline>{
                                 cp_pair, // id + 0.1, id + 0.9
                                 joints[std::get<0>(j_mf[id + 2][j])](std::get<1>(j_mf[id + 2][j]), false)[0]}));
@@ -984,7 +1029,7 @@ namespace wood
                 case (5):
                 {
 
-                    std::cout << "Intersect rectangle or line CASE 5 \n";
+                    //std::cout << "Intersect rectangle or line CASE 5 \n";
 
                     // two edges
                     int edge_pair[2];
@@ -992,9 +1037,6 @@ namespace wood
                     if (edge_pair[0] > edge_pair[1])
                         std::swap(edge_pair[0], edge_pair[1]);
 
-#ifdef DEBUG_wood_ELEMENT
-                    printf("\nCPP   FILE %s    METHOD %s   LINE %i     WHAT %s ", __FILE__, __FUNCTION__, __LINE__, "Intersect rectangle or line CASE 5 ");
-#endif
                     if (false)
                     { // split by line, in this case you need to know which side is inside
                     }
@@ -1003,46 +1045,40 @@ namespace wood
                         ///////////////////////////////////////////////////////////////////////////////
                         // 1) Cut polygons and 2) Get closest parameters (Find closest parameters to edges) and add to pairs
                         ///////////////////////////////////////////////////////////////////////////////
+
+                        // First Intersection
                         std::pair<double, double> cp_pair_0(0.0, 0.0);
                         CGAL_Polyline joint_pline_0;
-
-                        for (auto &temp_p : pline0)
-                        {
-                            std::cout << temp_p << "\n";
-                        }
-                        std::cout << "\n";
-                        for (auto &temp_p : joints[joint_id](male_or_female, true).front())
-                        {
-                            std::cout << temp_p << "\n";
-                        }
-
-                        bool result0 = intersection_closed_and_open_paths_2D(pline0, joints[joint_id](male_or_female, true).front(), this->planes[0], joint_pline_0, edge_pair, cp_pair_0);
+                        bool result0 = intersection_closed_and_open_paths_2D(
+                            pline0, joints[joint_id](male_or_female, true).front(), this->planes[0],
+                            joint_pline_0, edge_pair, cp_pair_0);
                         if (!result0)
                             continue;
 
-                        // #ifdef DEBUG_wood_ELEMENT
-                        printf("\nCPP   FILE %s    METHOD %s   LINE %i     WHAT %s ", __FILE__, __FUNCTION__, __LINE__, "First Intersection ");
-                        // #endif
-
+                        // Second Intersection
                         std::pair<double, double> cp_pair_1(0.0, 0.0);
                         CGAL_Polyline joint_pline_1;
-                        bool result1 = intersection_closed_and_open_paths_2D(pline1, joints[joint_id](male_or_female, false).front(), this->planes[1], joint_pline_1, edge_pair, cp_pair_1);
+                        bool result1 = intersection_closed_and_open_paths_2D(
+                            pline1, joints[joint_id](male_or_female, false).front(), this->planes[1],
+                            joint_pline_1, edge_pair, cp_pair_1);
                         if (!result1)
                             continue;
-                        // #ifdef DEBUG_wood_ELEMENT
-                        printf("\nCPP   FILE %s    METHOD %s   LINE %i     WHAT %s ", __FILE__, __FUNCTION__, __LINE__, "Second Intersection ");
-                        // #endif
+
+                        // Output
+                        // std::cout << "__________cp_pair_0: " << cp_pair_0.first << " " << cp_pair_0.second << std::endl;
+                        // std::cout << "__________cp_pair_1: " << cp_pair_1.first << " " << cp_pair_1.second << std::endl;
 
                         sorted_by_id_plines_0.insert(
                             std::make_pair(
-                                (cp_pair_0.first + cp_pair_0.first) * 0.5,
+                                (size_t)(scale_0 * std::floor(cp_pair_0.first)) + (size_t)(scale_1 * std::fmod(cp_pair_0.first, 1)), //(cp_pair_0.first + cp_pair_0.second) * 0.5,
                                 std::pair<std::pair<double, double>, CGAL_Polyline>{cp_pair_0, joint_pline_0}));
-                        sorted_by_id_plines_1.insert(std::make_pair((cp_pair_1.first + cp_pair_1.first) * 0.5, std::pair<std::pair<double, double>, CGAL_Polyline>{cp_pair_1, joint_pline_1}));
+
+                        sorted_by_id_plines_1.insert(
+                            std::make_pair(
+                                (size_t)(scale_0 * std::floor(cp_pair_1.first)) + (size_t)(scale_1 * std::fmod(cp_pair_1.first, 1)), //(cp_pair_1.first + cp_pair_1.second) * 0.5,
+                                std::pair<std::pair<double, double>, CGAL_Polyline>{cp_pair_1, joint_pline_1}));
 
                         point_count += joint_pline_1.size();
-                        // #ifdef DEBUG_wood_ELEMENT
-                        printf("\nCPP   FILE %s    METHOD %s   LINE %i     WHAT %s ", __FILE__, __FUNCTION__, __LINE__, "Output of Case 5 ");
-                        // #endif
                     }
 
                     break;
@@ -1077,12 +1113,21 @@ namespace wood
 
         point_flags_0.back() = false; // ignore last
 
+        // corner case
+        // when a cross joint is position on the last vertex of the polyline
         // Skip the first point, when the joint is located on the last segment of the polyline
+        // pline0.size() - 2, because the polyline is closed
         // [ . first ] [ . last ]
-        if (std::floor(sorted_by_id_plines_0.begin()->second.first.first) < 1 && std::ceil(sorted_by_id_plines_0.begin()->second.first.second) == (pline0.size() - 1))
+
+        // std::cout << "__________dict: " << (sorted_by_id_plines_0.begin()->second.first.first) << " " << (sorted_by_id_plines_0.begin()->second.first.second) << "\n";
+        // std::cout << "__________dict: " << (sorted_by_id_plines_0.rbegin()->second.first.first) << " " << (sorted_by_id_plines_0.rbegin()->second.first.second) << "\n";
+        if (
+            sorted_by_id_plines_0.rbegin()->second.first.first > (pline0.size() - 2) &&
+            sorted_by_id_plines_0.rbegin()->second.first.second < 1)
         {
-            std::reverse(sorted_by_id_plines_0.begin()->second.second.begin(), sorted_by_id_plines_0.begin()->second.second.end());
-            point_flags_0[0] = false;
+            // std::cout << "__________corner case detected\n";
+            //  No need to reverse, it is handled inside intersection_closed_and_open_paths_2D method -> // std::reverse(sorted_by_id_plines_0.begin()->second.second.begin(), sorted_by_id_plines_0.begin()->second.second.end());
+            point_flags_0[0] = false; // skip the first points
             point_count--;
         }
 
@@ -1091,12 +1136,8 @@ namespace wood
         for (size_t i = 0; i < point_flags_0.size(); i++)
             if (point_flags_0[i])
                 sorted_by_id_plines_0.insert(
-                    std::make_pair(
-                        (double)i,
-                        std::pair<std::pair<double, double>, CGAL_Polyline>{std::pair<double, double>(
-                                                                                (double)i,
-                                                                                (double)i),
-                                                                            CGAL_Polyline{pline0[i]}}));
+                    std::make_pair((size_t)(i * scale_0),
+                                   std::pair<std::pair<double, double>, CGAL_Polyline>{std::pair<double, double>((double)i, (double)i), CGAL_Polyline{pline0[i]}}));
 
         // Merge all polygons in one closed polyline
         // [ . ] [ . : : . ] [ . ] [ . : : . ] [ . ]
@@ -1115,15 +1156,17 @@ namespace wood
 
         point_flags_1.back() = false; // ignore last
 
-        if (std::floor(sorted_by_id_plines_1.begin()->second.first.first) < 1 && std::ceil(sorted_by_id_plines_1.begin()->second.first.second) == (pline1.size() - 1))
+        if (
+            sorted_by_id_plines_1.rbegin()->second.first.first > pline1.size() - 2 &&
+            sorted_by_id_plines_1.rbegin()->second.first.second < 1)
         {
-            std::reverse(sorted_by_id_plines_1.begin()->second.second.begin(), sorted_by_id_plines_1.begin()->second.second.end());
+            // No need to reverse, it is handled inside intersection_closed_and_open_paths_2D method -> // std::reverse(sorted_by_id_plines_1.begin()->second.second.begin(), sorted_by_id_plines_1.begin()->second.second.end());
             point_flags_1[0] = false;
         }
 
         for (size_t i = 0; i < point_flags_1.size(); i++)
             if (point_flags_1[i])
-                sorted_by_id_plines_1.insert(std::make_pair((double)i, std::pair<std::pair<double, double>, CGAL_Polyline>{std::pair<double, double>((double)i, (double)i), CGAL_Polyline{pline1[i]}}));
+                sorted_by_id_plines_1.insert(std::make_pair((size_t)scale_0 * i, std::pair<std::pair<double, double>, CGAL_Polyline>{std::pair<double, double>((double)i, (double)i), CGAL_Polyline{pline1[i]}}));
 
         CGAL_Polyline pline1_new; // reserve optimize
         pline1_new.reserve(point_count);
@@ -1146,6 +1189,20 @@ namespace wood
 
         pline0_new.emplace_back(pline0_new.front());
         pline1_new.emplace_back(pline1_new.front());
+
+        // std::cout << "\n";
+        // for (auto &pair : sorted_by_id_plines_0)
+        // {
+        //     std::cout << "__________dict: " << (pair.first) << "\n";
+        //     // std::cout << "__________dict: " << (pair.second.first.first) << " " << (pair.second.first.second) << "\n";
+        // }
+
+        // std::cout << "\n";
+        // for (auto &pair : sorted_by_id_plines_1)
+        // {
+        //     std::cout << "__________dict: " << (pair.first) << "\n";
+        //     // std::cout << "__________dict: " << (pair.second.first.first) << " " << (pair.second.first.second) << "\n";
+        // }
 
         ///////////////////////////////////////////////////////////////////////////////
         // Only used for tenon-mortise joinery holes
