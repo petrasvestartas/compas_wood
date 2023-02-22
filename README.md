@@ -30,10 +30,10 @@ Author: [Petras Vestartas](https://petrasvestartas.com/About-Petras-Vestartas)
 - [ ] update the CGAL version for Inscribed Rectangle bug fix made by CGAL guys
 
 #### unit-tests 
-- [ ] add units tests from MOOC to CPP data-sets: Annen (corner cases, full arch)
+- [x] add units tests from MOOC to CPP data-sets: Annen (corner cases, full arch)
 - [x] add units tests from MOOC to CPP data-sets: Cross joints (IBOIS pavilion, planarized shell)
 - [x] add units tests from MOOC to CPP data-sets: Folded plates arch
-- [ ] add units tests from MOOC to CPP data-sets: VDA pavilion
+- [x] add units tests from MOOC to CPP data-sets: VDA pavilion
 - [x] add units tests from MOOC to CPP data-sets: Reciprocal with cross joints
 - [x] add units tests from MOOC to CPP data-sets: Reciprocal with Mixed Joint (cross + finger + tenon+mortise)
 - [ ] add units tests from MOOC to CPP data-sets: RTree search + OOBB
