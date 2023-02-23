@@ -17,7 +17,7 @@ namespace wood_xml
 
     bool read_xml_numbers(std::vector<std::vector<double>> &numbers)
     {
-        std::string file_path = path_and_file_for_input_numbers;
+        std::string file_path = path_and_file_for_input_numbers; // user input
         // printf( " \n %s  \n", file_path.c_str());
         std::string property_to_read = "input_numbers";
 
@@ -67,11 +67,11 @@ namespace wood_xml
         return true;
     }
 
-    bool read_xml_polylines(std::vector<std::vector<IK::Point_3>> &polylines, const bool &simple_case, bool remove_duplicates)
+    bool read_xml_polylines(std::vector<std::vector<IK::Point_3>> &polylines, const bool &simple_case, const bool &remove_duplicates)
     {
         std::string file_path = simple_case ? path_and_file_for_input_polylines_simple_case : path_and_file_for_input_polylines;
         // printf( " \n %s  \n", file_path.c_str());
-        std::string property_to_read = "input_polylines";
+        std::string property_to_read = "input_polylines"; // this is the main enclosing tag for the full data-set in the xml file
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Check if XML file exists, path_and_file_for_joints is a global path
@@ -128,6 +128,162 @@ namespace wood_xml
             printf("nwood_xml -> |read_xml_polylines|CPP Wrong property \n");
             return false;
         }
+        return true;
+    }
+
+    bool read_xml_polylines_and_properties(
+        std::vector<std::vector<IK::Point_3>> &input_polyline_pairs,
+        std::vector<std::vector<IK::Vector_3>> &input_insertion_vectors,
+        std::vector<std::vector<int>>& input_JOINTS_TYPES,
+        std::vector<std::vector<int>>& input_three_valence_element_indices_and_instruction,
+        std::vector<int>& input_adjacency,
+        const bool &simple_case,
+        const bool &remove_duplicates)
+    {
+        std::string file_path = simple_case ? path_and_file_for_input_polylines_simple_case : path_and_file_for_input_polylines;
+        // printf( " \n %s  \n", file_path.c_str());
+        std::string property_to_read = "input_polylines"; // this is the main enclosing tag for the full data-set in the xml file
+
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Check if XML file exists, path_and_file_for_joints is a global path
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        printf("wood_xml ->  read_xml_polylines -> ");
+        printf(file_path.c_str());
+        printf("\n");
+        if (!file_exists_0(file_path))
+        {
+            printf("wood_xml -> wood_xml|read_xml_polylines|File does not exist \n");
+            return false;
+        }
+        else
+        {
+            printf("wood_xml -> read_xml_polylines|file exists \n");
+        }
+
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Get properties from XML and create polylines
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        try
+        {
+            boost::property_tree::ptree tree;
+            boost::property_tree::xml_parser::read_xml(file_path, tree);
+
+            const static std::unordered_map<std::string, int> string_to_case{
+                {"polyline", 0},
+                {"insertion_vectors", 1},
+                {"joints_types", 2},
+                {"three_valence_element_indices_and_instruction", 3},
+                {"adjacency", 4}};
+
+            for (boost::property_tree::ptree::value_type &v : tree.get_child(property_to_read))
+            {
+                if (v.first == "polyline")
+                {
+
+                    // iterate through <point> array and add points to the polyline
+                    std::vector<IK::Point_3> polyline;
+                    for (boost::property_tree::ptree::value_type &point : v.second)
+                    {
+                        // convert get corrdinates of the points, by directly accessing <x>, <y>, <z> tags
+                        double x = point.second.get<double>("x");
+                        double y = point.second.get<double>("y");
+                        double z = point.second.get<double>("z");
+                        IK::Point_3 p(x, y, z);
+
+                        // skip duplicate points
+                        if (remove_duplicates && polyline.size() > 0)
+                            if (CGAL::squared_distance(polyline.back(), p) < wood_globals::DISTANCE_SQUARED)
+                                continue;
+
+                        // add point to polyline
+                        polyline.emplace_back(x, y, z);
+                    }
+                    input_polyline_pairs.emplace_back(polyline);
+                }
+                else if (v.first == "insertion_vectors")
+                {
+                    // iterate through <vector> array and add vectors to the insertion vector
+                    std::vector<IK::Vector_3> vectors;
+                    for (boost::property_tree::ptree::value_type &vector : v.second)
+                    {
+                        // convert get coordinates of the points, by directly accessing <x>, <y>, <z> tags
+                        double x = vector.second.get<double>("x");
+                        double y = vector.second.get<double>("y");
+                        double z = vector.second.get<double>("z");
+
+                        // add point to polyline
+                        vectors.emplace_back(x, y, z);
+                    }
+                    input_insertion_vectors.emplace_back(vectors);
+                }
+                else if (v.first == "joints_types")
+                {
+                    // iterate through integers representing joint types
+                    std::vector<int> joint_types;
+
+                    // this is different from the previous because it is a flat list of integers with the same identifiers
+                    //std::cout << "\n";
+                    for (boost::property_tree::ptree::value_type &id : v.second)
+                    {
+                        //std::cout << id.second.get_value<int>() << "\n";
+                        joint_types.emplace_back(id.second.get_value<int>());
+                    }
+                    input_JOINTS_TYPES.emplace_back(joint_types);
+                }
+                else if (v.first == "three_valence")
+                {
+                    // WARNING the three_valence must start with 0 or 1 depending whether it is Annen or Vidy corner case
+                    // iterate through integers representing joint types
+                    std::vector<int> three_valence;
+
+                    // this is different from the previous because it is a flat list of integers with the same identifiers
+                    for (boost::property_tree::ptree::value_type &id : v.second)
+                    {
+
+                        three_valence.emplace_back(id.second.get_value<int>());
+                    }
+                    input_three_valence_element_indices_and_instruction.emplace_back(three_valence);
+                }
+                else if (v.first == "adjacency")
+                {
+                    // flat list of pair integers
+                    for (boost::property_tree::ptree::value_type &id : v.second)
+                    {
+                        input_adjacency.emplace_back(id.second.get_value<int>());
+                    }
+                }
+            } // for
+        }
+        catch (std::exception &e)
+        {
+            (void)e;
+            printf("nwood_xml -> |read_xml_polylines|CPP Wrong property \n");
+            return false;
+        }
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // perform checks of insertion vectors and joint types
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        // check if the number of polylines is equal to the number of insertion vectors
+        // polyline input is twice bigger because the list is flattened
+        if (input_insertion_vectors.size() > 0)
+            if (input_insertion_vectors.size() != input_polyline_pairs.size() * 0.5)
+            {
+                std::cout << "\n"
+                          << input_polyline_pairs.size() * 0.5 << " " << input_insertion_vectors.size() << "\n";
+                printf("nwood_xml -> |read_xml_polylines|CPP insertion vectors are given, but count of them is not equal to polyline count \n");
+                return false;
+            }
+        // check if the number of polyliens is equal to the number of joints types
+        if (input_JOINTS_TYPES.size() > 0)
+            if (input_JOINTS_TYPES.size() != input_polyline_pairs.size() * 0.5)
+            {
+                printf("nwood_xml -> |read_xml_polylines|CPP joint types are given, but count of them is not equal to polyline count \n");
+                std::cout << "\n"
+                          << input_polyline_pairs.size() << " " << input_JOINTS_TYPES.size() << "\n";
+                return false;
+            }
         return true;
     }
 
@@ -341,5 +497,4 @@ namespace wood_xml
         }
         return true;
     }
-
 }

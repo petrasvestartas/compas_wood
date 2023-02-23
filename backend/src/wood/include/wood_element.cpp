@@ -96,7 +96,7 @@ namespace wood
                         IK::Point_3 origin(plane[0].hx(), plane[0].hy(), plane[0].hz());
 
                         IK::Point_3 center = cgal_polyline_util::center(this->polylines[0]);
-                        //std::cout << this->polylines.size() << std::endl;
+                        // std::cout << this->polylines.size() << std::endl;
                         IK::Point_3 p0 = origin + plane[3];
                         IK::Point_3 p1 = origin - plane[3];
 
@@ -393,84 +393,87 @@ namespace wood
         CGAL_Polyline joint_outline = pline_to_cut;
 
         /////////////////////////////////////////////////////////////////////////////////////
-        // Create Transformation
+        // Create Transformation, to orient the the 3D polylines to the XY plane
         /////////////////////////////////////////////////////////////////////////////////////
         CGAL::Aff_transformation_3<IK> xform_toXY = cgal_xform_util::plane_to_xy(plate_outline[0], plane);
         CGAL::Aff_transformation_3<IK> xform_toXY_Inv = xform_toXY.inverse();
         cgal_polyline_util::transform(plate_outline, xform_toXY);
         cgal_polyline_util::transform(joint_outline, xform_toXY);
 
-        // /////////////////////////////////////////////////////////////////////////////////////
-        // // Polylines will not be exactly on the origin due to rounding errors, so make z = 0
-        // /////////////////////////////////////////////////////////////////////////////////////
-
-        // for (int i = 0; i < a.size(); i++)
-        //     a[i] = IK::Point_3(a[i].hx(), a[i].hy(), 0);
-
-        // for (int i = 0; i < b.size(); i++)
-        //     b[i] = IK::Point_3(b[i].hx(), b[i].hy(), 0);
-
         /////////////////////////////////////////////////////////////////////////////////////
         // Find Max Coordinate to get Scale factor
         /////////////////////////////////////////////////////////////////////////////////////
+        IK::Vector_3 translation_vector();
+        size_t n = joint_outline.size() - 1 + plate_outline.size() - 1;
 
-        double max_coordinate = 0;
-        for (int i = 0; i < joint_outline.size() - 1; i++) // plate
-        {
-            if (max_coordinate < std::abs(joint_outline[i].hx()))
-                max_coordinate = std::abs(joint_outline[i].hx());
+        // double max_coordinate = 0;
+        // for (int i = 0; i < joint_outline.size() - 1; i++) // plate
+        // {
 
-            if (max_coordinate < std::abs(joint_outline[i].hy()))
-                max_coordinate = std::abs(joint_outline[i].hy());
-        }
+        //     // translation_vector += joint_outline[i];
+        //     if (max_coordinate < std::abs(joint_outline[i].hx()))
+        //         max_coordinate = std::abs(joint_outline[i].hx());
 
-        for (int i = 0; i < plate_outline.size() - 1; i++) // joint
-        {
-            if (max_coordinate < std::abs(plate_outline[i].hx()))
-                max_coordinate = std::abs(plate_outline[i].hx());
+        //     if (max_coordinate < std::abs(joint_outline[i].hy()))
+        //         max_coordinate = std::abs(joint_outline[i].hy());
+        // }
 
-            if (max_coordinate < std::abs(plate_outline[i].hy()))
-                max_coordinate = std::abs(plate_outline[i].hy());
-        }
+        // for (int i = 0; i < plate_outline.size() - 1; i++) // joint
+        // {
+        //     // translation_vector += plate_outline[i];
+        //     if (max_coordinate < std::abs(plate_outline[i].hx()))
+        //         max_coordinate = std::abs(plate_outline[i].hx());
 
-        double scale = std::pow(10, 8 - cgal_math_util::count_digits(std::ceil(max_coordinate)));
-        // std::cout << max_coordinate << " " << cgal_math_util::count_digits(max_coordinate) << std::endl;
-        //  scale = 100000;
+        //     if (max_coordinate < std::abs(plate_outline[i].hy()))
+        //         max_coordinate = std::abs(plate_outline[i].hy());
+        // }
+
+        // double scale = std::pow(10, 10 - cgal_math_util::count_digits(std::ceil(max_coordinate)));
+        //  std::cout << max_coordinate << " " << cgal_math_util::count_digits(max_coordinate) << std::endl;
+        //    scale = 100000;
         /////////////////////////////////////////////////////////////////////////////////////
         // Convert to Clipper
         /////////////////////////////////////////////////////////////////////////////////////
-        Clipper2Lib::Paths64 clipper_plate_outlines;
-        clipper_plate_outlines.emplace_back(std::vector<Clipper2Lib::Point64>());
+        Clipper2Lib::PathsD clipper_plate_outlines;
+        clipper_plate_outlines.emplace_back(std::vector<Clipper2Lib::PointD>());
         clipper_plate_outlines.back().reserve(plate_outline.size() - 1);
 
-        Clipper2Lib::Paths64 clipper_joint_outlines;
-        clipper_joint_outlines.emplace_back(std::vector<Clipper2Lib::Point64>());
+        Clipper2Lib::PathsD clipper_joint_outlines;
+        clipper_joint_outlines.emplace_back(std::vector<Clipper2Lib::PointD>());
         clipper_joint_outlines.back().reserve(joint_outline.size());
 
         // printf("\n");
+        // be aware that the scaling miust be done using int64_t, if int will be used the result will be wrong due to rounding
         for (int i = 0; i < plate_outline.size() - 1; i++) // this outline has no duplicate end point because it is "closed path"
         {
-            clipper_plate_outlines.back().emplace_back((int)(plate_outline[i].x() * scale), (int)(plate_outline[i].y() * scale));
-            // printf("%f %f %f \n", a[i].x(), a[i].y(), a[i].z());
+            clipper_plate_outlines.back().emplace_back((plate_outline[i].x()), (plate_outline[i].y()));
+            // std::cout << "__________ " << clipper_plate_outlines.back().back().x << " " << clipper_plate_outlines.back().back().y << std::endl;
+            //  printf("%f %f %f \n", a[i].x(), a[i].y(), a[i].z());
         }
         // printf("\n");
         for (int i = 0; i < joint_outline.size(); i++) // this outline has duplicate end points because it is "open path"
         {
-            clipper_joint_outlines.back().emplace_back((int)(joint_outline[i].x() * scale), (int)(joint_outline[i].y() * scale));
+            clipper_joint_outlines.back().emplace_back((joint_outline[i].x()), (joint_outline[i].y()));
             // printf("%f %f %f \n", b[i].x(), b[i].y(), b[i].z());
         }
+        // scale these paths by 1.0e10.
+        // int err = 0;
+        // clipper_plate_outlines = Clipper2Lib::ScalePaths<double, double>(clipper_plate_outlines, scale, scale, err);
+        // clipper_joint_outlines = Clipper2Lib::ScalePaths<double, double>(clipper_joint_outlines, scale, scale, err);
 
         // printf("\n");
         try
         {
 
             // https://github.com/AngusJohnson/Clipper2/blob/main/CPP/Clipper2Lib/include/clipper2/clipper.h
-            Clipper2Lib::Paths64 clipper_result_closed;
-            Clipper2Lib::Paths64 clipper_result_open;
-            Clipper2Lib::Clipper64 clipper;
+            Clipper2Lib::PathsD clipper_result_closed;
+            Clipper2Lib::PathsD clipper_result_open;
+            Clipper2Lib::ClipperD clipper;
             clipper.AddOpenSubject(clipper_joint_outlines);
             clipper.AddClip(clipper_plate_outlines);
             clipper.Execute(Clipper2Lib::ClipType::Intersection, Clipper2Lib::FillRule::NonZero, clipper_result_closed, clipper_result_open);
+            // de-scale the result
+            // clipper_result_open = Clipper2Lib::ScalePaths<double, double>(clipper_result_open, 1 / scale, 1 / scale, err);
 
             if (clipper_result_open.size() > 0)
             {
@@ -490,10 +493,11 @@ namespace wood
                     // scale back to original coordinates
                     if (count == 0)
                     {
+
                         // std::cout << "\n";
                         for (size_t j = 0; j < polynode.size(); j++)
                         {
-                            c.emplace_back(polynode[j].x / scale, polynode[j].y / scale, 0);
+                            c.emplace_back(polynode[j].x, polynode[j].y, 0);
                             // std::cout << polynode[j].x / scale << " " << polynode[j].y / scale << " " << 0 << std::endl;
                         }
                         // std::cout << "\n";
@@ -503,7 +507,8 @@ namespace wood
                         std::vector<IK::Point_3> pts;
                         pts.reserve(polynode.size());
                         for (size_t j = 0; j < polynode.size(); j++)
-                            pts.emplace_back(polynode[j].x / scale, polynode[j].y / scale, 0);
+                            pts.emplace_back(polynode[j].x, polynode[j].y, 0);
+                        // pts.emplace_back(polynode[j].x / scale, polynode[j].y / scale, 0);
 
                         // Check if curve is closest to new pline if not reverse
                         if (CGAL::squared_distance(c.back(), pts.front()) > wood_globals::DISTANCE_SQUARED && CGAL::squared_distance(c.back(), pts.back()) > wood_globals::DISTANCE_SQUARED)
@@ -548,7 +553,8 @@ namespace wood
                 double t0 = -1;
                 double t1 = -1;
 
-                //std::cout << "\n";
+                // std::cout << "\n";
+                // this has to be rewritten to get to smallest ids to an edge or below the error message to be scale prone
                 for (size_t i = 0; i < plate_outline.size() - 1; i++)
                 {
                     IK::Segment_3 s(plate_outline[i], plate_outline[(i + 1)]);
@@ -558,14 +564,22 @@ namespace wood
                         size_t id = j == 0 ? 0 : c.size() - 1; // take only the first and last points
                         double dist_to_plate_segment = CGAL::squared_distance(s, c[id]);
 
-                        if (id == 0 && dist_to_plate_segment < wood_globals::DISTANCE_SQUARED)
+                        // std::cout << "dist_to_plate_segment: " << dist_to_plate_segment << std::endl;
+
+                        if (j == 0 && dist_to_plate_segment < 1) // wood_globals::DISTANCE_SQUARED * 1000)
                         {
+
                             cgal_polyline_util::closest_point_to(c[0], s, t0);
+
+                            // std::cout << "t0: " << t0 << std::endl;
                             t0 += i;
                         }
-                        else if (id == c.size() - 1 && dist_to_plate_segment < wood_globals::DISTANCE_SQUARED)
+                        else if (j == 1 && dist_to_plate_segment < 1) //< wood_globals::DISTANCE_SQUARED * 1000)
                         {
+
                             cgal_polyline_util::closest_point_to(c[c.size() - 1], s, t1);
+
+                            // std::cout << "t1: " << t1 << std::endl;
                             t1 += i;
                         }
                     }
@@ -574,12 +588,8 @@ namespace wood
                         break;
                 }
 
-                // transform to 3D space
-                for (int i = 0; i < c.size(); i++)
-                    c[i] = c[i].transform(xform_toXY_Inv);
-
-                for (int i = 0; i < plate_outline.size(); i++)
-                    plate_outline[i] = plate_outline[i].transform(xform_toXY_Inv);
+                // for (int i = 0; i < plate_outline.size(); i++)
+                //     plate_outline[i] = plate_outline[i].transform(xform_toXY_Inv);
 
                 // reverse if the clipper result is flipped
                 // sort intersection polyling so that the two points are in the correct order
@@ -602,23 +612,70 @@ namespace wood
                 //     std::cout << p << "\n";
                 // std::cout << "\n";
 
-                // std::cout << "\nt0 " << t0 << " t1 " << t1 << "\n ";
+                // std::cout << "\nt0 " << t0 << " t1 " << t1 << "\n";
 
                 if (t0 != -1 && t1 != -1)
                 {
+                    // transform to 3D space and give parameters for insertion
+                    cgal_polyline_util::transform(c, xform_toXY_Inv);
                     cp_pair = std::pair<double, double>(t0, t1);
                     return true;
+                }
+                else
+                {
+                    // std::cout << "_______________no intersection found, result count: " << clipper_result_open.size() << "\n";
+                    //  if (clipper_result_open.size() > 0)
+                    //  {
+                    //      // CGAL_Polyline plate_outline = closed_pline_cutter;
+                    //      // CGAL_Polyline joint_outline = pline_to_cut;
+
+                    //     std::cout << clipper_result_open[0].size() << "\n";
+                    //     std::cout << "\n";
+                    //     for (auto &p : plate_outline)
+                    //         std::cout << p << "\n";
+                    //     std::cout << "\n";
+                    //     // for (auto &p : joint_outline)
+                    //     //     std::cout << p << "\n";
+                    //     // std::cout << "\n";
+                    //     for (auto &p : c)
+                    //         std::cout << p << "\n";
+                    //     std::cout << "\n";
+
+                    // scale = 100000000;
+                    // for (int i = 0; i < plate_outline.size() - 1; i++) // this outline has no duplicate end point because it is "closed path"
+                    // {
+                    //     std::cout << (int64_t)(plate_outline[i].x() * scale) << " " << (int64_t)(plate_outline[i].y() * scale) << " " << 0 << "\n";
+                    // }
+                    // std::cout << "\n";
+
+                    // for (int i = 0; i < joint_outline.size(); i++) // this outline has duplicate end points because it is "open path"
+                    // {
+
+                    //     std::cout << (int64_t)(joint_outline[i].x() * scale) << " " << (int64_t)(joint_outline[i].y() * scale) << " " << 0 << "\n";
+                    // }
+                    // std::cout << "\n";
+
+                    // std::cout << clipper_result_open[0].size() << "\n";
+                    // std::cout << "\n";
+                    // for (auto &p : plate_outline)
+                    //     std::cout << p << "\n";
+                    // std::cout << "\n";
+                    // for (auto &p : c)
+                    //     std::cout << p << "\n";
+                    // std::cout << "\n";
+                    //}
+                    return false;
                 }
             }
             else
             {
-                //std::cout << "intersection_closed_and_open_paths_2D -> No intersection found\n";
+                // std::cout << "intersection_closed_and_open_paths_2D -> No intersection found\n";
                 return false;
             }
         }
         catch (const std::exception &ex)
         {
-            std::cout << "wood_element.cpp -> parameters: scale " << scale << "max_coordinate " << max_coordinate << "\n";
+            // std::cout << "wood_element.cpp -> parameters: scale " << scale << "max_coordinate " << max_coordinate << "\n";
             printf("\nCPP   FILE %s    METHOD %s   LINE %i     WHAT %s   ", __FILE__, __FUNCTION__, __LINE__, ex.what());
         }
 
@@ -631,7 +688,7 @@ namespace wood
     void element::merge_joints(std::vector<wood::joint> &joints, std::vector<std::vector<CGAL_Polyline>> &output)
     {
 
-        //std::cout << "merge function \n";
+        // std::cout << "merge function \n";
 
         // OPTIMIZE CASE(5) BECAUSE EDGE ARE KNOWN, BUT CHECK ALSO CROSS JOINT ENSURE THAT YOU TAKE CROSSING EDGES
         // CHANGE TO 2D METHOD, TO AVOID MULTIPLE THE SAME MATRIX CREATION FOR ORIENTATION TO 2D I.E. CLIPPER AND line_line_3d
@@ -988,6 +1045,7 @@ namespace wood
                     // Get closest parameters (edge start, start+1) and add to pairs
                     ///////////////////////////////////////////////////////////////////////////////
                     std::pair<double, double> cp_pair((double)(id + 0.1), (double)(id + 0.9)); // these pairs are not functional
+                    double average = id + 0.5;
 
                     sorted_by_id_plines_0.insert(
                         std::make_pair(
@@ -1029,7 +1087,7 @@ namespace wood
                 case (5):
                 {
 
-                    //std::cout << "Intersect rectangle or line CASE 5 \n";
+                    // std::cout << "Intersect rectangle or line CASE 5 \n";
 
                     // two edges
                     int edge_pair[2];
@@ -1107,6 +1165,7 @@ namespace wood
             // iterate // id + 0.1, id + 0.9, this makes no sence
             for (size_t j = (size_t)std::ceil(pair.second.first.first); j <= (size_t)std::floor(pair.second.first.second); j++)
             { // are corners in between insertable polylines
+                // std::cout << "remove points \n";
                 point_flags_0[j] = false;
                 point_count--;
             }
@@ -1151,8 +1210,12 @@ namespace wood
         std::vector<bool> point_flags_1(pline0.size(), true); // point flags to keep corners
 
         for (auto &pair : sorted_by_id_plines_1)
-            for (size_t j = (size_t)std::ceil(pair.second.first.first); j <= (size_t)std::floor(pair.second.first.second); j++) // are corners in between insertable polylines
+            for (size_t j = (size_t)std::ceil(pair.second.first.first); j <= (size_t)std::floor(pair.second.first.second); j++)
+
+            { // are corners in between insertable polylines
                 point_flags_1[j] = false;
+                // std::cout << "j" << j << " " << "remove points \n";
+            }
 
         point_flags_1.back() = false; // ignore last
 
@@ -1160,6 +1223,7 @@ namespace wood
             sorted_by_id_plines_1.rbegin()->second.first.first > pline1.size() - 2 &&
             sorted_by_id_plines_1.rbegin()->second.first.second < 1)
         {
+
             // No need to reverse, it is handled inside intersection_closed_and_open_paths_2D method -> // std::reverse(sorted_by_id_plines_1.begin()->second.second.begin(), sorted_by_id_plines_1.begin()->second.second.end());
             point_flags_1[0] = false;
         }
@@ -1175,7 +1239,7 @@ namespace wood
             pline1_new.insert(pline1_new.end(), x.second.second.begin(), x.second.second.end());
 
         ///////////////////////////////////////////////////////////////////////////////
-        // Close
+        // WARNING Close - Does this part make sense?
         ///////////////////////////////////////////////////////////////////////////////
         if (last_id == this->polylines[0].size() && last_segment0_start.squared_length() > wood_globals::DISTANCE_SQUARED)
         {

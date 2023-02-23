@@ -1496,7 +1496,7 @@ namespace wood_main
         adjacency_border.reserve(input_adjacency.size());
         adjacency_valid.reserve(input_adjacency.size());
 
-        int adjacency_item_count = 4;
+        int adjacency_item_count = 4; // v0, v1, f0, f1
         for (int i = 0; i < input_adjacency.size(); i += adjacency_item_count)
         {
 
@@ -1629,6 +1629,10 @@ namespace wood_main
                     type);
 
                 joints_map.emplace(cgal_math_util::unique_from_two_int(el_ids.first, el_ids.second), joint_id);
+                // std::cout << "\n joint id "
+                //           << joint_id << " el_ids.first "
+                //           << el_ids.first << " el_ids.second "
+                //           << el_ids.second << std::endl;
 
                 //////////////////////////////////////////////////////////////////////////////////////////////////////
                 // Place wood::joint ids and male or female flags to wood::joint list
@@ -2060,6 +2064,10 @@ namespace wood_main
             }
             catch (const std::out_of_range &oor)
             {
+                std::cout << "\n"
+                          << in_s0_s1_e20_e31[i][0] << " " << in_s0_s1_e20_e31[i][1];
+                std::cout << "\n"
+                          << in_s0_s1_e20_e31[i][2] << " " << in_s0_s1_e20_e31[i][3];
                 printf("\nCPP   FILE %s    METHOD %s   LINE %i     WHAT %s  %s ", __FILE__, __FUNCTION__, __LINE__, "Out of Range error:", oor.what());
                 continue;
             }

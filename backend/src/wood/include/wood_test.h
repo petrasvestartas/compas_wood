@@ -68,14 +68,30 @@ namespace wood_test
         void set_file_path_for_input_xml_and_screenshot(std::vector<std::vector<IK::Point_3>> &input_polyline_pairs, const std::string &function_name, bool remove_duplicate_points = false);
 
         /**
+         *  this function is run first
+         * set properties for saving the screenshot and input xml files e.g. "C:\IBOIS57\_Code\Software\Python\compas_wood\backend\src\wood\dataset"
+         * with this method you can get polylines with all the properties
+         */
+        void set_file_path_for_input_xml_and_screenshot(
+            std::vector<std::vector<IK::Point_3>> &input_polyline_pairs,
+            std::vector<std::vector<IK::Vector_3>> &input_insertion_vectors,
+            std::vector<std::vector<int>> &input_JOINTS_TYPES,
+            std::vector<std::vector<int>> &input_three_valence_element_indices_and_instruction,
+            std::vector<int> &input_adjacency,
+            const std::string &function_name, bool remove_duplicate_points);
+
+        /**
          * this function is run at the end of the example
          * define OpenGL vizualizer parameters
          */
         void set_plate_display(std::vector<std::vector<IK::Point_3>> &input_polyline_pairs, std::vector<std::vector<CGAL_Polyline>> &output_plines, bool add_loft = true);
-
     }
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // plate methods
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // side-to-side in-plane and out-of-plane
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     /**
      * example for plates
@@ -85,31 +101,29 @@ namespace wood_test
 
     /**
      * example for plates
-     * example for developing screw connection when plates are touching top-to-top
-     */
-    bool type_plates_name_top_to_top_pairs();
-
-    /**
-     * example for plates
      * 4 types of connections for a) simple tenon mortise, b) four linked joints, c) two linked and one not linked joint but touching the wall, existing in vidy vertical walls only, d) two linked and one not linked joint
+     * this is running clipper method with rectangles for the special joint
      */
     bool type_plates_name_joint_linking_vidychapel_corner();
 
     /**
      * example for plates
      * st loup chapel exaple using tenon-mortise joints
+     * this is running clipper method with rectangles for the special joint
      */
     bool type_plates_name_joint_linking_vidychapel_one_layer();
 
     /**
      * example for plates
      * two layer st loup chapel in one axis, since the rest of the axis have the same geometrical joinery generation, just angles are different
+     * this is running clipper method with rectangles for the special joint
      */
     bool type_plates_name_joint_linking_vidychapel_one_axis_two_layers();
 
     /**
      * example for plates
      * st loup chapel in two layers as if it would be done as the vidy theater
+     * this is running clipper method with rectangles for the special joint
      */
     bool type_plates_name_joint_linking_vidychapel_full();
 
@@ -162,7 +176,7 @@ namespace wood_test
      * example for plates
      * out_of_plane finger joints, ending with miters at the corner in a form of a icosahedron
      */
-    bool type_plates_name_side_to_side_edge_outofplane_icosacahedron();
+    bool type_plates_name_side_to_side_edge_outofplane_icosahedron();
 
     /**
      * example for plates
@@ -188,6 +202,16 @@ namespace wood_test
      */
     bool type_plates_name_side_to_side_edge_inplane_outofplane_simple_corners_different_lengths();
 
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // top-to-top data sets
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    /**
+     * example for plates
+     * example for developing screw connection when plates are touching top-to-top
+     */
+    bool type_plates_name_top_to_top_pairs();
+
     /**
      * example for plates
      * in_plane and out_of_plane finger joints and top_to_top joints in one assembly - Rossiniere First Version from timber boards
@@ -195,6 +219,10 @@ namespace wood_test
      * THERE IS A BUG IN THE VIEWER, DISPLAY DISAPPEARS AFTER GOING FROM 4 TO 3 TO 4 MODE
      */
     bool type_plates_name_side_to_side_edge_outofplane_inplane_and_top_to_top_hexboxes();
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // top-to-side data sets
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
      * example for plates
@@ -213,6 +241,52 @@ namespace wood_test
      * in_plane top_to_side cornder from the Annen project and some T-Joints
      */
     bool type_plates_name_top_to_side_corners();
+
+    /**
+     * example for plates
+     * top-to-side and side-to-side out-of-plane joints
+     * Annen project
+     * one simple corner with insertion joints
+     */
+    bool type_plates_name_top_to_side_and_side_to_side_outofplane_annen_corner();
+
+    /**
+     * example for plates
+     * top-to-side and side-to-side out-of-plane joints
+     * Annen project
+     * one box with insertion joints and joint type selection
+     */
+    bool type_plates_name_top_to_side_and_side_to_side_outofplane_annen_box();
+
+    /**
+     * example for plates
+     * top-to-side and side-to-side out-of-plane joints
+     * Annen project
+     * two boxes with insertion joints and joint type selection and the 3-valence joint
+     */
+    bool type_plates_name_top_to_side_and_side_to_side_outofplane_annen_box_pair();
+
+    /**
+     * example for plates
+     * top-to-side and side-to-side out-of-plane joints
+     * Annen project
+     * two boxes with insertion joints and joint type selection and the 3-valence joint
+     * a small version of the full arch is given - special xml function is needed
+     */
+    bool type_plates_name_top_to_side_and_side_to_side_outofplane_annen_grid_small();
+
+    /**
+     * example for plates
+     * top-to-side and side-to-side out-of-plane joints
+     * Annen project
+     * two boxes with insertion joints and joint type selection and the 3-valence joint
+     * full arch is given - special xml function is needed
+     */
+    bool type_plates_name_top_to_side_and_side_to_side_outofplane_annen_grid_full_arch();
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // cross data sets
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
      * example for plates
@@ -247,6 +321,20 @@ namespace wood_test
 
     /**
      * example for plates
+     * cross joints, single layer hexagon shell connected with connectors in a shape of an arch
+     */
+    bool type_plates_name_cross_vda_single_arch();
+
+    /**
+     * example for plates
+     * cross joints, vda pavilion consisting of two layers quad panels and connectors
+     */
+    bool type_plates_name_cross_vda_shell();
+
+
+
+    /**
+     * example for plates
      * cross joints, square reciprocal structure taken from an architecture museum
      * in reality joints are connected by metal holders
      */
@@ -259,25 +347,23 @@ namespace wood_test
      */
     bool type_plates_name_cross_square_reciprocal_iseya();
 
-         /**
+    /**
      * example for plates
      * cross joints, plate cross and side joints
      * Ibois pavilion, this model has no proper insertion sequence
      */
     bool type_plates_name_cross_ibois_pavilion();
 
-    
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // beam methods
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        // beam methods
-        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-        /**
-         * example for beams
-         * multiple beams connected in one node, taken from the Phanome project near Zurich, Switzerland
-         */
-        bool
-        type_beams_name_phanomema_node();
+    /**
+     * example for beams
+     * multiple beams connected in one node, taken from the Phanome project near Zurich, Switzerland
+     */
+    bool
+    type_beams_name_phanomema_node();
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // library of joints

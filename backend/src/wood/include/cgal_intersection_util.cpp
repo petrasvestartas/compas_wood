@@ -429,24 +429,42 @@ namespace cgal_intersection_util
 
         // Colinearity check!!!!!!!!
 
-        const auto result = CGAL::intersection(l0, l1);
+        // ERRROR THIS PLANE-PLANE-PLANE IS NOT WORKING
+        IK::Plane_3 plane_2d_0(p0_0, CGAL::cross_product(IK::Vector_3(0, 0, 1), p0_1 - p0_0));
+        IK::Plane_3 plane_2d_1(p1_0, CGAL::cross_product(IK::Vector_3(0, 0, 1), p1_1 - p1_0));
+        IK::Plane_3 plane_2d_2(p0_0, IK::Vector_3(0, 0, 1));
 
+        IK::Point_3 output_point;
+        bool result = plane_plane_plane_with_parallel_check(plane_2d_0, plane_2d_1, plane_2d_2, output_point);
         if (result)
         {
-            if (const IK::Point_2 *p = boost::get<IK::Point_2>(&*result))
-            {
-                output = IK::Point_3(p->hx(), p->hy(), 0);
-                output = xform_Inv.transform(output);
-            }
-            else
-            {
-                return false;
-            }
+            output = output_point;
+            output = xform_Inv.transform(output);
+            return true;
         }
         else
         {
             return false;
         }
+
+        // const auto result = CGAL::intersection(l0, l1);
+
+        // if (result)
+        // {
+        //     if (const IK::Point_2 *p = boost::get<IK::Point_2>(&*result))
+        //     {
+        //         output = IK::Point_3(p->hx(), p->hy(), 0);
+        //         output = xform_Inv.transform(output);
+        //     }
+        //     else
+        //     {
+        //         return false;
+        //     }
+        // }
+        // else
+        // {
+        //     return false;
+        // }
 
         return true;
     }
@@ -656,10 +674,34 @@ namespace cgal_intersection_util
 
     bool line_two_planes(IK::Segment_3 &line, const IK::Plane_3 &plane0, const IK::Plane_3 &plane1)
     {
-        auto result0 = CGAL::intersection(line, plane0);
-        auto result1 = CGAL::intersection(line, plane1);
-        line = IK::Segment_3(*boost::get<IK::Point_3>(&*result0), *boost::get<IK::Point_3>(&*result1));
-        return true;
+
+        IK::Point_3 output_point_0;
+        bool result_0 = line_plane(line, plane0, output_point_0, true);
+
+        IK::Point_3 output_point_1;
+        bool result_1 = line_plane(line, plane1, output_point_1, true);
+
+        if (result_0 && result_1)
+        {
+            line = IK::Segment_3(output_point_0, output_point_1);
+            return true;
+        }
+        else
+            return false;
+
+        // line = IK::Segment_3(*boost::get<IK::Point_3>(&*result0), *boost::get<IK::Point_3>(&*result1));
+
+        // if (result)
+        // {
+        //     // std::cout << output_point.hx() << " " << output_point.hy() << " " << output_point.hz() << std::endl;
+        //     points.emplace_back(output_point);
+        //     edge_ids.emplace_back(i);
+        // }
+
+        // auto result0 = CGAL::intersection(line, plane0);
+        // auto result1 = CGAL::intersection(line, plane1);
+        // line = IK::Segment_3(*boost::get<IK::Point_3>(&*result0), *boost::get<IK::Point_3>(&*result1));
+        // return true;
     }
 
     bool polyline_plane_to_line(const CGAL_Polyline &polyline, const IK::Plane_3 &plane, IK::Segment_3 &alignment_segment, IK::Segment_3 &output)
@@ -672,19 +714,32 @@ namespace cgal_intersection_util
 
         for (int i = 0; i < polyline.size() - 1; i++)
         {
-            IK::Segment_3 segment(polyline[i], polyline[i + 1]);
-            auto output = CGAL::intersection(segment, plane);
 
-            if (output)
+            IK::Segment_3 segment(polyline[i], polyline[i + 1]);
+
+            IK::Point_3 output_point_0;
+            bool result_0 = line_plane(segment, plane, output_point_0, true);
+
+            if (result_0)
             {
-                if (const IK::Point_3 *p = boost::get<IK::Point_3>(&*output))
-                {
-                    pts[count] = *p;
-                    count++;
-                    if (count == 2)
-                        break;
-                } // if point type
-            }     // output exists
+                pts[count] = output_point_0;
+                count++;
+                if (count == 2)
+                    break;
+            }
+
+            // auto output = CGAL::intersection(segment, plane);
+
+            // if (output)
+            // {
+            //     if (const IK::Point_3 *p = boost::get<IK::Point_3>(&*output))
+            //     {
+            //         pts[count] = *p;
+            //         count++;
+            //         if (count == 2)
+            //             break;
+            //     } // if point type
+            // }     // output exists
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -726,16 +781,12 @@ namespace cgal_intersection_util
             IK::Point_3 output_point;
             bool result = line_plane(segment, plane, output_point, true);
 
-            // const auto result = CGAL::intersection(segment, plane);
-
             if (result)
             {
+                // std::cout << output_point.hx() << " " << output_point.hy() << " " << output_point.hz() << std::endl;
                 points.emplace_back(output_point);
                 edge_ids.emplace_back(i);
             }
-            // if (const IK::Point_3 *p = boost::get<IK::Point_3>(&*result))
-            ///{
-            // points.emplace_back(*p);
 
         } // if point type
 
