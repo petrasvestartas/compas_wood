@@ -111,9 +111,7 @@ https://grail.cs.washington.edu/projects/carpentrycompiler/
     year = {2019}
 }
 
-##### Tests
-![type_library_name_ss_e_op_4](https://user-images.githubusercontent.com/18013985/221279721-46affd00-b1d1-4893-87a4-683a2f134eda.png)
-![type_library_name_ts_e_p_5](https://user-images.githubusercontent.com/18013985/221279746-7591ea1f-d021-4da2-91fb-fd8a7b9b0b9a.png)
+## Tests
 ![type_plates_name_cross_and_sides_corner](https://user-images.githubusercontent.com/18013985/221279761-5753e90d-b73a-4e63-824a-da8b5d57d3c2.png)
 ![type_plates_name_cross_corners](https://user-images.githubusercontent.com/18013985/221279772-0d037f1a-1c43-4c11-b42d-77558b9bc2d1.png)
 ![type_plates_name_cross_ibois_pavilion](https://user-images.githubusercontent.com/18013985/221279812-6262616b-b9d7-4e49-a132-1463da5d521d.png)
