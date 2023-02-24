@@ -1,4 +1,4 @@
-# Project for Generating Timber Joints
+# COMPAS_WOOD - Project for Generating Timber Joints
 
 Author: [Petras Vestartas](https://petrasvestartas.com/About-Petras-Vestartas)
 
