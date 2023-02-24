@@ -30,9 +30,10 @@
 // The development strategy is following:
 // 1) Create backend in C++ with a Viewer - Finished
 // 2) Create a wrapper in C++ with Pybind11 - In Process
-// 3) Setup the Compas Python Environment and that replicated the 2nd step workflow
+// 3) Setup the Compas Python Environment that replicates the 2nd step workflow - Not done
 // 4) Produce documentation - Finished
-// 5) Write Grasshopper components
+// 5) Write Grasshopper components - Not done
+// 6) Write if the code works on MAC and Linux - Not done
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 #pragma once
