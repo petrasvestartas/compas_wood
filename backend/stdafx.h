@@ -218,3 +218,6 @@ using RowMatrixXi = Eigen::Matrix<int, Eigen::Dynamic, Eigen::Dynamic, Eigen::Ro
 
 // Display
 static std::vector<CGAL_Polyline> viewer_polylines;
+
+// pybind11
+#include <pybind11/pybind11.h>

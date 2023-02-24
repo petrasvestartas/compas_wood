@@ -1,7 +1,0 @@
-C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/cgal-prefix/src/cgal-build/CMakeFiles/install_FindCGAL.dir
-C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/cgal-prefix/src/cgal-build/CMakeFiles/ALL_CGAL_TARGETS.dir
-C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/cgal-prefix/src/cgal-build/CMakeFiles/examples.dir
-C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/cgal-prefix/src/cgal-build/CMakeFiles/demos.dir
-C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/cgal-prefix/src/cgal-build/CMakeFiles/INSTALL.dir
-C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/cgal-prefix/src/cgal-build/CMakeFiles/ALL_BUILD.dir
-C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/cgal-prefix/src/cgal-build/CMakeFiles/ZERO_CHECK.dir

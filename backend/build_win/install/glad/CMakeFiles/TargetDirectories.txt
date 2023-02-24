@@ -1,4 +1,0 @@
-C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/install/glad/CMakeFiles/glad-generate-files.dir
-C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/install/glad/CMakeFiles/glad.dir
-C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/install/glad/CMakeFiles/ALL_BUILD.dir
-C:/IBOIS57/_Code/Software/Python/compas_wood/backend/build_win/install/glad/CMakeFiles/ZERO_CHECK.dir

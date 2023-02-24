@@ -353,6 +353,24 @@ endif (WIN32)
 
   # add_library(CDT STATIC ${CDT_INC} ${CDT_SRC}  )
   # target_include_directories(CDT  PUBLIC "${CMAKE_BINARY_DIR}/install/cdt/CDT/include/") #link headers to clipper library
+
+########################################################################
+# PYBIND11
+######################################################################## 
+
+ExternalProject_Add(pybind11
+  URL https://github.com/pybind/pybind11/archive/refs/tags/v2.10.3.zip
+  CMAKE_ARGS
+    -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
+    -DCMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER}
+  SOURCE_DIR   "${CMAKE_BINARY_DIR}/install/pybind11"
+  BUILD_ALWAYS "" #do not buld
+  INSTALL_COMMAND "" #installer for now is empty
+)
+
+
+
+
 endif ()
 
 
@@ -430,12 +448,20 @@ if (BUILD_MY_PROJECTS)
   ###############################################################################
   find_package(OpenGL REQUIRED)
 
+  ###############################################################################
+  # PYBIND11 - requires python installation besides the python11
+  ###############################################################################
+  #give the python path to pybind11
+  set(CMAKE_EXPORT_COMPILE_COMMANDS 1)
+  set(Python_Dir "C:/Python38/")
+
 
   ###############################################################################
   # LINK HEADERS TO EXE
   # check path:
   # message(AUTHOR_WARNING "${CMAKE_SOURCE_DIR}/viewer/include/stb")
   ###############################################################################
+
   list(APPEND petras_include_paths 
   #my_code
   "${CMAKE_SOURCE_DIR}/src/viewer/include/"
@@ -471,8 +497,28 @@ if (BUILD_MY_PROJECTS)
   #"C:/msys64/mingw64/lib/" #GCC
   #googletest
   "${CMAKE_BINARY_DIR}/install/googletest/include/"
-
+  #pybind11
+  "${Python_Dir}include/" 
+  "${CMAKE_BINARY_DIR}/install/pybind11/include/"
   )
+
+ message(STATUS "___________________________Python is Found")
+message(STATUS "${Python_Dir_Windows}include/")
+# set(Python_Dir_Windows "C:/Python38/")
+# find_package("Python")
+
+
+# if(PYTHON_FOUND)
+#     message(STATUS "___________________________Python is Found")
+#     message(STATUS ${Python})
+#     message(STATUS ${Python_INCLUDE_DIRS})
+#     message(STATUS ${Python_LIBRARIES})
+#     # add_executable(enough enough.c)
+#     # include_directories(${ZLIB_INCLUDE_DIRS})
+#     # target_link_libraries(enough ${ZLIB_LIBRARIES})
+# else()
+#     message(FATAL_ERROR "PYTHON not found")
+# endif()
 
 
   target_include_directories(${PROJECT_NAME} PUBLIC "$<BUILD_INTERFACE:${petras_include_paths}>") #header for the library
@@ -513,6 +559,10 @@ if (BUILD_MY_PROJECTS)
       gtest
       gmock
     ) #gmp mpfr link library | zlibstatic WINDOWS
+
+    target_link_libraries(${PROJECT_NAME} PUBLIC 
+      "${Python_Dir}/libs/python38.lib"
+    )
   endif()
 
   ###############################################################################
