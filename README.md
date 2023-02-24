@@ -2,6 +2,9 @@
 
 Author: [Petras Vestartas](https://petrasvestartas.com/About-Petras-Vestartas)
 
+![type_plates_name_side_to_side_edge_inplane_hexshell](https://user-images.githubusercontent.com/18013985/221278631-8ed8f5af-8485-49ec-9a99-625d5a4466e4.png)
+
+
 ## :small_red_triangle: Under-construction to-do list :small_red_triangle:
 
 ### 01 2023 - finalization of joinery methods (top-to-top, clip joint, multi-butterfly connections)
