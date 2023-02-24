@@ -1,6 +1,6 @@
 #pragma once
 
-#include <stdio.h>
+// std library
 #include <stdlib.h>
 #include <vector>
 #include <array>
@@ -71,29 +71,20 @@
 #include "src/viewer/include/opengl/opengl_debug.h"
 
 // imgui
-// #include "imgui.h"
 #include "wood_globals.h"
 #include "imgui_impl_glfw.h"
 #define IMGUI_IMPL_OPENGL_LOADER_CUSTOM
 #include "imgui_impl_opengl3.h"
 
-// #include "imgui.h"
-// #include "imgui_impl_opengl3.h"
-
 // my lib goemetry
 #include "src/viewer/include/opengl/opengl_shaders.h"
-
 #include "src/viewer/include/opengl/opengl_polylines.h"
 #include "src/viewer/include/opengl/opengl_pointclouds.h"
-// #include <CDT.h>
-//  temp
-// #include <CDT.h>
-// #include "src/viewer/include/opengl/opengl_triangulation.h"
 #include <CDT.h>                                            //used in opengl_meshes
 #include "src/viewer/include/opengl/opengl_triangulation.h" //used in opengl_meshes
-
 #include "src/viewer/include/opengl/opengl_meshes.h"
 #include "src/viewer/include/opengl/opengl_cameras.h"
+
 #define gui
 // #ifdef(gui) //only declare this if the following header is outside of the precompiled header
 #include "src/viewer/include/imgui/imgui_render.h"
@@ -191,7 +182,7 @@ typedef CGALCDT::Point Point;
 typedef CGAL::Polygon_2<IK> Polygon_2;
 typedef CGALCDT::Face_handle Face_handle;
 
-// Eigen for Pybind11
+// Eigen for Pybind11 used only at small part for meshing
 using RowMatrixXd = Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor>;
 using RowMatrixXi = Eigen::Matrix<int, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor>;
 
@@ -219,5 +210,6 @@ using RowMatrixXi = Eigen::Matrix<int, Eigen::Dynamic, Eigen::Dynamic, Eigen::Ro
 // Display
 static std::vector<CGAL_Polyline> viewer_polylines;
 
-// pybind11
-#include <pybind11/pybind11.h>
+// // pybind11
+// #include <pybind11/pybind11.h>
+// namespace py = pybind11;

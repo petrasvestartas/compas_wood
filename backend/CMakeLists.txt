@@ -449,14 +449,6 @@ if (BUILD_MY_PROJECTS)
   find_package(OpenGL REQUIRED)
 
   ###############################################################################
-  # PYBIND11 - requires python installation besides the python11
-  ###############################################################################
-  #give the python path to pybind11
-  set(CMAKE_EXPORT_COMPILE_COMMANDS 1)
-  set(Python_Dir "C:/Python38/")
-
-
-  ###############################################################################
   # LINK HEADERS TO EXE
   # check path:
   # message(AUTHOR_WARNING "${CMAKE_SOURCE_DIR}/viewer/include/stb")
@@ -497,29 +489,7 @@ if (BUILD_MY_PROJECTS)
   #"C:/msys64/mingw64/lib/" #GCC
   #googletest
   "${CMAKE_BINARY_DIR}/install/googletest/include/"
-  #pybind11
-  "${Python_Dir}include/" 
-  "${CMAKE_BINARY_DIR}/install/pybind11/include/"
   )
-
- message(STATUS "___________________________Python is Found")
-message(STATUS "${Python_Dir_Windows}include/")
-# set(Python_Dir_Windows "C:/Python38/")
-# find_package("Python")
-
-
-# if(PYTHON_FOUND)
-#     message(STATUS "___________________________Python is Found")
-#     message(STATUS ${Python})
-#     message(STATUS ${Python_INCLUDE_DIRS})
-#     message(STATUS ${Python_LIBRARIES})
-#     # add_executable(enough enough.c)
-#     # include_directories(${ZLIB_INCLUDE_DIRS})
-#     # target_link_libraries(enough ${ZLIB_LIBRARIES})
-# else()
-#     message(FATAL_ERROR "PYTHON not found")
-# endif()
-
 
   target_include_directories(${PROJECT_NAME} PUBLIC "$<BUILD_INTERFACE:${petras_include_paths}>") #header for the library
 
@@ -560,9 +530,9 @@ message(STATUS "${Python_Dir_Windows}include/")
       gmock
     ) #gmp mpfr link library | zlibstatic WINDOWS
 
-    target_link_libraries(${PROJECT_NAME} PUBLIC 
-      "${Python_Dir}/libs/python38.lib"
-    )
+    # target_link_libraries(${PROJECT_NAME} PUBLIC 
+    #   "${Python_Dir}/libs/python38.lib"
+    # )
   endif()
 
   ###############################################################################
@@ -603,8 +573,56 @@ message(STATUS "${Python_Dir_Windows}include/")
 
   message(AUTHOR_WARNING "${CMAKE_BINARY_DIR}/Release" ${BUILD_MY_PROJECTS})
 
+  
+  ###############################################################################
+  # WRAPPER LIBRARY FOR PYBIND11 - https://www.youtube.com/watch?v=-eIkUnCLMFc&t=75s
+  # My own created tutorial: https://github.com/pybind/pybind11/discussions/4530
+  # PYBIND11 - requires python installation besides the python11
+  # WARNING - your conda environment must not have the module with the same name installed, 
+  # SOLUTION - check by "conda list" and "pip uninstall compas_wood"
+  ###############################################################################
+  #give the python path to pybind11
+  set(CMAKE_EXPORT_COMPILE_COMMANDS 1)
+  set(PYTHON_MODULE_NAME "wood_pybind11")
 
+  # find python do not use find_package(Python) this would fail if a few python versions are installed, better to use one from Anaconda
+  find_package(Python 3.6 REQUIRED COMPONENTS Interpreter Development ${_pybind11_quiet}) 
 
+  # add pybind11 to enamle CMake command: pybind11_add_module
+  add_subdirectory("${CMAKE_BINARY_DIR}/install/pybind11")
+
+  # module - this is a special cmake command from the pybind11 package
+  pybind11_add_module (
+    "${PYTHON_MODULE_NAME}" # name of the module
+    #source pybind11
+    "${CMAKE_SOURCE_DIR}/src/compas_wood/include/compas_wood.cpp"
+    #clipper
+    "${CMAKE_BINARY_DIR}/install/clipper_2/CPP/Clipper2Lib/src/clipper.engine.cpp"
+    "${CMAKE_BINARY_DIR}/install/clipper_2/CPP/Clipper2Lib/src/clipper.offset.cpp"
+
+  )
+
+  # include directories for header files
+  target_include_directories(
+    "${PYTHON_MODULE_NAME}" # name of the module
+    #source pybind11
+    PRIVATE "${CMAKE_SOURCE_DIR}/src/compas_wood/include/"
+    #wood
+    PRIVATE "${CMAKE_SOURCE_DIR}/src/wood/include/"
+    #pybind11
+    PRIVATE "${CMAKE_BINARY_DIR}/install/pybind11/"
+    #eigen
+    PRIVATE "${CMAKE_BINARY_DIR}/install/eigen/"
+    #clipper
+    PRIVATE "${CMAKE_BINARY_DIR}/install/clipper_2/CPP/Clipper2Lib/include/"
+    #boost
+    PRIVATE "${CMAKE_BINARY_DIR}/install/boost/include/boost-1_78/"
+    #eigen
+    PRIVATE "${CMAKE_BINARY_DIR}/install/eigen/"
+    #cgal
+    PRIVATE "${CMAKE_BINARY_DIR}/install/cgal/include"
+    PRIVATE "${CMAKE_BINARY_DIR}/install/cgal/auxiliary/gmp/include"
+  )
 
 endif ()
 
@@ -665,7 +683,7 @@ if (COMPILE_LIBS)
   ###############################################################################
   set(STB_INC
   "${CMAKE_SOURCE_DIR}/src/viewer/include/stb/stb_image.h"
-    "${CMAKE_SOURCE_DIR}/src/viewer/include/stb/stb_image_write.h"
+  "${CMAKE_SOURCE_DIR}/src/viewer/include/stb/stb_image_write.h"
  )
 
   set(STB_SRC
@@ -706,6 +724,14 @@ if (COMPILE_LIBS)
   ###############################################################################
   # EIGEN
   ###############################################################################
+
+  ###############################################################################
+  # PYBDIND11 - COPY THE PYTHON MODULE TO THE TEST FOLDER
+  ###############################################################################
+
+
+
+  
 
 
   message(AUTHOR_WARNING "Part 1 - endif" ${BUILD_MY_PROJECTS})

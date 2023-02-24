@@ -2,7 +2,7 @@
 
 ## Joint Parameters: Type, Divisions, Double
 
-Three parameters are used per joint type in one continuous array, meaning only one joint type can be used or other joint type wil used the same parameters.
+Three parameters are used per joint type in one continuous array, meaning only one joint type can be used or other joint type will used the same parameters.
 
 
 ```cpp
