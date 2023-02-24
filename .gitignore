@@ -1,3 +1,12 @@
+#ingore backend
+backend/wood/.cache/**
+backend/wood/build/**
+backend/wood/build_win/**
+backend/build_win/**
+backend/wood/CMakeFiles/**
+
+*.tar.gz
+
 # Prerequisites
 *.d
 *.db

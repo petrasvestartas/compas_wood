@@ -1,0 +1,302 @@
+// run ninja-> g++ main.cpp -o main
+// cmake  --fresh -DGET_LIBS=OFF -DBUILD_MY_PROJECTS=ON -DRELEASE_DEBUG=ON -DCMAKE_BUILD_TYPE="Release" -G "Ninja" .. && cmake  --build . --config Release
+// cmake --fresh -DGET_LIBS=OFF -DBUILD_MY_PROJECTS=ON -DRELEASE_DEBUG=ON -DCMAKE_BUILD_TYPE="Release"  -G "Visual Studio 17 2022" -A x64 .. && cmake --build . --config Release
+// cmake  -E time --build . -v --config Release -- -j0
+// cmake  --build . -v --config Release -- -j0
+// cmake  --build . --config Release -v
+
+#include "stdafx.h"
+
+#include "viewer/include/opengl/opengl_meshes.h"
+#include "viewer/include/opengl/opengl_cameras.h"
+#define gui
+//#ifdef(gui) //only declare this if the following header is outside of the precompiled header
+#include "viewer/include/imgui/imgui_render.h"
+//#endif//only declare this if the following header is outside of the precompiled header
+#include "viewer/include/opengl/opengl_globals_geometry.h"
+#include "viewer/include/opengl/opengl_render.h"
+
+// temp
+#include "wood/include/wood_main.h"
+#include "wood/include/wood_xml.h" // xml parser and viewer customization
+#include "wood/include/wood_test.h"
+
+// viewer
+#include "wood/include/viewer_wood.h"
+
+//#include "nest/nfp.h"
+
+int main(int argc, char **argv)
+{
+	// data-set taken from https://schneide.blog/tag/cc/
+	CGAL::Surface_mesh<CGAL::Exact_predicates_inexact_constructions_kernel::Point_3> mesh_0;
+	CGAL::Surface_mesh<CGAL::Exact_predicates_inexact_constructions_kernel::Point_3> mesh_1;
+
+	mesh_0.add_vertex(CGAL::Epick::Point_3(0, 0, 0));
+	mesh_0.add_vertex(CGAL::Epick::Point_3(0, 0, 1));
+	mesh_0.add_vertex(CGAL::Epick::Point_3(1, 0, 1));
+	mesh_0.add_vertex(CGAL::Epick::Point_3(1, 1, 1));
+	mesh_0.add_vertex(CGAL::Epick::Point_3(1, 0, 0));
+	mesh_0.add_vertex(CGAL::Epick::Point_3(1, 1, 0));
+	mesh_0.add_vertex(CGAL::Epick::Point_3(0, 1, 0));
+	mesh_0.add_vertex(CGAL::Epick::Point_3(0, 1, 1));
+
+	mesh_0.add_face(CGAL::SM_Vertex_index(0), CGAL::SM_Vertex_index(4), CGAL::SM_Vertex_index(2));
+	mesh_0.add_face(CGAL::SM_Vertex_index(4), CGAL::SM_Vertex_index(5), CGAL::SM_Vertex_index(3));
+	mesh_0.add_face(CGAL::SM_Vertex_index(5), CGAL::SM_Vertex_index(6), CGAL::SM_Vertex_index(7));
+	mesh_0.add_face(CGAL::SM_Vertex_index(6), CGAL::SM_Vertex_index(0), CGAL::SM_Vertex_index(1));
+	mesh_0.add_face(CGAL::SM_Vertex_index(4), CGAL::SM_Vertex_index(0), CGAL::SM_Vertex_index(6));
+	mesh_0.add_face(CGAL::SM_Vertex_index(6), CGAL::SM_Vertex_index(5), CGAL::SM_Vertex_index(4));
+	mesh_0.add_face(CGAL::SM_Vertex_index(2), CGAL::SM_Vertex_index(7), CGAL::SM_Vertex_index(1));
+	mesh_0.add_face(CGAL::SM_Vertex_index(7), CGAL::SM_Vertex_index(2), CGAL::SM_Vertex_index(3));
+	mesh_0.add_face(CGAL::SM_Vertex_index(0), CGAL::SM_Vertex_index(2), CGAL::SM_Vertex_index(1));
+	mesh_0.add_face(CGAL::SM_Vertex_index(4), CGAL::SM_Vertex_index(3), CGAL::SM_Vertex_index(2));
+	mesh_0.add_face(CGAL::SM_Vertex_index(5), CGAL::SM_Vertex_index(7), CGAL::SM_Vertex_index(3));
+	mesh_0.add_face(CGAL::SM_Vertex_index(6), CGAL::SM_Vertex_index(1), CGAL::SM_Vertex_index(7));
+
+	mesh_1.add_vertex(CGAL::Epick::Point_3(0.353451, 0.209961, 0.725612));
+	mesh_1.add_vertex(CGAL::Epick::Point_3(0.353451, 0.209961, 1.725612));
+	mesh_1.add_vertex(CGAL::Epick::Point_3(1.353451, 0.209961, 1.725612));
+	mesh_1.add_vertex(CGAL::Epick::Point_3(1.353451, 1.209961, 1.725612));
+	mesh_1.add_vertex(CGAL::Epick::Point_3(1.353451, 0.209961, 0.725612));
+	mesh_1.add_vertex(CGAL::Epick::Point_3(1.353451, 1.209961, 0.725612));
+	mesh_1.add_vertex(CGAL::Epick::Point_3(0.353451, 1.209961, 0.725612));
+	mesh_1.add_vertex(CGAL::Epick::Point_3(0.353451, 1.209961, 1.725612));
+
+	mesh_1.add_face(CGAL::SM_Vertex_index(0), CGAL::SM_Vertex_index(4), CGAL::SM_Vertex_index(2));
+	mesh_1.add_face(CGAL::SM_Vertex_index(4), CGAL::SM_Vertex_index(5), CGAL::SM_Vertex_index(3));
+	mesh_1.add_face(CGAL::SM_Vertex_index(5), CGAL::SM_Vertex_index(6), CGAL::SM_Vertex_index(7));
+	mesh_1.add_face(CGAL::SM_Vertex_index(6), CGAL::SM_Vertex_index(0), CGAL::SM_Vertex_index(1));
+	mesh_1.add_face(CGAL::SM_Vertex_index(4), CGAL::SM_Vertex_index(0), CGAL::SM_Vertex_index(6));
+	mesh_1.add_face(CGAL::SM_Vertex_index(6), CGAL::SM_Vertex_index(5), CGAL::SM_Vertex_index(4));
+	mesh_1.add_face(CGAL::SM_Vertex_index(2), CGAL::SM_Vertex_index(7), CGAL::SM_Vertex_index(1));
+	mesh_1.add_face(CGAL::SM_Vertex_index(7), CGAL::SM_Vertex_index(2), CGAL::SM_Vertex_index(3));
+	mesh_1.add_face(CGAL::SM_Vertex_index(0), CGAL::SM_Vertex_index(2), CGAL::SM_Vertex_index(1));
+	mesh_1.add_face(CGAL::SM_Vertex_index(4), CGAL::SM_Vertex_index(3), CGAL::SM_Vertex_index(2));
+	mesh_1.add_face(CGAL::SM_Vertex_index(5), CGAL::SM_Vertex_index(7), CGAL::SM_Vertex_index(3));
+	mesh_1.add_face(CGAL::SM_Vertex_index(6), CGAL::SM_Vertex_index(1), CGAL::SM_Vertex_index(7));
+
+	std::vector<Mesh> mesh_list;
+	mesh_list.reserve(2);
+	mesh_list.emplace_back(mesh_0);
+	mesh_list.emplace_back(mesh_1);
+
+	// run the boolean intersection
+
+	size_t difference_union_intersection = 0;
+
+	std::vector<float> coord_out;
+	std::vector<float> normals_out;
+	int n_coord_out;
+	std::vector<int> faces_out;
+	int n_faces_out;
+	std::vector<int> facesColors_out;
+	int n_facesColors_out;
+	int n_valid_meshes = 9;
+
+	cgal_mesh_boolean::mesh_boolean_create_array_track_colors(
+
+		// double *coord_mesh, int *n_coord_meshArray, // Flat array of coordinates / 0 256 512 flat array of vertices array / number of meshes
+		// int *faces_mesh, int *n_faces_meshArray,
+		// size_t n_mesh,
+		mesh_list,
+		difference_union_intersection,
+
+		coord_out, n_coord_out,
+		normals_out,
+		faces_out,
+		n_faces_out,
+		facesColors_out, n_facesColors_out,
+		n_valid_meshes
+
+	);
+
+	wood_test::test_cgal_mesh_boolean_0();
+	// opengl_globals_geometry::meshes.add(coord_out, normals_out, faces_out, colors::grey, 1, "mesh_outlines_wood");
+	opengl_globals::shader_type_0default_1transparent_2shaded_3shadedwireframe_4wireframe_5normals_6explode = 3;
+	opengl_globals::shaders_folder = "C:\\IBOIS57\\_Code\\Software\\CPP\\CMAKE\\super_build\\compas_wood\\viewer\\shaders\\";
+	opengl_globals_geometry::meshes.add_flat_faces(coord_out, normals_out, faces_out, facesColors_out, colors::white, 0, "mesh_outlines_wood");
+	opengl_globals_geometry::add_grid();
+
+	// const std::vector<glm::vec3> &out_vertices,
+	// 		const std::vector<glm::vec3> &out_normals,
+	// 		const std::vector<glm::ivec3> &out_triangles,
+	// 		const glm::vec4 &obj_color,
+	// 		float shading_w = 1,
+
+	int a = 10;
+	int b = 1;
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	// geometry
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	// opengl_globals_geometry::add_robot_abb_6700(0, glm::translate(glm::vec3(0.0f, 0.0f, 0.0f)));
+	opengl_render::render();
+	return 0;
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	// Read Polylines from XML
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	// polylines axes
+	bool simple_case = false;
+	std::vector<std::vector<IK::Point_3>> input_polyline_pairs;
+	path_and_file_for_input_polylines = "C:\\IBOIS57\\_Code\\Software\\Python\\compas_wood\\net\\data\\input_polylines.xml";
+	bool result = xml_parser::read_xml_polylines(input_polyline_pairs, simple_case);
+	if (!result)
+	{
+		std::cout << "Error input_polylines.xml";
+		return 0;
+	}
+
+	// radii
+	std::vector<std::vector<double>> input_radii;
+	path_and_file_for_input_numbers = "C:\\IBOIS57\\_Code\\Software\\Python\\compas_wood\\net\\data\\input_numbers.xml";
+	result = xml_parser::read_xml_numbers(input_radii);
+	if (!result)
+	{
+		std::cout << "Error input_numbers.xml ";
+		return 0;
+	}
+
+	// direction
+	std::vector<std::vector<IK::Vector_3>> polylines_segment_direction;
+
+	// allowed types
+	// allowed_types: -1 - all possible types, 0 - end - to - end, 1 - cross or side - to - end, this option is needed because multiple joint can be made in one intersection,
+	std::vector<int> allowed_types;
+	allowed_types.reserve(input_polyline_pairs.size());
+	for (int i = 0; i < input_polyline_pairs.size(); i++)
+		allowed_types.emplace_back(-1);
+
+	// min_distance : double distance until which search is valid
+	// Parameter t explanation
+	//  x < 0 - all cross
+	// x > 1.0 all side - end
+	//  how close the point is to the middle from
+	//(closest to the middle) 0 <= x <= 1 (closest to the edge)
+	// possible output : one is above another below - side - to - end joint  e.g. 0.9999
+	// possible output : when both are above, the smaller is female, other is male 0.75
+	// possible output : when both are below, then cross, e.g. 0.0001
+	double min_distance = 50.0;
+
+	// volume_length : double length of beam volumes
+	double volume_length = 100;
+
+	// cross_or_side_to_end : double type0_type1_parameter
+	double cross_or_side_to_end = -1;
+	1 - 0.91;
+
+	// flip_male : property for side-to-end volumes 0 - no shift, -1 shift to right, 1 shift to left
+	int flip_male = 0;
+
+	// Output
+	std::vector<std::array<int, 4>> polyline0_id_segment0_id_polyline1_id_segment1_id;
+	std::vector<std::array<IK::Point_3, 2>> point_pairs;
+	std::vector<std::array<CGAL_Polyline, 4>> volume_pairs;
+	std::vector<CGAL_Polyline> joints_areas;
+	std::vector<int> joints_types;
+
+	// Global Parameters and output joint selection and orientation
+	double division_length = 300;
+	std::vector<double> default_parameters_for_JOINTS_TYPES{
+		300,
+		0.5,
+		8,
+		450,
+		0.64,
+		10,
+		450,
+		0.7,
+		22,
+		300, // cross joints
+		0.1, // cross joints
+		32,	 // cross joints
+		300,
+		0.5,
+		40,
+		300,
+		0.5,
+		58,
+		300,
+		1.0,
+		60};
+
+	std::vector<std::vector<CGAL_Polyline>> output_plines;
+	std::vector<std::vector<cut_type>> output_types;
+	bool compute_joints = true;
+	double division_distance = 500;
+	double shift = 0.6;
+	int output_type = 3;
+
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	// Joinery Solver
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	// std::vector < double> 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40,
+
+	beam_volumes(
+
+		// input
+		input_polyline_pairs,
+		input_radii,
+		polylines_segment_direction,
+		allowed_types,
+		min_distance,
+		volume_length,
+		cross_or_side_to_end,
+		flip_male,
+
+		// ouput
+		polyline0_id_segment0_id_polyline1_id_segment1_id,
+		point_pairs,
+		volume_pairs,
+		joints_areas,
+		joints_types,
+
+		// Global Parameters and output joint selection and orientation
+		default_parameters_for_JOINTS_TYPES,
+		output_plines,
+		output_types,
+		compute_joints,
+		division_distance,
+		shift,
+		output_type
+
+	);
+
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	// WritePolylines
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	xml_parser::write_xml_polylines_and_types(output_plines, output_types);
+
+	std::vector<CGAL_Polyline> output_plines2;
+	for (auto &volume : volume_pairs)
+	{
+		output_plines2.emplace_back(volume[0]);
+		output_plines2.emplace_back(volume[1]);
+		output_plines2.emplace_back(volume[2]);
+		output_plines2.emplace_back(volume[3]);
+	}
+
+	// xml_parser::write_xml_polylines(joints_areas);
+
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	// Preview polylines from xml, take 9 - th element
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	viewer_for_wood::scale = 1000.0f;
+	viewer_for_wood::add(input_polyline_pairs); // grey
+	viewer_for_wood::add(point_pairs);			// lines - red
+	viewer_for_wood::add(volume_pairs);			// polyline blue
+	viewer_for_wood::add_areas(joints_areas);	// mesh green
+	viewer_for_wood::add(output_plines);		// loft meshes should
+
+	std::vector<std::vector<glm::vec3>> vertices;
+	std::vector<glm::vec3> one_face = {glm::vec3(0, 0, 0), glm::vec3(1, 0, 0), glm::vec3(1, 1, 0), glm::vec3(0, 0, 0)};
+	vertices.emplace_back(one_face);
+	opengl_globals_geometry::meshes.add(vertices, colors::green, false, 0.001f, 1.0f, "mesh_outlines_wood");
+
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	// render
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	opengl_render::render();
+
+	return 0;
+}

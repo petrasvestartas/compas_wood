@@ -81,7 +81,7 @@ namespace rhino_util {
 
         public static int IsAbovePlane(this Plane plane, Point3d p) {
             Point3d pCopy = new Point3d(p);
-            pCopy.Transform(Rhino.Geometry.Transform.PlaneToPlane(plane, Plane.WorldXY));
+            pCopy.Transform(Rhino.Geometry.Transform.plane_to_plane(plane, Plane.WorldXY));
             if (pCopy.Z == 0) return 0;
             else if (pCopy.Z < 0) return -1;
             else return 1;

@@ -495,7 +495,7 @@ def joints(polylines_vertices_XYZ, search_type):
         List of element indices
     joint_areas
         List of joint areas as polylines
-    joint_types
+    JOINTS_TYPES
         List of joint types as int
 
     """
@@ -534,7 +534,7 @@ def joints(polylines_vertices_XYZ, search_type):
     # ==============================================================================
 
     start_time = time.time()
-    element_pairs, joint_areas, joint_types = pybind11_joinery_solver.pybind11_joints(
+    element_pairs, joint_areas, JOINTS_TYPES = pybind11_joinery_solver.pybind11_joints(
         V, F, search_type
     )
 
@@ -565,16 +565,16 @@ def joints(polylines_vertices_XYZ, search_type):
         polyline = Polyline(points)
         joint_areas_polylines.append(polyline)
 
-    joint_types_list = []
-    for id in joint_types:
-        joint_types_list.append(id[0])
+    JOINTS_TYPES_list = []
+    for id in JOINTS_TYPES:
+        JOINTS_TYPES_list.append(id[0])
     # print("Number of polylines " + str(len(joint_areas_polylines)))
 
     print(
         "============================================================================== CPP -"
     )
     # print("Output")
-    return element_pairs_list, joint_areas_polylines, joint_types_list
+    return element_pairs_list, joint_areas_polylines, JOINTS_TYPES_list
 
 
 @plugin(
@@ -709,7 +709,7 @@ def beam_volumes(
         a list of 4 polyline
     joint_areas_list
         a list of closed polylines within local connection detection
-    joint_types_list
+    JOINTS_TYPES_list
         a list of integers of joint area types
     joint_geometry
         oriented joint geometry if joints are computed
@@ -792,7 +792,7 @@ def beam_volumes(
         point_pairs,
         volume_pairs,
         joint_areas,
-        joint_types,
+        JOINTS_TYPES,
         joint_geometry,
     ) = pybind11_joinery_solver.pybind11_beam_volumes(
         folder,
@@ -847,9 +847,9 @@ def beam_volumes(
         pline = Polyline(points)
         joint_areas_list.append(pline)
 
-    joint_types_list = []
-    for points_coord in joint_types:
-        joint_types_list.append(points_coord[0])
+    JOINTS_TYPES_list = []
+    for points_coord in JOINTS_TYPES:
+        JOINTS_TYPES_list.append(points_coord[0])
 
     joint_geometry_list = []
     for points_coord in joint_geometry:
@@ -864,7 +864,7 @@ def beam_volumes(
         pair_points_list,
         pair_volumes_list,
         joint_areas_list,
-        joint_types_list,
+        JOINTS_TYPES_list,
         joint_geometry_list,
     )
 

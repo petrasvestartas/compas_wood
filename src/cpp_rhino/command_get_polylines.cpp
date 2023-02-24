@@ -124,7 +124,7 @@ bool CGetTextDotObject::CustomGeometryFilter(const CRhinoObject* object, const O
 }
 
 bool UI(const CRhinoCommandContext& context, std::vector<CGAL_Polyline>& input_polyline_pairs, std::vector<int>& input_polyline_pairs_indices, int& search_type, double& division_distance, double& shift, int& output_type,
-    std::vector<double>& joint_parameters, std::vector<std::vector<IK::Vector_3>>& input_insertion_vectors, std::vector<std::vector<int>>& input_joint_types, int& triangulation) {
+    std::vector<double>& joint_parameters, std::vector<std::vector<IK::Vector_3>>& input_insertion_vectors, std::vector<std::vector<int>>& input_JOINTS_TYPES, int& triangulation) {
     double tol = context.m_doc.AbsoluteTolerance() * 10;
 #pragma region GetPolylines
 
@@ -195,15 +195,15 @@ bool UI(const CRhinoCommandContext& context, std::vector<CGAL_Polyline>& input_p
     int n = input_polyline_pairs.size() * 0.5;
 
     input_insertion_vectors = std::vector<std::vector<IK::Vector_3>>(n);
-    input_joint_types = std::vector<std::vector<int>>(n);
+    input_JOINTS_TYPES = std::vector<std::vector<int>>(n);
 
     for (int i = 0; i < n; i++) {
         input_insertion_vectors[i].reserve(input_polyline_pairs[i].size() + 1);
-        input_joint_types[i].reserve(input_polyline_pairs[i].size() + 1);
+        input_JOINTS_TYPES[i].reserve(input_polyline_pairs[i].size() + 1);
 
         for (int j = 0; j < input_polyline_pairs[i].size() + 1; j++) {
             input_insertion_vectors[i].emplace_back(0, 0, 0);
-            input_joint_types[i].emplace_back(-1);
+            input_JOINTS_TYPES[i].emplace_back(-1);
         }
     }
 
@@ -363,7 +363,7 @@ bool UI(const CRhinoCommandContext& context, std::vector<CGAL_Polyline>& input_p
         for (int i = 0; i < text_dots.size(); i++) {//AABB.size()
             //RhinoApp().Print(L" x %f y %f z %f \n", text_dots[i].first.x, text_dots[i].first.y, text_dots[i].first.z);
             //std::vector<int> result;
-            auto callback = [i, &text_dots, &input_polyline_pairs, &input_joint_types, &collision_count, &context](int foundValue) -> bool
+            auto callback = [i, &text_dots, &input_polyline_pairs, &input_JOINTS_TYPES, &collision_count, &context](int foundValue) -> bool
             {
                 //RhinoApp().Print(L" __________________ \n");
                 //Get lines points
@@ -378,7 +378,7 @@ bool UI(const CRhinoCommandContext& context, std::vector<CGAL_Polyline>& input_p
                 if (flag) {
                     int face_or_edge = text_dots[i].second < 0 ? 0 : 2 + edge;
                     int type = text_dots[i].second < -100 ? 0 : std::abs(text_dots[i].second);
-                    input_joint_types[foundValue][face_or_edge] = type;
+                    input_JOINTS_TYPES[foundValue][face_or_edge] = type;
                     //RhinoApp().Print(L" Element %i edge %i \n", foundValue, edge);
                     //RhinoApp().Print(L" Closest Distance 0: %f \n", closest_distance);
                     collision_count++;
@@ -391,7 +391,7 @@ bool UI(const CRhinoCommandContext& context, std::vector<CGAL_Polyline>& input_p
                 if (flag) {
                     int face_or_edge = text_dots[i].second < 0 ? 1 : 2 + edge;
                     int type = text_dots[i].second < -100 ? 0 : std::abs(text_dots[i].second);
-                    input_joint_types[foundValue][face_or_edge] = std::abs(type);
+                    input_JOINTS_TYPES[foundValue][face_or_edge] = std::abs(type);
                     //RhinoApp().Print(L" Element %i edge %i \n", foundValue, edge);
                     //RhinoApp().Print(L" Closest Distance 1: %f \n", closest_distance);
                     collision_count++;
@@ -419,8 +419,8 @@ bool UI(const CRhinoCommandContext& context, std::vector<CGAL_Polyline>& input_p
         }
     }
     //RhinoApp().Print(L" Joint Types Collision count: %i \n", collision_count);
-    if (collision_count == 0) input_joint_types.clear();
-    //RhinoApp().Print(L" Joint Type vector count: %i \n", input_joint_types.size());
+    if (collision_count == 0) input_JOINTS_TYPES.clear();
+    //RhinoApp().Print(L" Joint Type vector count: %i \n", input_JOINTS_TYPES.size());
 
 #pragma endregion
 
@@ -592,10 +592,10 @@ CRhinoCommand::result command_get_polylines::RunCommand(const CRhinoCommandConte
     //side-to-side parallel in-plane |  side-to-side parallel | side-to-side out-of-plane |  top-to-side | cross | top-to-top |  side-to-side non-parallel
     std::vector<double> joint_parameters = { 1000, 0.5, 1,  1000, 0.5, 10 ,  1000, 0.5, 20 ,  1000, 0.5, 30 ,  1000, 0.5, 40 ,  1000, 0.5, 50 };
     std::vector<std::vector<IK::Vector_3>> input_insertion_vectors;
-    std::vector<std::vector<int>> input_joint_types;
+    std::vector<std::vector<int>> input_JOINTS_TYPES;
     int triangulation = 1;
     if (!UI(context, input_polyline_pairs, input_polyline_pairs_indices,
-        search_type, division_distance, shift, output_type, joint_parameters, input_insertion_vectors, input_joint_types, triangulation)) return CRhinoCommand::failure;
+        search_type, division_distance, shift, output_type, joint_parameters, input_insertion_vectors, input_JOINTS_TYPES, triangulation)) return CRhinoCommand::failure;
 
     /////////////////////////////////////////////////////////////////////
     //Main Method
@@ -604,7 +604,7 @@ CRhinoCommand::result command_get_polylines::RunCommand(const CRhinoCommandConte
     auto start = std::chrono::high_resolution_clock::now();
     //input
     //std::vector<std::vector<IK::Vector_3>> input_insertion_vectors;
-    //std::vector<std::vector<int>> input_joint_types;
+    //std::vector<std::vector<int>> input_JOINTS_TYPES;
     std::vector<std::vector<int>> input_three_valence_element_indices_and_instruction;
     //output
     std::vector<std::vector<CGAL_Polyline>> output_polyline_groups;
@@ -614,14 +614,14 @@ CRhinoCommand::result command_get_polylines::RunCommand(const CRhinoCommandConte
     //get_connection_zones(
     //    out_polyline_pairs,
     //    out_insertion_vectors,
-    //    out_joint_types,
+    //    out_JOINTS_TYPES,
     //    out_three_valence_element_indices_and_instruction,
     //    out_adjacency,
 
     //    output,
     //    top_face_triangulation,
 
-    //    out_default_parameters_for_joint_types,
+    //    out_default_parameters_for_JOINTS_TYPES,
     //    search_type,
     //    division_distance,
     //    shift,
@@ -635,7 +635,7 @@ CRhinoCommand::result command_get_polylines::RunCommand(const CRhinoCommandConte
         get_connection_zones(
             input_polyline_pairs,
             input_insertion_vectors,
-            input_joint_types,
+            input_JOINTS_TYPES,
             input_three_valence_element_indices_and_instruction,
             out_adjacency,
 

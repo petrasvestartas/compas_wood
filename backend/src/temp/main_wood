@@ -1,0 +1,91 @@
+#include "stdafx.h"
+#include "nest/nfp.h"
+// temp
+
+int main(int argc, char **argv)
+{
+
+	opengl_globals::shader_type_0default_1transparent_2shaded_3shadedwireframe_4wireframe_5normals_6explode = 2;
+	std::string exe_file_path(argv[0]);
+	opengl_globals::shaders_folder = exe_file_path.substr(0, exe_file_path.find_last_of("/\\")) + "\\shaders";
+	std::cout << opengl_globals::shaders_folder;
+
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	// geometry
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	opengl_globals_geometry::add_grid();
+	// // opengl_globals_geometry::add_planar_polylines_with_holes_as_one_mesh();
+	// Clipper2Lib::Paths64 subject, clip, solution;
+	// subject.push_back(Clipper2Lib::MakePath("100, 50, 10, 79, 65, 2, 65, 98, 10, 20"));
+	// clip.push_back(Clipper2Lib::MakePath("98, 63, 4, 68, 77, 8, 52, 100, 19, 13"));
+	// solution = Intersect(subject, clip, Clipper2Lib::FillRule::NonZero);
+
+	// std::vector<std::vector<glm::vec3>> plines_clipper;
+	// float scale = 0.01;
+	// plines_clipper.reserve(solution.size());
+	// for (int i = 0; i < solution.size(); i++)
+	// {
+	// 	std::vector<glm::vec3> pline;
+	// 	pline.reserve((solution[i].size() + 1) * 3);
+	// 	for (int j = 0; j < solution[i].size(); j++)
+	// 		pline.emplace_back(solution[i][j].x * scale, solution[i][j].y * scale, 0);
+
+	// 	pline.emplace_back(solution[i][0].x * scale, solution[i][0].y * scale, 0);
+	// 	plines_clipper.emplace_back(pline);
+	// }
+
+	// std::vector<std::vector<std::vector<glm::vec3>>> plines_clipper_groups;
+	// plines_clipper_groups.emplace_back(plines_clipper);
+
+	// opengl_globals_geometry::polylines.add(plines_clipper_groups, 5, glm::vec4(0.2f, 0.2f, 0.2f, 0.5f), true, "mesh_outlines_clipper");
+
+	// opengl_globals_geometry::meshes.add(plines_clipper_groups, glm::vec4(1, 0.0f, 0.50f, 0.1f), false, 0.001, 1, "polylne_with_holes_clipper");
+	auto start = std::chrono::high_resolution_clock::now();
+	std::vector<std::vector<std::vector<glm::vec3>>> pattern_glm;
+	std::vector<std::vector<std::vector<glm::vec3>>> path_glm;
+	std::vector<std::vector<std::vector<glm::vec3>>> nfp_glm;
+	std::vector<std::vector<std::vector<glm::vec3>>> results;
+
+	nest::nfps(pattern_glm, path_glm, nfp_glm, results);
+	auto stop = std::chrono::high_resolution_clock::now();
+	auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(stop - start);
+	std::cout << "Time taken by function: " << duration.count() << " ms" << std::endl;
+	opengl_globals_geometry::polylines.add(pattern_glm, 5, colors::red, true, "mesh_outlines_clipper");
+	opengl_globals_geometry::polylines.add(path_glm, 5, colors::blue, true, "mesh_outlines_clipper");
+	opengl_globals_geometry::polylines.add(nfp_glm, 5, colors::green, true, "mesh_outlines_clipper");
+	opengl_globals_geometry::polylines.add(results, 5, colors::black, true, "mesh_outlines_clipper");
+
+	// opengl_globals_geometry::polylines.add(std::vector<float>{ -2, 0, 0, y_axis_r.x - 2, y_axis_r.y, y_axis_r.z  }, weight::thick, colors::blue);
+	// opengl_globals_geometry::polylines.add(std::vector<float>{ -2, 0, 0, z_axis_r.x - 2, z_axis_r.y, z_axis_r.z  }, weight::thick, colors::blue);
+	// opengl_globals_geometry::polylines.add(std::vector<float>{ 0, 0, 0, 1, 0, 0 }, weight::thick, colors::red);
+	// opengl_globals_geometry::polylines.add(std::vector<float>{ 0, 0, 0, 0, 1, 0 }, weight::thick, colors::red);
+	// opengl_globals_geometry::polylines.add(std::vector<float>{ 0, 0, 0, 0, 0, 1 }, weight::thick, colors::red);
+	// opengl_globals_geometry::polylines.add(std::vector<float>{ -4, 0, 0, x_axis_r2.x - 4, x_axis_r2.y, x_axis_r2.z }, weight::thick, colors::green);
+	// opengl_globals_geometry::polylines.add(std::vector<float>{ -4, 0, 0, y_axis_r2.x - 4, y_axis_r2.y, y_axis_r2.z  }, weight::thick, colors::green);
+	// opengl_globals_geometry::polylines.add(std::vector<float>{ -4, 0, 0, z_axis_r2.x - 4, z_axis_r2.y, z_axis_r2.z  }, weight::thick, colors::green);
+
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	////init meshes
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	// opengl_globals_geometry::add_robot_abb_6700(0, glm::translate(glm::vec3(0.0f, 0.0f, 0.0f)));
+
+	// opengl_globals_geometry::add_robot_abb_6700(1, glm::translate(glm::vec3(0.0f, 3.0f, 0.0f)));
+	////print(opengl_render::meshes._geo.size());
+	// opengl_globals_geometry::add_random_pipes();
+	////opengl_globals_geometry::add_random_pipes();
+
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	// render
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	opengl_render::render();
+
+	return 0;
+}
+
+// //run ninja-> g++ main.cpp -o main
+// #include <iostream>
+
+// int main() {
+//     std::cout << "Hello World!";
+//     return 0;
+// }

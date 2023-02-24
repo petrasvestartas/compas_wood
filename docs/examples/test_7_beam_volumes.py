@@ -67,7 +67,7 @@ def test_beam_volumes():
         pair_points,
         volume_pairs,
         joint_areas_list,
-        joint_types_list,
+        JOINTS_TYPES_list,
         joint_geometry_list,
     ) = beam_volumes(
         polylines,
@@ -119,7 +119,7 @@ def test_beam_volumes():
         0,
         0,
         False,
-        joint_types_list,
+        JOINTS_TYPES_list,
     )
 
 

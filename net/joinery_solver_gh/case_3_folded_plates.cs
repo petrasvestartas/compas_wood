@@ -224,7 +224,7 @@ namespace joinery_solver_gh
                     int[] nei = m.Faces.AdjacentFaces(i);
 
                     foreach (int j in nei)
-                        this.adjacency.Add(new int[4] { i, j,-1,-1 });
+                        this.adjacency.Add(new int[4] { i, j, -1, -1 });
                 }
                 edge_joints[i] = Enumerable.Repeat(this.flags[i], 9).ToArray();
             }
@@ -513,11 +513,6 @@ namespace joinery_solver_gh
                     }
                 }
             }
-
-
-
-
-
         }
 
         public void get_insertion_vectors()
@@ -542,12 +537,10 @@ namespace joinery_solver_gh
             //chamfer
             if (this.chamfer > 0.000001)
             {
-
                 for (int i = 0; i < f; i++)
                 {
                     for (int j = 0; j < 2; j++)
                     {
-
                         f_polylines[i][j] = PolylineUtil.Chamfer(f_polylines[i][j], -this.chamfer);
                     }
                 }

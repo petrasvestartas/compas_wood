@@ -1,0 +1,15 @@
+//https://www.youtube.com/watch?v=Rfj40xW9q6w
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Debug",
+      "type": "cppdbg",
+      "request": "launch",
+      "cwd": "${fileDirname}",
+      "miDebuggerPath": "gdb",
+      "program": "C:\\IBOIS57\\_Code\\Software\\Python\\compas_wood\\backend\\build_win\\Debug\\wood.exe",
+      "args": [],
+    }
+  ]
+}

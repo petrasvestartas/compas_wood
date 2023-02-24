@@ -3198,36 +3198,36 @@ IK::Point_3(-0.7, 0.7, -0.6),
         /////////////////////////////////////////////////////////////////////
         //You must define new joint each time you internalize it
         /////////////////////////////////////////////////////////////////////
-        std::array<std::string, 70> joint_names;
-        for (size_t i = 0; i < joint_names.size(); i++)
-            joint_names[i] = "undefined";
+        std::array<std::string, 70> JOINT_NAMES;
+        for (size_t i = 0; i < JOINT_NAMES.size(); i++)
+            JOINT_NAMES[i] = "undefined";
 
-        joint_names[1] = "ss_e_ip_0";
-        joint_names[2] = "ss_e_ip_1";
-        joint_names[3] = "ss_e_ip_2";
-        joint_names[8] = "side_removal";
-        joint_names[9] = "ss_e_ip_9";
-        joint_names[10] = "ss_e_op_0";
-        joint_names[11] = "ss_e_op_1";
-        joint_names[12] = "ss_e_op_2";
-        joint_names[18] = "side_removal";
-        joint_names[19] = "ss_e_op_9";
-        joint_names[20] = "ts_e_p_0";
-        joint_names[21] = "ts_e_p_1";
-        joint_names[22] = "ts_e_p_2";
-        joint_names[23] = "ts_e_p_3";
-        joint_names[24] = "ts_e_p_4";
-        joint_names[28] = "side_removal";
-        joint_names[29] = "ts_e_p_9";
-        joint_names[30] = "cr_c_ip_0";
-        joint_names[31] = "cr_c_ip_1";
-        joint_names[32] = "cr_c_ip_2";
-        joint_names[38] = "side_removal";
-        joint_names[39] = "cr_c_ip_9";
-        joint_names[48] = "side_removal";
-        joint_names[58] = "side_removal_ss_e_r_1";
-        joint_names[59] = "ss_e_r_9";
-        joint_names[60] = "b_0";
+        JOINT_NAMES[1] = "ss_e_ip_0";
+        JOINT_NAMES[2] = "ss_e_ip_1";
+        JOINT_NAMES[3] = "ss_e_ip_2";
+        JOINT_NAMES[8] = "side_removal";
+        JOINT_NAMES[9] = "ss_e_ip_9";
+        JOINT_NAMES[10] = "ss_e_op_0";
+        JOINT_NAMES[11] = "ss_e_op_1";
+        JOINT_NAMES[12] = "ss_e_op_2";
+        JOINT_NAMES[18] = "side_removal";
+        JOINT_NAMES[19] = "ss_e_op_9";
+        JOINT_NAMES[20] = "ts_e_p_0";
+        JOINT_NAMES[21] = "ts_e_p_1";
+        JOINT_NAMES[22] = "ts_e_p_2";
+        JOINT_NAMES[23] = "ts_e_p_3";
+        JOINT_NAMES[24] = "ts_e_p_4";
+        JOINT_NAMES[28] = "side_removal";
+        JOINT_NAMES[29] = "ts_e_p_9";
+        JOINT_NAMES[30] = "cr_c_ip_0";
+        JOINT_NAMES[31] = "cr_c_ip_1";
+        JOINT_NAMES[32] = "cr_c_ip_2";
+        JOINT_NAMES[38] = "side_removal";
+        JOINT_NAMES[39] = "cr_c_ip_9";
+        JOINT_NAMES[48] = "side_removal";
+        JOINT_NAMES[58] = "side_removal_ss_e_r_1";
+        JOINT_NAMES[59] = "ss_e_r_9";
+        JOINT_NAMES[60] = "b_0";
 
 #ifdef DEBUG_JOINERY_LIBRARY
         printf("\nCPP   FILE %s    METHOD %s   LINE %i     WHAT %s ", __FILE__, __FUNCTION__, __LINE__, "construct_joint_by_index");
@@ -3265,9 +3265,9 @@ IK::Point_3(-0.7, 0.7, -0.6),
             //types0+265
             //CGAL_Debug(0);
             int id_representing_joint_name = -1;
-            if (elements[jo.v0].joint_types.size() && elements[jo.v1].joint_types.size()) {
-                int a = std::abs(elements[jo.v0].joint_types[jo.f0_0]);
-                int b = std::abs(elements[jo.v1].joint_types[jo.f1_0]);
+            if (elements[jo.v0].JOINTS_TYPES.size() && elements[jo.v1].JOINTS_TYPES.size()) {
+                int a = std::abs(elements[jo.v0].JOINTS_TYPES[jo.f0_0]);
+                int b = std::abs(elements[jo.v1].JOINTS_TYPES[jo.f1_0]);
 
                 // printf("\n %i %i ", a,b);
 
@@ -3275,12 +3275,12 @@ IK::Point_3(-0.7, 0.7, -0.6),
                 // CGAL_Debug(a, b, a);
 
             }
-            else if (elements[jo.v0].joint_types.size()) {
-                id_representing_joint_name = std::abs(elements[jo.v0].joint_types[jo.f0_0]);
+            else if (elements[jo.v0].JOINTS_TYPES.size()) {
+                id_representing_joint_name = std::abs(elements[jo.v0].JOINTS_TYPES[jo.f0_0]);
                 //printf("\n b");
             }
-            else if (elements[jo.v1].joint_types.size()) {
-                id_representing_joint_name = std::abs(elements[jo.v1].joint_types[jo.f1_0]);
+            else if (elements[jo.v1].JOINTS_TYPES.size()) {
+                id_representing_joint_name = std::abs(elements[jo.v1].JOINTS_TYPES[jo.f1_0]);
                 //printf("\n c");
             }
 
@@ -3364,7 +3364,7 @@ IK::Point_3(-0.7, 0.7, -0.6),
             //f << "construct_joint_by_index\n";
             //f << id_representing_joint_name;
             //f.close();
-            jo.name = joint_names[id_representing_joint_name];
+            jo.name = JOINT_NAMES[id_representing_joint_name];
             jo.unit_scale_distance = elements[jo.v0].thickness * jo.scale[2];
             //CGAL_Debug(division_distance);
 

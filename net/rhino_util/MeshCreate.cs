@@ -2129,7 +2129,7 @@ namespace rhino_util {
         //            Point3d center = PointUtil.AveragePoint(polylines[i]);
         //            plane.Origin = center;
         //        }
-        //        polylines[i].Transform(Transform.PlaneToPlane(plane, Plane.WorldXY));
+        //        polylines[i].Transform(Transform.plane_to_plane(plane, Plane.WorldXY));
         //    }
 
         //    for (int i = 0; i < polylines.Length; i++) {
@@ -2202,7 +2202,7 @@ namespace rhino_util {
             Plane.FitPlaneToPoints(polylines[0], out plane);
             for (int i = 0; i < polylines.Length; i++) {
                 allPt.AddRange(polylines[i].GetRange(0, polylines[i].Count-1));
-                polylines[i].Transform(Transform.PlaneToPlane(plane, Plane.WorldXY));
+                polylines[i].Transform(Transform.plane_to_plane(plane, Plane.WorldXY));
             }
 
             bool remesh = false;
@@ -2285,7 +2285,7 @@ namespace rhino_util {
                 m.Faces.AddFace(t.GetVertexID(0), t.GetVertexID(1), t.GetVertexID(2));
             }
 
-           //   m.Transform(Transform.PlaneToPlane(Plane.WorldXY, plane));
+           //   m.Transform(Transform.plane_to_plane(Plane.WorldXY, plane));
 
             m.Clean();
 

@@ -168,7 +168,7 @@ namespace rhino_util {
         }
 
         public static Box GetBoundingBoxAligned(List<Point3d> pts, Plane plane, double inflate = 0) {
-            Transform transform = Transform.ChangeBasis(Plane.WorldXY, plane);
+            Transform transform = Transform.change_basis(Plane.WorldXY, plane);
             BoundingBox b = new BoundingBox(pts, transform);
 
             if (inflate > 0) {
@@ -192,7 +192,7 @@ namespace rhino_util {
         }
 
         public static Box GetBoundingBoxAligned(Brep brep, Plane plane) {
-            Transform transform = Transform.ChangeBasis(Plane.WorldXY, plane);
+            Transform transform = Transform.change_basis(Plane.WorldXY, plane);
             BoundingBox b = brep.GetBoundingBox(transform);
 
             Point3d min = b.Min;

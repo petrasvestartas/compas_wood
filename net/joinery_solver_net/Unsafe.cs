@@ -9,7 +9,7 @@ namespace joinery_solver_net
         //Basic Method and Examples for PInvoke
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         //private string dllName = System.Runtime.InteropServices.RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? "joinery_solver_pinvoke.dll" : "joinery_solver_pinvoke.dylib";
-        public const string dllName = "libjoinery_solver_pinvoke.dylib";
+        public const string dllName = "joinery_solver_pinvoke.dll";
 
         [DllImport(dllName, CallingConvention = CallingConvention.Cdecl)]
         public static extern int test_get_square(int n);
@@ -33,7 +33,7 @@ namespace joinery_solver_net
         public static extern int pinvoke_get_connection_zones(
             [MarshalAs(UnmanagedType.LPArray)] int[] f, int f_s, [MarshalAs(UnmanagedType.LPArray)] double[] v, int v_s,
             [MarshalAs(UnmanagedType.LPArray)] int[] vec_f, int vec_f_s, [MarshalAs(UnmanagedType.LPArray)] double[] vec_v, int vec_v_s,
-            [MarshalAs(UnmanagedType.LPArray)] int[] joint_types_f, int joint_types_f_s, [MarshalAs(UnmanagedType.LPArray)] int[] joint_types_v, int joint_types_v_s,
+            [MarshalAs(UnmanagedType.LPArray)] int[] JOINTS_TYPES_f, int JOINTS_TYPES_f_s, [MarshalAs(UnmanagedType.LPArray)] int[] JOINTS_TYPES_v, int JOINTS_TYPES_v_s,
             [MarshalAs(UnmanagedType.LPArray)] int[] threevalence_f, int threevalence_f_s, [MarshalAs(UnmanagedType.LPArray)] int[] threevalence_v, int threevalence_v_s,
             [MarshalAs(UnmanagedType.LPArray)] int[] adjacency_v, int adjacency_v_s,
             [MarshalAs(UnmanagedType.LPArray)] double[] jointparams_v, int jointparams_v_s,
