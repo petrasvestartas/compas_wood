@@ -39,10 +39,12 @@ Author: [Petras Vestartas](https://petrasvestartas.com/About-Petras-Vestartas)
 - [ ] add units tests from MOOC to CPP data-sets: RTree search + OOBB
 
 #### COMPAS integration 
-- [ ] compile a simple "Hello World" package that runs CPP files in COMPAS, follow the documentation I did before
-- [ ] check if the process is running via Git-Hub actions
-- [ ] rewrite Pybind11 for compas
-- [ ] test compas_wood on MAC
+- [x] Create backend in C++ with a Viewer - Finished
+- [ ] Create a wrapper in C++ with Pybind11 - In Process
+- [ ] Setup the Compas Python Environment that replicates the 2nd step workflow - Not done
+- [ ] Produce documentation - Finished
+- [ ] Write Grasshopper components - Not done
+- [ ] Write if the code works on MAC and Linux - Not done
 
 ### 03 2023 - finalization of beam-panel model integration | C++ unit tests from the collected study cases, wrapping the code to pybind11
 - [ ] continue the model based on " beam_node_0.cpp -> beam_node_0 " , currently only connection areas are generated, but not the joint volumes
