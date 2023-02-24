@@ -4,6 +4,8 @@ Author: [Petras Vestartas](https://petrasvestartas.com/About-Petras-Vestartas)
 
 ![type_plates_name_side_to_side_edge_inplane_hexshell](https://user-images.githubusercontent.com/18013985/221278631-8ed8f5af-8485-49ec-9a99-625d5a4466e4.png)
 
+![type_plates_name_top_to_side_and_side_to_side_outofplane_annen_grid_full_arch](https://user-images.githubusercontent.com/18013985/221278750-e42b5596-8d6a-4a48-ab80-b825dde446af.png)
+
 
 ## :small_red_triangle: Under-construction to-do list :small_red_triangle:
 
