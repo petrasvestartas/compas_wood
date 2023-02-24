@@ -112,14 +112,6 @@ https://grail.cs.washington.edu/projects/carpentrycompiler/
 }
 
 ##### Tests
-![type_beams_name_phanomema_node](https://user-images.githubusercontent.com/18013985/221279502-30518683-5f72-4df8-a343-9b5a9e289a66.png)
-![type_geometry_name_cgal_mesh_boolean_0](https://user-images.githubusercontent.com/18013985/221279525-f8cbf814-60f1-4fb2-a2b2-ff8046b92fd8.png)
-![type_geometry_name_circle_ponts_inscribed_in_a_polygon](https://user-images.githubusercontent.com/18013985/221279535-3dec16f4-8333-4cab-9ae3-4d482eda0c1e.png)
-![type_geometry_name_grid_of_points_in_a_polygon](https://user-images.githubusercontent.com/18013985/221279588-620f7dd3-d062-4aeb-9a24-c6da241b672d.png)
-![type_geometry_name_offest_polygon_inside_and_divide_into_points](https://user-images.githubusercontent.com/18013985/221279612-97053bb7-b589-48cf-9133-bf73bee4d100.png)
-![type_geometry_name_polygon_center](https://user-images.githubusercontent.com/18013985/221279627-7dcb0eab-26fd-431d-8865-6cfe45249998.png)
-![type_geometry_name_polygon_center_polylabel](https://user-images.githubusercontent.com/18013985/221279647-0666febf-5eb8-4909-a80c-0d9541b66f63.png)
-![type_geometry_name_rectangle_ponts_inscribed_in_a_polygon](https://user-images.githubusercontent.com/18013985/221279668-4f9cc70f-da6c-443b-bffa-ca214ec1a2d9.png)
 ![type_library_name_ss_e_op_4](https://user-images.githubusercontent.com/18013985/221279721-46affd00-b1d1-4893-87a4-683a2f134eda.png)
 ![type_library_name_ts_e_p_5](https://user-images.githubusercontent.com/18013985/221279746-7591ea1f-d021-4da2-91fb-fd8a7b9b0b9a.png)
 ![type_plates_name_cross_and_sides_corner](https://user-images.githubusercontent.com/18013985/221279761-5753e90d-b73a-4e63-824a-da8b5d57d3c2.png)
