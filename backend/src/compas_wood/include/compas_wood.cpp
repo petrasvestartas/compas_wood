@@ -1,13 +1,71 @@
-#include "compas_wood.h"
+#include <stdafx_pybind11.h> //libs
+#include "compas.h"          //converters
+#include "compas_wood.h"     //headers
 
-void test()
+namespace compas_wood
 {
-    printf("\n________________________________________________________________________\n");
-    printf("\n_______________________Hello from CPP Wood______________________________\n");
-    printf("\n___If you see this message, say hi to the developer Petras Vestartas ___\n");
-    printf("\n____________________petrasvestartas@gmail.com___________________________\n");
-    printf("\n________________________________________________________________________\n");
+
+    void test()
+    {
+        printf("\n________________________________________________________________________\n");
+        printf("\n_______________________Hello from CPP Wood______________________________\n");
+        printf("\n___If you see this message, say hi to the developer Petras Vestartas ___\n");
+        printf("\n____________________petrasvestartas@gmail.com___________________________\n");
+        printf("\n________________________________________________________________________\n");
+    }
+
+    void test_opaque_types_wood_vector_int(std::vector<int> &vec)
+    {
+        for (int i = 0; i < vec.size(); i++)
+        {
+            vec[i] = vec[i] * vec[i];
+        }
+    }
+
+    void test_opaque_types_wood_nested_vector_int(std::vector<std::vector<int>> &vec)
+    {
+        for (int i = 0; i < vec.size(); i++)
+        {
+            for (int j = 0; j < vec[i].size(); j++)
+            {
+                vec[i][j] = vec[i][j] * vec[i][j];
+            }
+        }
+    }
+
+    void test_opaque_types_wood_vector_double(std::vector<double> &vec)
+    {
+        for (int i = 0; i < vec.size(); i++)
+        {
+            vec[i] = vec[i] * vec[i];
+        }
+    }
+
+    void test_opaque_types_wood_nested_vector_double(std::vector<std::vector<double>> &vec)
+    {
+        for (int i = 0; i < vec.size(); i++)
+        {
+            for (int j = 0; j < vec[i].size(); j++)
+            {
+                vec[i][j] = vec[i][j] * vec[i][j];
+            }
+        }
+    }
 }
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Pybind11 Opaque types, be sure that the these types are equavivalent to the ones in the "PYBIND11_MODULE(wood_pybind11, m)""
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+PYBIND11_MAKE_OPAQUE(std::vector<int>);
+PYBIND11_MAKE_OPAQUE(std::vector<std::vector<int>>);
+PYBIND11_MAKE_OPAQUE(std::vector<double>);
+PYBIND11_MAKE_OPAQUE(std::vector<std::vector<double>>);
+PYBIND11_MAKE_OPAQUE(std::map<std::string, double>);
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Pybind11 module and the wrapped functions
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 PYBIND11_MODULE(wood_pybind11, m)
 {
@@ -33,9 +91,30 @@ PYBIND11_MODULE(wood_pybind11, m)
     // Then Eigen Matrix will be converted back to compas data structure
     // This means that there will be a small overhead for the data-transfer
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    pybind11::class_<Result>(m, "Result").def_readonly("vertices", &Result::vertices).def_readonly("faces", &Result::faces);
 
-    m.def("test", &test); // Function reference
+    // CPP collections visible in Python
+    py::bind_vector<std::vector<int>>(m, "WoodVectorInt");
+    py::bind_vector<std::vector<std::vector<int>>>(m, "WoodNestedVectorInt");
+    py::bind_vector<std::vector<double>>(m, "WoodVectorDouble");
+    py::bind_vector<std::vector<std::vector<double>>>(m, "WoodNestedVectorDouble");
+
+    py::bind_map<std::map<std::string, double>>(m, "WoodMapStringDouble");
+
+    // mesh structure
+    pybind11::class_<compas::ResultMesh>(m, "ResultMesh")
+        .def_readonly("vertices", &compas::ResultMesh::vertices)
+        .def_readonly("faces", &compas::ResultMesh::faces);
+
+    // test methods
+    m.def("test", &compas_wood::test); // Function reference
+    m.def("test_opaque_types_wood_vector_int", &compas_wood::test_opaque_types_wood_vector_int);
+    m.def("test_opaque_types_wood_nested_vector_int", &compas_wood::test_opaque_types_wood_nested_vector_int);
+    m.def("test_opaque_types_wood_vector_double", &compas_wood::test_opaque_types_wood_vector_double);
+    m.def("test_opaque_types_wood_nested_vector_double", &compas_wood::test_opaque_types_wood_nested_vector_double);
+
+    // primary methods
+
+    // secondary methods
 }
 
 // PYBIND11_MODULE(pybind11_joinery_solver, m)
@@ -54,8 +133,6 @@ PYBIND11_MODULE(wood_pybind11, m)
 //            pybind11_connectionzones
 
 //     )pbdoc";
-
-
 
 //     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //     // Exposed methods

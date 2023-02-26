@@ -1,5 +1,3 @@
-
-
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // DEVELOPER:
 // Petras Vestartas, petasvestartas@gmail.com
@@ -19,9 +17,9 @@
 // NOTE:
 // "compas_wood.h" and "compas_wood.cpp" are the only two files that contains pybind11 code, do not create any other files
 // "stdafx_pybind11.h" file contains all the header files and type shortcuts, without any viewer, just algorithm
+// "compas.h" and "compas.cpp" contains converter methods (CGAl->Eigen and Eigen->CGAL),
 //
 // the wrapper methods contains:
-// converter methods (CGAl->Eigen and Eigen->CGAL),
 // primary methods plates methods
 // secondary geometry methods for Wood library
 //
@@ -29,74 +27,108 @@
 //
 // The development strategy is following:
 // 1) Create backend in C++ with a Viewer - Finished
-// 2) Create a wrapper in C++ with Pybind11 - In Process
+// 2) Create a wrapper in C++ with Pybind11 - In Process - https://pybind11.readthedocs.io/en/stable/ https://github.com/petrasvestartas/sp4e/tree/main/lectures/week14
 // 3) Setup the Compas Python Environment that replicates the 2nd step workflow - Not done
 // 4) Produce documentation - Finished
 // 5) Write Grasshopper components - Not done
 // 6) Write if the code works on MAC and Linux - Not done
+//
+// COMMENT STYLE
+/**
+ * test functions that has to be run before running the rest of the code to check if the library is working
+ *
+ * @param [in] x The first coordinate of the vector
+ * @param [in] y The second coordinate of the vector
+ * @param [in] z The third coordinate of the vector
+ * @return The length of the vector
+ */
+//
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 #pragma once
 
-#include <stdafx_pybind11.h>
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Converter methods, where np.asarray are mapped to Eigen matrix
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-/**
- * container to store the vertices and faces, by faces we mean also polyline indices
- */
-struct Result
+namespace compas_wood
 {
-    RowMatrixXd vertices;
-    RowMatrixXi faces;
-};
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Primary methods
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Test methods
+    // https://github.com/tdegeus/pybind11_examples
+    // https://github.com/pybind/pybind11/discussions/4340
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-/**
- * test functions that has to be run before running the rest of the code to check if the library is working
- */
-void test();
+    /**
+     * test functions that has to be run before running the rest of the code to check if the library is working
+     */
+    void test();
 
-/**
- * read_data_set from the xml file, they will be numbered from 0 to n
- */
-void get_data_set(int data_set_index);
+    /**
+     * share a vector of int between C++ and Python without copying
+     *
+     * @param [in] vec a list of integers
+     */
+    void test_opaque_types_wood_vector_int(std::vector<int> &vec);
 
-/**
- * the main method to detect the joinery
- */
-void get_connection_zones();
+    /**
+     * share a nested vector of int between C++ and Python without copying
+     *
+     * @param [in] vec a nested list of integers
+     */
+    void test_opaque_types_wood_nested_vector_int(std::vector<std::vector<int>> &vec);
 
-/**
- * get closed mesh from a pair of polylines
- */
-void closed_mesh_from_polylines();
+    /**
+     * share a vector of int between C++ and Python without copying
+     *
+     * @param [in] vec a list of doubles
+     */
+    void test_opaque_types_wood_vector_double(std::vector<double> &vec);
 
-/**
- * get closest objects indices by using rtree
- */
-void rtree();
+    /**
+     * share a nested vector of double between C++ and Python without copying
+     *
+     * @param [in] vec a nested list of doubles
+     */
+    void test_opaque_types_wood_nested_vector_double(std::vector<std::vector<double>> &vec);
 
-/**
- * get joints from the get_connection_zones function without geometry
- */
-void joints();
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Primary methods
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Secondary Methods
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    /**
+     * read_data_set from the xml file, they will be numbered from 0 to n
+     */
+    void get_data_set(std::string file_name_of_data_set);
 
-/**
- * get proximity lines from two polylines
- */
-void intersecting_sequences_of_dD_iso_oriented_boxes();
+    /**
+     * the main method to detect the joinery
+     */
+    void get_connection_zones();
 
-/**
- * get volumes of the beams that represent plate like elements for joinery definition
- */
-void beam_volumes();
+    /**
+     * get closed mesh from a pair of polylines
+     */
+    void closed_mesh_from_polylines();
+
+    /**
+     * get closest objects indices by using rtree
+     */
+    void rtree();
+
+    /**
+     * get joints from the get_connection_zones function without geometry
+     */
+    void joints();
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Secondary Methods
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    /**
+     * get proximity lines from two polylines
+     */
+    void intersecting_sequences_of_dD_iso_oriented_boxes();
+
+    /**
+     * get volumes of the beams that represent plate like elements for joinery definition
+     */
+    void beam_volumes();
+}

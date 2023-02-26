@@ -80,7 +80,7 @@ typedef CGAL::Cartesian_converter<EK, IK> EK_to_IK;
 using CGAL_Polyline = std::vector<IK::Point_3>;
 using CGAL_Polylines = std::list<CGAL_Polyline>;
 typedef typename CGAL::Box_intersection_d::Box_with_info_d<double, 3, std::pair<std::size_t, std::size_t>> Box;
-typedef CGAL::Surface_mesh<IK::Point_3> Mesh;
+using Mesh = CGAL::Surface_mesh<IK::Point_3>;
 namespace PMP = CGAL::Polygon_mesh_processing;
 
 struct FaceInfo2
@@ -102,13 +102,6 @@ typedef CGAL::Constrained_Delaunay_triangulation_2<IK, TDS, Itag> CGALCDT;
 typedef CGALCDT::Point Point;
 typedef CGAL::Polygon_2<IK> Polygon_2;
 typedef CGALCDT::Face_handle Face_handle;
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// EIGEN for Pybind11 used only at small part for meshing
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-using RowMatrixXd = Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor>;
-using RowMatrixXi = Eigen::Matrix<int, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor>;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // BOOST
@@ -149,22 +142,15 @@ using RowMatrixXi = Eigen::Matrix<int, Eigen::Dynamic, Eigen::Dynamic, Eigen::Ro
 #include "rtree_util.h"
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// compas_wood linkage
 // PYBIND11
+// Eigen
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 #include <pybind11/pybind11.h> // minimal includes for pybind11
 namespace py = pybind11;       // minimal includes for pybind11
 #include <pybind11/eigen.h>    //this is needed to enable faster data transfer
 #include <pybind11/stl.h>      //for faster binding https://pybind11.readthedocs.io/en/stable/advanced/cast/stl.html
+#include <pybind11/stl_bind.h> //for opaque types https://pybind11.readthedocs.io/en/stable/advanced/cast/stl.html
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// COMMENT STYLE
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-/**
- * test functions that has to be run before running the rest of the code to check if the library is working
- *
- * @param [in] x The first coordinate of the vector
- * @param [in] y The second coordinate of the vector
- * @param [in] z The third coordinate of the vector
- * @return The length of the vector
- */
+using RowMatrixXd = Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor>;
+using RowMatrixXi = Eigen::Matrix<int, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor>;
