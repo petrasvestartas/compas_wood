@@ -1,4 +1,4 @@
-#include "stdafx_pybind11.h"              //includes
+#include "../../../stdafx.h"              //includes
 #include "python_to_cpp__cpp_to_python.h" //converters
 #include "compas_wood.h"                  //headers
 #include "wood_xml.h"                     //read xml file of the datasets
@@ -69,30 +69,20 @@ namespace compas_wood
         printf(file_name_of_data_set.c_str());
         printf("\n________________________________________________________________________\n");
 
-// set the path to the xml file | input data-set
-// WARNING wood_globals::DATA_SET_INPUT_FOLDER must be local
-// wood_xml::path_and_file_for_input_polylines = wood_globals::DATA_SET_INPUT_FOLDER + file_name_of_data_set + ".xml";
-// wood_xml::path_and_file_for_input_polylines = wood_globals::DATA_SET_INPUT_FOLDER + ".xml";
-// auto test = wood_xml::path_and_file_for_input_polylines;
-#ifdef WOOD_WRAPPER
-        printf("WOOD_WRAPPER is defined\n");
-#endif
-
-#if defined(WOOD_WRAPPER)
-        printf("WOOD_WRAPPER is defined\n");
-#endif
-
-#if defined(WIDTH)
-        printf("WIDTH is defined\n");
-#endif
-        auto test = wood_globals::DATA_SET_INPUT_FOLDER;
-        printf(test.c_str());
+        // set the path to the xml file | input data-set
+        // WARNING wood_globals::DATA_SET_INPUT_FOLDER must be local
+        // wood_xml::path_and_file_for_input_polylines = wood_globals::DATA_SET_INPUT_FOLDER + file_name_of_data_set + ".xml";
+        // wood_xml::path_and_file_for_input_polylines = wood_globals::DATA_SET_INPUT_FOLDER + ".xml";
+        // auto test = wood_xml::path_and_file_for_input_polylines;
+        auto test = wood_globals::DATA_SET_INPUT_FOLDER = "C:\\IBOIS57\\_Code\\Software\\Python\\compas_wood\\frontend\\src\\wood\\dataset\\";
+        wood_xml::path_and_file_for_input_polylines = wood_globals::DATA_SET_INPUT_FOLDER + file_name_of_data_set + ".xml";
 
         // fill the stl container with coordinates from polylines
-        polylines_coordinates.emplace_back(std::vector<double>{0.5, 1.7, 5.0, 0.0, 1.0, 5.1});
+        // polylines_coordinates.emplace_back(std::vector<double>{0.5, 1.7, 5.0, 0.0, 1.0, 5.1});
 
         // read the xml file
-        // wood_xml::read_xml_polylines(polylines_coordinates, false, true);
+        wood_xml::read_xml_polylines(polylines_coordinates, false, true);
+        printf(std::to_string(polylines_coordinates.size()).c_str());
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

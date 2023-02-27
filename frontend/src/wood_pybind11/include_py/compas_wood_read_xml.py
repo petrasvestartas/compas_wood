@@ -24,6 +24,11 @@ print(polyline_0)
 polylines_coordinates = WoodNestedVectorDouble([polyline_0, polyline_1])
 
 get_data_set("type_plates_name_cross_vda_hexshell_reciprocal", polylines_coordinates)
-print(polylines_coordinates[0])
-print(polylines_coordinates[1])
-print(polylines_coordinates[2])
+
+for i in range(len(polylines_coordinates)):
+    print(polylines_coordinates[i])
+
+
+# print(polylines_coordinates[0])
+# print(polylines_coordinates[1])
+# print(polylines_coordinates[2])

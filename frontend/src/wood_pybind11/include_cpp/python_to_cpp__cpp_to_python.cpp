@@ -1,5 +1,5 @@
-#include <stdafx_pybind11.h>
-#include <python_to_cpp__cpp_to_python.h>
+#include "../../../stdafx.h"
+#include "python_to_cpp__cpp_to_python.h"
 
 namespace python_to_cpp__cpp_to_python
 {

@@ -45,6 +45,27 @@ cmake_minimum_required(VERSION 3.24.2)
 
 set(COMPILER_NINJA OFF)
 
+if(WIN32)
+  string(ASCII 27 Esc)
+  set(ColourReset "${Esc}[m")
+  set(ColourBold  "${Esc}[1m")
+  set(Red         "${Esc}[31m")
+  set(Green       "${Esc}[32m")
+  set(Yellow      "${Esc}[33m")
+  set(Blue        "${Esc}[34m")
+  set(Magenta     "${Esc}[35m")
+  set(Cyan        "${Esc}[36m")
+  set(White       "${Esc}[37m")
+  set(BoldRed     "${Esc}[1;31m")
+  set(BoldGreen   "${Esc}[1;32m")
+  set(BoldYellow  "${Esc}[1;33m")
+  set(BoldBlue    "${Esc}[1;34m")
+  set(BoldMagenta "${Esc}[1;35m")
+  set(BoldCyan    "${Esc}[1;36m")
+  set(BoldWhite   "${Esc}[1;37m")
+endif()
+
+
 if(COMPILER_NINJA)
  set(CMAKE_MAKE_PROGRAM "C:\\Ninja\\ninja.exe" CACHE FILEPATH "" FORCE)
 endif()
@@ -62,13 +83,14 @@ set_property(GLOBAL PROPERTY RULE_LAUNCH_COMPILE "${CMAKE_COMMAND} -E time")
 # debug
 set(RELEASE_DEBUG "" CACHE STRING "DEBUG to true ")
 if(RELEASE_DEBUG)
-  message(AUTHOR_WARNING "RELEASE IS BEING CONFIGURED" )
+  message("${BoldBlue} RELEASE IS BEING CONFIGURED ${ColourReset}" )
   set(CMAKE_BUILD_TYPE_INIT "Release")
 else()
-message(AUTHOR_WARNING "DEBUG IS BEING CONFIGURED" )
+  message("${BoldBlue} AUTHOR_WARNING DEBUG IS BEING CONFIGURED ${ColourReset}" )
   set(CMAKE_C_FLAGS_DEBUG "-g -DDEBUG")
   set(CMAKE_CXX_FLAGS_DEBUG "-g -DDEBUG")
 endif()
+
 
 
 
@@ -88,145 +110,145 @@ SET(GET_LIBS "" CACHE STRING "Set option to download dependencies")
 if (GET_LIBS)
   message(AUTHOR_WARNING "GET_LIBS_" ${GET_LIBS})
 
-  #######################################################################
-  # CDT
-  ####################################################################### 
-  ExternalProject_Add(cdt
-  GIT_REPOSITORY    https://github.com/artem-ogre/CDT.git
-  GIT_TAG           master
-      CMAKE_ARGS
-        -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
-        -DCMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER}
-        #-DCMAKE_INSTALL_PREFIX:PATH="${CMAKE_BINARY_DIR}/install"
-      SOURCE_DIR   "${CMAKE_BINARY_DIR}/install/cdt/"
-        #INSTALL_DIR   "${CMAKE_INSTALL_PREFIX}/install"
-      CONFIGURE_COMMAND "" #do not configure
-      BUILD_COMMAND "" #do not buld
-      INSTALL_COMMAND "" #installer for now is empty
-  )
+#   #######################################################################
+#   # CDT
+#   ####################################################################### 
+#   ExternalProject_Add(cdt
+#   GIT_REPOSITORY    https://github.com/artem-ogre/CDT.git
+#   GIT_TAG           master
+#       CMAKE_ARGS
+#         -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
+#         -DCMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER}
+#         #-DCMAKE_INSTALL_PREFIX:PATH="${CMAKE_BINARY_DIR}/install"
+#       SOURCE_DIR   "${CMAKE_BINARY_DIR}/install/cdt/"
+#         #INSTALL_DIR   "${CMAKE_INSTALL_PREFIX}/install"
+#       CONFIGURE_COMMAND "" #do not configure
+#       BUILD_COMMAND "" #do not buld
+#       INSTALL_COMMAND "" #installer for now is empty
+#   )
 
-  #######################################################################
-  # CLIPPER2
-  ####################################################################### 
-  ExternalProject_Add(clipper_2
-      GIT_REPOSITORY https://github.com/AngusJohnson/Clipper2.git
-      GIT_TAG main
-      CMAKE_ARGS
-        -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
-        -DCMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER}
-        #-DCMAKE_INSTALL_PREFIX:PATH="${CMAKE_BINARY_DIR}/install"
-      SOURCE_DIR   "${CMAKE_BINARY_DIR}/install/clipper_2"
-        #INSTALL_DIR   "${CMAKE_INSTALL_PREFIX}/install"
-      CONFIGURE_COMMAND "" #do not configure
-      BUILD_COMMAND "" #do not buld
-      INSTALL_COMMAND "" #installer for now is empty
-  )
+#   #######################################################################
+#   # CLIPPER2
+#   ####################################################################### 
+#   ExternalProject_Add(clipper_2
+#       GIT_REPOSITORY https://github.com/AngusJohnson/Clipper2.git
+#       GIT_TAG main
+#       CMAKE_ARGS
+#         -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
+#         -DCMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER}
+#         #-DCMAKE_INSTALL_PREFIX:PATH="${CMAKE_BINARY_DIR}/install"
+#       SOURCE_DIR   "${CMAKE_BINARY_DIR}/install/clipper_2"
+#         #INSTALL_DIR   "${CMAKE_INSTALL_PREFIX}/install"
+#       CONFIGURE_COMMAND "" #do not configure
+#       BUILD_COMMAND "" #do not buld
+#       INSTALL_COMMAND "" #installer for now is empty
+#   )
 
-  #######################################################################
-  #GLFW https://learnopengl.com/Getting-started/Hello-Window
-  #######################################################################
-  ExternalProject_Add(glfw
-  URL https://github.com/glfw/glfw/releases/download/3.3.8/glfw-3.3.8.zip
-  CMAKE_ARGS
-    -DCMAKE_INSTALL_PREFIX="${CMAKE_BINARY_DIR}/install/glfw"
-    #-DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
-    #-DCMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER}
-    #-GLFW_BUILD_DOCS = ON
-    #-GLFW_BUILD_EXAMPLES = ON
-    #-GLFW_BUILD_TESTS = ON
-    #-GLFW_INSTALL = ON
-    #-USE_MSVC_RUNTIME_LIBRARY_DLL = ON
-    #-DCMAKE_INSTALL_PREFIX:PATH=${CMAKE_INSTALL_PREFIX}
-  UPDATE_COMMAND ""
-  SOURCE_DIR   "${CMAKE_BINARY_DIR}/install/glfw"
-  BUILD_IN_SOURCE 1
-  INSTALL_COMMAND "" #installer for now is empty
+#   #######################################################################
+#   #GLFW https://learnopengl.com/Getting-started/Hello-Window
+#   #######################################################################
+#   ExternalProject_Add(glfw
+#   URL https://github.com/glfw/glfw/releases/download/3.3.8/glfw-3.3.8.zip
+#   CMAKE_ARGS
+#     -DCMAKE_INSTALL_PREFIX="${CMAKE_BINARY_DIR}/install/glfw"
+#     #-DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
+#     #-DCMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER}
+#     #-GLFW_BUILD_DOCS = ON
+#     #-GLFW_BUILD_EXAMPLES = ON
+#     #-GLFW_BUILD_TESTS = ON
+#     #-GLFW_INSTALL = ON
+#     #-USE_MSVC_RUNTIME_LIBRARY_DLL = ON
+#     #-DCMAKE_INSTALL_PREFIX:PATH=${CMAKE_INSTALL_PREFIX}
+#   UPDATE_COMMAND ""
+#   SOURCE_DIR   "${CMAKE_BINARY_DIR}/install/glfw"
+#   BUILD_IN_SOURCE 1
+#   INSTALL_COMMAND "" #installer for now is empty
 
-  #BUILD_ALWAYS ON #do not build
-  #INSTALL_COMMAND ON #installer for now is empty
-  )
+#   #BUILD_ALWAYS ON #do not build
+#   #INSTALL_COMMAND ON #installer for now is empty
+#   )
 
-########################################################################
-# GLM
-######################################################################## 
-  ExternalProject_Add(glm
-  URL https://github.com/g-truc/glm/releases/download/0.9.9.8/glm-0.9.9.8.7z
-  CMAKE_ARGS
-    -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
-    -DCMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER}
-    #-DCMAKE_INSTALL_PREFIX:PATH="${CMAKE_BINARY_DIR}/install"
-  SOURCE_DIR   "${CMAKE_BINARY_DIR}/install/glm"
-    #INSTALL_DIR   "${CMAKE_INSTALL_PREFIX}/install"
-  CONFIGURE_COMMAND "" #do not configure
-  BUILD_COMMAND "" #do not buld
-  INSTALL_COMMAND "" #installer for now is empty
-)
+# ########################################################################
+# # GLM
+# ######################################################################## 
+#   ExternalProject_Add(glm
+#   URL https://github.com/g-truc/glm/releases/download/0.9.9.8/glm-0.9.9.8.7z
+#   CMAKE_ARGS
+#     -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
+#     -DCMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER}
+#     #-DCMAKE_INSTALL_PREFIX:PATH="${CMAKE_BINARY_DIR}/install"
+#   SOURCE_DIR   "${CMAKE_BINARY_DIR}/install/glm"
+#     #INSTALL_DIR   "${CMAKE_INSTALL_PREFIX}/install"
+#   CONFIGURE_COMMAND "" #do not configure
+#   BUILD_COMMAND "" #do not buld
+#   INSTALL_COMMAND "" #installer for now is empty
+# )
 
-########################################################################
-# GLAD
-######################################################################## 
-ExternalProject_Add(glad
-URL "https://github.com/Dav1dde/glad/archive/v0.1.29.zip"
-CMAKE_ARGS 
-  -DCMAKE_INSTALL_PREFIX="${CMAKE_BINARY_DIR}/install/glad"
-  #-DGLAD_INSTALL=OFF
-  -DGLAD_PROFILE="core"
-  -DGLAD_GENERATOR="c"
-UPDATE_COMMAND ""
-SOURCE_DIR "${CMAKE_BINARY_DIR}/install/glad"
-#CONFIGURE_COMMAND "" #do not configure
-BUILD_IN_SOURCE 1
-#BUILD_COMMAND "ON" #do not build
-INSTALL_COMMAND "" #installer for now is empty
-)
-
-
+# ########################################################################
+# # GLAD
+# ######################################################################## 
+# ExternalProject_Add(glad
+# URL "https://github.com/Dav1dde/glad/archive/v0.1.29.zip"
+# CMAKE_ARGS 
+#   -DCMAKE_INSTALL_PREFIX="${CMAKE_BINARY_DIR}/install/glad"
+#   #-DGLAD_INSTALL=OFF
+#   -DGLAD_PROFILE="core"
+#   -DGLAD_GENERATOR="c"
+# UPDATE_COMMAND ""
+# SOURCE_DIR "${CMAKE_BINARY_DIR}/install/glad"
+# #CONFIGURE_COMMAND "" #do not configure
+# BUILD_IN_SOURCE 1
+# #BUILD_COMMAND "ON" #do not build
+# INSTALL_COMMAND "" #installer for now is empty
+# )
 
 
-########################################################################
-# IMGUI
-######################################################################## 
-ExternalProject_Add(imgui
-URL https://github.com/ocornut/imgui/archive/refs/tags/v1.88.zip
-CMAKE_ARGS
-  -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
-  -DCMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER}
-  #-DCMAKE_INSTALL_PREFIX:PATH="${CMAKE_BINARY_DIR}/install"
-SOURCE_DIR   "${CMAKE_BINARY_DIR}/install/imgui"
-  #INSTALL_DIR   "${CMAKE_INSTALL_PREFIX}/install"
-CONFIGURE_COMMAND "" #do not configure
-BUILD_COMMAND "" #do not buld
-INSTALL_COMMAND "" #installer for now is empty
-)
 
-    #https://stackoverflow.com/questions/68824024/detecting-compiler-configuration-in-cmake-file
-    #https://www.microsoft.com/en-us/download/details.aspx?id=6812
-    ExternalProject_Add(assimp
-    PREFIX assimp
-    GIT_REPOSITORY https://github.com/assimp/assimp.git
-    GIT_TAG master
-    CMAKE_ARGS     
-    -DCMAKE_INSTALL_PREFIX="${CMAKE_BINARY_DIR}/install/assimp"
-    -DASSIMP_BUILD_ALL_IMPORTERS_BY_DEFAULT:BOOL=OFF
-    -DASSIMP_BUILD_ALL_EXPORTERS_BY_DEFAULT:BOOL=OFF
-    -DBUILD_SHARED_LIBS:BOOL=OFF
-    -DASSIMP_BUILD_ASSIMP_TOOLS:BOOL=OFF
-    -DASSIMP_BUILD_TESTS:BOOL=OFF
-    -DASSIMP_BUILD_FBX_IMPORTER:BOOL=ON
-    -DASSIMP_BUILD_OBJ_IMPORTER:BOOL=ON
-    -DASSIMP_BUILD_OBJ_EXPORTER:BOOL=ON
-    -DASSIMP_BUILD_ZLIB:BOOL=ON
-    -DASSIMP_LIBRARY_SUFFIX:STRING=
-    -DLIBRARY_SUFFIX:STRING=
-    -DCMAKE_DEBUG_POSTFIX:STRING=
-    -DASSIMP_INJECT_DEBUG_POSTFIX:BOOL=OFF
-        UPDATE_COMMAND ""
-        SOURCE_DIR "${CMAKE_BINARY_DIR}/install/assimp"
-        #CONFIGURE_COMMAND "" #do not configure
-        BUILD_IN_SOURCE 1
-        #BUILD_COMMAND "ON" #do not build
-        INSTALL_COMMAND "" #installer for now is empty
-    )
+
+# ########################################################################
+# # IMGUI
+# ######################################################################## 
+# ExternalProject_Add(imgui
+# URL https://github.com/ocornut/imgui/archive/refs/tags/v1.88.zip
+# CMAKE_ARGS
+#   -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
+#   -DCMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER}
+#   #-DCMAKE_INSTALL_PREFIX:PATH="${CMAKE_BINARY_DIR}/install"
+# SOURCE_DIR   "${CMAKE_BINARY_DIR}/install/imgui"
+#   #INSTALL_DIR   "${CMAKE_INSTALL_PREFIX}/install"
+# CONFIGURE_COMMAND "" #do not configure
+# BUILD_COMMAND "" #do not buld
+# INSTALL_COMMAND "" #installer for now is empty
+# )
+
+#     #https://stackoverflow.com/questions/68824024/detecting-compiler-configuration-in-cmake-file
+#     #https://www.microsoft.com/en-us/download/details.aspx?id=6812
+#     ExternalProject_Add(assimp
+#     PREFIX assimp
+#     GIT_REPOSITORY https://github.com/assimp/assimp.git
+#     GIT_TAG master
+#     CMAKE_ARGS     
+#     -DCMAKE_INSTALL_PREFIX="${CMAKE_BINARY_DIR}/install/assimp"
+#     -DASSIMP_BUILD_ALL_IMPORTERS_BY_DEFAULT:BOOL=OFF
+#     -DASSIMP_BUILD_ALL_EXPORTERS_BY_DEFAULT:BOOL=OFF
+#     -DBUILD_SHARED_LIBS:BOOL=OFF
+#     -DASSIMP_BUILD_ASSIMP_TOOLS:BOOL=OFF
+#     -DASSIMP_BUILD_TESTS:BOOL=OFF
+#     -DASSIMP_BUILD_FBX_IMPORTER:BOOL=ON
+#     -DASSIMP_BUILD_OBJ_IMPORTER:BOOL=ON
+#     -DASSIMP_BUILD_OBJ_EXPORTER:BOOL=ON
+#     -DASSIMP_BUILD_ZLIB:BOOL=ON
+#     -DASSIMP_LIBRARY_SUFFIX:STRING=
+#     -DLIBRARY_SUFFIX:STRING=
+#     -DCMAKE_DEBUG_POSTFIX:STRING=
+#     -DASSIMP_INJECT_DEBUG_POSTFIX:BOOL=OFF
+#         UPDATE_COMMAND ""
+#         SOURCE_DIR "${CMAKE_BINARY_DIR}/install/assimp"
+#         #CONFIGURE_COMMAND "" #do not configure
+#         BUILD_IN_SOURCE 1
+#         #BUILD_COMMAND "ON" #do not build
+#         INSTALL_COMMAND "" #installer for now is empty
+#     )
 
 
 ########################################################################
@@ -242,12 +264,12 @@ ExternalProject_Add(cgal
     -DCMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER}
     #-DCMAKE_INSTALL_PREFIX:PATH=${CMAKE_INSTALL_PREFIX}
   SOURCE_DIR   "${CMAKE_BINARY_DIR}/install/cgal"
-  BUILD_ALWAYS "" #do not buld
+  BUILD_ALWAYS "" #do not build
   INSTALL_COMMAND "" #installer for now is empty
 )
 
 
-ExternalProject_Add(cgal_dependencies
+ExternalProject_Add(cgal_auxiliary
   URL https://github.com/CGAL/cgal/releases/download/v5.5/CGAL-5.5-win64-auxiliary-libraries-gmp-mpfr.zip
   CMAKE_ARGS
     -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
@@ -256,118 +278,83 @@ ExternalProject_Add(cgal_dependencies
   SOURCE_DIR   "${CMAKE_BINARY_DIR}/install/cgal/auxiliary"
     #INSTALL_DIR   "${CMAKE_INSTALL_PREFIX}/install"
   CONFIGURE_COMMAND "" #do not configure
-  BUILD_COMMAND "" #do not buld
+  BUILD_COMMAND "" #do not build
   INSTALL_COMMAND "" #installer for now is empty
 )
+  message("${BoldBlue} ${CMAKE_BINARY_DIR}/install/cgal/auxiliary ${ColourReset}" )
 
 
-########################################################################
-# BOOST
-######################################################################## 
-  if (WIN32)
-    set(BOOST_BOOTSTRAP_CMD ${CMAKE_CURRENT_BINARY_DIR}/boost-prefix/src/boost/bootstrap.bat)
-    set(BOOST_BUILD_CMD ${CMAKE_CURRENT_BINARY_DIR}/boost-prefix/src/boost/b2.exe)
-  elseif (UNIX)
-    set(BOOST_BOOTSTRAP_CMD ${CMAKE_CURRENT_BINARY_DIR}/boost-prefix/src/boost/bootstrap.sh)
-    set(BOOST_BUILD_CMD ${CMAKE_CURRENT_BINARY_DIR}/boost-prefix/src/boost/b2)
-  endif ()
 
-  ExternalProject_Add(boost
-    GIT_REPOSITORY https://github.com/boostorg/boost.git
-    GIT_TAG boost-1.78.0
-    CONFIGURE_COMMAND ${BOOST_BOOTSTRAP_CMD}
-    BUILD_COMMAND
-      ${BOOST_BUILD_CMD}
-      --prefix=${CMAKE_BINARY_DIR}/install/boost
-      -sZLIB_LIBRARY_PATH=${CMAKE_BINARY_DIR}/install/boost/lib
-      --without-python
-      address-model=64
-      variant=debug,release
-      link=shared
-      runtime-link=shared
-      threading=multi
-      install
-    BUILD_IN_SOURCE 1
-    INSTALL_COMMAND ""
-    #SOURCE_DIR "${CMAKE_BINARY_DIR}/install/boost" #install directory is in build/install/eigen
-  )
+# ########################################################################
+# # BOOST
+# ######################################################################## 
+#   if (WIN32)
+#     set(BOOST_BOOTSTRAP_CMD ${CMAKE_CURRENT_BINARY_DIR}/boost-prefix/src/boost/bootstrap.bat)
+#     set(BOOST_BUILD_CMD ${CMAKE_CURRENT_BINARY_DIR}/boost-prefix/src/boost/b2.exe)
+#   elseif (UNIX)
+#     set(BOOST_BOOTSTRAP_CMD ${CMAKE_CURRENT_BINARY_DIR}/boost-prefix/src/boost/bootstrap.sh)
+#     set(BOOST_BUILD_CMD ${CMAKE_CURRENT_BINARY_DIR}/boost-prefix/src/boost/b2)
+#   endif ()
 
-########################################################################
-# EIGEN
-######################################################################## 
-  ExternalProject_Add(eigen
-    GIT_REPOSITORY https://gitlab.com/libeigen/eigen.git
-    GIT_TAG 3.4.0
-    CMAKE_ARGS
-      -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
-      -DCMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER}
-      -DCMAKE_INSTALL_PREFIX=${CMAKE_BINARY_DIR}/install/eigen #has not effect
-    SOURCE_DIR   "${CMAKE_BINARY_DIR}/install/eigen" #install directory is in build/install/eigen
-    BUILD_COMMAND "" #do not build
-    INSTALL_COMMAND "" #do not install
-  )
-########################################################################
-# GOOGLETEST ///googletest/include
-######################################################################## 
-set(GOOGLE_TEST_OS "")
-if (WIN32)
-    set(GOOGLE_TEST_OS "$<$<PLATFORM_ID:Windows>:-Dgtest_force_shared_crt:BOOL=ON>")
-endif (WIN32)
+#   ExternalProject_Add(boost
+#     GIT_REPOSITORY https://github.com/boostorg/boost.git
+#     GIT_TAG boost-1.78.0
+#     CONFIGURE_COMMAND ${BOOST_BOOTSTRAP_CMD}
+#     BUILD_COMMAND
+#       ${BOOST_BUILD_CMD}
+#       --prefix=${CMAKE_BINARY_DIR}/install/boost
+#       -sZLIB_LIBRARY_PATH=${CMAKE_BINARY_DIR}/install/boost/lib
+#       --without-python
+#       address-model=64
+#       variant=debug,release
+#       link=shared
+#       runtime-link=shared
+#       threading=multi
+#       install
+#     BUILD_IN_SOURCE 1
+#     INSTALL_COMMAND ""
+#     #SOURCE_DIR "${CMAKE_BINARY_DIR}/install/boost" #install directory is in build/install/eigen
+#   )
 
-        unset(GTEST_ROOT CACHE)
-         unset(GMOCK_ROOT CACHE)
-         ExternalProject_Add(googletest
-             GIT_REPOSITORY https://github.com/google/googletest.git
-             GIT_TAG 58d77fa8070e8cec2dc1ed015d66b454c8d78850
-             PREFIX ${CMAKE_BINARY_DIR}/install/googletest
-             INSTALL_DIR ${CMAKE_BINARY_DIR}/install/googletest
-             CMAKE_ARGS
-                 -DCMAKE_INSTALL_PREFIX:PATH=<INSTALL_DIR>
-		 ${GOOGLE_TEST_OS} #$<$<PLATFORM_ID:Windows>:-Dgtest_force_shared_crt:BOOL=ON>
-             BUILD_COMMAND
-                 COMMAND ${CMAKE_COMMAND} --build <BINARY_DIR> --config Release --target install
-                # COMMAND ${CMAKE_COMMAND} --build <BINARY_DIR> --config Debug --target install
-             INSTALL_COMMAND  ""
-             )
-         set(GTEST_ROOT ${CMAKE_BINARY_DIR}/install/googletest CACHE PATH "" FORCE)
-         set(GMOCK_ROOT ${CMAKE_BINARY_DIR}/install/googletest CACHE PATH "" FORCE)
+# ########################################################################
+# # EIGEN
+# ######################################################################## 
+#   ExternalProject_Add(eigen
+#     GIT_REPOSITORY https://gitlab.com/libeigen/eigen.git
+#     GIT_TAG 3.4.0
+#     CMAKE_ARGS
+#       -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
+#       -DCMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER}
+#       -DCMAKE_INSTALL_PREFIX=${CMAKE_BINARY_DIR}/install/eigen #has not effect
+#     SOURCE_DIR   "${CMAKE_BINARY_DIR}/install/eigen" #install directory is in build/install/eigen
+#     BUILD_COMMAND "" #do not build
+#     INSTALL_COMMAND "" #do not install
+#   )
+# ########################################################################
+# # GOOGLETEST ///googletest/include
+# ######################################################################## 
+# set(GOOGLE_TEST_OS "")
+# if (WIN32)
+#     set(GOOGLE_TEST_OS "$<$<PLATFORM_ID:Windows>:-Dgtest_force_shared_crt:BOOL=ON>")
+# endif (WIN32)
 
-
-  ###############################################################################
-  # CDT
-  ###############################################################################
-  # set(CDT_INC
-  # "${CMAKE_BINARY_DIR}/install/cdt/CDT/include/CDT.h"
-  # "${CMAKE_BINARY_DIR}/install/cdt/CDT/include/CDT.hpp"
-  # "${CMAKE_BINARY_DIR}/install/cdt/CDT/include/CDTUtils.h"
-  # "${CMAKE_BINARY_DIR}/install/cdt/CDT/include/CDTUtils.hpp"
-  # "${CMAKE_BINARY_DIR}/install/cdt/CDT/include/KDTree.h"
-  # "${CMAKE_BINARY_DIR}/install/cdt/CDT/include/LocatorKDTree.h"
-  # "${CMAKE_BINARY_DIR}/install/cdt/CDT/include/predicates.h"
-  # "${CMAKE_BINARY_DIR}/install/cdt/CDT/include/remove_at.hpp"
-  # )
-
-  # set(CDT_SRC
-  # "${CMAKE_BINARY_DIR}/install/cdt/CDT/src/CDT.cpp"
-  # )
-
-  # add_library(CDT STATIC ${CDT_INC} ${CDT_SRC}  )
-  # target_include_directories(CDT  PUBLIC "${CMAKE_BINARY_DIR}/install/cdt/CDT/include/") #link headers to clipper library
-
-########################################################################
-# PYBIND11
-######################################################################## 
-
-ExternalProject_Add(pybind11
-  URL https://github.com/pybind/pybind11/archive/refs/tags/v2.10.3.zip
-  CMAKE_ARGS
-    -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
-    -DCMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER}
-  SOURCE_DIR   "${CMAKE_BINARY_DIR}/install/pybind11"
-  BUILD_ALWAYS "" #do not buld
-  INSTALL_COMMAND "" #installer for now is empty
-)
-
+#         unset(GTEST_ROOT CACHE)
+#          unset(GMOCK_ROOT CACHE)
+#          ExternalProject_Add(googletest
+#              GIT_REPOSITORY https://github.com/google/googletest.git
+#              GIT_TAG 58d77fa8070e8cec2dc1ed015d66b454c8d78850
+#              PREFIX ${CMAKE_BINARY_DIR}/install/googletest
+#              INSTALL_DIR ${CMAKE_BINARY_DIR}/install/googletest
+#              CMAKE_ARGS
+#                  -DCMAKE_INSTALL_PREFIX:PATH=<INSTALL_DIR>
+# 		 ${GOOGLE_TEST_OS} #$<$<PLATFORM_ID:Windows>:-Dgtest_force_shared_crt:BOOL=ON>
+#              BUILD_COMMAND
+#                  COMMAND ${CMAKE_COMMAND} --build <BINARY_DIR> --config Release --target install
+#                 # COMMAND ${CMAKE_COMMAND} --build <BINARY_DIR> --config Debug --target install
+#              INSTALL_COMMAND  ""
+#              )
+#          set(GTEST_ROOT ${CMAKE_BINARY_DIR}/install/googletest CACHE PATH "" FORCE)
+#          set(GMOCK_ROOT ${CMAKE_BINARY_DIR}/install/googletest CACHE PATH "" FORCE)
 
 
 
@@ -386,7 +373,7 @@ endif ()
 ###############################################################################
 SET(BUILD_MY_PROJECTS "" CACHE STRING "Build Project")
 if (BUILD_MY_PROJECTS)
-  message(AUTHOR_WARNING "BUILD_MY_PROJECTS_" ${BUILD_MY_PROJECTS})
+  message("${BoldBlue} BUILD_MY_PROJECTS_ ${BUILD_MY_PROJECTS} ${ColourReset}" )
 
   # if (MSVC)
   #   # warning level 4 and all warnings as errors
@@ -432,7 +419,8 @@ if (BUILD_MY_PROJECTS)
   ###############################################################################
   #option(KDV_BUILD_USING_PCH "Build using pre-compile header support" ON)
   #if (CMAKE_VERSION VERSION_GREATER_EQUAL 3.16 AND KDV_BUILD_USING_PCH) # support for PCHs in CMake was added in 3.16
-  message(AUTHOR_WARNING "Compiling using pre-compiled header support")
+
+  message("${BoldBlue}  PRECOMPILED HEADER ${ColourReset}")
   target_precompile_headers(${PROJECT_NAME} PRIVATE  stdafx.h) # With PUBLIC they will be used by targets using this target
   #target_precompile_headers(${PROJECT_NAME} PRIVATE   "C:/IBOIS57/_Code/Software/CPP/CMAKE/super_build/compas_wood/build_win/CMakeFiles/compas_wood.dir/Release/cmake_pch.hxx")
   set(CMAKE_PCH_INSTANTIATE_TEMPLATES ON)
@@ -497,7 +485,7 @@ if (BUILD_MY_PROJECTS)
   # LINK LIBRARIES TO EXE, STATIC LIBRARIES PATHS MUST BE AT THE END
   ###############################################################################
   if(COMPILER_NINJA)
-      message(STATUS "COMPILER_NINJA ON")
+      message("${BoldBlue} COMPILER_NINJA ${ColourReset}")
       target_link_libraries(${PROJECT_NAME} PUBLIC 
       Clipper2 
       opengl32 
@@ -514,7 +502,7 @@ if (BUILD_MY_PROJECTS)
       ) #gmp mpfr link library | zlibstatic WINDOWS
 
   else()
-    message(STATUS "COMPILER_NINJA OFF")
+    message("${BoldBlue} COMPILER_MSVC ${ColourReset}")
     target_link_libraries(${PROJECT_NAME} PUBLIC 
       Clipper2 
       opengl32 
@@ -571,83 +559,83 @@ if (BUILD_MY_PROJECTS)
   ###############################################################################
   target_link_directories(${PROJECT_NAME} PUBLIC "${CMAKE_BINARY_DIR}/install/googletest/lib/" )
 
-  message(AUTHOR_WARNING "${CMAKE_BINARY_DIR}/Release" ${BUILD_MY_PROJECTS})
-  message(AUTHOR_WARNING "${CMAKE_SOURCE_DIR}/src/wood/include/")
+  # message(AUTHOR_WARNING "${CMAKE_BINARY_DIR}/Release" ${BUILD_MY_PROJECTS})
+  # message(AUTHOR_WARNING "${CMAKE_SOURCE_DIR}/src/wood/include/")
   
-  ###############################################################################
-  # WRAPPER LIBRARY FOR PYBIND11 - https://www.youtube.com/watch?v=-eIkUnCLMFc&t=75s
-  # My own created tutorial: https://github.com/pybind/pybind11/discussions/4530
-  # PYBIND11 - requires python installation besides the python11
-  # WARNING - your conda environment must not have the module with the same name installed, 
-  # SOLUTION - check by "conda list" and "pip uninstall compas_wood"
-  ###############################################################################
-  #give the python path to pybind11
-  set(CMAKE_EXPORT_COMPILE_COMMANDS 1)
-  set(PYTHON_MODULE_NAME "wood_pybind11")
+  # ###############################################################################
+  # # WRAPPER LIBRARY FOR PYBIND11 - https://www.youtube.com/watch?v=-eIkUnCLMFc&t=75s
+  # # My own created tutorial: https://github.com/pybind/pybind11/discussions/4530
+  # # PYBIND11 - requires python installation besides the python11
+  # # WARNING - your conda environment must not have the module with the same name installed, 
+  # # SOLUTION - check by "conda list" and "pip uninstall compas_wood"
+  # ###############################################################################
+  # #give the python path to pybind11
+  # set(CMAKE_EXPORT_COMPILE_COMMANDS 1)
+  # set(PYTHON_MODULE_NAME "wood_pybind11")
 
-  # find python do not use find_package(Python) this would fail if a few python versions are installed, better to use one from Anaconda
-  find_package(Python 3.6 REQUIRED COMPONENTS Interpreter Development ${_pybind11_quiet}) 
+  # # find python do not use find_package(Python) this would fail if a few python versions are installed, better to use one from Anaconda
+  # find_package(Python 3.6 REQUIRED COMPONENTS Interpreter Development ${_pybind11_quiet}) 
 
-  # add pybind11 to enamle CMake command: pybind11_add_module
-  add_subdirectory("${CMAKE_BINARY_DIR}/install/pybind11")
+  # # add pybind11 to enamle CMake command: pybind11_add_module
+  # add_subdirectory("${CMAKE_BINARY_DIR}/install/pybind11")
 
-  # module - this is a special cmake command from the pybind11 package
-  pybind11_add_module (
-    "${PYTHON_MODULE_NAME}" # name of the module
-    #source pybind11
-    "${CMAKE_SOURCE_DIR}/src/compas_wood/include/stdafx_pybind11.cpp" # includes
-    "${CMAKE_SOURCE_DIR}/src/compas_wood/include/python_to_cpp__cpp_to_python.cpp" # converters
-    "${CMAKE_SOURCE_DIR}/src/compas_wood/include/compas_wood.cpp" # wrapper of the wood library
-    #clipper
-    "${CMAKE_BINARY_DIR}/install/clipper_2/CPP/Clipper2Lib/src/clipper.engine.cpp"
-    "${CMAKE_BINARY_DIR}/install/clipper_2/CPP/Clipper2Lib/src/clipper.offset.cpp"
-    #wood
-    "${CMAKE_SOURCE_DIR}/src/compas_wood/wood/include/wood_globals.cpp"
-    # "${CMAKE_SOURCE_DIR}/src/wood/include/cgal_box_util.cpp"
-    # "${CMAKE_SOURCE_DIR}/src/wood/include/rtree_util.cpp"
-    # "${CMAKE_SOURCE_DIR}/src/wood/include/cgal_inscribe_util.cpp"
-    # "${CMAKE_SOURCE_DIR}/src/wood/include/cgal_intersection_util.cpp"
-    # "${CMAKE_SOURCE_DIR}/src/wood/include/cgal_xform_util.cpp"
-    # "${CMAKE_SOURCE_DIR}/src/wood/include/cgal_math_util.cpp"
-    # "${CMAKE_SOURCE_DIR}/src/wood/include/cgal_plane_util.cpp"
-    # "${CMAKE_SOURCE_DIR}/src/wood/include/cgal_polyline_mesh_util.cpp"
-    # "${CMAKE_SOURCE_DIR}/src/wood/include/cgal_polyline_util.cpp"
-    # "${CMAKE_SOURCE_DIR}/src/wood/include/cgal_rectangle_util.cpp"
-    # "${CMAKE_SOURCE_DIR}/src/wood/include/cgal_vector_util.cpp"
-    # "${CMAKE_SOURCE_DIR}/src/wood/include/clipper_util.cpp"
-    # "${CMAKE_SOURCE_DIR}/src/wood/include/wood_element.cpp"
-    # "${CMAKE_SOURCE_DIR}/src/wood/include/wood_joint.cpp"
-    # "${CMAKE_SOURCE_DIR}/src/wood/include/wood_joint_lib.cpp"
-    # #"${CMAKE_SOURCE_DIR}/src/wood/include/wood_test.cpp"
-    # "${CMAKE_SOURCE_DIR}/src/wood/include/wood_main.cpp"
-    # "${CMAKE_SOURCE_DIR}/src/wood/include/wood_xml.cpp"
-    # "${CMAKE_SOURCE_DIR}/src/wood/include/cgal_mesh_boolean.cpp"
-
-
-  )
+  # # module - this is a special cmake command from the pybind11 package
+  # pybind11_add_module (
+  #   "${PYTHON_MODULE_NAME}" # name of the module
+  #   #source pybind11
+  #   "${CMAKE_SOURCE_DIR}/src/compas_wood/include/stdafx_pybind11.cpp" # includes
+  #   "${CMAKE_SOURCE_DIR}/src/compas_wood/include/python_to_cpp__cpp_to_python.cpp" # converters
+  #   "${CMAKE_SOURCE_DIR}/src/compas_wood/include/compas_wood.cpp" # wrapper of the wood library
+  #   #clipper
+  #   "${CMAKE_BINARY_DIR}/install/clipper_2/CPP/Clipper2Lib/src/clipper.engine.cpp"
+  #   "${CMAKE_BINARY_DIR}/install/clipper_2/CPP/Clipper2Lib/src/clipper.offset.cpp"
+  #   #wood
+  #   "${CMAKE_SOURCE_DIR}/src/compas_wood/wood/include/wood_globals.cpp"
+  #   # "${CMAKE_SOURCE_DIR}/src/wood/include/cgal_box_util.cpp"
+  #   # "${CMAKE_SOURCE_DIR}/src/wood/include/rtree_util.cpp"
+  #   # "${CMAKE_SOURCE_DIR}/src/wood/include/cgal_inscribe_util.cpp"
+  #   # "${CMAKE_SOURCE_DIR}/src/wood/include/cgal_intersection_util.cpp"
+  #   # "${CMAKE_SOURCE_DIR}/src/wood/include/cgal_xform_util.cpp"
+  #   # "${CMAKE_SOURCE_DIR}/src/wood/include/cgal_math_util.cpp"
+  #   # "${CMAKE_SOURCE_DIR}/src/wood/include/cgal_plane_util.cpp"
+  #   # "${CMAKE_SOURCE_DIR}/src/wood/include/cgal_polyline_mesh_util.cpp"
+  #   # "${CMAKE_SOURCE_DIR}/src/wood/include/cgal_polyline_util.cpp"
+  #   # "${CMAKE_SOURCE_DIR}/src/wood/include/cgal_rectangle_util.cpp"
+  #   # "${CMAKE_SOURCE_DIR}/src/wood/include/cgal_vector_util.cpp"
+  #   # "${CMAKE_SOURCE_DIR}/src/wood/include/clipper_util.cpp"
+  #   # "${CMAKE_SOURCE_DIR}/src/wood/include/wood_element.cpp"
+  #   # "${CMAKE_SOURCE_DIR}/src/wood/include/wood_joint.cpp"
+  #   # "${CMAKE_SOURCE_DIR}/src/wood/include/wood_joint_lib.cpp"
+  #   # #"${CMAKE_SOURCE_DIR}/src/wood/include/wood_test.cpp"
+  #   # "${CMAKE_SOURCE_DIR}/src/wood/include/wood_main.cpp"
+  #   # "${CMAKE_SOURCE_DIR}/src/wood/include/wood_xml.cpp"
+  #   # "${CMAKE_SOURCE_DIR}/src/wood/include/cgal_mesh_boolean.cpp"
 
 
-  # include directories for header files
-  target_include_directories(
-    "${PYTHON_MODULE_NAME}" # name of the module
-    #source pybind11
-    PRIVATE "${CMAKE_SOURCE_DIR}/src/compas_wood/include/"
-    #wood
-    PRIVATE "${CMAKE_SOURCE_DIR}/src/compas_wood/wood/include/"
-    #pybind11
-    PRIVATE "${CMAKE_BINARY_DIR}/install/pybind11/"
-    #eigen
-    PRIVATE "${CMAKE_BINARY_DIR}/install/eigen/"
-    #clipper
-    PRIVATE "${CMAKE_BINARY_DIR}/install/clipper_2/CPP/Clipper2Lib/include/"
-    #boost
-    PRIVATE "${CMAKE_BINARY_DIR}/install/boost/include/boost-1_78/"
-    #eigen
-    PRIVATE "${CMAKE_BINARY_DIR}/install/eigen/"
-    #cgal
-    PRIVATE "${CMAKE_BINARY_DIR}/install/cgal/include"
-    PRIVATE "${CMAKE_BINARY_DIR}/install/cgal/auxiliary/gmp/include"
-  )
+  # )
+
+
+  # # include directories for header files
+  # target_include_directories(
+  #   "${PYTHON_MODULE_NAME}" # name of the module
+  #   #source pybind11
+  #   PRIVATE "${CMAKE_SOURCE_DIR}/src/compas_wood/include/"
+  #   #wood
+  #   PRIVATE "${CMAKE_SOURCE_DIR}/src/compas_wood/wood/include/"
+  #   #pybind11
+  #   PRIVATE "${CMAKE_BINARY_DIR}/install/pybind11/"
+  #   #eigen
+  #   PRIVATE "${CMAKE_BINARY_DIR}/install/eigen/"
+  #   #clipper
+  #   PRIVATE "${CMAKE_BINARY_DIR}/install/clipper_2/CPP/Clipper2Lib/include/"
+  #   #boost
+  #   PRIVATE "${CMAKE_BINARY_DIR}/install/boost/include/boost-1_78/"
+  #   #eigen
+  #   PRIVATE "${CMAKE_BINARY_DIR}/install/eigen/"
+  #   #cgal
+  #   PRIVATE "${CMAKE_BINARY_DIR}/install/cgal/include"
+  #   PRIVATE "${CMAKE_BINARY_DIR}/install/cgal/auxiliary/gmp/include"
+  # )
 
 endif ()
 
@@ -754,12 +742,6 @@ if (COMPILE_LIBS)
   # PYBDIND11 - COPY THE PYTHON MODULE TO THE TEST FOLDER
   ###############################################################################
 
-
-
-  
-
-
-  message(AUTHOR_WARNING "Part 1 - endif" ${BUILD_MY_PROJECTS})
 endif ()
 
 

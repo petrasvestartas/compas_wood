@@ -2,6 +2,8 @@
 ########################################################################
 # PROPERTIES
 ########################################################################
+set(CMAKE_COLOR_DIAGNOSTICS ON)
+set(CMAKE_COLOR_MAKEFILE ON)
 cmake_minimum_required(VERSION 3.24.2)
 
 project(wood_pybind11 LANGUAGES C CXX)
@@ -14,16 +16,57 @@ cmake_policy(SET CMP0097 NEW)
 # Set global property (all targets are impacted)
 set_property(GLOBAL PROPERTY RULE_LAUNCH_COMPILE "${CMAKE_COMMAND} -E time")
 
+if(WIN32)
+  string(ASCII 27 Esc)
+  set(ColourReset "${Esc}[m")
+  set(ColourBold  "${Esc}[1m")
+  set(Red         "${Esc}[31m")
+  set(Green       "${Esc}[32m")
+  set(Yellow      "${Esc}[33m")
+  set(Blue        "${Esc}[34m")
+  set(Magenta     "${Esc}[35m")
+  set(Cyan        "${Esc}[36m")
+  set(White       "${Esc}[37m")
+  set(BoldRed     "${Esc}[1;31m")
+  set(BoldGreen   "${Esc}[1;32m")
+  set(BoldYellow  "${Esc}[1;33m")
+  set(BoldBlue    "${Esc}[1;34m")
+  set(BoldMagenta "${Esc}[1;35m")
+  set(BoldCyan    "${Esc}[1;36m")
+  set(BoldWhite   "${Esc}[1;37m")
+endif()
+
+
+
+
 # debug
 set(RELEASE_DEBUG "" CACHE STRING "DEBUG to true ")
 if(RELEASE_DEBUG)
-  message(AUTHOR_WARNING "RELEASE IS BEING CONFIGURED" )
+  message("${BoldBlue} RELEASE IS BEING CONFIGURED ${ColourReset}" )
   set(CMAKE_BUILD_TYPE_INIT "Release")
 else()
-message(AUTHOR_WARNING "DEBUG IS BEING CONFIGURED" )
+  message("${BoldBlue} AUTHOR_WARNING DEBUG IS BEING CONFIGURED ${ColourReset}" )
   set(CMAKE_C_FLAGS_DEBUG "-g -DDEBUG")
   set(CMAKE_CXX_FLAGS_DEBUG "-g -DDEBUG")
 endif()
+
+
+
+# message("This is normal")
+# message("${Red}This is Red${ColourReset}")
+# message("${Green}This is Green${ColourReset}")
+# message("${Yellow}This is Yellow${ColourReset}")
+# message("${Blue}This is Blue${ColourReset}")
+# message("${Magenta}This is Magenta${ColourReset}")
+# message("${Cyan}This is Cyan${ColourReset}")
+# message("${White}This is White${ColourReset}")
+# message("${BoldRed}This is BoldRed${ColourReset}")
+# message("${BoldGreen}This is BoldGreen${ColourReset}")
+# message("${BoldYellow}This is BoldYellow${ColourReset}")
+# message("${BoldBlue}This is BoldBlue${ColourReset}")
+# message("${BoldMagenta}This is BoldMagenta${ColourReset}")
+# message("${BoldCyan}This is BoldCyan${ColourReset}")
+# message("${BoldWhite}This is BoldWhite\n\n${ColourReset}")
 
 
 ########################################################################
@@ -36,7 +79,8 @@ include(ExternalProject)
 
 SET(GET_LIBS "" CACHE STRING "Set option to download dependencies")
 if (GET_LIBS)
-  message(AUTHOR_WARNING "GET_LIBS_" ${GET_LIBS})
+
+  message("${BoldBlue} GET_LIBS_ ${GET_LIBS} ${ColourReset}" )
 
   #######################################################################
   # CLIPPER2
@@ -55,6 +99,39 @@ if (GET_LIBS)
       INSTALL_COMMAND "" #installer for now is empty
   )
 
+
+
+  ########################################################################
+  # EIGEN
+  ######################################################################## 
+  ExternalProject_Add(eigen
+    GIT_REPOSITORY https://gitlab.com/libeigen/eigen.git
+    GIT_TAG 3.4.0
+    CMAKE_ARGS
+      -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
+      -DCMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER}
+      -DCMAKE_INSTALL_PREFIX=${CMAKE_BINARY_DIR}/install/eigen #has not effect
+    SOURCE_DIR   "${CMAKE_BINARY_DIR}/install/eigen" #install directory is in build/install/eigen
+    BUILD_COMMAND "" #do not build
+    INSTALL_COMMAND "" #do not install
+  )
+
+  ########################################################################
+  # PYBIND11
+  ######################################################################## 
+
+  ExternalProject_Add(pybind11
+    URL https://github.com/pybind/pybind11/archive/refs/tags/v2.10.3.zip
+    CMAKE_ARGS
+      -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
+      -DCMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER}
+      -DCMAKE_INSTALL_PREFIX=${CMAKE_BINARY_DIR}/install/pybind11 #has not effect
+    SOURCE_DIR   "${CMAKE_BINARY_DIR}/install/pybind11"
+    BUILD_COMMAND "" #do not build
+    INSTALL_COMMAND "" #installer for now is empty
+  )
+  
+  
   ########################################################################
   # CGAL
   ######################################################################## 
@@ -118,35 +195,6 @@ if (GET_LIBS)
     #SOURCE_DIR "${CMAKE_BINARY_DIR}/install/boost" #install directory is in build/install/eigen
   )
 
-  ########################################################################
-  # EIGEN
-  ######################################################################## 
-  ExternalProject_Add(eigen
-    GIT_REPOSITORY https://gitlab.com/libeigen/eigen.git
-    GIT_TAG 3.4.0
-    CMAKE_ARGS
-      -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
-      -DCMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER}
-      -DCMAKE_INSTALL_PREFIX=${CMAKE_BINARY_DIR}/install/eigen #has not effect
-    SOURCE_DIR   "${CMAKE_BINARY_DIR}/install/eigen" #install directory is in build/install/eigen
-    BUILD_COMMAND "" #do not build
-    INSTALL_COMMAND "" #do not install
-  )
-
-  ########################################################################
-  # PYBIND11
-  ######################################################################## 
-
-  ExternalProject_Add(pybind11
-    URL https://github.com/pybind/pybind11/archive/refs/tags/v2.10.3.zip
-    CMAKE_ARGS
-      -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
-      -DCMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER}
-    SOURCE_DIR   "${CMAKE_BINARY_DIR}/install/pybind11"
-    BUILD_ALWAYS "" #do not build
-    INSTALL_COMMAND "" #installer for now is empty
-  )
-
 endif ()
 
 
@@ -164,29 +212,10 @@ endif ()
 ###############################################################################
 SET(BUILD_MY_PROJECTS "" CACHE STRING "Build Project")
 if (BUILD_MY_PROJECTS)
-  message(AUTHOR_WARNING "BUILD_MY_PROJECTS_" ${BUILD_MY_PROJECTS})
+
+  message("${BoldBlue} BUILD_MY_PROJECTS_ ${BUILD_MY_PROJECTS} ${ColourReset}" )
 
 
-  ###############################################################################
-  # PCH support
-  ###############################################################################
-  #option(KDV_BUILD_USING_PCH "Build using pre-compile header support" ON)
-  #if (CMAKE_VERSION VERSION_GREATER_EQUAL 3.16 AND KDV_BUILD_USING_PCH) # support for PCHs in CMake was added in 3.16
-  message(AUTHOR_WARNING "Compiling using pre-compiled header support")
-  target_precompile_headers(${PROJECT_NAME} PRIVATE  stdafx.h) # With PUBLIC they will be used by targets using this target
-  #target_precompile_headers(${PROJECT_NAME} PRIVATE   "C:/IBOIS57/_Code/Software/CPP/CMAKE/super_build/compas_wood/build_win/CMakeFiles/compas_wood.dir/Release/cmake_pch.hxx")
-  set(CMAKE_PCH_INSTANTIATE_TEMPLATES ON)
-
-
-  ###############################################################################
-  # CGAL
-  ###############################################################################
-  #target_link_libraries(${PROJECT_NAME} PUBLIC "${CMAKE_BINARY_DIR}/install/cgal/auxiliary/gmp/lib/" ) # WINDOWS
-  if(COMPILER_NINJA)
-    target_link_directories(${PROJECT_NAME} PUBLIC "C:/msys64/mingw64/lib/" )
-  else()
-    target_link_directories(${PROJECT_NAME} PUBLIC "${CMAKE_BINARY_DIR}/install/cgal/auxiliary/gmp/lib/" )
-  endif()
 
   ###############################################################################
   # WRAPPER LIBRARY FOR PYBIND11 - https://www.youtube.com/watch?v=-eIkUnCLMFc&t=75s
@@ -206,16 +235,16 @@ if (BUILD_MY_PROJECTS)
 
   # module - this is a special cmake command from the pybind11 package
   pybind11_add_module (
-    "${${PROJECT_NAME}}" # name of the module
+    "${PROJECT_NAME}" # name of the module
     #source pybind11
-    "${CMAKE_SOURCE_DIR}/src/compas_wood/include/stdafx_pybind11.cpp" # includes
-    "${CMAKE_SOURCE_DIR}/src/compas_wood/include/python_to_cpp__cpp_to_python.cpp" # converters
-    "${CMAKE_SOURCE_DIR}/src/compas_wood/include/compas_wood.cpp" # wrapper of the wood library
+    #"${CMAKE_SOURCE_DIR}/src/compas_wood/include/stdafx.cpp" # includes
+    "${CMAKE_SOURCE_DIR}/src/wood_pybind11/include_cpp/python_to_cpp__cpp_to_python.cpp" # converters
+    "${CMAKE_SOURCE_DIR}/src/wood_pybind11/include_cpp/compas_wood.cpp" # wrapper of the wood library
     #clipper
     "${CMAKE_BINARY_DIR}/install/clipper_2/CPP/Clipper2Lib/src/clipper.engine.cpp"
     "${CMAKE_BINARY_DIR}/install/clipper_2/CPP/Clipper2Lib/src/clipper.offset.cpp"
     #wood
-    "${CMAKE_SOURCE_DIR}/src/wood_pybind11/include_cpp/wood_globals.cpp"
+    "${CMAKE_SOURCE_DIR}/src/wood/include/wood_globals.cpp"
     # "${CMAKE_SOURCE_DIR}/src/wood/include/cgal_box_util.cpp"
     # "${CMAKE_SOURCE_DIR}/src/wood/include/rtree_util.cpp"
     # "${CMAKE_SOURCE_DIR}/src/wood/include/cgal_inscribe_util.cpp"
@@ -233,7 +262,7 @@ if (BUILD_MY_PROJECTS)
     # "${CMAKE_SOURCE_DIR}/src/wood/include/wood_joint_lib.cpp"
     # #"${CMAKE_SOURCE_DIR}/src/wood/include/wood_test.cpp"
     # "${CMAKE_SOURCE_DIR}/src/wood/include/wood_main.cpp"
-    # "${CMAKE_SOURCE_DIR}/src/wood/include/wood_xml.cpp"
+    "${CMAKE_SOURCE_DIR}/src/wood/include/wood_xml.cpp"
     # "${CMAKE_SOURCE_DIR}/src/wood/include/cgal_mesh_boolean.cpp"
 
 
@@ -242,7 +271,7 @@ if (BUILD_MY_PROJECTS)
 
   # include directories for header files
   target_include_directories(
-    "${${PROJECT_NAME}}" # name of the module
+    "${PROJECT_NAME}" # name of the module
     #source pybind11
     PRIVATE "${CMAKE_SOURCE_DIR}/src/wood_pybind11/include_cpp/"
     #wood
@@ -261,6 +290,29 @@ if (BUILD_MY_PROJECTS)
     PRIVATE "${CMAKE_BINARY_DIR}/install/cgal/include"
     PRIVATE "${CMAKE_BINARY_DIR}/install/cgal/auxiliary/gmp/include"
   )
+
+  ###############################################################################
+  # PCH support
+  ###############################################################################
+  #option(KDV_BUILD_USING_PCH "Build using pre-compile header support" ON)
+  #if (CMAKE_VERSION VERSION_GREATER_EQUAL 3.16 AND KDV_BUILD_USING_PCH) # support for PCHs in CMake was added in 3.16
+    message("${BoldBlue} Compiling using pre-compiled header support ${ColourReset}" )
+
+  target_precompile_headers(${PROJECT_NAME} PRIVATE  stdafx.h) # With PUBLIC they will be used by targets using this target
+  #target_precompile_headers(${PROJECT_NAME} PRIVATE   "C:/IBOIS57/_Code/Software/CPP/CMAKE/super_build/compas_wood/build_win/CMakeFiles/compas_wood.dir/Release/cmake_pch.hxx")
+  set(CMAKE_PCH_INSTANTIATE_TEMPLATES ON)
+
+
+  ###############################################################################
+  # CGAL
+  ###############################################################################
+  #target_link_libraries(${PROJECT_NAME} PUBLIC "${CMAKE_BINARY_DIR}/install/cgal/auxiliary/gmp/lib/" ) # WINDOWS
+  if(COMPILER_NINJA)
+    target_link_directories(${PROJECT_NAME} PUBLIC "C:/msys64/mingw64/lib/" )
+  else()
+    target_link_directories(${PROJECT_NAME} PUBLIC "${CMAKE_BINARY_DIR}/install/cgal/auxiliary/gmp/lib/" )
+  endif()
+
 
 endif()
 
@@ -318,6 +370,4 @@ if (COMPILE_LIBS)
 
  
 
-
-  message(AUTHOR_WARNING "Part 1 - endif" ${BUILD_MY_PROJECTS})
 endif ()
