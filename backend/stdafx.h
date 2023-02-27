@@ -95,7 +95,7 @@
 // temp
 #include "src/viewer/include/opengl/opengl_meshes.h"
 #include "src/viewer/include/opengl/opengl_cameras.h"
-#define gui
+
 // #ifdef(gui) //only declare this if the following header is outside of the precompiled header
 #include "src/viewer/include/imgui/imgui_render.h"
 // #endif//only declare this if the following header is outside of the precompiled header
@@ -209,7 +209,3 @@ typedef CGALCDT::Face_handle Face_handle;
 
 // Display
 static std::vector<CGAL_Polyline> viewer_polylines;
-
-// // pybind11
-// #include <pybind11/pybind11.h>
-// namespace py = pybind11;

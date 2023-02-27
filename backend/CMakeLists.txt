@@ -572,7 +572,7 @@ if (BUILD_MY_PROJECTS)
   target_link_directories(${PROJECT_NAME} PUBLIC "${CMAKE_BINARY_DIR}/install/googletest/lib/" )
 
   message(AUTHOR_WARNING "${CMAKE_BINARY_DIR}/Release" ${BUILD_MY_PROJECTS})
-
+  message(AUTHOR_WARNING "${CMAKE_SOURCE_DIR}/src/wood/include/")
   
   ###############################################################################
   # WRAPPER LIBRARY FOR PYBIND11 - https://www.youtube.com/watch?v=-eIkUnCLMFc&t=75s
@@ -595,12 +595,37 @@ if (BUILD_MY_PROJECTS)
   pybind11_add_module (
     "${PYTHON_MODULE_NAME}" # name of the module
     #source pybind11
-    "${CMAKE_SOURCE_DIR}/src/compas_wood/include/compas_wood.cpp"
+    "${CMAKE_SOURCE_DIR}/src/compas_wood/include/stdafx_pybind11.cpp" # includes
+    "${CMAKE_SOURCE_DIR}/src/compas_wood/include/python_to_cpp__cpp_to_python.cpp" # converters
+    "${CMAKE_SOURCE_DIR}/src/compas_wood/include/compas_wood.cpp" # wrapper of the wood library
     #clipper
     "${CMAKE_BINARY_DIR}/install/clipper_2/CPP/Clipper2Lib/src/clipper.engine.cpp"
     "${CMAKE_BINARY_DIR}/install/clipper_2/CPP/Clipper2Lib/src/clipper.offset.cpp"
+    #wood
+    "${CMAKE_SOURCE_DIR}/src/compas_wood/wood/include/wood_globals.cpp"
+    # "${CMAKE_SOURCE_DIR}/src/wood/include/cgal_box_util.cpp"
+    # "${CMAKE_SOURCE_DIR}/src/wood/include/rtree_util.cpp"
+    # "${CMAKE_SOURCE_DIR}/src/wood/include/cgal_inscribe_util.cpp"
+    # "${CMAKE_SOURCE_DIR}/src/wood/include/cgal_intersection_util.cpp"
+    # "${CMAKE_SOURCE_DIR}/src/wood/include/cgal_xform_util.cpp"
+    # "${CMAKE_SOURCE_DIR}/src/wood/include/cgal_math_util.cpp"
+    # "${CMAKE_SOURCE_DIR}/src/wood/include/cgal_plane_util.cpp"
+    # "${CMAKE_SOURCE_DIR}/src/wood/include/cgal_polyline_mesh_util.cpp"
+    # "${CMAKE_SOURCE_DIR}/src/wood/include/cgal_polyline_util.cpp"
+    # "${CMAKE_SOURCE_DIR}/src/wood/include/cgal_rectangle_util.cpp"
+    # "${CMAKE_SOURCE_DIR}/src/wood/include/cgal_vector_util.cpp"
+    # "${CMAKE_SOURCE_DIR}/src/wood/include/clipper_util.cpp"
+    # "${CMAKE_SOURCE_DIR}/src/wood/include/wood_element.cpp"
+    # "${CMAKE_SOURCE_DIR}/src/wood/include/wood_joint.cpp"
+    # "${CMAKE_SOURCE_DIR}/src/wood/include/wood_joint_lib.cpp"
+    # #"${CMAKE_SOURCE_DIR}/src/wood/include/wood_test.cpp"
+    # "${CMAKE_SOURCE_DIR}/src/wood/include/wood_main.cpp"
+    # "${CMAKE_SOURCE_DIR}/src/wood/include/wood_xml.cpp"
+    # "${CMAKE_SOURCE_DIR}/src/wood/include/cgal_mesh_boolean.cpp"
+
 
   )
+
 
   # include directories for header files
   target_include_directories(
@@ -608,7 +633,7 @@ if (BUILD_MY_PROJECTS)
     #source pybind11
     PRIVATE "${CMAKE_SOURCE_DIR}/src/compas_wood/include/"
     #wood
-    PRIVATE "${CMAKE_SOURCE_DIR}/src/wood/include/"
+    PRIVATE "${CMAKE_SOURCE_DIR}/src/compas_wood/wood/include/"
     #pybind11
     PRIVATE "${CMAKE_BINARY_DIR}/install/pybind11/"
     #eigen

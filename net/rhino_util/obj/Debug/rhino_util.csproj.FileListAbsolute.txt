@@ -1,5 +1,0 @@
-C:\IBOIS57\_Code\Software\Raccoon_Litter_Box\joinery_solver\rhino_util\bin\Debug\rhino_util.dll
-C:\IBOIS57\_Code\Software\Raccoon_Litter_Box\joinery_solver\rhino_util\bin\Debug\rhino_util.pdb
-C:\IBOIS57\_Code\Software\Raccoon_Litter_Box\joinery_solver\rhino_util\obj\Debug\rhino_util.csproj.CoreCompileInputs.cache
-C:\IBOIS57\_Code\Software\Raccoon_Litter_Box\joinery_solver\rhino_util\obj\Debug\rhino_util.dll
-C:\IBOIS57\_Code\Software\Raccoon_Litter_Box\joinery_solver\rhino_util\obj\Debug\rhino_util.pdb
