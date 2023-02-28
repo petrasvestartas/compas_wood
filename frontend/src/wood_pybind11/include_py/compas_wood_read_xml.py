@@ -4,10 +4,14 @@
 import os.path as path
 import sys
 
-module_folder = path.abspath(path.join(__file__, "../../../..")) + "\\build_win\\Release"
+module_folder = (
+    path.abspath(path.join(__file__, "../../../..")) + "\\build_win\\Release"
+)
 print(module_folder)
 sys.path.append(module_folder)
-sys.path.append("C://IBOIS57//_Code//Software//Python//compas_wood//frontend//build_win//Release//")
+sys.path.append(
+    "C://IBOIS57//_Code//Software//Python//compas_wood//frontend//build_win//Release//"
+)
 
 
 ####################################################################################################################################
@@ -23,7 +27,11 @@ polyline_1 = WoodVectorDouble([0.5, 1.4, 2.3])
 print(polyline_0)
 polylines_coordinates = WoodNestedVectorDouble([polyline_0, polyline_1])
 
-get_data_set("type_plates_name_cross_vda_hexshell_reciprocal", polylines_coordinates)
+get_data_set(
+    "C://IBOIS57//_Code//Software//Python//compas_wood//frontend//src//wood//dataset//",
+    "type_plates_name_cross_vda_hexshell_reciprocal",
+    polylines_coordinates,
+)
 
 for i in range(len(polylines_coordinates)):
     print(polylines_coordinates[i])

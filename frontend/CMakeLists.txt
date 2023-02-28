@@ -150,7 +150,7 @@ if (GET_LIBS)
   )
 
 
-  ExternalProject_Add(cgal_dependencies
+  ExternalProject_Add(cgal_auxiliary
     URL https://github.com/CGAL/cgal/releases/download/v5.5/CGAL-5.5-win64-auxiliary-libraries-gmp-mpfr.zip
     CMAKE_ARGS
       -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}

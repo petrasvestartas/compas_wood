@@ -16,7 +16,7 @@
 //
 // NOTE:
 // "compas_wood.h" and "compas_wood.cpp" are the only two files that contains pybind11 code, do not create any other files
-// "stdafx_pybind11.h" file contains all the header files and type shortcuts, without any viewer, just algorithm
+// "stdafx.h" file contains all the header files and type shortcuts, without any viewer, just algorithm
 // "compas.h" and "compas.cpp" contains converter methods (CGAl->Eigen and Eigen->CGAL),
 //
 // the converter contains:
