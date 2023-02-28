@@ -69,18 +69,21 @@ namespace compas_wood
         wood_xml::path_and_file_for_input_polylines = wood_globals::DATA_SET_INPUT_FOLDER + filename_of_dataset + ".xml";
 
         // print the user given values
-        printf("\n___________________________________start_of_CPP_____________________________________\n");
+        //printf("\n___________________________________start_of_CPP_____________________________________\n");
         printf("User given values \n");
         printf(foldername.c_str());
         printf("\n");
         printf(filename_of_dataset.c_str());
         printf("\n");
         printf(wood_xml::path_and_file_for_input_polylines.c_str());
-        printf("\n____________________________________end_of_CPP______________________________________\n");
+        printf("\n");
+        printf("Number of polylines:\n");
+        printf("\n");
+        printf(std::to_string(polylines_coordinates.size()).c_str());
+        //printf("\n____________________________________end_of_CPP______________________________________\n");
 
         // read the xml file
         wood_xml::read_xml_polylines(polylines_coordinates, false, true);
-        printf(std::to_string(polylines_coordinates.size()).c_str());
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
