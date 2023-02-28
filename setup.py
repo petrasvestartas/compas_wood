@@ -54,19 +54,31 @@ ext_modules = [
         sorted(
             [
                 # precompiled header
-                "/src/frontend/stdafx.cpp",
-                # converters
-                "/src/frontend/src/wood_pybind11/include_cpp/python_to_cpp__cpp_to_python.cpp",
-                # wrapper of the wood library
-                "/src/frontend/src/wood_pybind11/include_cpp/compas_wood.cpp",
-                # clipper
-                "${CMAKE_BINARY_DIR}/install/clipper_2/CPP/Clipper2Lib/src/clipper.engine.cpp",
-                "${CMAKE_BINARY_DIR}/install/clipper_2/CPP/Clipper2Lib/src/clipper.offset.cpp",
+                "src/frontend/stdafx.cpp",
+                # wrapper of the wood library | converters
+                "src/frontend/src/wood_pybind11/include_cpp/python_to_cpp__cpp_to_python.cpp",
+                "src/frontend/src/wood_pybind11/include_cpp/compas_wood.cpp",
                 # wood
-                "${CMAKE_SOURCE_DIR}/src/wood/include/wood_globals.cpp",
+                "src/frontend/src/wood/include/wood_globals.cpp",
+                "src/frontend/src/wood/include/wood_xml.cpp",
+                # 3rd_party | Clipper2Lib
+                "src/frontend/src/3rd_party/Clipper2Lib/src/clipper.engine.cpp",
+                "src/frontend/src/3rd_party/Clipper2Lib/src/clipper.offset.cpp",
+                "src/frontend/src/3rd_party/Clipper2Lib/src/clipper.rectclip.cpp",
             ]
         ),
-        include_dirs=["./include", get_eigen_include(), get_pybind_include()],
+        include_dirs=[
+            # precompiled header
+            "src/frontend/",
+            # wrapper of the wood library | converters
+            "src/frontend/src/wood_pybind11/include_cpp/",
+            # wood
+            "src/frontend/src/wood/include/",
+            # 3rd_party | Clipper2Lib
+            "src/frontend/src/3rd_party/Clipper2Lib/include/",
+            get_eigen_include(),
+            get_pybind_include(),
+        ],
         library_dirs=[
             get_library_dirs(),
         ],
@@ -100,12 +112,12 @@ def has_flag(compiler, flagname):
 
 
 def cpp_flag(compiler):
-    """Return the -std=c++[11/14/17] compiler flag.
+    """Return the -std=c++[11/14/17/20] compiler flag.
 
     The newer version is prefered over c++11 (when it is available).
     """
     # flags = ['-std=c++17', '-std=c++14', '-std=c++11']
-    flags = ["-std=c++14", "-std=c++11"]
+    flags = ["-std=c++20", "-std=c++17", "-std=c++14", "-std=c++11"]
 
     for flag in flags:
         if has_flag(compiler, flag):
@@ -118,7 +130,7 @@ class BuildExt(build_ext):
     """A custom build extension for adding compiler-specific options."""
 
     c_opts = {
-        "msvc": ["/EHsc", "/std:c++14"],
+        "msvc": ["/EHsc", "/std:c++20"],
         "unix": [],
     }
     l_opts = {

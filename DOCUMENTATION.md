@@ -2,12 +2,60 @@
 
 
 * copy the contents of the "compas_cgal" repository
-* win_install_cookiecutter.bat
-* win_install_docs.bat
-* win_build.bat
-* win_docs.bat
-* copy "frontend" folder to source
-* configure linking
+* run files one by one: 
+```
+win_install_cookiecutter.bat
+win_install_docs.bat
+win_build.bat
+win_docs.bat
+```
+* copy "frontend" folder to "src" folder
+* add third-party library, incase there were not installed by the compas framework e.g. Clipper2 "src/frontend/src/3rd_party/Clipper2Lib"
+* create folder "compas_wood" in source -> "src/compas_wood"
+* configure linking (be aware that "src" directory should be without front slash, not this "/src"):
+  
+```
+ext_modules = [
+    Extension(
+        "wood_pybind11",
+        sorted(
+            [
+                # precompiled header
+                "src/frontend/stdafx.cpp",
+                # wrapper of the wood library | converters
+                "src/frontend/src/wood_pybind11/include_cpp/python_to_cpp__cpp_to_python.cpp",
+                "src/frontend/src/wood_pybind11/include_cpp/compas_wood.cpp",
+                # wood
+                "src/frontend/src/wood/include/wood_globals.cpp",
+                "src/frontend/src/wood/include/wood_xml.cpp",
+                # 3rd_party | Clipper2Lib
+                "src/frontend/src/3rd_party/Clipper2Lib/src/clipper.engine.cpp",
+                "src/frontend/src/3rd_party/Clipper2Lib/src/clipper.offset.cpp",
+                "src/frontend/src/3rd_party/Clipper2Lib/src/clipper.rectclip.cpp",
+            ]
+        ),
+        include_dirs=[
+            # precompiled header
+            "src/frontend/",
+            # wrapper of the wood library | converters
+            "src/frontend/src/wood_pybind11/include_cpp/",
+            # wood
+            "src/frontend/src/wood/include/",
+            # 3rd_party | Clipper2Lib
+            "src/frontend/src/3rd_party/Clipper2Lib/include/",
+            get_eigen_include(),
+            get_pybind_include(),
+        ],
+        library_dirs=[
+            get_library_dirs(),
+        ],
+        libraries=["mpfr", "gmp"],
+        language="c++",
+    ),
+]
+```
+
+* add test.py files from the "frontend/src/wood_pybind11/include_py/" into "tests" folder and run them
 
 ___
 ___

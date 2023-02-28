@@ -1,11 +1,17 @@
-********************************************************************************
-Documentation of COMPAS CGAL
-********************************************************************************
+.. figure:: /_images/compas_wood_website_logo.jpg
+    :figclass: figure
+    :class: figure-img img-fluid 
+    :width: 300
+
 
 .. rst-class:: lead
 
-COMPAS CGAL provides easy-to-use Python bindings for selected algorithms
-of `CGAL, The Computational Geometry Algorithms Library <https://www.cgal.org/>`_.
+.. .. figure:: /_images/
+     :figclass: figure
+     :class: figure-img img-fluid
+
+
+Author: `Petras Vestartas <http://www.petrasvestartas.com/>`_.
 
 
 Table of Contents
@@ -16,14 +22,12 @@ Table of Contents
    :titlesonly:
 
    Introduction <self>
+   about
    installation
    examples
    api
    license
+   citation
 
 
-Indices and tables
-==================
 
-* :ref:`genindex`
-* :ref:`modindex`

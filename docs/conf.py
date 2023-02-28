@@ -1,4 +1,3 @@
-# flake8: noqa
 # -*- coding: utf-8 -*-
 
 # If your documentation needs a minimal Sphinx version, state it here.
@@ -15,13 +14,12 @@ from sphinx.ext.napoleon.docstring import NumpyDocstring
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "../src"))
 
-
 # -- General configuration ------------------------------------------------
 
-project = "COMPAS CGAL"
-copyright = "2017, Block Research Group - ETH Zurich"
-author = "Tom Van Mele"
-release = "0.5.0"
+project = "compas_wood"
+copyright = "Petras Vestartas"
+author = "Petras Vestartas"
+release = "1.0.0"
 version = ".".join(release.split(".")[0:2])
 
 master_doc = "index"
@@ -50,18 +48,10 @@ extensions = [
     "sphinx.ext.mathjax",
     "sphinx.ext.napoleon",
     "sphinx.ext.githubpages",
-    "sphinx.ext.autodoc.typehints",
-    "tabs",
+    "matplotlib.sphinxext.plot_directive",
 ]
 
 # autodoc options
-
-autodoc_type_aliases = {}
-
-# this does not work properly yet
-autodoc_typehints = "none"
-autodoc_typehints_format = "short"
-autodoc_typehints_description_target = "documented"
 
 autodoc_default_options = {
     "undoc-members": True,
@@ -129,7 +119,6 @@ NumpyDocstring._parse = patched_parse
 intersphinx_mapping = {
     "python": ("https://docs.python.org/", None),
     "compas": ("https://compas.dev/compas/latest/", None),
-    "compas_view2": ("https://compas.dev/compas_view2/latest/", None),
 }
 
 # linkcode
@@ -144,7 +133,7 @@ def linkcode_resolve(domain, info):
         return None
 
     package = info["module"].split(".")[0]
-    if not package.startswith("compas_cgal"):
+    if not package.startswith("compas_wood"):
         return None
 
     module = importlib.import_module(info["module"])
@@ -166,7 +155,7 @@ def linkcode_resolve(domain, info):
     else:
         return None
 
-    return f"https://github.com/compas-dev/compas_cgal/blob/master/src/{filename}.py#L{lineno}"
+    return f"https://github.com/ibois-epfl/compas_wood/blob/master/src/{filename}.py#L{lineno}"
 
 
 # extlinks
@@ -179,13 +168,13 @@ html_theme = "compaspkg"
 html_theme_path = sphinx_compas_theme.get_html_theme_path()
 
 html_theme_options = {
-    "package_name": "compas_cgal",
+    "package_name": "compas_wood",
     "package_title": project,
     "package_version": release,
-    "package_author": "compas-dev",
-    "package_docs": "https://compas.dev/compas_cgal/",
-    "package_repo": "https://github.com/compas-dev/compas_cgal",
-    "package_old_versions_txt": "https://compas.dev/compas_cgal/doc_versions.txt",
+    "package_author": "Petras Vestartas",
+    "package_docs": "https://ibois-epfl.github.io/compas_wood/",
+    "package_repo": "https://github.com/ibois-epfl/compas_wood",
+    "package_old_versions_txt": "https://ibois_epfl.github.io/compas-wood/doc_versions.txt",
 }
 
 html_context = {}
@@ -195,6 +184,5 @@ html_last_updated_fmt = ""
 html_copy_source = False
 html_show_sourcelink = False
 html_permalinks = False
-html_permalinks_icon = ""
-html_experimental_html5_writer = False
+html_add_permalinks = None
 html_compact_lists = True
