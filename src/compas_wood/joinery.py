@@ -43,10 +43,16 @@ def read_xml(
         []
     )  # fills with double values e.g. WoodVectorDouble([0.5, 1.4, 2.3])
 
+    print(
+        "\n___________________________________start_of_WOOD_____________________________________\n"
+    )
     wood_pybind11.get_data_set(
         foldername,
         filename_of_dataset,
         polylines_coordinates,
+    )
+    print(
+        "\n____________________________________end_of_WOOD______________________________________\n"
     )
 
     ###################################################################################################
@@ -55,18 +61,18 @@ def read_xml(
 
     output_polylines = []
 
-    # for i in range(len(polylines_coordinates)):
-    #     points = []
-    #     for j in range(0, len(polylines_coordinates[i]), 3):
-    #         points.append(
-    #             [
-    #                 polylines_coordinates[i][j + 0],
-    #                 polylines_coordinates[i][j + 1],
-    #                 polylines_coordinates[i][j + 2],
-    #             ]
-    #         )
-    #     polyline = Polyline(points)
-    #     output_polylines.append(polyline)
+    for i in range(len(polylines_coordinates)):
+        points = []
+        for j in range(0, len(polylines_coordinates[i]), 3):
+            points.append(
+                [
+                    polylines_coordinates[i][j + 0],
+                    polylines_coordinates[i][j + 1],
+                    polylines_coordinates[i][j + 2],
+                ]
+            )
+        polyline = Polyline(points)
+        output_polylines.append(polyline)
 
     ###################################################################################################
     # output
