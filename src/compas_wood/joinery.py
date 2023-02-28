@@ -150,7 +150,18 @@ def rtree():
     wood_pybind11.test()
 
 
-def get_connection_zones():
+def get_connection_zones(
+    # polylines_vertices_XYZ,
+    # face_vectors_XYZ=None,
+    # face_joints_types_int=None,
+    # three_valance_element_indices_and_instruction=None,
+    # adjacency=None,
+    # default_joint_parameters=None,
+    # search_type=2,
+    # output_type=4,
+    # triangulate=0,
+    # scale=None,
+):
     """Test if Wood library is loaded
 
     Parameters

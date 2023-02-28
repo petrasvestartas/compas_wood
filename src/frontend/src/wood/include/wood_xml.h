@@ -62,6 +62,29 @@ namespace wood_xml
         const bool &simple_case = false,
         const bool &remove_duplicates = false);
 
+    /**
+     * xml reader - <?xml version="1.0" encoding="UTF-8"?>
+     * extract polylines for wood algorithm
+     * and properties: insertion_vectors, joints_per_face, three_valence, adjacency
+     *
+     * @param [out] input_polyline_pairs pair of polyline
+     * @param [out] input_insertion_vectors insertion vectors per face, e.g. a box has 6 faces, 2 top and bottom, 4 sides
+     * @param [out] input_JOINTS_TYPES joint types per face e.g. {{0,0,1,1,1,1}{0,0,1,1,1,1}}
+     * @param [out] input_three_valence_element_indices_and_instruction three valence element indices e.g. {{0},{0,7,1,7}}, for corner cases like 0 - Annen or 1 - Vidy, be aware that this vector starts by a list consisting of one index point to a correct corner case
+     * @param [out] input_adjacency a list of consisting of element pairs, e.g. id00, id01, id10, id11 ...
+     * @param [in] simple_case choose between two file paths "path_and_file_for_input_polylines" and "path_and_file_for_input_polylines_simple_case"
+     * @param [in] remove_duplicates remove duplicate points in polylines
+     * @return true if the file reading was successful
+     */
+    bool read_xml_polylines_and_properties(
+        std::vector<std::vector<double>> &input_polyline_pairs,
+        std::vector<std::vector<double>> &input_insertion_vectors,
+        std::vector<std::vector<int>> &input_JOINTS_TYPES,
+        std::vector<std::vector<int>> &input_three_valence_element_indices_and_instruction,
+        std::vector<int> &input_adjacency,
+        const bool &simple_case = false,
+        const bool &remove_duplicates = false);
+
     bool write_xml_polylines(std::vector<std::vector<IK::Point_3>> &polylines, const bool &simple_case = false);
 
     bool write_xml_polylines(std::vector<std::vector<std::vector<IK::Point_3>>> &polylines_tree, int id = -1);
