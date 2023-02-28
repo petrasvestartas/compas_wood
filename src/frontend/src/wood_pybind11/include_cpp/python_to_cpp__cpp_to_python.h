@@ -40,10 +40,11 @@
  * @param [in] z The third coordinate of the vector
  * @return The length of the vector
  */
-//
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ //
+ ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 #pragma once
+#include "wood_cut.h"
 
 namespace python_to_cpp__cpp_to_python
 {
@@ -73,7 +74,7 @@ namespace python_to_cpp__cpp_to_python
      * @param [in] faces - matrix of indices
      * @return a Mesh data structure -> typedef CGAL::Surface_mesh<IK::Point_3> Mesh;
      */
-    Mesh mesh_from_vertices_and_faces(const RowMatrixXd &vertices, const RowMatrixXi &faces);
+    Mesh mesh_from_vertices_and_faces(const RowMatrixXd& vertices, const RowMatrixXi& faces);
 
     /**
      * create a polygoanl mesh from vertices and faces
@@ -83,7 +84,7 @@ namespace python_to_cpp__cpp_to_python
      * @param [in] faces - matrix of indices
      * @return a Mesh data structure -> typedef CGAL::Surface_mesh<IK::Point_3> Mesh;
      */
-    Mesh ngon_from_vertices_and_faces(const RowMatrixXd &vertices, const std::vector<std::vector<int>> &faces);
+    Mesh ngon_from_vertices_and_faces(const RowMatrixXd& vertices, const std::vector<std::vector<int>>& faces);
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Python to CPP Polyline
@@ -96,7 +97,7 @@ namespace python_to_cpp__cpp_to_python
      * @param [in] vertices - matrix of coordinates
      * @return a vector of polylines
      */
-    std::vector<CGAL_Polyline> matrix_to_polylines(const RowMatrixXd &vertices);
+    std::vector<CGAL_Polyline> matrix_to_polylines(const RowMatrixXd& vertices);
 
     /**
      * create a vector of polylines
@@ -106,7 +107,7 @@ namespace python_to_cpp__cpp_to_python
      * @param [out] vector_of_polylines - container of polylines
      * @return a vector of polylines
      */
-    void coord_to_vector_of_polylines(std::vector<std::vector<double>> &nested_vector_of_numbers, std::vector<std::vector<IK::Point_3>> &vector_of_polylines);
+    void coord_to_vector_of_polylines(std::vector<std::vector<double>>& nested_vector_of_numbers, std::vector<std::vector<IK::Point_3>>& vector_of_polylines);
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Python to CPP std::vector<std::vector<IK::Vector_3>>
@@ -119,7 +120,7 @@ namespace python_to_cpp__cpp_to_python
      * @param [in] vertices - matrix of coordinates
      * @return a vector of vectors of IK::Vector_3
      */
-    std::vector<std::vector<IK::Vector_3>> matrix_to_nested_vector(const RowMatrixXd &vertices);
+    std::vector<std::vector<IK::Vector_3>> matrix_to_nested_vector(const RowMatrixXd& vertices);
 
     /**
      * create a nested vector of IK::Vector_3
@@ -129,7 +130,7 @@ namespace python_to_cpp__cpp_to_python
      * @param [out] nested_vector_of_vectors - container of vectors
      * @return a nested vector of vectors of IK::Vector_3
      */
-    void coord_to_vector_of_vectors(std::vector<std::vector<double>> &nested_vector_of_numbers, std::vector<std::vector<IK::Vector_3>> &nested_vector_of_vectors);
+    void coord_to_vector_of_vectors(std::vector<std::vector<double>>& nested_vector_of_numbers, std::vector<std::vector<IK::Vector_3>>& nested_vector_of_vectors);
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Python to CPP std::vector<std::vector<int>> and <std::vector<int>
@@ -142,7 +143,7 @@ namespace python_to_cpp__cpp_to_python
      * @param [in] indices - matrix of indices
      * @return a nested vector of int
      */
-    std::vector<std::vector<int>> matrix_to_nested_vector(const RowMatrixXi &indices);
+    std::vector<std::vector<int>> matrix_to_nested_vector(const RowMatrixXi& indices);
 
     /**
      * convert matrix a vector integers
@@ -151,7 +152,7 @@ namespace python_to_cpp__cpp_to_python
      * @param [in] indices - matrix of indices
      * @return a vector of int
      */
-    std::vector<int> matrix_to_vector(const RowMatrixXi &indices);
+    std::vector<int> matrix_to_vector(const RowMatrixXi& indices);
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // CPP TO PYTHON CONVERSIONS
@@ -182,7 +183,7 @@ namespace python_to_cpp__cpp_to_python
      * @param [in] mesh - a Mesh data structure -> typedef CGAL::Surface_mesh<IK::Point_3> Mesh;
      * @return a tuple of matrices for coordinates and indices
      */
-    std::tuple<RowMatrixXd, RowMatrixXi> mesh_to_vertices_and_faces(const Mesh &mesh);
+    std::tuple<RowMatrixXd, RowMatrixXi> mesh_to_vertices_and_faces(const Mesh& mesh);
 
     /**
      * convert quad mesh to coordinates and indices
@@ -191,7 +192,7 @@ namespace python_to_cpp__cpp_to_python
      * @param [in] mesh - a Mesh data structure -> typedef CGAL::Surface_mesh<IK::Point_3> Mesh;
      * @return a tuple of matrices for coordinates and indices
      */
-    std::tuple<RowMatrixXd, RowMatrixXi> quadmesh_to_vertices_and_faces(const Mesh &mesh);
+    std::tuple<RowMatrixXd, RowMatrixXi> quadmesh_to_vertices_and_faces(const Mesh& mesh);
 
     /**
      * convert mesh to a struct of vertices and faces
@@ -200,7 +201,7 @@ namespace python_to_cpp__cpp_to_python
      * @param [in] mesh - a Mesh data structure -> typedef CGAL::Surface_mesh<IK::Point_3> Mesh;
      * @return struct that consists of two matrices for coordinates and indices (Xd and Xi)
      */
-    ResultMesh result_from_mesh(const Mesh &mesh);
+    ResultMesh result_from_mesh(const Mesh& mesh);
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Polyline to Python
@@ -213,7 +214,7 @@ namespace python_to_cpp__cpp_to_python
      * @param [in] polylines - nested container of points std::vector<std::vector<IK::Point3d>>
      * @return a matrix of coordinates
      */
-    std::vector<RowMatrixXd> result_from_polylines(const std::vector<CGAL_Polyline> &polylines);
+    std::vector<RowMatrixXd> result_from_polylines(const std::vector<CGAL_Polyline>& polylines);
 
     /**
      * convert nested vector of polylines to coordinates
@@ -223,7 +224,7 @@ namespace python_to_cpp__cpp_to_python
      * @param [out] nested_nested_vector_of_coords - nested nested container of points std::vector<std::vector<std::vector<std::vector<double>>>>
      * @return a matrix of coordinates
      */
-    void nested_vector_of_polylines_to_coord(std::vector<std::vector<CGAL_Polyline>> &nested_vector_of_polylines, std::vector<std::vector<std::vector<double>>> &nested_nested_vector_of_coords);
+    void nested_vector_of_polylines_to_coord(std::vector<std::vector<CGAL_Polyline>>& nested_vector_of_polylines, std::vector<std::vector<std::vector<double>>>& nested_nested_vector_of_coords);
 
     /**
      * convert nested vector of wood_cut::cut_type to nested container of int
@@ -233,7 +234,7 @@ namespace python_to_cpp__cpp_to_python
      * @param [out] output_types_int - nested container of int
      * @return a matrix of coordinates
      */
-    void nested_vector_of_cut_type_to_nested_vector_of_int(std::vector<std::vector<wood_cut::cut_type>> &output_types, std::vector<std::vector<int>> &output_types_int);
+    void nested_vector_of_cut_type_to_nested_vector_of_int(std::vector<std::vector<wood_cut::cut_type>>& output_types, std::vector<std::vector<int>>& output_types_int);
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // XML to Python
@@ -246,5 +247,5 @@ namespace python_to_cpp__cpp_to_python
      * @param [in] filename -  the name of the file in \compas_wood\backend\src\wood\dataset
      * @return a matrix of coordinates that represents pair of polylines
      */
-    std::vector<RowMatrixXd> read_xml_as_polyline_pairs(std::string &filename);
+    std::vector<RowMatrixXd> read_xml_as_polyline_pairs(std::string& filename);
 }

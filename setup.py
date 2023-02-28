@@ -59,6 +59,9 @@ ext_modules = [
                 "src/frontend/src/3rd_party/Clipper2Lib/src/clipper.rectclip.cpp",
                 # precompiled header
                 "src/frontend/stdafx.cpp",
+                # wrapper of the wood library | converters
+                "src/frontend/src/wood_pybind11/include_cpp/compas_wood.cpp",
+                "src/frontend/src/wood_pybind11/include_cpp/python_to_cpp__cpp_to_python.cpp",
                 # wood
                 "src/frontend/src/wood/include/wood_globals.cpp",
                 "src/frontend/src/wood/include/wood_xml.cpp",
@@ -81,9 +84,6 @@ ext_modules = [
                 "src/frontend/src/wood/include/wood_joint.cpp",
                 "src/frontend/src/wood/include/wood_joint_lib.cpp",
                 "src/frontend/src/wood/include/wood_main.cpp",
-                # wrapper of the wood library | converters
-                "src/frontend/src/wood_pybind11/include_cpp/compas_wood.cpp",
-                "src/frontend/src/wood_pybind11/include_cpp/python_to_cpp__cpp_to_python.cpp",
             ]
         ),
         include_dirs=[
@@ -91,10 +91,10 @@ ext_modules = [
             "src/frontend/src/3rd_party/Clipper2Lib/include/",
             # precompiled header
             "src/frontend/",
-            # wood
-            "src/frontend/src/wood/include/",
             # wrapper of the wood library | converters
             "src/frontend/src/wood_pybind11/include_cpp/",
+            # wood
+            "src/frontend/src/wood/include/",
             get_eigen_include(),
             get_pybind_include(),
         ],
