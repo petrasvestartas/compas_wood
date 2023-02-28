@@ -3,8 +3,18 @@
 #include "compas_wood.h"                  //headers
 #include "wood_xml.h"                     //read xml file of the datasets
 
-// #include "cgal_inscribe_util.h"
-// #include "cgal_rectangle_util.h"
+// data structure
+#include "wood_cut.h"
+#include "wood_main.h"
+
+// joinery
+#include "wood_joint_lib.h"
+#include "wood_joint.h"
+
+// geometry methods
+#include "cgal_mesh_boolean.h"
+#include "cgal_inscribe_util.h"
+#include "cgal_rectangle_util.h"
 
 namespace compas_wood
 {
