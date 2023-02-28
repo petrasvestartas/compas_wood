@@ -1,8 +1,48 @@
 import wood_pybind11
-from wood_pybind11 import WoodVectorDouble
 from wood_pybind11 import WoodNestedVectorDouble
-from compas.geometry import Point
 from compas.geometry import Polyline
+
+# existing data-sets
+filenames_of_datasets = [
+    "type_beams_name_phanomema_node",
+    "type_plates_name_cross_and_sides_corner",
+    "type_plates_name_cross_corners",
+    "type_plates_name_cross_ibois_pavilion",
+    "type_plates_name_cross_square_reciprocal_iseya",
+    "type_plates_name_cross_square_reciprocal_two_sides",
+    "type_plates_name_cross_vda_corner",
+    "type_plates_name_cross_vda_hexshell",
+    "type_plates_name_cross_vda_hexshell_reciprocal",
+    "type_plates_name_cross_vda_shell",
+    "type_plates_name_cross_vda_single_arch",
+    "type_plates_name_hexbox_and_corner",
+    "type_plates_name_joint_linking_vidychapel_corner",
+    "type_plates_name_joint_linking_vidychapel_full",
+    "type_plates_name_joint_linking_vidychapel_one_axis_two_layers",
+    "type_plates_name_joint_linking_vidychapel_one_layer",
+    "type_plates_name_side_to_side_edge_inplane_2_butterflies",
+    "type_plates_name_side_to_side_edge_inplane_differentdirections",
+    "type_plates_name_side_to_side_edge_inplane_hexshell",
+    "type_plates_name_side_to_side_edge_inplane_outofplane_simple_corners",
+    "type_plates_name_side_to_side_edge_inplane_outofplane_simple_corners_combined",
+    "type_plates_name_side_to_side_edge_inplane_outofplane_simple_corners_different_lengths",
+    "type_plates_name_side_to_side_edge_outofplane_box",
+    "type_plates_name_side_to_side_edge_outofplane_dodecahedron",
+    "type_plates_name_side_to_side_edge_outofplane_folding",
+    "type_plates_name_side_to_side_edge_outofplane_icosahedron",
+    "type_plates_name_side_to_side_edge_outofplane_inplane_and_top_to_top_hexboxes",
+    "type_plates_name_side_to_side_edge_outofplane_octahedron",
+    "type_plates_name_side_to_side_edge_outofplane_tetra",
+    "type_plates_name_top_to_side_and_side_to_side_outofplane_annen_box",
+    "type_plates_name_top_to_side_and_side_to_side_outofplane_annen_box_pair",
+    "type_plates_name_top_to_side_and_side_to_side_outofplane_annen_corner",
+    "type_plates_name_top_to_side_and_side_to_side_outofplane_annen_grid_full_arch",
+    "type_plates_name_top_to_side_and_side_to_side_outofplane_annen_grid_small",
+    "type_plates_name_top_to_side_box",
+    "type_plates_name_top_to_side_corners",
+    "type_plates_name_top_to_side_pairs",
+    "type_plates_name_top_to_top_pairs",
+]
 
 
 def test():
