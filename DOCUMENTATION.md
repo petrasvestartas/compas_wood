@@ -1,6 +1,13 @@
 # compas_wood
 
 
+* copy the contents of the "compas_cgal" repository
+* win_install_cookiecutter.bat
+* win_install_docs.bat
+* win_build.bat
+* win_docs.bat
+* copy "frontend" folder to source
+* configure linking
 
 ___
 ___

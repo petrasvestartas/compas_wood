@@ -50,18 +50,20 @@ def get_library_dirs():
 
 ext_modules = [
     Extension(
-        "compas_cgal._cgal",
+        "wood_pybind11",
         sorted(
             [
-                "src/compas_cgal.cpp",
-                "src/compas.cpp",
-                "src/meshing.cpp",
-                "src/booleans.cpp",
-                "src/slicer.cpp",
-                "src/intersections.cpp",
-                "src/measure.cpp",
-                "src/subdivision.cpp",
-                "src/triangulations.cpp",
+                # precompiled header
+                "/src/frontend/stdafx.cpp",
+                # converters
+                "/src/frontend/src/wood_pybind11/include_cpp/python_to_cpp__cpp_to_python.cpp",
+                # wrapper of the wood library
+                "/src/frontend/src/wood_pybind11/include_cpp/compas_wood.cpp",
+                # clipper
+                "${CMAKE_BINARY_DIR}/install/clipper_2/CPP/Clipper2Lib/src/clipper.engine.cpp",
+                "${CMAKE_BINARY_DIR}/install/clipper_2/CPP/Clipper2Lib/src/clipper.offset.cpp",
+                # wood
+                "${CMAKE_SOURCE_DIR}/src/wood/include/wood_globals.cpp",
             ]
         ),
         include_dirs=["./include", get_eigen_include(), get_pybind_include()],
@@ -149,14 +151,14 @@ class BuildExt(build_ext):
 
 
 setup(
-    name="compas_cgal",
-    version="0.5.0",
-    description="COMPAS friedly bindings for the CGAL library.",
+    name="compas_wood",
+    version="1.0.0",
+    description="COMPAS friedly bindings for the WOOD library.",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/compas-dev/compas_cgal",
-    author="tom van mele",
-    author_email="van.mele@arch.ethz.ch",
+    url="https://github.com/petrasvestartas/compas_wood",
+    author="petras vestartas",
+    author_email="petrasvestartas@gmail.com",
     license="GPL-3 License",
     classifiers=[
         "Development Status :: 3 - Alpha",
@@ -177,7 +179,7 @@ setup(
     ],
     keywords=[],
     project_urls={},
-    packages=["compas_cgal"],
+    packages=["compas_wood"],
     package_dir={"": "src"},
     # package_data={},
     # data_files=[],
