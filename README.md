@@ -12,6 +12,32 @@ Author: [Petras Vestartas](https://petrasvestartas.com/About-Petras-Vestartas)
 - [ ] "tests/compas_wood_5_get_connection_zones.py" - generate timber joints
 - [ ] "tests/compas_wood_6_closed_mesh_from_polylines.py" - create a solid mesh from polylines with holes
 
+## Interface compas_wood
+
+### Installation
+
+#### Clone Github Repository
+
+##### Windows
+
+    conda create -n wood-dev python=3.8 mpir mpfr boost-cpp eigen=3.3 cgal-cpp=5.2 pybind11 compas compas_view2 --yes
+    conda activate wood-dev
+    git clone https://github.com/petrasvestartas/compas_wood
+    cd compas_wood
+    pip install -e .
+
+##### Mac
+
+
+    conda create -n wood-dev python=3.8 gmp mpfr boost-cpp eigen=3.3 cgal-cpp=5.2 pybind11 compas compas_view2 --yes
+    conda activate wood-dev
+    git clone https:/github.com/petrasvestartas/compas_wood
+    cd compas_wood 
+    pip install -e . 
+
+##### Video
+https://user-images.githubusercontent.com/18013985/147587822-cfb43c96-4a81-4b89-987f-8d201ec2e5ba.mp4
+
 
 
 
@@ -82,46 +108,9 @@ Author: [Petras Vestartas](https://petrasvestartas.com/About-Petras-Vestartas)
 
 
 
-## Interface compas_wood
-
-### Installation
-
-#### Clone Github Repository
-
-##### Windows
-
-    conda create -n wood-dev python=3.8 mpir mpfr boost-cpp eigen=3.3 cgal-cpp=5.2 pybind11 compas compas_view2 --yes
-    conda activate wood-dev
-    git clone https://github.com/petrasvestartas/compas_wood
-    cd compas_wood
-    pip install -e .
-
-##### Mac
-
-
-    conda create -n wood-dev python=3.8 gmp mpfr boost-cpp eigen=3.3 cgal-cpp=5.2 pybind11 compas compas_view2 --yes
-    conda activate wood-dev
-    git clone https:/github.com/petrasvestartas/compas_wood
-    cd compas_wood 
-    pip install -e . 
-
-##### Video
-https://user-images.githubusercontent.com/18013985/147587822-cfb43c96-4a81-4b89-987f-8d201ec2e5ba.mp4
 
 
 
-##### References
-https://grail.cs.washington.edu/projects/carpentrycompiler/
-@article {wu_siga19,
-    author = {Chenming Wu and Haisen Zhao and Chandrakana Nandi and Jeffrey I. Lipton and Zachary Tatlock and Adriana Schulz},
-    title = {Carpentry Compiler},
-    journal = {ACM Transactions on Graphics},
-    note = {presented at SIGGRAPH Asia 2019},
-    volume = {38},
-    number = {6},
-    pages = {Article No. 195},
-    year = {2019}
-}
 
 ## Tests
 ![type_plates_name_cross_and_sides_corner](https://user-images.githubusercontent.com/18013985/221279761-5753e90d-b73a-4e63-824a-da8b5d57d3c2.png)
