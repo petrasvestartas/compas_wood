@@ -62,6 +62,7 @@ namespace wood_xml
         const bool &simple_case = false,
         const bool &remove_duplicates = false);
 
+
     bool write_xml_polylines(std::vector<std::vector<IK::Point_3>> &polylines, const bool &simple_case = false);
 
     bool write_xml_polylines(std::vector<std::vector<std::vector<IK::Point_3>>> &polylines_tree, int id = -1);

@@ -2,6 +2,10 @@
 #include "python_to_cpp__cpp_to_python.h" //converters
 #include "compas_wood.h"                  //headers
 #include "wood_xml.h"                     //read xml file of the datasets
+
+// #include "cgal_inscribe_util.h"
+// #include "cgal_rectangle_util.h"
+
 namespace compas_wood
 {
 
@@ -62,14 +66,13 @@ namespace compas_wood
     // Primary methods
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    void get_data_set(std::string &foldername, std::string &filename_of_dataset, std::vector<std::vector<double>> &polylines_coordinates)
+    void read_xml_polylines(std::string &foldername, std::string &filename_of_dataset, std::vector<std::vector<double>> &polylines_coordinates)
     {
         // set file paths
         wood_globals::DATA_SET_INPUT_FOLDER = foldername; // = "C:\\IBOIS57\\_Code\\Software\\Python\\compas_wood\\frontend\\src\\wood\\dataset\\";
         wood_xml::path_and_file_for_input_polylines = wood_globals::DATA_SET_INPUT_FOLDER + filename_of_dataset + ".xml";
 
         // print the user given values
-        //printf("\n___________________________________start_of_CPP_____________________________________\n");
         printf("User given values \n");
         printf(foldername.c_str());
         printf("\n");
@@ -77,13 +80,104 @@ namespace compas_wood
         printf("\n");
         printf(wood_xml::path_and_file_for_input_polylines.c_str());
         printf("\n");
-        printf("Number of polylines:\n");
-        printf("\n");
-        printf(std::to_string(polylines_coordinates.size()).c_str());
-        //printf("\n____________________________________end_of_CPP______________________________________\n");
 
         // read the xml file
         wood_xml::read_xml_polylines(polylines_coordinates, false, true);
+    }
+
+    void read_xml_polylines_and_properties(
+        std::string &foldername,
+        std::string &filename_of_dataset,
+        std::vector<std::vector<double>> &input_polyline_pairs_coord,
+        std::vector<std::vector<double>> &input_insertion_vectors_coord,
+        std::vector<std::vector<int>> &input_JOINTS_TYPES,
+        std::vector<std::vector<int>> &input_three_valence_element_indices_and_instruction,
+        std::vector<int> &input_adjacency)
+    {
+
+        // set file paths
+        wood_globals::DATA_SET_INPUT_FOLDER = foldername; // = "C:\\IBOIS57\\_Code\\Software\\Python\\compas_wood\\frontend\\src\\wood\\dataset\\";
+        wood_xml::path_and_file_for_input_polylines = wood_globals::DATA_SET_INPUT_FOLDER + filename_of_dataset + ".xml";
+
+        // print the user given values
+        printf("User given values \n");
+        printf(foldername.c_str());
+        printf("\n");
+        printf(filename_of_dataset.c_str());
+        printf("\n");
+        printf(wood_xml::path_and_file_for_input_polylines.c_str());
+        printf("\n");
+
+        // read the xml file
+        wood_xml::read_xml_polylines_and_properties(input_polyline_pairs_coord, input_insertion_vectors_coord, input_JOINTS_TYPES, input_three_valence_element_indices_and_instruction, input_adjacency, false, true);
+    }
+
+    void get_connection_zones(
+        // input
+        std::vector<std::vector<double>> &pybind11_input_polyline_pairs,
+        std::vector<std::vector<double>> &pybind11_input_insertion_vectors,
+        std::vector<std::vector<int>> &pybind11_input_JOINTS_TYPES,
+        std::vector<std::vector<int>> &pybind11_input_three_valence_element_indices_and_instruction,
+        std::vector<int> &pybind11_input_adjacency,
+        std::vector<double> &pybind11_wood_globals_JOINTS_PARAMETERS_AND_TYPES,
+        int &search_type,
+        std::vector<double> &scale,
+        int &output_type,
+        // output
+        std::vector<std::vector<std::vector<double>>> &pybind11_output_plines,
+        std::vector<std::vector<int>> &pybind11_output_types)
+    {
+        // internal::set_file_path_for_input_xml_and_screenshot(
+        //     input_polyline_pairs,
+        //     input_insertion_vectors,
+        //     input_JOINTS_TYPES,
+        //     input_three_valence_element_indices_and_instruction,
+        //     input_adjacency,
+        //     "type_plates_name_top_to_side_and_side_to_side_outofplane_annen_grid_small",
+        //     false);
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // The filename of the xml file and the screenshot directory
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        std::vector<std::vector<IK::Point_3>> input_polyline_pairs;
+        python_to_cpp__cpp_to_python::coord_to_vector_of_polylines(pybind11_input_polyline_pairs, input_polyline_pairs);
+
+        std::vector<std::vector<IK::Vector_3>> input_insertion_vectors;
+        python_to_cpp__cpp_to_python::coord_to_vector_of_vectors(pybind11_input_insertion_vectors, input_insertion_vectors);
+
+        wood_globals::JOINTS_PARAMETERS_AND_TYPES = pybind11_wood_globals_JOINTS_PARAMETERS_AND_TYPES;
+        wood_globals::OUTPUT_GEOMETRY_TYPE = output_type;
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Main Method of Wood
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        std::vector<std::vector<CGAL_Polyline>> output_plines;
+        std::vector<std::vector<wood_cut::cut_type>> output_types;
+        std::vector<std::vector<int>> top_face_triangulation;
+
+        wood_main::get_connection_zones(
+            // input
+            input_polyline_pairs,
+            input_insertion_vectors,
+            pybind11_input_JOINTS_TYPES,
+            pybind11_input_three_valence_element_indices_and_instruction,
+            pybind11_input_adjacency,
+            // output
+            output_plines,
+            output_types,
+            top_face_triangulation,
+            // Global Parameters
+            wood_globals::JOINTS_PARAMETERS_AND_TYPES,
+            scale,
+            search_type,
+            wood_globals::OUTPUT_GEOMETRY_TYPE,
+            0);
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Convert polylines to double vector and cut types to int vector
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        python_to_cpp__cpp_to_python::nested_vector_of_polylines_to_coord(output_plines, pybind11_output_plines);
+        python_to_cpp__cpp_to_python::nested_vector_of_cut_type_to_nested_vector_of_int(output_types, pybind11_output_types); // only filled when 3rd output type is uesd
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -97,8 +191,10 @@ namespace compas_wood
 
 PYBIND11_MAKE_OPAQUE(std::vector<int>);
 PYBIND11_MAKE_OPAQUE(std::vector<std::vector<int>>);
+PYBIND11_MAKE_OPAQUE(std::vector<std::vector<std::vector<int>>>);
 PYBIND11_MAKE_OPAQUE(std::vector<double>);
 PYBIND11_MAKE_OPAQUE(std::vector<std::vector<double>>);
+PYBIND11_MAKE_OPAQUE(std::vector<std::vector<std::vector<double>>>);
 PYBIND11_MAKE_OPAQUE(std::map<std::string, double>);
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -114,6 +210,8 @@ PYBIND11_MODULE(wood_pybind11, m)
         .. autosummary::
            :toctree: _generate
            test
+           read_xml_polylines
+           read_xml_polylines_and_properties
            get_connection_zones
            closed_mesh_from_polylines
            rtree
@@ -130,11 +228,13 @@ PYBIND11_MODULE(wood_pybind11, m)
     // This means that there will be a small overhead for the data-transfer
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    // CPP collections visible in Python
+    // CPP collections visible in Python | these binding must come together with the PYBIND11_MAKE_OPAQUE equivalent at the top
     py::bind_vector<std::vector<int>>(m, "WoodVectorInt");
     py::bind_vector<std::vector<std::vector<int>>>(m, "WoodNestedVectorInt");
+    py::bind_vector<std::vector<std::vector<std::vector<int>>>>(m, "WoodNestedNestedVectorInt");
     py::bind_vector<std::vector<double>>(m, "WoodVectorDouble");
     py::bind_vector<std::vector<std::vector<double>>>(m, "WoodNestedVectorDouble");
+    py::bind_vector<std::vector<std::vector<std::vector<double>>>>(m, "WoodNestedNestedVectorDouble");
 
     py::bind_map<std::map<std::string, double>>(m, "WoodMapStringDouble");
 
@@ -151,12 +251,38 @@ PYBIND11_MODULE(wood_pybind11, m)
     m.def("test_opaque_types_wood_nested_vector_double", &compas_wood::test_opaque_types_wood_nested_vector_double);
 
     // primary methods
-    m.def("get_data_set", &compas_wood::get_data_set,
+    m.def("read_xml_polylines", &compas_wood::read_xml_polylines,
           // inputs
           pybind11::arg("foldername").noconvert(),
           pybind11::arg("filename_of_dataset").noconvert(),
           // outputs
           pybind11::arg("polylines_coordinates").noconvert());
+
+    m.def("read_xml_polylines_and_properties", &compas_wood::read_xml_polylines_and_properties,
+          // inputs
+          pybind11::arg("foldername").noconvert(),
+          pybind11::arg("filename_of_dataset").noconvert(),
+          // outputs
+          pybind11::arg("input_polyline_pairs_coord").noconvert(),
+          pybind11::arg("input_insertion_vectors_coord").noconvert(),
+          pybind11::arg("input_JOINTS_TYPES").noconvert(),
+          pybind11::arg("input_three_valence_element_indices_and_instruction").noconvert(),
+          pybind11::arg("input_adjacency").noconvert());
+
+    m.def("get_connection_zones", &compas_wood::get_connection_zones,
+          // inputs
+          pybind11::arg("pybind11_input_polyline_pairs").noconvert(),
+          pybind11::arg("pybind11_input_insertion_vectors").noconvert(),
+          pybind11::arg("pybind11_input_JOINTS_TYPES").noconvert(),
+          pybind11::arg("pybind11_input_three_valence_element_indices_and_instruction").noconvert(),
+          pybind11::arg("pybind11_input_adjacency").noconvert(),
+          pybind11::arg("pybind11_wood_globals_JOINTS_PARAMETERS_AND_TYPES").noconvert(),
+          pybind11::arg("search_type"),
+          pybind11::arg("scale").noconvert(),
+          pybind11::arg("output_type").noconvert(),
+          // outputs
+          pybind11::arg("pybind11_output_plines").noconvert(),
+          pybind11::arg("pybind11_output_types").noconvert());
 
     // secondary methods
 }

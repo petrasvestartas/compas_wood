@@ -245,29 +245,37 @@ if (BUILD_MY_PROJECTS)
     "${CMAKE_BINARY_DIR}/install/clipper_2/CPP/Clipper2Lib/src/clipper.offset.cpp"
     #wood
     "${CMAKE_SOURCE_DIR}/src/wood/include/wood_globals.cpp"
-    # "${CMAKE_SOURCE_DIR}/src/wood/include/cgal_box_util.cpp"
-    # "${CMAKE_SOURCE_DIR}/src/wood/include/rtree_util.cpp"
-    # "${CMAKE_SOURCE_DIR}/src/wood/include/cgal_inscribe_util.cpp"
-    # "${CMAKE_SOURCE_DIR}/src/wood/include/cgal_intersection_util.cpp"
-    # "${CMAKE_SOURCE_DIR}/src/wood/include/cgal_xform_util.cpp"
-    # "${CMAKE_SOURCE_DIR}/src/wood/include/cgal_math_util.cpp"
-    # "${CMAKE_SOURCE_DIR}/src/wood/include/cgal_plane_util.cpp"
-    # "${CMAKE_SOURCE_DIR}/src/wood/include/cgal_polyline_mesh_util.cpp"
-    # "${CMAKE_SOURCE_DIR}/src/wood/include/cgal_polyline_util.cpp"
-    # "${CMAKE_SOURCE_DIR}/src/wood/include/cgal_rectangle_util.cpp"
-    # "${CMAKE_SOURCE_DIR}/src/wood/include/cgal_vector_util.cpp"
-    # "${CMAKE_SOURCE_DIR}/src/wood/include/clipper_util.cpp"
-    # "${CMAKE_SOURCE_DIR}/src/wood/include/wood_element.cpp"
-    # "${CMAKE_SOURCE_DIR}/src/wood/include/wood_joint.cpp"
-    # "${CMAKE_SOURCE_DIR}/src/wood/include/wood_joint_lib.cpp"
+    "${CMAKE_SOURCE_DIR}/src/wood/include/cgal_box_util.cpp"
+    "${CMAKE_SOURCE_DIR}/src/wood/include/rtree_util.cpp"
+    "${CMAKE_SOURCE_DIR}/src/wood/include/cgal_inscribe_util.cpp"
+    "${CMAKE_SOURCE_DIR}/src/wood/include/cgal_intersection_util.cpp"
+    "${CMAKE_SOURCE_DIR}/src/wood/include/cgal_xform_util.cpp"
+    "${CMAKE_SOURCE_DIR}/src/wood/include/cgal_math_util.cpp"
+    "${CMAKE_SOURCE_DIR}/src/wood/include/cgal_mesh_boolean.cpp"
+    "${CMAKE_SOURCE_DIR}/src/wood/include/cgal_plane_util.cpp"
+    "${CMAKE_SOURCE_DIR}/src/wood/include/cgal_polyline_mesh_util.cpp"
+    "${CMAKE_SOURCE_DIR}/src/wood/include/cgal_polyline_util.cpp"
+    "${CMAKE_SOURCE_DIR}/src/wood/include/cgal_rectangle_util.cpp"
+    "${CMAKE_SOURCE_DIR}/src/wood/include/cgal_vector_util.cpp"
+    "${CMAKE_SOURCE_DIR}/src/wood/include/cgal_xform_util.cpp"
+    "${CMAKE_SOURCE_DIR}/src/wood/include/clipper_util.cpp"
+    "${CMAKE_SOURCE_DIR}/src/wood/include/rtree_util.cpp"
+    "${CMAKE_SOURCE_DIR}/src/wood/include/wood_element.cpp"
+    "${CMAKE_SOURCE_DIR}/src/wood/include/wood_joint.cpp"
+    "${CMAKE_SOURCE_DIR}/src/wood/include/wood_joint_lib.cpp"
     # #"${CMAKE_SOURCE_DIR}/src/wood/include/wood_test.cpp"
-    # "${CMAKE_SOURCE_DIR}/src/wood/include/wood_main.cpp"
+    "${CMAKE_SOURCE_DIR}/src/wood/include/wood_main.cpp"
     "${CMAKE_SOURCE_DIR}/src/wood/include/wood_xml.cpp"
     # "${CMAKE_SOURCE_DIR}/src/wood/include/cgal_mesh_boolean.cpp"
-
-
   )
 
+
+
+    message("${BoldBlue} ${CMAKE_BINARY_DIR}/install/cgal/auxiliary/gmp/lib/ ${ColourReset}" )
+
+  # target_link_libraries(
+  #   "${PYTHON_MODULE_NAME}" 
+  # )
 
   # include directories for header files
   target_include_directories(
@@ -287,9 +295,34 @@ if (BUILD_MY_PROJECTS)
     #eigen
     PRIVATE "${CMAKE_BINARY_DIR}/install/eigen/"
     #cgal
-    PRIVATE "${CMAKE_BINARY_DIR}/install/cgal/include"
-    PRIVATE "${CMAKE_BINARY_DIR}/install/cgal/auxiliary/gmp/include"
+    PUBLIC "${CMAKE_BINARY_DIR}/install/cgal/include"
+    PUBLIC "${CMAKE_BINARY_DIR}/install/cgal/auxiliary/gmp/include"
   )
+
+
+  
+  ###############################################################################
+  # LINK STATIC LIBRARIES_ CLIPPER AND CGAL
+  ###############################################################################
+  #target_link_libraries(${PROJECT_NAME} PUBLIC "${CMAKE_BINARY_DIR}/install/cgal/auxiliary/gmp/lib/" ) # WINDOWS
+  # if(COMPILER_NINJA)
+  #   target_link_directories("${PROJECT_NAME}" PUBLIC "C:/msys64/mingw64/lib/" )
+  # else()
+  target_link_directories("${PROJECT_NAME}" 
+  # cgal
+  PUBLIC "${CMAKE_BINARY_DIR}/install/cgal/auxiliary/gmp/lib/" 
+  # clipper
+  PUBLIC "${CMAKE_BINARY_DIR}/Release/"
+  )
+  
+
+
+    target_link_libraries(${PROJECT_NAME} PUBLIC 
+    Clipper2 
+    libgmp-10
+    libmpfr-4
+  ) #gmp mpfr link library | zlibstatic WINDOWS
+
 
   ###############################################################################
   # PCH support

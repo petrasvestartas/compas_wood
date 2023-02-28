@@ -110,145 +110,145 @@ SET(GET_LIBS "" CACHE STRING "Set option to download dependencies")
 if (GET_LIBS)
   message(AUTHOR_WARNING "GET_LIBS_" ${GET_LIBS})
 
-#   #######################################################################
-#   # CDT
-#   ####################################################################### 
-#   ExternalProject_Add(cdt
-#   GIT_REPOSITORY    https://github.com/artem-ogre/CDT.git
-#   GIT_TAG           master
-#       CMAKE_ARGS
-#         -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
-#         -DCMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER}
-#         #-DCMAKE_INSTALL_PREFIX:PATH="${CMAKE_BINARY_DIR}/install"
-#       SOURCE_DIR   "${CMAKE_BINARY_DIR}/install/cdt/"
-#         #INSTALL_DIR   "${CMAKE_INSTALL_PREFIX}/install"
-#       CONFIGURE_COMMAND "" #do not configure
-#       BUILD_COMMAND "" #do not buld
-#       INSTALL_COMMAND "" #installer for now is empty
-#   )
+  #######################################################################
+  # CDT
+  ####################################################################### 
+  ExternalProject_Add(cdt
+  GIT_REPOSITORY    https://github.com/artem-ogre/CDT.git
+  GIT_TAG           master
+      CMAKE_ARGS
+        -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
+        -DCMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER}
+        #-DCMAKE_INSTALL_PREFIX:PATH="${CMAKE_BINARY_DIR}/install"
+      SOURCE_DIR   "${CMAKE_BINARY_DIR}/install/cdt/"
+        #INSTALL_DIR   "${CMAKE_INSTALL_PREFIX}/install"
+      CONFIGURE_COMMAND "" #do not configure
+      BUILD_COMMAND "" #do not buld
+      INSTALL_COMMAND "" #installer for now is empty
+  )
 
-#   #######################################################################
-#   # CLIPPER2
-#   ####################################################################### 
-#   ExternalProject_Add(clipper_2
-#       GIT_REPOSITORY https://github.com/AngusJohnson/Clipper2.git
-#       GIT_TAG main
-#       CMAKE_ARGS
-#         -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
-#         -DCMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER}
-#         #-DCMAKE_INSTALL_PREFIX:PATH="${CMAKE_BINARY_DIR}/install"
-#       SOURCE_DIR   "${CMAKE_BINARY_DIR}/install/clipper_2"
-#         #INSTALL_DIR   "${CMAKE_INSTALL_PREFIX}/install"
-#       CONFIGURE_COMMAND "" #do not configure
-#       BUILD_COMMAND "" #do not buld
-#       INSTALL_COMMAND "" #installer for now is empty
-#   )
+  #######################################################################
+  # CLIPPER2
+  ####################################################################### 
+  ExternalProject_Add(clipper_2
+      GIT_REPOSITORY https://github.com/AngusJohnson/Clipper2.git
+      GIT_TAG main
+      CMAKE_ARGS
+        -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
+        -DCMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER}
+        #-DCMAKE_INSTALL_PREFIX:PATH="${CMAKE_BINARY_DIR}/install"
+      SOURCE_DIR   "${CMAKE_BINARY_DIR}/install/clipper_2"
+        #INSTALL_DIR   "${CMAKE_INSTALL_PREFIX}/install"
+      CONFIGURE_COMMAND "" #do not configure
+      BUILD_COMMAND "" #do not buld
+      INSTALL_COMMAND "" #installer for now is empty
+  )
 
-#   #######################################################################
-#   #GLFW https://learnopengl.com/Getting-started/Hello-Window
-#   #######################################################################
-#   ExternalProject_Add(glfw
-#   URL https://github.com/glfw/glfw/releases/download/3.3.8/glfw-3.3.8.zip
-#   CMAKE_ARGS
-#     -DCMAKE_INSTALL_PREFIX="${CMAKE_BINARY_DIR}/install/glfw"
-#     #-DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
-#     #-DCMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER}
-#     #-GLFW_BUILD_DOCS = ON
-#     #-GLFW_BUILD_EXAMPLES = ON
-#     #-GLFW_BUILD_TESTS = ON
-#     #-GLFW_INSTALL = ON
-#     #-USE_MSVC_RUNTIME_LIBRARY_DLL = ON
-#     #-DCMAKE_INSTALL_PREFIX:PATH=${CMAKE_INSTALL_PREFIX}
-#   UPDATE_COMMAND ""
-#   SOURCE_DIR   "${CMAKE_BINARY_DIR}/install/glfw"
-#   BUILD_IN_SOURCE 1
-#   INSTALL_COMMAND "" #installer for now is empty
+  #######################################################################
+  #GLFW https://learnopengl.com/Getting-started/Hello-Window
+  #######################################################################
+  ExternalProject_Add(glfw
+  URL https://github.com/glfw/glfw/releases/download/3.3.8/glfw-3.3.8.zip
+  CMAKE_ARGS
+    -DCMAKE_INSTALL_PREFIX="${CMAKE_BINARY_DIR}/install/glfw"
+    #-DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
+    #-DCMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER}
+    #-GLFW_BUILD_DOCS = ON
+    #-GLFW_BUILD_EXAMPLES = ON
+    #-GLFW_BUILD_TESTS = ON
+    #-GLFW_INSTALL = ON
+    #-USE_MSVC_RUNTIME_LIBRARY_DLL = ON
+    #-DCMAKE_INSTALL_PREFIX:PATH=${CMAKE_INSTALL_PREFIX}
+  UPDATE_COMMAND ""
+  SOURCE_DIR   "${CMAKE_BINARY_DIR}/install/glfw"
+  BUILD_IN_SOURCE 1
+  INSTALL_COMMAND "" #installer for now is empty
 
-#   #BUILD_ALWAYS ON #do not build
-#   #INSTALL_COMMAND ON #installer for now is empty
-#   )
+  #BUILD_ALWAYS ON #do not build
+  #INSTALL_COMMAND ON #installer for now is empty
+  )
 
-# ########################################################################
-# # GLM
-# ######################################################################## 
-#   ExternalProject_Add(glm
-#   URL https://github.com/g-truc/glm/releases/download/0.9.9.8/glm-0.9.9.8.7z
-#   CMAKE_ARGS
-#     -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
-#     -DCMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER}
-#     #-DCMAKE_INSTALL_PREFIX:PATH="${CMAKE_BINARY_DIR}/install"
-#   SOURCE_DIR   "${CMAKE_BINARY_DIR}/install/glm"
-#     #INSTALL_DIR   "${CMAKE_INSTALL_PREFIX}/install"
-#   CONFIGURE_COMMAND "" #do not configure
-#   BUILD_COMMAND "" #do not buld
-#   INSTALL_COMMAND "" #installer for now is empty
-# )
+########################################################################
+# GLM
+######################################################################## 
+  ExternalProject_Add(glm
+  URL https://github.com/g-truc/glm/releases/download/0.9.9.8/glm-0.9.9.8.7z
+  CMAKE_ARGS
+    -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
+    -DCMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER}
+    #-DCMAKE_INSTALL_PREFIX:PATH="${CMAKE_BINARY_DIR}/install"
+  SOURCE_DIR   "${CMAKE_BINARY_DIR}/install/glm"
+    #INSTALL_DIR   "${CMAKE_INSTALL_PREFIX}/install"
+  CONFIGURE_COMMAND "" #do not configure
+  BUILD_COMMAND "" #do not buld
+  INSTALL_COMMAND "" #installer for now is empty
+)
 
-# ########################################################################
-# # GLAD
-# ######################################################################## 
-# ExternalProject_Add(glad
-# URL "https://github.com/Dav1dde/glad/archive/v0.1.29.zip"
-# CMAKE_ARGS 
-#   -DCMAKE_INSTALL_PREFIX="${CMAKE_BINARY_DIR}/install/glad"
-#   #-DGLAD_INSTALL=OFF
-#   -DGLAD_PROFILE="core"
-#   -DGLAD_GENERATOR="c"
-# UPDATE_COMMAND ""
-# SOURCE_DIR "${CMAKE_BINARY_DIR}/install/glad"
-# #CONFIGURE_COMMAND "" #do not configure
-# BUILD_IN_SOURCE 1
-# #BUILD_COMMAND "ON" #do not build
-# INSTALL_COMMAND "" #installer for now is empty
-# )
-
-
+########################################################################
+# GLAD
+######################################################################## 
+ExternalProject_Add(glad
+URL "https://github.com/Dav1dde/glad/archive/v0.1.29.zip"
+CMAKE_ARGS 
+  -DCMAKE_INSTALL_PREFIX="${CMAKE_BINARY_DIR}/install/glad"
+  #-DGLAD_INSTALL=OFF
+  -DGLAD_PROFILE="core"
+  -DGLAD_GENERATOR="c"
+UPDATE_COMMAND ""
+SOURCE_DIR "${CMAKE_BINARY_DIR}/install/glad"
+#CONFIGURE_COMMAND "" #do not configure
+BUILD_IN_SOURCE 1
+#BUILD_COMMAND "ON" #do not build
+INSTALL_COMMAND "" #installer for now is empty
+)
 
 
-# ########################################################################
-# # IMGUI
-# ######################################################################## 
-# ExternalProject_Add(imgui
-# URL https://github.com/ocornut/imgui/archive/refs/tags/v1.88.zip
-# CMAKE_ARGS
-#   -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
-#   -DCMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER}
-#   #-DCMAKE_INSTALL_PREFIX:PATH="${CMAKE_BINARY_DIR}/install"
-# SOURCE_DIR   "${CMAKE_BINARY_DIR}/install/imgui"
-#   #INSTALL_DIR   "${CMAKE_INSTALL_PREFIX}/install"
-# CONFIGURE_COMMAND "" #do not configure
-# BUILD_COMMAND "" #do not buld
-# INSTALL_COMMAND "" #installer for now is empty
-# )
 
-#     #https://stackoverflow.com/questions/68824024/detecting-compiler-configuration-in-cmake-file
-#     #https://www.microsoft.com/en-us/download/details.aspx?id=6812
-#     ExternalProject_Add(assimp
-#     PREFIX assimp
-#     GIT_REPOSITORY https://github.com/assimp/assimp.git
-#     GIT_TAG master
-#     CMAKE_ARGS     
-#     -DCMAKE_INSTALL_PREFIX="${CMAKE_BINARY_DIR}/install/assimp"
-#     -DASSIMP_BUILD_ALL_IMPORTERS_BY_DEFAULT:BOOL=OFF
-#     -DASSIMP_BUILD_ALL_EXPORTERS_BY_DEFAULT:BOOL=OFF
-#     -DBUILD_SHARED_LIBS:BOOL=OFF
-#     -DASSIMP_BUILD_ASSIMP_TOOLS:BOOL=OFF
-#     -DASSIMP_BUILD_TESTS:BOOL=OFF
-#     -DASSIMP_BUILD_FBX_IMPORTER:BOOL=ON
-#     -DASSIMP_BUILD_OBJ_IMPORTER:BOOL=ON
-#     -DASSIMP_BUILD_OBJ_EXPORTER:BOOL=ON
-#     -DASSIMP_BUILD_ZLIB:BOOL=ON
-#     -DASSIMP_LIBRARY_SUFFIX:STRING=
-#     -DLIBRARY_SUFFIX:STRING=
-#     -DCMAKE_DEBUG_POSTFIX:STRING=
-#     -DASSIMP_INJECT_DEBUG_POSTFIX:BOOL=OFF
-#         UPDATE_COMMAND ""
-#         SOURCE_DIR "${CMAKE_BINARY_DIR}/install/assimp"
-#         #CONFIGURE_COMMAND "" #do not configure
-#         BUILD_IN_SOURCE 1
-#         #BUILD_COMMAND "ON" #do not build
-#         INSTALL_COMMAND "" #installer for now is empty
-#     )
+
+########################################################################
+# IMGUI
+######################################################################## 
+ExternalProject_Add(imgui
+URL https://github.com/ocornut/imgui/archive/refs/tags/v1.88.zip
+CMAKE_ARGS
+  -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
+  -DCMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER}
+  #-DCMAKE_INSTALL_PREFIX:PATH="${CMAKE_BINARY_DIR}/install"
+SOURCE_DIR   "${CMAKE_BINARY_DIR}/install/imgui"
+  #INSTALL_DIR   "${CMAKE_INSTALL_PREFIX}/install"
+CONFIGURE_COMMAND "" #do not configure
+BUILD_COMMAND "" #do not buld
+INSTALL_COMMAND "" #installer for now is empty
+)
+
+    #https://stackoverflow.com/questions/68824024/detecting-compiler-configuration-in-cmake-file
+    #https://www.microsoft.com/en-us/download/details.aspx?id=6812
+    ExternalProject_Add(assimp
+    PREFIX assimp
+    GIT_REPOSITORY https://github.com/assimp/assimp.git
+    GIT_TAG master
+    CMAKE_ARGS     
+    -DCMAKE_INSTALL_PREFIX="${CMAKE_BINARY_DIR}/install/assimp"
+    -DASSIMP_BUILD_ALL_IMPORTERS_BY_DEFAULT:BOOL=OFF
+    -DASSIMP_BUILD_ALL_EXPORTERS_BY_DEFAULT:BOOL=OFF
+    -DBUILD_SHARED_LIBS:BOOL=OFF
+    -DASSIMP_BUILD_ASSIMP_TOOLS:BOOL=OFF
+    -DASSIMP_BUILD_TESTS:BOOL=OFF
+    -DASSIMP_BUILD_FBX_IMPORTER:BOOL=ON
+    -DASSIMP_BUILD_OBJ_IMPORTER:BOOL=ON
+    -DASSIMP_BUILD_OBJ_EXPORTER:BOOL=ON
+    -DASSIMP_BUILD_ZLIB:BOOL=ON
+    -DASSIMP_LIBRARY_SUFFIX:STRING=
+    -DLIBRARY_SUFFIX:STRING=
+    -DCMAKE_DEBUG_POSTFIX:STRING=
+    -DASSIMP_INJECT_DEBUG_POSTFIX:BOOL=OFF
+        UPDATE_COMMAND ""
+        SOURCE_DIR "${CMAKE_BINARY_DIR}/install/assimp"
+        #CONFIGURE_COMMAND "" #do not configure
+        BUILD_IN_SOURCE 1
+        #BUILD_COMMAND "ON" #do not build
+        INSTALL_COMMAND "" #installer for now is empty
+    )
 
 
 ########################################################################
@@ -285,76 +285,76 @@ ExternalProject_Add(cgal_auxiliary
 
 
 
-# ########################################################################
-# # BOOST
-# ######################################################################## 
-#   if (WIN32)
-#     set(BOOST_BOOTSTRAP_CMD ${CMAKE_CURRENT_BINARY_DIR}/boost-prefix/src/boost/bootstrap.bat)
-#     set(BOOST_BUILD_CMD ${CMAKE_CURRENT_BINARY_DIR}/boost-prefix/src/boost/b2.exe)
-#   elseif (UNIX)
-#     set(BOOST_BOOTSTRAP_CMD ${CMAKE_CURRENT_BINARY_DIR}/boost-prefix/src/boost/bootstrap.sh)
-#     set(BOOST_BUILD_CMD ${CMAKE_CURRENT_BINARY_DIR}/boost-prefix/src/boost/b2)
-#   endif ()
+########################################################################
+# BOOST
+######################################################################## 
+  if (WIN32)
+    set(BOOST_BOOTSTRAP_CMD ${CMAKE_CURRENT_BINARY_DIR}/boost-prefix/src/boost/bootstrap.bat)
+    set(BOOST_BUILD_CMD ${CMAKE_CURRENT_BINARY_DIR}/boost-prefix/src/boost/b2.exe)
+  elseif (UNIX)
+    set(BOOST_BOOTSTRAP_CMD ${CMAKE_CURRENT_BINARY_DIR}/boost-prefix/src/boost/bootstrap.sh)
+    set(BOOST_BUILD_CMD ${CMAKE_CURRENT_BINARY_DIR}/boost-prefix/src/boost/b2)
+  endif ()
 
-#   ExternalProject_Add(boost
-#     GIT_REPOSITORY https://github.com/boostorg/boost.git
-#     GIT_TAG boost-1.78.0
-#     CONFIGURE_COMMAND ${BOOST_BOOTSTRAP_CMD}
-#     BUILD_COMMAND
-#       ${BOOST_BUILD_CMD}
-#       --prefix=${CMAKE_BINARY_DIR}/install/boost
-#       -sZLIB_LIBRARY_PATH=${CMAKE_BINARY_DIR}/install/boost/lib
-#       --without-python
-#       address-model=64
-#       variant=debug,release
-#       link=shared
-#       runtime-link=shared
-#       threading=multi
-#       install
-#     BUILD_IN_SOURCE 1
-#     INSTALL_COMMAND ""
-#     #SOURCE_DIR "${CMAKE_BINARY_DIR}/install/boost" #install directory is in build/install/eigen
-#   )
+  ExternalProject_Add(boost
+    GIT_REPOSITORY https://github.com/boostorg/boost.git
+    GIT_TAG boost-1.78.0
+    CONFIGURE_COMMAND ${BOOST_BOOTSTRAP_CMD}
+    BUILD_COMMAND
+      ${BOOST_BUILD_CMD}
+      --prefix=${CMAKE_BINARY_DIR}/install/boost
+      -sZLIB_LIBRARY_PATH=${CMAKE_BINARY_DIR}/install/boost/lib
+      --without-python
+      address-model=64
+      variant=debug,release
+      link=shared
+      runtime-link=shared
+      threading=multi
+      install
+    BUILD_IN_SOURCE 1
+    INSTALL_COMMAND ""
+    #SOURCE_DIR "${CMAKE_BINARY_DIR}/install/boost" #install directory is in build/install/eigen
+  )
 
-# ########################################################################
-# # EIGEN
-# ######################################################################## 
-#   ExternalProject_Add(eigen
-#     GIT_REPOSITORY https://gitlab.com/libeigen/eigen.git
-#     GIT_TAG 3.4.0
-#     CMAKE_ARGS
-#       -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
-#       -DCMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER}
-#       -DCMAKE_INSTALL_PREFIX=${CMAKE_BINARY_DIR}/install/eigen #has not effect
-#     SOURCE_DIR   "${CMAKE_BINARY_DIR}/install/eigen" #install directory is in build/install/eigen
-#     BUILD_COMMAND "" #do not build
-#     INSTALL_COMMAND "" #do not install
-#   )
-# ########################################################################
-# # GOOGLETEST ///googletest/include
-# ######################################################################## 
-# set(GOOGLE_TEST_OS "")
-# if (WIN32)
-#     set(GOOGLE_TEST_OS "$<$<PLATFORM_ID:Windows>:-Dgtest_force_shared_crt:BOOL=ON>")
-# endif (WIN32)
+########################################################################
+# EIGEN
+######################################################################## 
+  ExternalProject_Add(eigen
+    GIT_REPOSITORY https://gitlab.com/libeigen/eigen.git
+    GIT_TAG 3.4.0
+    CMAKE_ARGS
+      -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
+      -DCMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER}
+      -DCMAKE_INSTALL_PREFIX=${CMAKE_BINARY_DIR}/install/eigen #has not effect
+    SOURCE_DIR   "${CMAKE_BINARY_DIR}/install/eigen" #install directory is in build/install/eigen
+    BUILD_COMMAND "" #do not build
+    INSTALL_COMMAND "" #do not install
+  )
+########################################################################
+# GOOGLETEST ///googletest/include
+######################################################################## 
+set(GOOGLE_TEST_OS "")
+if (WIN32)
+    set(GOOGLE_TEST_OS "$<$<PLATFORM_ID:Windows>:-Dgtest_force_shared_crt:BOOL=ON>")
+endif (WIN32)
 
-#         unset(GTEST_ROOT CACHE)
-#          unset(GMOCK_ROOT CACHE)
-#          ExternalProject_Add(googletest
-#              GIT_REPOSITORY https://github.com/google/googletest.git
-#              GIT_TAG 58d77fa8070e8cec2dc1ed015d66b454c8d78850
-#              PREFIX ${CMAKE_BINARY_DIR}/install/googletest
-#              INSTALL_DIR ${CMAKE_BINARY_DIR}/install/googletest
-#              CMAKE_ARGS
-#                  -DCMAKE_INSTALL_PREFIX:PATH=<INSTALL_DIR>
-# 		 ${GOOGLE_TEST_OS} #$<$<PLATFORM_ID:Windows>:-Dgtest_force_shared_crt:BOOL=ON>
-#              BUILD_COMMAND
-#                  COMMAND ${CMAKE_COMMAND} --build <BINARY_DIR> --config Release --target install
-#                 # COMMAND ${CMAKE_COMMAND} --build <BINARY_DIR> --config Debug --target install
-#              INSTALL_COMMAND  ""
-#              )
-#          set(GTEST_ROOT ${CMAKE_BINARY_DIR}/install/googletest CACHE PATH "" FORCE)
-#          set(GMOCK_ROOT ${CMAKE_BINARY_DIR}/install/googletest CACHE PATH "" FORCE)
+        unset(GTEST_ROOT CACHE)
+         unset(GMOCK_ROOT CACHE)
+         ExternalProject_Add(googletest
+             GIT_REPOSITORY https://github.com/google/googletest.git
+             GIT_TAG 58d77fa8070e8cec2dc1ed015d66b454c8d78850
+             PREFIX ${CMAKE_BINARY_DIR}/install/googletest
+             INSTALL_DIR ${CMAKE_BINARY_DIR}/install/googletest
+             CMAKE_ARGS
+                 -DCMAKE_INSTALL_PREFIX:PATH=<INSTALL_DIR>
+		 ${GOOGLE_TEST_OS} #$<$<PLATFORM_ID:Windows>:-Dgtest_force_shared_crt:BOOL=ON>
+             BUILD_COMMAND
+                 COMMAND ${CMAKE_COMMAND} --build <BINARY_DIR> --config Release --target install
+                # COMMAND ${CMAKE_COMMAND} --build <BINARY_DIR> --config Debug --target install
+             INSTALL_COMMAND  ""
+             )
+         set(GTEST_ROOT ${CMAKE_BINARY_DIR}/install/googletest CACHE PATH "" FORCE)
+         set(GMOCK_ROOT ${CMAKE_BINARY_DIR}/install/googletest CACHE PATH "" FORCE)
 
 
 

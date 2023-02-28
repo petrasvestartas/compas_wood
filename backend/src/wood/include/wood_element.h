@@ -89,6 +89,14 @@ namespace wood
         std::string key;
         IK::Plane_3 component_plane;
 
+        /**
+         * Get output from the joinery vector
+         *
+         * @param [in] joints a list of precomputed joints
+         * @param [in] output outlines of joints
+         * @param [in] what_to_expose 0 - Plate outlines | 1 - wood::joint lines | 2 - wood::joint areas | 3 - wood::joint areas with bounding box | 4 - wood::joint areas with bounding box and cut types
+         * @param [out] output_cut_types outlines of cut types | only filled when the 3rd output type is uesd
+         */
         void get_joints_geometry(std::vector<wood::joint> &joints, std::vector<std::vector<CGAL_Polyline>> &output, int what_to_expose, std::vector<std::vector<wood_cut::cut_type>> &output_cut_types);
 
         // bool sort_by_third(const std::tuple<int, bool, double> &a, const std::tuple<int, bool, double> &b);

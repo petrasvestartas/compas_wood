@@ -103,12 +103,40 @@ namespace python_to_cpp__cpp_to_python
     {
     }
 
+    void coord_to_vector_of_polylines(std::vector<std::vector<double>> &nested_vector_of_numbers, std::vector<std::vector<IK::Point_3>> &vector_of_polylines)
+    {
+        vector_of_polylines.reserve(nested_vector_of_numbers.size());
+        for (auto &polyline : nested_vector_of_numbers)
+        {
+            vector_of_polylines.push_back(std::vector<IK::Point_3>());
+            vector_of_polylines.back().reserve(polyline.size() / 3);
+            for (int i = 0; i < polyline.size(); i += 3)
+            {
+                vector_of_polylines.back().push_back(IK::Point_3(polyline[i], polyline[i + 1], polyline[i + 2]));
+            }
+        }
+    }
+
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Python to CPP std::vector<std::vector<IK::Vector_3>>
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     std::vector<std::vector<IK::Vector_3>> matrix_to_nested_vector(const RowMatrixXd &vertices)
     {
+    }
+
+    void coord_to_vector_of_vectors(std::vector<std::vector<double>> &nested_vector_of_numbers, std::vector<std::vector<IK::Vector_3>> &nested_vector_of_vectors)
+    {
+        nested_vector_of_vectors.reserve(nested_vector_of_numbers.size());
+        for (auto &vector : nested_vector_of_numbers)
+        {
+            nested_vector_of_vectors.push_back(std::vector<IK::Vector_3>());
+            nested_vector_of_vectors.back().reserve(vector.size() / 3);
+            for (int i = 0; i < vector.size(); i += 3)
+            {
+                nested_vector_of_vectors.back().push_back(IK::Vector_3(vector[i], vector[i + 1], vector[i + 2]));
+            }
+        }
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -265,6 +293,43 @@ namespace python_to_cpp__cpp_to_python
         }
 
         return pointsets;
+    }
+
+    void nested_vector_of_polylines_to_coord(std::vector<std::vector<CGAL_Polyline>> &nested_vector_of_polylines, std::vector<std::vector<std::vector<double>>> &nested_nested_vector_of_coords)
+    {
+
+        nested_nested_vector_of_coords.reserve(nested_vector_of_polylines.size());
+        for (int i = 0; i < nested_vector_of_polylines.size(); i++)
+        {
+            nested_nested_vector_of_coords.emplace_back(std::vector<std::vector<double>>());
+            nested_nested_vector_of_coords.back().reserve(nested_vector_of_polylines[i].size());
+            for (int j = 0; j < nested_vector_of_polylines[i].size(); j++)
+            {
+                nested_nested_vector_of_coords[i].emplace_back(std::vector<double>());
+                nested_nested_vector_of_coords[i].back().reserve(nested_vector_of_polylines[i][j].size());
+                for (int k = 0; k < nested_vector_of_polylines[i][j].size(); k++)
+                {
+                    nested_nested_vector_of_coords[i][j].emplace_back((double)nested_vector_of_polylines[i][j][k].x());
+                    nested_nested_vector_of_coords[i][j].emplace_back((double)nested_vector_of_polylines[i][j][k].y());
+                    nested_nested_vector_of_coords[i][j].emplace_back((double)nested_vector_of_polylines[i][j][k].z());
+                }
+            }
+        }
+    }
+
+    void nested_vector_of_cut_type_to_nested_vector_of_int(std::vector<std::vector<wood_cut::cut_type>> &output_types, std::vector<std::vector<int>> &output_types_int)
+    {
+
+        output_types_int.reserve(output_types.size());
+        for (int i = 0; i < output_types.size(); i++)
+        {
+            output_types_int.emplace_back(std::vector<int>());
+            output_types_int.back().reserve(output_types[i].size());
+            for (int j = 0; j < output_types[i].size(); j++)
+            {
+                output_types_int[i].emplace_back((int)output_types[i][j]);
+            }
+        }
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

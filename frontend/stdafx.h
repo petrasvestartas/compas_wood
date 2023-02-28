@@ -141,6 +141,17 @@ typedef CGALCDT::Face_handle Face_handle;
 #include "cgal_rectangle_util.h"
 #include "rtree_util.h"
 
+// data structure
+#include "wood_cut.h"
+#include "wood_main.h"
+
+// joinery
+#include "wood_joint_lib.h"
+#include "wood_joint.h"
+
+// geometry methods
+#include "cgal_mesh_boolean.h"
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // compas_wood linkage
 // PYBIND11

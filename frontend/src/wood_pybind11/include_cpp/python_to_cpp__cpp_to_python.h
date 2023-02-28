@@ -98,18 +98,38 @@ namespace python_to_cpp__cpp_to_python
      */
     std::vector<CGAL_Polyline> matrix_to_polylines(const RowMatrixXd &vertices);
 
+    /**
+     * create a vector of polylines
+     * use - c++ | in wood: input_polyline_pairs
+     *
+     * @param [in] nested_vector_of_numbers - container of coordinates
+     * @param [out] vector_of_polylines - container of polylines
+     * @return a vector of polylines
+     */
+    void coord_to_vector_of_polylines(std::vector<std::vector<double>> &nested_vector_of_numbers, std::vector<std::vector<IK::Point_3>> &vector_of_polylines);
+
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Python to CPP std::vector<std::vector<IK::Vector_3>>
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
-     * create a vector of vectors of IK::Vector_3
+     * create a nested vector of IK::Vector_3
      * use - c++ | in wood: input_insertion_vectors for elements: top, bottom and sides
      *
      * @param [in] vertices - matrix of coordinates
      * @return a vector of vectors of IK::Vector_3
      */
     std::vector<std::vector<IK::Vector_3>> matrix_to_nested_vector(const RowMatrixXd &vertices);
+
+    /**
+     * create a nested vector of IK::Vector_3
+     * use - c++ | in wood: input_insertion_vectors for elements: top, bottom and sides
+     *
+     * @param [in] nested_vector_of_numbers - container of coordinates
+     * @param [out] nested_vector_of_vectors - container of vectors
+     * @return a nested vector of vectors of IK::Vector_3
+     */
+    void coord_to_vector_of_vectors(std::vector<std::vector<double>> &nested_vector_of_numbers, std::vector<std::vector<IK::Vector_3>> &nested_vector_of_vectors);
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Python to CPP std::vector<std::vector<int>> and <std::vector<int>
@@ -194,6 +214,26 @@ namespace python_to_cpp__cpp_to_python
      * @return a matrix of coordinates
      */
     std::vector<RowMatrixXd> result_from_polylines(const std::vector<CGAL_Polyline> &polylines);
+
+    /**
+     * convert nested vector of polylines to coordinates
+     * use - python
+     *
+     * @param [in] nested_vector_of_polylines - nested container of points std::vector<std::vector<std::vector<IK::Point3d>>>
+     * @param [out] nested_nested_vector_of_coords - nested nested container of points std::vector<std::vector<std::vector<std::vector<double>>>>
+     * @return a matrix of coordinates
+     */
+    void nested_vector_of_polylines_to_coord(std::vector<std::vector<CGAL_Polyline>> &nested_vector_of_polylines, std::vector<std::vector<std::vector<double>>> &nested_nested_vector_of_coords);
+
+    /**
+     * convert nested vector of wood_cut::cut_type to nested container of int
+     * use - python
+     *
+     * @param [in] output_types - nested container of wood_cut::cut_type
+     * @param [out] output_types_int - nested container of int
+     * @return a matrix of coordinates
+     */
+    void nested_vector_of_cut_type_to_nested_vector_of_int(std::vector<std::vector<wood_cut::cut_type>> &output_types, std::vector<std::vector<int>> &output_types_int);
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // XML to Python

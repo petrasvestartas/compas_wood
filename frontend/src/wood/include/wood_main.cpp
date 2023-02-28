@@ -821,7 +821,7 @@ namespace wood_main
                                 cgal_intersection_util::line_two_planes(y_line, Plane0[0], Plane1[1]);
                                 y = y_line[1] - y_line[0];
                                 x = CGAL::cross_product(y, z);
-                                viewer_polylines.emplace_back(CGAL_Polyline{y_line[0], y_line[1]});
+                                // viewer_polylines.emplace_back(CGAL_Polyline{y_line[0], y_line[1]});
 
                                 CGAL::Aff_transformation_3<IK> xform = cgal_xform_util::plane_to_xy(o, x, y, z);
 

@@ -100,12 +100,57 @@ namespace compas_wood
      * @param [in] filename_of_dataset file name of the xml file, without the ending
      * @param [out] polylines_coordinates a nest vectors of coordinates, that represents pairs of polylines
      */
-    void get_data_set(std::string &foldername, std::string &filename_of_dataset, std::vector<std::vector<double>> &polylines_coordinates);
+    void read_xml_polylines(std::string &foldername, std::string &filename_of_dataset, std::vector<std::vector<double>> &polylines_coordinates);
+
+    /**
+     * read_data_set from the xml file, they will be numbered from 0 to n
+     *
+     * @param [in] foldername folder name where all the data sets are stored
+     * @param [in] filename_of_dataset file name of the xml file, without the ending
+     * @param [out] input_polyline_pairs_coord vector of polylines in a flat list
+     * @param [out] input_insertion_vectors_coord vectors per element face (top,bottom and sides)
+     * @param [out] input_JOINTS_TYPES vector of adjacency
+     * @param [out] input_three_valence_element_indices_and_instruction vector of adjacency
+     * @param [out] input_adjacency vector of adjacency
+     *
+     */
+    void read_xml_polylines_and_properties(
+        std::string &foldername,
+        std::string &filename_of_dataset,
+        std::vector<std::vector<double>> &input_polyline_pairs_coord,
+        std::vector<std::vector<double>> &input_insertion_vectors_coord,
+        std::vector<std::vector<int>> &input_JOINTS_TYPES,
+        std::vector<std::vector<int>> &input_three_valence_element_indices_and_instruction,
+        std::vector<int> &input_adjacency);
 
     /**
      * the main method to detect the joinery
+     * @param [in] pybind11_input_polyline_pairs vector of polylines in a flat list
+     * @param [in] pybind11_input_insertion_vectors vectors per element face (top,bottom and sides)
+     * @param [in] pybind11_input_JOINTS_TYPES vector of joints types per element face (top,bottom and sides)
+     * @param [in] pybind11_input_three_valence_element_indices_and_instruction vector of three valence element indices and instruction
+     * @param [in] pybind11_input_adjacency vector of adjacency
+     * @param [in] pybind11_wood_globals_JOINTS_PARAMETERS_AND_TYPES vector of joints parameters and types | (side-to-side edge in-plane), (side-to-side edge out-of-plane), (top-to-side edge plane), (cross cutting in-plane), (top-to-top edge plane), (side-to-side edge rotated), (boundary) | (6*3) | 300, 0.5, 3, 450, 0.64, 15, 450, 0.5, 20, 300, 0.5, 30, 6, 0.95, 40, 300, 1.0, 60
+     * @param [in] search_type search type 0 - side-to-side, 1 - cross, 2 - both
+     * @param [in] scale scale in x,y,z directions
+     * @param [in] output_type 0 - Plate outlines | 1 - wood::joint lines | 2 - wood::joint areas | 3 - wood::joint areas with bounding box | 4 - wood::joint areas with bounding box and cut types
+     * @param [out] pybind11_output_plines nested vector of polylines in a flat list
+     * @param [out] pybind11_output_types vector of joints types per element face (top,bottom and sides)
      */
-    void get_connection_zones();
+    void get_connection_zones(
+        // input
+        std::vector<std::vector<double>> &pybind11_input_polyline_pairs,
+        std::vector<std::vector<double>> &pybind11_input_insertion_vectors,
+        std::vector<std::vector<int>> &pybind11_input_JOINTS_TYPES,
+        std::vector<std::vector<int>> &pybind11_input_three_valence_element_indices_and_instruction,
+        std::vector<int> &pybind11_input_adjacency,
+        std::vector<double> &pybind11_wood_globals_JOINTS_PARAMETERS_AND_TYPES,
+        int &search_type,
+        std::vector<double> &scale,
+        int &output_type,
+        // output
+        std::vector<std::vector<std::vector<double>>> &pybind11_output_plines,
+        std::vector<std::vector<int>> &pybind11_output_types);
 
     /**
      * get closed mesh from a pair of polylines

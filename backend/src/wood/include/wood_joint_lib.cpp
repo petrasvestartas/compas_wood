@@ -4,7 +4,7 @@
 #else
 #include "../../../stdafx.h" //go up to the folder where the CMakeLists.txt is
 #endif
- 
+
 #include "wood_joint_lib.h"
 
 namespace wood_joint_lib
@@ -477,7 +477,7 @@ namespace wood_joint_lib
         // Get average line
         IK::Segment_3 average_line;
         cgal_polyline_util::line_line_overlap_average(jo.joint_lines[0], jo.joint_lines[1], average_line);
-        viewer_polylines.emplace_back(CGAL_Polyline({average_line[0], average_line[1]}));
+        // viewer_polylines.emplace_back(CGAL_Polyline({average_line[0], average_line[1]}));
 
         // Get average thickness
         double half_thickness = (elements[jo.v0].thickness + elements[jo.v1].thickness) / 4.0;
@@ -2065,7 +2065,7 @@ namespace wood_joint_lib
         // Get average line
         IK::Segment_3 average_line;
         cgal_polyline_util::line_line_overlap_average(jo.joint_lines[0], jo.joint_lines[1], average_line);
-        viewer_polylines.emplace_back(CGAL_Polyline({average_line[0], average_line[1]}));
+        // viewer_polylines.emplace_back(CGAL_Polyline({average_line[0], average_line[1]}));
 
         // Get average thickness
         double half_thickness = (elements[jo.v0].thickness + elements[jo.v1].thickness) / 4.0;

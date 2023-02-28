@@ -84,7 +84,7 @@ namespace wood
                         }
                     }
                 }
-
+                
                 switch (what_to_expose)
                 {
                 case (0): // Plate outlines

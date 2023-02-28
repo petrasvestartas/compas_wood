@@ -83,9 +83,12 @@
                 "C:/IBOIS57/_Code/Software/Python/compas_wood/frontend/build_win/install/googletest/include/gmock/",
                 "C:/IBOIS57/_Code/Software/Python/compas_wood/frontend/build_win/install/googletest/include/gmock/internal/",
                 "C:/IBOIS57/_Code/Software/Python/compas_wood/frontend/build_win/install/googletest/include/gmock/custom/",
+                "C:/IBOIS57/_Code/Software/Python/compas_wood/frontend/build_win/install/",
+                "C:/IBOIS57/_Code/Software/Python/compas_wood/frontend/build_win/install/pybind11/",
                 "C:/IBOIS57/_Code/Software/Python/compas_wood/frontend/build_win/install/pybind11/include/",
                 "C:/IBOIS57/_Code/Software/Python/compas_wood/frontend/build_win/install/pybind11/include/pybind11/",
-                "C:/IBOIS57/_Code/Software/Python/compas_wood/frontend/src/compas_wood/include/"
+                "C:/IBOIS57/_Code/Software/Python/compas_wood/frontend/src/wood/include/",
+                "C:/IBOIS57/_Code/Software/Python/compas_wood/frontend/src/wood_pybind11/include_cpp/"
             ],
             "name": "wood_config",
             "intelliSenseMode": "gcc-x64",
