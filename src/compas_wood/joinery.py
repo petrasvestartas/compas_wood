@@ -44,8 +44,8 @@ def read_xml(
     )  # fills with double values e.g. WoodVectorDouble([0.5, 1.4, 2.3])
 
     wood_pybind11.get_data_set(
-        "C://IBOIS57//_Code//Software//Python//compas_wood//frontend//src//wood//dataset//",
-        "type_plates_name_cross_vda_hexshell_reciprocal",
+        foldername,
+        filename_of_dataset,
         polylines_coordinates,
     )
 
@@ -55,17 +55,18 @@ def read_xml(
 
     output_polylines = []
 
-    for i in range(len(polylines_coordinates)):
-        polyline = Polyline([])
-        for j in range(0, len(polylines_coordinates[i], 3)):
-            polyline.append(
-                [
-                    polylines_coordinates[i][j + 0],
-                    polylines_coordinates[i][j + 1],
-                    polylines_coordinates[i][j + 2],
-                ]
-            )
-        output_polylines.append(polyline)
+    # for i in range(len(polylines_coordinates)):
+    #     points = []
+    #     for j in range(0, len(polylines_coordinates[i]), 3):
+    #         points.append(
+    #             [
+    #                 polylines_coordinates[i][j + 0],
+    #                 polylines_coordinates[i][j + 1],
+    #                 polylines_coordinates[i][j + 2],
+    #             ]
+    #         )
+    #     polyline = Polyline(points)
+    #     output_polylines.append(polyline)
 
     ###################################################################################################
     # output

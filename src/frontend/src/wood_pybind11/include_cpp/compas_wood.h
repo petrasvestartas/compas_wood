@@ -16,7 +16,7 @@
 //
 // NOTE:
 // "compas_wood.h" and "compas_wood.cpp" are the only two files that contains pybind11 code, do not create any other files
-// "stdafx_pybind11.h" file contains all the header files and type shortcuts, without any viewer, just algorithm
+// "stdafx.h" file contains all the header files and type shortcuts, without any viewer, just algorithm
 // "compas.h" and "compas.cpp" contains converter methods (CGAl->Eigen and Eigen->CGAL),
 //
 // the wrapper methods contains:
@@ -96,10 +96,11 @@ namespace compas_wood
     /**
      * read_data_set from the xml file, they will be numbered from 0 to n
      *
-     * @param [in] file_name_of_data_set file name without exenstion e.g. type_plates_name_cross_vda_corner
+     * @param [in] foldername folder name where all the data sets are stored
+     * @param [in] filename_of_dataset file name of the xml file, without the ending
      * @param [out] polylines_coordinates a nest vectors of coordinates, that represents pairs of polylines
      */
-    void get_data_set(std::string &file_name_of_data_set, std::vector<std::vector<double>> &polylines_coordinates);
+    void get_data_set(std::string &foldername, std::string &filename_of_dataset, std::vector<std::vector<double>> &polylines_coordinates);
 
     /**
      * the main method to detect the joinery

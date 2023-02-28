@@ -62,23 +62,21 @@ namespace compas_wood
     // Primary methods
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    void get_data_set(std::string &file_name_of_data_set, std::vector<std::vector<double>> &polylines_coordinates)
+    void get_data_set(std::string &foldername, std::string &filename_of_dataset, std::vector<std::vector<double>> &polylines_coordinates)
     {
-        // print file name
-        printf("\n________________________________________________________________________\n");
-        printf(file_name_of_data_set.c_str());
-        printf("\n________________________________________________________________________\n");
+        // set file paths
+        wood_globals::DATA_SET_INPUT_FOLDER = foldername; // = "C:\\IBOIS57\\_Code\\Software\\Python\\compas_wood\\frontend\\src\\wood\\dataset\\";
+        wood_xml::path_and_file_for_input_polylines = wood_globals::DATA_SET_INPUT_FOLDER + filename_of_dataset + ".xml";
 
-        // set the path to the xml file | input data-set
-        // WARNING wood_globals::DATA_SET_INPUT_FOLDER must be local
-        // wood_xml::path_and_file_for_input_polylines = wood_globals::DATA_SET_INPUT_FOLDER + file_name_of_data_set + ".xml";
-        // wood_xml::path_and_file_for_input_polylines = wood_globals::DATA_SET_INPUT_FOLDER + ".xml";
-        // auto test = wood_xml::path_and_file_for_input_polylines;
-        auto test = wood_globals::DATA_SET_INPUT_FOLDER = "C:\\IBOIS57\\_Code\\Software\\Python\\compas_wood\\frontend\\src\\wood\\dataset\\";
-        wood_xml::path_and_file_for_input_polylines = wood_globals::DATA_SET_INPUT_FOLDER + file_name_of_data_set + ".xml";
-
-        // fill the stl container with coordinates from polylines
-        // polylines_coordinates.emplace_back(std::vector<double>{0.5, 1.7, 5.0, 0.0, 1.0, 5.1});
+        // print the user given values
+        printf("\n___________________________________start_of_CPP_____________________________________\n");
+        printf("User given values \n");
+        printf(foldername.c_str());
+        printf("\n");
+        printf(filename_of_dataset.c_str());
+        printf("\n");
+        printf(wood_xml::path_and_file_for_input_polylines.c_str());
+        printf("\n____________________________________end_of_CPP______________________________________\n");
 
         // read the xml file
         wood_xml::read_xml_polylines(polylines_coordinates, false, true);
@@ -152,7 +150,8 @@ PYBIND11_MODULE(wood_pybind11, m)
     // primary methods
     m.def("get_data_set", &compas_wood::get_data_set,
           // inputs
-          pybind11::arg("file_name_of_data_set").noconvert(),
+          pybind11::arg("foldername").noconvert(),
+          pybind11::arg("filename_of_dataset").noconvert(),
           // outputs
           pybind11::arg("polylines_coordinates").noconvert());
 
