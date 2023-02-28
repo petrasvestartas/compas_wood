@@ -90,7 +90,7 @@ conda activate wood
 
 ### Part 1.2 - Install Documentation
 
-Install CookieCutter
+Install CookieCutter (be sure to add path to environmental variables on windows C:\ProgramData\Anaconda3\pkgs\openssl-1.1.1l-h2bbff1b_0\Library\bin )
 ```
 pip install cookiecutter
 ```
