@@ -53,29 +53,48 @@ ext_modules = [
         "wood_pybind11",
         sorted(
             [
-                # precompiled header
-                "src/frontend/stdafx.cpp",
-                # wrapper of the wood library | converters
-                "src/frontend/src/wood_pybind11/include_cpp/python_to_cpp__cpp_to_python.cpp",
-                "src/frontend/src/wood_pybind11/include_cpp/compas_wood.cpp",
-                # wood
-                "src/frontend/src/wood/include/wood_globals.cpp",
-                "src/frontend/src/wood/include/wood_xml.cpp",
                 # 3rd_party | Clipper2Lib
                 "src/frontend/src/3rd_party/Clipper2Lib/src/clipper.engine.cpp",
                 "src/frontend/src/3rd_party/Clipper2Lib/src/clipper.offset.cpp",
                 "src/frontend/src/3rd_party/Clipper2Lib/src/clipper.rectclip.cpp",
+                # precompiled header
+                "src/frontend/stdafx.cpp",
+                # wood
+                "src/frontend/src/wood/include/wood_globals.cpp",
+                "src/frontend/src/wood/include/wood_xml.cpp",
+                "src/frontend/src/wood/include/cgal_box_util.cpp",
+                "src/frontend/src/wood/include/rtree_util.cpp",
+                "src/frontend/src/wood/include/cgal_inscribe_util.cpp",
+                "src/frontend/src/wood/include/cgal_intersection_util.cpp",
+                "src/frontend/src/wood/include/cgal_xform_util.cpp",
+                "src/frontend/src/wood/include/cgal_math_util.cpp",
+                "src/frontend/src/wood/include/cgal_mesh_boolean.cpp",
+                "src/frontend/src/wood/include/cgal_plane_util.cpp",
+                "src/frontend/src/wood/include/cgal_polyline_mesh_util.cpp",
+                "src/frontend/src/wood/include/cgal_polyline_util.cpp",
+                "src/frontend/src/wood/include/cgal_rectangle_util.cpp",
+                "src/frontend/src/wood/include/cgal_vector_util.cpp",
+                "src/frontend/src/wood/include/cgal_xform_util.cpp",
+                "src/frontend/src/wood/include/clipper_util.cpp",
+                "src/frontend/src/wood/include/rtree_util.cpp",
+                "src/frontend/src/wood/include/wood_element.cpp",
+                "src/frontend/src/wood/include/wood_joint.cpp",
+                "src/frontend/src/wood/include/wood_joint_lib.cpp",
+                "src/frontend/src/wood/include/wood_main.cpp",
+                # wrapper of the wood library | converters
+                "src/frontend/src/wood_pybind11/include_cpp/compas_wood.cpp",
+                "src/frontend/src/wood_pybind11/include_cpp/python_to_cpp__cpp_to_python.cpp",
             ]
         ),
         include_dirs=[
-            # precompiled header
-            "src/frontend/",
-            # wrapper of the wood library | converters
-            "src/frontend/src/wood_pybind11/include_cpp/",
-            # wood
-            "src/frontend/src/wood/include/",
             # 3rd_party | Clipper2Lib
             "src/frontend/src/3rd_party/Clipper2Lib/include/",
+            # precompiled header
+            "src/frontend/",
+            # wood
+            "src/frontend/src/wood/include/",
+            # wrapper of the wood library | converters
+            "src/frontend/src/wood_pybind11/include_cpp/",
             get_eigen_include(),
             get_pybind_include(),
         ],
