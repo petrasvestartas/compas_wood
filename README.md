@@ -4,6 +4,16 @@ Author: [Petras Vestartas](https://petrasvestartas.com/About-Petras-Vestartas)
 
 ![type_plates_name_side_to_side_edge_inplane_hexshell](https://user-images.githubusercontent.com/18013985/221278631-8ed8f5af-8485-49ec-9a99-625d5a4466e4.png)
 
+## Examples
+"tests/compas_wood_1_test.py" - test if the library is loading
+"tests/compas_wood_2_read_xml.py" - get data-set a set of polylines and display in viewer
+"tests/compas_wood_3_joints.py" - get connection-areas between timber plates
+"tests/compas_wood_4_rtree.py" - get neighbors of an element
+"tests/compas_wood_5_get_connection_zones.py" - generate timber joints
+"tests/compas_wood_6_closed_mesh_from_polylines.py" - create a solid mesh from polylines with holes
+
+
+
 
 ## :small_red_triangle: Under-construction all the code is being developrd on the "backend" branch :small_red_triangle:
 
