@@ -62,7 +62,7 @@ def display(
     # preview
     if input is not None:
         display_polylines(
-            viewer, input, scale, 1.0, 0.0, 0.0, 3, True, movex_0
+            viewer, input, scale, 0.25, 0.25, 0.25, 3, True, movex_0
         )  # polylines without joints
 
     if result is not None:

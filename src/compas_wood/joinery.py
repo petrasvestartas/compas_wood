@@ -5,6 +5,7 @@ from wood_pybind11 import WoodVectorDouble
 from wood_pybind11 import WoodNestedVectorDouble
 from wood_pybind11 import WoodNestedNestedVectorDouble
 from compas.geometry import Polyline
+import time
 
 # from wood_pybind11 import test
 # from wood_pybind11 import read_xml_polylines
@@ -263,7 +264,7 @@ def read_xml_polylines(
     )  # fills with double values e.g. WoodVectorDouble([0.5, 1.4, 2.3])
 
     print(
-        "\n___________________________________start_of_WOOD_____________________________________\n"
+        "\n___________________________________start_of_WOOD_____________________________________"
     )
     wood_pybind11.read_xml_polylines(
         foldername,
@@ -271,7 +272,7 @@ def read_xml_polylines(
         polylines_coordinates,
     )
     print(
-        "\n____________________________________end_of_WOOD______________________________________\n"
+        "\n____________________________________end_of_WOOD______________________________________"
     )
 
     ###################################################################################################
@@ -331,7 +332,7 @@ def read_xml_polylines_and_properties(
     input_adjacency = WoodVectorInt([])
 
     print(
-        "\n___________________________________start_of_WOOD_____________________________________\n"
+        "\n___________________________________start_of_WOOD_____________________________________"
     )
 
     wood_pybind11.read_xml_polylines_and_properties(
@@ -344,7 +345,7 @@ def read_xml_polylines_and_properties(
         input_adjacency,
     )
     print(
-        "\n____________________________________end_of_WOOD______________________________________\n"
+        "\n____________________________________end_of_WOOD______________________________________"
     )
 
     ###################################################################################################
@@ -515,9 +516,9 @@ def get_connection_zones(
     ###################################################################################################
 
     print(
-        "\n___________________________________start_of_WOOD_____________________________________\n"
+        "\n___________________________________start_of_WOOD_____________________________________"
     )
-
+    start_time = time.time()
     wood_pybind11.get_connection_zones(
         # input
         _input_polyline_pairs_coord,
@@ -533,10 +534,9 @@ def get_connection_zones(
         _output_plines,
         _output_types,
     )
-
-    print(
-        "\n____________________________________end_of_WOOD______________________________________\n"
-    )
+    
+    print("\n______________________________________ %s ms ______________________________________" % round((time.time() - start_time) * 1000.0, 2))
+    print("\n____________________________________end_of_WOOD______________________________________")
 
     ###################################################################################################
     # convert nested vector of doubles to a list of polylines
