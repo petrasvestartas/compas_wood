@@ -130,5 +130,47 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [ ] check compatibility with Linux
 
 
+### Switch precompiled headers
 
+´´´cmake
+cmake_minimum_required(VERSION 3.14)
+project(tslam_reconstruct)
+set(CMAKE_CXX_STANDARD 17)
+option(ENABLE_O3D_VISUAL_DEBUG  "This option will find locally and link open3d to enable visual debugging"   OFF)
+# build shared lib
+file(GLOB tslamrec_srcs_base "*.cc")
+list(REMOVE_ITEM tslamrec_srcs_base "${CMAKE_CURRENT_SOURCE_DIR}/reconstruct_debug.cc")
+add_library(tslamrec SHARED)  # SHARED or STATIC
+target_sources(tslamrec PUBLIC ${tslamrec_srcs_base})
+if(ENABLE_O3D_VISUAL_DEBUG)
+    find_package(Open3D 0.16.1 REQUIRED)
+    target_link_libraries(tslamrec PUBLIC Open3D::Open3D)
+    target_compile_definitions(tslamrec PUBLIC TSLAM_REC_O3D_VISUAL_DEBUG=0)
+endif()
+´´´
+
+´´´cpp
+#ifdef TSLAM_REC_O3D_VISUAL_DEBUG
+    #include<open3d/Open3D.h>
+#endif
+​
+#include <algorithm>
+#include <math.h>
+// ...
+​
+int main()
+{
+		std::cout << "Hello World" << std::endl;
+#ifdef TSLAM_REC_O3D_VISUAL_DEBUG
+        this->visualize(this->m_ShowVisualizer,
+                        this->m_DrawTags,
+                        this->m_DrawTagNormals,
+                        this->m_DrawAabb,
+                        this->m_DrawIntersectedPoly,
+                        this->m_DrawSplittingSegments,
+                        this->m_DrawSelectedFace,
+                        this->m_DrawFinalMesh);
+#endif
+}
+´´´
 
