@@ -87,8 +87,8 @@ https://user-images.githubusercontent.com/18013985/147587822-cfb43c96-4a81-4b89-
 
 #### COMPAS integration 
 - [x] Create backend in C++ with a Viewer - Finished
-- [ ] Create a wrapper in C++ with Pybind11 - In Process
-- [ ] Setup the Compas Python Environment that replicates the 2nd step workflow - Not done
+- [x] Create a wrapper in C++ with Pybind11 - In Process
+- [x] Setup the Compas Python Environment that replicates the 2nd step workflow - Not done
 - [ ] Produce documentation - Finished
 - [ ] Write Grasshopper components - Not done
 - [ ] Write if the code works on MAC and Linux - Not done
