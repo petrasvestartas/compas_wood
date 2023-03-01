@@ -132,7 +132,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Switch precompiled headers
 
-´´´cmake
+```cmake
 cmake_minimum_required(VERSION 3.14)
 project(tslam_reconstruct)
 set(CMAKE_CXX_STANDARD 17)
@@ -147,9 +147,9 @@ if(ENABLE_O3D_VISUAL_DEBUG)
     target_link_libraries(tslamrec PUBLIC Open3D::Open3D)
     target_compile_definitions(tslamrec PUBLIC TSLAM_REC_O3D_VISUAL_DEBUG=0)
 endif()
-´´´
+```
 
-´´´cpp
+```cpp
 #ifdef TSLAM_REC_O3D_VISUAL_DEBUG
     #include<open3d/Open3D.h>
 #endif
@@ -172,5 +172,5 @@ int main()
                         this->m_DrawFinalMesh);
 #endif
 }
-´´´
+```
 
