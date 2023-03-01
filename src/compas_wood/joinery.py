@@ -1,48 +1,227 @@
 import wood_pybind11
+from wood_pybind11 import WoodVectorInt
+from wood_pybind11 import WoodNestedVectorInt
+from wood_pybind11 import WoodVectorDouble
 from wood_pybind11 import WoodNestedVectorDouble
+from wood_pybind11 import WoodNestedNestedVectorDouble
 from compas.geometry import Polyline
+
+# from wood_pybind11 import test
+# from wood_pybind11 import read_xml_polylines
+# from wood_pybind11 import read_xml_polylines_and_properties
+# from wood_pybind11 import get_connection_zones
 
 # existing data-sets
 filenames_of_datasets = [
-    "type_beams_name_phanomema_node",
-    "type_plates_name_cross_and_sides_corner",
-    "type_plates_name_cross_corners",
-    "type_plates_name_cross_ibois_pavilion",
-    "type_plates_name_cross_square_reciprocal_iseya",
-    "type_plates_name_cross_square_reciprocal_two_sides",
-    "type_plates_name_cross_vda_corner",
-    "type_plates_name_cross_vda_hexshell",
-    "type_plates_name_cross_vda_hexshell_reciprocal",
-    "type_plates_name_cross_vda_shell",
-    "type_plates_name_cross_vda_single_arch",
-    "type_plates_name_hexbox_and_corner",
-    "type_plates_name_joint_linking_vidychapel_corner",
-    "type_plates_name_joint_linking_vidychapel_full",
-    "type_plates_name_joint_linking_vidychapel_one_axis_two_layers",
-    "type_plates_name_joint_linking_vidychapel_one_layer",
-    "type_plates_name_side_to_side_edge_inplane_2_butterflies",
-    "type_plates_name_side_to_side_edge_inplane_differentdirections",
-    "type_plates_name_side_to_side_edge_inplane_hexshell",
-    "type_plates_name_side_to_side_edge_inplane_outofplane_simple_corners",
-    "type_plates_name_side_to_side_edge_inplane_outofplane_simple_corners_combined",
-    "type_plates_name_side_to_side_edge_inplane_outofplane_simple_corners_different_lengths",
-    "type_plates_name_side_to_side_edge_outofplane_box",
-    "type_plates_name_side_to_side_edge_outofplane_dodecahedron",
-    "type_plates_name_side_to_side_edge_outofplane_folding",
-    "type_plates_name_side_to_side_edge_outofplane_icosahedron",
-    "type_plates_name_side_to_side_edge_outofplane_inplane_and_top_to_top_hexboxes",
-    "type_plates_name_side_to_side_edge_outofplane_octahedron",
-    "type_plates_name_side_to_side_edge_outofplane_tetra",
-    "type_plates_name_top_to_side_and_side_to_side_outofplane_annen_box",
-    "type_plates_name_top_to_side_and_side_to_side_outofplane_annen_box_pair",
-    "type_plates_name_top_to_side_and_side_to_side_outofplane_annen_corner",
-    "type_plates_name_top_to_side_and_side_to_side_outofplane_annen_grid_full_arch",
-    "type_plates_name_top_to_side_and_side_to_side_outofplane_annen_grid_small",
-    "type_plates_name_top_to_side_box",
-    "type_plates_name_top_to_side_corners",
-    "type_plates_name_top_to_side_pairs",
-    "type_plates_name_top_to_top_pairs",
+    "type_beams_name_phanomema_node",  # 0
+    "type_plates_name_cross_and_sides_corner",  # 1
+    "type_plates_name_cross_corners",  # 2
+    "type_plates_name_cross_ibois_pavilion",  # 3
+    "type_plates_name_cross_square_reciprocal_iseya",  # 4
+    "type_plates_name_cross_square_reciprocal_two_sides",  # 5
+    "type_plates_name_cross_vda_corner",  # 6
+    "type_plates_name_cross_vda_hexshell",  # 7
+    "type_plates_name_cross_vda_hexshell_reciprocal",  # 8
+    "type_plates_name_cross_vda_shell",  # 9
+    "type_plates_name_cross_vda_single_arch",  # 10
+    "type_plates_name_hexbox_and_corner",  # 11
+    "type_plates_name_joint_linking_vidychapel_corner",  # 12
+    "type_plates_name_joint_linking_vidychapel_full",  # 13
+    "type_plates_name_joint_linking_vidychapel_one_axis_two_layers",  # 14
+    "type_plates_name_joint_linking_vidychapel_one_layer",  # 15
+    "type_plates_name_side_to_side_edge_inplane_2_butterflies",  # 16
+    "type_plates_name_side_to_side_edge_inplane_differentdirections",  # 17
+    "type_plates_name_side_to_side_edge_inplane_hexshell",  # 18
+    "type_plates_name_side_to_side_edge_inplane_outofplane_simple_corners",  # 19
+    "type_plates_name_side_to_side_edge_inplane_outofplane_simple_corners_combined",  # 20
+    "type_plates_name_side_to_side_edge_inplane_outofplane_simple_corners_different_lengths",  # 21
+    "type_plates_name_side_to_side_edge_outofplane_box",  # 22
+    "type_plates_name_side_to_side_edge_outofplane_dodecahedron",  # 23
+    "type_plates_name_side_to_side_edge_outofplane_folding",  # 24
+    "type_plates_name_side_to_side_edge_outofplane_icosahedron",  # 25
+    "type_plates_name_side_to_side_edge_outofplane_inplane_and_top_to_top_hexboxes",  # 26
+    "type_plates_name_side_to_side_edge_outofplane_octahedron",  # 27
+    "type_plates_name_side_to_side_edge_outofplane_tetra",  # 28
+    "type_plates_name_top_to_side_and_side_to_side_outofplane_annen_box",  # 29
+    "type_plates_name_top_to_side_and_side_to_side_outofplane_annen_box_pair",  # 30
+    "type_plates_name_top_to_side_and_side_to_side_outofplane_annen_corner",  # 31
+    "type_plates_name_top_to_side_and_side_to_side_outofplane_annen_grid_full_arch",  # 32
+    "type_plates_name_top_to_side_and_side_to_side_outofplane_annen_grid_small",  # 33
+    "type_plates_name_top_to_side_box",  # 34
+    "type_plates_name_top_to_side_corners",  # 35
+    "type_plates_name_top_to_side_pairs",  # 36
+    "type_plates_name_top_to_top_pairs",  # 37
 ]
+
+
+def WoodVectorInt_to_list(wood_vector_int):
+    my_list = []
+
+    for i in range(0, len(wood_vector_int)):
+        my_list.append(wood_vector_int[i])
+
+    return my_list
+
+
+def list_to_WoodVectorInt(list):
+    my_list = WoodVectorInt(list)
+
+    return my_list
+
+
+def WoodNestedVectorInt_to_lists(wood_nested_vector_int):
+    my_lists = []
+
+    for i in range(len(wood_nested_vector_int)):
+        my_list = []
+        for j in range(0, len(wood_nested_vector_int[i])):
+            my_list.append(wood_nested_vector_int[i][j])
+        my_lists.append(my_list)
+
+    return my_lists
+
+
+def lists_to_WoodNestedVectorInt(lists):
+    my_lists = WoodNestedVectorInt()
+
+    for i in lists:
+        my_lists.append(WoodVectorInt(i))
+
+    return my_lists
+
+
+def WoodVectorDouble_to_list(wood_vector_double):
+    my_list = []
+
+    for i in range(0, len(wood_vector_double)):
+        my_list.append(wood_vector_double[i])
+
+    return my_list
+
+
+def list_to_WoodVectorDouble(list):
+    my_list = WoodVectorDouble(list)
+
+    return my_list
+
+
+def WoodNestedVectorDouble_to_lists(wood_nested_vector_double):
+    my_lists = []
+
+    for i in range(len(wood_nested_vector_double)):
+        my_list = []
+        for j in range(0, len(wood_nested_vector_double[i])):
+            my_list.append(wood_nested_vector_double[i][j])
+        my_lists.append(my_list)
+
+    return my_lists
+
+
+def lists_to_WoodNestedVectorDouble(lists):
+    my_lists = WoodNestedVectorDouble([])
+
+    for i in lists:
+        my_lists.append(WoodVectorDouble(i))
+
+    return my_lists
+
+
+def lists_of_vectors_to_WoodNestedVectorDouble(lists):
+    my_lists = WoodNestedVectorDouble()
+
+    for i in lists:
+        list_coord = []
+        for vector in i:
+            list_coord.append(vector[0])
+            list_coord.append(vector[1])
+            list_coord.append(vector[2])
+        my_lists.append(WoodVectorDouble(list_coord))
+
+    return my_lists
+
+
+def WoodNestedVectorDouble_to_polylines(wood_nested_vector_double):
+    # polylines
+    output_polylines = []
+
+    for i in range(len(wood_nested_vector_double)):
+        points = []
+        for j in range(0, len(wood_nested_vector_double[i]), 3):
+            points.append(
+                [
+                    wood_nested_vector_double[i][j + 0],
+                    wood_nested_vector_double[i][j + 1],
+                    wood_nested_vector_double[i][j + 2],
+                ]
+            )
+        polyline = Polyline(points)
+        output_polylines.append(polyline)
+
+    return output_polylines
+
+
+def polylines_to_WoodNestedVectorDouble(lists):
+    my_lists = WoodNestedVectorDouble()
+
+    for i in range(len(lists)):
+        my_list = []
+        for j in lists[i]:
+            my_list.append(j[0])
+            my_list.append(j[1])
+            my_list.append(j[2])
+        my_lists.append(WoodVectorDouble(my_list))
+
+    return my_lists
+
+
+def WoodNestedVectorDouble_to_vectorslist(wood_nested_vector_double):
+    # vectors
+    output_vectors = []
+    for i in range(len(wood_nested_vector_double)):
+        vectors = []
+        for j in range(0, len(wood_nested_vector_double[i]), 3):
+            vectors.append(
+                [
+                    wood_nested_vector_double[i][j + 0],
+                    wood_nested_vector_double[i][j + 1],
+                    wood_nested_vector_double[i][j + 2],
+                ]
+            )
+        output_vectors.append(vectors)
+
+    return output_vectors
+
+
+def WoodNestedNestedVectorDouble_to_polylineslists(wood_nested_nested_vector_double):
+    # lists of polylines
+    output_polylines = []
+
+    for i in wood_nested_nested_vector_double:
+        polylines = []
+
+        for j in i:
+            points = []
+            for k in range(0, len(j), 3):
+                points.append([j[k + 0], j[k + 1], j[k + 2]])
+            polylines.append(Polyline(points))
+
+        output_polylines.append(polylines)
+
+    return output_polylines
+
+
+def WoodNestedNestedVectorDouble_to_polylineslist(wood_nested_nested_vector_double):
+    # lists of polylines
+    output_polylines = []
+
+    for i in wood_nested_nested_vector_double:
+        for j in i:
+            points = []
+            for k in range(0, len(j), 3):
+                points.append([j[k + 0], j[k + 1], j[k + 2]])
+            output_polylines.append(Polyline(points))
+
+    return output_polylines
 
 
 def test():
@@ -60,7 +239,7 @@ def test():
     wood_pybind11.test()
 
 
-def read_xml(
+def read_xml_polylines(
     foldername, filename_of_dataset="type_plates_name_cross_vda_hexshell_reciprocal"
 ):
     """read xml data_sets files from foldername and filename_of_dataset
@@ -86,7 +265,7 @@ def read_xml(
     print(
         "\n___________________________________start_of_WOOD_____________________________________\n"
     )
-    wood_pybind11.get_data_set(
+    wood_pybind11.read_xml_polylines(
         foldername,
         filename_of_dataset,
         polylines_coordinates,
@@ -120,6 +299,273 @@ def read_xml(
     return output_polylines
 
 
+def read_xml_polylines_and_properties(
+    foldername,
+    filename_of_dataset="type_plates_name_cross_vda_hexshell_reciprocal",
+):
+    """read xml data_sets files from foldername and filename_of_dataset
+    Parameters
+    ----------
+    foldername : str
+        The name of the folder where all the .xml data-sets are located e.g. "C://IBOIS57//_Code//Software//Python//compas_wood//frontend//src//wood//dataset//".
+    filename_of_dataset : str, optional
+        The name of the file e.g. "type_plates_name_cross_vda_hexshell_reciprocal" .
+    Returns
+    -------
+    tuple:
+        std::vector<std::vector<double>>& input_polyline_pairs_coord,
+        std::vector<std::vector<double>>& input_insertion_vectors_coord
+        std::vector<std::vector<int>>& input_JOINTS_TYPES,
+        std::vector<std::vector<int>>& input_three_valence_element_indices_and_instruction,
+        std::vector<int>& input_adjacency
+        A list of top and bottom polylines
+    """
+
+    ###################################################################################################
+    # run the WOOD CPP code
+    ###################################################################################################
+    input_polyline_pairs_coord = WoodNestedVectorDouble([])
+    input_insertion_vectors_coord = WoodNestedVectorDouble([])
+    input_JOINTS_TYPES = WoodNestedVectorInt([])
+    input_three_valence_element_indices_and_instruction = WoodNestedVectorInt([])
+    input_adjacency = WoodVectorInt([])
+
+    print(
+        "\n___________________________________start_of_WOOD_____________________________________\n"
+    )
+
+    wood_pybind11.read_xml_polylines_and_properties(
+        foldername,
+        filename_of_dataset,
+        input_polyline_pairs_coord,
+        input_insertion_vectors_coord,
+        input_JOINTS_TYPES,
+        input_three_valence_element_indices_and_instruction,
+        input_adjacency,
+    )
+    print(
+        "\n____________________________________end_of_WOOD______________________________________\n"
+    )
+
+    ###################################################################################################
+    # convert nested vector of doubles to a list of polylines
+    ###################################################################################################
+
+    # polylines
+    output_polylines = WoodNestedVectorDouble_to_polylines(input_polyline_pairs_coord)
+
+    # vectors
+    output_vectors = WoodNestedVectorDouble_to_vectorslist(
+        input_insertion_vectors_coord
+    )
+
+    # joint_types
+    output_joints_types = WoodNestedVectorInt_to_lists(input_JOINTS_TYPES)
+
+    # three_valence
+    output_three_valence_element_indices_and_instruction = WoodNestedVectorInt_to_lists(
+        input_three_valence_element_indices_and_instruction
+    )
+
+    # adjacency
+    output_adjacency = WoodVectorInt_to_list(input_adjacency)
+
+    ###################################################################################################
+    # output
+    ###################################################################################################
+    return (
+        output_polylines,
+        output_vectors,
+        output_joints_types,
+        output_three_valence_element_indices_and_instruction,
+        output_adjacency,
+    )
+
+
+def get_connection_zones(
+    input_polyline_pairs,
+    input_insertion_vectors=None,
+    input_joints_types=None,
+    input_three_valence_element_indices_and_instruction=None,
+    input_adjacency=None,
+    joint_parameters_and_types=None,
+    search_type=0,
+    scale=[1, 1, 1],
+    output_type=4,
+    flatten_output=False,
+):
+    """detect connection zones between two polylines and generate joinery
+    Parameters
+    ----------
+    input_polyline_pairs : list[Polyline]
+        list of polylines of top and bottom outlines
+    input_insertion_vectors : list[list[Vector],list[Vector],list[Vector]], optional
+        list of lists of insertion vectors for each polyline side: top, bottom and sides
+    input_joints_types : list[list[int],list[int],list[int]], optional
+        list of lists of joint types for each polyline side: top, bottom and sides
+    input_three_valence_element_indices_and_instruction : list[list[int],list[int],list[int]], optional
+        list of lists of 4 valence elements e.g. [[0],[0,4,1,4],[5,4,6,4]], the first item points to special corner cases: 0 - Annen Case 1 - Vidy Case
+    input_adjacency : list[int], optional
+        list of adjacency between polylines elements and faces, often sides are ignored e.g. [0,1,-1,-1,5,8,-1,-1]
+    joint_parameters_and_types : list[double], optional
+        a list of triplets:
+        300, 0.5, 3,   // 1-9 ss_e_ip (side-to-side edge in-plane)
+        450, 0.64, 15, // 10-19 ss_e_op (side-to-side edge out-of-plane)
+        450, 0.5, 20,  // 20-29 ts_e_p (top-to-side edge plane)
+        300, 0.5, 30,  // 30-39 cr_c_ip (cross cutting in-plane)
+        6, 0.95, 40,   // 40-49 tt_e_p  (top-to-top edge plane)
+        300, 0.5, 58,  // 50-59 ss_e_r (side-to-side edge rotated)
+        300, 1.0, 60   // 60-69 b (boundary)
+    search_type : int, optional
+        0 - side-to-side, 1 - cross, 2 - all
+    scale : list[double], optional
+        a list of 3 doubles for scaling the joint
+        for beams you might need bigger cuts
+        for plates you might need smaller cuts
+    output_type : int, optional
+        what_to_expose:
+        0 - Plate outlines
+        1 - wood::joint lines
+        2 - wood::joint areas
+        3 - wood::joint areas with bounding box
+        4 - wood::joint areas with bounding box and cut types
+    Returns
+    -------
+    list[Polyline]
+        A list of top and bottom polylines
+    """
+
+    ###################################################################################################
+    # convert compas polylines to nested vector of doubles
+    ###################################################################################################
+
+    _input_polyline_pairs_coord = WoodNestedVectorDouble([])
+    _input_insertion_vectors_coord = WoodNestedVectorDouble([])
+    _input_joints_types = WoodNestedVectorInt([])
+    _input_three_valence_element_indices_and_instruction = WoodNestedVectorInt([])
+    _input_adjacency = WoodVectorInt([])
+
+    _input_polyline_pairs_coord = polylines_to_WoodNestedVectorDouble(
+        input_polyline_pairs
+    )  # input_polyline_pairs
+
+    if input_insertion_vectors is not None:
+        _input_insertion_vectors_coord = lists_of_vectors_to_WoodNestedVectorDouble(
+            input_insertion_vectors
+        )  # input_insertion_vectors
+
+    if input_joints_types is not None:
+        _input_joints_types = lists_to_WoodNestedVectorInt(
+            input_joints_types
+        )  # input_joints_types
+
+    if input_three_valence_element_indices_and_instruction is not None:
+        _input_three_valence_element_indices_and_instruction = (
+            lists_to_WoodNestedVectorInt(
+                input_three_valence_element_indices_and_instruction
+            )
+        )
+        # (input_three_valence_element_indices_and_instruction)
+
+    if input_adjacency is not None:
+        _input_adjacency = list_to_WoodVectorInt(input_adjacency)  # input_adjacency
+
+    _joint_parameters_and_types = WoodVectorDouble(
+        [
+            300.0,  # 1-9 ss_e_ip (side-to-side edge in-plane)
+            0.5,
+            3.0,
+            200.0,  # 10-19 ss_e_op (side-to-side edge out-of-plane)
+            0.66,
+            10.0,
+            300.0,  # 20-29 ts_e_p (top-to-side edge plane)
+            0.5,
+            20.0,
+            300.0,  # 30-39 cr_c_ip (cross cutting in-plane)
+            0.5,
+            30.0,
+            6.0,  # 40-49 tt_e_p  (top-to-top edge plane)
+            0.95,
+            40.0,
+            300.0,  # 50-59 ss_e_r (side-to-side edge rotated)
+            0.5,
+            58.0,
+            300.0,  # 60-69 b (boundary)
+            1.0,
+            60.0,
+        ]
+    )
+
+    if (
+        joint_parameters_and_types is not None
+    ):  # if the user has provided joint parameters
+        for i in range(len(joint_parameters_and_types)):
+            _joint_parameters_and_types[i] = joint_parameters_and_types[i]
+
+    _output_plines = WoodNestedNestedVectorDouble([])
+    _output_types = WoodNestedVectorInt([])
+    _scale = WoodVectorDouble([1.0, 1.0, 1.0])
+
+    if scale is not None:  # if the user has provided joint parameters
+        for i in range(len(scale)):
+            _scale[i] = scale[i]
+
+    ###################################################################################################
+    # run the WOOD CPP code
+    ###################################################################################################
+
+    print(
+        "\n___________________________________start_of_WOOD_____________________________________\n"
+    )
+
+    wood_pybind11.get_connection_zones(
+        # input
+        _input_polyline_pairs_coord,
+        _input_insertion_vectors_coord,
+        _input_joints_types,
+        _input_three_valence_element_indices_and_instruction,
+        _input_adjacency,
+        _joint_parameters_and_types,
+        search_type,
+        _scale,
+        output_type,
+        # output
+        _output_plines,
+        _output_types,
+    )
+
+    print(
+        "\n____________________________________end_of_WOOD______________________________________\n"
+    )
+
+    ###################################################################################################
+    # convert nested vector of doubles to a list of polylines
+    ###################################################################################################
+
+    ###################################################################################################
+    # output
+    ###################################################################################################
+    if flatten_output:
+        return WoodNestedNestedVectorDouble_to_polylineslist(_output_plines)
+    else:
+        return WoodNestedNestedVectorDouble_to_polylineslists(_output_plines)
+
+
+def closed_mesh_from_polylines():
+    """Test if Wood library is loaded
+
+    Parameters
+    ----------
+
+    Returns
+    -------
+    Prints
+        Hello from CPP Wood
+    """
+
+    wood_pybind11.test()
+
+
 def joints():
     """Test if Wood library is loaded
 
@@ -136,47 +582,6 @@ def joints():
 
 
 def rtree():
-    """Test if Wood library is loaded
-
-    Parameters
-    ----------
-
-    Returns
-    -------
-    Prints
-        Hello from CPP Wood
-    """
-
-    wood_pybind11.test()
-
-
-def get_connection_zones(
-    # polylines_vertices_XYZ,
-    # face_vectors_XYZ=None,
-    # face_joints_types_int=None,
-    # three_valance_element_indices_and_instruction=None,
-    # adjacency=None,
-    # default_joint_parameters=None,
-    # search_type=2,
-    # output_type=4,
-    # triangulate=0,
-    # scale=None,
-):
-    """Test if Wood library is loaded
-
-    Parameters
-    ----------
-
-    Returns
-    -------
-    Prints
-        Hello from CPP Wood
-    """
-
-    wood_pybind11.test()
-
-
-def closed_mesh_from_polylines():
     """Test if Wood library is loaded
 
     Parameters
