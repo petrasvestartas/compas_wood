@@ -153,19 +153,49 @@ namespace compas_wood
         std::vector<std::vector<int>> &pybind11_output_types);
 
     /**
-     * get closed mesh from a pair of polylines
+     * mesh a list of polylines with holes
+     *
+     * @param [in] polylines_coordinates a nested vector of doubles, representing a list of polylines
+     * @param [out] out_vertices a vector of vertices
+     * @param [out] out_normals a vector of normals
+     * @param [out] out_triangles a vector of triangles
      */
-    void closed_mesh_from_polylines();
+    void closed_mesh_from_polylines_vnf(
+        std::vector<std::vector<double>> &polylines_coordinates,
+        std::vector<float> &out_vertices,
+        std::vector<float> &out_normals,
+        std::vector<int> &out_triangles);
 
     /**
-     * get closest objects indices by using rtree
+     * get indices colliding the current elements
+     * also output axisaligned bounding box and oriented bounding box
+     *
+     * @param [in] polylines_coordinates a nested vector of doubles, representing a list of polylines
+     * @param [out] out_vertices a vector of vertices
+     * @param [out] out_normals a vector of normals
+     * @param [out] out_triangles a vector of triangles
      */
-    void rtree();
+    void rtree(
+        std::vector<std::vector<double>> &polylines_coordinates,
+        std::vector<std::vector<int>> &elements_neighbours,
+        std::vector<std::vector<double>> &elements_AABB,
+        std::vector<std::vector<double>> &elements_OOBB);
 
     /**
      * get joints from the get_connection_zones function without geometry
+     *
+     * @param [in] polylines_coordinates a nested vector of doubles, representing a list of polylines
+     * @param [in] search_type search type e.g. 0 - side-to-side, 1 - cross, 2 - both
+     * @param [out] element_pairs indices of the elements that are connected
+     * @param [out] joint_areas a vector of polyline coordinates
+     * @param [out] joint_types type of joint e.g. side-to-side, top-to-side, cross ...
      */
-    void joints();
+    void joints(
+        std::vector<std::vector<double>> &polylines_coordinates,
+        int &search_type,
+        std::vector<std::vector<int>> &element_pairs,
+        std::vector<std::vector<double>> &joint_areas,
+        std::vector<int> &joint_types);
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Secondary Methods

@@ -1,16 +1,9 @@
 #ingore backend
-backend/wood/.cache/**
-backend/wood/build/**
-backend/wood/build_win/**
 backend/build_win/**
-backend/wood/CMakeFiles/**
 
 #ingore frontend
-frontend/wood/.cache/**
-frontend/wood/build/**
-frontend/wood/build_win/**
 frontend/build_win/**
-frontend/wood/CMakeFiles/**
+
 
 *.tar.gz
 
