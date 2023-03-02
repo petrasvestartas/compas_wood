@@ -4,7 +4,10 @@ from wood_pybind11 import WoodNestedVectorInt
 from wood_pybind11 import WoodVectorDouble
 from wood_pybind11 import WoodNestedVectorDouble
 from wood_pybind11 import WoodNestedNestedVectorDouble
+from wood_pybind11 import WoodVectorFloat
 from compas.geometry import Polyline
+from compas.geometry import Mesh
+from compas.geometry import Box
 import time
 
 # from wood_pybind11 import test
@@ -161,6 +164,35 @@ def WoodNestedVectorDouble_to_polylines(wood_nested_vector_double):
     return output_polylines
 
 
+def WoodVectorFloat_and_WoodVectorInt_to_mesh(wood_vector_float, wood_vector_int):
+    # >>> vertices_1 = [[0, 0, 0], [0, 500, 0], [500, 500, 0], [500, 0, 0]]
+    # >>> vertices_2 = [[500, 0, 0], [500, 500, 0], [1000, 500, 0], [1000, 0, 0]]
+    # >>> faces = [[0, 1, 2, 3]]
+
+    vertices = []
+    faces = []
+
+    for i in range(0, len(wood_vector_float), 3):
+        vertices.append(
+            [
+                wood_vector_float[i + 0],
+                wood_vector_float[i + 1],
+                wood_vector_float[i + 2],
+            ]
+        )
+
+    for i in range(0, len(wood_vector_int), 3):
+        faces.append(
+            [
+                wood_vector_int[i + 0],
+                wood_vector_int[i + 1],
+                wood_vector_int[i + 2],
+            ]
+        )
+
+    return Mesh.from_vertices_and_faces(vertices, faces)
+
+
 def polylines_to_WoodNestedVectorDouble(lists):
     my_lists = WoodNestedVectorDouble()
 
@@ -223,6 +255,10 @@ def WoodNestedNestedVectorDouble_to_polylineslist(wood_nested_nested_vector_doub
             output_polylines.append(Polyline(points))
 
     return output_polylines
+
+
+def WoodNestedVectorDouble_to_boxeslist(wood_nested_vector_double):
+    pass
 
 
 def test():
@@ -534,9 +570,14 @@ def get_connection_zones(
         _output_plines,
         _output_types,
     )
-    
-    print("\n______________________________________ %s ms ______________________________________" % round((time.time() - start_time) * 1000.0, 2))
-    print("\n____________________________________end_of_WOOD______________________________________")
+
+    print(
+        "\n______________________________________ %s ms ______________________________________"
+        % round((time.time() - start_time) * 1000.0, 2)
+    )
+    print(
+        "\n____________________________________end_of_WOOD______________________________________"
+    )
 
     ###################################################################################################
     # convert nested vector of doubles to a list of polylines
@@ -551,46 +592,184 @@ def get_connection_zones(
         return WoodNestedNestedVectorDouble_to_polylineslists(_output_plines)
 
 
-def closed_mesh_from_polylines():
-    """Test if Wood library is loaded
+def closed_mesh_from_polylines(list_of_polylines):
+    """Convert a list of polylines to a closed mesh.
 
     Parameters
     ----------
+    list_of_polylines : list[Polyline]
+        list of polylines with holes, for meshing plates
 
     Returns
     -------
-    Prints
-        Hello from CPP Wood
+    Mesh
+        A closed mesh for top and bottom polylines
     """
 
-    wood_pybind11.test()
+    ###################################################################################################
+    # conversion of input data
+    ###################################################################################################
+    list_of_polylines_coordinates = []
+    polylines_to_WoodNestedVectorDouble(list_of_polylines)
+
+    ###################################################################################################
+    # run the WOOD CPP code
+    ###################################################################################################
+
+    print(
+        "\n___________________________________start_of_WOOD_____________________________________"
+    )
+
+    start_time = time.time()
+    out_vertices = WoodVectorFloat()
+    out_normals = WoodVectorFloat()
+    out_triangles = WoodVectorInt()
+
+    wood_pybind11.closed_mesh_from_polylines_vnf(
+        # input
+        list_of_polylines_coordinates,
+        # output
+        out_vertices,
+        out_normals,
+        out_triangles,
+    )
+
+    print(
+        "\n______________________________________ %s ms ______________________________________"
+        % round((time.time() - start_time) * 1000.0, 2)
+    )
+    print(
+        "\n____________________________________end_of_WOOD______________________________________"
+    )
+
+    ###################################################################################################
+    # conversion of output data
+    ###################################################################################################
+    return WoodVectorFloat_and_WoodVectorInt_to_mesh(out_vertices, out_triangles)
 
 
-def joints():
-    """Test if Wood library is loaded
+def joints(polylines, search_type=0):
+    """Get joints as: a) element pairs, b) joint areas, c) joint types.
 
     Parameters
     ----------
+    polylines : list[Polyline]
+        list of polylines that represents the timber elements
+
+    search_type : int
+        0: side-to-side, 1: cross, 2: both
 
     Returns
     -------
-    Prints
-        Hello from CPP Wood
+    tuple:
+        list[list[int]] element_pairs,
+        list[Polyline] joint_areas
+        list[int] joint_types
     """
 
-    wood_pybind11.test()
+    ###################################################################################################
+    # conversion of input data
+    ###################################################################################################
+    polylines_coordinates = []
+
+    ###################################################################################################
+    # run the WOOD CPP code
+    ###################################################################################################
+
+    print(
+        "\n___________________________________start_of_WOOD_____________________________________"
+    )
+    start_time = time.time()
+
+    element_pairs = WoodNestedVectorInt()
+    joint_areas = WoodNestedVectorDouble()
+    joint_types = WoodVectorInt()
+
+    wood_pybind11.joints(
+        # input
+        polylines_coordinates,
+        0,
+        # output
+        element_pairs,
+        joint_areas,
+        joint_types,
+    )
+
+    print(
+        "\n______________________________________ %s ms ______________________________________"
+        % round((time.time() - start_time) * 1000.0, 2)
+    )
+    print(
+        "\n____________________________________end_of_WOOD______________________________________"
+    )
+
+    ###################################################################################################
+    # conversion of output data and output
+    ###################################################################################################
+    return (
+        WoodNestedVectorInt_to_lists(element_pairs),
+        WoodNestedVectorDouble_to_polylines(joint_areas),
+        WoodVectorInt_to_list(joint_types),
+    )
 
 
 def rtree():
-    """Test if Wood library is loaded
+    """Get neighbors of elements using a R-tree.
 
     Parameters
     ----------
+    polylines : list[Polyline]
+        list of polylines that represents the timber elements
 
     Returns
     -------
-    Prints
-        Hello from CPP Wood
+    tuple:
+        list[list[int]] elements_neighbours,
+        list[Box] elements_AABB
+        list[Box] elements_OOBB
     """
 
-    wood_pybind11.test()
+    ###################################################################################################
+    # conversion of input data
+    ###################################################################################################
+    polylines_coordinates = []
+
+    ###################################################################################################
+    # run the WOOD CPP code
+    ###################################################################################################
+
+    print(
+        "\n___________________________________start_of_WOOD_____________________________________"
+    )
+    start_time = time.time()
+    elements_neighbours = WoodNestedVectorInt()  #  each vector consists of 2 indices
+    elements_AABB = WoodNestedVectorDouble()  #  each vector consists of 24 coordinates
+    elements_OOBB = WoodNestedVectorDouble()  #  each vector consists of 24 coordinates
+
+    wood_pybind11.rtree(
+        # input
+        polylines_coordinates,
+        # output
+        elements_neighbours,
+        elements_AABB,
+        elements_OOBB,
+    )
+
+    print(
+        "\n______________________________________ %s ms ______________________________________"
+        % round((time.time() - start_time) * 1000.0, 2)
+    )
+    print(
+        "\n____________________________________end_of_WOOD______________________________________"
+    )
+
+    ###################################################################################################
+    # conversion of output data
+    ###################################################################################################
+    elements_neighbours_lists = WoodNestedVectorInt_to_lists(elements_neighbours)
+    WoodNestedVectorDouble_to_list_of_lists(
+        elements_AABB
+    )  #  rewrite to convert to list of boxes
+    WoodNestedVectorDouble_to_list_of_lists(
+        elements_OOBB
+    )  #  use the same method as one above

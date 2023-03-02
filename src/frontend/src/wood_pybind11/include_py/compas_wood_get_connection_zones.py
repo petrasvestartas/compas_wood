@@ -133,5 +133,5 @@ get_connection_zones(
     pybind11_output_types,
 )
 
-# print(pybind11_output_plines[0][0])
+print(pybind11_output_plines[0][0])
 # print(pybind11_output_types[0][0])

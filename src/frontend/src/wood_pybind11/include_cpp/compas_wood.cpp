@@ -4,7 +4,9 @@
 #include "wood_xml.h"                     //read xml file of the datasets
 
 // data structure
+#include "wood_cut.h"
 #include "wood_main.h"
+#include "wood_element.h"
 
 // joinery
 #include "wood_joint_lib.h"
@@ -19,7 +21,7 @@ namespace compas_wood
 {
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    // Test methods - mainly to chekc if the library is loading and whether the types can be passed between C++ and Python
+    // Test methods - mainly to check if the library is loading and whether the types can be passed between C++ and Python
     // https://github.com/tdegeus/pybind11_examples
     // https://github.com/pybind/pybind11/discussions/4340
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -33,7 +35,7 @@ namespace compas_wood
         printf("\n________________________________________________________________________\n");
     }
 
-    void test_opaque_types_wood_vector_int(std::vector<int>& vec)
+    void test_opaque_types_wood_vector_int(std::vector<int> &vec)
     {
         for (int i = 0; i < vec.size(); i++)
         {
@@ -41,7 +43,7 @@ namespace compas_wood
         }
     }
 
-    void test_opaque_types_wood_nested_vector_int(std::vector<std::vector<int>>& vec)
+    void test_opaque_types_wood_nested_vector_int(std::vector<std::vector<int>> &vec)
     {
         for (int i = 0; i < vec.size(); i++)
         {
@@ -52,7 +54,7 @@ namespace compas_wood
         }
     }
 
-    void test_opaque_types_wood_vector_double(std::vector<double>& vec)
+    void test_opaque_types_wood_vector_double(std::vector<double> &vec)
     {
         for (int i = 0; i < vec.size(); i++)
         {
@@ -60,7 +62,7 @@ namespace compas_wood
         }
     }
 
-    void test_opaque_types_wood_nested_vector_double(std::vector<std::vector<double>>& vec)
+    void test_opaque_types_wood_nested_vector_double(std::vector<std::vector<double>> &vec)
     {
         for (int i = 0; i < vec.size(); i++)
         {
@@ -75,7 +77,7 @@ namespace compas_wood
     // Primary methods
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    void read_xml_polylines(std::string& foldername, std::string& filename_of_dataset, std::vector<std::vector<double>>& polylines_coordinates)
+    void read_xml_polylines(std::string &foldername, std::string &filename_of_dataset, std::vector<std::vector<double>> &polylines_coordinates)
     {
         // set file paths
         wood_globals::DATA_SET_INPUT_FOLDER = foldername; // = "C:\\IBOIS57\\_Code\\Software\\Python\\compas_wood\\frontend\\src\\wood\\dataset\\";
@@ -95,13 +97,13 @@ namespace compas_wood
     }
 
     void read_xml_polylines_and_properties(
-        std::string& foldername,
-        std::string& filename_of_dataset,
-        std::vector<std::vector<double>>& input_polyline_pairs_coord,
-        std::vector<std::vector<double>>& input_insertion_vectors_coord,
-        std::vector<std::vector<int>>& input_JOINTS_TYPES,
-        std::vector<std::vector<int>>& input_three_valence_element_indices_and_instruction,
-        std::vector<int>& input_adjacency)
+        std::string &foldername,
+        std::string &filename_of_dataset,
+        std::vector<std::vector<double>> &input_polyline_pairs_coord,
+        std::vector<std::vector<double>> &input_insertion_vectors_coord,
+        std::vector<std::vector<int>> &input_JOINTS_TYPES,
+        std::vector<std::vector<int>> &input_three_valence_element_indices_and_instruction,
+        std::vector<int> &input_adjacency)
     {
 
         // set file paths
@@ -123,18 +125,18 @@ namespace compas_wood
 
     void get_connection_zones(
         // input
-        std::vector<std::vector<double>>& pybind11_input_polyline_pairs,
-        std::vector<std::vector<double>>& pybind11_input_insertion_vectors,
-        std::vector<std::vector<int>>& pybind11_input_JOINTS_TYPES,
-        std::vector<std::vector<int>>& pybind11_input_three_valence_element_indices_and_instruction,
-        std::vector<int>& pybind11_input_adjacency,
-        std::vector<double>& pybind11_wood_globals_JOINTS_PARAMETERS_AND_TYPES,
-        int& search_type,
-        std::vector<double>& scale,
-        int& output_type,
+        std::vector<std::vector<double>> &pybind11_input_polyline_pairs,
+        std::vector<std::vector<double>> &pybind11_input_insertion_vectors,
+        std::vector<std::vector<int>> &pybind11_input_JOINTS_TYPES,
+        std::vector<std::vector<int>> &pybind11_input_three_valence_element_indices_and_instruction,
+        std::vector<int> &pybind11_input_adjacency,
+        std::vector<double> &pybind11_wood_globals_JOINTS_PARAMETERS_AND_TYPES,
+        int &search_type,
+        std::vector<double> &scale,
+        int &output_type,
         // output
-        std::vector<std::vector<std::vector<double>>>& pybind11_output_plines,
-        std::vector<std::vector<int>>& pybind11_output_types)
+        std::vector<std::vector<std::vector<double>>> &pybind11_output_plines,
+        std::vector<std::vector<int>> &pybind11_output_types)
     {
         // internal::set_file_path_for_input_xml_and_screenshot(
         //     input_polyline_pairs,
@@ -189,9 +191,251 @@ namespace compas_wood
         python_to_cpp__cpp_to_python::nested_vector_of_cut_type_to_nested_vector_of_int(output_types, pybind11_output_types); // only filled when 3rd output type is uesd
     }
 
+    void closed_mesh_from_polylines_vnf(
+        std::vector<std::vector<double>> &polylines_coordinates,
+        std::vector<float> &out_vertices,
+        std::vector<float> &out_normals,
+        std::vector<int> &out_triangles)
+    {
+
+        std::vector<std::vector<IK::Point_3>> vector_of_polyline;
+        python_to_cpp__cpp_to_python::coord_to_vector_of_polylines(polylines_coordinates, vector_of_polyline);
+        cgal_polyline_mesh_util::closed_mesh_from_polylines_vnf(vector_of_polyline, out_vertices, out_normals, out_triangles);
+    }
+
+    void rtree(
+        std::vector<std::vector<double>> &polylines_coordinates,
+        std::vector<std::vector<int>> &elements_neighbours,
+        std::vector<std::vector<double>> &elements_AABB,
+        std::vector<std::vector<double>> &elements_OOBB)
+    {
+
+        //////////////////////////////////////////////////////////////////////////////
+        // Convert raw-data to list of Polylines
+        //////////////////////////////////////////////////////////////////////////////
+        std::vector<CGAL_Polyline> input_polyline_pairs;
+        python_to_cpp__cpp_to_python::coord_to_vector_of_polylines(polylines_coordinates, input_polyline_pairs);
+
+        //////////////////////////////////////////////////////////////////////////////
+        // Create elements, AABB, OBB, P, Pls, thickness
+        //////////////////////////////////////////////////////////////////////////////
+        std::vector<wood::element> e;
+        std::vector<std::vector<IK::Vector_3>> input_insertion_vectors;
+        std::vector<std::vector<int>> input_joint_types;
+        wood_main::get_elements(input_polyline_pairs, input_insertion_vectors, input_joint_types, e);
+
+        //////////////////////////////////////////////////////////////////////////////
+        // Create joints, Perform Joint Area Search
+        //////////////////////////////////////////////////////////////////////////////
+
+        //////////////////////////////////////////////////////////////////////////////
+        // Create RTree
+        //////////////////////////////////////////////////////////////////////////////
+
+        RTree<int, double, 3> tree;
+
+        //////////////////////////////////////////////////////////////////////////////
+        // Insert AABB
+        //////////////////////////////////////////////////////////////////////////////
+
+        for (int i = 0; i < e.size(); i++)
+        {
+            double min[3] = {e[i].aabb.xmin(), e[i].aabb.ymin(), e[i].aabb.zmin()};
+            double max[3] = {e[i].aabb.xmax(), e[i].aabb.ymax(), e[i].aabb.zmax()};
+            tree.Insert(min, max, i);
+        }
+
+        //////////////////////////////////////////////////////////////////////////////
+        // Search Closest Boxes | Skip duplicates pairs | Perform callback with OBB
+        //////////////////////////////////////////////////////////////////////////////
+        elements_neighbours.reserve(e.size());
+
+        for (int i = 0; i < e.size(); i++)
+        {
+
+            std::vector<int> element_neigbhours;
+
+            auto callback = [&element_neigbhours, i, &e](int foundValue) -> bool
+            {
+                if (cgal_box_util::get_collision(e[i].oob, e[foundValue].oob))
+                {
+                    element_neigbhours.push_back(foundValue);
+                }
+                return true;
+            };
+
+            double min[3] = {e[i].aabb.xmin(), e[i].aabb.ymin(), e[i].aabb.zmin()};
+            double max[3] = {e[i].aabb.xmax(), e[i].aabb.ymax(), e[i].aabb.zmax()};
+            int nhits = tree.Search(min, max, callback); // callback in this method call callback above
+
+            // Add elements to the vector
+            elements_neighbours.emplace_back(std::vector<int>());
+
+            for (int j = 0; j < element_neigbhours.size(); j++)
+                elements_neighbours.back().emplace_back(element_neigbhours[j]);
+        }
+
+        //////////////////////////////////////////////////////////////////////////////
+        // Output AABB
+        //////////////////////////////////////////////////////////////////////////////
+        elements_AABB.reserve(e.size());
+
+        for (int i = 0; i < e.size(); i++)
+        {
+
+            elements_AABB.emplace_back(std::vector<double>());
+            elements_AABB.back().reserve(24);
+
+            elements_AABB.back().emplace_back(e[i].aabb.xmin());
+            elements_AABB.back().emplace_back(e[i].aabb.ymin());
+            elements_AABB.back().emplace_back(e[i].aabb.zmin());
+
+            elements_AABB.back().emplace_back(e[i].aabb.xmin());
+            elements_AABB.back().emplace_back(e[i].aabb.ymin());
+            elements_AABB.back().emplace_back(e[i].aabb.zmax());
+
+            elements_AABB.back().emplace_back(e[i].aabb.xmin());
+            elements_AABB.back().emplace_back(e[i].aabb.ymax());
+            elements_AABB.back().emplace_back(e[i].aabb.zmax());
+
+            elements_AABB.back().emplace_back(e[i].aabb.xmin());
+            elements_AABB.back().emplace_back(e[i].aabb.ymax());
+            elements_AABB.back().emplace_back(e[i].aabb.zmin());
+
+            elements_AABB.back().emplace_back(e[i].aabb.xmax());
+            elements_AABB.back().emplace_back(e[i].aabb.ymin());
+            elements_AABB.back().emplace_back(e[i].aabb.zmin());
+
+            elements_AABB.back().emplace_back(e[i].aabb.xmax());
+            elements_AABB.back().emplace_back(e[i].aabb.ymin());
+            elements_AABB.back().emplace_back(e[i].aabb.zmax());
+
+            elements_AABB.back().emplace_back(e[i].aabb.xmax());
+            elements_AABB.back().emplace_back(e[i].aabb.ymax());
+            elements_AABB.back().emplace_back(e[i].aabb.zmax());
+
+            elements_AABB.back().emplace_back(e[i].aabb.xmax());
+            elements_AABB.back().emplace_back(e[i].aabb.ymax());
+            elements_AABB.back().emplace_back(e[i].aabb.zmin());
+        }
+
+        //////////////////////////////////////////////////////////////////////////////
+        // Output OOBB
+        //////////////////////////////////////////////////////////////////////////////
+
+        elements_OOBB.reserve(e.size());
+
+        for (int i = 0; i < e.size(); i++)
+        {
+            elements_OOBB.emplace_back(std::vector<double>());
+            elements_OOBB.back().reserve(24);
+
+            // point 0x plane_origin_xcoord + (box_sizex * plane_xaxis_xcoordinate) + (box_sizey * plane_yaxis_xcoord) + (box_sizez * plane_zaxis_xcoord)
+            // point 0y plane_origin_xcoord + (box_sizex * plane_xaxis_ycoordinate) + (box_sizey * plane_yaxis_ycoord) + (box_sizez * plane_zaxis_ycoord)
+            // point 0y plane_origin_xcoord + (box_sizex * plane_xaxis_zcoordinate) + (box_sizey * plane_yaxis_zcoord) + (box_sizez * plane_zaxis_zcoord)
+            elements_OOBB.back().emplace_back(e[i].oob[0].x() + (e[i].oob[4].x() * e[i].oob[1].x()) + (e[i].oob[4].y() * e[i].oob[2].x()) - (e[i].oob[4].z() * e[i].oob[3].x()));
+            elements_OOBB.back().emplace_back(e[i].oob[0].y() + (e[i].oob[4].x() * e[i].oob[1].y()) + (e[i].oob[4].y() * e[i].oob[2].y()) - (e[i].oob[4].z() * e[i].oob[3].y()));
+            elements_OOBB.back().emplace_back(e[i].oob[0].z() + (e[i].oob[4].x() * e[i].oob[1].z()) + (e[i].oob[4].y() * e[i].oob[2].z()) - (e[i].oob[4].z() * e[i].oob[3].z()));
+
+            // point 1
+            elements_OOBB.back().emplace_back(e[i].oob[0].x() - (e[i].oob[4].x() * e[i].oob[1].x()) + (e[i].oob[4].y() * e[i].oob[2].x()) - (e[i].oob[4].z() * e[i].oob[3].x()));
+            elements_OOBB.back().emplace_back(e[i].oob[0].y() - (e[i].oob[4].x() * e[i].oob[1].y()) + (e[i].oob[4].y() * e[i].oob[2].y()) - (e[i].oob[4].z() * e[i].oob[3].y()));
+            elements_OOBB.back().emplace_back(e[i].oob[0].z() - (e[i].oob[4].x() * e[i].oob[1].z()) + (e[i].oob[4].y() * e[i].oob[2].z()) - (e[i].oob[4].z() * e[i].oob[3].z()));
+
+            // point 2
+            elements_OOBB.back().emplace_back(e[i].oob[0].x() + (e[i].oob[4].x() * e[i].oob[1].x()) - (e[i].oob[4].y() * e[i].oob[2].x()) - (e[i].oob[4].z() * e[i].oob[3].x()));
+            elements_OOBB.back().emplace_back(e[i].oob[0].y() + (e[i].oob[4].x() * e[i].oob[1].y()) - (e[i].oob[4].y() * e[i].oob[2].y()) - (e[i].oob[4].z() * e[i].oob[3].y()));
+            elements_OOBB.back().emplace_back(e[i].oob[0].z() + (e[i].oob[4].x() * e[i].oob[1].z()) - (e[i].oob[4].y() * e[i].oob[2].z()) - (e[i].oob[4].z() * e[i].oob[3].z()));
+
+            // point 3
+            elements_OOBB.back().emplace_back(e[i].oob[0].x() - (e[i].oob[4].x() * e[i].oob[1].x()) - (e[i].oob[4].y() * e[i].oob[2].x()) - (e[i].oob[4].z() * e[i].oob[3].x()));
+            elements_OOBB.back().emplace_back(e[i].oob[0].y() - (e[i].oob[4].x() * e[i].oob[1].y()) - (e[i].oob[4].y() * e[i].oob[2].y()) - (e[i].oob[4].z() * e[i].oob[3].y()));
+            elements_OOBB.back().emplace_back(e[i].oob[0].z() - (e[i].oob[4].x() * e[i].oob[1].z()) - (e[i].oob[4].y() * e[i].oob[2].z()) - (e[i].oob[4].z() * e[i].oob[3].z()));
+
+            // point 4
+            elements_OOBB.back().emplace_back(e[i].oob[0].x() + (e[i].oob[4].x() * e[i].oob[1].x()) + (e[i].oob[4].y() * e[i].oob[2].x()) + (e[i].oob[4].z() * e[i].oob[3].x()));
+            elements_OOBB.back().emplace_back(e[i].oob[0].y() + (e[i].oob[4].x() * e[i].oob[1].y()) + (e[i].oob[4].y() * e[i].oob[2].y()) + (e[i].oob[4].z() * e[i].oob[3].y()));
+            elements_OOBB.back().emplace_back(e[i].oob[0].z() + (e[i].oob[4].x() * e[i].oob[1].z()) + (e[i].oob[4].y() * e[i].oob[2].z()) + (e[i].oob[4].z() * e[i].oob[3].z()));
+
+            // point 5
+            elements_OOBB.back().emplace_back(e[i].oob[0].x() - (e[i].oob[4].x() * e[i].oob[1].x()) + (e[i].oob[4].y() * e[i].oob[2].x()) + (e[i].oob[4].z() * e[i].oob[3].x()));
+            elements_OOBB.back().emplace_back(e[i].oob[0].y() - (e[i].oob[4].x() * e[i].oob[1].y()) + (e[i].oob[4].y() * e[i].oob[2].y()) + (e[i].oob[4].z() * e[i].oob[3].y()));
+            elements_OOBB.back().emplace_back(e[i].oob[0].z() - (e[i].oob[4].x() * e[i].oob[1].z()) + (e[i].oob[4].y() * e[i].oob[2].z()) + (e[i].oob[4].z() * e[i].oob[3].z()));
+
+            // point 6
+            elements_OOBB.back().emplace_back(e[i].oob[0].x() + (e[i].oob[4].x() * e[i].oob[1].x()) - (e[i].oob[4].y() * e[i].oob[2].x()) + (e[i].oob[4].z() * e[i].oob[3].x()));
+            elements_OOBB.back().emplace_back(e[i].oob[0].y() + (e[i].oob[4].x() * e[i].oob[1].y()) - (e[i].oob[4].y() * e[i].oob[2].y()) + (e[i].oob[4].z() * e[i].oob[3].y()));
+            elements_OOBB.back().emplace_back(e[i].oob[0].z() + (e[i].oob[4].x() * e[i].oob[1].z()) - (e[i].oob[4].y() * e[i].oob[2].z()) + (e[i].oob[4].z() * e[i].oob[3].z()));
+
+            // point 7
+            elements_OOBB.back().emplace_back(e[i].oob[0].x() - (e[i].oob[4].x() * e[i].oob[1].x()) - (e[i].oob[4].y() * e[i].oob[2].x()) + (e[i].oob[4].z() * e[i].oob[3].x()));
+            elements_OOBB.back().emplace_back(e[i].oob[0].y() - (e[i].oob[4].x() * e[i].oob[1].y()) - (e[i].oob[4].y() * e[i].oob[2].y()) + (e[i].oob[4].z() * e[i].oob[3].y()));
+            elements_OOBB.back().emplace_back(e[i].oob[0].z() - (e[i].oob[4].x() * e[i].oob[1].z()) - (e[i].oob[4].y() * e[i].oob[2].z()) + (e[i].oob[4].z() * e[i].oob[3].z()));
+        }
+    }
+
+    void joints(
+        std::vector<std::vector<double>> &polylines_coordinates,
+        int &search_type,
+        std::vector<std::vector<int>> &element_pairs,
+        std::vector<std::vector<double>> &joint_areas,
+        std::vector<int> &joint_types)
+    {
+        //////////////////////////////////////////////////////////////////////////////
+        // Convert raw-data to list of Polylines
+        //////////////////////////////////////////////////////////////////////////////
+        std::vector<CGAL_Polyline> input_polyline_pairs;
+        python_to_cpp__cpp_to_python::coord_to_vector_of_polylines(polylines_coordinates, input_polyline_pairs);
+
+        //////////////////////////////////////////////////////////////////////////////
+        // Create elements, AABB, OBB, P, Pls, thickness
+        //////////////////////////////////////////////////////////////////////////////
+        const int n = input_polyline_pairs.size() * 0.5;
+        std::vector<wood::element> elements;
+        std::vector<std::vector<IK::Vector_3>> input_insertion_vectors;
+        std::vector<std::vector<int>> input_joint_types;
+        wood_main::get_elements(input_polyline_pairs, input_insertion_vectors, input_joint_types, elements);
+
+        //////////////////////////////////////////////////////////////////////////////
+        // Create joints, Perform Joint Area Search
+        //////////////////////////////////////////////////////////////////////////////
+        auto joints = std::vector<wood::joint>();
+        auto joints_map = std::unordered_map<uint64_t, int>();
+        std::vector<int> neighbors;
+        wood_main::adjacency_search(elements, search_type, neighbors, joints, joints_map);
+
+        //////////////////////////////////////////////////////////////////////////////
+        // Get element pairs, joint areas, join types
+        //////////////////////////////////////////////////////////////////////////////
+        element_pairs.reserve(joints.size());
+        joint_areas.reserve(joints.size());
+        joint_types.reserve(joints.size());
+
+        for (size_t i = 0; i < joints.size(); i++)
+        {
+            // element pairs
+            element_pairs.emplace_back(std::vector<int>{joints[i].v0, joints[i].v1});
+
+            // joint areas
+            joint_areas.emplace_back(std::vector<double>());
+            joint_areas.back().reserve(joints[i].joint_area.size() * 3);
+
+            for (size_t j = 0; j < joints[i].joint_area.size(); j++)
+            {
+                joint_areas.back().emplace_back(joints[i].joint_area[j].hx());
+                joint_areas.back().emplace_back(joints[i].joint_area[j].hy());
+                joint_areas.back().emplace_back(joints[i].joint_area[j].hz());
+            }
+
+            // joint types
+            joint_types.emplace_back(joints[i].type);
+        }
+    }
+
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Secondary Methods
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -204,6 +448,9 @@ PYBIND11_MAKE_OPAQUE(std::vector<std::vector<std::vector<int>>>);
 PYBIND11_MAKE_OPAQUE(std::vector<double>);
 PYBIND11_MAKE_OPAQUE(std::vector<std::vector<double>>);
 PYBIND11_MAKE_OPAQUE(std::vector<std::vector<std::vector<double>>>);
+PYBIND11_MAKE_OPAQUE(std::vector<float>);
+PYBIND11_MAKE_OPAQUE(std::vector<std::vector<float>>);
+PYBIND11_MAKE_OPAQUE(std::vector<std::vector<std::vector<float>>>);
 PYBIND11_MAKE_OPAQUE(std::map<std::string, double>);
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -244,6 +491,9 @@ PYBIND11_MODULE(wood_pybind11, m)
     py::bind_vector<std::vector<double>>(m, "WoodVectorDouble");
     py::bind_vector<std::vector<std::vector<double>>>(m, "WoodNestedVectorDouble");
     py::bind_vector<std::vector<std::vector<std::vector<double>>>>(m, "WoodNestedNestedVectorDouble");
+    py::bind_vector<std::vector<float>>(m, "WoodVectorFloat");
+    py::bind_vector<std::vector<std::vector<float>>>(m, "WoodNestedVectorFloat");
+    py::bind_vector<std::vector<std::vector<std::vector<float>>>>(m, "WoodNestedNestedVectorFloat");
 
     py::bind_map<std::map<std::string, double>>(m, "WoodMapStringDouble");
 
@@ -261,37 +511,62 @@ PYBIND11_MODULE(wood_pybind11, m)
 
     // primary methods
     m.def("read_xml_polylines", &compas_wood::read_xml_polylines,
-        // inputs
-        pybind11::arg("foldername").noconvert(),
-        pybind11::arg("filename_of_dataset").noconvert(),
-        // outputs
-        pybind11::arg("polylines_coordinates").noconvert());
+          // inputs
+          pybind11::arg("foldername").noconvert(),
+          pybind11::arg("filename_of_dataset").noconvert(),
+          // outputs
+          pybind11::arg("polylines_coordinates").noconvert());
 
     m.def("read_xml_polylines_and_properties", &compas_wood::read_xml_polylines_and_properties,
-        // inputs
-        pybind11::arg("foldername").noconvert(),
-        pybind11::arg("filename_of_dataset").noconvert(),
-        // outputs
-        pybind11::arg("input_polyline_pairs_coord").noconvert(),
-        pybind11::arg("input_insertion_vectors_coord").noconvert(),
-        pybind11::arg("input_JOINTS_TYPES").noconvert(),
-        pybind11::arg("input_three_valence_element_indices_and_instruction").noconvert(),
-        pybind11::arg("input_adjacency").noconvert());
+          // inputs
+          pybind11::arg("foldername").noconvert(),
+          pybind11::arg("filename_of_dataset").noconvert(),
+          // outputs
+          pybind11::arg("input_polyline_pairs_coord").noconvert(),
+          pybind11::arg("input_insertion_vectors_coord").noconvert(),
+          pybind11::arg("input_JOINTS_TYPES").noconvert(),
+          pybind11::arg("input_three_valence_element_indices_and_instruction").noconvert(),
+          pybind11::arg("input_adjacency").noconvert());
 
     m.def("get_connection_zones", &compas_wood::get_connection_zones,
-        // inputs
-        pybind11::arg("pybind11_input_polyline_pairs").noconvert(),
-        pybind11::arg("pybind11_input_insertion_vectors").noconvert(),
-        pybind11::arg("pybind11_input_JOINTS_TYPES").noconvert(),
-        pybind11::arg("pybind11_input_three_valence_element_indices_and_instruction").noconvert(),
-        pybind11::arg("pybind11_input_adjacency").noconvert(),
-        pybind11::arg("pybind11_wood_globals_JOINTS_PARAMETERS_AND_TYPES").noconvert(),
-        pybind11::arg("search_type"),
-        pybind11::arg("scale").noconvert(),
-        pybind11::arg("output_type").noconvert(),
-        // outputs
-        pybind11::arg("pybind11_output_plines").noconvert(),
-        pybind11::arg("pybind11_output_types").noconvert());
+          // inputs
+          pybind11::arg("pybind11_input_polyline_pairs").noconvert(),
+          pybind11::arg("pybind11_input_insertion_vectors").noconvert(),
+          pybind11::arg("pybind11_input_JOINTS_TYPES").noconvert(),
+          pybind11::arg("pybind11_input_three_valence_element_indices_and_instruction").noconvert(),
+          pybind11::arg("pybind11_input_adjacency").noconvert(),
+          pybind11::arg("pybind11_wood_globals_JOINTS_PARAMETERS_AND_TYPES").noconvert(),
+          pybind11::arg("search_type"),
+          pybind11::arg("scale").noconvert(),
+          pybind11::arg("output_type").noconvert(),
+          // outputs
+          pybind11::arg("pybind11_output_plines").noconvert(),
+          pybind11::arg("pybind11_output_types").noconvert());
+
+    m.def("closed_mesh_from_polylines_vnf", &compas_wood::closed_mesh_from_polylines_vnf,
+          // inputs
+          pybind11::arg("polylines_coordinates").noconvert(),
+          // outputs
+          pybind11::arg("out_vertices").noconvert(),
+          pybind11::arg("out_normals").noconvert(),
+          pybind11::arg("out_triangles").noconvert());
+
+    m.def("rtree", &compas_wood::rtree,
+          // inputs
+          pybind11::arg("polylines_coordinates").noconvert(),
+          // outputs
+          pybind11::arg("elements_neighbours").noconvert(),
+          pybind11::arg("elements_AABB").noconvert(),
+          pybind11::arg("elements_OOBB").noconvert());
+
+    m.def("joints", &compas_wood::joints,
+          // inputs
+          pybind11::arg("polylines_coordinates").noconvert(),
+          pybind11::arg("search_type"),
+          // outputs
+          pybind11::arg("element_pairs").noconvert(),
+          pybind11::arg("joint_areas").noconvert(),
+          pybind11::arg("joint_types").noconvert());
 
     // secondary methods
 }

@@ -33,7 +33,7 @@ namespace python_to_cpp__cpp_to_python
         std::vector<Mesh::Vertex_index> vertex_indices(vertices_count);
 
         // add vertices to the mesh and the index descriptor
-        for (int i = 0; i < vertices_count; i++)
+        for (size_t i = 0; i < vertices_count; i++)
         {
             // index descriptor is used to store indices of vertices, indices are retrieved while adding points to the mesh
             vertex_indices[i] = mesh.add_vertex(IK::Point_3(vertices(i, 0), vertices(i, 1), vertices(i, 2)));
@@ -44,7 +44,7 @@ namespace python_to_cpp__cpp_to_python
         Mesh::Vertex_index b;
         Mesh::Vertex_index c;
 
-        for (int i = 0; i < faces_count; i++)
+        for (size_t i = 0; i < faces_count; i++)
         {
             a = vertex_indices[faces(i, 0)];
             b = vertex_indices[faces(i, 1)];
@@ -73,18 +73,18 @@ namespace python_to_cpp__cpp_to_python
         std::vector<Mesh::Vertex_index> index_descriptor(vertices_count);
 
         // add vertices to the mesh and the index descriptor
-        for (int i = 0; i < vertices_count; i++)
+        for (size_t i = 0; i < vertices_count; i++)
         {
             // index descriptor is used to store indices of vertices, indices are retrieved while adding points to the mesh
             index_descriptor[i] = mesh.add_vertex(IK::Point_3(vertices(i, 0), vertices(i, 1), vertices(i, 2)));
         }
 
         // add faces
-        for (int i = 0; i < faces.size(); i++)
+        for (size_t i = 0; i < faces.size(); i++)
         {
             // create a face of the vector of integers, the number of vertices per face can change, so a vector is used, instead of matrix
             std::vector<Mesh::Vertex_index> face;
-            for (int j = 0; j < faces[i].size(); j++)
+            for (size_t j = 0; j < faces[i].size(); j++)
                 face.push_back(index_descriptor[faces[i][j]]);
 
             // add that face to the mesh
@@ -105,15 +105,20 @@ namespace python_to_cpp__cpp_to_python
 
     void coord_to_vector_of_polylines(std::vector<std::vector<double>> &nested_vector_of_numbers, std::vector<std::vector<IK::Point_3>> &vector_of_polylines)
     {
-        vector_of_polylines.reserve(nested_vector_of_numbers.size());
+        if (nested_vector_of_numbers.size() == 0) return;
+
+            vector_of_polylines.reserve(nested_vector_of_numbers.size());
         for (auto &polyline : nested_vector_of_numbers)
         {
+            if (polyline.size() == 0)
+                continue;
+
             vector_of_polylines.push_back(std::vector<IK::Point_3>());
             vector_of_polylines.back().reserve(polyline.size() / 3);
-            for (int i = 0; i < polyline.size(); i += 3)
-            {
-                vector_of_polylines.back().push_back(IK::Point_3(polyline[i], polyline[i + 1], polyline[i + 2]));
-            }
+
+            for (size_t i = 0; i < polyline.size(); i += 3)
+                vector_of_polylines.back().emplace_back(polyline[i], polyline[i + 1], polyline[i + 2]);
+          
         }
     }
 
@@ -132,7 +137,7 @@ namespace python_to_cpp__cpp_to_python
         {
             nested_vector_of_vectors.push_back(std::vector<IK::Vector_3>());
             nested_vector_of_vectors.back().reserve(vector.size() / 3);
-            for (int i = 0; i < vector.size(); i += 3)
+            for (size_t i = 0; i < vector.size(); i += 3)
             {
                 nested_vector_of_vectors.back().push_back(IK::Vector_3(vector[i], vector[i + 1], vector[i + 2]));
             }
@@ -282,7 +287,7 @@ namespace python_to_cpp__cpp_to_python
             RowMatrixXd points(polyline.size(), 3);
 
             // assign coordinates
-            for (int j = 0; j < polyline.size(); j++)
+            for (size_t j = 0; j < polyline.size(); j++)
             {
                 points(j, 0) = (double)polyline[j].x();
                 points(j, 1) = (double)polyline[j].y();
@@ -299,15 +304,15 @@ namespace python_to_cpp__cpp_to_python
     {
 
         nested_nested_vector_of_coords.reserve(nested_vector_of_polylines.size());
-        for (int i = 0; i < nested_vector_of_polylines.size(); i++)
+        for (size_t i = 0; i < nested_vector_of_polylines.size(); i++)
         {
             nested_nested_vector_of_coords.emplace_back(std::vector<std::vector<double>>());
             nested_nested_vector_of_coords.back().reserve(nested_vector_of_polylines[i].size());
-            for (int j = 0; j < nested_vector_of_polylines[i].size(); j++)
+            for (size_t j = 0; j < nested_vector_of_polylines[i].size(); j++)
             {
                 nested_nested_vector_of_coords[i].emplace_back(std::vector<double>());
                 nested_nested_vector_of_coords[i].back().reserve(nested_vector_of_polylines[i][j].size());
-                for (int k = 0; k < nested_vector_of_polylines[i][j].size(); k++)
+                for (size_t k = 0; k < nested_vector_of_polylines[i][j].size(); k++)
                 {
                     nested_nested_vector_of_coords[i][j].emplace_back((double)nested_vector_of_polylines[i][j][k].x());
                     nested_nested_vector_of_coords[i][j].emplace_back((double)nested_vector_of_polylines[i][j][k].y());
@@ -321,11 +326,11 @@ namespace python_to_cpp__cpp_to_python
     {
 
         output_types_int.reserve(output_types.size());
-        for (int i = 0; i < output_types.size(); i++)
+        for (size_t i = 0; i < output_types.size(); i++)
         {
             output_types_int.emplace_back(std::vector<int>());
             output_types_int.back().reserve(output_types[i].size());
-            for (int j = 0; j < output_types[i].size(); j++)
+            for (size_t j = 0; j < output_types[i].size(); j++)
             {
                 output_types_int[i].emplace_back((int)output_types[i][j]);
             }
