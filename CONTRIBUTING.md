@@ -2,6 +2,21 @@
 
 Contributions are welcome and very much appreciated!
 
+## Commit Rules:
+
+    Two keywors: <type_of_commit> <project_name> <description>
+    <type_of_commit> ADD FIX MISC REM
+    <project_name> BACKEND FRONTEND COMPAS
+    e.g. ADD BACKEND origami folding surface generation
+
+## Commit Sequence:
+
+    git add --all
+    git commit -m "<type_of_commit> <project_name> <description>"
+    git push
+
+
+
 ## Bug reports
 
 When [reporting a bug](https://github.com/compas-dev/compas_cgal/issues) please include:
