@@ -50,6 +50,29 @@
 namespace compas_wood
 {
 
+    namespace internal
+    {
+
+        /**
+         * get point on a plane using 3 coordinate
+         *
+         * @param [in] box 0 - origin, 1 - xaxis, 2 - yaxis, 3 - zaxis, 4 - size, but the function does not use the size, so it can be used for planes too
+         * @param [in] s coordinate on the x axis
+         * @param [in] t coordinate on the y axis
+         * @param [in] c coordinate on the z axis
+         * @return point on the plane
+         */
+        IK::Point_3 point_at(IK::Vector_3 (&box)[5], const double &s, const double &t, const double &c);
+
+        /**
+         * get eight corners of a box
+         *
+         * @param [in] box 0 - origin, 1 - xaxis, 2 - yaxis, 3 - zaxis, 4 - size
+         * @param [out] corners corners of a box, bottom rectangle and top rectangle
+         */
+        void get_corners(IK::Vector_3 (&box)[5], CGAL_Polyline &corners);
+    }
+
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Test methods - mainly to chekc if the library is loading and whether the types can be passed between C++ and Python
     // https://github.com/tdegeus/pybind11_examples

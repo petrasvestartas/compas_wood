@@ -20,6 +20,34 @@
 namespace compas_wood
 {
 
+    namespace internal
+    {
+        IK::Point_3 point_at(IK::Vector_3 (&box)[5], const double& s,const  double& t, const double& c)
+        {
+            return IK::Point_3(
+                box[0].x() + s * box[1].x() + t * box[2].x() + c * box[3].x(),
+                box[0].y() + s * box[1].y() + t * box[2].y() + c * box[3].y(),
+                box[0].z() + s * box[1].z() + t * box[2].z() + c * box[3].z()
+
+            );
+        }
+
+        void get_corners(IK::Vector_3 (&box)[5], CGAL_Polyline &corners)
+        {
+            corners = CGAL_Polyline(8);
+
+            corners[0] = point_at(box, box[4].x(), box[4].y(), -box[4].z());
+            corners[1] = point_at(box, -box[4].x(), box[4].y(), -box[4].z());
+            corners[3] = point_at(box, box[4].x(), -box[4].y(), -box[4].z());
+            corners[2] = point_at(box, -box[4].x(), -box[4].y(), -box[4].z());
+
+            corners[4] = point_at(box, box[4].x(), box[4].y(), box[4].z());
+            corners[5] = point_at(box, -box[4].x(), box[4].y(), box[4].z());
+            corners[7] = point_at(box, box[4].x(), -box[4].y(), box[4].z());
+            corners[6] = point_at(box, -box[4].x(), -box[4].y(), box[4].z());
+        }
+    }
+
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Test methods - mainly to check if the library is loading and whether the types can be passed between C++ and Python
     // https://github.com/tdegeus/pybind11_examples
@@ -330,47 +358,15 @@ namespace compas_wood
             elements_OOBB.emplace_back(std::vector<double>());
             elements_OOBB.back().reserve(24);
 
-            // point 0x plane_origin_xcoord + (box_sizex * plane_xaxis_xcoordinate) + (box_sizey * plane_yaxis_xcoord) + (box_sizez * plane_zaxis_xcoord)
-            // point 0y plane_origin_xcoord + (box_sizex * plane_xaxis_ycoordinate) + (box_sizey * plane_yaxis_ycoord) + (box_sizez * plane_zaxis_ycoord)
-            // point 0y plane_origin_xcoord + (box_sizex * plane_xaxis_zcoordinate) + (box_sizey * plane_yaxis_zcoord) + (box_sizez * plane_zaxis_zcoord)
-            elements_OOBB.back().emplace_back(e[i].oob[0].x() + (e[i].oob[4].x() * e[i].oob[1].x()) + (e[i].oob[4].y() * e[i].oob[2].x()) - (e[i].oob[4].z() * e[i].oob[3].x()));
-            elements_OOBB.back().emplace_back(e[i].oob[0].y() + (e[i].oob[4].x() * e[i].oob[1].y()) + (e[i].oob[4].y() * e[i].oob[2].y()) - (e[i].oob[4].z() * e[i].oob[3].y()));
-            elements_OOBB.back().emplace_back(e[i].oob[0].z() + (e[i].oob[4].x() * e[i].oob[1].z()) + (e[i].oob[4].y() * e[i].oob[2].z()) - (e[i].oob[4].z() * e[i].oob[3].z()));
+            CGAL_Polyline corners;
+            internal::get_corners(e[i].oob, corners);
 
-            // point 1
-            elements_OOBB.back().emplace_back(e[i].oob[0].x() - (e[i].oob[4].x() * e[i].oob[1].x()) + (e[i].oob[4].y() * e[i].oob[2].x()) - (e[i].oob[4].z() * e[i].oob[3].x()));
-            elements_OOBB.back().emplace_back(e[i].oob[0].y() - (e[i].oob[4].x() * e[i].oob[1].y()) + (e[i].oob[4].y() * e[i].oob[2].y()) - (e[i].oob[4].z() * e[i].oob[3].y()));
-            elements_OOBB.back().emplace_back(e[i].oob[0].z() - (e[i].oob[4].x() * e[i].oob[1].z()) + (e[i].oob[4].y() * e[i].oob[2].z()) - (e[i].oob[4].z() * e[i].oob[3].z()));
-
-            // point 2
-            elements_OOBB.back().emplace_back(e[i].oob[0].x() + (e[i].oob[4].x() * e[i].oob[1].x()) - (e[i].oob[4].y() * e[i].oob[2].x()) - (e[i].oob[4].z() * e[i].oob[3].x()));
-            elements_OOBB.back().emplace_back(e[i].oob[0].y() + (e[i].oob[4].x() * e[i].oob[1].y()) - (e[i].oob[4].y() * e[i].oob[2].y()) - (e[i].oob[4].z() * e[i].oob[3].y()));
-            elements_OOBB.back().emplace_back(e[i].oob[0].z() + (e[i].oob[4].x() * e[i].oob[1].z()) - (e[i].oob[4].y() * e[i].oob[2].z()) - (e[i].oob[4].z() * e[i].oob[3].z()));
-
-            // point 3
-            elements_OOBB.back().emplace_back(e[i].oob[0].x() - (e[i].oob[4].x() * e[i].oob[1].x()) - (e[i].oob[4].y() * e[i].oob[2].x()) - (e[i].oob[4].z() * e[i].oob[3].x()));
-            elements_OOBB.back().emplace_back(e[i].oob[0].y() - (e[i].oob[4].x() * e[i].oob[1].y()) - (e[i].oob[4].y() * e[i].oob[2].y()) - (e[i].oob[4].z() * e[i].oob[3].y()));
-            elements_OOBB.back().emplace_back(e[i].oob[0].z() - (e[i].oob[4].x() * e[i].oob[1].z()) - (e[i].oob[4].y() * e[i].oob[2].z()) - (e[i].oob[4].z() * e[i].oob[3].z()));
-
-            // point 4
-            elements_OOBB.back().emplace_back(e[i].oob[0].x() + (e[i].oob[4].x() * e[i].oob[1].x()) + (e[i].oob[4].y() * e[i].oob[2].x()) + (e[i].oob[4].z() * e[i].oob[3].x()));
-            elements_OOBB.back().emplace_back(e[i].oob[0].y() + (e[i].oob[4].x() * e[i].oob[1].y()) + (e[i].oob[4].y() * e[i].oob[2].y()) + (e[i].oob[4].z() * e[i].oob[3].y()));
-            elements_OOBB.back().emplace_back(e[i].oob[0].z() + (e[i].oob[4].x() * e[i].oob[1].z()) + (e[i].oob[4].y() * e[i].oob[2].z()) + (e[i].oob[4].z() * e[i].oob[3].z()));
-
-            // point 5
-            elements_OOBB.back().emplace_back(e[i].oob[0].x() - (e[i].oob[4].x() * e[i].oob[1].x()) + (e[i].oob[4].y() * e[i].oob[2].x()) + (e[i].oob[4].z() * e[i].oob[3].x()));
-            elements_OOBB.back().emplace_back(e[i].oob[0].y() - (e[i].oob[4].x() * e[i].oob[1].y()) + (e[i].oob[4].y() * e[i].oob[2].y()) + (e[i].oob[4].z() * e[i].oob[3].y()));
-            elements_OOBB.back().emplace_back(e[i].oob[0].z() - (e[i].oob[4].x() * e[i].oob[1].z()) + (e[i].oob[4].y() * e[i].oob[2].z()) + (e[i].oob[4].z() * e[i].oob[3].z()));
-
-            // point 6
-            elements_OOBB.back().emplace_back(e[i].oob[0].x() + (e[i].oob[4].x() * e[i].oob[1].x()) - (e[i].oob[4].y() * e[i].oob[2].x()) + (e[i].oob[4].z() * e[i].oob[3].x()));
-            elements_OOBB.back().emplace_back(e[i].oob[0].y() + (e[i].oob[4].x() * e[i].oob[1].y()) - (e[i].oob[4].y() * e[i].oob[2].y()) + (e[i].oob[4].z() * e[i].oob[3].y()));
-            elements_OOBB.back().emplace_back(e[i].oob[0].z() + (e[i].oob[4].x() * e[i].oob[1].z()) - (e[i].oob[4].y() * e[i].oob[2].z()) + (e[i].oob[4].z() * e[i].oob[3].z()));
-
-            // point 7
-            elements_OOBB.back().emplace_back(e[i].oob[0].x() - (e[i].oob[4].x() * e[i].oob[1].x()) - (e[i].oob[4].y() * e[i].oob[2].x()) + (e[i].oob[4].z() * e[i].oob[3].x()));
-            elements_OOBB.back().emplace_back(e[i].oob[0].y() - (e[i].oob[4].x() * e[i].oob[1].y()) - (e[i].oob[4].y() * e[i].oob[2].y()) + (e[i].oob[4].z() * e[i].oob[3].y()));
-            elements_OOBB.back().emplace_back(e[i].oob[0].z() - (e[i].oob[4].x() * e[i].oob[1].z()) - (e[i].oob[4].y() * e[i].oob[2].z()) + (e[i].oob[4].z() * e[i].oob[3].z()));
+            for (int j = 0; j < 8; j++)
+            {
+                elements_OOBB.back().emplace_back(corners[j].hx());
+                elements_OOBB.back().emplace_back(corners[j].hy());
+                elements_OOBB.back().emplace_back(corners[j].hz());
+            }
         }
     }
 
