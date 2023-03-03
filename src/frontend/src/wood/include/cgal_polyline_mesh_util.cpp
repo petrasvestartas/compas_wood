@@ -187,16 +187,16 @@ namespace cgal_polyline_mesh_util
             //////////////////////////////////////////////////////////////////////////////
             // Insert the polygons into a constrained triangulation
             //////////////////////////////////////////////////////////////////////////////
-            try
-            {
+            //try
+            //{
                 CGALCDT.insert_constraint(polygon_2d.vertices_begin(), polygon_2d.vertices_end(), true);
-            }
-            catch (const CGALCDT::Intersection_of_constraints_exception &)
-            {
-                printf("CPP CGALCDT::Intersection_of_constraints_exception \n");
+            //}
+            // catch (...)//const CGALCDT::Intersection_of_constraints_exception &
+            // {
+            //     printf("CPP CGALCDT::Intersection_of_constraints_exception \n");
 
-                return;
-            }
+            //     return;
+            // }
         }
 
         //////////////////////////////////////////////////////////////////////////////

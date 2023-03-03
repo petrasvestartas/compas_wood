@@ -136,7 +136,7 @@ def cpp_flag(compiler):
     The newer version is prefered over c++11 (when it is available).
     """
     # flags = ['-std=c++17', '-std=c++14', '-std=c++11']
-    flags = ["-std=c++20", "-std=c++17", "-std=c++14", "-std=c++11"]
+    flags = ["-std=c++17"] # "-std=c++17", "-std=c++14", "-std=c++11"
 
     for flag in flags:
         if has_flag(compiler, flag):
@@ -149,7 +149,7 @@ class BuildExt(build_ext):
     """A custom build extension for adding compiler-specific options."""
 
     c_opts = {
-        "msvc": ["/EHsc", "/std:c++20"],
+        "msvc": ["/EHsc", "/std:c++17"],
         "unix": [],
     }
     l_opts = {
