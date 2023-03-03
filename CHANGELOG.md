@@ -14,103 +14,69 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 
 
-## [0.5.0] 2022-10-07
+## [1.0.0] 2023-01-01
 
 ### Added
 
-* Support to python 3.10.
-* Added Changelog check in PRs.
-* Exposing mesh `compas_cgal.booleans.split` function.
-
-### Changed
-
-* Updated github workflow.
-
-### Removed
-
-
-## [0.4.0] 2022-01-20
-
-### Added
-
-* Added type annotations.
-* Added dimension checks to trimesh setters.
-* Added `compas_cgal.measure.volume`.
-* Added `compas_cgal.subdivision.catmull_clark`.
-
-### Changed
-
-### Removed
-
-## [0.3.0] 2021-12-14
-
-### Added
-
-* Added `compas_cgal.booleans.boolean_union`.
-* Added `compas_cgal.booleans.boolean_difference`.
-* Added `compas_cgal.booleans.boolean_intersection`.
-* Added `compas_cgal.intersections.intersection_mesh_mesh`.
-* Added `compas_cgal.meshing.remesh`.
-* Added `compas_cgal.slicer.slice_mesh`.
-* Added `compas_cgal.triangulation.delaunay_triangulation`.
-* Added `compas_cgal.triangulation.constrained_delaunay_triangulation`.
-* Added `compas_cgal.triangulation.conforming_delaunay_triangulation`.
-
-### Changed
-
-### Removed
-
-
-
-
-
-## :small_red_triangle: Under-construction all the code is being developrd on the "backend" branch :small_red_triangle:
-
-## - to-do list - 
-
-### 01 2023 - finalization of joinery methods (top-to-top, clip joint, multi-butterfly connections)
-
-#### CPP
 - [x] separate header only library structure to CPP and H files
-
-#### top-to-top 
-
 - [x] single point drill
 - [x] line drill
 - [x] circle (polylabel) drill
 - [x] smooth drill
 - [x] hatch drill
-#### multi-butterfly
-- [x] replicate the joint n-times
-#### clip
-- [x] take tenon-mortise and adapt to the clipper geometry
+- [x] multi-butterly replicate the joint n-times
+- [x] clip take tenon-mortise and adapt to the clipper geometry
+
+### Changed
+
+### Removed
 
 
-### 02 2023 - finalization of the plate algorithms - MOOC delivery
+## [1.0.0] 2023-02-01
 
-#### bug fixes
+### Added
+
+- [x] add unit tests from MOOC to CPP data-sets: Annen (corner cases, full arch)
+- [x] add unit tests from MOOC to CPP data-sets: Cross joints (IBOIS pavilion, planarized shell)
+- [x] add unit tests from MOOC to CPP data-sets: Folded plates arch
+- [x] add unit tests from MOOC to CPP data-sets: VDA pavilion
+- [x] add unit tests from MOOC to CPP data-sets: Reciprocal with cross joints
+- [x] add unit tests from MOOC to CPP data-sets: Reciprocal with Mixed Joint (cross + finger + tenon+mortise)
+- [ ] add unit tests from MOOC to CPP data-sets: RTree search + OOBB
+
+### Changed
+
 - [x] merge function clean-up
 - [x] finger joint parameterization 
 - [ ] update the CGAL version for Inscribed Rectangle bug fix made by CGAL guys
 
-#### unit-tests 
-- [x] add units tests from MOOC to CPP data-sets: Annen (corner cases, full arch)
-- [x] add units tests from MOOC to CPP data-sets: Cross joints (IBOIS pavilion, planarized shell)
-- [x] add units tests from MOOC to CPP data-sets: Folded plates arch
-- [x] add units tests from MOOC to CPP data-sets: VDA pavilion
-- [x] add units tests from MOOC to CPP data-sets: Reciprocal with cross joints
-- [x] add units tests from MOOC to CPP data-sets: Reciprocal with Mixed Joint (cross + finger + tenon+mortise)
-- [ ] add units tests from MOOC to CPP data-sets: RTree search + OOBB
 
-#### COMPAS integration 
+### Removed
+
+## [1.0.0] 2023-03-01
+
+### Added
+
+- [ ] finalization of the plate algorithms - MOOC delivery
 - [x] Create backend in C++ with a Viewer - Finished
 - [x] Create a wrapper in C++ with Pybind11 - In Process
-- [x] Setup the Compas Python Environment that replicates the 2nd step workflow - Not done
-- [ ] Produce documentation - Finished
-- [ ] Write Grasshopper components - Not done
-- [ ] Write if the code works on MAC and Linux - Not done
+- [x] Setup the Compas Python Environment that replicates the 2nd step workflow 
+- [ ] Produce documentation
+- [ ] Write Grasshopper components
+- [ ] update the code for MAC
+- [ ] update c++ code for Linux
+- [ ] conda
+- [ ] update of the Rhino3D, Grasshopper version, compatibility check with
+Windows, Mac and Linux
 
-### 03 2023 - finalization of beam-panel model integration | C++ unit tests from the collected study cases, wrapping the code to pybind11
+### Changed
+
+### Removed
+
+## [1.0.0] 2023-04-01
+
+### Added
+
 - [ ] continue the model based on " beam_node_0.cpp -> beam_node_0 " , currently only connection areas are generated, but not the joint volumes
 - [ ] use for tests already implemented mesh boolean difference method
 - [ ] separate connection area detection into 3 steps a) cross, b) end-to-end, c) side-to-end
@@ -119,15 +85,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [ ] try to clean up the python code that builds correctly, including the documentaion
 - [ ] wrap the two major methods to pybind11
 
-### 04 2023 - documentation, pytest, conda packaging
+### Changed
+
+### Removed
+
+## [1.0.0] 2023-05-01
+
+### Added
+
 - [ ] document how to set up all unit tests
 - [ ] create pytests that are the same as GoogleTests
-- [ ] publish conda package -> meeting with Tom
 
-### 05 2023 - update of the Rhino3D, Grasshopper version, compatibility check with Windows, Mac and Linux
-- [ ] develop a Grasshopper plugin that is completely python based
-- [ ] check compatibility with MAC
-- [ ] check compatibility with Linux
+### Changed
+
+
+# Wish-list
+* OpenNest rewrited version for c++
+* box packing
+* linear stock
+* fabrication outlines for plates with notches
+* global form methods: mesh pipe, surface mesh offset
 
 
 ### Switch precompiled headers
