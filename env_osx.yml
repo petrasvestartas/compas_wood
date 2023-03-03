@@ -7,8 +7,8 @@ dependencies:
   - gmp
   - mpfr
   - boost-cpp
-  - eigen=3.3
-  - cgal-cpp=5.2
+  - eigen=3.4
+  - cgal-cpp=5.5
   - pybind11
   - compas
   - pip:
