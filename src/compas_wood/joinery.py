@@ -261,10 +261,10 @@ def WoodNestedNestedVectorDouble_to_polylineslist(wood_nested_nested_vector_doub
 
 def WoodVectorDouble_to_box(wood_vector_double):
     points = []
-    for i in wood_vector_double:
-        for j in range(0, len(i), 3):
-            p = Point(i[j], i[j + 1], i[j + 2])
-            points.append(p)
+
+    for i in range(0, len(wood_vector_double), 3):
+        p = Point(wood_vector_double[i], wood_vector_double[i + 1], wood_vector_double[i + 2])
+        points.append(p)
 
     point_center = (points[0] + points[6]) * 0.5
 
@@ -676,12 +676,12 @@ def closed_mesh_from_polylines(list_of_polylines):
     return WoodVectorFloat_and_WoodVectorInt_to_mesh(out_vertices, out_triangles)
 
 
-def joints(polylines, search_type=0):
+def joints(list_of_polylines, search_type=0):
     """Get joints as: a) element pairs, b) joint areas, c) joint types.
 
     Parameters
     ----------
-    polylines : list[Polyline]
+    list_of_polylines : list[Polyline]
         list of polylines that represents the timber elements
 
     search_type : int
@@ -698,8 +698,9 @@ def joints(polylines, search_type=0):
     ###################################################################################################
     # conversion of input data
     ###################################################################################################
-    polylines_coordinates = []
-
+    list_of_polylines_coordinates = polylines_to_WoodNestedVectorDouble(
+        list_of_polylines
+    )
     ###################################################################################################
     # run the WOOD CPP code
     ###################################################################################################
@@ -715,7 +716,7 @@ def joints(polylines, search_type=0):
 
     wood_pybind11.joints(
         # input
-        polylines_coordinates,
+        list_of_polylines_coordinates,
         0,
         # output
         element_pairs,
@@ -741,12 +742,12 @@ def joints(polylines, search_type=0):
     )
 
 
-def rtree():
+def rtree(list_of_polylines):
     """Get neighbors of elements using a R-tree.
 
     Parameters
     ----------
-    polylines : list[Polyline]
+    list_of_polylines : list[Polyline]
         list of polylines that represents the timber elements
 
     Returns
@@ -760,7 +761,9 @@ def rtree():
     ###################################################################################################
     # conversion of input data
     ###################################################################################################
-    polylines_coordinates = []
+    list_of_polylines_coordinates = polylines_to_WoodNestedVectorDouble(
+        list_of_polylines
+    )
 
     ###################################################################################################
     # run the WOOD CPP code
@@ -776,7 +779,7 @@ def rtree():
 
     wood_pybind11.rtree(
         # input
-        polylines_coordinates,
+        list_of_polylines_coordinates,
         # output
         elements_neighbours,
         elements_AABB,
