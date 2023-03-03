@@ -57,16 +57,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- [ ] finalization of the plate algorithms - MOOC delivery
+- [x] finalization of the plate algorithms - MOOC delivery
 - [x] Create backend in C++ with a Viewer - Finished
 - [x] Create a wrapper in C++ with Pybind11 - In Process
 - [x] Setup the Compas Python Environment that replicates the 2nd step workflow 
-- [ ] Produce documentation
-- [ ] Write Grasshopper components
 - [ ] update the code for MAC
+- [ ] Produce documentation for MOOC section. Since docs building fails try just build one file or compas_cgal docs
+- [ ] rewrite Grasshopper components in Python
+- [ ] test on another Windows and mac pc
+- [ ] push package to Conda
 - [ ] update c++ code for Linux
-- [ ] conda
-- [ ] update of the Rhino3D, Grasshopper version, compatibility check with
 Windows, Mac and Linux
 
 ### Changed
