@@ -200,7 +200,7 @@ namespace compas_wood
 
         std::vector<std::vector<IK::Point_3>> vector_of_polyline;
         python_to_cpp__cpp_to_python::coord_to_vector_of_polylines(polylines_coordinates, vector_of_polyline);
-        cgal_polyline_mesh_util::closed_mesh_from_polylines_vnf(vector_of_polyline, out_vertices, out_normals, out_triangles);
+        cgal_polyline_mesh_util::closed_mesh_from_polylines_vnf(vector_of_polyline, out_vertices, out_normals, out_triangles, 1);
     }
 
     void rtree(
