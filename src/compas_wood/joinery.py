@@ -6,7 +6,9 @@ from wood_pybind11 import WoodNestedVectorDouble
 from wood_pybind11 import WoodNestedNestedVectorDouble
 from wood_pybind11 import WoodVectorFloat
 from compas.geometry import Polyline
-from compas.geometry import Mesh
+from compas.datastructures import Mesh
+from compas.geometry import Point
+from compas.geometry import Frame
 from compas.geometry import Box
 import time
 
@@ -257,8 +259,33 @@ def WoodNestedNestedVectorDouble_to_polylineslist(wood_nested_nested_vector_doub
     return output_polylines
 
 
+def WoodVectorDouble_to_box(wood_vector_double):
+    points = []
+    for i in wood_vector_double:
+        for j in range(0, len(i), 3):
+            p = Point(i[j], i[j + 1], i[j + 2])
+            points.append(p)
+
+    point_center = (points[0] + points[6]) * 0.5
+
+    xaxis = points[0] - points[4]
+    yaxis = points[0] - points[3]
+    zaxis = points[0] - points[1]
+    frame = Frame(point_center, xaxis, yaxis)
+
+    box = Box(frame, xaxis.length, yaxis.length, zaxis.length)
+    vertices, faces = box.to_vertices_and_faces()
+    mesh_box = Mesh.from_vertices_and_faces(vertices, faces)
+
+    return mesh_box
+
+
 def WoodNestedVectorDouble_to_boxeslist(wood_nested_vector_double):
-    pass
+    mesh_boxes = []
+    for i in wood_nested_vector_double:
+        mesh_boxes.append(WoodVectorDouble_to_box(i))
+
+    return mesh_boxes
 
 
 def test():
@@ -609,8 +636,9 @@ def closed_mesh_from_polylines(list_of_polylines):
     ###################################################################################################
     # conversion of input data
     ###################################################################################################
-    list_of_polylines_coordinates = []
-    polylines_to_WoodNestedVectorDouble(list_of_polylines)
+    list_of_polylines_coordinates = polylines_to_WoodNestedVectorDouble(
+        list_of_polylines
+    )
 
     ###################################################################################################
     # run the WOOD CPP code
@@ -725,8 +753,8 @@ def rtree():
     -------
     tuple:
         list[list[int]] elements_neighbours,
-        list[Box] elements_AABB
-        list[Box] elements_OOBB
+        list[Mesh] elements_AABB
+        list[Mesh] elements_OOBB
     """
 
     ###################################################################################################
@@ -742,9 +770,9 @@ def rtree():
         "\n___________________________________start_of_WOOD_____________________________________"
     )
     start_time = time.time()
-    elements_neighbours = WoodNestedVectorInt()  #  each vector consists of 2 indices
-    elements_AABB = WoodNestedVectorDouble()  #  each vector consists of 24 coordinates
-    elements_OOBB = WoodNestedVectorDouble()  #  each vector consists of 24 coordinates
+    elements_neighbours = WoodNestedVectorInt()  # each vector consists of 2 indices
+    elements_AABB = WoodNestedVectorDouble()  # each vector consists of 24 coordinates
+    elements_OOBB = WoodNestedVectorDouble()  # each vector consists of 24 coordinates
 
     wood_pybind11.rtree(
         # input
@@ -766,10 +794,8 @@ def rtree():
     ###################################################################################################
     # conversion of output data
     ###################################################################################################
-    elements_neighbours_lists = WoodNestedVectorInt_to_lists(elements_neighbours)
-    WoodNestedVectorDouble_to_list_of_lists(
-        elements_AABB
-    )  #  rewrite to convert to list of boxes
-    WoodNestedVectorDouble_to_list_of_lists(
-        elements_OOBB
-    )  #  use the same method as one above
+    return (
+        WoodNestedVectorInt_to_lists(elements_neighbours),
+        WoodNestedVectorDouble_to_boxeslist(elements_AABB),
+        WoodNestedVectorDouble_to_boxeslist(elements_OOBB),
+    )
