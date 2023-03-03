@@ -112,7 +112,6 @@ namespace cgal_box_util
 
         //struct obb
 
-
         bool get_separating_plane(const vec3 &relative_position, const vec3 &axis, const obb &box1, const obb &box2)
         {
 
