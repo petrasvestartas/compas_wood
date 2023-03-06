@@ -9,6 +9,92 @@ namespace cgal_rectangle_util
 
     namespace internal
     {
+
+    double length(double x, double y, double z)
+        {
+
+            double len;
+            x = fabs(x);
+            y = fabs(y);
+            z = fabs(z);
+            if (y >= x && y >= z)
+            {
+                len = x;
+                x = y;
+                y = len;
+            }
+            else if (z >= x && z >= y)
+            {
+                len = x;
+                x = z;
+                z = len;
+            }
+
+            // 15 September 2003 Dale Lear
+            //     For small denormalized doubles (positive but smaller
+            //     than DBL_MIN), some compilers/FPUs set 1.0/x to +INF.
+            //     Without the ON_DBL_MIN test we end up with
+            //     microscopic vectors that have infinte length!
+            //
+            //     This code is absolutely necessary.  It is a critical
+            //     part of the bug fix for RR 11217.
+            if (x > ON_DBL_MIN)
+            {
+                y /= x;
+                z /= x;
+                len = x * sqrt(1.0 + y * y + z * z);
+            }
+            else if (x > 0.0 && ON_IS_FINITE(x))
+                len = x;
+            else
+                len = 0.0;
+
+            return len;
+        }
+
+        bool unitize(IK::Vector_3 &vector)
+        {
+            bool rc = false;
+            // Since x,y,z are floats, d will not be denormalized and the
+            // ON_DBL_MIN tests in ON_2dVector::Unitize() are not needed.
+
+            double d = length(vector.hx(), vector.hy(), vector.hz());
+            if (d > 0.0)
+            {
+                double dx = vector.hx();
+                double dy = vector.hy();
+                double dz = vector.hz();
+                vector = IK::Vector_3(
+                    (dx / d),
+                    (dy / d),
+                    (dz / d));
+                rc = true;
+            }
+            return rc;
+        }
+
+        CGAL::Aff_transformation_3<IK> plane_to_xy(const IK::Point_3 &origin, const IK::Plane_3 &plane)
+        {
+            // Vectors must be unitized, else the result is wrong
+            auto x_axis = plane.base1();
+            auto y_axis = plane.base2();
+            auto z_axis = plane.orthogonal_vector();
+            internal::unitize(x_axis);
+            internal::unitize(y_axis);
+            internal::unitize(z_axis);
+
+            // Move to origin -> T0 translates point P0 to (0,0,0)
+            CGAL::Aff_transformation_3<IK> t(CGAL::TRANSLATION, IK::Vector_3(-origin.x(), -origin.y(), -origin.z()));
+
+            // Rotate ->
+            CGAL::Aff_transformation_3<IK> f(
+                x_axis.x(), x_axis.y(), x_axis.z(),
+                y_axis.x(), y_axis.y(), y_axis.z(),
+                z_axis.x(), z_axis.y(), z_axis.z());
+
+            return f * t;
+        }
+                
         float ccw(const IK::Point_3 &a, const IK::Point_3 &b, const IK::Point_3 &c)
         {
             return (b.x() - a.x()) * (c.y() - a.y()) - (b.y() - a.y()) * (c.x() - a.x());
@@ -92,16 +178,9 @@ namespace cgal_rectangle_util
             return IK::Point_3(point.hx() * std::cos(angle) - point.hy() * std::sin(angle), point.hx() * std::sin(angle) + point.hy() * std::cos(angle), 0);
         }
 
-        /**
-         * get transformation from 3D to 2D and invcerse from a polyline
-         * the 3D plane is computed from the start point of the polyline
-         * and an the sum of the consecutive edges cross products
-         *
-         * @param [in] polyline input CGAL polyline
-         * @param [out] xform_to_xy transformation from 3D to XY
-         * @param [out] xform_to_xy_inv transformation from XY to 3D
-         * @return returns true if the polyline has more than 3 points, else not valid
-         */
+
+
+
         bool orient_polyline_to_xy_and_back(CGAL_Polyline &polyline, CGAL::Aff_transformation_3<IK> &xform_to_xy, CGAL::Aff_transformation_3<IK> &xform_to_xy_inv)
         {
 
@@ -121,11 +200,13 @@ namespace cgal_rectangle_util
             /////////////////////////////////////////////////////////////////////////////////////
             // Create Transformation and assign outputs
             /////////////////////////////////////////////////////////////////////////////////////
-            xform_to_xy = cgal_xform_util::plane_to_xy(polyline[0], plane);
+            xform_to_xy = internal::plane_to_xy(polyline[0], plane);
             xform_to_xy_inv = xform_to_xy.inverse();
             return true;
         }
-    }
+
+        
+   }
 
     CGAL_Polyline quick_hull(const CGAL_Polyline &v)
     {
@@ -188,7 +269,7 @@ namespace cgal_rectangle_util
         CGAL::Iso_rectangle_2<IK> rectangle(p0, p1);
         double min_angle = 0;
 
-        for (int i = 0; i < hull_points.size(); i++)
+        for (size_t i = 0; i < hull_points.size(); i++)
         {
 
             /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -334,7 +415,7 @@ namespace cgal_rectangle_util
             CGAL::Iso_rectangle_2<IK> rectangle(p0, p1);
             double min_angle = 0;
 
-            for (int i = 0; i < hull_points.size(); i++)
+            for (size_t i = 0; i < hull_points.size(); i++)
             {
 
                 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -442,7 +523,7 @@ namespace cgal_rectangle_util
             /////////////////////////////////////////////////////////////////////////////////////
             Clipper2Lib::Path64 polyline_clipper(polygon_copy.size() - 1);
 
-            for (int i = 0; i < polygon_copy.size() - 1; i++)
+            for (size_t i = 0; i < polygon_copy.size() - 1; i++)
             {
                 polyline_clipper[i] = Clipper2Lib::Point64((int)(polygon_copy[i].x() * 1e6), (int)(polygon_copy[i].y() * 1e6));
             }

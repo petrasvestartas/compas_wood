@@ -20,6 +20,7 @@
 
 #ifndef RTREE_UTIL_H
 #define RTREE_UTIL_H
+
 namespace rtree_util
 {
 

@@ -66,10 +66,8 @@ ext_modules = [
                 "src/frontend/src/wood/include/wood_globals.cpp",
                 "src/frontend/src/wood/include/wood_xml.cpp",
                 "src/frontend/src/wood/include/cgal_box_util.cpp",
-                "src/frontend/src/wood/include/rtree_util.cpp",
                 "src/frontend/src/wood/include/cgal_inscribe_util.cpp",
                 "src/frontend/src/wood/include/cgal_intersection_util.cpp",
-                "src/frontend/src/wood/include/cgal_xform_util.cpp",
                 "src/frontend/src/wood/include/cgal_math_util.cpp",
                 "src/frontend/src/wood/include/cgal_mesh_boolean.cpp",
                 "src/frontend/src/wood/include/cgal_plane_util.cpp",
@@ -87,8 +85,11 @@ ext_modules = [
             ]
         ),
         include_dirs=[
-            # 3rd_party | Clipper2Lib
-            "src/frontend/src/3rd_party/Clipper2Lib/include/",
+            # 3rd_party | Clipper2Lib | CGAL
+            "src/frontend/src/3rd_party/Clipper2Lib/include/",      
+            # "src/frontend/src/3rd_party/CGAL/",
+            # "src/frontend/src/3rd_party/CGAL/include/",
+            # "src/frontend/src/3rd_party/CGAL/auxiliary/gmp/include/",
             # precompiled header
             "src/frontend/",
             # wrapper of the wood library | converters

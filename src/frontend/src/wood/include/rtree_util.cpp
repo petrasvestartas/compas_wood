@@ -1,6 +1,6 @@
 
-#include "../../../stdafx.h" //go up to the folder where the CMakeLists.txt is
 
+#include "../../../stdafx.h" //go up to the folder where the CMakeLists.txt is
 
 #include "rtree_util.h"
 
@@ -12,7 +12,7 @@ namespace rtree_util
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Main geometry methods used in rtree to be used as self-contained header and source file
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        IK::Point_3 point_at(const IK::Segment_3 &line, const double &t)
+        IK::Point_3 point_at(const IK::Segment_3& line, const double& t)
         {
             const double s = 1.0 - t;
 
@@ -22,7 +22,7 @@ namespace rtree_util
                 (line[0].z() == line[1].z()) ? line[0].z() : s * line[0].z() + t * line[1].z());
         }
 
-        bool closest_point_to(const IK::Point_3 &point, const IK::Segment_3 &line, double &t)
+        bool closest_point_to(const IK::Point_3& point, const IK::Segment_3& line, double& t)
         {
             bool rc = false;
 
@@ -47,7 +47,7 @@ namespace rtree_util
             return rc;
         }
 
-        double get_closest_distance(const IK::Point_3 &point, CGAL_Polyline &polyline, size_t &edge_id)
+        double get_closest_distance(const IK::Point_3& point, CGAL_Polyline& polyline, size_t& edge_id)
         {
             edge_id = 0;
             IK::Segment_3 segment(polyline[0], polyline[1]);
@@ -76,9 +76,9 @@ namespace rtree_util
     }
 
     void find_closest_plateside_to_line(
-        std::vector<CGAL_Polyline> &input_polyline_pairs,
-        std::vector<IK::Segment_3> &input_insertion_lines,
-        std::vector<std::vector<IK::Vector_3>> &output_insertion_vectors)
+        std::vector<CGAL_Polyline>& input_polyline_pairs,
+        std::vector<IK::Segment_3>& input_insertion_lines,
+        std::vector<std::vector<IK::Vector_3>>& output_insertion_vectors)
     {
         // Create a container to store full empty insertion vectors
         size_t n = (size_t)(input_polyline_pairs.size() * 0.5);
@@ -101,12 +101,12 @@ namespace rtree_util
             CGAL_Polyline twoPolylines;
             twoPolylines.reserve(input_polyline_pairs[i * 2].size() + input_polyline_pairs[i * 2 + 1].size());
 
-            for (auto &p : input_polyline_pairs[i * 2])
+            for (auto& p : input_polyline_pairs[i * 2])
             {
                 twoPolylines.emplace_back(p);
             }
 
-            for (auto &p : input_polyline_pairs[i * 2 + 1])
+            for (auto& p : input_polyline_pairs[i * 2 + 1])
             {
                 twoPolylines.emplace_back(p);
             }
@@ -120,8 +120,8 @@ namespace rtree_util
 
             AABB = CGAL::bbox_3(AABB_Min_Max.begin(), AABB_Min_Max.end(), IK());
 
-            double min[3] = {AABB.xmin(), AABB.ymin(), AABB.zmin()};
-            double max[3] = {AABB.xmax(), AABB.ymax(), AABB.zmax()};
+            double min[3] = { AABB.xmin(), AABB.ymin(), AABB.zmin() };
+            double max[3] = { AABB.xmax(), AABB.ymax(), AABB.zmax() };
             tree.Insert(min, max, i);
         }
 
@@ -168,11 +168,11 @@ namespace rtree_util
                 return true;
             };
 
-            CGAL_Polyline pline{input_insertion_lines[i][0], input_insertion_lines[i][1]};
+            CGAL_Polyline pline{ input_insertion_lines[i][0], input_insertion_lines[i][1] };
             CGAL::Bbox_3 AABB = CGAL::bbox_3(pline.begin(), pline.end(), IK());
 
-            double min[3] = {AABB.xmin() - wood_globals::DISTANCE, AABB.ymin() - wood_globals::DISTANCE, AABB.zmin() - wood_globals::DISTANCE};
-            double max[3] = {AABB.xmax() + wood_globals::DISTANCE, AABB.ymax() + wood_globals::DISTANCE, AABB.zmax() + wood_globals::DISTANCE};
+            double min[3] = { AABB.xmin() - wood_globals::DISTANCE, AABB.ymin() - wood_globals::DISTANCE, AABB.zmin() - wood_globals::DISTANCE };
+            double max[3] = { AABB.xmax() + wood_globals::DISTANCE, AABB.ymax() + wood_globals::DISTANCE, AABB.zmax() + wood_globals::DISTANCE };
             auto nhits = tree.Search(min, max, callback); // callback in this method call callback above
         }
 
@@ -181,10 +181,10 @@ namespace rtree_util
     }
 
     void find_closest_plateside_to_indexedpoint(
-        std::vector<CGAL_Polyline> &input_polyline_pairs,
-        std::vector<IK::Point_3> &input_points,
-        std::vector<int> &input_points_types,
-        std::vector<std::vector<int>> &output_joint_types)
+        std::vector<CGAL_Polyline>& input_polyline_pairs,
+        std::vector<IK::Point_3>& input_points,
+        std::vector<int>& input_points_types,
+        std::vector<std::vector<int>>& output_joint_types)
     {
         // Create a container to store full empty insertion vectors
         size_t n = (size_t)(input_polyline_pairs.size() * 0.5);
@@ -210,10 +210,10 @@ namespace rtree_util
             CGAL_Polyline twoPolylines;
             twoPolylines.reserve(input_polyline_pairs[i * 2].size() + input_polyline_pairs[i * 2 + 1].size());
 
-            for (auto &p : input_polyline_pairs[i * 2])
+            for (auto& p : input_polyline_pairs[i * 2])
                 twoPolylines.emplace_back(p);
 
-            for (auto &p : input_polyline_pairs[i * 2 + 1])
+            for (auto& p : input_polyline_pairs[i * 2 + 1])
                 twoPolylines.emplace_back(p);
 
             CGAL::Bbox_3 AABB = CGAL::bbox_3(twoPolylines.begin(), twoPolylines.end(), IK());
@@ -225,8 +225,8 @@ namespace rtree_util
 
             AABB = CGAL::bbox_3(AABB_Min_Max.begin(), AABB_Min_Max.end(), IK());
 
-            double min[3] = {AABB.xmin(), AABB.ymin(), AABB.zmin()};
-            double max[3] = {AABB.xmax(), AABB.ymax(), AABB.zmax()};
+            double min[3] = { AABB.xmin(), AABB.ymin(), AABB.zmin() };
+            double max[3] = { AABB.xmax(), AABB.ymax(), AABB.zmax() };
             tree.Insert(min, max, i);
         }
 
@@ -271,8 +271,8 @@ namespace rtree_util
                 return true;
             };
 
-            double min[3] = {input_points[i].hx() - wood_globals::DISTANCE, input_points[i].hy() - wood_globals::DISTANCE, input_points[i].hz() - wood_globals::DISTANCE};
-            double max[3] = {input_points[i].hx() + wood_globals::DISTANCE, input_points[i].hy() + wood_globals::DISTANCE, input_points[i].hz() + wood_globals::DISTANCE};
+            double min[3] = { input_points[i].hx() - wood_globals::DISTANCE, input_points[i].hy() - wood_globals::DISTANCE, input_points[i].hz() - wood_globals::DISTANCE };
+            double max[3] = { input_points[i].hx() + wood_globals::DISTANCE, input_points[i].hy() + wood_globals::DISTANCE, input_points[i].hz() + wood_globals::DISTANCE };
             auto nhits = tree.Search(min, max, callback); // callback in this method call callback above
         }
 

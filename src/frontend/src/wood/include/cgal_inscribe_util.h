@@ -137,6 +137,28 @@ namespace cgal_inscribe_util
          * @return returns true if the polyline has more than 3 points, else not valid
          */
         bool orient_polyline_to_xy_and_back(CGAL_Polyline &polyline, CGAL::Aff_transformation_3<IK> &xform_to_xy, CGAL::Aff_transformation_3<IK> &xform_to_xy_inv);
+
+        /**
+         * transformation matrix, orient from xy plane to plane
+         *
+         * @param [in] origin plane oint
+         * @param [in] x_axis x_axis, that is non-unitized
+         * @param [in] y_axis y_axis, that is non-unitized
+         * @param [in] z_axis z_axis, that is non-unitized
+         * @return CGAL 4x4 transformation matrix https://doc.cgal.org/latest/Kernel_23/classCGAL_1_1Aff__transformation__3.html
+         */
+        CGAL::Aff_transformation_3<IK> xy_to_plane(const IK::Vector_3 &origin, const IK::Vector_3 &x_axis, const IK::Vector_3 &y_axis, const IK::Vector_3 &z_axis);
+
+
+
+        /**
+         * transformation matrix, rotate geometry around a vector, the vector start at the origin (0,0,0)
+         *
+         * @param [in] angle angle in radians
+         * @param [in] axis direction of rotation
+         * @return CGAL 4x4 transformation matrix https://doc.cgal.org/latest/Kernel_23/classCGAL_1_1Aff__transformation__3.html
+         */
+        CGAL::Aff_transformation_3<IK> axis_rotation(const double &angle, const IK::Vector_3 &axis);
     }
 
     /**

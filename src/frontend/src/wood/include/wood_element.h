@@ -35,10 +35,13 @@
 // conic = '9'
 
 // #include "../../stdafx.h"
-#include "wood_joint.h"
 
 #ifndef WOOD_ELEMENT_H
 #define WOOD_ELEMENT_H
+
+#include "wood_joint.h"
+
+
 namespace wood
 {
     class element

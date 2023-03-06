@@ -3,9 +3,11 @@
 
 #define WOOD_WRAPPER
 
-#ifdef __clang__
-#define CATCH_CONFIG_NO_CPP17_UNCAUGHT_EXCEPTIONS
-#endif
+
+#ifndef STDAFX_H
+#define STDAFX_H
+
+
 // #define CGAL_NO_ASSERTIONS
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // STD
@@ -46,6 +48,22 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // CGAL
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+// https://github.com/CGAL/cgal/issues/7301 mac assertions error:
+#include <CGAL/assertions.h>
+
+#ifdef CGAL_destructor_assertion
+#undef CGAL_destructor_assertion
+#define CGAL_destructor_assertion(EX) \
+     ((!CGAL::get_use_assertions() || CGAL::possibly(EX)||std::uncaught_exception())?(static_cast<void>(0)): ::CGAL::assertion_fail( # EX , __FILE__, __LINE__))
+#endif
+
+#ifdef CGAL_destructor_assertion_catch
+#undef CGAL_destructor_assertion_catch
+#define CGAL_destructor_assertion_catch(CODE) try{ CODE } catch(...) { if(!std::uncaught_exception()) throw; }
+#endif
+
+
 //#include <boost/exception/diagnostic_information.hpp>
 
 //  CGAL predicates https://github.com/CGAL/cgal/discussions/6946
@@ -123,7 +141,7 @@ typedef CGALCDT::Face_handle Face_handle;
 // WOOD RTREE
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 #include "rtree.h"
-
+#include "rtree_util.h" // here is duplicate symbols
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // WOOD
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -143,7 +161,8 @@ typedef CGALCDT::Face_handle Face_handle;
 #include "clipper_util.h"
 #include "cgal_polyline_util.h"
 #include "cgal_rectangle_util.h"
-#include "rtree_util.h"
+
+
 #include "wood_cut.h"
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -159,3 +178,9 @@ namespace py = pybind11;       // minimal includes for pybind11
 
 using RowMatrixXd = Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor>;
 using RowMatrixXi = Eigen::Matrix<int, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor>;
+
+#ifdef __clang__
+#define CATCH_CONFIG_NO_CPP17_UNCAUGHT_EXCEPTIONS
+#endif
+
+#endif

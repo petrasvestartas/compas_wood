@@ -1440,7 +1440,7 @@ namespace wood_main
         // Create RTree
         //////////////////////////////////////////////////////////////////////////////
 
-        RTree<int, double, 3> tree;
+        RTree<int, double, 3> r_tree;
 
         //////////////////////////////////////////////////////////////////////////////
         // Insert AABB
@@ -1450,7 +1450,7 @@ namespace wood_main
         {
             double min[3] = {elements[i].aabb.xmin(), elements[i].aabb.ymin(), elements[i].aabb.zmin()};
             double max[3] = {elements[i].aabb.xmax(), elements[i].aabb.ymax(), elements[i].aabb.zmax()};
-            tree.Insert(min, max, i);
+            r_tree.Insert(min, max, i);
         }
 
         //////////////////////////////////////////////////////////////////////////////
@@ -1474,7 +1474,7 @@ namespace wood_main
 
             double min[3] = {elements[i].aabb.xmin(), elements[i].aabb.ymin(), elements[i].aabb.zmin()};
             double max[3] = {elements[i].aabb.xmax(), elements[i].aabb.ymax(), elements[i].aabb.zmax()};
-            int nhits = tree.Search(min, max, callback); // callback in this method call callback above
+            int nhits = r_tree.Search(min, max, callback); // callback in this method call callback above
         }
     }
 
@@ -2198,8 +2198,9 @@ namespace wood_main
         catch (...)
         {
             printf("\nCPP   FILE %s    METHOD %s   LINE %i     WHAT %s ", __FILE__, __FUNCTION__, __LINE__, "Error in get_elements");
-            return;
         }
+
+        return;
 
 #ifdef DEBUG_MEASURE_TIME
         auto end = std::chrono::high_resolution_clock::now();

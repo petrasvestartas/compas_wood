@@ -159,9 +159,9 @@ namespace compas_wood
         std::vector<std::vector<int>> &pybind11_input_three_valence_element_indices_and_instruction,
         std::vector<int> &pybind11_input_adjacency,
         std::vector<double> &pybind11_wood_globals_JOINTS_PARAMETERS_AND_TYPES,
-        int &search_type,
-        std::vector<double> &scale,
-        int &output_type,
+        int &_search_type,
+        std::vector<double> &_scale,
+        int &_output_type,
         // output
         std::vector<std::vector<std::vector<double>>> &pybind11_output_plines,
         std::vector<std::vector<int>> &pybind11_output_types)
@@ -179,14 +179,26 @@ namespace compas_wood
         // The filename of the xml file and the screenshot directory
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+        printf("CPP 1");
+
         std::vector<std::vector<IK::Point_3>> input_polyline_pairs;
         python_to_cpp__cpp_to_python::coord_to_vector_of_polylines(pybind11_input_polyline_pairs, input_polyline_pairs);
-
+        printf("CPP 2");
         std::vector<std::vector<IK::Vector_3>> input_insertion_vectors;
-        python_to_cpp__cpp_to_python::coord_to_vector_of_vectors(pybind11_input_insertion_vectors, input_insertion_vectors);
+        // python_to_cpp__cpp_to_python::coord_to_vector_of_vectors(pybind11_input_insertion_vectors, input_insertion_vectors);
+        printf("CPP 3");
 
-        wood_globals::JOINTS_PARAMETERS_AND_TYPES = pybind11_wood_globals_JOINTS_PARAMETERS_AND_TYPES;
-        wood_globals::OUTPUT_GEOMETRY_TYPE = output_type;
+        std::vector<std::vector<int>> input_JOINTS_TYPES;
+        std::vector<std::vector<int>> input_three_valence_element_indices_and_instruction;
+        std::vector<int> input_adjacency;
+
+        int search_type=0;
+        std::vector<double> scale{1,1,1};
+        int output_type = 3;
+
+        // wood_globals::JOINTS_PARAMETERS_AND_TYPES = pybind11_wood_globals_JOINTS_PARAMETERS_AND_TYPES;
+        // wood_globals::OUTPUT_GEOMETRY_TYPE = output_type;
+        printf("CPP 4");
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Main Method of Wood
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -194,29 +206,37 @@ namespace compas_wood
         std::vector<std::vector<wood_cut::cut_type>> output_types;
         std::vector<std::vector<int>> top_face_triangulation;
 
-        wood_main::get_connection_zones(
-            // input
-            input_polyline_pairs,
-            input_insertion_vectors,
-            pybind11_input_JOINTS_TYPES,
-            pybind11_input_three_valence_element_indices_and_instruction,
-            pybind11_input_adjacency,
-            // output
-            output_plines,
-            output_types,
-            top_face_triangulation,
-            // Global Parameters
-            wood_globals::JOINTS_PARAMETERS_AND_TYPES,
-            scale,
-            search_type,
-            wood_globals::OUTPUT_GEOMETRY_TYPE,
-            0);
 
-        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        // Convert polylines to double vector and cut types to int vector
-        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        python_to_cpp__cpp_to_python::nested_vector_of_polylines_to_coord(output_plines, pybind11_output_plines);
-        python_to_cpp__cpp_to_python::nested_vector_of_cut_type_to_nested_vector_of_int(output_types, pybind11_output_types); // only filled when 3rd output type is uesd
+
+
+
+        printf("CPP 5");
+ 
+        wood_main::get_connection_zones(
+                // input
+                input_polyline_pairs,
+                input_insertion_vectors,
+                input_JOINTS_TYPES,
+                input_three_valence_element_indices_and_instruction,
+                input_adjacency,
+                // output
+                output_plines,
+                output_types,
+                top_face_triangulation,
+                // Global Parameters
+                wood_globals::JOINTS_PARAMETERS_AND_TYPES,
+                scale,
+                search_type,
+                wood_globals::OUTPUT_GEOMETRY_TYPE,
+                0);
+
+        printf("CPP 6");
+        // ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // // Convert polylines to double vector and cut types to int vector
+        // ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // python_to_cpp__cpp_to_python::nested_vector_of_polylines_to_coord(output_plines, pybind11_output_plines);
+        // python_to_cpp__cpp_to_python::nested_vector_of_cut_type_to_nested_vector_of_int(output_types, pybind11_output_types); // only filled when 3rd output type is uesd
+        // printf("CPP 7");
     }
 
     void closed_mesh_from_polylines_vnf(
@@ -266,7 +286,7 @@ namespace compas_wood
         // Insert AABB
         //////////////////////////////////////////////////////////////////////////////
 
-        for (int i = 0; i < e.size(); i++)
+        for (size_t i = 0; i < e.size(); i++)
         {
             double min[3] = {e[i].aabb.xmin(), e[i].aabb.ymin(), e[i].aabb.zmin()};
             double max[3] = {e[i].aabb.xmax(), e[i].aabb.ymax(), e[i].aabb.zmax()};
@@ -278,7 +298,7 @@ namespace compas_wood
         //////////////////////////////////////////////////////////////////////////////
         elements_neighbours.reserve(e.size());
 
-        for (int i = 0; i < e.size(); i++)
+        for (size_t i = 0; i < e.size(); i++)
         {
 
             std::vector<int> element_neigbhours;
@@ -308,7 +328,7 @@ namespace compas_wood
         //////////////////////////////////////////////////////////////////////////////
         elements_AABB.reserve(e.size());
 
-        for (int i = 0; i < e.size(); i++)
+        for (size_t i = 0; i < e.size(); i++)
         {
 
             elements_AABB.emplace_back(std::vector<double>());
@@ -353,7 +373,7 @@ namespace compas_wood
 
         elements_OOBB.reserve(e.size());
 
-        for (int i = 0; i < e.size(); i++)
+        for (size_t i = 0; i < e.size(); i++)
         {
             elements_OOBB.emplace_back(std::vector<double>());
             elements_OOBB.back().reserve(24);

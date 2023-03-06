@@ -12,6 +12,8 @@ from compas.geometry import Frame
 from compas.geometry import Box
 import time
 
+
+
 # from wood_pybind11 import test
 # from wood_pybind11 import read_xml_polylines
 # from wood_pybind11 import read_xml_polylines_and_properties
@@ -503,11 +505,11 @@ def get_connection_zones(
     # convert compas polylines to nested vector of doubles
     ###################################################################################################
 
-    _input_polyline_pairs_coord = WoodNestedVectorDouble([])
-    _input_insertion_vectors_coord = WoodNestedVectorDouble([])
-    _input_joints_types = WoodNestedVectorInt([])
-    _input_three_valence_element_indices_and_instruction = WoodNestedVectorInt([])
-    _input_adjacency = WoodVectorInt([])
+    _input_polyline_pairs_coord = WoodNestedVectorDouble()
+    _input_insertion_vectors_coord = WoodNestedVectorDouble()
+    _input_joints_types = WoodNestedVectorInt()
+    _input_three_valence_element_indices_and_instruction = WoodNestedVectorInt()
+    _input_adjacency = WoodVectorInt()
 
     _input_polyline_pairs_coord = polylines_to_WoodNestedVectorDouble(
         input_polyline_pairs
@@ -581,6 +583,19 @@ def get_connection_zones(
     print(
         "\n___________________________________start_of_WOOD_____________________________________"
     )
+    
+    # print(_input_polyline_pairs_coord)
+    # print(_input_insertion_vectors_coord)
+    # print(_input_joints_types)
+    # print(_input_three_valence_element_indices_and_instruction)
+    # print(_input_adjacency)
+    # print(_joint_parameters_and_types)
+    # print(search_type)
+    # print(_scale)
+    # print(output_type)
+    # print(_output_plines)
+    # print(_output_types)
+    
     start_time = time.time()
     wood_pybind11.get_connection_zones(
         # input

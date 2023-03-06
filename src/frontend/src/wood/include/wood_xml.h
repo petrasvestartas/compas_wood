@@ -1,7 +1,9 @@
-#include "wood_cut.h"
-
 #ifndef WOOD_XML_H
 #define WOOD_XML_H
+
+#include "wood_cut.h"
+
+
 
 namespace wood_xml
 {
