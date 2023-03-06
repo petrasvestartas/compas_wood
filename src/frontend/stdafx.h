@@ -51,7 +51,7 @@
 
 // https://github.com/CGAL/cgal/issues/7301 mac assertions error:
 
-#ifdef __apple__
+#ifdef TARGET_OS_MAC 
 #include <CGAL/assertions.h>
 
 #ifdef CGAL_destructor_assertion
