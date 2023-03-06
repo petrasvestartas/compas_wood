@@ -51,13 +51,13 @@
 
 // https://github.com/CGAL/cgal/issues/7301 mac assertions error:
 
-#ifdef(__apple__)
+#ifdef __apple__
 #include <CGAL/assertions.h>
 
 #ifdef CGAL_destructor_assertion
 #undef CGAL_destructor_assertion
 #define CGAL_destructor_assertion(EX) \
-        ((!CGAL::get_use_assertions() || CGAL::possibly(EX)||std::uncaught_exception())?(static_cast<void>(0)): ::CGAL::assertion_fail( # EX , __FILE__, __LINE__))
+            ((!CGAL::get_use_assertions() || CGAL::possibly(EX)||std::uncaught_exception())?(static_cast<void>(0)): ::CGAL::assertion_fail( # EX , __FILE__, __LINE__))
 #endif
 
 #ifdef CGAL_destructor_assertion_catch
