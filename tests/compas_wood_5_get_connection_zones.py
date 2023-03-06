@@ -1,5 +1,4 @@
-
-import faulthandler; faulthandler.enable()
+# import faulthandler; faulthandler.enable()
 # /Applications/anaconda3/envs/wood-dev/bin/python -Xfaulthandler /Users/vestarta/Documents/compas_wood/tests/compas_wood_5_get_connection_zones.py
 # PYTHONFAULTHANDLER=1 /Applications/anaconda3/envs/wood-dev/bin/python /Users/vestarta/Documents/compas_wood/tests/compas_wood_5_get_connection_zones.py
 
@@ -7,7 +6,6 @@ import faulthandler; faulthandler.enable()
 from compas_wood.joinery import get_connection_zones
 import data_set_plates
 from compas_wood.viewer_helpers import display
-
 
 
 def test_connection_detection():
@@ -43,28 +41,20 @@ def test_connection_detection():
     #     None,
     #     joint_parameters,
     # )
-    
-    input = data_set_plates.annen_small_polylines()
+
     result = get_connection_zones(
-        input,
-        None,
-        None,
-        None,
+        data_set_plates.annen_small_polylines(),
+        data_set_plates.annen_small_edge_directions(),
+        data_set_plates.annen_small_edge_joints(),
+        data_set_plates.annen_small_three_valance_element_indices_and_instruction(),
         None,
         joint_parameters,
     )
 
-    # mesh polylines
-    # meshes = []
-    # for i in range(len(result)):
-    #     mesh_result = closed_mesh_from_polylines(result[i])
-    #     meshes.append(mesh_result)
-    # display(result_flat_list, None, meshes, 0.01, 0, 0, 0, False)
-
     # display
     result_flat_list = [item for sublist in result for item in sublist]
+    print(result_flat_list)
     display(result_flat_list, None, None, 0.001, 0, 0, 0, False)
 
 
 test_connection_detection()
-
