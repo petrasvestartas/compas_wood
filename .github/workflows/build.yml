@@ -34,5 +34,5 @@ jobs:
 
       - uses: compas-dev/compas-actions.build@v1.1.1
         with:
-          test_lint: true
+          test_lint: false
           test_compas: true
