@@ -155,7 +155,7 @@ def linkcode_resolve(domain, info):
     else:
         return None
 
-    return f"https://github.com/ibois-epfl/compas_wood/blob/master/src/{filename}.py#L{lineno}"
+    return f"https://github.com/petrasvestartas/compas_wood/blob/master/src/{filename}.py#L{lineno}"
 
 
 # extlinks
@@ -172,9 +172,9 @@ html_theme_options = {
     "package_title": project,
     "package_version": release,
     "package_author": "Petras Vestartas",
-    "package_docs": "https://ibois-epfl.github.io/compas_wood/",
-    "package_repo": "https://github.com/ibois-epfl/compas_wood",
-    "package_old_versions_txt": "https://ibois_epfl.github.io/compas-wood/doc_versions.txt",
+    "package_docs": "https://petrasvestartas.github.io/compas_wood/",
+    "package_repo": "https://github.com/petrasvestartas/compas_wood",
+    "package_old_versions_txt": "https://petrasvestartas.github.io/compas-wood/doc_versions.txt",
 }
 
 html_context = {}
