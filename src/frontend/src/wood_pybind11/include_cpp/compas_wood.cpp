@@ -179,26 +179,26 @@ namespace compas_wood
         // The filename of the xml file and the screenshot directory
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        printf("CPP 1");
-
+   
         std::vector<std::vector<IK::Point_3>> input_polyline_pairs;
         python_to_cpp__cpp_to_python::coord_to_vector_of_polylines(pybind11_input_polyline_pairs, input_polyline_pairs);
-        printf("CPP 2");
+   
         std::vector<std::vector<IK::Vector_3>> input_insertion_vectors;
-        // python_to_cpp__cpp_to_python::coord_to_vector_of_vectors(pybind11_input_insertion_vectors, input_insertion_vectors);
-        printf("CPP 3");
+        python_to_cpp__cpp_to_python::coord_to_vector_of_vectors(pybind11_input_insertion_vectors, input_insertion_vectors);
 
-        std::vector<std::vector<int>> input_JOINTS_TYPES;
-        std::vector<std::vector<int>> input_three_valence_element_indices_and_instruction;
-        std::vector<int> input_adjacency;
 
-        int search_type=0;
-        std::vector<double> scale{1,1,1};
-        int output_type = 3;
+        std::vector<std::vector<int>> input_JOINTS_TYPES = pybind11_input_JOINTS_TYPES = pybind11_input_JOINTS_TYPES;
+        std::vector<std::vector<int>> input_three_valence_element_indices_and_instruction = pybind11_input_three_valence_element_indices_and_instruction;
+        std::vector<int> input_adjacency = pybind11_input_adjacency;
 
-        // wood_globals::JOINTS_PARAMETERS_AND_TYPES = pybind11_wood_globals_JOINTS_PARAMETERS_AND_TYPES;
-        // wood_globals::OUTPUT_GEOMETRY_TYPE = output_type;
-        printf("CPP 4");
+        int search_type=_search_type;
+        std::vector<double> scale = _scale;
+        int output_type = _output_type;
+
+        wood_globals::JOINTS_PARAMETERS_AND_TYPES = pybind11_wood_globals_JOINTS_PARAMETERS_AND_TYPES;
+        wood_globals::OUTPUT_GEOMETRY_TYPE = output_type;
+
+   
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Main Method of Wood
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -206,11 +206,7 @@ namespace compas_wood
         std::vector<std::vector<wood_cut::cut_type>> output_types;
         std::vector<std::vector<int>> top_face_triangulation;
 
-
-
-
-
-        printf("CPP 5");
+        //printf("CPP 5");
  
         wood_main::get_connection_zones(
                 // input
@@ -230,13 +226,13 @@ namespace compas_wood
                 wood_globals::OUTPUT_GEOMETRY_TYPE,
                 0);
 
-        printf("CPP 6");
-        // ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        // // Convert polylines to double vector and cut types to int vector
-        // ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        // python_to_cpp__cpp_to_python::nested_vector_of_polylines_to_coord(output_plines, pybind11_output_plines);
-        // python_to_cpp__cpp_to_python::nested_vector_of_cut_type_to_nested_vector_of_int(output_types, pybind11_output_types); // only filled when 3rd output type is uesd
-        // printf("CPP 7");
+        //printf("CPP 6");
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Convert polylines to double vector and cut types to int vector
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        python_to_cpp__cpp_to_python::nested_vector_of_polylines_to_coord(output_plines, pybind11_output_plines);
+        python_to_cpp__cpp_to_python::nested_vector_of_cut_type_to_nested_vector_of_int(output_types, pybind11_output_types); // only filled when 3rd output type is uesd
+        //printf("CPP 7");
     }
 
     void closed_mesh_from_polylines_vnf(

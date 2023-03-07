@@ -35,24 +35,19 @@ def test_connection_detection():
     ]
 
     # generate joints
-    # result = get_connection_zones(
-    #     data_set_plates.annen_small_polylines(),
-    #     data_set_plates.annen_small_edge_directions(),
-    #     data_set_plates.annen_small_edge_joints(),
-    #     data_set_plates.annen_small_three_valance_element_indices_and_instruction(),
-    #     None,
-    #     joint_parameters,
-    # )
-    
-    input = data_set_plates.annen_small_polylines()
     result = get_connection_zones(
-        input,
-        None,
-        None,
-        None,
+        data_set_plates.annen_small_polylines(),
+        data_set_plates.annen_small_edge_directions(),
+        data_set_plates.annen_small_edge_joints(),
+        data_set_plates.annen_small_three_valance_element_indices_and_instruction(),
         None,
         joint_parameters,
+        0,
+        [1,1,1],
+        4
+        
     )
+
 
     # mesh polylines
     # meshes = []
@@ -62,7 +57,9 @@ def test_connection_detection():
     # display(result_flat_list, None, meshes, 0.01, 0, 0, 0, False)
 
     # display
+    
     result_flat_list = [item for sublist in result for item in sublist]
+    print(result_flat_list)
     display(result_flat_list, None, None, 0.001, 0, 0, 0, False)
 
 

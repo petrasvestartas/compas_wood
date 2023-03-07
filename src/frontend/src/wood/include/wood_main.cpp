@@ -2200,7 +2200,7 @@ namespace wood_main
             printf("\nCPP   FILE %s    METHOD %s   LINE %i     WHAT %s ", __FILE__, __FUNCTION__, __LINE__, "Error in get_elements");
         }
 
-        return;
+   
 
 #ifdef DEBUG_MEASURE_TIME
         auto end = std::chrono::high_resolution_clock::now();
@@ -2226,6 +2226,8 @@ namespace wood_main
             printf("\nCPP   FILE %s    METHOD %s   LINE %i     WHAT %s ", __FILE__, __FUNCTION__, __LINE__, "Error in adjacency_search");
             return;
         }
+
+       
 
 #ifdef DEBUG_MEASURE_TIME
         end = std::chrono::high_resolution_clock::now();
@@ -2292,6 +2294,8 @@ namespace wood_main
             return;
         }
 
+      
+
 #ifdef DEBUG_MEASURE_TIME
         end = std::chrono::high_resolution_clock::now();
         elapsed = std::chrono::duration_cast<std::chrono::nanoseconds>(end - begin);
@@ -2308,7 +2312,7 @@ namespace wood_main
         //////////////////////////////////////////////////////////////////////////////
         output_plines = std::vector<std::vector<CGAL_Polyline>>(elements.size());
         output_types = std::vector<std::vector<wood_cut::cut_type>>(elements.size());
-
+        
         try
         {
 
@@ -2366,6 +2370,8 @@ namespace wood_main
             printf("\nCPP   FILE %s    METHOD %s   LINE %i     WHAT %s ", __FILE__, __FUNCTION__, __LINE__, "Error in get_joints_geometry");
             return;
         }
+
+     
 
 #ifdef DEBUG_MEASURE_TIME
         end = std::chrono::high_resolution_clock::now();

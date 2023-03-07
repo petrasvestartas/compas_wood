@@ -134,7 +134,6 @@ def display_polylines_as_mesh(viewer, polylines, types, scale=0.01, t=3):
                 viewer.add(
                     out_mesh[i][j],
                     color=out_mesh_colors[i],
-                    show_edges=True,
                     opacity=0.5,
                 )
 
@@ -191,7 +190,7 @@ def display_polylines(
     if collection:
         if len(polylinesScaled):
             viewer.add(
-                Collection(polylinesScaled), linewidth=t, colors=colors, color=(r, g, b)
+                Collection(polylinesScaled), linewidth=t #, colors=colors, color=(r, g, b)
             )
 
         else:
@@ -216,7 +215,6 @@ def display_mesh(viewer, input, scale=0.01, r=0.0, g=0.0, b=0.0, t=1):
         y,
         facecolor=(r, g, b),
         linecolor=(0, 0, 0),
-        show_edges=True,
         opacity=0.5,
         linewidth=1,
         hide_coplanaredges=True,

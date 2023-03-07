@@ -48,7 +48,7 @@ def test_connection_detection():
     for i in range(len(result)):
         mesh_result = closed_mesh_from_polylines(result[i])
         meshes.append(mesh_result)
-    # display(result_flat_list, None, meshes, 0.001, 0, 0, 0, False)
+    display(result_flat_list, None, meshes, 0.001, 0, 0, 0, False)
 
 
 test_connection_detection()
