@@ -62,7 +62,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [x] Create a wrapper in C++ with Pybind11 - In Process
 - [x] Setup the Compas Python Environment that replicates the 2nd step workflow 
 - [ ] update the code for MAC
-- [ ] Produce documentation for MOOC section. Since docs building fails try just build one file or compas_cgal docs
+- [ ] Produce documentation for MOOC section. Since docs building fails try just build one file or compas_wood docs
 - [ ] rewrite Grasshopper components in Python
 - [ ] test on another Windows and mac pc
 - [ ] push package to Conda
