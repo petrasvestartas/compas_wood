@@ -50,19 +50,21 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // https://github.com/CGAL/cgal/issues/7301 mac assertions error:
+
+#ifdef _LIBCPP_AVAILABILITY_UNCAUGHT_EXCEPTIONS 
 #include <CGAL/assertions.h>
 
 #ifdef CGAL_destructor_assertion
 #undef CGAL_destructor_assertion
 #define CGAL_destructor_assertion(EX) \
-     ((!CGAL::get_use_assertions() || CGAL::possibly(EX)||std::uncaught_exception())?(static_cast<void>(0)): ::CGAL::assertion_fail( # EX , __FILE__, __LINE__))
+            ((!CGAL::get_use_assertions() || CGAL::possibly(EX)||std::uncaught_exception())?(static_cast<void>(0)): ::CGAL::assertion_fail( # EX , __FILE__, __LINE__))
 #endif
 
 #ifdef CGAL_destructor_assertion_catch
 #undef CGAL_destructor_assertion_catch
 #define CGAL_destructor_assertion_catch(CODE) try{ CODE } catch(...) { if(!std::uncaught_exception()) throw; }
 #endif
-
+#endif
 
 //#include <boost/exception/diagnostic_information.hpp>
 

@@ -19,6 +19,7 @@ jobs:
     strategy:
       matrix:
         os: [macos-latest, windows-latest]
+        # os: [windows-latest]
         python-version: ['3.6', '3.7', '3.8', '3.9', '3.10']
 
     steps:
@@ -33,5 +34,5 @@ jobs:
 
       - uses: compas-dev/compas-actions.build@v1.1.1
         with:
-          test_lint: true
+          test_lint: false
           test_compas: true

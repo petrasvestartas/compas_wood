@@ -67,7 +67,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [ ] test on another Windows and mac pc
 - [ ] push package to Conda
 - [ ] update c++ code for Linux
-Windows, Mac and Linux
 
 ### Changed
 
