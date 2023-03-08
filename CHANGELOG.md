@@ -61,14 +61,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [x] Create backend in C++ with a Viewer - Finished
 - [x] Create a wrapper in C++ with Pybind11 - In Process
 - [x] Setup the Compas Python Environment that replicates the 2nd step workflow 
-- [ ] update the code for MAC
+- [x] update the code for MAC
 - [ ] Produce documentation for MOOC section. Since docs building fails try just build one file or compas_wood docs
 - [ ] rewrite Grasshopper components in Python
-- [ ] test on another Windows and mac pc
+- [x] test on another Windows and mac pc
 - [ ] push package to Conda
 - [ ] update c++ code for Linux
 
 ### Changed
+
+- [x] Backend has a new data-set: wood_test::type_plates_name_vda_floor_0
 
 ### Removed
 
