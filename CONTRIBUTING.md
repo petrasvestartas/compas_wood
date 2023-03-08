@@ -22,7 +22,7 @@ Contributions are welcome and very much appreciated!
 ### Windows
 
     conda create -n wood-dev python=3.8 mpir mpfr boost-cpp eigen=3.4 cgal-cpp=5.5 pybind11 compas compas_view2 --yes
-     conda create -n wood-dev python=3.8 mpir mpfr boost-cpp eigen=3.4 pybind11 compas compas_view2 --yes
+    conda create -n wood-dev python=3.8 mpir mpfr boost-cpp eigen=3.4 pybind11 compas compas_view2 --yes
     conda activate wood-dev
     git clone https://github.com/petrasvestartas/compas_wood
     cd compas_wood
