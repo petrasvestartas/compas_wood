@@ -13,12 +13,9 @@ on:
 jobs:
   docs:
     runs-on: windows-latest
+      - name: build (windows)
     steps:
       - uses: compas-dev/compas-actions.docs@v2
-        run: |
-          conda install eigen=3.4 boost-cpp mpir mpfr cgal-cpp=5.5 pybind11 compas -y
-          pip install -r requirements-dev.txt
-          invoke docs
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           use_conda: true
