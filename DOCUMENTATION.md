@@ -64,7 +64,7 @@ ___
 ## Part 1 - Create Package
 
 ### Part 1.0 - Install Software:
-* Anaconda
+* Anaconda | run it as administrator | before doing anything run this command: ```conda config --append channels conda-forge```
 * VSCode
 * Github Desktop
 * Git for windows, mac has git installed by default
