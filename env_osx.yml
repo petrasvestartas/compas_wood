@@ -11,5 +11,6 @@ dependencies:
   - cgal-cpp=5.5
   - pybind11
   - compas
+  - compas_view2
   - pip:
     - -r requirements-dev.txt
