@@ -11,11 +11,70 @@ on:
       - main
 
 jobs:
-  docs:
+  build:
+    name: build and deploy docs
     runs-on: windows-latest
+    defaults:
+      run:
+        shell: bash -l {0}
     steps:
-      - uses: compas-dev/compas-actions.docs@v2
+      - uses: actions/checkout@v2
+
+      - uses: conda-incubator/setup-miniconda@v2.0.0
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          use_conda: true
-      
+          miniconda-version: "latest"
+          activate-environment: wood
+          channels: conda-forge
+          python-version: 3.8
+
+      - name: build (windows)
+        run: |
+          conda install mpir mpfr boost-cpp eigen=3.4 cgal-cpp=5.5 pybind11 compas compas_view2 -y
+          pip install -r requirements-dev.txt
+          invoke docs
+
+      - uses: compas-dev/compas-actions.docs@v1.3.0
+        id: docs
+        with:
+          dest: deploy
+          build_to_subfolder: true
+          install_dependencies: false
+          build_docs: false
+
+      - name: Deploy docs
+        if: success() && steps.docs.outputs.commit_type != 'pull'
+        uses: crazy-max/ghaction-github-pages@v2
+        with:
+          target_branch: gh-pages
+          build_dir: deploy
+          keep_history: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    outputs:
+      commit_type: ${{ steps.docs.outputs.commit_type }}
+      current_version: ${{ steps.docs.outputs.current_version }}
+
+  docVersions:
+    needs: build
+    if: needs.build.outputs.commit_type == 'tag'
+    name: update doc versions
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          ref: gh-pages
+
+      - uses: compas-dev/compas-actions.docversions@v1.3.0
+        with:
+          current_version: ${{ needs.build.outputs.current_version }}
+
+      - name: Deploy docs
+        if: success()
+        uses: crazy-max/ghaction-github-pages@v2
+        with:
+          target_branch: gh-pages
+          build_dir: ./
+          keep_history: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
