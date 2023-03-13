@@ -64,7 +64,7 @@ ___
 ## Part 1 - Create Package
 
 ### Part 1.0 - Install Software:
-* Anaconda
+* Anaconda | run it as administrator | before doing anything run this command: ```conda config --append channels conda-forge```
 * VSCode
 * Github Desktop
 * Git for windows, mac has git installed by default
@@ -78,12 +78,12 @@ conda activate wood
 ```
 windows
 ``` 
-conda create -n wood python=3.8 mpir mpfr boost-cpp eigen=3.3 cgal-cpp=5.2 pybind11 compas compas_view2 --yes 
+conda create -n wood python=3.8 mpir mpfr boost-cpp eigen=3.4 cgal-cpp=5.5 pybind11 compas compas_view2 --yes 
 conda activate wood
 ```
 mac
 ```
-conda create -n wood python=3.8 gmp mpfr boost-cpp eigen=3.3 cgal-cpp=5.2 pybind11 compas compas_view2 --yes
+conda create -n wood python=3.8 gmp mpfr boost-cpp eigen=3.4 cgal-cpp=5.5 pybind11 compas compas_view2 --yes
 conda activate wood
 ```
 
