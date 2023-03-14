@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  
+  <title>compas_wood - General Description</title>
+  
+
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+
+  <meta name="author" content="Petras Vestartas" />
+  <meta name="description" content="" />
+
+  <link rel="shortcut icon" href="../_static/images/compas.ico" type="image/x-icon">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.4.0/styles/mono-blue.min.css">
+  <link rel="stylesheet" type="text/css" href="../_static/css/compas.css" />
+  <link rel="stylesheet" type="text/css" href="../_static/css/compas-reference.css" />
+
+  
+  <link rel="next" title="Search Methods" href="search.html" />
+  
+
+  
+  <link rel="prev" title="About" href="../about.html" />
+  
+
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+</head>
+
+<body data-spy="scroll" data-target="#compas-toc">
+  <!-- header -->
+  <header id="header" class="compas-header d-flex align-items-center">
+    <nav class="navbar navbar-expand navbar-dark col flex-column flex-md-row text-center">
+      <!-- brand -->
+      <a class="navbar-brand" href="https://petrasvestartas.github.io/compas_wood/">
+        <img src="../_static/images/compas_icon_white.png" alt="compas_wood" width="48px" height="48px" />
+      </a>
+      <!-- brand -->
+      <!-- primary -->
+      <ul class="navbar-nav">
+        <li class="nav-item active"><a class="nav-link" href="https://petrasvestartas.github.io/compas_wood/">compas_wood</a></li>
+      </ul>
+      <!-- primary -->
+      <ul class="navbar-nav d-none d-md-flex ml-md-auto">
+        <!-- version -->
+        
+        <meta id="doc_versions" data-url="https://petrasvestartas.github.io/compas-wood/doc_versions.txt" data-docs="https://petrasvestartas.github.io/compas_wood/">
+        <li class="nav-item nav-versions dropdown">
+          <a class="nav-item nav-link dropdown-toggle mr-md-2" href="#" id="bd-versions" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            1.0.0
+          </a>
+          <div id="doc_version_list" class="dropdown-menu dropdown-menu-md-right" aria-labelledby="bd-versions"></div>
+        </li>
+        
+        <!-- version -->
+        <!-- social -->
+        <li class="nav-item">
+          <a class="nav-link" href="https://github.com/petrasvestartas/compas_wood" target="_blank">
+            <span class="fab fa-github fa-1x"></span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="http://forum.compas-framework.org" target="_blank">
+            <span class="fab fa-discourse fa-1x"></span>
+          </a>
+        </li>
+        <!-- social -->
+      </ul>
+    </nav>
+  </header>
+  <!-- header -->
+  <!-- main -->
+  <div class="container-fluid">
+    <div class="row">
+      <!-- main -->
+      <main class="col-12 col-md-9 col-xl-7 px-4 px-md-5 pt-2 pb-5 compas-content" role="main">
+        
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb mb-3 bg-white px-0">
+            <li class="breadcrumb-item"><a href="../index.html">compas_wood</a></li>
+            
+            <li class="breadcrumb-item"><a href="../about.html">About</a></li>
+            
+            <!-- <li class="breadcrumb-item active" aria-current="page">General Description</li> -->
+          </ol>
+        </nav>
+        
+
+        
+        
+        <section id="general-description">
+<h1>General Description</h1>
+<section id="scope-pair-wise-connections">
+<h2>Scope - Pair-wise Connections</h2>
+<figure class="figure align-default">
+<img alt="../_images/Slide1.jpg" class="figure-img img-fluid" src="../_images/Slide1.jpg" />
+</figure>
+</section>
+<section id="algorithm-structure">
+<h2>Algorithm Structure</h2>
+<figure class="figure align-default">
+<img alt="../_images/Slide8.jpg" class="figure-img img-fluid" src="../_images/Slide8.jpg" />
+</figure>
+</section>
+<section id="joint-types">
+<h2>Joint Types</h2>
+<dl>
+<dt>Joint parameters are given in a list following this order:</dt><dd><ul>
+<li><p>side-to-side parallel in-plane |  side-to-side parallel | side-to-side out-of-plane |  top-to-side | cross | top-to-top |  side-to-side non-parallel</p></li>
+<li><div class="line-block">
+<div class="line">division length | shift | type |</div>
+</div>
+</li>
+<li><p>{ 1000, 0.5, 1,  1000, 0.5, 10 ,  1000, 0.5, 20 ,  1000, 0.5, 30 ,  1000, 0.5, 40 ,  1000, 0.5, 50 }</p></li>
+</ul>
+</dd>
+<dt>Code implementation:</dt><dd><ul class="simple">
+<li><dl class="simple">
+<dt>how to a custom construct joint</dt><dd><ul>
+<li><p>string, name of a joint e.g. “ss_e_ip_0”</p></li>
+<li><p>std::vector&lt;CGAL_Polyline&gt; m[2] - 2 plines lists, where 1st list are bottom and 2nd are top plines</p></li>
+<li><p>std::vector&lt;CGAL_Polyline&gt; f[2] - 2 plines lists, where 1st list are bottom and 2nd are top plines</p></li>
+<li><p>std::vector&lt;char&gt; - list of boolean types for the “m” array, length matches m list length</p></li>
+<li><p>std::vector&lt;char&gt; - list of boolean types for the “f” array, length matches f list length</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><p><input checked=""  type="checkbox"> joint class that stores adjacency information</p></li>
+<li><p><input checked=""  type="checkbox"> change-basis transformation from unit tile to joint volume defined by two rectangles</p></li>
+<li><p><input checked=""  type="checkbox"> assignment of joints based and search categories and connection types</p></li>
+<li><p><input type="checkbox"> store each parameterized joint inside std::unordered_map&lt;string, joint&gt; that is not remapped yet</p></li>
+</ul>
+</dd>
+</dl>
+<p><strong>Joints in the Joint Library:</strong></p>
+<table class="colwidths-auto table table-bordered docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Types_0</p></th>
+<th class="head"><p>Types_1-9</p></th>
+<th class="head"><p>Types_10-19</p></th>
+<th class="head"><p>Types_20-29</p></th>
+<th class="head"><p>Types_30-39</p></th>
+<th class="head"><p>Types_40-49</p></th>
+<th class="head"><p>Types_50-59</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><strong>skip</strong></p></td>
+<td><p><strong>side-to-side</strong></p></td>
+<td><p><strong>side-to-side</strong></p></td>
+<td><p><strong>top-to-side</strong></p></td>
+<td><p><strong>cross</strong></p></td>
+<td><p><strong>top-to-top</strong></p></td>
+<td><p><strong>side-to-side</strong></p></td>
+</tr>
+<tr class="row-odd"><td></td>
+<td><p><strong>in-plane</strong></p></td>
+<td><p><strong>out-of-plane</strong></p></td>
+<td></td>
+<td></td>
+<td></td>
+<td><p><strong>rotated</strong></p></td>
+</tr>
+<tr class="row-even"><td></td>
+<td><p><strong>default</strong> ss_e_ip_1</p></td>
+<td><p><strong>default</strong> ss_e_op_1</p></td>
+<td><p><strong>default</strong> ts_e_p_3</p></td>
+<td><p><strong>default</strong> cr_c_ip_0</p></td>
+<td><p><strong>default</strong></p></td>
+<td><p><strong>default</strong></p></td>
+</tr>
+<tr class="row-odd"><td></td>
+<td><p>1 - (ss_e_ip_1)</p></td>
+<td><p>10 - (ss_e_op_1)</p></td>
+<td><p>20 - (ts_e_p_1)</p></td>
+<td><p>30 - (cr_c_ip_0)</p></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-even"><td></td>
+<td><p>2 - (ss_e_ip_0)</p></td>
+<td><p>11 - (ss_e_op_2)</p></td>
+<td><p>21 - (ts_e_p_2)</p></td>
+<td><p>31 - (cr_c_ip_1)</p></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td></td>
+<td></td>
+<td><p>12 - (ss_e_op_0)</p></td>
+<td><p>22 - (ts_e_p_3)</p></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-even"><td></td>
+<td></td>
+<td></td>
+<td><p>23 - (ts_e_p_0)</p></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td></td>
+<td><p><strong>custom</strong> 9   ss_e_ip_9</p></td>
+<td><p><strong>custom</strong> 19   ss_e_op_9</p></td>
+<td><p><strong>custom</strong> 29   ts_e_p_9</p></td>
+<td><p><strong>custom</strong> 39   cr_c_ip_9</p></td>
+<td><p><strong>custom</strong> 49   tt_e_p_9</p></td>
+<td><p><strong>custom</strong> 59   ss_e_r_9</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="simple">
+<dt>Joints have two properties m_boolean_type and f_boolean_type to guide the fabrication process:</dt><dd><ul class="simple">
+<li><p><strong>Default</strong> nothing = ‘0’</p></li>
+<li><p><strong>Plates</strong> edge_insertion = ‘1’</p></li>
+<li><p><strong>Plates</strong> hole = ‘2’,</p></li>
+<li><p><strong>Plates</strong> insert_between_multiple_edges = ‘3’</p></li>
+<li><p><strong>Beams</strong> slice = ‘4’ //project and make rectangle</p></li>
+<li><p><strong>Beams</strong> mill = ‘5’,</p></li>
+<li><p><strong>Beams</strong> mill_project = ‘6’ //project</p></li>
+<li><p><strong>Beams</strong> cut = ‘7’</p></li>
+<li><p><strong>Beams</strong> cut_project = ‘8’ //project</p></li>
+<li><p><strong>Beams</strong> binary_slice_mill = ‘9’ //project and make rectangle</p></li>
+</ul>
+</dd>
+</dl>
+<p><strong>Joint: ss_e_op_1 Nejiri Arigata</strong></p>
+<figure class="figure align-default">
+<img alt="../_images/joint_documentation_0.jpg" class="figure-img img-fluid" src="../_images/joint_documentation_0.jpg" />
+</figure>
+<p><strong>Joint: ss_e_op_2 Dovetail</strong></p>
+<figure class="figure align-default">
+<img alt="../_images/joint_documentation_1.jpg" class="figure-img img-fluid" src="../_images/joint_documentation_1.jpg" />
+</figure>
+<p><strong>Joint: ss_e_ip_0 Dovetail</strong></p>
+<figure class="figure align-default">
+<img alt="../_images/joint_documentation_2.jpg" class="figure-img img-fluid" src="../_images/joint_documentation_2.jpg" />
+</figure>
+<p><strong>Joint: tenon mortise ts_e_p_2 (ts_e_p_0 - original) (start and end point of the joint line are skipped)</strong></p>
+<figure class="figure align-default">
+<img alt="../_images/joint_documentation_3.jpg" class="figure-img img-fluid" src="../_images/joint_documentation_3.jpg" />
+</figure>
+<p><strong>Joint: Annen joint - ts_e_p_3 (ts_e_p_2 - original)</strong></p>
+<figure class="figure align-default">
+<img alt="../_images/joint_documentation_4.jpg" class="figure-img img-fluid" src="../_images/joint_documentation_4.jpg" />
+</figure>
+<p><strong>Joint: cr_c_ip_0 cross</strong></p>
+<figure class="figure align-default">
+<img alt="../_images/joint_documentation_5.jpg" class="figure-img img-fluid" src="../_images/joint_documentation_5.jpg" />
+</figure>
+<p><strong>Joint: cr_c_ip_1 conic cross</strong></p>
+<figure class="figure align-default">
+<img alt="../_images/joint_documentation_6.jpg" class="figure-img img-fluid" src="../_images/joint_documentation_6.jpg" />
+</figure>
+<dl class="simple">
+<dt>To-do joints types:</dt><dd><ul class="simple">
+<li><p><input type="checkbox"> snap-fit joint</p></li>
+<li><p><input type="checkbox"> keys</p></li>
+<li><p><input type="checkbox"> tenon-mortise beams</p></li>
+<li><p><input type="checkbox"> tenon-mortise half beam</p></li>
+<li><p><input type="checkbox"> scarf</p></li>
+<li><p><input type="checkbox"> screws</p></li>
+</ul>
+</dd>
+<dt>To-do others:</dt><dd><ul class="simple">
+<li><p><input type="checkbox"> flipping case</p></li>
+<li><p><input type="checkbox">  BLT</p></li>
+</ul>
+</dd>
+</dl>
+</section>
+<section id="element">
+<h2>Element</h2>
+<dl class="simple">
+<dt>Code Implementation:</dt><dd><ul class="simple">
+<li><p>Element is specified as a pair of polylines, with planes for each side, in a beam case it is only a central polylines</p></li>
+<li><p><input checked=""  type="checkbox"> j_mf property track joints (joint id, male/female, parameter on edge)</p></li>
+<li><p><input type="checkbox"> mesh boolean: a) reference shapes, b) joints polygon pairs</p></li>
+</ul>
+</dd>
+<dt>Merge:</dt><dd><ul class="simple">
+<li><p>plate geometry can be merged, for beams boolean difference must be performed</p></li>
+<li><p><input checked=""  type="checkbox"> Insert face joints inside edge</p></li>
+<li><p><input checked=""  type="checkbox"> Insert between multiple edges (open polylines + closed polygons)</p></li>
+<li><p><input type="checkbox"> Cut projection and insert in polygon (case when side-side joints are rotated e.g. butterfly)</p></li>
+<li><p><input type="checkbox"> Mesh boolean: a) reference shapes, b) joints polygon pairs</p></li>
+</ul>
+</dd>
+</dl>
+<figure class="figure align-default">
+<img alt="../_images/merge_1.jpg" class="figure-img img-fluid" src="../_images/merge_1.jpg" />
+</figure>
+<dl class="simple">
+<dt>Grouping:</dt><dd><ul class="simple">
+<li><p><input type="checkbox"> Introduce unordered_map to track grouping like sorted lists x;x;x</p></li>
+</ul>
+</dd>
+</dl>
+</section>
+<section id="presentation">
+<h2>Presentation</h2>
+<section id="element-is-a-list-of-joints">
+<h3>Element is a List of Joints</h3>
+<figure class="figure align-default">
+<img alt="../_images/Slide2.jpg" class="figure-img img-fluid" src="../_images/Slide2.jpg" />
+</figure>
+</section>
+<section id="element-group">
+<h3>Element Group</h3>
+<figure class="figure align-default">
+<img alt="../_images/Slide3.jpg" class="figure-img img-fluid" src="../_images/Slide3.jpg" />
+</figure>
+</section>
+<section id="joint-tiles-undirected-graph-tile-female-male-cuts">
+<h3>Joint - Tiles + Undirected-graph. Tile = Female + Male Cuts</h3>
+<figure class="figure align-default">
+<img alt="../_images/Slide4.jpg" class="figure-img img-fluid" src="../_images/Slide4.jpg" />
+</figure>
+</section>
+<section id="search-connection-detection">
+<h3>Search - Connection Detection</h3>
+<figure class="figure align-default">
+<img alt="../_images/Slide5.jpg" class="figure-img img-fluid" src="../_images/Slide5.jpg" />
+</figure>
+<figure class="figure align-default">
+<img alt="../_images/Slide32.jpg" class="figure-img img-fluid" src="../_images/Slide32.jpg" />
+</figure>
+<figure class="figure align-default">
+<img alt="../_images/Slide34.jpg" class="figure-img img-fluid" src="../_images/Slide34.jpg" />
+</figure>
+<figure class="figure align-default">
+<img alt="../_images/Slide33.jpg" class="figure-img img-fluid" src="../_images/Slide33.jpg" />
+</figure>
+</section>
+<section id="tile-change-of-basis-transformation">
+<h3>Tile - Change-of-basis Transformation</h3>
+<figure class="figure align-default">
+<img alt="../_images/Slide6.jpg" class="figure-img img-fluid" src="../_images/Slide6.jpg" />
+</figure>
+</section>
+<section id="boolean-methods-for-digital-cuts">
+<h3>Boolean Methods for Digital Cuts</h3>
+<figure class="figure align-default">
+<img alt="../_images/Slide7.jpg" class="figure-img img-fluid" src="../_images/Slide7.jpg" />
+</figure>
+</section>
+<section id="side-to-side-topology">
+<h3>Side-to-side Topology</h3>
+<figure class="figure align-default">
+<img alt="../_images/Slide35.jpg" class="figure-img img-fluid" src="../_images/Slide35.jpg" />
+</figure>
+<figure class="figure align-default">
+<img alt="../_images/Slide36.jpg" class="figure-img img-fluid" src="../_images/Slide36.jpg" />
+</figure>
+<figure class="figure align-default">
+<img alt="../_images/Slide44.jpg" class="figure-img img-fluid" src="../_images/Slide44.jpg" />
+</figure>
+<figure class="figure align-default">
+<img alt="../_images/Slide45.jpg" class="figure-img img-fluid" src="../_images/Slide45.jpg" />
+</figure>
+<figure class="figure align-default">
+<img alt="../_images/Slide9.jpg" class="figure-img img-fluid" src="../_images/Slide9.jpg" />
+</figure>
+<figure class="figure align-default">
+<img alt="../_images/Slide10.jpg" class="figure-img img-fluid" src="../_images/Slide10.jpg" />
+</figure>
+<figure class="figure align-default">
+<img alt="../_images/Slide11.jpg" class="figure-img img-fluid" src="../_images/Slide11.jpg" />
+</figure>
+<figure class="figure align-default">
+<img alt="../_images/Slide24.jpg" class="figure-img img-fluid" src="../_images/Slide24.jpg" />
+</figure>
+</section>
+<section id="side-to-top-topology">
+<h3>Side-to-top Topology</h3>
+<figure class="figure align-default">
+<img alt="../_images/Slide41.jpg" class="figure-img img-fluid" src="../_images/Slide41.jpg" />
+</figure>
+<figure class="figure align-default">
+<img alt="../_images/Slide42.jpg" class="figure-img img-fluid" src="../_images/Slide42.jpg" />
+</figure>
+<figure class="figure align-default">
+<img alt="../_images/Slide12.jpg" class="figure-img img-fluid" src="../_images/Slide12.jpg" />
+</figure>
+<figure class="figure align-default">
+<img alt="../_images/Slide43.jpg" class="figure-img img-fluid" src="../_images/Slide43.jpg" />
+</figure>
+<figure class="figure align-default">
+<img alt="../_images/Slide39.jpg" class="figure-img img-fluid" src="../_images/Slide39.jpg" />
+</figure>
+<figure class="figure align-default">
+<img alt="../_images/Slide37.jpg" class="figure-img img-fluid" src="../_images/Slide37.jpg" />
+</figure>
+<figure class="figure align-default">
+<img alt="../_images/Slide38.jpg" class="figure-img img-fluid" src="../_images/Slide38.jpg" />
+</figure>
+<figure class="figure align-default">
+<img alt="../_images/Slide13.jpg" class="figure-img img-fluid" src="../_images/Slide13.jpg" />
+</figure>
+<figure class="figure align-default">
+<img alt="../_images/Slide14.jpg" class="figure-img img-fluid" src="../_images/Slide14.jpg" />
+</figure>
+<figure class="figure align-default">
+<img alt="../_images/Slide15.jpg" class="figure-img img-fluid" src="../_images/Slide15.jpg" />
+</figure>
+<figure class="figure align-default">
+<img alt="../_images/Slide21.jpg" class="figure-img img-fluid" src="../_images/Slide21.jpg" />
+</figure>
+<figure class="figure align-default">
+<img alt="../_images/Slide22.jpg" class="figure-img img-fluid" src="../_images/Slide22.jpg" />
+</figure>
+<figure class="figure align-default">
+<img alt="../_images/Slide27.jpg" class="figure-img img-fluid" src="../_images/Slide27.jpg" />
+</figure>
+<figure class="figure align-default">
+<img alt="../_images/Slide19.jpg" class="figure-img img-fluid" src="../_images/Slide19.jpg" />
+</figure>
+<figure class="figure align-default">
+<img alt="../_images/Slide20.jpg" class="figure-img img-fluid" src="../_images/Slide20.jpg" />
+</figure>
+<figure class="figure align-default">
+<img alt="../_images/Slide28.jpg" class="figure-img img-fluid" src="../_images/Slide28.jpg" />
+</figure>
+<figure class="figure align-default">
+<img alt="../_images/Slide40.jpg" class="figure-img img-fluid" src="../_images/Slide40.jpg" />
+</figure>
+<figure class="figure align-default">
+<img alt="../_images/Slide47.jpg" class="figure-img img-fluid" src="../_images/Slide47.jpg" />
+</figure>
+<figure class="figure align-default">
+<img alt="../_images/Slide23.jpg" class="figure-img img-fluid" src="../_images/Slide23.jpg" />
+</figure>
+<figure class="figure align-default">
+<img alt="../_images/Slide50.jpg" class="figure-img img-fluid" src="../_images/Slide50.jpg" />
+</figure>
+</section>
+<section id="cross-topology">
+<h3>Cross Topology</h3>
+<figure class="figure align-default">
+<img alt="../_images/Slide16.jpg" class="figure-img img-fluid" src="../_images/Slide16.jpg" />
+</figure>
+<figure class="figure align-default">
+<img alt="../_images/Slide48.jpg" class="figure-img img-fluid" src="../_images/Slide48.jpg" />
+</figure>
+<figure class="figure align-default">
+<img alt="../_images/Slide17.jpg" class="figure-img img-fluid" src="../_images/Slide17.jpg" />
+</figure>
+<figure class="figure align-default">
+<img alt="../_images/Slide18.jpg" class="figure-img img-fluid" src="../_images/Slide18.jpg" />
+</figure>
+<figure class="figure align-default">
+<img alt="../_images/Slide29.jpg" class="figure-img img-fluid" src="../_images/Slide29.jpg" />
+</figure>
+<figure class="figure align-default">
+<img alt="../_images/Slide49.jpg" class="figure-img img-fluid" src="../_images/Slide49.jpg" />
+</figure>
+</section>
+<section id="mixed-topology">
+<h3>Mixed Topology</h3>
+<figure class="figure align-default">
+<img alt="../_images/Slide26.jpg" class="figure-img img-fluid" src="../_images/Slide26.jpg" />
+</figure>
+<figure class="figure align-default">
+<img alt="../_images/Slide30.jpg" class="figure-img img-fluid" src="../_images/Slide30.jpg" />
+</figure>
+<figure class="figure align-default">
+<img alt="../_images/Slide31.jpg" class="figure-img img-fluid" src="../_images/Slide31.jpg" />
+</figure>
+<figure class="figure align-default">
+<img alt="../_images/Slide25.jpg" class="figure-img img-fluid" src="../_images/Slide25.jpg" />
+</figure>
+<figure class="figure align-default">
+<img alt="../_images/Slide46.jpg" class="figure-img img-fluid" src="../_images/Slide46.jpg" />
+</figure>
+</section>
+</section>
+</section>
+
+        
+      </main>
+      <!-- content -->
+      <!-- sidebar -->
+      <div class="col-12 col-md-3 compas-sidebar" role="navigation">
+        <form id="search" class="d-flex align-items-center compas-searchbox" action="../search.html" method="get">
+          <input class="form-control" type="text" name="q" placeholder="Search docs" />
+          <input type="hidden" name="check_keywords" value="yes" />
+          <input type="hidden" name="area" value="default" />
+          <button class="navbar-toggler d-md-none" type="button" data-toggle="collapse" data-target="#compas-navigation" aria-controls="compas-navigation" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+        </form>
+        
+        
+        <div id="compas-navigation" class="collapse compas-navigation">
+          <ul class="nav flex-column collapse show active">
+<li class="toctree-l1 nav-item"><a class="nav-link reference internal" href="../index.html">Introduction</a></li>
+<li class="toctree-l1 nav-item active"><a class="nav-link reference internal" href="../about.html">About</a><ul class="nav flex-column collapse show active">
+<li class="toctree-l2 nav-item active"><a class="nav-link active reference internal" href="#">General Description</a></li>
+<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="search.html">Search Methods</a></li>
+</ul>
+</li>
+<li class="toctree-l1 nav-item"><a class="nav-link reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1 nav-item"><a class="nav-link reference internal" href="../examples.html">Examples</a><ul class="nav flex-column collapse">
+<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="../examples/compas_wood_1_test.html">tests/compas_wood_1_test.py</a></li>
+<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="../examples/compas_wood_2_read_xml.html">tests/compas_wood_2_read_xml.py</a></li>
+<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="../examples/compas_wood_3_joints.html">tests/compas_wood_3_joints.py</a></li>
+<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="../examples/compas_wood_4_rtree.html">tests/compas_wood_4_rtree.py</a></li>
+<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="../examples/compas_wood_5_get_connection_zones.html">tests/compas_wood_5_get_connection_zones.py</a></li>
+<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="../examples/compas_wood_6_closed_mesh_from_polylines.html">tests/compas_wood_6_closed_mesh_from_polylines.py</a></li>
+</ul>
+</li>
+<li class="toctree-l1 nav-item"><a class="nav-link reference internal" href="../video_tutorials.html">Video Tutorials</a></li>
+<li class="toctree-l1 nav-item"><a class="nav-link reference internal" href="../api.html">API Reference</a><ul class="nav flex-column collapse">
+<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="../api/compas_wood.html">compas_wood</a><ul class="nav flex-column collapse">
+<li class="toctree-l3 nav-item"><a class="nav-link reference internal" href="../api/generated/compas_wood.joinery.test.html">test</a></li>
+<li class="toctree-l3 nav-item"><a class="nav-link reference internal" href="../api/generated/compas_wood.joinery.read_xml_polylines.html">read_xml_polylines</a></li>
+<li class="toctree-l3 nav-item"><a class="nav-link reference internal" href="../api/generated/compas_wood.joinery.read_xml_polylines_and_properties.html">read_xml_polylines_and_properties</a></li>
+<li class="toctree-l3 nav-item"><a class="nav-link reference internal" href="../api/generated/compas_wood.joinery.get_connection_zones.html">get_connection_zones</a></li>
+<li class="toctree-l3 nav-item"><a class="nav-link reference internal" href="../api/generated/compas_wood.joinery.closed_mesh_from_polylines.html">closed_mesh_from_polylines</a></li>
+<li class="toctree-l3 nav-item"><a class="nav-link reference internal" href="../api/generated/compas_wood.joinery.joints.html">joints</a></li>
+<li class="toctree-l3 nav-item"><a class="nav-link reference internal" href="../api/generated/compas_wood.joinery.rtree.html">rtree</a></li>
+<li class="toctree-l3 nav-item"><a class="nav-link reference internal" href="../api/generated/compas_wood.conversions.WoodVectorInt_to_list.html">WoodVectorInt_to_list</a></li>
+<li class="toctree-l3 nav-item"><a class="nav-link reference internal" href="../api/generated/compas_wood.conversions.list_to_WoodVectorInt.html">list_to_WoodVectorInt</a></li>
+<li class="toctree-l3 nav-item"><a class="nav-link reference internal" href="../api/generated/compas_wood.conversions.WoodNestedVectorInt_to_lists.html">WoodNestedVectorInt_to_lists</a></li>
+<li class="toctree-l3 nav-item"><a class="nav-link reference internal" href="../api/generated/compas_wood.conversions.lists_to_WoodNestedVectorInt.html">lists_to_WoodNestedVectorInt</a></li>
+<li class="toctree-l3 nav-item"><a class="nav-link reference internal" href="../api/generated/compas_wood.conversions.WoodVectorDouble_to_list.html">WoodVectorDouble_to_list</a></li>
+<li class="toctree-l3 nav-item"><a class="nav-link reference internal" href="../api/generated/compas_wood.conversions.list_to_WoodVectorDouble.html">list_to_WoodVectorDouble</a></li>
+<li class="toctree-l3 nav-item"><a class="nav-link reference internal" href="../api/generated/compas_wood.conversions.WoodNestedVectorDouble_to_lists.html">WoodNestedVectorDouble_to_lists</a></li>
+<li class="toctree-l3 nav-item"><a class="nav-link reference internal" href="../api/generated/compas_wood.conversions.lists_to_WoodNestedVectorDouble.html">lists_to_WoodNestedVectorDouble</a></li>
+<li class="toctree-l3 nav-item"><a class="nav-link reference internal" href="../api/generated/compas_wood.conversions.lists_of_vectors_to_WoodNestedVectorDouble.html">lists_of_vectors_to_WoodNestedVectorDouble</a></li>
+<li class="toctree-l3 nav-item"><a class="nav-link reference internal" href="../api/generated/compas_wood.conversions.WoodNestedVectorDouble_to_polylines.html">WoodNestedVectorDouble_to_polylines</a></li>
+<li class="toctree-l3 nav-item"><a class="nav-link reference internal" href="../api/generated/compas_wood.conversions.WoodVectorFloat_and_WoodVectorInt_to_mesh.html">WoodVectorFloat_and_WoodVectorInt_to_mesh</a></li>
+<li class="toctree-l3 nav-item"><a class="nav-link reference internal" href="../api/generated/compas_wood.conversions.polylines_to_WoodNestedVectorDouble.html">polylines_to_WoodNestedVectorDouble</a></li>
+<li class="toctree-l3 nav-item"><a class="nav-link reference internal" href="../api/generated/compas_wood.conversions.WoodNestedVectorDouble_to_vectorslist.html">WoodNestedVectorDouble_to_vectorslist</a></li>
+<li class="toctree-l3 nav-item"><a class="nav-link reference internal" href="../api/generated/compas_wood.conversions.WoodNestedNestedVectorDouble_to_polylineslists.html">WoodNestedNestedVectorDouble_to_polylineslists</a></li>
+<li class="toctree-l3 nav-item"><a class="nav-link reference internal" href="../api/generated/compas_wood.conversions.WoodNestedNestedVectorDouble_to_polylineslist.html">WoodNestedNestedVectorDouble_to_polylineslist</a></li>
+<li class="toctree-l3 nav-item"><a class="nav-link reference internal" href="../api/generated/compas_wood.conversions.WoodVectorDouble_to_box.html">WoodVectorDouble_to_box</a></li>
+<li class="toctree-l3 nav-item"><a class="nav-link reference internal" href="../api/generated/compas_wood.conversions.WoodNestedVectorDouble_to_boxeslist.html">WoodNestedVectorDouble_to_boxeslist</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1 nav-item"><a class="nav-link reference internal" href="../license.html">License</a></li>
+<li class="toctree-l1 nav-item"><a class="nav-link reference internal" href="../citation.html">Citation</a></li>
+</ul>
+
+        </div>
+        
+      </div>
+      <!-- sidebar -->
+      <!-- toc -->
+      <div class="d-none d-xl-block col-xl-2 compas-toc" role="toc">
+        
+        <ul class="nav flex-column" id="compas-toc">
+<li class="nav-item"><a class="nav-link reference internal" href="#">General Description</a><ul class="nav flex-column">
+<li class="nav-item"><a class="nav-link reference internal" href="#scope-pair-wise-connections">Scope - Pair-wise Connections</a></li>
+<li class="nav-item"><a class="nav-link reference internal" href="#algorithm-structure">Algorithm Structure</a></li>
+<li class="nav-item"><a class="nav-link reference internal" href="#joint-types">Joint Types</a></li>
+<li class="nav-item"><a class="nav-link reference internal" href="#element">Element</a></li>
+<li class="nav-item"><a class="nav-link reference internal" href="#presentation">Presentation</a><ul class="nav flex-column">
+<li class="nav-item"><a class="nav-link reference internal" href="#element-is-a-list-of-joints">Element is a List of Joints</a></li>
+<li class="nav-item"><a class="nav-link reference internal" href="#element-group">Element Group</a></li>
+<li class="nav-item"><a class="nav-link reference internal" href="#joint-tiles-undirected-graph-tile-female-male-cuts">Joint - Tiles + Undirected-graph. Tile = Female + Male Cuts</a></li>
+<li class="nav-item"><a class="nav-link reference internal" href="#search-connection-detection">Search - Connection Detection</a></li>
+<li class="nav-item"><a class="nav-link reference internal" href="#tile-change-of-basis-transformation">Tile - Change-of-basis Transformation</a></li>
+<li class="nav-item"><a class="nav-link reference internal" href="#boolean-methods-for-digital-cuts">Boolean Methods for Digital Cuts</a></li>
+<li class="nav-item"><a class="nav-link reference internal" href="#side-to-side-topology">Side-to-side Topology</a></li>
+<li class="nav-item"><a class="nav-link reference internal" href="#side-to-top-topology">Side-to-top Topology</a></li>
+<li class="nav-item"><a class="nav-link reference internal" href="#cross-topology">Cross Topology</a></li>
+<li class="nav-item"><a class="nav-link reference internal" href="#mixed-topology">Mixed Topology</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+      </div>
+      <!-- toc -->
+    </div>
+  </div>
+  <!-- main -->
+  <!-- footer -->
+  <footer class="compas-footer">
+    <nav class="nav p-2">
+      
+      <a href="../about.html" title="About" class="nav-link footer-link float-start text-left d-flex w-50" rel="prev">
+        <div class="nav-button p-2 m-2"><i class="fas fa-arrow-left"></i></div>
+        <div class="nav-title flex-grow-1 align-self-center">
+          <div class="nav-direction small font-weight-light">Previous</div>
+          About
+        </div>
+      </a>
+      
+
+      
+      <a href="search.html" title="Search Methods" class="nav-link footer-link float-end text-right d-flex w-50" rel="next">
+        <div class="nav-title footer-link flex-grow-1 align-self-center">
+          <div class="nav-direction small font-weight-light">Next</div>
+          Search Methods
+        </div>
+        <div class="nav-button p-2 m-2"><i class="fas fa-arrow-right"></i></div>
+      </a>
+      
+    </nav>
+  </footer>
+  <!-- footer -->
+  <!-- below -->
+  <div class="below py-5" style="background-color: #222;">
+    <div class="container">
+      <div class="row flex-column">
+        <div class="col-12 col-md-6 mx-md-auto text-center">
+          <h4 class="pb-3 below-text">COMPAS</h4>
+          <p class="below-text">
+            A computational framework for collaboration and research
+            in Architecture, Engineering, Fabrication, and Construction.
+          </p>
+          <nav class="nav justify-content-center pb-3">
+            <a class="nav-link mx-2 px-0 below-link" href="http://github.com/compas-dev" target="_blank">
+              <span class="fab fa-github fa-1x"></span>
+            </a>
+            <a class="nav-link mx-2 px-0 below-link" href="http://forum.compas-framework.org" target="_blank">
+              <span class="fab fa-discourse fa-1x"></span>
+            </a>
+            <a class="nav-link mx-2 px-0 below-link" href="https://pypi.org/project/COMPAS/" target="_blank">
+              <span class="fab fa-python fa-1x"></span>
+            </a>
+          </nav>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col text-center">
+          <p class="p-0 m-0 below-text">Copyright &copy; 2017-2021 compas-dev</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- below -->
+  <!-- scripts -->
+  <script id="documentation_options" data-url_root="" src="../_static/documentation_options.js"></script>
+
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.4.0/highlight.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/anchor-js/4.0.0/anchor.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.8/clipboard.min.js"></script>
+
+  <script src="../_static/underscore.js"></script>
+  <script src="../_static/doctools.js"></script>
+  <script src="../_static/searchtools.js"></script>
+  <script src="../_static/language_data.js"></script>
+
+  <script>
+    $(document).ready(function () {
+      $(".language-default code").addClass("python");
+      $(".language-python code").addClass("python");
+      $(".language-bash code").addClass("bash");
+      $(".language-cpp code").addClass("cpp");
+      $(".language-json code").addClass("json");
+      $(".language-none code").addClass("plaintext");
+
+      hljs.initHighlighting();
+      anchors.add();
+
+      new ClipboardJS(".btn.copy", {
+        target: function(trigger) {
+          return trigger.nextElementSibling;
+        }
+      });
+
+      $("#compas-navigation li.active > ul").each(function() {
+        var ul = $(this);
+        if (! ul.hasClass("show")) {
+          ul.addClass("show");
+        }
+      });
+
+      $("#compas-navigation li.toctree-l1").has("ul").each(function() {
+        var li = $(this);
+        li.addClass("has-children");
+        if (li.hasClass("active")) {
+          li.prepend('<span class="menu-toggle"><i class="fas fa-chevron-up"></i></span>');
+        }
+        else {
+          li.prepend('<span class="menu-toggle"><i class="fas fa-chevron-down"></i></span>');
+        }
+      });
+
+      $(".menu-toggle").click(function() {
+        var toggle = $(this);
+        toggle.siblings("ul").toggleClass("show");
+      });
+
+    });
+
+
+    var url = $("#doc_versions").data("url");
+    var docs_site = $("#doc_versions").data("docs");
+
+    if (url) {
+      $.get(url, res => {
+        var lines = res.match(/[^\r\n]+/g);
+        lines.sort((a, b) => a.localeCompare(b, undefined, { numeric: true }));
+        lines.reverse();
+        lines.forEach(version => {
+          $("#doc_version_list").append("<a class=\"dropdown-item\" href=\"" + docs_site + version + "\">" + version + "</a>");
+        });
+
+        var selected_version = $('.nav-versions .dropdown-item').filter(function (i, ver) {
+          return window.location.href.startsWith(ver.href);
+        });
+        selected_version.addClass('active');
+        $("#bd-versions").text(selected_version.text());
+
+      })
+    }
+  </script>
+  <!-- scripts -->
+  
+  
+</body>
+
+</html>

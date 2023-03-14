@@ -24,7 +24,7 @@
   
 
   
-  <link rel="prev" title="joints" href="compas_wood.joinery.joints.html" />
+  <link rel="prev" title="read_xml_polylines_and_properties" href="compas_wood.joinery.read_xml_polylines_and_properties.html" />
   
 
   <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
@@ -35,22 +35,22 @@
   <header id="header" class="compas-header d-flex align-items-center">
     <nav class="navbar navbar-expand navbar-dark col flex-column flex-md-row text-center">
       <!-- brand -->
-      <a class="navbar-brand" href="https://ibois-epfl.github.io/compas_wood/">
+      <a class="navbar-brand" href="https://petrasvestartas.github.io/compas_wood/">
         <img src="../../_static/images/compas_icon_white.png" alt="compas_wood" width="48px" height="48px" />
       </a>
       <!-- brand -->
       <!-- primary -->
       <ul class="navbar-nav">
-        <li class="nav-item active"><a class="nav-link" href="https://ibois-epfl.github.io/compas_wood/">compas_wood</a></li>
+        <li class="nav-item active"><a class="nav-link" href="https://petrasvestartas.github.io/compas_wood/">compas_wood</a></li>
       </ul>
       <!-- primary -->
       <ul class="navbar-nav d-none d-md-flex ml-md-auto">
         <!-- version -->
         
-        <meta id="doc_versions" data-url="https://ibois_epfl.github.io/compas-wood/doc_versions.txt" data-docs="https://ibois-epfl.github.io/compas_wood/">
+        <meta id="doc_versions" data-url="https://petrasvestartas.github.io/compas-wood/doc_versions.txt" data-docs="https://petrasvestartas.github.io/compas_wood/">
         <li class="nav-item nav-versions dropdown">
           <a class="nav-item nav-link dropdown-toggle mr-md-2" href="#" id="bd-versions" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            0.1.1
+            1.0.0
           </a>
           <div id="doc_version_list" class="dropdown-menu dropdown-menu-md-right" aria-labelledby="bd-versions"></div>
         </li>
@@ -58,7 +58,7 @@
         <!-- version -->
         <!-- social -->
         <li class="nav-item">
-          <a class="nav-link" href="https://github.com/ibois-epfl/compas_wood" target="_blank">
+          <a class="nav-link" href="https://github.com/petrasvestartas/compas_wood" target="_blank">
             <span class="fab fa-github fa-1x"></span>
           </a>
         </li>
@@ -95,28 +95,40 @@
         
         <section class="detail" id="get-connection-zones">
 <h1>get_connection_zones</h1>
-<dl class="function">
-<dt id="compas_wood.joinery.get_connection_zones">
-<code class="sig-prename descclassname">compas_wood.joinery.</code><code class="sig-name descname">get_connection_zones</code><span class="sig-paren">(</span><em class="sig-param">polylines_vertices_XYZ</em>, <em class="sig-param">face_vectors_XYZ=None</em>, <em class="sig-param">face_joints_types_int=None</em>, <em class="sig-param">three_valance_element_indices_and_instruction=None</em>, <em class="sig-param">adjacency=None</em>, <em class="sig-param">default_joint_parameters=None</em>, <em class="sig-param">search_type=2</em>, <em class="sig-param">output_type=4</em>, <em class="sig-param">triangulate=0</em>, <em class="sig-param">scale=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/ibois-epfl/compas_wood/blob/master/src/compas_wood/joinery.py#L32"><span class="viewcode-link">[source]</span></a></dt>
-<dd><p>Compute joinery</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>polylines_vertices_XYZ</strong> (<em>pairs of polylines</em>)</p></li>
-<li><p><strong>face_vectors_XYZ</strong> (<em>vectors to orient a joint</em>)</p></li>
-<li><p><strong>face_joints_types_int</strong> (<em>joint id, existing in the code</em>)</p></li>
-<li><p><strong>three_valance_element_indices_and_instruction</strong> (<em>special case e.g. alignment of rectangles</em>)</p></li>
-<li><p><strong>adjacency</strong> (<em>a list of plate id integer pairs</em>)</p></li>
-<li><p><strong>search_type</strong> (<em>0 - face-to-face, 1 - plane-to-face (cross), 2 - all</em>)</p></li>
-<li><p><strong>output_type</strong> (<em>0 - top outlines and one joint_area, 1 - top outlines and two joint lines,</em>)</p></li>
-<li><p><strong>2 - top outlines and joint volumes first and third, 3 - top outlines and joint polylines,</strong></p></li>
-<li><p><strong>4 - get_joints_geometry_as_closed_polylines_performing_intersection</strong></p></li>
-<li><p><strong>triangulate</strong> (<em>0 - not output as mesh, 1 - output as mesh, currently not supported in python</em>)</p></li>
-<li><p><strong>scale</strong> (<em>xyz once or six times per joint type</em>)</p></li>
+<dl class="py function">
+<dt class="sig sig-object py" id="compas_wood.joinery.get_connection_zones">
+<span class="sig-prename descclassname"><span class="pre">compas_wood.joinery.</span></span><span class="sig-name descname"><span class="pre">get_connection_zones</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_polyline_pairs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_insertion_vectors</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_joints_types</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_three_valence_element_indices_and_instruction</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_adjacency</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">joint_parameters_and_types</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">search_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scale</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[1,</span> <span class="pre">1,</span> <span class="pre">1]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">flatten_output</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/petrasvestartas/compas_wood/blob/master/src/compas_wood/joinery.py#L222"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>detect connection zones between two polylines and generate joinery
+:Parameters: * <strong>input_polyline_pairs</strong> (<em>list[Polyline]</em>) – list of polylines of top and bottom outlines</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><strong>input_insertion_vectors</strong> (<em>list[list[Vector],list[Vector],list[Vector]], optional</em>) – list of lists of insertion vectors for each polyline side: top, bottom and sides</p></li>
+<li><p><strong>input_joints_types</strong> (<em>list[list[int],list[int],list[int]], optional</em>) – list of lists of joint types for each polyline side: top, bottom and sides</p></li>
+<li><p><strong>input_three_valence_element_indices_and_instruction</strong> (<em>list[list[int],list[int],list[int]], optional</em>) – list of lists of 4 valence elements e.g. [[0],[0,4,1,4],[5,4,6,4]], the first item points to special corner cases: 0 - Annen Case 1 - Vidy Case</p></li>
+<li><p><strong>input_adjacency</strong> (<em>list[int], optional</em>) – list of adjacency between polylines elements and faces, often sides are ignored e.g. [0,1,-1,-1,5,8,-1,-1]</p></li>
+<li><p><strong>joint_parameters_and_types</strong> (<em>list[double], optional</em>) – a list of triplets:
+300, 0.5, 3,   // 1-9 ss_e_ip (side-to-side edge in-plane)
+450, 0.64, 15, // 10-19 ss_e_op (side-to-side edge out-of-plane)
+450, 0.5, 20,  // 20-29 ts_e_p (top-to-side edge plane)
+300, 0.5, 30,  // 30-39 cr_c_ip (cross cutting in-plane)
+6, 0.95, 40,   // 40-49 tt_e_p  (top-to-top edge plane)
+300, 0.5, 58,  // 50-59 ss_e_r (side-to-side edge rotated)
+300, 1.0, 60   // 60-69 b (boundary)</p></li>
+<li><p><strong>search_type</strong> (<em>int, optional</em>) – 0 - side-to-side, 1 - cross, 2 - all</p></li>
+<li><p><strong>scale</strong> (<em>list[double], optional</em>) – a list of 3 doubles for scaling the joint
+for beams you might need bigger cuts
+for plates you might need smaller cuts</p></li>
+<li><p><strong>output_type</strong> (<em>int, optional</em>) – what_to_expose:
+0 - Plate outlines
+1 - wood::joint lines
+2 - wood::joint areas
+3 - wood::joint areas with bounding box
+4 - wood::joint areas with bounding box and cut types</p></li>
 </ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><em>List of Polylines</em> – with added joints</p>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><em>list[Polyline]</em> – A list of top and bottom polylines</p>
 </dd>
 </dl>
 </dd></dl>
@@ -141,32 +153,48 @@
         <div id="compas-navigation" class="collapse compas-navigation">
           <ul class="nav flex-column collapse show active">
 <li class="toctree-l1 nav-item"><a class="nav-link reference internal" href="../../index.html">Introduction</a></li>
-<li class="toctree-l1 nav-item"><a class="nav-link reference internal" href="../../description.html">Description</a></li>
-<li class="toctree-l1 nav-item"><a class="nav-link reference internal" href="../../installation.html">Installation</a></li>
-<li class="toctree-l1 nav-item"><a class="nav-link reference internal" href="../../examples.html">Examples</a><ul class="nav flex-column collapse">
-<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="../../examples/test_0_data_set.html">0_data_set</a></li>
-<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="../../examples/test_1_compas_wood.html">1_compas_wood</a></li>
-<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="../../examples/test_2_rtree.html">2_rtree</a></li>
-<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="../../examples/test_3_joints.html">3_joints</a></li>
-<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="../../examples/test_4_get_connection_zones_c_0.html">4_get_connection_zones c_0</a></li>
-<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="../../examples/test_4_get_connection_zones_ss_0.html">4_get_connection_zones ss_0</a></li>
-<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="../../examples/test_4_get_connection_zones_ss_24.html">4_get_connection_zones ss_24</a></li>
-<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="../../examples/test_4_get_connection_zones_ts_3.html">4_get_connection_zones ts_3</a></li>
-<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="../../examples/test_4_get_connection_zones_vda_2.html">4_get_connection_zones vda_2</a></li>
-<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="../../examples/test_5_closed_mesh_from_polylines.html">5_closed_mesh_from_polylines</a></li>
-<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="../../examples/test_6_closest_polylines.html">6_closest_polylines</a></li>
-<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="../../examples/test_7_beam_volumes.html">7_beam_volumes</a></li>
+<li class="toctree-l1 nav-item"><a class="nav-link reference internal" href="../../about.html">About</a><ul class="nav flex-column collapse">
+<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="../../about/general_description.html">General Description</a></li>
+<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="../../about/search.html">Search Methods</a></li>
 </ul>
 </li>
+<li class="toctree-l1 nav-item"><a class="nav-link reference internal" href="../../installation.html">Installation</a></li>
+<li class="toctree-l1 nav-item"><a class="nav-link reference internal" href="../../examples.html">Examples</a><ul class="nav flex-column collapse">
+<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="../../examples/compas_wood_1_test.html">tests/compas_wood_1_test.py</a></li>
+<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="../../examples/compas_wood_2_read_xml.html">tests/compas_wood_2_read_xml.py</a></li>
+<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="../../examples/compas_wood_3_joints.html">tests/compas_wood_3_joints.py</a></li>
+<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="../../examples/compas_wood_4_rtree.html">tests/compas_wood_4_rtree.py</a></li>
+<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="../../examples/compas_wood_5_get_connection_zones.html">tests/compas_wood_5_get_connection_zones.py</a></li>
+<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="../../examples/compas_wood_6_closed_mesh_from_polylines.html">tests/compas_wood_6_closed_mesh_from_polylines.py</a></li>
+</ul>
+</li>
+<li class="toctree-l1 nav-item"><a class="nav-link reference internal" href="../../video_tutorials.html">Video Tutorials</a></li>
 <li class="toctree-l1 nav-item active"><a class="nav-link reference internal" href="../../api.html">API Reference</a><ul class="nav flex-column collapse show active">
 <li class="toctree-l2 nav-item active"><a class="nav-link reference internal" href="../compas_wood.html">compas_wood</a><ul class="nav flex-column collapse show active">
 <li class="toctree-l3 nav-item"><a class="nav-link reference internal" href="compas_wood.joinery.test.html">test</a></li>
-<li class="toctree-l3 nav-item"><a class="nav-link reference internal" href="compas_wood.joinery.rtree.html">rtree</a></li>
-<li class="toctree-l3 nav-item"><a class="nav-link reference internal" href="compas_wood.joinery.joints.html">joints</a></li>
+<li class="toctree-l3 nav-item"><a class="nav-link reference internal" href="compas_wood.joinery.read_xml_polylines.html">read_xml_polylines</a></li>
+<li class="toctree-l3 nav-item"><a class="nav-link reference internal" href="compas_wood.joinery.read_xml_polylines_and_properties.html">read_xml_polylines_and_properties</a></li>
 <li class="toctree-l3 nav-item active"><a class="nav-link active reference internal" href="#">get_connection_zones</a></li>
 <li class="toctree-l3 nav-item"><a class="nav-link reference internal" href="compas_wood.joinery.closed_mesh_from_polylines.html">closed_mesh_from_polylines</a></li>
-<li class="toctree-l3 nav-item"><a class="nav-link reference internal" href="compas_wood.joinery.closest_polylines.html">closest_polylines</a></li>
-<li class="toctree-l3 nav-item"><a class="nav-link reference internal" href="compas_wood.joinery.beam_volumes.html">beam_volumes</a></li>
+<li class="toctree-l3 nav-item"><a class="nav-link reference internal" href="compas_wood.joinery.joints.html">joints</a></li>
+<li class="toctree-l3 nav-item"><a class="nav-link reference internal" href="compas_wood.joinery.rtree.html">rtree</a></li>
+<li class="toctree-l3 nav-item"><a class="nav-link reference internal" href="compas_wood.conversions.WoodVectorInt_to_list.html">WoodVectorInt_to_list</a></li>
+<li class="toctree-l3 nav-item"><a class="nav-link reference internal" href="compas_wood.conversions.list_to_WoodVectorInt.html">list_to_WoodVectorInt</a></li>
+<li class="toctree-l3 nav-item"><a class="nav-link reference internal" href="compas_wood.conversions.WoodNestedVectorInt_to_lists.html">WoodNestedVectorInt_to_lists</a></li>
+<li class="toctree-l3 nav-item"><a class="nav-link reference internal" href="compas_wood.conversions.lists_to_WoodNestedVectorInt.html">lists_to_WoodNestedVectorInt</a></li>
+<li class="toctree-l3 nav-item"><a class="nav-link reference internal" href="compas_wood.conversions.WoodVectorDouble_to_list.html">WoodVectorDouble_to_list</a></li>
+<li class="toctree-l3 nav-item"><a class="nav-link reference internal" href="compas_wood.conversions.list_to_WoodVectorDouble.html">list_to_WoodVectorDouble</a></li>
+<li class="toctree-l3 nav-item"><a class="nav-link reference internal" href="compas_wood.conversions.WoodNestedVectorDouble_to_lists.html">WoodNestedVectorDouble_to_lists</a></li>
+<li class="toctree-l3 nav-item"><a class="nav-link reference internal" href="compas_wood.conversions.lists_to_WoodNestedVectorDouble.html">lists_to_WoodNestedVectorDouble</a></li>
+<li class="toctree-l3 nav-item"><a class="nav-link reference internal" href="compas_wood.conversions.lists_of_vectors_to_WoodNestedVectorDouble.html">lists_of_vectors_to_WoodNestedVectorDouble</a></li>
+<li class="toctree-l3 nav-item"><a class="nav-link reference internal" href="compas_wood.conversions.WoodNestedVectorDouble_to_polylines.html">WoodNestedVectorDouble_to_polylines</a></li>
+<li class="toctree-l3 nav-item"><a class="nav-link reference internal" href="compas_wood.conversions.WoodVectorFloat_and_WoodVectorInt_to_mesh.html">WoodVectorFloat_and_WoodVectorInt_to_mesh</a></li>
+<li class="toctree-l3 nav-item"><a class="nav-link reference internal" href="compas_wood.conversions.polylines_to_WoodNestedVectorDouble.html">polylines_to_WoodNestedVectorDouble</a></li>
+<li class="toctree-l3 nav-item"><a class="nav-link reference internal" href="compas_wood.conversions.WoodNestedVectorDouble_to_vectorslist.html">WoodNestedVectorDouble_to_vectorslist</a></li>
+<li class="toctree-l3 nav-item"><a class="nav-link reference internal" href="compas_wood.conversions.WoodNestedNestedVectorDouble_to_polylineslists.html">WoodNestedNestedVectorDouble_to_polylineslists</a></li>
+<li class="toctree-l3 nav-item"><a class="nav-link reference internal" href="compas_wood.conversions.WoodNestedNestedVectorDouble_to_polylineslist.html">WoodNestedNestedVectorDouble_to_polylineslist</a></li>
+<li class="toctree-l3 nav-item"><a class="nav-link reference internal" href="compas_wood.conversions.WoodVectorDouble_to_box.html">WoodVectorDouble_to_box</a></li>
+<li class="toctree-l3 nav-item"><a class="nav-link reference internal" href="compas_wood.conversions.WoodNestedVectorDouble_to_boxeslist.html">WoodNestedVectorDouble_to_boxeslist</a></li>
 </ul>
 </li>
 </ul>
@@ -195,11 +223,11 @@
   <footer class="compas-footer">
     <nav class="nav p-2">
       
-      <a href="compas_wood.joinery.joints.html" title="joints" class="nav-link footer-link float-start text-left d-flex w-50" rel="prev">
+      <a href="compas_wood.joinery.read_xml_polylines_and_properties.html" title="read_xml_polylines_and_properties" class="nav-link footer-link float-start text-left d-flex w-50" rel="prev">
         <div class="nav-button p-2 m-2"><i class="fas fa-arrow-left"></i></div>
         <div class="nav-title flex-grow-1 align-self-center">
           <div class="nav-direction small font-weight-light">Previous</div>
-          joints
+          read_xml_polylines_and_properties
         </div>
       </a>
       

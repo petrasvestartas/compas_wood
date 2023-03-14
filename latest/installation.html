@@ -35,22 +35,22 @@
   <header id="header" class="compas-header d-flex align-items-center">
     <nav class="navbar navbar-expand navbar-dark col flex-column flex-md-row text-center">
       <!-- brand -->
-      <a class="navbar-brand" href="https://ibois-epfl.github.io/compas_wood/">
+      <a class="navbar-brand" href="https://petrasvestartas.github.io/compas_wood/">
         <img src="_static/images/compas_icon_white.png" alt="compas_wood" width="48px" height="48px" />
       </a>
       <!-- brand -->
       <!-- primary -->
       <ul class="navbar-nav">
-        <li class="nav-item active"><a class="nav-link" href="https://ibois-epfl.github.io/compas_wood/">compas_wood</a></li>
+        <li class="nav-item active"><a class="nav-link" href="https://petrasvestartas.github.io/compas_wood/">compas_wood</a></li>
       </ul>
       <!-- primary -->
       <ul class="navbar-nav d-none d-md-flex ml-md-auto">
         <!-- version -->
         
-        <meta id="doc_versions" data-url="https://ibois_epfl.github.io/compas-wood/doc_versions.txt" data-docs="https://ibois-epfl.github.io/compas_wood/">
+        <meta id="doc_versions" data-url="https://petrasvestartas.github.io/compas-wood/doc_versions.txt" data-docs="https://petrasvestartas.github.io/compas_wood/">
         <li class="nav-item nav-versions dropdown">
           <a class="nav-item nav-link dropdown-toggle mr-md-2" href="#" id="bd-versions" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            0.1.1
+            1.0.0
           </a>
           <div id="doc_version_list" class="dropdown-menu dropdown-menu-md-right" aria-labelledby="bd-versions"></div>
         </li>
@@ -58,7 +58,7 @@
         <!-- version -->
         <!-- social -->
         <li class="nav-item">
-          <a class="nav-link" href="https://github.com/ibois-epfl/compas_wood" target="_blank">
+          <a class="nav-link" href="https://github.com/petrasvestartas/compas_wood" target="_blank">
             <span class="fab fa-github fa-1x"></span>
           </a>
         </li>
@@ -93,9 +93,9 @@
 <h1>Installation</h1>
 <section id="windows">
 <h2>Windows</h2>
-<div class="language-python notranslate"><div class="highlight"><pre><button class="btn copy"><i class="far fa-copy"></i></button><code><span></span><span class="n">conda</span> <span class="n">create</span> <span class="o">-</span><span class="n">n</span> <span class="n">wood</span><span class="o">-</span><span class="n">dev</span> <span class="n">python</span><span class="o">=</span><span class="mf">3.8</span> <span class="n">mpir</span> <span class="n">mpfr</span> <span class="n">boost</span><span class="o">-</span><span class="n">cpp</span> <span class="n">eigen</span><span class="o">=</span><span class="mf">3.3</span> <span class="n">cgal</span><span class="o">-</span><span class="n">cpp</span><span class="o">=</span><span class="mf">5.2</span> <span class="n">pybind11</span> <span class="n">compas</span> <span class="n">compas_view2</span> <span class="o">--</span><span class="n">yes</span>
+<div class="language-python notranslate"><div class="highlight"><pre><button class="btn copy"><i class="far fa-copy"></i></button><code><span></span><span class="n">conda</span> <span class="n">create</span> <span class="o">-</span><span class="n">n</span> <span class="n">wood</span><span class="o">-</span><span class="n">dev</span> <span class="n">python</span><span class="o">=</span><span class="mf">3.8</span> <span class="n">mpir</span> <span class="n">mpfr</span> <span class="n">boost</span><span class="o">-</span><span class="n">cpp</span> <span class="n">eigen</span><span class="o">=</span><span class="mf">3.4</span> <span class="n">cgal</span><span class="o">-</span><span class="n">cpp</span><span class="o">=</span><span class="mf">5.5</span> <span class="n">pybind11</span> <span class="n">compas</span> <span class="n">compas_view2</span> <span class="o">--</span><span class="n">yes</span>
 <span class="n">conda</span> <span class="n">activate</span> <span class="n">wood</span><span class="o">-</span><span class="n">dev</span>
-<span class="n">git</span> <span class="n">clone</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">ibois</span><span class="o">-</span><span class="n">epfl</span><span class="o">/</span><span class="n">compas_wood</span>
+<span class="n">git</span> <span class="n">clone</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">petrasvestartas</span><span class="o">/</span><span class="n">compas_wood</span><span class="o">.</span><span class="n">git</span>
 <span class="n">cd</span> <span class="n">compas_wood</span>
 <span class="n">pip</span> <span class="n">install</span> <span class="o">-</span><span class="n">e</span> <span class="o">.</span>
 </code></pre></div>
@@ -103,9 +103,9 @@
 </section>
 <section id="mac">
 <h2>Mac</h2>
-<div class="language-python notranslate"><div class="highlight"><pre><button class="btn copy"><i class="far fa-copy"></i></button><code><span></span><span class="n">conda</span> <span class="n">create</span> <span class="o">-</span><span class="n">n</span> <span class="n">wood</span><span class="o">-</span><span class="n">dev</span> <span class="n">python</span><span class="o">=</span><span class="mf">3.8</span> <span class="n">gmp</span> <span class="n">mpfr</span> <span class="n">boost</span><span class="o">-</span><span class="n">cpp</span> <span class="n">eigen</span><span class="o">=</span><span class="mf">3.3</span> <span class="n">cgal</span><span class="o">-</span><span class="n">cpp</span><span class="o">=</span><span class="mf">5.2</span> <span class="n">pybind11</span> <span class="n">compas</span> <span class="n">compas_view2</span> <span class="o">--</span><span class="n">yes</span>
+<div class="language-python notranslate"><div class="highlight"><pre><button class="btn copy"><i class="far fa-copy"></i></button><code><span></span><span class="n">conda</span> <span class="n">create</span> <span class="o">-</span><span class="n">n</span> <span class="n">wood</span><span class="o">-</span><span class="n">dev</span> <span class="n">python</span><span class="o">=</span><span class="mf">3.8</span> <span class="n">gmp</span> <span class="n">mpfr</span> <span class="n">boost</span><span class="o">-</span><span class="n">cpp</span> <span class="n">eigen</span><span class="o">=</span><span class="mf">3.4</span> <span class="n">cgal</span><span class="o">-</span><span class="n">cpp</span><span class="o">=</span><span class="mf">5.5</span> <span class="n">pybind11</span> <span class="n">compas</span> <span class="n">compas_view2</span> <span class="o">--</span><span class="n">yes</span>
 <span class="n">conda</span> <span class="n">activate</span> <span class="n">wood</span><span class="o">-</span><span class="n">dev</span>
-<span class="n">git</span> <span class="n">clone</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">ibois</span><span class="o">-</span><span class="n">epfl</span><span class="o">/</span><span class="n">compas_wood</span>
+<span class="n">git</span> <span class="n">clone</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">petrasvestartas</span><span class="o">/</span><span class="n">compas_wood</span><span class="o">.</span><span class="n">git</span>
 <span class="n">cd</span> <span class="n">compas_wood</span>
 <span class="n">pip</span> <span class="n">install</span> <span class="o">-</span><span class="n">e</span> <span class="o">.</span>
 </code></pre></div>
@@ -113,10 +113,36 @@
 </section>
 <section id="rhino-grasshopper">
 <h2>Rhino Grasshopper</h2>
-<div class="language-python notranslate"><div class="highlight"><pre><button class="btn copy"><i class="far fa-copy"></i></button><code><span></span><span class="n">Download</span> <span class="n">the</span> <span class="p">(</span><span class="n">Windows</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">Mac</span><span class="p">)</span> <span class="n">zipped</span> <span class="n">files</span> <span class="ow">and</span> <span class="n">place</span> <span class="n">them</span> <span class="ow">in</span> <span class="n">libraries</span> <span class="n">folder</span><span class="o">.</span>
+<div class="language-python notranslate"><div class="highlight"><pre><button class="btn copy"><i class="far fa-copy"></i></button><code><span></span><span class="n">Download</span> <span class="n">the</span> <span class="n">zipped</span> <span class="n">files</span> <span class="ow">and</span> <span class="n">place</span> <span class="n">them</span> <span class="ow">in</span> <span class="n">libraries</span> <span class="n">folder</span><span class="o">.</span>
+<span class="n">Current</span> <span class="n">suppoorted</span> <span class="n">Grasshopper</span> <span class="ow">is</span> <span class="n">version</span> <span class="ow">is</span> <span class="n">Windows</span> <span class="n">only</span><span class="o">.</span>
 <span class="n">You</span> <span class="n">can</span> <span class="n">find</span> <span class="n">this</span> <span class="n">folder</span> <span class="n">when</span> <span class="n">you</span> <span class="nb">open</span> <span class="n">Grasshopper</span><span class="o">.</span>
 <span class="n">File</span><span class="o">-&gt;</span><span class="n">Special</span> <span class="n">Folder</span><span class="o">-&gt;</span><span class="n">Component</span> <span class="n">Folder</span><span class="o">.</span>
-<span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">ibois</span><span class="o">-</span><span class="n">epfl</span><span class="o">/</span><span class="n">compas_wood</span><span class="o">/</span><span class="n">releases</span><span class="o">/</span><span class="n">tag</span><span class="o">/</span><span class="n">compas_wood_GH_1</span><span class="mf">.0.0</span>
+<span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">petrasvestartas</span><span class="o">/</span><span class="n">compas_wood</span><span class="o">/</span><span class="n">releases</span><span class="o">/</span><span class="n">tag</span><span class="o">/</span><span class="n">compas_wood_GH_1</span><span class="mf">.0.0</span>
+</code></pre></div>
+</div>
+</section>
+<section id="c">
+<h2>C++</h2>
+<p>Step 1: Create a build directory and go into it</p>
+<div class="language-cmake notranslate"><div class="highlight"><pre><button class="btn copy"><i class="far fa-copy"></i></button><code><span></span>cd C:\IBOIS57\_Code\Software\Python\compas_wood\backend\
+mkdir build_win
+cd build_win
+</code></pre></div>
+</div>
+<p>Step 2: Download libraries via CMake</p>
+<div class="language-cmake notranslate"><div class="highlight"><pre><button class="btn copy"><i class="far fa-copy"></i></button><code><span></span>cmake --fresh -DGET_LIBS=ON -DCOMPILE_LIBS=OFF -DBUILD_MY_PROJECTS=OFF -DRELEASE_DEBUG=ON -DCMAKE_BUILD_TYPE=&quot;Release&quot;  -G &quot;Visual Studio 17 2022&quot; -A x64 .. &amp;&amp; cmake --build . --config Release
+</code></pre></div>
+</div>
+<p>Step 3: Build 3rd-party libraries (this part compiles 3rd party libraries to static libraries that reduces compilation time while working with C++)</p>
+<div class="language-cmake notranslate"><div class="highlight"><pre><button class="btn copy"><i class="far fa-copy"></i></button><code><span></span>cmake --fresh -DGET_LIBS=OFF -DBUILD_MY_PROJECTS=ON -DCOMPILE_LIBS=ON -DRELEASE_DEBUG=ON -DCMAKE_BUILD_TYPE=&quot;Release&quot;  -G &quot;Visual Studio 17 2022&quot; -A x64 .. &amp;&amp; cmake --build . --config Release
+</code></pre></div>
+</div>
+<p>Step 4: Build the code (precompiled header is compiled to reduce the compilation time)</p>
+<div class="language-cmake notranslate"><div class="highlight"><pre><button class="btn copy"><i class="far fa-copy"></i></button><code><span></span>cmake --fresh -DGET_LIBS=OFF -DBUILD_MY_PROJECTS=ON -DCOMPILE_LIBS=OFF -DRELEASE_DEBUG=ON -DCMAKE_BUILD_TYPE=&quot;Release&quot;  -G &quot;Visual Studio 17 2022&quot; -A x64 .. &amp;&amp; cmake --build . --config Release
+</code></pre></div>
+</div>
+<p>Step 5 - Run the code - you can use this as a default VScode task:</p>
+<div class="language-cmake notranslate"><div class="highlight"><pre><button class="btn copy"><i class="far fa-copy"></i></button><code><span></span>cmake  --build C:\\IBOIS57\\_Code\\Software\\Python\\compas_wood\\backend\\build_win\\ -v --config Release --parallel 8 &amp;&amp;  C:\\IBOIS57\\_Code\\Software\\Python\\compas_wood\\backend\\build_win\\Release\\wood.exe
 </code></pre></div>
 </div>
 </section>
@@ -141,27 +167,49 @@
           <ul class="nav flex-column collapse show active">
 <li class="toctree-l1 nav-item"><a class="nav-link reference internal" href="index.html">Introduction</a></li>
 <li class="toctree-l1 nav-item"><a class="nav-link reference internal" href="about.html">About</a><ul class="nav flex-column collapse">
-<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="about/all.html">All</a></li>
+<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="about/general_description.html">General Description</a></li>
 <li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="about/search.html">Search Methods</a></li>
 </ul>
 </li>
 <li class="toctree-l1 nav-item active"><a class="nav-link active reference internal" href="#">Installation</a></li>
 <li class="toctree-l1 nav-item"><a class="nav-link reference internal" href="examples.html">Examples</a><ul class="nav flex-column collapse">
-<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="examples/test_0_data_set.html">0_data_set</a></li>
-<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="examples/test_1_compas_wood.html">1_compas_wood</a></li>
-<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="examples/test_2_rtree.html">2_rtree</a></li>
-<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="examples/test_3_joints.html">3_joints</a></li>
-<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="examples/test_4_get_connection_zones_c_0.html">4_get_connection_zones c_0</a></li>
-<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="examples/test_4_get_connection_zones_ss_0.html">4_get_connection_zones ss_0</a></li>
-<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="examples/test_4_get_connection_zones_ss_24.html">4_get_connection_zones ss_24</a></li>
-<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="examples/test_4_get_connection_zones_ts_3.html">4_get_connection_zones ts_3</a></li>
-<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="examples/test_4_get_connection_zones_vda_2.html">4_get_connection_zones vda_2</a></li>
-<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="examples/test_5_closed_mesh_from_polylines.html">5_closed_mesh_from_polylines</a></li>
-<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="examples/test_6_closest_polylines.html">6_closest_polylines</a></li>
-<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="examples/test_7_beam_volumes.html">7_beam_volumes</a></li>
+<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="examples/compas_wood_1_test.html">tests/compas_wood_1_test.py</a></li>
+<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="examples/compas_wood_2_read_xml.html">tests/compas_wood_2_read_xml.py</a></li>
+<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="examples/compas_wood_3_joints.html">tests/compas_wood_3_joints.py</a></li>
+<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="examples/compas_wood_4_rtree.html">tests/compas_wood_4_rtree.py</a></li>
+<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="examples/compas_wood_5_get_connection_zones.html">tests/compas_wood_5_get_connection_zones.py</a></li>
+<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="examples/compas_wood_6_closed_mesh_from_polylines.html">tests/compas_wood_6_closed_mesh_from_polylines.py</a></li>
 </ul>
 </li>
-<li class="toctree-l1 nav-item"><a class="nav-link reference internal" href="api.html">API Reference</a><ul class="simple">
+<li class="toctree-l1 nav-item"><a class="nav-link reference internal" href="video_tutorials.html">Video Tutorials</a></li>
+<li class="toctree-l1 nav-item"><a class="nav-link reference internal" href="api.html">API Reference</a><ul class="nav flex-column collapse">
+<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="api/compas_wood.html">compas_wood</a><ul class="nav flex-column collapse">
+<li class="toctree-l3 nav-item"><a class="nav-link reference internal" href="api/generated/compas_wood.joinery.test.html">test</a></li>
+<li class="toctree-l3 nav-item"><a class="nav-link reference internal" href="api/generated/compas_wood.joinery.read_xml_polylines.html">read_xml_polylines</a></li>
+<li class="toctree-l3 nav-item"><a class="nav-link reference internal" href="api/generated/compas_wood.joinery.read_xml_polylines_and_properties.html">read_xml_polylines_and_properties</a></li>
+<li class="toctree-l3 nav-item"><a class="nav-link reference internal" href="api/generated/compas_wood.joinery.get_connection_zones.html">get_connection_zones</a></li>
+<li class="toctree-l3 nav-item"><a class="nav-link reference internal" href="api/generated/compas_wood.joinery.closed_mesh_from_polylines.html">closed_mesh_from_polylines</a></li>
+<li class="toctree-l3 nav-item"><a class="nav-link reference internal" href="api/generated/compas_wood.joinery.joints.html">joints</a></li>
+<li class="toctree-l3 nav-item"><a class="nav-link reference internal" href="api/generated/compas_wood.joinery.rtree.html">rtree</a></li>
+<li class="toctree-l3 nav-item"><a class="nav-link reference internal" href="api/generated/compas_wood.conversions.WoodVectorInt_to_list.html">WoodVectorInt_to_list</a></li>
+<li class="toctree-l3 nav-item"><a class="nav-link reference internal" href="api/generated/compas_wood.conversions.list_to_WoodVectorInt.html">list_to_WoodVectorInt</a></li>
+<li class="toctree-l3 nav-item"><a class="nav-link reference internal" href="api/generated/compas_wood.conversions.WoodNestedVectorInt_to_lists.html">WoodNestedVectorInt_to_lists</a></li>
+<li class="toctree-l3 nav-item"><a class="nav-link reference internal" href="api/generated/compas_wood.conversions.lists_to_WoodNestedVectorInt.html">lists_to_WoodNestedVectorInt</a></li>
+<li class="toctree-l3 nav-item"><a class="nav-link reference internal" href="api/generated/compas_wood.conversions.WoodVectorDouble_to_list.html">WoodVectorDouble_to_list</a></li>
+<li class="toctree-l3 nav-item"><a class="nav-link reference internal" href="api/generated/compas_wood.conversions.list_to_WoodVectorDouble.html">list_to_WoodVectorDouble</a></li>
+<li class="toctree-l3 nav-item"><a class="nav-link reference internal" href="api/generated/compas_wood.conversions.WoodNestedVectorDouble_to_lists.html">WoodNestedVectorDouble_to_lists</a></li>
+<li class="toctree-l3 nav-item"><a class="nav-link reference internal" href="api/generated/compas_wood.conversions.lists_to_WoodNestedVectorDouble.html">lists_to_WoodNestedVectorDouble</a></li>
+<li class="toctree-l3 nav-item"><a class="nav-link reference internal" href="api/generated/compas_wood.conversions.lists_of_vectors_to_WoodNestedVectorDouble.html">lists_of_vectors_to_WoodNestedVectorDouble</a></li>
+<li class="toctree-l3 nav-item"><a class="nav-link reference internal" href="api/generated/compas_wood.conversions.WoodNestedVectorDouble_to_polylines.html">WoodNestedVectorDouble_to_polylines</a></li>
+<li class="toctree-l3 nav-item"><a class="nav-link reference internal" href="api/generated/compas_wood.conversions.WoodVectorFloat_and_WoodVectorInt_to_mesh.html">WoodVectorFloat_and_WoodVectorInt_to_mesh</a></li>
+<li class="toctree-l3 nav-item"><a class="nav-link reference internal" href="api/generated/compas_wood.conversions.polylines_to_WoodNestedVectorDouble.html">polylines_to_WoodNestedVectorDouble</a></li>
+<li class="toctree-l3 nav-item"><a class="nav-link reference internal" href="api/generated/compas_wood.conversions.WoodNestedVectorDouble_to_vectorslist.html">WoodNestedVectorDouble_to_vectorslist</a></li>
+<li class="toctree-l3 nav-item"><a class="nav-link reference internal" href="api/generated/compas_wood.conversions.WoodNestedNestedVectorDouble_to_polylineslists.html">WoodNestedNestedVectorDouble_to_polylineslists</a></li>
+<li class="toctree-l3 nav-item"><a class="nav-link reference internal" href="api/generated/compas_wood.conversions.WoodNestedNestedVectorDouble_to_polylineslist.html">WoodNestedNestedVectorDouble_to_polylineslist</a></li>
+<li class="toctree-l3 nav-item"><a class="nav-link reference internal" href="api/generated/compas_wood.conversions.WoodVectorDouble_to_box.html">WoodVectorDouble_to_box</a></li>
+<li class="toctree-l3 nav-item"><a class="nav-link reference internal" href="api/generated/compas_wood.conversions.WoodNestedVectorDouble_to_boxeslist.html">WoodNestedVectorDouble_to_boxeslist</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1 nav-item"><a class="nav-link reference internal" href="license.html">License</a></li>
@@ -180,6 +228,7 @@
 <li class="nav-item"><a class="nav-link reference internal" href="#windows">Windows</a></li>
 <li class="nav-item"><a class="nav-link reference internal" href="#mac">Mac</a></li>
 <li class="nav-item"><a class="nav-link reference internal" href="#rhino-grasshopper">Rhino Grasshopper</a></li>
+<li class="nav-item"><a class="nav-link reference internal" href="#c">C++</a></li>
 </ul>
 </li>
 </ul>
