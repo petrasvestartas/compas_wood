@@ -33,7 +33,7 @@ Local:
     *  |check| face_to_face side-to-side parallel out-of-plane | **joinery_library 10-19** | type 11
     *  |check| face_to_face top-to-side | **joinery_library 20-29** | type 20
     *  |check| plane_to_face cross | **joinery_library 30-39** | type 30
-    *  |uncheck| face_to_face top_to_top | **joinery_library 40-49** |  type 40  currently only output joint_area with 0 local search
+    *  |check| face_to_face top_to_top | **joinery_library 40-49** |  type 40  currently only output joint_area with 0 local search
     *  |check| face_to_face side-to-side | **joinery_library non-parallel 50-59** |  type 50 
     *  |check| border_to_face border | **joinery_library border 60-69** |  type 60 
 
@@ -46,42 +46,38 @@ Local:
    :header-rows: 1
 
    * - **skip**
-     - **side-to-side**
-     - **side-to-side**
-     - **top-to-side**
-     - **cross**
-     - **top-to-top**
-     - **side-to-side**
-     - **border**
+     - **side-to-side edge in-plane**
+     - **side-to-side edge out-of-plane**
+     - **top-to-side edge plane**
+     - **cross cutting in-plane**
+     - **top-to-top edge plane**
+     - **side-to-side edge rotated**
+     - **boundary**
    * -  
-     - **in-plane**
-     - **out-of-plane**
+     -
+     -
      - 
      - 
      - 
-     - **rotated**
+     -
      -
    * - 0 
-     - 12
-     - 11
-     - 20
-     - 30
-     - 40
-     - 50
-     - 60
+     - 1-9
+     - 10-19
+     - 20-29
+     - 30-39
+     - 40-49
+     - 50-59
+     - 60-69
 
 
 Local Search and Insertion Vector:
-    *  Description: a vector on an element edge that is equal to a plane normal on an edge.
-    *  |check| side-top connection insertion vector is currently defined by plane normals, not insertion direction because it is equal what is inside code
-    *  |uncheck| side-side connection, not finished for out of plane connections
-    *  |uncheck| side-side connection in rotaton insertion vector not tested 
-    *  |uncheck| top-top connection
+    *  A vector on an element edge that is equal to a plane normal on an edge.
 
-.. figure:: /_images/insertion_vectors_0.jpg
+.. figure:: /_images/about/insertion_vectors_0.jpg
     :figclass: figure
     :class: figure-img img-fluid
 
-.. figure:: /_images/insertion_vectors_2.jpg
+.. figure:: /_images/about/insertion_vectors_2.jpg
     :figclass: figure
     :class: figure-img img-fluid

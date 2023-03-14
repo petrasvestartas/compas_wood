@@ -1,4 +1,4 @@
-.. figure:: /_images/compas_wood_website_logo.jpg
+.. figure:: /_images/logo/compas_wood_website_logo.jpg
     :figclass: figure
     :class: figure-img img-fluid 
     :width: 300
@@ -13,7 +13,6 @@
 
 Author: `Petras Vestartas <http://www.petrasvestartas.com/>`_.
 
-
 Table of Contents
 =================
 
@@ -25,9 +24,11 @@ Table of Contents
    about
    installation
    examples
+   video_tutorials
    api
    license
    citation
 
+Last update: 2020-03-14
 
 
