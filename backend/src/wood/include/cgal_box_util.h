@@ -112,9 +112,9 @@ namespace cgal_box_util
         {
             double x, y, z;
             vec3 operator-(const vec3 &rhs) const { return {x - rhs.x, y - rhs.y, z - rhs.z}; }
-            double operator*(const vec3 &rhs) const { return {x * rhs.x + y * rhs.y + z * rhs.z}; }                                 // DOT PRODUCT
+            double operator*(const vec3 &rhs) const { return (x * rhs.x + y * rhs.y + z * rhs.z); }                                 // DOT PRODUCT
             vec3 operator^(const vec3 &rhs) const { return {y * rhs.z - z * rhs.y, z * rhs.x - x * rhs.z, x * rhs.y - y * rhs.x}; } // CROSS PRODUCT
-            vec3 operator*(const double &rhs) const { return vec3{x * rhs, y * rhs, z * rhs}; }
+            vec3 operator*(const double &rhs) const { return {x * rhs, y * rhs, z * rhs}; }
         };
 
         /**

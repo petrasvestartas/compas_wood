@@ -1,6 +1,6 @@
-// define either wrapper of viewer include
 
 #include "../../../stdafx.h" //go up to the folder where the CMakeLists.txt is
+
 
 #include "wood_globals.h"
 

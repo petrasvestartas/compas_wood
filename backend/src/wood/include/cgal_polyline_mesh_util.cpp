@@ -1,10 +1,6 @@
-// define either wrapper of viewer include
-#ifdef WOOD_WRAPPER
-#include "../../../src/compas_wood/include/stdafx_pybind11.h" //go up to the folder where the CMakeLists.txt is
-#else
+
 #include "../../../stdafx.h" //go up to the folder where the CMakeLists.txt is
-#endif
- 
+
 #include "cgal_polyline_mesh_util.h"
 
 namespace cgal_polyline_mesh_util
@@ -191,16 +187,16 @@ namespace cgal_polyline_mesh_util
             //////////////////////////////////////////////////////////////////////////////
             // Insert the polygons into a constrained triangulation
             //////////////////////////////////////////////////////////////////////////////
-            try
-            {
+            //try
+            //{
                 CGALCDT.insert_constraint(polygon_2d.vertices_begin(), polygon_2d.vertices_end(), true);
-            }
-            catch (const CGALCDT::Intersection_of_constraints_exception &)
-            {
-                printf("CPP CGALCDT::Intersection_of_constraints_exception \n");
+            //}
+            // catch (...)//const CGALCDT::Intersection_of_constraints_exception &
+            // {
+            //     printf("CPP CGALCDT::Intersection_of_constraints_exception \n");
 
-                return;
-            }
+            //     return;
+            // }
         }
 
         //////////////////////////////////////////////////////////////////////////////

@@ -1,10 +1,6 @@
-// define either wrapper of viewer include
-#ifdef WOOD_WRAPPER
-#include "../../../src/compas_wood/include/stdafx_pybind11.h" //go up to the folder where the CMakeLists.txt is
-#else
+
 #include "../../../stdafx.h" //go up to the folder where the CMakeLists.txt is
-#endif
- 
+
 #include "viewer_wood.h"
 
 float viewer_wood::scale = 1000.0f;

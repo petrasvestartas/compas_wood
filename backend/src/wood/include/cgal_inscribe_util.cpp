@@ -1,9 +1,6 @@
-// define either wrapper of viewer include
-#ifdef WOOD_WRAPPER
-#include "../../../src/compas_wood/include/stdafx_pybind11.h" //go up to the folder where the CMakeLists.txt is
-#else
+
 #include "../../../stdafx.h" //go up to the folder where the CMakeLists.txt is
-#endif
+
  
 #include "cgal_inscribe_util.h"
 
@@ -123,7 +120,7 @@ namespace cgal_inscribe_util
             size_t len = CGAL::squared_distance(polyline.front(), polyline.back()) < wood_globals::DISTANCE_SQUARED ? polyline.size() - 1 : polyline.size();
             average_normal = IK::Vector_3(0, 0, 0);
 
-            for (int i = 0; i < len; i++)
+            for (size_t i = 0; i < len; i++)
             {
                 auto prev = ((i - 1) + len) % len;
                 auto next = ((i + 1) + len) % len;
@@ -163,7 +160,7 @@ namespace cgal_inscribe_util
             z_axis = IK::Vector_3(0, 0, 0);
 
             double max_length = 0;
-            for (int i = 0; i < len; i++)
+            for (size_t i = 0; i < len; i++)
             {
                 auto prev = ((i - 1) + len) % len;
                 auto next = ((i + 1) + len) % len;
@@ -187,7 +184,7 @@ namespace cgal_inscribe_util
             double degrees = 0; // <-- correction
             double chunk_angle = 360 / number_of_chunks;
             points.reserve(number_of_chunks);
-            CGAL::Aff_transformation_3<IK> xy_to_plane = cgal_xform_util::xy_to_plane(origin, x_axis, y_axis, z_axis);
+            CGAL::Aff_transformation_3<IK> xy_to_plane = internal::xy_to_plane(origin, x_axis, y_axis, z_axis);
 
             for (int i = 0; i < number_of_chunks; i++)
             {
@@ -217,10 +214,56 @@ namespace cgal_inscribe_util
             /////////////////////////////////////////////////////////////////////////////////////
             // Create Transformation and assign outputs
             /////////////////////////////////////////////////////////////////////////////////////
-            xform_to_xy = cgal_xform_util::plane_to_xy(polyline[0], plane);
+            xform_to_xy = internal::plane_to_xy(polyline[0], plane);
             xform_to_xy_inv = xform_to_xy.inverse();
             return true;
         }
+
+        CGAL::Aff_transformation_3<IK> xy_to_plane(const IK::Vector_3 &origin, const IK::Vector_3 &x_axis, const IK::Vector_3 &y_axis, const IK::Vector_3 &z_axis)
+            {
+                // Vectors must be unitized, else the result is wrong
+                IK::Vector_3 _x_axis = x_axis;
+                IK::Vector_3 _y_axis = y_axis;
+                IK::Vector_3 _z_axis = z_axis;
+
+                internal::unitize(_x_axis);
+                internal::unitize(_y_axis);
+                internal::unitize(_z_axis);
+
+                // transformation maps P0 to P1, P0+x_axis_0 to P1+x_axis_1, ...
+                CGAL::Aff_transformation_3<IK> f(
+                    _x_axis.x(), _y_axis.x(), _z_axis.x(),
+                    _x_axis.y(), _y_axis.y(), _z_axis.y(),
+                    _x_axis.z(), _y_axis.z(), _z_axis.z());
+
+                // Move to 3d -> T1 translates (0,0,0) to point P1
+                CGAL::Aff_transformation_3<IK> t(CGAL::TRANSLATION, IK::Vector_3(origin.x(), origin.y(), origin.z()));
+
+                return t * f;
+            }
+
+
+        CGAL::Aff_transformation_3<IK> axis_rotation(const double &angle, const IK::Vector_3 &axis)
+    {
+        // create matrix of the rotation
+        IK::RT
+            c = cos(angle),
+            s = sin(angle),
+            ux(axis.x()),
+            uy(axis.y()),
+            uz(axis.z());
+
+        IK::RT matrix[12] =
+            {
+                ux * ux * (1 - c) + c, ux * uy * (1 - c) - uz * s, ux * uz * (1 - c) + uy * s, 0,
+                ux * uy * (1 - c) + uz * s, uy * uy * (1 - c) + c, uy * uz * (1 - c) - ux * s, 0,
+                ux * uz * (1 - c) - uy * s, uy * uz * (1 - c) + ux * s, uz * uz * (1 - c) + c, 0};
+
+        return CGAL::Aff_transformation_3<IK>(matrix[0], matrix[1], matrix[2],
+                                              matrix[3], matrix[4], matrix[5],
+                                              matrix[6], matrix[7], matrix[8],
+                                              matrix[9], matrix[10], matrix[11]);
+    }
 
     }
 
@@ -239,7 +282,7 @@ namespace cgal_inscribe_util
         IK::Plane_3 plane;
         cgal_polyline_util::get_fast_plane(polylines_copy[0], origin, plane);
 
-        CGAL::Aff_transformation_3<IK> xform_toXY = cgal_xform_util::plane_to_xy(origin, plane);
+        CGAL::Aff_transformation_3<IK> xform_toXY = internal::plane_to_xy(origin, plane);
         CGAL::Aff_transformation_3<IK> xform_toXY_Inv = xform_toXY.inverse();
         for (auto &polyline : polylines_copy)
             cgal_polyline_util::transform(polyline, xform_toXY);
@@ -256,7 +299,7 @@ namespace cgal_inscribe_util
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         if (len.size() > 0)
         {
-            for (int i = 0; i < polylines_copy.size(); i++)
+            for (size_t i = 0; i < polylines_copy.size(); i++)
             {
                 CGAL::Bbox_3 AABB = CGAL::bbox_3(polylines_copy[i].begin(), polylines_copy[i].end(), IK());
                 auto p0 = IK::Point_3(AABB.xmin(), AABB.ymin(), AABB.zmin());
@@ -279,9 +322,9 @@ namespace cgal_inscribe_util
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         mapbox::geometry::polygon<double> polygon_with_holes(polylines_copy.size());
 
-        for (int i = 0; i < polylines_copy.size(); i++)
+        for (size_t i = 0; i < polylines_copy.size(); i++)
         {
-            for (int j = 0; j < polylines_copy[ids[i]].size() - 1; j++)
+            for (size_t j = 0; j < polylines_copy[ids[i]].size() - 1; j++)
             {
                 polygon_with_holes[i].emplace_back(polylines_copy[ids[i]][j].x(), polylines_copy[ids[i]][j].y());
                 // std::cout << polylines_copy[ids[i]][j].x() << " " << polylines_copy[ids[i]][j].y() << std::endl;
@@ -323,9 +366,9 @@ namespace cgal_inscribe_util
         if (orient_to_closest_edge)
         {
 
-            for (auto i = 0; i < polylines.size(); i++)
+            for (size_t i = 0; i < polylines.size(); i++)
             {
-                for (auto j = 0; j < polylines[i].size() - 1; j++)
+                for (size_t j = 0; j < polylines[i].size() - 1; j++)
                 {
 
                     IK::Segment_3 polyline_segment(polylines[i][j], polylines[i][j + 1]);
@@ -416,7 +459,7 @@ namespace cgal_inscribe_util
             xform_toXY = internal::plane_to_xy(o, x, y, z);
 
         // without rotation the algorithm does not work, is it a bug of CGAL?
-        CGAL::Aff_transformation_3<IK> rot = cgal_xform_util::axis_rotation(0.0001, IK::Vector_3(0, 0, 1));
+        CGAL::Aff_transformation_3<IK> rot = internal::axis_rotation(0.0001, IK::Vector_3(0, 0, 1));
         xform_toXY = rot * xform_toXY;
 
         CGAL::Aff_transformation_3<IK>

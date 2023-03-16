@@ -1,9 +1,5 @@
-// define either wrapper of viewer include
-#ifdef WOOD_WRAPPER
-#include "../../../src/compas_wood/include/stdafx_pybind11.h" //go up to the folder where the CMakeLists.txt is
-#else
+
 #include "../../../stdafx.h" //go up to the folder where the CMakeLists.txt is
-#endif
 
 #include "cgal_mesh_boolean.h"
 

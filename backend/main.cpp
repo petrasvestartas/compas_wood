@@ -19,6 +19,9 @@ int main(int argc, char **argv)
 	opengl_globals::shaders_folder = "C:\\IBOIS57\\_Code\\Software\\Python\\compas_wood\\backend\\src\\viewer\\shaders\\";
 	opengl_render::render(wood_test::type_plates_name_vda_floor_0);
 
+	// develop algorithm for notches
+	
+
 	// bool type_plates_name_cross_square_reciprocal_two_sides();
 	// bool type_plates_name_cross_square_reciprocal_iseya();
 	// bool type_plates_name_cross_ibois_pavilion();

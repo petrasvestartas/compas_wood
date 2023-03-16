@@ -748,7 +748,7 @@ namespace cgal_box_search
 
                 if (distance < min_distance * min_distance)
                 {
-                    size_t first_0 = 0, first_1 = 0;
+                    // size_t first_0 = 0, first_1 = 0;
                     bool flipped = false;
                     uint64_t id;
                     if (b2.info().first > b1.info().first)

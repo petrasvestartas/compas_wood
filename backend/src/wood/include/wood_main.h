@@ -18,13 +18,15 @@
 // #include "clipper_util.h"
 // #include "rtree_util.h"
 
+#ifndef WOOD_MAIN_H
+#define WOOD_MAIN_H
+
 #include "wood_cut.h"
 #include "wood_joint.h"
 #include "wood_element.h" //wood eleement has: #include "wood_joint.h"
 #include "wood_joint_lib.h"
 
-#ifndef WOOD_MAIN_H
-#define WOOD_MAIN_H
+
 
 namespace wood_main
 {

@@ -1,10 +1,6 @@
-// define either wrapper of viewer include
-#ifdef WOOD_WRAPPER
-#include "../../../src/compas_wood/include/stdafx_pybind11.h" //go up to the folder where the CMakeLists.txt is
-#else
+
 #include "../../../stdafx.h" //go up to the folder where the CMakeLists.txt is
-#endif
- 
+
 #include "cgal_polyline_util.h"
 
 namespace cgal_polyline_util

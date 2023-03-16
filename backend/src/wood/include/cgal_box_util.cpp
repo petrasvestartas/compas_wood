@@ -1,9 +1,4 @@
-// define either wrapper of viewer include
-#ifdef WOOD_WRAPPER
-#include "../../../src/compas_wood/include/stdafx_pybind11.h" //go up to the folder where the CMakeLists.txt is
-#else
 #include "../../../stdafx.h" //go up to the folder where the CMakeLists.txt is
-#endif
  
 #include "cgal_box_util.h"
 
@@ -116,7 +111,6 @@ namespace cgal_box_util
         //struct vec3
 
         //struct obb
-
 
         bool get_separating_plane(const vec3 &relative_position, const vec3 &axis, const obb &box1, const obb &box2)
         {

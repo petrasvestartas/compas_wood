@@ -26,6 +26,34 @@ namespace cgal_rectangle_util
 
     namespace internal
     {
+
+        /**
+         * Get length of a 3D vector, taken from the OpenNURBS library: https://github.com/mcneel/opennurbs
+         *
+         * @param [in] x The first coordinate of the vector
+         * @param [in] y The second coordinate of the vector
+         * @param [in] z The third coordinate of the vector
+         * @return The length of the vector
+         */
+        double length(double x, double y, double z);
+
+        /**
+         * Unitize the vector by dividing its coordinates by its length
+         *
+         * @param [in, out] vector 3D vector
+         * @return true if the vector length is not equal to zero
+         */
+        bool unitize(IK::Vector_3 &vector);
+
+        /**
+         * transformation matrix, orient from plane to xy plane
+         *
+         * @param [in] origin plane origin
+         * @param [in] plane plane, from which x-axis and y-axis and z-axis are extracted
+         * @return CGAL 4x4 transformation matrix https://doc.cgal.org/latest/Kernel_23/classCGAL_1_1Aff__transformation__3.html
+         */
+        CGAL::Aff_transformation_3<IK> plane_to_xy(const IK::Point_3 &origin, const IK::Plane_3 &plane);
+
         /**
          * WARNING user must not use this method - this method is used by quick_hull algorithm
          * it checks if points are clockwise or counter clockwise
@@ -121,6 +149,9 @@ namespace cgal_rectangle_util
          * @return rotated vector
          */
         IK::Point_3 rotate_to_xaxis(IK::Point_3 &point, const double &angle);
+
+
+
 
         /**
          * get transformation from 3D to 2D and invcerse from a polyline
