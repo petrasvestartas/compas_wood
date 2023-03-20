@@ -155,4 +155,19 @@ namespace cgal_vector_util
         break;
         }
     }
+
+    IK::Vector_3 get_leveled_vector(const IK::Vector_3 &vector, const double &vertical_height)
+    {
+
+        IK::Vector_3 dir = vector;
+
+        if (unitize(dir))
+        {
+            double angle = CGAL::angle(dir, IK::Vector_3(0, 0, 1));
+            double inclined_offset_by_vertical_distance = vertical_height / std::cos(angle);
+            dir *= inclined_offset_by_vertical_distance;
+        }
+
+        return dir;
+    }
 }
