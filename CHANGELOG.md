@@ -62,7 +62,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [x] Create a wrapper in C++ with Pybind11 - In Process
 - [x] Setup the Compas Python Environment that replicates the 2nd step workflow 
 - [x] update the code for MAC
-- [ ] Produce documentation for MOOC section. Since docs building fails try just build one file or compas_wood docs
+- [x] Produce documentation for MOOC section. Since docs building fails try just build one file or compas_wood docs
 - [ ] rewrite Grasshopper components in Python
 - [x] test on another Windows and mac pc
 - [ ] push package to Conda
@@ -78,12 +78,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- [ ] write a cpp method for a notch generation
 - [ ] continue the model based on " beam_node_0.cpp -> beam_node_0 " , currently only connection areas are generated, but not the joint volumes
 - [ ] use for tests already implemented mesh boolean difference method
 - [ ] separate connection area detection into 3 steps a) cross, b) end-to-end, c) side-to-end
 - [ ] display connection area by type color
 - [ ] transfer all NGon joinery tests to this one " beam_node_0.cpp " and write Google Tests
-- [ ] try to clean up the python code that builds correctly, including the documentaion
+- [ ] try to clean up the python code that builds correctly, including the documentation
 - [ ] wrap the two major methods to pybind11
 
 ### Changed
@@ -101,7 +102,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 
 # Wish-list
-* OpenNest rewrited version for c++
+* OpenNest rewriten version for c++
 * box packing
 * linear stock
 * fabrication outlines for plates with notches

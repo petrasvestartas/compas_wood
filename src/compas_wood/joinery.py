@@ -5,14 +5,9 @@ from wood_pybind11 import WoodVectorDouble
 from wood_pybind11 import WoodNestedVectorDouble
 from wood_pybind11 import WoodNestedNestedVectorDouble
 from wood_pybind11 import WoodVectorFloat
+import compas_wood.conversions as conv
 from compas.geometry import Polyline
-from compas.datastructures import Mesh
-from compas.geometry import Point
-from compas.geometry import Frame
-from compas.geometry import Box
 import time
-
-
 
 # from wood_pybind11 import test
 # from wood_pybind11 import read_xml_polylines
@@ -60,234 +55,6 @@ filenames_of_datasets = [
     "type_plates_name_top_to_side_pairs",  # 36
     "type_plates_name_top_to_top_pairs",  # 37
 ]
-
-
-def WoodVectorInt_to_list(wood_vector_int):
-    my_list = []
-
-    for i in range(0, len(wood_vector_int)):
-        my_list.append(wood_vector_int[i])
-
-    return my_list
-
-
-def list_to_WoodVectorInt(list):
-    my_list = WoodVectorInt(list)
-
-    return my_list
-
-
-def WoodNestedVectorInt_to_lists(wood_nested_vector_int):
-    my_lists = []
-
-    for i in range(len(wood_nested_vector_int)):
-        my_list = []
-        for j in range(0, len(wood_nested_vector_int[i])):
-            my_list.append(wood_nested_vector_int[i][j])
-        my_lists.append(my_list)
-
-    return my_lists
-
-
-def lists_to_WoodNestedVectorInt(lists):
-    my_lists = WoodNestedVectorInt()
-
-    for i in lists:
-        my_lists.append(WoodVectorInt(i))
-
-    return my_lists
-
-
-def WoodVectorDouble_to_list(wood_vector_double):
-    my_list = []
-
-    for i in range(0, len(wood_vector_double)):
-        my_list.append(wood_vector_double[i])
-
-    return my_list
-
-
-def list_to_WoodVectorDouble(list):
-    my_list = WoodVectorDouble(list)
-
-    return my_list
-
-
-def WoodNestedVectorDouble_to_lists(wood_nested_vector_double):
-    my_lists = []
-
-    for i in range(len(wood_nested_vector_double)):
-        my_list = []
-        for j in range(0, len(wood_nested_vector_double[i])):
-            my_list.append(wood_nested_vector_double[i][j])
-        my_lists.append(my_list)
-
-    return my_lists
-
-
-def lists_to_WoodNestedVectorDouble(lists):
-    my_lists = WoodNestedVectorDouble([])
-
-    for i in lists:
-        my_lists.append(WoodVectorDouble(i))
-
-    return my_lists
-
-
-def lists_of_vectors_to_WoodNestedVectorDouble(lists):
-    my_lists = WoodNestedVectorDouble()
-
-    for i in lists:
-        list_coord = []
-        for vector in i:
-            list_coord.append(vector[0])
-            list_coord.append(vector[1])
-            list_coord.append(vector[2])
-        my_lists.append(WoodVectorDouble(list_coord))
-
-    return my_lists
-
-
-def WoodNestedVectorDouble_to_polylines(wood_nested_vector_double):
-    # polylines
-    output_polylines = []
-
-    for i in range(len(wood_nested_vector_double)):
-        points = []
-        for j in range(0, len(wood_nested_vector_double[i]), 3):
-            points.append(
-                [
-                    wood_nested_vector_double[i][j + 0],
-                    wood_nested_vector_double[i][j + 1],
-                    wood_nested_vector_double[i][j + 2],
-                ]
-            )
-        polyline = Polyline(points)
-        output_polylines.append(polyline)
-
-    return output_polylines
-
-
-def WoodVectorFloat_and_WoodVectorInt_to_mesh(wood_vector_float, wood_vector_int):
-    # >>> vertices_1 = [[0, 0, 0], [0, 500, 0], [500, 500, 0], [500, 0, 0]]
-    # >>> vertices_2 = [[500, 0, 0], [500, 500, 0], [1000, 500, 0], [1000, 0, 0]]
-    # >>> faces = [[0, 1, 2, 3]]
-
-    vertices = []
-    faces = []
-
-    for i in range(0, len(wood_vector_float), 3):
-        vertices.append(
-            [
-                wood_vector_float[i + 0],
-                wood_vector_float[i + 1],
-                wood_vector_float[i + 2],
-            ]
-        )
-
-    for i in range(0, len(wood_vector_int), 3):
-        faces.append(
-            [
-                wood_vector_int[i + 0],
-                wood_vector_int[i + 1],
-                wood_vector_int[i + 2],
-            ]
-        )
-
-    return Mesh.from_vertices_and_faces(vertices, faces)
-
-
-def polylines_to_WoodNestedVectorDouble(lists):
-    my_lists = WoodNestedVectorDouble()
-
-    for i in range(len(lists)):
-        my_list = []
-        for j in lists[i]:
-            my_list.append(j[0])
-            my_list.append(j[1])
-            my_list.append(j[2])
-        my_lists.append(WoodVectorDouble(my_list))
-
-    return my_lists
-
-
-def WoodNestedVectorDouble_to_vectorslist(wood_nested_vector_double):
-    # vectors
-    output_vectors = []
-    for i in range(len(wood_nested_vector_double)):
-        vectors = []
-        for j in range(0, len(wood_nested_vector_double[i]), 3):
-            vectors.append(
-                [
-                    wood_nested_vector_double[i][j + 0],
-                    wood_nested_vector_double[i][j + 1],
-                    wood_nested_vector_double[i][j + 2],
-                ]
-            )
-        output_vectors.append(vectors)
-
-    return output_vectors
-
-
-def WoodNestedNestedVectorDouble_to_polylineslists(wood_nested_nested_vector_double):
-    # lists of polylines
-    output_polylines = []
-
-    for i in wood_nested_nested_vector_double:
-        polylines = []
-
-        for j in i:
-            points = []
-            for k in range(0, len(j), 3):
-                points.append([j[k + 0], j[k + 1], j[k + 2]])
-            polylines.append(Polyline(points))
-
-        output_polylines.append(polylines)
-
-    return output_polylines
-
-
-def WoodNestedNestedVectorDouble_to_polylineslist(wood_nested_nested_vector_double):
-    # lists of polylines
-    output_polylines = []
-
-    for i in wood_nested_nested_vector_double:
-        for j in i:
-            points = []
-            for k in range(0, len(j), 3):
-                points.append([j[k + 0], j[k + 1], j[k + 2]])
-            output_polylines.append(Polyline(points))
-
-    return output_polylines
-
-
-def WoodVectorDouble_to_box(wood_vector_double):
-    points = []
-
-    for i in range(0, len(wood_vector_double), 3):
-        p = Point(wood_vector_double[i], wood_vector_double[i + 1], wood_vector_double[i + 2])
-        points.append(p)
-
-    point_center = (points[0] + points[6]) * 0.5
-
-    xaxis = points[0] - points[4]
-    yaxis = points[0] - points[3]
-    zaxis = points[0] - points[1]
-    frame = Frame(point_center, xaxis, yaxis)
-
-    box = Box(frame, xaxis.length, yaxis.length, zaxis.length)
-    vertices, faces = box.to_vertices_and_faces()
-    mesh_box = Mesh.from_vertices_and_faces(vertices, faces)
-
-    return mesh_box
-
-
-def WoodNestedVectorDouble_to_boxeslist(wood_nested_vector_double):
-    mesh_boxes = []
-    for i in wood_nested_vector_double:
-        mesh_boxes.append(WoodVectorDouble_to_box(i))
-
-    return mesh_boxes
 
 
 def test():
@@ -418,23 +185,27 @@ def read_xml_polylines_and_properties(
     ###################################################################################################
 
     # polylines
-    output_polylines = WoodNestedVectorDouble_to_polylines(input_polyline_pairs_coord)
+    output_polylines = conv.WoodNestedVectorDouble_to_polylines(
+        input_polyline_pairs_coord
+    )
 
     # vectors
-    output_vectors = WoodNestedVectorDouble_to_vectorslist(
+    output_vectors = conv.WoodNestedVectorDouble_to_vectorslist(
         input_insertion_vectors_coord
     )
 
     # joint_types
-    output_joints_types = WoodNestedVectorInt_to_lists(input_JOINTS_TYPES)
+    output_joints_types = conv.WoodNestedVectorInt_to_lists(input_JOINTS_TYPES)
 
     # three_valence
-    output_three_valence_element_indices_and_instruction = WoodNestedVectorInt_to_lists(
-        input_three_valence_element_indices_and_instruction
+    output_three_valence_element_indices_and_instruction = (
+        conv.WoodNestedVectorInt_to_lists(
+            input_three_valence_element_indices_and_instruction
+        )
     )
 
     # adjacency
-    output_adjacency = WoodVectorInt_to_list(input_adjacency)
+    output_adjacency = conv.WoodVectorInt_to_list(input_adjacency)
 
     ###################################################################################################
     # output
@@ -514,30 +285,32 @@ def get_connection_zones(
     _input_three_valence_element_indices_and_instruction = WoodNestedVectorInt()
     _input_adjacency = WoodVectorInt()
 
-    _input_polyline_pairs_coord = polylines_to_WoodNestedVectorDouble(
+    _input_polyline_pairs_coord = conv.polylines_to_WoodNestedVectorDouble(
         input_polyline_pairs
     )  # input_polyline_pairs
 
     if input_insertion_vectors is not None:
-        _input_insertion_vectors_coord = lists_of_vectors_to_WoodNestedVectorDouble(
-            input_insertion_vectors
+        _input_insertion_vectors_coord = (
+            conv.lists_of_vectors_to_WoodNestedVectorDouble(input_insertion_vectors)
         )  # input_insertion_vectors
 
     if input_joints_types is not None:
-        _input_joints_types = lists_to_WoodNestedVectorInt(
+        _input_joints_types = conv.lists_to_WoodNestedVectorInt(
             input_joints_types
         )  # input_joints_types
 
     if input_three_valence_element_indices_and_instruction is not None:
         _input_three_valence_element_indices_and_instruction = (
-            lists_to_WoodNestedVectorInt(
+            conv.lists_to_WoodNestedVectorInt(
                 input_three_valence_element_indices_and_instruction
             )
         )
         # (input_three_valence_element_indices_and_instruction)
 
     if input_adjacency is not None:
-        _input_adjacency = list_to_WoodVectorInt(input_adjacency)  # input_adjacency
+        _input_adjacency = conv.list_to_WoodVectorInt(
+            input_adjacency
+        )  # input_adjacency
 
     _joint_parameters_and_types = WoodVectorDouble(
         [
@@ -591,7 +364,7 @@ def get_connection_zones(
     print(
         "\n___________________________________start_of_WOOD_____________________________________"
     )
-    
+
     # print(_input_polyline_pairs_coord)
     # print(_input_insertion_vectors_coord)
     # print(_input_joints_types)
@@ -603,7 +376,7 @@ def get_connection_zones(
     # print(output_type)
     # print(_output_plines)
     # print(_output_types)
-    
+
     start_time = time.time()
     wood_pybind11.get_connection_zones(
         # input
@@ -639,9 +412,9 @@ def get_connection_zones(
     # output
     ###################################################################################################
     if flatten_output:
-        return WoodNestedNestedVectorDouble_to_polylineslist(_output_plines)
+        return conv.WoodNestedNestedVectorDouble_to_polylineslist(_output_plines)
     else:
-        return WoodNestedNestedVectorDouble_to_polylineslists(_output_plines)
+        return conv.WoodNestedNestedVectorDouble_to_polylineslists(_output_plines)
 
 
 def closed_mesh_from_polylines(list_of_polylines):
@@ -661,7 +434,7 @@ def closed_mesh_from_polylines(list_of_polylines):
     ###################################################################################################
     # conversion of input data
     ###################################################################################################
-    list_of_polylines_coordinates = polylines_to_WoodNestedVectorDouble(
+    list_of_polylines_coordinates = conv.polylines_to_WoodNestedVectorDouble(
         list_of_polylines
     )
 
@@ -698,7 +471,7 @@ def closed_mesh_from_polylines(list_of_polylines):
     ###################################################################################################
     # conversion of output data
     ###################################################################################################
-    return WoodVectorFloat_and_WoodVectorInt_to_mesh(out_vertices, out_triangles)
+    return conv.WoodVectorFloat_and_WoodVectorInt_to_mesh(out_vertices, out_triangles)
 
 
 def joints(list_of_polylines, search_type=0):
@@ -723,7 +496,7 @@ def joints(list_of_polylines, search_type=0):
     ###################################################################################################
     # conversion of input data
     ###################################################################################################
-    list_of_polylines_coordinates = polylines_to_WoodNestedVectorDouble(
+    list_of_polylines_coordinates = conv.polylines_to_WoodNestedVectorDouble(
         list_of_polylines
     )
     ###################################################################################################
@@ -761,9 +534,9 @@ def joints(list_of_polylines, search_type=0):
     # conversion of output data and output
     ###################################################################################################
     return (
-        WoodNestedVectorInt_to_lists(element_pairs),
-        WoodNestedVectorDouble_to_polylines(joint_areas),
-        WoodVectorInt_to_list(joint_types),
+        conv.WoodNestedVectorInt_to_lists(element_pairs),
+        conv.WoodNestedVectorDouble_to_polylines(joint_areas),
+        conv.WoodVectorInt_to_list(joint_types),
     )
 
 
@@ -786,7 +559,7 @@ def rtree(list_of_polylines):
     ###################################################################################################
     # conversion of input data
     ###################################################################################################
-    list_of_polylines_coordinates = polylines_to_WoodNestedVectorDouble(
+    list_of_polylines_coordinates = conv.polylines_to_WoodNestedVectorDouble(
         list_of_polylines
     )
 
@@ -823,7 +596,7 @@ def rtree(list_of_polylines):
     # conversion of output data
     ###################################################################################################
     return (
-        WoodNestedVectorInt_to_lists(elements_neighbours),
-        WoodNestedVectorDouble_to_boxeslist(elements_AABB),
-        WoodNestedVectorDouble_to_boxeslist(elements_OOBB),
+        conv.WoodNestedVectorInt_to_lists(elements_neighbours),
+        conv.WoodNestedVectorDouble_to_boxeslist(elements_AABB),
+        conv.WoodNestedVectorDouble_to_boxeslist(elements_OOBB),
     )
