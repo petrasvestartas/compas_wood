@@ -2,7 +2,7 @@
 
 Author: [Petras Vestartas](https://petrasvestartas.com/Petras-Vestartas-CV)
 
-![alt text](docs\_images/github_repo_structure/compas_wood_github_repository_structure.png "github_repository_structure")
+![alt text](docs/_images/github_repo_structure/compas_wood_github_repository_structure.png "github_repository_structure")
 ![type_plates_name_side_to_side_edge_inplane_hexshell](https://user-images.githubusercontent.com/18013985/221278631-8ed8f5af-8485-49ec-9a99-625d5a4466e4.png)
 
 
