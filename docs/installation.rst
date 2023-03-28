@@ -27,7 +27,7 @@ Mac
     pip install -e .
 
 ################################################################################
-If you never used neither VSCode nor Anaconda not github
+If you never used VSCode, Anaconda, Git
 ################################################################################
 
 *    Step 0 - Install git (https://git-scm.com/downloads) 
