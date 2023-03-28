@@ -1,7 +1,7 @@
 ********************************************************************************
 tests/compas_wood_7_mooc_homework.py
 ********************************************************************************
-* **Description:** Mesh from polylines that comes from the joinery algorithm
+* **Description:** Double tenon mortise joint first implemented in the Vidy Theater project. The data-set contains the adjancency information. For a correct merging with the plate outline the joits area is reduced by 10 units.
 * **Output:** Preview of the data-set in compas_view2
 
 .. literalinclude:: ../../tests/compas_wood_7_mooc_homework.py

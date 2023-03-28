@@ -27,9 +27,10 @@ Mac
     pip install -e .
 
 ################################################################################
-If you never used neither VSCode nor Anaconda
+If you never used neither VSCode nor Anaconda not github
 ################################################################################
 
+*    Step 0 - Install git (https://git-scm.com/downloads) 
 *    Step 1 - Install C++ compiler, for windows download "Visual Studio 2019" (https://visualstudio.microsoft.com/downloads/), for MAC download "Xcode" (https://developer.apple.com/xcode/)
 *    Step 2 - download "Anaconda" (https://www.anaconda.com/products/distribution) and install it, during installation mark the option to add the path to the environment variables.
 *    Step 3 - run the "Anacond Prompt" terminal using Administrative rights
