@@ -37,7 +37,7 @@ def test_connection_detection():
         joint_parameters,
         0,
         [1, 1, 1],
-        4   
+        3   
     )
 
     # display

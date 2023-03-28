@@ -27,6 +27,51 @@ Mac
     pip install -e .
 
 ################################################################################
+If you never used neither VSCode nor Anaconda
+################################################################################
+
+*    Step 1 - Install C++ compiler, for windows download "Visual Studio 2019" (https://visualstudio.microsoft.com/downloads/), for MAC download "Xcode" (https://developer.apple.com/xcode/)
+*    Step 2 - download "Anaconda" (https://www.anaconda.com/products/distribution) and install it, during installation mark the option to add the path to the environment variables.
+*    Step 3 - run the "Anacond Prompt" terminal using Administrative rights
+*    Step 4 - update conda 
+
+.. code-block:: 
+
+    conda config --add channels conda-forge
+
+*    Step 5 - write in the terminal commands mentioned above either for MAC or Windows e.g.
+
+.. code-block:: 
+
+    conda create -n wood-dev python=3.8 mpir mpfr boost-cpp eigen=3.4 cgal-cpp=5.5 pybind11 compas compas_view2 --yes
+    conda activate wood-dev 
+    git clone https://github.com/petrasvestartas/compas_wood.git
+    cd compas_wood
+    pip install -e .
+
+*    Step 6 - install VSCode (https://code.visualstudio.com/download)
+*    Step 7 - install Python extension in VScode
+
+.. figure:: /_images/installation/7.png
+    :figclass: figure
+    :class: figure-img img-fluid 
+
+*    Step 8 - change default terminal to "Command Line", type "Ctrl+Shift+P" and type "Select Default Shell" and select "Command Line"
+
+.. figure:: /_images/installation/8.png
+    :figclass: figure
+    :class: figure-img img-fluid 
+
+
+*    Step 9 - change the environment to "wood-dev", type "Ctrl+Shift+P" and type "Python: Select Interpreter" and select "wood-dev". Finally go to tests folder, open any file, right click on the canvas and click "Run Python file in Terminal"
+
+.. figure:: /_images/installation/9.png
+    :figclass: figure
+    :class: figure-img img-fluid 
+
+*    Even if the first time the whole installation seems complex, this process is standard to other compas packages, following this link: https://compas.dev/compas/latest/installation.html
+
+################################################################################
 Rhino Grasshopper 
 ################################################################################
 
