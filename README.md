@@ -38,6 +38,27 @@ Author: [Petras Vestartas](https://petrasvestartas.com/Petras-Vestartas-CV)
     cd compas_wood 
     pip install -e . 
 
+* Note: Be aware that "pip install -e ." command will take some time to run without any messages. This is normal for C++ compilation that is done only once.
+
+
+##### If you install this library on a new computer that did not have Anaconda Prompt or VScode follow these steps
+
+* conda config --add channels conda-forge
+
+* Install Anaconda Prompt: https://www.anaconda.com/
+* Add this environment path. On windows search type "Edit the system environmental variables", click "Environmental Variables..", under second tab click "path", then edit and add the following path: "C:\ProgramData\Anaconda3\Scripts". This process can be avoided if during installation of Anaconda Prompt you ticked the option to the Anaconda Prompt to the Environmental Variables.
+* Open Anaconda Prompt terminal and update conda:
+    conda activate base
+    conda update --all
+
+##### If you never used VSCode
+
+* Install VSCode: https://code.visualstudio.com/Download
+* Install VSCode Extensions: Python
+* Launch VScode, type CTRL+SHIFT+P and >Python: Create Terminal
+
+
+
 ##### Video
 https://user-images.githubusercontent.com/18013985/147587822-cfb43c96-4a81-4b89-987f-8d201ec2e5ba.mp4
 

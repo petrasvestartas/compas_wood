@@ -14,11 +14,8 @@ def disply_joint(
     female_boolean_types,
 ):
     viewer = App(
-        show_grid=False,
-        width=3840,
-        height=2160 - 250,
-        enable_sidebar=True,
-        version="120",
+        # width=3840,
+        # height=2160 - 250,
     )
 
     if male_plines_polylines is not None:
@@ -50,11 +47,8 @@ def display(
     display_polylines_as_mesh_types=None,
 ):
     viewer = App(
-        show_grid=False,
-        width=3840,
-        height=2160 - 250,
-        enable_sidebar=True,
-        version="120",
+        # width=3840,
+        # height=2160 - 250,
     )
 
     viewer.view.camera.fov = 10
@@ -165,7 +159,7 @@ def display_polylines(
                     else:
                         viewer.add(a, color=(206 / 255, 0, 88 / 255.0), linewidth=10)
                 else:
-                    viewer.add(a, color=(r, g, b), linewidth=t)
+                    viewer.add(a, linewidth=t)
 
             if collection is True:
                 colors.append((r, g, b))
@@ -190,7 +184,7 @@ def display_polylines(
     if collection:
         if len(polylinesScaled):
             viewer.add(
-                Collection(polylinesScaled), linewidth=t #, colors=colors, color=(r, g, b)
+                Collection(polylinesScaled), linewidth = t
             )
 
         else:
@@ -217,6 +211,8 @@ def display_mesh(viewer, input, scale=0.01, r=0.0, g=0.0, b=0.0, t=1):
         linecolor=(0, 0, 0),
         opacity=0.5,
         linewidth=1,
+        show_lines=False,
         hide_coplanaredges=True,
         show_faces=True,
+
     )

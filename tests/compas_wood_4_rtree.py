@@ -29,7 +29,7 @@ def test_rtree(boxes_AABB_or_boxes_OOBB=False):
         boxes_selected.append(boxes[i])
 
     # Display via Compas_View2
-    # display(input, None, boxes_selected, 0.0001, 0, 0, 0, True)
+    display(input, None, boxes_selected, 0.0001, 0, 0, 0, True)
 
     # output
     return neighbours

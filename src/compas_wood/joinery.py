@@ -459,6 +459,7 @@ def get_connection_zones(
     scale=[1, 1, 1],
     output_type=4,
     flatten_output=False,
+    joint_volume_extension = [0, 0, 0]
 ):
     """detect connection zones between two polylines and generate joinery
     Parameters
@@ -495,6 +496,8 @@ def get_connection_zones(
         2 - wood::joint areas
         3 - wood::joint areas with bounding box
         4 - wood::joint areas with bounding box and cut types
+    joint_volume_extension : list[double], optional
+        a list of 3 doubles for extending the joint volume in x, y and z directions
     Returns
     -------
     list[Polyline]
@@ -571,10 +574,15 @@ def get_connection_zones(
     _output_plines = WoodNestedNestedVectorDouble([])
     _output_types = WoodNestedVectorInt([])
     _scale = WoodVectorDouble([1.0, 1.0, 1.0])
+    _joint_volume_extension = WoodVectorDouble([1.0, 1.0, 1.0])
 
     if scale is not None:  # if the user has provided joint parameters
         for i in range(len(scale)):
             _scale[i] = scale[i]
+
+    if joint_volume_extension is not None:  # if the user has provided joint parameters
+        for i in range(len(joint_volume_extension)):
+            _joint_volume_extension[i] = joint_volume_extension[i]
 
     ###################################################################################################
     # run the WOOD CPP code
@@ -611,6 +619,8 @@ def get_connection_zones(
         # output
         _output_plines,
         _output_types,
+        # global_parameters
+        _joint_volume_extension
     )
 
     print(

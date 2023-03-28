@@ -173,7 +173,10 @@ namespace compas_wood
         int &output_type,
         // output
         std::vector<std::vector<std::vector<double>>> &pybind11_output_plines,
-        std::vector<std::vector<int>> &pybind11_output_types);
+        std::vector<std::vector<int>> &pybind11_output_types,
+        // global_parameters
+        std::vector<double>& pybind11_joint_volume_parameters
+        );
 
     /**
      * mesh a list of polylines with holes

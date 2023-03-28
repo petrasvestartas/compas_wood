@@ -145,10 +145,21 @@ namespace compas_wood
         printf(filename_of_dataset.c_str());
         printf("\n");
         printf(wood_xml::path_and_file_for_input_polylines.c_str());
-        printf("\n");
-
         // read the xml file
         wood_xml::read_xml_polylines_and_properties(input_polyline_pairs_coord, input_insertion_vectors_coord, input_JOINTS_TYPES, input_three_valence_element_indices_and_instruction, input_adjacency, false, true);
+        
+        printf("\n input_polyline_pairs_coord ");
+        printf(std::to_string(input_polyline_pairs_coord.size()).c_str());
+        printf("\n input_insertion_vectors_coord ");
+        printf(std::to_string(input_insertion_vectors_coord.size()).c_str());
+        printf("\n input_JOINTS_TYPES ");
+        printf(std::to_string(input_JOINTS_TYPES.size()).c_str());
+        printf("\n input_three_valence_element_indices_and_instruction ");
+        printf(std::to_string(input_three_valence_element_indices_and_instruction.size()).c_str());
+        printf("\n input_adjacency ");
+        printf(std::to_string(input_adjacency.size()).c_str());
+        printf("\n");
+    
     }
 
     void get_connection_zones(
@@ -164,7 +175,10 @@ namespace compas_wood
         int& _output_type,
         // output
         std::vector<std::vector<std::vector<double>>>& pybind11_output_plines,
-        std::vector<std::vector<int>>& pybind11_output_types)
+        std::vector<std::vector<int>>& pybind11_output_types,
+        // global_parameters
+        std::vector<double>& pybind11_joint_volume_parameters
+        )
     {
         // internal::set_file_path_for_input_xml_and_screenshot(
         //     input_polyline_pairs,
@@ -197,6 +211,8 @@ namespace compas_wood
 
         wood_globals::JOINTS_PARAMETERS_AND_TYPES = pybind11_wood_globals_JOINTS_PARAMETERS_AND_TYPES;
         wood_globals::OUTPUT_GEOMETRY_TYPE = output_type;
+        for(int i = 0; i< pybind11_joint_volume_parameters.size(); i++)
+            wood_globals::JOINT_VOLUME_EXTENSION[i] = pybind11_joint_volume_parameters[i];
 
    
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -206,11 +222,6 @@ namespace compas_wood
         std::vector<std::vector<wood_cut::cut_type>> output_types;
         std::vector<std::vector<int>> top_face_triangulation;
 
-
-
-
-
-        printf("CPP 5");
  
         wood_main::get_connection_zones(
             // input
@@ -557,7 +568,8 @@ PYBIND11_MODULE(wood_pybind11, m)
         pybind11::arg("output_type").noconvert(),
         // outputs
         pybind11::arg("pybind11_output_plines").noconvert(),
-        pybind11::arg("pybind11_output_types").noconvert());
+        pybind11::arg("pybind11_output_types").noconvert(),
+        pybind11::arg("pybind11_joint_volume_parameters").noconvert());
 
     m.def("closed_mesh_from_polylines_vnf", &compas_wood::closed_mesh_from_polylines_vnf,
         // inputs

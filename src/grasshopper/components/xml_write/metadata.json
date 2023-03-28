@@ -1,0 +1,49 @@
+{
+    "name": "xml_write_plines",
+    "nickname": "xml_write_plines",
+    "description": "Write a data tree of polylines to an xml file.",
+    "category": "compas_wood",
+    "subcategory": "serialize",
+    "exposure": 2,
+    "instanceGuid": "acefda87-27e6-4df8-abb8-11b1c275ce0d",
+    "ghpython": {
+        "hideOutput": true,
+        "hideInput": true,
+        "isAdvancedMode": true,
+        "marshalOutGuids": true,
+        "iconDisplay": 2,
+        "inputParameters": [
+            {
+                "name": "_plines",
+                "nickname": "_plines",
+                "description": "a data tree of polylines pairs",
+                "optional": false,
+                "allowTreeAccess": true,
+                "showTypeHints": true,
+                "scriptParamAccess": "tree",
+                "wireDisplay": "faint",
+                "sourceCount": 0,
+                "typeHintID": "polyline",
+                "reverse": false,
+                "simplify": false
+            },
+            {
+                "name": "_path",
+                "nickname": "_path",
+                "description": "path where to write the xml file",
+                "optional": true,
+                "allowTreeAccess": true,
+                "showTypeHints": true,
+                "scriptParamAccess": "item",
+                "wireDisplay": "faint",
+                "sourceCount": 0,
+                "typeHintID": "str",
+                "reverse": false,
+                "simplify": false
+            }
+        ],
+        "outputParameters": [
+          
+        ]
+    }
+}
