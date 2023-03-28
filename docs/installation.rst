@@ -40,7 +40,7 @@ If you never used VSCode, Anaconda, Git
 
     conda config --add channels conda-forge
 
-*    Step 5 - write in the terminal commands mentioned above either for MAC or Windows e.g.
+*    Step 5 - using Anaconda Prompt write a series commands to create an environment:
 
 .. code-block:: 
 
