@@ -2,24 +2,13 @@
 
 Author: [Petras Vestartas](https://petrasvestartas.com/Petras-Vestartas-CV)
 
-![alt text](docs/__readme_images/compas_wood_github_repository_structure.png "github_repository_structure")
-
+![alt text](docs\_images/github_repo_structure/compas_wood_github_repository_structure.png "github_repository_structure")
 ![type_plates_name_side_to_side_edge_inplane_hexshell](https://user-images.githubusercontent.com/18013985/221278631-8ed8f5af-8485-49ec-9a99-625d5a4466e4.png)
 
-
-## Examples for MOOC Tutorials
-- [x] "tests/compas_wood_1_test.py" - test if the library is loading
-- [x] "tests/compas_wood_2_read_xml.py" - get data-set a set of polylines and display in viewer
-- [x] "tests/compas_wood_3_joints.py" - get connection-areas between timber plates
-- [x] "tests/compas_wood_4_rtree.py" - get neighbors of an element
-- [x] "tests/compas_wood_5_get_connection_zones.py" - generate timber joints
-- [x] "tests/compas_wood_6_closed_mesh_from_polylines.py" - create a solid mesh from polylines with holes
 
 ## Interface compas_wood
 
 ### Installation
-
-#### Clone Github Repository
 
 ##### Windows
 
@@ -43,9 +32,8 @@ Author: [Petras Vestartas](https://petrasvestartas.com/Petras-Vestartas-CV)
 
 ##### If you install this library on a new computer that did not have Anaconda Prompt or VScode follow these steps
 
-* conda config --add channels conda-forge
-
 * Install Anaconda Prompt: https://www.anaconda.com/
+* Type in the anaconda prompt: "conda config --add channels conda-forge"
 * Add this environment path. On windows search type "Edit the system environmental variables", click "Environmental Variables..", under second tab click "path", then edit and add the following path: "C:\ProgramData\Anaconda3\Scripts". This process can be avoided if during installation of Anaconda Prompt you ticked the option to the Anaconda Prompt to the Environmental Variables.
 * Open Anaconda Prompt terminal and update conda:
     conda activate base
@@ -58,10 +46,18 @@ Author: [Petras Vestartas](https://petrasvestartas.com/Petras-Vestartas-CV)
 * Launch VScode, type CTRL+SHIFT+P and >Python: Create Terminal
 
 
-
 ##### Video
 https://user-images.githubusercontent.com/18013985/147587822-cfb43c96-4a81-4b89-987f-8d201ec2e5ba.mp4
 
+
+## Examples
+- [x] "tests/compas_wood_1_test.py" - test if the library is loading
+- [x] "tests/compas_wood_2_read_xml.py" - get data-set a set of polylines and display in viewer
+- [x] "tests/compas_wood_3_joints.py" - get connection-areas between timber plates
+- [x] "tests/compas_wood_4_rtree.py" - get neighbors of an element
+- [x] "tests/compas_wood_5_get_connection_zones.py" - generate timber joints
+- [x] "tests/compas_wood_6_closed_mesh_from_polylines.py" - create a solid mesh from polylines with holes
+- [x] "tests/compas_wood_7_mooc_homework.py" - create a special connection of the Vidy project
 
 
 ## Tests
