@@ -1,0 +1,88 @@
+{
+    "name": "joints",
+    "nickname": "joints",
+    "description": "get connection zones from polylines and indices of neighboring elements",
+    "category": "compas_wood",
+    "subcategory": "joinery",
+    "exposure": 4,
+    "instanceGuid": "acefda11-51e6-5df0-abb8-15b5c271ce7d",
+    "ghpython": {
+        "hideOutput": true,
+        "hideInput": true,
+        "isAdvancedMode": true,
+        "marshalOutGuids": true,
+        "iconDisplay": 2,
+        "inputParameters": [
+            {
+                "name": "_polylines",
+                "nickname": "_polylines",
+                "description": "a data-tree of polyline pairs",
+                "optional": true,
+                "allowTreeAccess": true,
+                "showTypeHints": true,
+                "scriptParamAccess": "tree",
+                "wireDisplay": "faint",
+                "sourceCount": 0,
+                "typeHintID": "polyline",
+                "reverse": false,
+                "simplify": false
+            },
+            {
+                "name": "_id",
+                "nickname": "_id",
+                "description": "index of xml file, if _polylines are not given",
+                "optional": true,
+                "allowTreeAccess": true,
+                "showTypeHints": true,
+                "scriptParamAccess": "item",
+                "wireDisplay": "faint",
+                "sourceCount": 0,
+                "typeHintID": "int",
+                "reverse": false,
+                "simplify": false
+            }
+        ],
+        "outputParameters": [
+            {
+                "name": "_polylines_out",
+                "nickname": "_polylines_out",
+                "description": "polyline input",
+                "optional": false,
+                "sourceCount": 0,
+                "graft": false
+            },
+            {
+                "name": "_element_pairs",
+                "nickname": "_element_pairs",
+                "description": "indices of neighboring elements",
+                "optional": false,
+                "sourceCount": 0,
+                "graft": false
+            },
+            {
+                "name": "_joint_areas",
+                "nickname": "_joint_areas",
+                "description": "polylines that define the connection zones",
+                "optional": false,
+                "sourceCount": 0,
+                "graft": false
+            },
+            {
+                "name": "_joint_areas_mesh",
+                "nickname": "_joint_areas_mesh",
+                "description": "mesh that define the connection zones",
+                "optional": false,
+                "sourceCount": 0,
+                "graft": false
+            },
+            {
+                "name": "_joint_types",
+                "nickname": "_joint_types",
+                "description": "type of connection zone",
+                "optional": false,
+                "sourceCount": 0,
+                "graft": false
+            }
+        ]
+    }
+}

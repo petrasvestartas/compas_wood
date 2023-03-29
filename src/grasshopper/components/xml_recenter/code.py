@@ -24,10 +24,9 @@ class xml_recenter_component(component):
         
         # Transformation matrix
         translation = -RhinoGeometry.Vector3d(bbox.Center)
-        translation_vertical = RhinoGeometry.Transform.Translation(RhinoGeometry.Vector3d(0,0,bbox.Center.Z))
         move_to_center = RhinoGeometry.Transform.Translation(translation)
         scale_xform = RhinoGeometry.Transform.Scale(RhinoGeometry.Point3d.Origin, scale)
-        combined = scale_xform * move_to_center * translation_vertical
+        combined = scale_xform * move_to_center
         
         # Apply transformation
         geo_transformed = Grasshopper.DataTree[RhinoGeometry.GeometryBase]()

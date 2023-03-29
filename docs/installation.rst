@@ -14,6 +14,7 @@ Windows
     cd compas_wood
     pip install -e .
 
+
 ################################################################################
 Mac
 ################################################################################
@@ -25,6 +26,7 @@ Mac
     git clone https://github.com/petrasvestartas/compas_wood.git
     cd compas_wood 
     pip install -e .
+
 
 ################################################################################
 If you never used VSCode, Anaconda, Git
@@ -75,6 +77,14 @@ If you never used VSCode, Anaconda, Git
 ################################################################################
 Rhino Grasshopper 
 ################################################################################
+
+Open Anaconda Prompt:
+
+.. code-block:: 
+
+    conda activate wood-dev
+    python -m compas_rhino.install
+    python -m compas_rhino.install -p compas_wood
 
 .. code-block:: 
 
