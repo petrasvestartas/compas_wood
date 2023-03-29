@@ -81,6 +81,17 @@ namespace wood
                     }
                 }
 
+                size_t male_or_female = joints[std::get<0>(j_mf[i][j])].v0 == this->id ? 0 : 1;
+
+                bool four_volumes = joints[std::get<0>(j_mf[i][j])].joint_volumes[0].size() > 0 &&
+                                    joints[std::get<0>(j_mf[i][j])].joint_volumes[1].size() > 0 &&
+                                    joints[std::get<0>(j_mf[i][j])].joint_volumes[2].size() > 0 &&
+                                    joints[std::get<0>(j_mf[i][j])].joint_volumes[3].size() > 0;
+
+                std::pair<size_t, size_t> male_or_female_four_volumes = std::make_pair(0, 1);
+                if (four_volumes)
+                    male_or_female_four_volumes = male_or_female ? std::make_pair(0, 1) : std::make_pair(2, 3);
+
                 switch (what_to_expose)
                 {
                 case (0): // Plate outlines
@@ -112,29 +123,30 @@ namespace wood
                 }
 
                 case (1): // wood::joint lines
-                    // if (this->polylines.size() > 1 && i == 0) {
-                    //     output[this->id].emplace_back(this->polylines[0]); //cut
-                    //     output[this->id].emplace_back(this->polylines[1]); //cut
-                    // }
-
-                    output[this->id].emplace_back(joints[std::get<0>(j_mf[i][j])].joint_lines[0]);
-                    // output[this->id].emplace_back(joints[std::get<0>(j_mf[i][j])].joint_lines[1]);
+                    output[this->id].emplace_back(joints[std::get<0>(j_mf[i][j])].joint_lines[male_or_female]);
                     break;
-                case (2): // wood::joint volumes
-                    // std::cout << joints[std::get<0>(j_mf[i][j])].id << std::endl;
-                    //  if (this->polylines.size() > 1 && i == 0) {
-                    //      output[this->id].emplace_back(this->polylines[0]); //cut
-                    //      output[this->id].emplace_back(this->polylines[1]); //cut
-                    //  }
 
-                    if (joints[std::get<0>(j_mf[i][j])].joint_volumes[0].size() > 0)
-                        output[this->id].emplace_back(joints[std::get<0>(j_mf[i][j])].joint_volumes[0]);
-                    if (joints[std::get<0>(j_mf[i][j])].joint_volumes[1].size() > 0)
-                        output[this->id].emplace_back(joints[std::get<0>(j_mf[i][j])].joint_volumes[1]);
-                    if (joints[std::get<0>(j_mf[i][j])].joint_volumes[2].size() > 0)
-                        output[this->id].emplace_back(joints[std::get<0>(j_mf[i][j])].joint_volumes[2]);
-                    if (joints[std::get<0>(j_mf[i][j])].joint_volumes[3].size() > 0)
-                        output[this->id].emplace_back(joints[std::get<0>(j_mf[i][j])].joint_volumes[3]);
+                case (2): // wood::joint volumes
+
+                    if (four_volumes)
+                    {
+                        if (joints[std::get<0>(j_mf[i][j])].joint_volumes[male_or_female_four_volumes.first].size() > 0)
+                            output[this->id].emplace_back(joints[std::get<0>(j_mf[i][j])].joint_volumes[male_or_female_four_volumes.first]);
+                        if (joints[std::get<0>(j_mf[i][j])].joint_volumes[male_or_female_four_volumes.second].size() > 0)
+                            output[this->id].emplace_back(joints[std::get<0>(j_mf[i][j])].joint_volumes[male_or_female_four_volumes.second]);
+                    }
+                    else
+                    {
+                        if (joints[std::get<0>(j_mf[i][j])].joint_volumes[0].size() > 0)
+                            output[this->id].emplace_back(joints[std::get<0>(j_mf[i][j])].joint_volumes[0]);
+                        if (joints[std::get<0>(j_mf[i][j])].joint_volumes[1].size() > 0)
+                            output[this->id].emplace_back(joints[std::get<0>(j_mf[i][j])].joint_volumes[1]);
+                        if (joints[std::get<0>(j_mf[i][j])].joint_volumes[2].size() > 0)
+                            output[this->id].emplace_back(joints[std::get<0>(j_mf[i][j])].joint_volumes[2]);
+                        if (joints[std::get<0>(j_mf[i][j])].joint_volumes[3].size() > 0)
+                            output[this->id].emplace_back(joints[std::get<0>(j_mf[i][j])].joint_volumes[3]);
+                    }
+
                     break;
                 case (3):
 
