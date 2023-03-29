@@ -23,7 +23,6 @@
 
 #include "wood_cut.h"
 
-
 namespace wood
 {
     // Container for cuts
@@ -39,8 +38,8 @@ namespace wood
         /////////////////////////////////////////////////////////////////////////////////////////
         int id = 0, v0, v1, f0_0, f1_0, f0_1, f1_1, type; // 10 - SS Rotate 11 - SS OUT OF PLANE 12 - SS IN Plane,  20 Top-Side, 30 - Cross
         std::string key = "";
-        CGAL_Polyline joint_area;                         // delete
-        CGAL_Polyline joint_lines[2];                     // delete
+        CGAL_Polyline joint_area;     // delete
+        CGAL_Polyline joint_lines[2]; // delete
         // CGAL_Polyline joint_quads[2];//delete
         CGAL_Polyline joint_volumes[4]; // mostly 2, but can be 4 e.g. in-plane side-side
 
@@ -57,8 +56,6 @@ namespace wood
         std::array<std::vector<CGAL_Polyline>, 2> f;
         std::vector<wood_cut::cut_type> f_boolean_type; // 0 - do not merge, 1 - edge insertion, 2 - hole 3 - insert between multiple edges hole
 
-
-
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Joint geometrical parameters for
         // a) enable orientation
@@ -69,26 +66,24 @@ namespace wood
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         // Unit scale
-        //if this property is enabled, joint volume rectangles are moved within unit_scale_distance, this property is equal to first element thickness
+        // if this property is enabled, joint volume rectangles are moved within unit_scale_distance, this property is equal to first element thickness
         bool unit_scale = false;
         double unit_scale_distance = 0;
 
-        //Enable orientation or the joint is compute in place e.g. screws are computed in place, while other are pre-computed and oriented
+        // Enable orientation or the joint is compute in place e.g. screws are computed in place, while other are pre-computed and oriented
         bool orient = true;
 
-        //User parameter
+        // User parameter
         double division_length = 10;
         double shift = 0.5;
 
         // scale of the joint volume
         std::array<double, 3> scale = {1, 1, 1};
 
-        //computed parameters
+        // computed parameters
         int divisions = 1;
         double length = 1;
         bool compute_geometrical_divisions = true;
-
-
 
         /////////////////////////////////////////////////////////////////////////////////////////
         // Constructors
