@@ -147,7 +147,7 @@ namespace compas_wood
         printf(wood_xml::path_and_file_for_input_polylines.c_str());
         // read the xml file
         wood_xml::read_xml_polylines_and_properties(input_polyline_pairs_coord, input_insertion_vectors_coord, input_JOINTS_TYPES, input_three_valence_element_indices_and_instruction, input_adjacency, false, true);
-        
+
         printf("\n input_polyline_pairs_coord ");
         printf(std::to_string(input_polyline_pairs_coord.size()).c_str());
         printf("\n input_insertion_vectors_coord ");
@@ -159,7 +159,7 @@ namespace compas_wood
         printf("\n input_adjacency ");
         printf(std::to_string(input_adjacency.size()).c_str());
         printf("\n");
-    
+
     }
 
     void get_connection_zones(
@@ -178,7 +178,7 @@ namespace compas_wood
         std::vector<std::vector<int>>& pybind11_output_types,
         // global_parameters
         std::vector<double>& pybind11_joint_volume_parameters
-        )
+    )
     {
         // internal::set_file_path_for_input_xml_and_screenshot(
         //     input_polyline_pairs,
@@ -193,10 +193,10 @@ namespace compas_wood
         // The filename of the xml file and the screenshot directory
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-   
+
         std::vector<std::vector<IK::Point_3>> input_polyline_pairs;
         python_to_cpp__cpp_to_python::coord_to_vector_of_polylines(pybind11_input_polyline_pairs, input_polyline_pairs);
-   
+
         std::vector<std::vector<IK::Vector_3>> input_insertion_vectors;
         python_to_cpp__cpp_to_python::coord_to_vector_of_vectors(pybind11_input_insertion_vectors, input_insertion_vectors);
 
@@ -205,16 +205,16 @@ namespace compas_wood
         std::vector<std::vector<int>> input_three_valence_element_indices_and_instruction = pybind11_input_three_valence_element_indices_and_instruction;
         std::vector<int> input_adjacency = pybind11_input_adjacency;
 
-        int search_type=_search_type;
+        int search_type = _search_type;
         std::vector<double> scale = _scale;
         int output_type = _output_type;
 
         wood_globals::JOINTS_PARAMETERS_AND_TYPES = pybind11_wood_globals_JOINTS_PARAMETERS_AND_TYPES;
         wood_globals::OUTPUT_GEOMETRY_TYPE = output_type;
-        for(int i = 0; i< pybind11_joint_volume_parameters.size(); i++)
+        for (int i = 0; i < pybind11_joint_volume_parameters.size(); i++)
             wood_globals::JOINT_VOLUME_EXTENSION[i] = pybind11_joint_volume_parameters[i];
 
-   
+
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Main Method of Wood
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -222,7 +222,7 @@ namespace compas_wood
         std::vector<std::vector<wood_cut::cut_type>> output_types;
         std::vector<std::vector<int>> top_face_triangulation;
 
- 
+
         wood_main::get_connection_zones(
             // input
             input_polyline_pairs,
@@ -432,18 +432,16 @@ namespace compas_wood
         wood_main::adjacency_search(elements, search_type, neighbors, joints, joints_map);
 
         //////////////////////////////////////////////////////////////////////////////
-        // Get element pairs, joint areas, join types
+        // Get element pairs, joint areas, joint types
         //////////////////////////////////////////////////////////////////////////////
-        element_pairs.reserve(joints.size());
+        element_pairs.reserve(joints.size() * 3);
         joint_areas.reserve(joints.size());
         joint_types.reserve(joints.size());
 
         for (size_t i = 0; i < joints.size(); i++)
         {
             // element pairs and faces ids
-            element_pairs.emplace_back(std::vector<int>{joints[i].v0, joints[i].v1});
-            element_pairs.emplace_back(std::vector<int>{joints[i].f0_0, joints[i].f1_0});
-            element_pairs.emplace_back(std::vector<int>{joints[i].f0_1, joints[i].f1_1});
+            element_pairs.emplace_back(std::vector<int>{joints[i].v0, joints[i].v1, joints[i].f0_0, joints[i].f1_0, joints[i].f0_1, joints[i].f1_1});
 
             // joint areas
             joint_areas.emplace_back(std::vector<double>());

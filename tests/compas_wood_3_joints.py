@@ -17,7 +17,7 @@ def test_joints():
 
     # Compute joint polylines
     element_pairs_list, joint_areas_polylines, joint_types = joints(input, 0)
-    print(joint_types)
+    print(element_pairs_list[0])
 
 
 # ==============================================================================

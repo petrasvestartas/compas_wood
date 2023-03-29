@@ -54,7 +54,7 @@
             {
                 "name": "_element_pairs",
                 "nickname": "_element_pairs",
-                "description": "indices of neighboring elements",
+                "description": "indices of neighboring elements and their faces -> joints[i].v0, joints[i].v1, joints[i].f0_0, joints[i].f1_0, joints[i].f0_1, joints[i].f1_1",
                 "optional": false,
                 "sourceCount": 0,
                 "graft": false

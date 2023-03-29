@@ -12,6 +12,10 @@ import setuptools
 from setuptools.command.develop import develop
 from setuptools.command.install import install
 
+# https://github.com/pybind/pybind11/blob/296615ad34f9d8f680efbab22553881ad9843063/pybind11/setup_helpers.py#L391-L394
+from pybind11.setup_helpers import ParallelCompile, naive_recompile
+
+
 here = os.path.abspath(os.path.dirname(__file__))
 
 
@@ -86,7 +90,7 @@ ext_modules = [
         ),
         include_dirs=[
             # 3rd_party | Clipper2Lib | CGAL
-            "src/frontend/src/3rd_party/Clipper2Lib/include/",      
+            "src/frontend/src/3rd_party/Clipper2Lib/include/",
             # "src/frontend/src/3rd_party/CGAL/",
             # "src/frontend/src/3rd_party/CGAL/include/",
             # "src/frontend/src/3rd_party/CGAL/auxiliary/gmp/include/",
@@ -137,7 +141,7 @@ def cpp_flag(compiler):
     The newer version is prefered over c++11 (when it is available).
     """
     # flags = ['-std=c++17', '-std=c++14', '-std=c++11']
-    flags = ["-std=c++20"] # "-std=c++17", "-std=c++14", "-std=c++11"
+    flags = ["-std=c++20"]  # "-std=c++17", "-std=c++14", "-std=c++11"
 
     for flag in flags:
         if has_flag(compiler, flag):
@@ -181,6 +185,9 @@ class BuildExt(build_ext):
             ext.extra_link_args = link_opts
         build_ext.build_extensions(self)
 
+
+ParallelCompile("NPY_NUM_BUILD_JOBS").install()
+# ParallelCompile(default=0, needs_recompile=naive_recompile).install()
 
 setup(
     name="compas_wood",
