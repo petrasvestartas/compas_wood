@@ -440,8 +440,10 @@ namespace compas_wood
 
         for (size_t i = 0; i < joints.size(); i++)
         {
-            // element pairs
+            // element pairs and faces ids
             element_pairs.emplace_back(std::vector<int>{joints[i].v0, joints[i].v1});
+            element_pairs.emplace_back(std::vector<int>{joints[i].f0_0, joints[i].f1_0});
+            element_pairs.emplace_back(std::vector<int>{joints[i].f0_1, joints[i].f1_1});
 
             // joint areas
             joint_areas.emplace_back(std::vector<double>());
