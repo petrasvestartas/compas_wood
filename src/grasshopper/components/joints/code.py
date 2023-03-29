@@ -1,22 +1,8 @@
-"""get joints ids and connections areas between elements"""
 
-__author__ = "petras vestartas"
-__version__ = "2023.03.29"
-
-
-from ghpythonlib.componentbase import executingcomponent as component
-# STEP 0 - Installation, anaconda prompt:
-# python -m compas_rhino.install
-# python -m compas_rhino.install -p compas_wood
-# STEP 1 - check the environment name
-# import compas_bootstrapper
-# print(compas_bootstrapper.ENVIRONMENT_NAME)
-# STEP 2 - import proxy from compas.rpc
-# https://compas.dev/compas/latest/tutorial/rpc.html#supported-data-types-1
-from compas.rpc import Proxy # https://compas.dev/compas/latest/api/compas.rpc.html
 proxy = Proxy('compas_wood.joinery') # import module
 from compas_rhino import conversions
 from ghpythonlib import treehelpers
+import Grasshopper as gh
 import Rhino
 
 # STEP 3 - start server
@@ -51,13 +37,20 @@ class joints(component):
         # ==============================================================================
         # get joints
         # ==============================================================================
-        element_pairs_list, joint_areas_polylines, joint_types = proxy.joints(output_polylines, 0) 
+        element_pairs_list, joint_areas_polylines, joint_types = proxy.joints(output_polylines, 2) 
         
         
         # ==============================================================================
         # output
         # ==============================================================================
         _element_pairs = treehelpers.list_to_tree(element_pairs_list)
+        
+        # iterate joints add neighbors to individual elements element
+        _element_neighbors = gh.DataTree[int]()
+        for i in element_pairs_list:
+            _element_neighbors.Add(i[1],gh.Kernel.Data.GH_Path(i[0]))
+            _element_neighbors.Add(i[0],gh.Kernel.Data.GH_Path(i[1]))
+        
         
         _joint_areas = []
         _joint_areas_mesh = []
@@ -68,10 +61,13 @@ class joints(component):
             _joint_areas.append(polyline)
             _joint_areas_mesh.append(Rhino.Geometry.Mesh.CreateFromClosedPolyline(polyline))
         
-        _joint_types = joint_types
+        remap_joint_types = {11: 1, 12: 0, 13: 5, 20: 2, 30: 3, 40: 4}
+        _joint_types = []
+        for i in joint_types:
+            _joint_types.append(remap_joint_types[i])
         
         _polylines_out = []
         for i in output_polylines:
             _polylines_out.append(conversions.polyline_to_rhino(i))
         
-        return _polylines_out, _element_pairs, _joint_areas, _joint_areas_mesh, _joint_types
+        return _polylines_out, _element_pairs, _joint_areas, _joint_areas_mesh, _joint_types, _element_neighbors

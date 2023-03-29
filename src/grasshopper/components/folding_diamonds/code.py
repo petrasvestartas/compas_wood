@@ -9,7 +9,8 @@ from ghpythonlib.componentbase import executingcomponent as component
 import Rhino.Geometry as RhinoGeometry
 import math
 from ghpythonlib import treehelpers
-import Grasshopper 
+import Grasshopper
+
 # nested_list = treehelpers.tree_to_list(tree)
 # plates = treehelpers.list_to_tree(mtsj._f_polylines)
 
@@ -76,7 +77,6 @@ class case_3_folded_plates:
                 crv, 300, False
             ).ToNurbsSurface()
             self._surface = self._surface.Transpose()
-            
 
         self._u_divisions = u_divisions if u_divisions != None else 5
         self._v_divisions = v_divisions if v_divisions != None else 2
@@ -669,13 +669,13 @@ class case_3_folded_plates_component(component):
         )
         self.mesh = mtsj._mesh
         polylines_tree = Grasshopper.DataTree[RhinoGeometry.Polyline]()
-        for i in range(0,len(mtsj._f_polylines)):
-            for j in range(0,len(mtsj._f_polylines[i])):
-                polylines_tree.Add(mtsj._f_polylines[i][j],Grasshopper.Kernel.Data.GH_Path(i))
+        for i in range(0, len(mtsj._f_polylines)):
+            for j in range(0, len(mtsj._f_polylines[i])):
+                polylines_tree.Add(
+                    mtsj._f_polylines[i][j], Grasshopper.Kernel.Data.GH_Path(i)
+                )
         self.plates = polylines_tree
         self.insertion = mtsj._insertion_lines
         self.adjacency = treehelpers.list_to_tree(mtsj._adjacency)
         self.flags = mtsj._flags
         return self.mesh, self.plates, self.insertion, self.adjacency, self.flags
-
-

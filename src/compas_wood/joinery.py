@@ -548,7 +548,7 @@ def joints(list_of_polylines, search_type=0):
     wood_pybind11.joints(
         # input
         list_of_polylines_coordinates,
-        0,
+        search_type,
         # output
         element_pairs,
         joint_areas,

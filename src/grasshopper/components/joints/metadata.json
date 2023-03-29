@@ -5,7 +5,7 @@
     "category": "compas_wood",
     "subcategory": "joinery",
     "exposure": 4,
-    "instanceGuid": "acefda11-51e6-5df0-abb8-15b5c271ce7d",
+    "instanceGuid": "d5454962-1363-4e75-a4b5-078104a9c642",
     "ghpython": {
         "hideOutput": true,
         "hideInput": true,
@@ -79,6 +79,14 @@
                 "name": "_joint_types",
                 "nickname": "_joint_types",
                 "description": "type of connection zone",
+                "optional": false,
+                "sourceCount": 0,
+                "graft": false
+            },
+            {
+                "name": "_element_neighbors",
+                "nickname": "_element_neighbors",
+                "description": "ids of neighbors connected to a current element",
                 "optional": false,
                 "sourceCount": 0,
                 "graft": false
