@@ -28,6 +28,20 @@ def test_connection_detection():
     ]
 
     # generate joints
+    """
+    start_time = time.time()
+    result = get_connection_zones(
+        data_set_plates.annen_small_polylines(),
+        data_set_plates.annen_small_edge_directions(),
+        data_set_plates.annen_small_edge_joints(),
+        data_set_plates.annen_small_three_valance_element_indices_and_instruction(),
+        None,
+        joint_parameters,
+        0,
+        [1, 1, 1],
+        4   
+    )
+    """
     start_time = time.time()
     result = get_connection_zones(
         data_set_plates.annen_small_polylines(),
