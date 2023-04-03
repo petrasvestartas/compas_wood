@@ -100,7 +100,7 @@
 <div class="language-python notranslate"><div class="highlight"><pre><button class="btn copy"><i class="far fa-copy"></i></button><code><span></span><span class="kn">from</span> <span class="nn">compas_wood.joinery</span> <span class="kn">import</span> <span class="n">get_connection_zones</span>
 <span class="kn">import</span> <span class="nn">data_set_plates</span>
 <span class="kn">from</span> <span class="nn">compas_wood.viewer_helpers</span> <span class="kn">import</span> <span class="n">display</span>
-
+<span class="kn">import</span> <span class="nn">time</span>
 
 <span class="k">def</span> <span class="nf">test_connection_detection</span><span class="p">():</span>
     <span class="c1"># joinery parameters</span>
@@ -127,6 +127,7 @@
     <span class="p">]</span>
 
     <span class="c1"># generate joints</span>
+    <span class="n">start_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
     <span class="n">result</span> <span class="o">=</span> <span class="n">get_connection_zones</span><span class="p">(</span>
         <span class="n">data_set_plates</span><span class="o">.</span><span class="n">annen_small_polylines</span><span class="p">(),</span>
         <span class="n">data_set_plates</span><span class="o">.</span><span class="n">annen_small_edge_directions</span><span class="p">(),</span>
@@ -136,8 +137,14 @@
         <span class="n">joint_parameters</span><span class="p">,</span>
         <span class="mi">0</span><span class="p">,</span>
         <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
-        <span class="mi">3</span>   
+        <span class="mi">4</span>   
     <span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">(</span>
+         <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">______________________________________ </span><span class="si">%s</span><span class="s2"> ms ______________________________________&quot;</span>
+        <span class="o">%</span> <span class="nb">round</span><span class="p">((</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">start_time</span><span class="p">)</span> <span class="o">*</span> <span class="mf">1000.0</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="p">)</span>
+
 
     <span class="c1"># display</span>
     <span class="n">result_flat_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">item</span> <span class="k">for</span> <span class="n">sublist</span> <span class="ow">in</span> <span class="n">result</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">sublist</span><span class="p">]</span>
