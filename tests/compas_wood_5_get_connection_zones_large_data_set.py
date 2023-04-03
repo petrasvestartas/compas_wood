@@ -2,6 +2,11 @@ from compas_wood.joinery import get_connection_zones
 import data_set_plates
 from compas_wood.viewer_helpers import display
 import time
+from compas_wood.joinery import filenames_of_datasets
+from compas_wood.joinery import read_xml_polylines_and_properties
+
+
+
 
 def test_connection_detection():
     # joinery parameters
@@ -27,14 +32,26 @@ def test_connection_detection():
         50,
     ]
 
+
+    # read the xml file and get a data-set
+    foldername = (
+        "../compas_wood/src/frontend/src/wood/dataset/"
+    )
+
+    filename_of_dataset = filenames_of_datasets[32]
+
+        
     # generate joints
+    
+    output_polylines, output_vectors,output_joints_types, output_three_valence_element_indices_and_instruction, output_adjacency = read_xml_polylines_and_properties(foldername, filename_of_dataset)
+    
     start_time = time.time()
     result = get_connection_zones(
-        data_set_plates.annen_small_polylines(),
-        data_set_plates.annen_small_edge_directions(),
-        data_set_plates.annen_small_edge_joints(),
-        data_set_plates.annen_small_three_valance_element_indices_and_instruction(),
-        None,
+        output_polylines,
+        output_vectors,
+        output_joints_types,
+        output_three_valence_element_indices_and_instruction,
+        output_adjacency,
         joint_parameters,
         0,
         [1, 1, 1],
