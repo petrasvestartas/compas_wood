@@ -9,6 +9,7 @@ import compas_wood.conversions as conv
 from compas.geometry import Polyline
 import time
 import os
+import numpy as np
 
 # from wood_pybind11 import test
 # from wood_pybind11 import read_xml_polylines
@@ -57,6 +58,10 @@ filenames_of_datasets = [
     "type_plates_name_top_to_side_pairs",  # 36
     "type_plates_name_top_to_top_pairs",  # 37
 ]
+
+
+def rpc_test():
+    return np.random.rand(90000)
 
 
 def get_cwd():
@@ -571,7 +576,6 @@ def joints(list_of_polylines, search_type=0):
         conv.WoodNestedVectorDouble_to_polylines(joint_areas),
         conv.WoodVectorInt_to_list(joint_types),
     )
-
 
 
 def rtree(list_of_polylines):
