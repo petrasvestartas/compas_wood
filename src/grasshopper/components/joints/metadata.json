@@ -3,7 +3,7 @@
     "nickname": "joints",
     "description": "get connection zones from polylines and indices of neighboring elements",
     "category": "compas_wood",
-    "subcategory": "joinery",
+    "subcategory": "solver",
     "exposure": 4,
     "instanceGuid": "d5454962-1363-4e75-a4b5-078104a9c642",
     "ghpython": {

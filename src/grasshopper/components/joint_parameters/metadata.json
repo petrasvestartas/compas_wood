@@ -3,7 +3,7 @@
     "nickname": "joint_parameters",
     "description": "Create a list of joint parameters",
     "category": "compas_wood",
-    "subcategory": "joinery",
+    "subcategory": "data",
     "exposure": 4,
     "instanceGuid": "2efc1f5a-65bd-492a-9f0c-567e1d3ed173",
     "ghpython": {
@@ -114,8 +114,8 @@
         ],
         "outputParameters": [
             {
-                "name": "_joint_p",
-                "nickname": "_joint_p",
+                "name": "p",
+                "nickname": "p",
                 "description": "a list of joint parameters",
                 "optional": false,
                 "sourceCount": 0,

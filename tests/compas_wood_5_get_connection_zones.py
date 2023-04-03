@@ -1,7 +1,7 @@
 from compas_wood.joinery import get_connection_zones
 import data_set_plates
 from compas_wood.viewer_helpers import display
-
+import time
 
 def test_connection_detection():
     # joinery parameters
@@ -28,6 +28,7 @@ def test_connection_detection():
     ]
 
     # generate joints
+    start_time = time.time()
     result = get_connection_zones(
         data_set_plates.annen_small_polylines(),
         data_set_plates.annen_small_edge_directions(),
@@ -37,8 +38,14 @@ def test_connection_detection():
         joint_parameters,
         0,
         [1, 1, 1],
-        3   
+        4   
     )
+
+    print(
+         "\n______________________________________ %s ms ______________________________________"
+        % round((time.time() - start_time) * 1000.0, 2)
+    )
+
 
     # display
     result_flat_list = [item for sublist in result for item in sublist]

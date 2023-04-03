@@ -3,7 +3,7 @@
     "nickname": "connection_zones",
     "description": "generate connection areas and joints between elements",
     "category": "compas_wood",
-    "subcategory": "joinery",
+    "subcategory": "solver",
     "exposure": 2,
     "instanceGuid": "adefda51-51e6-5df0-abb8-11b5c241ce5d",
     "ghpython": {

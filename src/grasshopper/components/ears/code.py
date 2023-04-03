@@ -807,7 +807,7 @@ class ears(component):
                 planes.Add(Plane(plines0[0][0],planes0[0].ZAxis),Grasshopper.Kernel.Data.GH_Path(i))
                 notch_geo = []
                 if(_union):
-                    cut_curves0_temp, cut_curves1_temp, cut_extrusions_temp = self.get_notch_geometry(_c0, _c1, notch_lines_nested,notch_lines_nested_corners, planes0, planes1, radius+0.01)
+                    cut_curves0_temp, cut_curves1_temp, cut_extrusions_temp = self.get_notch_geometry(_c0, _c1, notch_lines_nested,notch_lines_nested_corners, planes0, planes1, radius+0.0000)
                     #cut_curves0.AddRange(cut_curves0_temp,Grasshopper.Kernel.Data.GH_Path(i))
                     #cut_curves1.AddRange(cut_curves1_temp,Grasshopper.Kernel.Data.GH_Path(i))
                     cut_extrusions.AddRange(cut_extrusions_temp,Grasshopper.Kernel.Data.GH_Path(i))

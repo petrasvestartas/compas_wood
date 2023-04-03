@@ -4,7 +4,7 @@
     "description": "Suface division into a diamon grid and giving thickness to each mesh face ",
     "category": "compas_wood",
     "subcategory": "cases",
-    "exposure": 4,
+    "exposure": 8,
     "instanceGuid": "acefda02-27e6-4df0-abb8-11b2c242ce0d",
     "ghpython": {
         "hideOutput": true,
