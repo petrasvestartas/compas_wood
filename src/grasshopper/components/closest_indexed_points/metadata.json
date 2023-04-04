@@ -1,0 +1,78 @@
+{
+    "name": "closest indexed points",
+    "nickname": "closest indexed points",
+    "description": "component iterates polyline edges and assigns index based on the point list and their type RTree search",
+    "category": "compas_wood",
+    "subcategory": "data",
+    "exposure": 16,
+    "instanceGuid": "6b51af6a-873e-4c06-b24d-223b1a036f60",
+    "ghpython": {
+        "hideOutput": true,
+        "hideInput": true,
+        "isAdvancedMode": true,
+        "marshalOutGuids": true,
+        "iconDisplay": 32,
+        "inputParameters": [
+            {
+                "name": "_polylines",
+                "nickname": "_polylines",
+                "description": "polylines tree branch order does not matter it is flatenned inside the component",
+                "optional": true,
+                "allowTreeAccess": true,
+                "showTypeHints": true,
+                "scriptParamAccess": "tree",
+                "wireDisplay": "faint",
+                "sourceCount": 0,
+                "typeHintID": "curve",
+                "reverse": false,
+                "simplify": false
+            },
+            {
+                "name": "_points",
+                "nickname": "_points",
+                "description": "a tree of points, the path id of the branch must match with _joint_types id, it is kind of a dictionary",
+                "optional": true,
+                "allowTreeAccess": true,
+                "showTypeHints": true,
+                "scriptParamAccess": "tree",
+                "wireDisplay": "faint",
+                "sourceCount": 0,
+                "typeHintID": "point",
+                "reverse": false,
+                "simplify": false
+            },
+            {
+                "name": "_joint_types",
+                "nickname": "_joint_types",
+                "description": "a tree of integers, the path id of the branch must match with _points id, it is kind of a dictionary",
+                "optional": true,
+                "allowTreeAccess": true,
+                "showTypeHints": true,
+                "scriptParamAccess": "tree",
+                "wireDisplay": "faint",
+                "sourceCount": 0,
+                "typeHintID": "int",
+                "reverse": false,
+                "simplify": false
+            }
+        ],
+        "outputParameters": [
+            {
+                "name": "_polylines_out",
+                "nickname": "_polylines_out",
+                "description": "pairs of polylines, grouped two polylines per branch",
+                "optional": false,
+                "sourceCount": 0,
+                "graft": false
+            },
+            {
+                "name": "_joint_types_out",
+                "nickname": "_joint_types_out",
+                "description": "a tree of int where each element contains top, bottom and side joint type assignments",
+                "optional": false,
+                "sourceCount": 0,
+                "graft": false
+            }
+        ]
+    }
+}

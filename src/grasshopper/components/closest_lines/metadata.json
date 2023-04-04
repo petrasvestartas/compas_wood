@@ -1,0 +1,64 @@
+{
+    "name": "closest lines",
+    "nickname": "closest lines",
+    "description": "iterates throught the polyline edges and assigns edge direction based on the RTree distance search",
+    "category": "compas_wood",
+    "subcategory": "data",
+    "exposure": 16,
+    "instanceGuid": "afebb95f-89bc-4a90-90ed-f7627c93a001",
+    "ghpython": {
+        "hideOutput": true,
+        "hideInput": true,
+        "isAdvancedMode": true,
+        "marshalOutGuids": true,
+        "iconDisplay": 32,
+        "inputParameters": [
+            {
+                "name": "_polylines",
+                "nickname": "_polylines",
+                "description": "polylines tree branch order does not matter it is flatenned inside the component",
+                "optional": true,
+                "allowTreeAccess": true,
+                "showTypeHints": true,
+                "scriptParamAccess": "tree",
+                "wireDisplay": "faint",
+                "sourceCount": 0,
+                "typeHintID": "curve",
+                "reverse": false,
+                "simplify": false
+            },
+            {
+                "name": "_lines",
+                "nickname": "_lines",
+                "description": "a tree of lines, the path id of the branch must match with _joint_types id, it is kind of a dictionary",
+                "optional": true,
+                "allowTreeAccess": true,
+                "showTypeHints": true,
+                "scriptParamAccess": "tree",
+                "wireDisplay": "faint",
+                "sourceCount": 0,
+                "typeHintID": "line",
+                "reverse": false,
+                "simplify": false
+            }
+        ],
+        "outputParameters": [
+            {
+                "name": "_polylines_out",
+                "nickname": "_polylines_out",
+                "description": "pairs of polylines, grouped two polylines per branch",
+                "optional": false,
+                "sourceCount": 0,
+                "graft": false
+            },
+            {
+                "name": "_vectors",
+                "nickname": "_vectors",
+                "description": "a tree of vectors where each element contains top, bottom and side vector assignments",
+                "optional": false,
+                "sourceCount": 0,
+                "graft": false
+            }
+        ]
+    }
+}
