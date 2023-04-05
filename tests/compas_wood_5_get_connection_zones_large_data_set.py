@@ -4,7 +4,7 @@ from compas_wood.viewer_helpers import display
 import time
 from compas_wood.joinery import filenames_of_datasets
 from compas_wood.joinery import read_xml_polylines_and_properties
-
+from compas_wood.cpp import rpc_test
 
 
 
@@ -45,7 +45,7 @@ def test_connection_detection():
     
     output_polylines, output_vectors,output_joints_types, output_three_valence_element_indices_and_instruction, output_adjacency = read_xml_polylines_and_properties(foldername, filename_of_dataset)
     
-    start_time = time.time()
+
     result = get_connection_zones(
         output_polylines,
         output_vectors,
@@ -57,6 +57,9 @@ def test_connection_detection():
         [1, 1, 1],
         4   
     )
+
+    start_time = time.time()
+    rpc_test()
 
     print(
          "\n______________________________________ %s ms ______________________________________"
