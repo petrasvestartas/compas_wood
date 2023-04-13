@@ -1,3 +1,7 @@
+#wood ingore src/frontend
+src/build/**
+src/build
+
 #wood ingore backend
 backend/wood/.cache/**
 backend/build_win/**
