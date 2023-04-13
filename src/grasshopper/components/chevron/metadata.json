@@ -1,0 +1,100 @@
+{
+    "name": "assembly",
+    "nickname": "assembly",
+    "description": "create a quad mesh by subdividing surface from two ends",
+    "category": "compas_wood",
+    "subcategory": "cases",
+    "exposure": 2,
+    "instanceGuid": "18E37F54-B1D0-4E55-9900-E915123451BB",
+    "ghpython": {
+        "hideOutput": true,
+        "hideInput": true,
+        "isAdvancedMode": true,
+        "marshalOutGuids": true,
+        "iconDisplay": 2,
+        "inputParameters": [
+            {
+                "name": "_surface",
+                "nickname": "_surface",
+                "description": "NURBS surfaces - use component -chevron-surfaces-",
+                "optional": true,
+                "allowTreeAccess": true,
+                "showTypeHints": true,
+                "scriptParamAccess": "item",
+                "wireDisplay": "faint",
+                "sourceCount": 0,
+                "typeHintID": "surface",
+                "reverse": false,
+                "simplify": false
+            },
+            {
+                "name": "_u_divisions",
+                "nickname": "_u_divisions",
+                "description": "number of divisions in u direction",
+                "optional": true,
+                "allowTreeAccess": true,
+                "showTypeHints": true,
+                "scriptParamAccess": "item",
+                "wireDisplay": "faint",
+                "sourceCount": 0,
+                "typeHintID": "float",
+                "reverse": false,
+                "simplify": false
+            },
+            {
+                "name": "_v_division_dist",
+                "nickname": "_v_division_dist",
+                "description": "division distance in v direction",
+                "optional": true,
+                "allowTreeAccess": true,
+                "showTypeHints": true,
+                "scriptParamAccess": "item",
+                "wireDisplay": "faint",
+                "sourceCount": 0,
+                "typeHintID": "float",
+                "reverse": false,
+                "simplify": false
+            },
+            {
+                "name": "_shift",
+                "nickname": "_shift",
+                "description": "value to change the central part of the subdivision",
+                "optional": true,
+                "allowTreeAccess": true,
+                "showTypeHints": true,
+                "scriptParamAccess": "item",
+                "wireDisplay": "faint",
+                "sourceCount": 0,
+                "typeHintID": "float",
+                "reverse": false,
+                "simplify": false
+            },
+            {
+                "name": "_scale",
+                "nickname": "_scale",
+                "description": "scale value to reduce quad size on the ends, where originally the curvature was bigger",
+                "optional": true,
+                "allowTreeAccess": true,
+                "showTypeHints": true,
+                "scriptParamAccess": "item",
+                "wireDisplay": "faint",
+                "sourceCount": 0,
+                "typeHintID": "float",
+                "reverse": false,
+                "simplify": false
+            }
+
+           
+        ],
+        "outputParameters": [
+            {
+            "name": "_mesh",
+            "nickname": "_mesh",
+            "description": "quad mesh",
+            "optional": false,
+            "sourceCount": 0,
+            "graft": false
+            }
+        ]
+    }
+}

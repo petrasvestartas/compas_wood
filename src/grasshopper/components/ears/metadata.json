@@ -3,7 +3,7 @@
     "nickname": "ears",
     "description": "generate notches also known as mickey mouse ears",
     "category": "compas_wood",
-    "subcategory": "utilities",
+    "subcategory": "fab",
     "exposure": 4,
     "instanceGuid": "aeefda51-51e6-5df0-aeb8-11b5c241ce5d",
     "ghpython": {

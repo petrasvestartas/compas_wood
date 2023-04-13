@@ -3,7 +3,7 @@
     "nickname": "orient_data",
     "description": "orient element polylines from their average plane to a user given target plane",
     "category": "compas_wood",
-    "subcategory": "utilities",
+    "subcategory": "fab",
     "exposure": 8,
     "instanceGuid": "648053E6-23FE-4D8D-B8F3-9A1E48056A50",
     "ghpython": {

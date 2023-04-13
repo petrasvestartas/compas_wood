@@ -26,7 +26,54 @@ from Rhino.Geometry import Polyline
 
 
 class connections_zones(component):
+    
+    bbox = Rhino.Geometry.BoundingBox.Unset
+    lines = []
+    insertion_vectors_current = []
+    joint_per_face_current_text_entity = []
+    polylines = []
+    
+    def DrawViewportWires(self, args):
+        #GrasshopperDocument = Grasshopper.Instances.ActiveCanvas.Document
+        #is_selected = False
+        """
+        for _ in GrasshopperDocument.Objects:
+            is_selected = _.Attributes.Selected
+        """
+        #col = args.WireColour_Selected if is_selected else args.WireColour;
+        col =  args.WireColour
+        line_weight = args.DefaultCurveThickness;
+        try:
+            for polyline in self.polylines:
+                args.Display.DrawPolyline(polyline,  col, line_weight)
+            """
+            plane = Plane.WorldXY
+            for line in self.lines:
+                args.Display.DrawLineArrow(line, Color.FromArgb(207, 0, 90), 2, 100)
+            for insertionVectorsCurrent in self.insertion_vectors_current:
+                if(insertionVectorsCurrent.Length<0.05):
+                    continue
+                args.Display.DrawLine(insertionVectorsCurrent, Color.FromArgb(0, 0, 0), 5)
+            for jointPerFaceCurrent in self.joint_per_face_current_text_entity:
+                result, plane = Rhino.RhinoDoc.ActiveDoc.Views.ActiveView.ActiveViewport.GetCameraFrame()
+                plane.Origin=(jointPerFaceCurrent.Plane.Origin)
+                args.Display.Draw3dText(jointPerFaceCurrent.PlainText, jointPerFaceCurrent.MaskColor, plane, jointPerFaceCurrent.TextHeight, "Arial", False, False,Rhino.DocObjects.TextHorizontalAlignment.Center, Rhino.DocObjects.TextVerticalAlignment.BottomOfTop)
+            """
+        except Exception, e:
+            System.Windows.Forms.MessageBox.Show(str(e), "script error")
+    
+    def get_ClippingBox(self):
+        return self.bbox
+    
     def RunScript(self, _data, _join_p, _scale, _extension, _find, _get):
+        # ==============================================================================
+        # clear input
+        # ==============================================================================
+        bbox = Rhino.Geometry.BoundingBox.Unset
+        lines = []
+        insertion_vectors_current = []
+        joint_per_face_current_text_entity = []
+        polylines = []
         # ==============================================================================
         # input
         # ==============================================================================
@@ -102,12 +149,14 @@ class connections_zones(component):
         # output
         # ==============================================================================
         _plines = []
-        
+        self.bbox = Rhino.Geometry.BoundingBox.Unset
         # nest two times the result and add to the tree
         for i in range(0, len(result)):
             list = []
             for j in range(0, len(result[i])):
                     list.append(conversions.polyline_to_rhino(result[i][j]))
+                    self.polylines.append(list[-1])
+                    self.bbox.Union(list[-1].BoundingBox)
             _plines.append(list)
         _cuts = []
         _data = [[_plines,_data[1],_data[2],_data[3],_data[4],_data[5],_cuts]]

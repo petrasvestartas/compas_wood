@@ -6,9 +6,6 @@ import Grasshopper, GhPython
 import System
 import Rhino
 import rhinoscriptsyntax as rs
-
-
-import rhinoscriptsyntax as rs
 import Rhino.Geometry as rg
 from Rhino.Geometry import BoundingBox
 from Rhino.Geometry import Point3d
@@ -48,12 +45,21 @@ class MyComponent(component):
             System.Windows.Forms.MessageBox.Show(str(e), "script error")
     
     def get_ClippingBox(self):
-        return Rhino.Geometry.BoundingBox()
+        return self.bbox
     
     
             
     def display_insersion_sequence(self, _data, _lines, _n, _t):
         
+        # ==============================================================================
+        # clear input
+        # ==============================================================================
+        bbox = Rhino.Geometry.BoundingBox.Unset
+        lines = []
+        insertion_vectors_current = []
+        joint_per_face_current_text_entity = []
+        polylines = []
+
         text_size = 50
         line_scale = 300
         

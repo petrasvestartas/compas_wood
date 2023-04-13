@@ -5,18 +5,18 @@
     "category": "compas_wood",
     "subcategory": "preview",
     "exposure": 16,
-    "instanceGuid": "0F2965A4-50E5-4883-AEF9-DDE4D2D990E7",
+    "instanceGuid": "2323A09F-F572-4FE4-8406-7E2F8607C7B6",
     "ghpython": {
         "hideOutput": true,
         "hideInput": true,
         "isAdvancedMode": true,
         "marshalOutGuids": true,
-        "iconDisplay": 2,
+        "iconDisplay": 4,
         "inputParameters": [
             {
-                "name": "_data",
-                "nickname": "_data",
-                "description": "collection of inputs that represent the elements, insertion vectors, joint types and adjacency, use input_set commonent to group these inputs",
+                "name": "_meshes",
+                "nickname": "_meshes",
+                "description": "collection of meshes",
                 "optional": true,
                 "allowTreeAccess": true,
                 "showTypeHints": true,
@@ -41,20 +41,7 @@
                 "reverse": false,
                 "simplify": false
             },
-            {
-                "name": "_n",
-                "nickname": "_n",
-                "description": "number of plates that are group e.g. one box contains 4 plates, then N = 4",
-                "optional": true,
-                "allowTreeAccess": true,
-                "showTypeHints": true,
-                "scriptParamAccess": "item",
-                "wireDisplay": "faint",
-                "sourceCount": 0,
-                "typeHintID": "int",
-                "reverse": false,
-                "simplify": false
-            },
+            
             {
                 "name": "_t",
                 "nickname": "_t",

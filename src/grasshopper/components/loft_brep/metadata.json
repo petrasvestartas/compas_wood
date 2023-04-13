@@ -3,7 +3,7 @@
     "nickname": "loft_b",
     "description": "loft outlines with holes, to create a brep",
     "category": "compas_wood",
-    "subcategory": "utilities",
+    "subcategory": "preview",
     "exposure": 2,
     "instanceGuid": "aaffda50-51e0-5df0-abb8-11b5c241ce5d",
     "ghpython": {

@@ -3,7 +3,7 @@
     "nickname": "loft_m",
     "description": "loft outlines with holes to create a mesh",
     "category": "compas_wood",
-    "subcategory": "utilities",
+    "subcategory": "preview",
     "exposure": 2,
     "instanceGuid": "aaefda50-51e0-5da0-abb8-11b5c241ce5d",
     "ghpython": {
