@@ -6,7 +6,7 @@ set(CMAKE_COLOR_DIAGNOSTICS ON)
 set(CMAKE_COLOR_MAKEFILE ON)
 cmake_minimum_required(VERSION 3.24.2)
 
-project(wood_pybind11 LANGUAGES C CXX)
+project(pinvoke_wood LANGUAGES C CXX)
 
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 set(CMAKE_CXX_STANDARD 20)
@@ -150,7 +150,7 @@ if (GET_LIBS)
   )
 
 
-  ExternalProject_Add(cgal_dependencies
+  ExternalProject_Add(cgal_auxiliary
     URL https://github.com/CGAL/cgal/releases/download/v5.5/CGAL-5.5-win64-auxiliary-libraries-gmp-mpfr.zip
     CMAKE_ARGS
       -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
@@ -214,70 +214,119 @@ SET(BUILD_MY_PROJECTS "" CACHE STRING "Build Project")
 if (BUILD_MY_PROJECTS)
 
   message("${BoldBlue} BUILD_MY_PROJECTS_ ${BUILD_MY_PROJECTS} ${ColourReset}" )
+  add_compile_definitions(SKIP_PYBIND11_TO_STDAFX_H)
 
+  # ###############################################################################
+  # # WRAPPER LIBRARY FOR PYBIND11 - https://www.youtube.com/watch?v=-eIkUnCLMFc&t=75s
+  # # My own created tutorial: https://github.com/pybind/pybind11/discussions/4530
+  # # PYBIND11 - requires python installation besides the python11
+  # # WARNING - your conda environment must not have the module with the same name installed, 
+  # # SOLUTION - check by "conda list" and "pip uninstall compas_wood"
+  # # WARNING - if you do not include pybind11_add_module with the code there will be an error: Cannot open include file: 'pybind11/pybind11.h'
+  # ###############################################################################
+  # #give the python path to pybind11
+  # set(CMAKE_EXPORT_COMPILE_COMMANDS 1)
 
+  # # find python do not use find_package(Python) this would fail if a few python versions are installed, better to use one from Anaconda
+  # find_package(Python 3.6 REQUIRED COMPONENTS Interpreter Development ${_pybind11_quiet}) 
 
-  ###############################################################################
-  # WRAPPER LIBRARY FOR PYBIND11 - https://www.youtube.com/watch?v=-eIkUnCLMFc&t=75s
-  # My own created tutorial: https://github.com/pybind/pybind11/discussions/4530
-  # PYBIND11 - requires python installation besides the python11
-  # WARNING - your conda environment must not have the module with the same name installed, 
-  # SOLUTION - check by "conda list" and "pip uninstall compas_wood"
-  ###############################################################################
-  #give the python path to pybind11
-  set(CMAKE_EXPORT_COMPILE_COMMANDS 1)
-
-  # find python do not use find_package(Python) this would fail if a few python versions are installed, better to use one from Anaconda
-  find_package(Python 3.6 REQUIRED COMPONENTS Interpreter Development ${_pybind11_quiet}) 
-
-  # add pybind11 to enamle CMake command: pybind11_add_module
-  add_subdirectory("${CMAKE_BINARY_DIR}/install/pybind11")
+  # # add pybind11 to enamle CMake command: pybind11_add_module
+  # add_subdirectory("${CMAKE_BINARY_DIR}/install/pybind11")
 
   # module - this is a special cmake command from the pybind11 package
-  pybind11_add_module (
+  # pybind11_add_module (
+  #   "${PROJECT_NAME}" # name of the module
+  #   #source pybind11
+  #   #"${CMAKE_SOURCE_DIR}/src/compas_wood/include/stdafx.cpp" # includes
+  #   "${CMAKE_SOURCE_DIR}/src/wood_pybind11/include_cpp/python_to_cpp__cpp_to_python.cpp" # converters
+  #   "${CMAKE_SOURCE_DIR}/src/wood_pybind11/include_cpp/compas_wood.cpp" # wrapper of the wood library
+  #   #clipper
+  #   "${CMAKE_BINARY_DIR}/install/clipper_2/CPP/Clipper2Lib/src/clipper.engine.cpp"
+  #   "${CMAKE_BINARY_DIR}/install/clipper_2/CPP/Clipper2Lib/src/clipper.offset.cpp"
+  #   #wood
+  #   "${CMAKE_SOURCE_DIR}/src/wood/include/wood_globals.cpp"
+  #   "${CMAKE_SOURCE_DIR}/src/wood/include/cgal_box_util.cpp"
+  #   "${CMAKE_SOURCE_DIR}/src/wood/include/rtree_util.cpp"
+  #   "${CMAKE_SOURCE_DIR}/src/wood/include/cgal_inscribe_util.cpp"
+  #   "${CMAKE_SOURCE_DIR}/src/wood/include/cgal_intersection_util.cpp"
+  #   "${CMAKE_SOURCE_DIR}/src/wood/include/cgal_xform_util.cpp"
+  #   "${CMAKE_SOURCE_DIR}/src/wood/include/cgal_math_util.cpp"
+  #   "${CMAKE_SOURCE_DIR}/src/wood/include/cgal_mesh_boolean.cpp"
+  #   "${CMAKE_SOURCE_DIR}/src/wood/include/cgal_plane_util.cpp"
+  #   "${CMAKE_SOURCE_DIR}/src/wood/include/cgal_polyline_mesh_util.cpp"
+  #   "${CMAKE_SOURCE_DIR}/src/wood/include/cgal_polyline_util.cpp"
+  #   "${CMAKE_SOURCE_DIR}/src/wood/include/cgal_rectangle_util.cpp"
+  #   "${CMAKE_SOURCE_DIR}/src/wood/include/cgal_vector_util.cpp"
+  #   "${CMAKE_SOURCE_DIR}/src/wood/include/cgal_xform_util.cpp"
+  #   "${CMAKE_SOURCE_DIR}/src/wood/include/clipper_util.cpp"
+  #   "${CMAKE_SOURCE_DIR}/src/wood/include/rtree_util.cpp"
+  #   "${CMAKE_SOURCE_DIR}/src/wood/include/wood_element.cpp"
+  #   "${CMAKE_SOURCE_DIR}/src/wood/include/wood_joint.cpp"
+  #   "${CMAKE_SOURCE_DIR}/src/wood/include/wood_joint_lib.cpp"
+  #   # #"${CMAKE_SOURCE_DIR}/src/wood/include/wood_test.cpp"
+  #   "${CMAKE_SOURCE_DIR}/src/wood/include/wood_main.cpp"
+  #   "${CMAKE_SOURCE_DIR}/src/wood/include/wood_xml.cpp"
+  #   # "${CMAKE_SOURCE_DIR}/src/wood/include/cgal_mesh_boolean.cpp"
+  # )
+
+  add_library (
     "${PROJECT_NAME}" # name of the module
+    SHARED
     #source pybind11
     #"${CMAKE_SOURCE_DIR}/src/compas_wood/include/stdafx.cpp" # includes
-    "${CMAKE_SOURCE_DIR}/src/wood_pybind11/include_cpp/python_to_cpp__cpp_to_python.cpp" # converters
-    "${CMAKE_SOURCE_DIR}/src/wood_pybind11/include_cpp/compas_wood.cpp" # wrapper of the wood library
+    # "${CMAKE_SOURCE_DIR}/src/wood_pybind11/include_cpp/python_to_cpp__cpp_to_python.cpp" # converters
+    # "${CMAKE_SOURCE_DIR}/src/wood_pybind11/include_cpp/compas_wood.cpp" # wrapper of the wood library
+    #pinvoke
+    "${CMAKE_SOURCE_DIR}/src/wood_pinvoke/pinvoke.cpp" # wrapper of the wood library
     #clipper
     "${CMAKE_BINARY_DIR}/install/clipper_2/CPP/Clipper2Lib/src/clipper.engine.cpp"
     "${CMAKE_BINARY_DIR}/install/clipper_2/CPP/Clipper2Lib/src/clipper.offset.cpp"
     #wood
     "${CMAKE_SOURCE_DIR}/src/wood/include/wood_globals.cpp"
-    # "${CMAKE_SOURCE_DIR}/src/wood/include/cgal_box_util.cpp"
-    # "${CMAKE_SOURCE_DIR}/src/wood/include/rtree_util.cpp"
-    # "${CMAKE_SOURCE_DIR}/src/wood/include/cgal_inscribe_util.cpp"
-    # "${CMAKE_SOURCE_DIR}/src/wood/include/cgal_intersection_util.cpp"
-    # "${CMAKE_SOURCE_DIR}/src/wood/include/cgal_xform_util.cpp"
-    # "${CMAKE_SOURCE_DIR}/src/wood/include/cgal_math_util.cpp"
-    # "${CMAKE_SOURCE_DIR}/src/wood/include/cgal_plane_util.cpp"
-    # "${CMAKE_SOURCE_DIR}/src/wood/include/cgal_polyline_mesh_util.cpp"
-    # "${CMAKE_SOURCE_DIR}/src/wood/include/cgal_polyline_util.cpp"
-    # "${CMAKE_SOURCE_DIR}/src/wood/include/cgal_rectangle_util.cpp"
-    # "${CMAKE_SOURCE_DIR}/src/wood/include/cgal_vector_util.cpp"
-    # "${CMAKE_SOURCE_DIR}/src/wood/include/clipper_util.cpp"
-    # "${CMAKE_SOURCE_DIR}/src/wood/include/wood_element.cpp"
-    # "${CMAKE_SOURCE_DIR}/src/wood/include/wood_joint.cpp"
-    # "${CMAKE_SOURCE_DIR}/src/wood/include/wood_joint_lib.cpp"
+    "${CMAKE_SOURCE_DIR}/src/wood/include/cgal_box_util.cpp"
+    "${CMAKE_SOURCE_DIR}/src/wood/include/rtree_util.cpp"
+    "${CMAKE_SOURCE_DIR}/src/wood/include/cgal_inscribe_util.cpp"
+    "${CMAKE_SOURCE_DIR}/src/wood/include/cgal_intersection_util.cpp"
+    "${CMAKE_SOURCE_DIR}/src/wood/include/cgal_xform_util.cpp"
+    "${CMAKE_SOURCE_DIR}/src/wood/include/cgal_math_util.cpp"
+    "${CMAKE_SOURCE_DIR}/src/wood/include/cgal_mesh_boolean.cpp"
+    "${CMAKE_SOURCE_DIR}/src/wood/include/cgal_plane_util.cpp"
+    "${CMAKE_SOURCE_DIR}/src/wood/include/cgal_polyline_mesh_util.cpp"
+    "${CMAKE_SOURCE_DIR}/src/wood/include/cgal_polyline_util.cpp"
+    "${CMAKE_SOURCE_DIR}/src/wood/include/cgal_rectangle_util.cpp"
+    "${CMAKE_SOURCE_DIR}/src/wood/include/cgal_vector_util.cpp"
+    "${CMAKE_SOURCE_DIR}/src/wood/include/cgal_xform_util.cpp"
+    "${CMAKE_SOURCE_DIR}/src/wood/include/clipper_util.cpp"
+    "${CMAKE_SOURCE_DIR}/src/wood/include/rtree_util.cpp"
+    "${CMAKE_SOURCE_DIR}/src/wood/include/wood_element.cpp"
+    "${CMAKE_SOURCE_DIR}/src/wood/include/wood_joint.cpp"
+    "${CMAKE_SOURCE_DIR}/src/wood/include/wood_joint_lib.cpp"
     # #"${CMAKE_SOURCE_DIR}/src/wood/include/wood_test.cpp"
-    # "${CMAKE_SOURCE_DIR}/src/wood/include/wood_main.cpp"
+    "${CMAKE_SOURCE_DIR}/src/wood/include/wood_main.cpp"
     "${CMAKE_SOURCE_DIR}/src/wood/include/wood_xml.cpp"
     # "${CMAKE_SOURCE_DIR}/src/wood/include/cgal_mesh_boolean.cpp"
-
-
   )
 
+
+
+    message("${BoldBlue} ${CMAKE_BINARY_DIR}/install/cgal/auxiliary/gmp/lib/ ${ColourReset}" )
+
+  # target_link_libraries(
+  #   "${PYTHON_MODULE_NAME}" 
+  # )
 
   # include directories for header files
   target_include_directories(
     "${PROJECT_NAME}" # name of the module
+    #pinvoke
+    PRIVATE "${CMAKE_SOURCE_DIR}/src/wood_pinvoke/"
     #source pybind11
-    PRIVATE "${CMAKE_SOURCE_DIR}/src/wood_pybind11/include_cpp/"
+    # PRIVATE "${CMAKE_SOURCE_DIR}/src/wood_pybind11/include_cpp/"
     #wood
     PRIVATE "${CMAKE_SOURCE_DIR}/src/wood/include/"
     #pybind11
-    PRIVATE "${CMAKE_BINARY_DIR}/install/pybind11/"
+    # PRIVATE "${CMAKE_BINARY_DIR}/install/pybind11/"
+    # PRIVATE "${CMAKE_BINARY_DIR}/install/pybind11/include"
     #eigen
     PRIVATE "${CMAKE_BINARY_DIR}/install/eigen/"
     #clipper
@@ -287,9 +336,34 @@ if (BUILD_MY_PROJECTS)
     #eigen
     PRIVATE "${CMAKE_BINARY_DIR}/install/eigen/"
     #cgal
-    PRIVATE "${CMAKE_BINARY_DIR}/install/cgal/include"
-    PRIVATE "${CMAKE_BINARY_DIR}/install/cgal/auxiliary/gmp/include"
+    PUBLIC "${CMAKE_BINARY_DIR}/install/cgal/include"
+    PUBLIC "${CMAKE_BINARY_DIR}/install/cgal/auxiliary/gmp/include"
   )
+
+
+  
+  ###############################################################################
+  # LINK STATIC LIBRARIES_ CLIPPER AND CGAL
+  ###############################################################################
+  #target_link_libraries(${PROJECT_NAME} PUBLIC "${CMAKE_BINARY_DIR}/install/cgal/auxiliary/gmp/lib/" ) # WINDOWS
+  # if(COMPILER_NINJA)
+  #   target_link_directories("${PROJECT_NAME}" PUBLIC "C:/msys64/mingw64/lib/" )
+  # else()
+  target_link_directories("${PROJECT_NAME}" 
+  # cgal
+  PUBLIC "${CMAKE_BINARY_DIR}/install/cgal/auxiliary/gmp/lib/" 
+  # clipper
+  PUBLIC "${CMAKE_BINARY_DIR}/Release/"
+  )
+  
+
+
+    target_link_libraries(${PROJECT_NAME} PUBLIC 
+    Clipper2 
+    libgmp-10
+    libmpfr-4
+  ) #gmp mpfr link library | zlibstatic WINDOWS
+
 
   ###############################################################################
   # PCH support

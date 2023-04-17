@@ -54,11 +54,11 @@ class MyComponent(component):
         # ==============================================================================
         # clear input
         # ==============================================================================
-        bbox = Rhino.Geometry.BoundingBox.Unset
-        lines = []
-        insertion_vectors_current = []
-        joint_per_face_current_text_entity = []
-        polylines = []
+        self.bbox = Rhino.Geometry.BoundingBox.Unset
+        self.lines = []
+        self.insertion_vectors_current = []
+        self.joint_per_face_current_text_entity = []
+        self.polylines = []
 
         text_size = 50
         line_scale = 300

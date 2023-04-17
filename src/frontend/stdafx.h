@@ -170,6 +170,7 @@ typedef CGALCDT::Face_handle Face_handle;
 
 #include "wood_cut.h"
 
+#ifndef SKIP_PYBIND11_TO_STDAFX_H
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // compas_wood linkage
 // PYBIND11
@@ -183,6 +184,7 @@ namespace py = pybind11;       // minimal includes for pybind11
 
 using RowMatrixXd = Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor>;
 using RowMatrixXi = Eigen::Matrix<int, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor>;
+#endif
 
 #ifdef __clang__
 #define CATCH_CONFIG_NO_CPP17_UNCAUGHT_EXCEPTIONS
