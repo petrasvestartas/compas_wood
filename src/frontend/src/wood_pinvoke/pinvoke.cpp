@@ -25,6 +25,26 @@ PINVOKE void test_get_array(double*& coord_out, int& coord_size_out) {
     coord_size_out = 3;
 }
 
+// Function to process a nested list and return a flattened list
+PINVOKE void process_and_return_nested_list(
+    const std::vector<std::vector<int>>& nested_list, 
+    int* flattened_list, 
+    int* flattened_list_size) {
+    // Access and process the nested list in C++
+    // ...
+
+    // Flatten the nested list and store it in the provided flattened_list buffer
+    int index = 0;
+    for (const auto& sublist : nested_list) {
+        for (const auto& item : sublist) {
+            flattened_list[index++] = item+1000;
+        }
+    }
+
+    // Store the size of the flattened list in flattened_list_size
+    *flattened_list_size = index;
+}
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //Input Conversion
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

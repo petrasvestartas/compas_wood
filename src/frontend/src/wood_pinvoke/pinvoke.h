@@ -5,6 +5,7 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 #include<cstdio>
 
+
 #define PINVOKE extern "C" __declspec(dllexport)
 #define deletePtr(ptr, isArray) if (isArray) {delete[] arr;} else {delete arr;}
 
@@ -17,6 +18,13 @@ PINVOKE void release_double(double* arr, bool isArray);
 PINVOKE void test_set_array(double* coord, int coord_size);
 
 PINVOKE void test_get_array(double*& coord_out, int& coord_size_out);
+
+// Function to process a nested list and return a flattened list
+PINVOKE void process_and_return_nested_list(
+    const std::vector<std::vector<int>>& nested_list, 
+    int* flattened_list,
+    int* flattened_list_size);
+
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //Input Conversion

@@ -1,12 +1,12 @@
-from ctypes import *
+import ctypes
 
+# Load the C++ shared library
+proxy = ctypes.cdll.LoadLibrary("C:/legion_pro_7_16IRX8H/software/python/compas_wood/src/wood_pybind11.cp38-win_amd64.pyd")
 
-lib_object = cdll.LoadLibrary("C:/IBOIS57/_Code/Software/Python/compas_wood/src/frontend/build/Release/pinvoke_wood.dll")
+# call the method
+result = proxy.test_get_square(5)
 
-result = lib_object.test_get_square(5)
-
-
-
-print("______________________________________THANKS ANDERS!______________________________________")
+# print result
+print("__________________________________________________________________________________________")
 print(result)
 print("__________________________________________________________________________________________")
