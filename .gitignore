@@ -1,6 +1,8 @@
 #wood ingore src/frontend
 src/build/**
 src/build
+src/frontend/build
+src/frontend/build/**
 
 #wood ingore backend
 backend/

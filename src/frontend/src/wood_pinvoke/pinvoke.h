@@ -10,18 +10,26 @@
 #define deletePtr(ptr, isArray) if (isArray) {delete[] arr;} else {delete arr;}
 
 PINVOKE int test_get_square(int n);
+PINVOKE int test_get_square2(int n);
+
+// Function to process an integer array and return its sum
+PINVOKE int process_and_return_sum(int* array, int size);
 
 PINVOKE void release_int(int* arr, bool isArray);
 
 PINVOKE void release_double(double* arr, bool isArray);
 
+PINVOKE void release_float(float* arr, bool isArray);
+
 PINVOKE void test_set_array(double* coord, int coord_size);
 
 PINVOKE void test_get_array(double*& coord_out, int& coord_size_out);
 
+PINVOKE void test_get_array_floats(float*& coord_out, size_t& coord_size_out);
+
 // Function to process a nested list and return a flattened list
 PINVOKE void process_and_return_nested_list(
-    const std::vector<std::vector<int>>& nested_list, 
+    const std::vector<std::vector<int>>& nested_list,
     int* flattened_list,
     int* flattened_list_size);
 
@@ -47,37 +55,40 @@ void list_to_coord(std::vector<std::vector<int>>& output_vectors, int*& out_f, i
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //Implementations
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-PINVOKE int pinvoke_get_connection_zones(
-    //input
-    int* f, int f_s, double* v, int v_s,
-    int* vec_f, int vec_f_s, double* vec_v, int vec_v_s,
-    int* jointtypes_f, int jointtypes_f_s, int* jointtypes_v, int jointtypes_v_s,
-    int* threevalence_f, int threevalence_f_s, int* threevalence_v, int threevalence_v_s,
-    int* adjacency_v, int adjacency_v_s,
-    double* jointparams_v, int jointparams_v_s,
-    double* scale_v, int scale_v_s,
-    const char* file_and_folder_of_joint_library_xml,
-    //output
-    int*& groups_f, int& groups_f_s, int*& out_f, int& out_f_s, double*& out_v, int& out_v_s,
-    //optional inputs
-    int search_type = 1, int output_type = 4, int triangulate = 0
-
+PINVOKE void pinvoke_get_connection_zones(
+    float** input_polyline_pairs_coords, size_t input_polyline_pairs_rows, size_t* input_polyline_pairs_cols,
+    float* arr, size_t& size
 );
+// PINVOKE int pinvoke_get_connection_zones(
+//     //input
+//     int* f, int f_s, double* v, int v_s,
+//     int* vec_f, int vec_f_s, double* vec_v, int vec_v_s,
+//     int* jointtypes_f, int jointtypes_f_s, int* jointtypes_v, int jointtypes_v_s,
+//     int* threevalence_f, int threevalence_f_s, int* threevalence_v, int threevalence_v_s,
+//     int* adjacency_v, int adjacency_v_s,
+//     double* jointparams_v, int jointparams_v_s,
+//     double* scale_v, int scale_v_s,
+//     const char* file_and_folder_of_joint_library_xml,
+//     //output
+//     int*& groups_f, int& groups_f_s, int*& out_f, int& out_f_s, double*& out_v, int& out_v_s,
+//     //optional inputs
+//     int search_type = 1, int output_type = 4, int triangulate = 0
 
-PINVOKE int pinvoke_find_closest_plateside_to_line(
-    //input - polylines flat list and a flat list of lines
-    int* f, int f_s, double* v, int v_s,
-    double* lines_v, int lines_v_s,
-    //output - jagged array of vectors
-    int*& out_f, int& out_f_s, double*& out_v, int& out_v_s
-);
+// );
 
-PINVOKE int pinvoke_find_closest_plateside_to_indexedpoint(
-    //input - polylines flat list and a flat list of lines
-    int* f, int f_s, double* v, int v_s,
-    double* pts_v, int pts_v_s,
-    int* ids_v, int ids_v_s,
-    //output - jagged array of vectors
-    int*& out_f, int& out_f_s, int*& out_v, int& out_v_s
-);
+// PINVOKE int pinvoke_find_closest_plateside_to_line(
+//     //input - polylines flat list and a flat list of lines
+//     int* f, int f_s, double* v, int v_s,
+//     double* lines_v, int lines_v_s,
+//     //output - jagged array of vectors
+//     int*& out_f, int& out_f_s, double*& out_v, int& out_v_s
+// );
+
+// PINVOKE int pinvoke_find_closest_plateside_to_indexedpoint(
+//     //input - polylines flat list and a flat list of lines
+//     int* f, int f_s, double* v, int v_s,
+//     double* pts_v, int pts_v_s,
+//     int* ids_v, int ids_v_s,
+//     //output - jagged array of vectors
+//     int*& out_f, int& out_f_s, int*& out_v, int& out_v_s
+// );
