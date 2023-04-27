@@ -1,7 +1,8 @@
 import ctypes
 
 # Load library
-lib = ctypes.cdll.LoadLibrary("C:/IBOIS57/_Code/Software/Python/compas_wood/src/frontend/build/Release/pinvoke_wood.dll")
+lib = ctypes.cdll.LoadLibrary("C:/legion_pro_7_16IRX8H/software/python/compas_wood/src/frontend/build/Release/pinvoke_wood.dll")
+#lib = ctypes.cdll.LoadLibrary("C:/IBOIS57/_Code/Software/Python/compas_wood/src/frontend/build/Release/pinvoke_wood.dll")
 
 # Define function prototype
 test_get_array_floats = lib.test_get_array_floats

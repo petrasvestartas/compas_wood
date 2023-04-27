@@ -46,6 +46,44 @@ PINVOKE void test_get_array_floats(float*& coord_out, size_t& coord_size_out) {
     coord_size_out = size;
 }
 
+struct Array_Floats {
+    float* data;
+    size_t size;
+};
+
+PINVOKE void test_get_nested_array_floats(Array_Floats*& array_out, size_t& array_size_out) {
+    size_t outer_size = 2;
+
+    // Allocate memory for the outer array
+    array_out = new Array_Floats[outer_size];
+
+    // Allocate memory for each inner array and populate it with data
+    array_out[0].data = new float[3] { 1.0f, 2.0f, 3.0f };
+    array_out[0].size = 3;
+
+    array_out[1].data = new float[2] { 4.0f, 5.0f };
+    array_out[1].size = 2;
+
+    array_size_out = outer_size;
+}
+
+
+
+PINVOKE void release_nested_array(Array_Floats*& array_out, size_t& array_size_out) {
+    // Free the memory for the inner arrays
+    for (size_t i = 0; i < array_size_out; ++i) {
+        delete[] array_out[i].data;
+    }
+
+    // Free the memory for the outer array
+    delete[] array_out;
+
+
+}
+
+
+
+
 
 // Function to process a nested list and return a flattened list
 PINVOKE void process_and_return_nested_list(
@@ -287,112 +325,142 @@ void list_to_coord(std::vector<std::vector<int>>& output_vectors, int*& out_f, i
 //Implementations
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-PINVOKE void pinvoke_get_connection_zones(
-    // _____________________________________________________ input
-    float** input_polyline_pairs_coords, size_t input_polyline_pairs_rows, size_t* input_polyline_pairs_cols,
-    // _____________________________________________________ output
-    float* arr, size_t& size
-    // _____________________________________________________ global parameters
-    // float** input_polyline_pairs_coords, int input_polyline_pairs_rows, int* input_polyline_pairs_cols
-    // // input
-    // std::vector<std::vector<double>>& pybind11_input_polyline_pairs,
-    // std::vector<std::vector<double>>& pybind11_input_insertion_vectors,
-    // std::vector<std::vector<int>>& pybind11_input_JOINTS_TYPES,
-    // std::vector<std::vector<int>>& pybind11_input_three_valence_element_indices_and_instruction,
-    // std::vector<int>& pybind11_input_adjacency,
-    // std::vector<double>& pybind11_wood_globals_JOINTS_PARAMETERS_AND_TYPES,
-    // int& _search_type,
-    // std::vector<double>& _scale,
-    // int& _output_type,
-    // // output
-    // std::vector<std::vector<std::vector<double>>>& pybind11_output_plines,
-    // std::vector<std::vector<int>>& pybind11_output_types,
-    // // global_parameters
-    // std::vector<double>& pybind11_joint_volume_parameters
-)
-{
+PINVOKE void get_connection_zones(
 
-    std::vector<std::vector<IK::Point_3>> input_polyline_pairs;
-    // Process each row of the nested array
-    for (size_t i = 0; i < input_polyline_pairs_rows; i++) {
-        float* row = input_polyline_pairs_coords[i];
-        size_t num_cols_in_row = input_polyline_pairs_cols[i];
-        // Process each element in the row
-        input_polyline_pairs.emplace_back(std::vector<IK::Point_3>());
-        for (size_t j = 0; j < num_cols_in_row; j += 3) {
-            input_polyline_pairs.back().emplace_back(IK::Point_3(row[j], row[j + 1], row[j + 2]));
-        }
+    // input
+    size_t*& in_polyline_pairs_f, size_t& in_polyline_pairs_f_s, float*& in_polyline_pairs_v, size_t& in_polyline_pairs_v_s
+    // int*& in_insertion_vectors_f, int& in_insertion_vectors_f_s, double*& in_insertion_vectors_v, int& in_insertion_vectors_v_s,
+    // int*& in_joints_types_f, int& in_joints_types_f_s, int*& in_joints_types_v, int& in_joints_types_v_s,
+    // int*& in_three_valence_f, int& in_three_valence_f_s, int*& in_three_valence_v, int& in_three_valence_v_s,
+    // int& in_search_type,
+    // double*& in_scale_v, int& in_scale_v_s
+    // int& in_output_type,
+
+    // // output
+    // int*& out_plines_groups_f, int& out_plines_groups_f_s, int*& out_plines_out_f, int& out_plines_out_f_s, double*& out_plines_out_v, int& out_plines_out_v_s,//std::vector<std::vector<CGAL_Polyline>> &output_plines,
+    // int*& out_types_f, int& out_types_f_s, int*& out_types_v, int& out_types_v_s,//std::vector<std::vector<wood_cut::cut_type>> &output_types,
+    
+    // // global_parameters
+    // double*& in_joint_volume_parameters_v, int& in_joint_volume_parameters_v_s
+) {
+
+
+    for(size_t i = 0; i < in_polyline_pairs_f_s; i++){
+        printf("in_polyline_pairs_f[%z]: %z\n", i, in_polyline_pairs_f[i]);
     }
 
-    // Populate the array with some values
-    arr[0] = 1.0;
-    arr[1] = 2.0;
-    arr[2] = 3.0;
-    arr[3] = 4.0;
-    arr[4] = 5.0;
-
-    // Set the size variable to the length of the array
-    size = 5;
-    // ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    // // The filename of the xml file and the screenshot directory
-    // ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-    // std::vector<std::vector<IK::Point_3>> input_polyline_pairs;
-    // python_to_cpp__cpp_to_python::coord_to_vector_of_polylines(pybind11_input_polyline_pairs, input_polyline_pairs);
-
-    // std::vector<std::vector<IK::Vector_3>> input_insertion_vectors;
-    // python_to_cpp__cpp_to_python::coord_to_vector_of_vectors(pybind11_input_insertion_vectors, input_insertion_vectors);
-
-
-    // std::vector<std::vector<int>> input_JOINTS_TYPES = pybind11_input_JOINTS_TYPES = pybind11_input_JOINTS_TYPES;
-    // std::vector<std::vector<int>> input_three_valence_element_indices_and_instruction = pybind11_input_three_valence_element_indices_and_instruction;
-    // std::vector<int> input_adjacency = pybind11_input_adjacency;
-
-    // int search_type = _search_type;
-    // std::vector<double> scale = _scale;
-    // int output_type = _output_type;
-
-    // wood_globals::JOINTS_PARAMETERS_AND_TYPES = pybind11_wood_globals_JOINTS_PARAMETERS_AND_TYPES;
-    // wood_globals::OUTPUT_GEOMETRY_TYPE = output_type;
-    // for (int i = 0; i < pybind11_joint_volume_parameters.size(); i++)
-    //     wood_globals::JOINT_VOLUME_EXTENSION[i] = pybind11_joint_volume_parameters[i];
-
-
-    // ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    // // Main Method of Wood
-    // ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    // std::vector<std::vector<CGAL_Polyline>> output_plines;
-    // std::vector<std::vector<wood_cut::cut_type>> output_types;
-    // std::vector<std::vector<int>> top_face_triangulation;
-
-
-    // wood_main::get_connection_zones(
-    //     // input
-    //     input_polyline_pairs,
-    //     input_insertion_vectors,
-    //     input_JOINTS_TYPES,
-    //     input_three_valence_element_indices_and_instruction,
-    //     input_adjacency,
-    //     // output
-    //     output_plines,
-    //     output_types,
-    //     top_face_triangulation,
-    //     // Global Parameters
-    //     wood_globals::JOINTS_PARAMETERS_AND_TYPES,
-    //     scale,
-    //     search_type,
-    //     wood_globals::OUTPUT_GEOMETRY_TYPE,
-    //     0);
-
-    // //printf("CPP 6");
-    // ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    // // Convert polylines to double vector and cut types to int vector
-    // ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    // python_to_cpp__cpp_to_python::nested_vector_of_polylines_to_coord(output_plines, pybind11_output_plines);
-    // python_to_cpp__cpp_to_python::nested_vector_of_cut_type_to_nested_vector_of_int(output_types, pybind11_output_types); // only filled when 3rd output type is uesd
-    // //printf("CPP 7");
+    for(size_t i = 0; i < in_polyline_pairs_v_s; i++){
+        printf("in_polyline_pairs_v[%z]: %f\n", i, in_polyline_pairs_v[i]);
+    }
+    
 }
+
+// PINVOKE void pinvoke_get_connection_zones(
+//     // _____________________________________________________ input
+//     float** input_polyline_pairs_coords, size_t input_polyline_pairs_rows, size_t* input_polyline_pairs_cols,
+//     // _____________________________________________________ output
+//     float* arr, size_t& size
+//     // _____________________________________________________ global parameters
+//     // float** input_polyline_pairs_coords, int input_polyline_pairs_rows, int* input_polyline_pairs_cols
+//     // // input
+//     // std::vector<std::vector<double>>& pybind11_input_polyline_pairs,
+//     // std::vector<std::vector<double>>& pybind11_input_insertion_vectors,
+//     // std::vector<std::vector<int>>& pybind11_input_JOINTS_TYPES,
+//     // std::vector<std::vector<int>>& pybind11_input_three_valence_element_indices_and_instruction,
+//     // std::vector<int>& pybind11_input_adjacency,
+//     // std::vector<double>& pybind11_wood_globals_JOINTS_PARAMETERS_AND_TYPES,
+//     // int& _search_type,
+//     // std::vector<double>& _scale,
+//     // int& _output_type,
+//     // // output
+//     // std::vector<std::vector<std::vector<double>>>& pybind11_output_plines,
+//     // std::vector<std::vector<int>>& pybind11_output_types,
+//     // // global_parameters
+//     // std::vector<double>& pybind11_joint_volume_parameters
+// )
+// {
+
+//     std::vector<std::vector<IK::Point_3>> input_polyline_pairs;
+//     // Process each row of the nested array
+//     for (size_t i = 0; i < input_polyline_pairs_rows; i++) {
+//         float* row = input_polyline_pairs_coords[i];
+//         size_t num_cols_in_row = input_polyline_pairs_cols[i];
+//         // Process each element in the row
+//         input_polyline_pairs.emplace_back(std::vector<IK::Point_3>());
+//         for (size_t j = 0; j < num_cols_in_row; j += 3) {
+//             input_polyline_pairs.back().emplace_back(IK::Point_3(row[j], row[j + 1], row[j + 2]));
+//         }
+//     }
+
+//     // Populate the array with some values
+//     arr[0] = 1.0;
+//     arr[1] = 2.0;
+//     arr[2] = 3.0;
+//     arr[3] = 4.0;
+//     arr[4] = 5.0;
+
+//     // Set the size variable to the length of the array
+//     size = 5;
+//     // ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//     // // The filename of the xml file and the screenshot directory
+//     // ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+//     // std::vector<std::vector<IK::Point_3>> input_polyline_pairs;
+//     // python_to_cpp__cpp_to_python::coord_to_vector_of_polylines(pybind11_input_polyline_pairs, input_polyline_pairs);
+
+//     // std::vector<std::vector<IK::Vector_3>> input_insertion_vectors;
+//     // python_to_cpp__cpp_to_python::coord_to_vector_of_vectors(pybind11_input_insertion_vectors, input_insertion_vectors);
+
+
+//     // std::vector<std::vector<int>> input_JOINTS_TYPES = pybind11_input_JOINTS_TYPES = pybind11_input_JOINTS_TYPES;
+//     // std::vector<std::vector<int>> input_three_valence_element_indices_and_instruction = pybind11_input_three_valence_element_indices_and_instruction;
+//     // std::vector<int> input_adjacency = pybind11_input_adjacency;
+
+//     // int search_type = _search_type;
+//     // std::vector<double> scale = _scale;
+//     // int output_type = _output_type;
+
+//     // wood_globals::JOINTS_PARAMETERS_AND_TYPES = pybind11_wood_globals_JOINTS_PARAMETERS_AND_TYPES;
+//     // wood_globals::OUTPUT_GEOMETRY_TYPE = output_type;
+//     // for (int i = 0; i < pybind11_joint_volume_parameters.size(); i++)
+//     //     wood_globals::JOINT_VOLUME_EXTENSION[i] = pybind11_joint_volume_parameters[i];
+
+
+//     // ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//     // // Main Method of Wood
+//     // ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//     // std::vector<std::vector<CGAL_Polyline>> output_plines;
+//     // std::vector<std::vector<wood_cut::cut_type>> output_types;
+//     // std::vector<std::vector<int>> top_face_triangulation;
+
+
+//     // wood_main::get_connection_zones(
+//     //     // input
+//     //     input_polyline_pairs,
+//     //     input_insertion_vectors,
+//     //     input_JOINTS_TYPES,
+//     //     input_three_valence_element_indices_and_instruction,
+//     //     input_adjacency,
+//     //     // output
+//     //     output_plines,
+//     //     output_types,
+//     //     top_face_triangulation,
+//     //     // Global Parameters
+//     //     wood_globals::JOINTS_PARAMETERS_AND_TYPES,
+//     //     scale,
+//     //     search_type,
+//     //     wood_globals::OUTPUT_GEOMETRY_TYPE,
+//     //     0);
+
+//     // //printf("CPP 6");
+//     // ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//     // // Convert polylines to double vector and cut types to int vector
+//     // ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//     // python_to_cpp__cpp_to_python::nested_vector_of_polylines_to_coord(output_plines, pybind11_output_plines);
+//     // python_to_cpp__cpp_to_python::nested_vector_of_cut_type_to_nested_vector_of_int(output_types, pybind11_output_types); // only filled when 3rd output type is uesd
+//     // //printf("CPP 7");
+// }
 
 
 // PINVOKE int pinvoke_get_connection_zones(

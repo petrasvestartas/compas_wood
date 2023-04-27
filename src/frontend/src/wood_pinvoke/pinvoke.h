@@ -27,12 +27,12 @@ PINVOKE void test_get_array(double*& coord_out, int& coord_size_out);
 
 PINVOKE void test_get_array_floats(float*& coord_out, size_t& coord_size_out);
 
-// Function to process a nested list and return a flattened list
-PINVOKE void process_and_return_nested_list(
-    const std::vector<std::vector<int>>& nested_list,
-    int* flattened_list,
-    int* flattened_list_size);
 
+typedef struct Array_Floats Array_Floats_;
+
+PINVOKE void test_get_nested_array_floats(Array_Floats_*& array_out, size_t& array_size_out);
+
+PINVOKE void release_nested_array(Array_Floats*& array_out, size_t& array_size_out) ;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //Input Conversion
@@ -59,6 +59,29 @@ PINVOKE void pinvoke_get_connection_zones(
     float** input_polyline_pairs_coords, size_t input_polyline_pairs_rows, size_t* input_polyline_pairs_cols,
     float* arr, size_t& size
 );
+
+
+
+
+PINVOKE void get_connection_zones(
+
+    // input
+    size_t*& in_polyline_pairs_f, size_t& in_polyline_pairs_f_s, float*& in_polyline_pairs_v, size_t& in_polyline_pairs_v_s
+    // int*& in_insertion_vectors_f, int& in_insertion_vectors_f_s, double*& in_insertion_vectors_v, int& in_insertion_vectors_v_s,
+    // int*& in_joints_types_f, int& in_joints_types_f_s, int*& in_joints_types_v, int& in_joints_types_v_s,
+    // int*& in_three_valence_f, int& in_three_valence_f_s, int*& in_three_valence_v, int& in_three_valence_v_s,
+    // int& in_search_type,
+    // double*& in_scale_v, int& in_scale_v_s
+    // int& in_output_type,
+
+    // // output
+    // int*& out_plines_groups_f, int& out_plines_groups_f_s, int*& out_plines_out_f, int& out_plines_out_f_s, double*& out_plines_out_v, int& out_plines_out_v_s,//std::vector<std::vector<CGAL_Polyline>> &output_plines,
+    // int*& out_types_f, int& out_types_f_s, int*& out_types_v, int& out_types_v_s,//std::vector<std::vector<wood_cut::cut_type>> &output_types,
+    
+    // // global_parameters
+    // double*& in_joint_volume_parameters_v, int& in_joint_volume_parameters_v_s
+);
+
 // PINVOKE int pinvoke_get_connection_zones(
 //     //input
 //     int* f, int f_s, double* v, int v_s,
