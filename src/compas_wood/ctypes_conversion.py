@@ -31,7 +31,33 @@ def list_polylines_coord(polylines):
             count += 1
     _v = (c_float * v_s)(*v)  # polyline coordinates
 
-    return _f, _f_s, _v, _v_s  # polyline sizes, number of polylines, polyline coordinates, number of coordinates
+    return f, f_s, v, v_s  # polyline sizes, number of polylines, polyline coordinates, number of coordinates
+
+# def list_polylines_coord(polylines):
+    
+
+#     v_s = 0
+#     f_s = len(polylines)
+#     f =  [None]*f_s
+#     for i in range(f_s):
+#         f[i] = len(polylines[i])
+#         v_s += len(polylines[i]) * 3
+
+#     _f = (c_size_t * f_s)(*f)  # polyline sizes
+#     _f_s = c_size_t(f_s)  # number of polylines
+#     _v_s = c_size_t(v_s)  # number of coordinates
+
+#     count = 0
+#     v =  [None]*v_s
+#     for i in range(f_s):
+#         for j in range(len(polylines[i])):
+#             v[count * 3 + 0] = polylines[i][j][0]
+#             v[count * 3 + 1] = polylines[i][j][1]
+#             v[count * 3 + 2] = polylines[i][j][2]
+#             count += 1
+#     _v = (c_float * v_s)(*v)  # polyline coordinates
+
+#     return _f, _f_s, _v, _v_s  # polyline sizes, number of polylines, polyline coordinates, number of coordinates
 
 
 def lists_vectors_coord(vectors):

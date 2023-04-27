@@ -48,12 +48,15 @@ def test_connection_detection():
         ]
     
     ############################################################################################################
-    # Call the function
+    # Call the function 
+    # https://stackoverflow.com/questions/4145775/how-do-i-convert-a-python-list-into-a-c-array-by-using-ctypes
+    # https://stackoverflow.com/questions/53265216/python-ctypes-type-conversion 
     ############################################################################################################
-
-    lib.get_connection_zones(
-        byref(in_polyline_pairs_f), byref(in_polyline_pairs_f_s), byref(in_polyline_pairs_v), byref(in_polyline_pairs_v_s)
-        )
+    a = (c_size_t * len(in_polyline_pairs_f))(*in_polyline_pairs_f)
+    b = c_size_t(in_polyline_pairs_f_s)
+    c = (c_float * len(in_polyline_pairs_v))(*in_polyline_pairs_v)
+    d = c_size_t(in_polyline_pairs_v_s)
+    lib.get_connection_zones(a,b,c,d  )
     #lib.get_connection_zones(byref(in_polyline_pairs_f), byref(in_polyline_pairs_f_s), byref(in_polyline_pairs_v), byref(in_polyline_pairs_v_s))
 
     
