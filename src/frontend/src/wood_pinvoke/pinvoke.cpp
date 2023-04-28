@@ -325,10 +325,12 @@ void list_to_coord(std::vector<std::vector<int>>& output_vectors, int*& out_f, i
 //Implementations
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-PINVOKE void get_connection_zones(
+PINVOKE void ctypes_get_connection_zones(
 
     // input
-    size_t*& in_polyline_pairs_f, size_t& in_polyline_pairs_f_s, float*& in_polyline_pairs_v, size_t& in_polyline_pairs_v_s
+    //size_t* in_polyline_pairs_f, size_t& in_polyline_pairs_f_s
+    size_t* in_polyline_pairs_f, size_t& in_polyline_pairs_f_s, float* in_polyline_pairs_v, size_t& in_polyline_pairs_v_s
+
     // int*& in_insertion_vectors_f, int& in_insertion_vectors_f_s, double*& in_insertion_vectors_v, int& in_insertion_vectors_v_s,
     // int*& in_joints_types_f, int& in_joints_types_f_s, int*& in_joints_types_v, int& in_joints_types_v_s,
     // int*& in_three_valence_f, int& in_three_valence_f_s, int*& in_three_valence_v, int& in_three_valence_v_s,
@@ -339,20 +341,24 @@ PINVOKE void get_connection_zones(
     // // output
     // int*& out_plines_groups_f, int& out_plines_groups_f_s, int*& out_plines_out_f, int& out_plines_out_f_s, double*& out_plines_out_v, int& out_plines_out_v_s,//std::vector<std::vector<CGAL_Polyline>> &output_plines,
     // int*& out_types_f, int& out_types_f_s, int*& out_types_v, int& out_types_v_s,//std::vector<std::vector<wood_cut::cut_type>> &output_types,
-    
+
     // // global_parameters
     // double*& in_joint_volume_parameters_v, int& in_joint_volume_parameters_v_s
 ) {
 
 
-    for(size_t i = 0; i < in_polyline_pairs_f_s; i++){
-        printf("in_polyline_pairs_f[%z]: %z\n", i, in_polyline_pairs_f[i]);
+    printf(" %zu\n", in_polyline_pairs_f_s);
+    printf(" %zu\n", in_polyline_pairs_v_s);
+
+    for (size_t i = 0; i < in_polyline_pairs_f_s; i++) {
+        //in_polyline_pairs_f[i] += i;
+        printf("in_polyline_pairs_f[ %zu ]: %zu\n", i, in_polyline_pairs_f[i]);
     }
 
-    for(size_t i = 0; i < in_polyline_pairs_v_s; i++){
-        printf("in_polyline_pairs_v[%z]: %f\n", i, in_polyline_pairs_v[i]);
+    for (size_t i = 0; i < in_polyline_pairs_v_s; i++) {
+        printf("in_polyline_pairs_v[%zu]: %f\n", i, in_polyline_pairs_v[i]);
     }
-    
+
 }
 
 // PINVOKE void pinvoke_get_connection_zones(

@@ -8,11 +8,9 @@ from ctypes import *
 
 
 def list_polylines_coord(polylines):
-    
-
     v_s = 0
     f_s = len(polylines)
-    f =  [None]*f_s
+    f = [None] * f_s
     for i in range(f_s):
         f[i] = len(polylines[i])
         v_s += len(polylines[i]) * 3
@@ -22,7 +20,7 @@ def list_polylines_coord(polylines):
     _v_s = c_size_t(v_s)  # number of coordinates
 
     count = 0
-    v =  [None]*v_s
+    v = [None] * v_s
     for i in range(f_s):
         for j in range(len(polylines[i])):
             v[count * 3 + 0] = polylines[i][j][0]
@@ -31,10 +29,17 @@ def list_polylines_coord(polylines):
             count += 1
     _v = (c_float * v_s)(*v)  # polyline coordinates
 
-    return f, f_s, v, v_s  # polyline sizes, number of polylines, polyline coordinates, number of coordinates
+    # return f, f_s, v, v_s  # polyline sizes, number of polylines, polyline coordinates, number of coordinates
+    return (
+        _f,
+        _f_s,
+        _v,
+        _v_s,
+    )  # polyline sizes, number of polylines, polyline coordinates, number of coordinates
+
 
 # def list_polylines_coord(polylines):
-    
+
 
 #     v_s = 0
 #     f_s = len(polylines)
@@ -111,6 +116,3 @@ def coord_polylines_lists():
 
 def coord_numbers_lists():
     pass
-
-
-
