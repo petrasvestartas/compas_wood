@@ -128,6 +128,39 @@ void coord_to_list(int*& f, int& f_s, double*& v, int& v_s, std::vector<CGAL_Pol
     }
 }
 
+void coord_to_list(size_t* f, size_t& f_s, float* v, size_t& v_s, std::vector<CGAL_Polyline>& plines) {
+    //Sanity check
+    try{
+      
+
+    if (v_s == 0 || f_s == 0) return;
+
+    //Convert Coordinates to CGAL Polylines
+    plines.reserve(f_s);
+    plines.emplace_back(CGAL_Polyline());
+    plines.back().reserve(f[0]);
+     printf("%zu %zu \n",f[plines.size()-1],(plines.size()-1));
+  //printf("%zu \n",f[0]);
+    for (size_t i = 0; i < v_s; i += 3) {
+        
+        //New polyline
+        if (plines.back().size() == f[plines.size() - 1]) {
+            plines.emplace_back(CGAL_Polyline());
+              printf("%zu %zu \n",f[plines.size()-1],(plines.size()-1));
+            plines.back().reserve(f[plines.size()-1]);
+        }
+        printf("%f %f %f \n", v[i], v[i+1],v[i+2]);
+    //     //Add point to the last polyline
+    IK::Point_3 p(v[i], v[i + 1], v[i + 2]);
+    plines.back().push_back(p);
+         //plines.back().emplace_back(v[i + 0], v[i + 1], v[i + 2]);
+    }
+        }
+    catch (const std::exception& e) {
+        std::cout << e.what() << std::endl;
+    }
+}
+
 void coord_to_list(int*& f, int& f_s, double*& v, int& v_s, std::vector<std::vector<IK::Vector_3>>& vectorlists) {
     //Sanity check
     if (v_s == 0 || f_s == 0) return;
@@ -345,19 +378,21 @@ PINVOKE void ctypes_get_connection_zones(
     // // global_parameters
     // double*& in_joint_volume_parameters_v, int& in_joint_volume_parameters_v_s
 ) {
+   
+    std::vector<CGAL_Polyline> in_polyline_pairs;
+    coord_to_list(in_polyline_pairs_f, in_polyline_pairs_f_s, in_polyline_pairs_v, in_polyline_pairs_v_s, in_polyline_pairs);
 
+    // printf(" %zu\n", in_polyline_pairs_f_s);
+    // printf(" %zu\n", in_polyline_pairs_v_s);
 
-    printf(" %zu\n", in_polyline_pairs_f_s);
-    printf(" %zu\n", in_polyline_pairs_v_s);
+    // for (size_t i = 0; i < in_polyline_pairs_f_s; i++) {
+    //     //in_polyline_pairs_f[i] += i;
+    //     printf("in_polyline_pairs_f[ %zu ]: %zu\n", i, in_polyline_pairs_f[i]);
+    // }
 
-    for (size_t i = 0; i < in_polyline_pairs_f_s; i++) {
-        //in_polyline_pairs_f[i] += i;
-        printf("in_polyline_pairs_f[ %zu ]: %zu\n", i, in_polyline_pairs_f[i]);
-    }
-
-    for (size_t i = 0; i < in_polyline_pairs_v_s; i++) {
-        printf("in_polyline_pairs_v[%zu]: %f\n", i, in_polyline_pairs_v[i]);
-    }
+    // for (size_t i = 0; i < in_polyline_pairs_v_s; i++) {
+    //     printf("in_polyline_pairs_v[%zu]: %f\n", i, in_polyline_pairs_v[i]);
+    // }
 
 }
 

@@ -38,6 +38,8 @@ PINVOKE void release_nested_array(Array_Floats*& array_out, size_t& array_size_o
 //Input Conversion
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void coord_to_list(int*& f, int& f_s, double*& v, int& v_s, std::vector<CGAL_Polyline>& plines);
+void coord_to_list(size_t* f, size_t& f_s, float* v, size_t& v_s, std::vector<CGAL_Polyline>& plines);
+
 void coord_to_list(int*& f, int& f_s, double*& v, int& v_s, std::vector<std::vector<IK::Vector_3>>& vectorlists);
 void coord_to_list(int*& f, int& f_s, int*& v, int& v_s, std::vector<std::vector<int>>& vectorlists);
 void coord_to_list(double*& v, int& v_s, std::vector<IK::Segment_3>& vectorlist);
