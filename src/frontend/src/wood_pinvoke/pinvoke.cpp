@@ -152,7 +152,7 @@ void coord_to_list(size_t* f, size_t& f_s, float* v, size_t& v_s, std::vector<st
     }
 }
 
-void coord_to_list(int*& f, int& f_s, int*& v, int& v_s, std::vector<std::vector<int>>& vectorlists) {
+void coord_to_list(size_t* f, size_t& f_s, int* v, size_t& v_s, std::vector<std::vector<int>>& vectorlists) {
     //Sanity check
     if (v_s == 0 || f_s == 0) return;
 
@@ -334,9 +334,9 @@ PINVOKE void ctypes_get_connection_zones(
     // input
     //size_t* in_polyline_pairs_f, size_t& in_polyline_pairs_f_s
     size_t* in_polyline_pairs_f, size_t& in_polyline_pairs_f_s, float* in_polyline_pairs_v, size_t& in_polyline_pairs_v_s,
-    size_t* in_vectors_f, size_t& in_vectors_f_s, float* in_vectors_v, size_t& in_vectors_v_s
+    size_t* in_vectors_f, size_t& in_vectors_f_s, float* in_vectors_v, size_t& in_vectors_v_s,
+    size_t* in_joints_types_f, size_t& in_joints_types_f_s, int* in_joints_types_v, size_t& in_joints_types_v_s
 
-    // int*& in_joints_types_f, int& in_joints_types_f_s, int*& in_joints_types_v, int& in_joints_types_v_s,
     // int*& in_three_valence_f, int& in_three_valence_f_s, int*& in_three_valence_v, int& in_three_valence_v_s,
     // int& in_search_type,
     // double*& in_scale_v, int& in_scale_v_s
@@ -355,6 +355,9 @@ PINVOKE void ctypes_get_connection_zones(
 
     std::vector<std::vector<IK::Vector_3>> in_vectors;
     coord_to_list(in_vectors_f, in_vectors_f_s, in_vectors_v, in_vectors_v_s, in_vectors);
+
+    std::vector<std::vector<int>> in_joints_types;
+    coord_to_list(in_joints_types_f, in_joints_types_f_s, in_joints_types_v, in_joints_types_v_s, in_joints_types);
 
     
 

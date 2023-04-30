@@ -40,8 +40,8 @@ PINVOKE void release_nested_array(Array_Floats*& array_out, size_t& array_size_o
 
 void coord_to_list(size_t* f, size_t& f_s, float* v, size_t& v_s, std::vector<CGAL_Polyline>& plines);
 void coord_to_list(size_t* f, size_t& f_s, float* v, size_t& v_s, std::vector<std::vector<IK::Vector_3>>& vectorlists);
+void coord_to_list(size_t* f, size_t& f_s, int* v, size_t& v_s, std::vector<std::vector<int>>& vectorlists);
 
-void coord_to_list(int*& f, int& f_s, int*& v, int& v_s, std::vector<std::vector<int>>& vectorlists);
 void coord_to_list(double*& v, int& v_s, std::vector<IK::Segment_3>& vectorlist);
 void coord_to_list(double*& v, int& v_s, std::vector<IK::Point_3>& vectorlist);
 void coord_to_list(int*& v, int& v_s, std::vector<int>& vectorlist);
@@ -70,7 +70,8 @@ PINVOKE void ctypes_get_connection_zones(
     // input
     //size_t* in_polyline_pairs_f, size_t& in_polyline_pairs_f_s
     size_t* in_polyline_pairs_f, size_t& in_polyline_pairs_f_s, float* in_polyline_pairs_v, size_t& in_polyline_pairs_v_s,
-    size_t* in_vectors_f, size_t& in_vectors_f_s, float* in_vectors_v, size_t& in_vectors_v_s
+    size_t* in_vectors_f, size_t& in_vectors_f_s, float* in_vectors_v, size_t& in_vectors_v_s,
+    size_t* in_joints_types_f, size_t& in_joints_types_f_s, int* in_joints_types_v, size_t& in_joints_types_v_s
 
 
     // int*& in_joints_types_f, int& in_joints_types_f_s, int*& in_joints_types_v, int& in_joints_types_v_s,

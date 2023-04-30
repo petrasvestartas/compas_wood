@@ -8,77 +8,46 @@ from ctypes import *
 
 
 def list_polylines_coord(polylines):
-    v_s = 0
-    f_s = len(polylines)
-    f = [None] * f_s
-    for i in range(f_s):
-        f[i] = len(polylines[i])
-        v_s += len(polylines[i]) * 3
-
-    _f = (c_size_t * f_s)(*f)  # polyline sizes
-    _f_s = c_size_t(f_s)  # number of polylines
-    _v_s = c_size_t(v_s)  # number of coordinates
-
-    count = 0
-    v = [None] * v_s
-    for i in range(f_s):
-        for j in range(len(polylines[i])):
-            v[count * 3 + 0] = polylines[i][j][0]
-            v[count * 3 + 1] = polylines[i][j][1]
-            v[count * 3 + 2] = polylines[i][j][2]
-            count += 1
-    _v = (c_float * v_s)(*v)  # polyline coordinates
-
-    # return f, f_s, v, v_s  # polyline sizes, number of polylines, polyline coordinates, number of coordinates
-    return (
-        _f,
-        _f_s,
-        _v,
-        _v_s,
-    )  # polyline sizes, number of polylines, polyline coordinates, number of coordinates
+    f = []
+    v = []
+    for polyline in polylines:
+        f.append(len(polyline))
+        for point in polyline:
+            v.extend(point)
+    _f = (c_size_t * len(f))(*f)
+    _v = (c_float * len(v))(*v)
+    return _f, c_size_t(len(f)), _v, c_size_t(len(v))
 
 
 def lists_vectors_coord(vectors):
-    
-    f_s = c_size_t(len(vectors))
-    faces = ([len(v) for v in vectors])
+    faces = [len(v) for v in vectors]
+    f = (c_size_t * len(vectors))(*faces)
+    v = [coord for vec in vectors for point in vec for coord in point]
+    v_s = c_size_t(len(v) * sizeof(c_float))
+    v = (c_float * len(v))(*v)
+    return f, c_size_t(len(vectors)), v, v_s
 
-    f = (c_size_t * (len(vectors)))(*faces)
 
-    v_s = c_size_t( sum(len(v) * 3 for v in vectors) )
-    vertices = [0.0] * v_s.value
-
-    
-    count = 0
-    for i in range(len(vectors)):
-        for j in range(len(vectors[i])):
-            vertices[count * 3] = c_float(vectors[i][j][0])
-            vertices[count * 3 + 1] = c_float(vectors[i][j][1])
-            vertices[count * 3 + 2] = c_float(vectors[i][j][2])
-            count += 1
-
-    v = (c_float * v_s.value)(*vertices)
-    return f, f_s, v, v_s
 
 
 def lists_numbers_coord(numbers):
     v_s = 0
     f_s = len(numbers)
-    f = [0] * len(numbers)
+    f = (c_size_t * len(numbers))()
 
     for i in range(len(numbers)):
         f[i] = len(numbers[i])
         v_s += len(numbers[i]) * 1
 
-    v = [0] * v_s
+    v = (c_int * v_s)()
 
     count = 0
     for i in range(len(numbers)):
         for j in range(len(numbers[i])):
-            v[count * 1 + 0] = numbers[i][j]
+            v[count] = numbers[i][j]
             count += 1
 
-    return f, f_s, v, v_s
+    return f, c_size_t(f_s), v, c_size_t(v_s)
 
 
 def list_numbers_coord(numbers):

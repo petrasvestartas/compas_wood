@@ -44,9 +44,7 @@ def test_connection_detection():
         in_polyline_pairs_v_s,
     ) = list_polylines_coord(input_polylines)
 
-    # data_set_plates.annen_small_edge_directions(),
-    # data_set_plates.annen_small_edge_joints(),
-    # data_set_plates.annen_small_three_valance_element_indices_and_instruction(),
+
     input_vectors = data_set_plates.annen_small_edge_directions()
     (
         in_vectors_f,
@@ -54,6 +52,16 @@ def test_connection_detection():
         in_vectors_v,
         in_vectors_v_s,
     ) = lists_vectors_coord(input_vectors)
+
+
+    input_joints = data_set_plates.annen_small_edge_joints()
+    (
+        in_joints_f,
+        in_joints_f_s,
+        in_joints_v,
+        in_joints_v_s,
+    ) = lists_numbers_coord(input_joints)
+    # data_set_plates.annen_small_three_valance_element_indices_and_instruction(),
    
     ############################################################################################################
     # Load library and declare function signature
@@ -65,9 +73,7 @@ def test_connection_detection():
     lib.ctypes_get_connection_zones.restype = None
     lib.ctypes_get_connection_zones.argtypes = [
         # polylines
-        POINTER(
-            c_size_t
-        ),  # size of polylines are transfered as a point, never write POINTER(POINTER(c_size_t)), always arrays will be transfered as pointers
+        POINTER(c_size_t ),  # size of polylines are transfered as a point, never write POINTER(POINTER(c_size_t)), always arrays will be transfered as pointers
         POINTER(c_size_t),  # if a value is passed by reference, it must be a pointer
         POINTER(c_float),
         POINTER(c_size_t),  # if a value is passed by reference, it must be a pointer
@@ -75,6 +81,11 @@ def test_connection_detection():
         POINTER(c_size_t),
         POINTER(c_size_t), 
         POINTER(c_float),
+        POINTER(c_size_t), 
+        # joints
+        POINTER(c_size_t),
+        POINTER(c_size_t), 
+        POINTER(c_int),
         POINTER(c_size_t), 
     ]
 
@@ -111,6 +122,11 @@ def test_connection_detection():
         byref(in_vectors_f_s),
         in_vectors_v,
         byref(in_vectors_v_s),
+        # joints
+        in_joints_f,
+        byref(in_joints_f_s),
+        in_joints_v,
+        byref(in_joints_v_s),
     )
 
     # for i in range(b.value):
