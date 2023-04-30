@@ -108,60 +108,31 @@ PINVOKE void process_and_return_nested_list(
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //Input Conversion
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-void coord_to_list(int*& f, int& f_s, double*& v, int& v_s, std::vector<CGAL_Polyline>& plines) {
-    //Sanity check
-    if (v_s == 0 || f_s == 0) return;
-
-    //Convert Coordinates to CGAL Polylines
-    plines.reserve(f_s);
-    plines.emplace_back(CGAL_Polyline());
-    plines.back().reserve(f[0]);
-
-    for (size_t i = 0; i < v_s; i += 3) {
-        //New polyline
-        if (plines.back().size() == f[plines.size() - 1]) {
-            plines.emplace_back(CGAL_Polyline());
-            plines.back().reserve(f[plines.size()]);
-        }
-        //Add point to the last polyline
-        plines.back().emplace_back(v[i + 0], v[i + 1], v[i + 2]);
-    }
-}
-
 void coord_to_list(size_t* f, size_t& f_s, float* v, size_t& v_s, std::vector<CGAL_Polyline>& plines) {
-    //Sanity check
-    try{
-      
-
+    
+    //Sanity check     
     if (v_s == 0 || f_s == 0) return;
 
     //Convert Coordinates to CGAL Polylines
     plines.reserve(f_s);
     plines.emplace_back(CGAL_Polyline());
     plines.back().reserve(f[0]);
-     printf("%zu %zu \n",f[plines.size()-1],(plines.size()-1));
-  //printf("%zu \n",f[0]);
+
     for (size_t i = 0; i < v_s; i += 3) {
         
         //New polyline
         if (plines.back().size() == f[plines.size() - 1]) {
             plines.emplace_back(CGAL_Polyline());
-              printf("%zu %zu \n",f[plines.size()-1],(plines.size()-1));
             plines.back().reserve(f[plines.size()-1]);
         }
-        printf("%f %f %f \n", v[i], v[i+1],v[i+2]);
-    //     //Add point to the last polyline
-    IK::Point_3 p(v[i], v[i + 1], v[i + 2]);
-    plines.back().push_back(p);
-         //plines.back().emplace_back(v[i + 0], v[i + 1], v[i + 2]);
-    }
-        }
-    catch (const std::exception& e) {
-        std::cout << e.what() << std::endl;
-    }
+         //Add point to the last polyline
+         plines.back().emplace_back(v[i + 0], v[i + 1], v[i + 2]);
+  
+      }
+
 }
 
-void coord_to_list(int*& f, int& f_s, double*& v, int& v_s, std::vector<std::vector<IK::Vector_3>>& vectorlists) {
+void coord_to_list(size_t* f, size_t& f_s, float* v, size_t& v_s, std::vector<std::vector<IK::Vector_3>>& vectorlists) {
     //Sanity check
     if (v_s == 0 || f_s == 0) return;
 
@@ -174,7 +145,7 @@ void coord_to_list(int*& f, int& f_s, double*& v, int& v_s, std::vector<std::vec
         //New polyline
         if (vectorlists.back().size() == f[vectorlists.size() - 1]) {
             vectorlists.emplace_back(std::vector<IK::Vector_3>());
-            vectorlists.back().reserve(f[vectorlists.size()]);
+            vectorlists.back().reserve(f[vectorlists.size()-1]);
         }
         //Add point to the last polyline
         vectorlists.back().emplace_back(v[i + 0], v[i + 1], v[i + 2]);
@@ -194,7 +165,7 @@ void coord_to_list(int*& f, int& f_s, int*& v, int& v_s, std::vector<std::vector
         //New list
         if (vectorlists.back().size() == f[vectorlists.size() - 1]) {
             vectorlists.emplace_back(std::vector<int>());
-            vectorlists.back().reserve(f[vectorlists.size()]);
+            vectorlists.back().reserve(f[vectorlists.size()-1]);
         }
         //Add point to the last polyline
         vectorlists.back().emplace_back(v[i]);
@@ -362,9 +333,9 @@ PINVOKE void ctypes_get_connection_zones(
 
     // input
     //size_t* in_polyline_pairs_f, size_t& in_polyline_pairs_f_s
-    size_t* in_polyline_pairs_f, size_t& in_polyline_pairs_f_s, float* in_polyline_pairs_v, size_t& in_polyline_pairs_v_s
+    size_t* in_polyline_pairs_f, size_t& in_polyline_pairs_f_s, float* in_polyline_pairs_v, size_t& in_polyline_pairs_v_s,
+    size_t* in_vectors_f, size_t& in_vectors_f_s, float* in_vectors_v, size_t& in_vectors_v_s
 
-    // int*& in_insertion_vectors_f, int& in_insertion_vectors_f_s, double*& in_insertion_vectors_v, int& in_insertion_vectors_v_s,
     // int*& in_joints_types_f, int& in_joints_types_f_s, int*& in_joints_types_v, int& in_joints_types_v_s,
     // int*& in_three_valence_f, int& in_three_valence_f_s, int*& in_three_valence_v, int& in_three_valence_v_s,
     // int& in_search_type,
@@ -381,6 +352,11 @@ PINVOKE void ctypes_get_connection_zones(
    
     std::vector<CGAL_Polyline> in_polyline_pairs;
     coord_to_list(in_polyline_pairs_f, in_polyline_pairs_f_s, in_polyline_pairs_v, in_polyline_pairs_v_s, in_polyline_pairs);
+
+    std::vector<std::vector<IK::Vector_3>> in_vectors;
+    coord_to_list(in_vectors_f, in_vectors_f_s, in_vectors_v, in_vectors_v_s, in_vectors);
+
+    
 
     // printf(" %zu\n", in_polyline_pairs_f_s);
     // printf(" %zu\n", in_polyline_pairs_v_s);

@@ -38,47 +38,26 @@ def list_polylines_coord(polylines):
     )  # polyline sizes, number of polylines, polyline coordinates, number of coordinates
 
 
-# def list_polylines_coord(polylines):
-
-
-#     v_s = 0
-#     f_s = len(polylines)
-#     f =  [None]*f_s
-#     for i in range(f_s):
-#         f[i] = len(polylines[i])
-#         v_s += len(polylines[i]) * 3
-
-#     _f = (c_size_t * f_s)(*f)  # polyline sizes
-#     _f_s = c_size_t(f_s)  # number of polylines
-#     _v_s = c_size_t(v_s)  # number of coordinates
-
-#     count = 0
-#     v =  [None]*v_s
-#     for i in range(f_s):
-#         for j in range(len(polylines[i])):
-#             v[count * 3 + 0] = polylines[i][j][0]
-#             v[count * 3 + 1] = polylines[i][j][1]
-#             v[count * 3 + 2] = polylines[i][j][2]
-#             count += 1
-#     _v = (c_float * v_s)(*v)  # polyline coordinates
-
-#     return _f, _f_s, _v, _v_s  # polyline sizes, number of polylines, polyline coordinates, number of coordinates
-
-
 def lists_vectors_coord(vectors):
-    f_s = len(vectors)
-    f = [len(v) for v in vectors]
-    v_s = sum(len(v) * 3 for v in vectors)
-    v = [0.0] * v_s
+    
+    f_s = c_size_t(len(vectors))
+    faces = ([len(v) for v in vectors])
 
+    f = (c_size_t * (len(vectors)))(*faces)
+
+    v_s = c_size_t( sum(len(v) * 3 for v in vectors) )
+    vertices = [0.0] * v_s.value
+
+    
     count = 0
     for i in range(len(vectors)):
         for j in range(len(vectors[i])):
-            v[count * 3] = vectors[i][j].X
-            v[count * 3 + 1] = vectors[i][j].Y
-            v[count * 3 + 2] = vectors[i][j].Z
+            vertices[count * 3] = c_float(vectors[i][j][0])
+            vertices[count * 3 + 1] = c_float(vectors[i][j][1])
+            vertices[count * 3 + 2] = c_float(vectors[i][j][2])
             count += 1
 
+    v = (c_float * v_s.value)(*vertices)
     return f, f_s, v, v_s
 
 
