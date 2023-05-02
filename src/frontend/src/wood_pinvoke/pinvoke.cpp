@@ -1,4 +1,20 @@
 #include "pinvoke.h"
+#include "../../../stdafx.h"              //includes
+#include "wood_xml.h"                     //read xml file of the datasets
+
+// data structure
+#include "wood_cut.h"
+#include "wood_main.h"
+#include "wood_element.h"
+
+// joinery
+#include "wood_joint_lib.h"
+#include "wood_joint.h"
+
+// geometry methods
+#include "cgal_mesh_boolean.h"
+#include "cgal_inscribe_util.h"
+#include "cgal_rectangle_util.h"
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //Basic Method and Examples for PInvoke
@@ -18,19 +34,27 @@ PINVOKE int process_and_return_sum(int* array, int size) {
     return sum;
 }
 
-PINVOKE void release_int(int* arr, bool isArray) {
+PINVOKE void release_int(int*& arr, bool isArray) {
     deletePtr(arr, isArray);
+    //arr = NULL;
 }
 
-PINVOKE void release_double(double* arr, bool isArray) {
+PINVOKE void release_double(double*& arr, bool isArray) {
     deletePtr(arr, isArray);
+    //arr = NULL;
 }
 
-PINVOKE void release_float(float* arr, bool isArray) {
+PINVOKE void release_float(float*& arr, bool isArray) {
     deletePtr(arr, isArray);
+    //arr = NULL;
 }
 
-PINVOKE void test_set_array(double* coord, int coord_size) {
+PINVOKE void release_size_t(size_t*& arr, bool isArray) {
+    deletePtr(arr, isArray);
+    //arr = NULL;
+}
+
+PINVOKE void test_set_array(double*& coord, int coord_size) {
     for (int i = 0; i < coord_size; i++)
         printf("%f \n", coord[i]);
 }
@@ -109,7 +133,7 @@ PINVOKE void process_and_return_nested_list(
 //Input Conversion
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void coord_to_list(size_t* f, size_t& f_s, float* v, size_t& v_s, std::vector<CGAL_Polyline>& plines) {
-    
+
     //Sanity check     
     if (v_s == 0 || f_s == 0) return;
 
@@ -119,16 +143,16 @@ void coord_to_list(size_t* f, size_t& f_s, float* v, size_t& v_s, std::vector<CG
     plines.back().reserve(f[0]);
 
     for (size_t i = 0; i < v_s; i += 3) {
-        
+
         //New polyline
         if (plines.back().size() == f[plines.size() - 1]) {
             plines.emplace_back(CGAL_Polyline());
-            plines.back().reserve(f[plines.size()-1]);
+            plines.back().reserve(f[plines.size() - 1]);
         }
-         //Add point to the last polyline
-         plines.back().emplace_back(v[i + 0], v[i + 1], v[i + 2]);
-  
-      }
+        //Add point to the last polyline
+        plines.back().emplace_back((double)v[i + 0], (double)v[i + 1], (double)v[i + 2]);
+
+    }
 
 }
 
@@ -145,11 +169,12 @@ void coord_to_list(size_t* f, size_t& f_s, float* v, size_t& v_s, std::vector<st
         //New polyline
         if (vectorlists.back().size() == f[vectorlists.size() - 1]) {
             vectorlists.emplace_back(std::vector<IK::Vector_3>());
-            vectorlists.back().reserve(f[vectorlists.size()-1]);
+            vectorlists.back().reserve(f[vectorlists.size() - 1]);
         }
         //Add point to the last polyline
-        vectorlists.back().emplace_back(v[i + 0], v[i + 1], v[i + 2]);
+        vectorlists.back().emplace_back((double)v[i + 0], (double)v[i + 1], (double)v[i + 2]);
     }
+
 }
 
 void coord_to_list(size_t* f, size_t& f_s, int* v, size_t& v_s, std::vector<std::vector<int>>& vectorlists) {
@@ -165,12 +190,51 @@ void coord_to_list(size_t* f, size_t& f_s, int* v, size_t& v_s, std::vector<std:
         //New list
         if (vectorlists.back().size() == f[vectorlists.size() - 1]) {
             vectorlists.emplace_back(std::vector<int>());
-            vectorlists.back().reserve(f[vectorlists.size()-1]);
+            vectorlists.back().reserve(f[vectorlists.size() - 1]);
         }
         //Add point to the last polyline
         vectorlists.back().emplace_back(v[i]);
     }
 }
+
+
+void coord_to_list(int* v, size_t& v_s, std::vector<int>& vectorlist) {
+    //Sanity check
+    if (v_s == 0) return;
+
+    //Convert Coordinates to vector list
+    vectorlist.reserve(v_s);
+
+    for (size_t i = 0; i < v_s; i++) {
+        vectorlist.emplace_back(v[i]);
+    }
+}
+
+void coord_to_list(double* v, size_t& v_s, std::vector<double>& vectorlist) {
+    //Sanity check
+    if (v_s == 0) return;
+
+    //Convert Coordinates to vector list
+    vectorlist.reserve(v_s);
+
+    for (size_t i = 0; i < v_s; i++) {
+        vectorlist.emplace_back(v[i]);
+    }
+}
+
+void coord_to_list(float* v, size_t& v_s, std::vector<double>& vectorlist) {
+    //Sanity check
+    if (v_s == 0) return;
+
+    //Convert Coordinates to vector list
+    vectorlist.reserve(v_s);
+
+    for (size_t i = 0; i < v_s; i++) {
+        vectorlist.emplace_back((double)v[i]);
+    }
+}
+
+
 
 void coord_to_list(double*& v, int& v_s, std::vector<IK::Segment_3>& vectorlist) {
     //Sanity check
@@ -213,33 +277,49 @@ void coord_to_list(double*& v, int& v_s, std::vector<IK::Point_3>& vectorlist) {
     }
 }
 
-void coord_to_list(int*& v, int& v_s, std::vector<int>& vectorlist) {
-    //Sanity check
-    if (v_s == 0) return;
-
-    //Convert Coordinates to vector list
-    vectorlist.reserve(v_s);
-
-    for (size_t i = 0; i < v_s; i++) {
-        vectorlist.emplace_back(v[i]);
-    }
-}
-
-void coord_to_list(double*& v, int& v_s, std::vector<double>& vectorlist) {
-    //Sanity check
-    if (v_s == 0) return;
-
-    //Convert Coordinates to vector list
-    vectorlist.reserve(v_s);
-
-    for (size_t i = 0; i < v_s; i++) {
-        vectorlist.emplace_back(v[i]);
-    }
-}
-
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //Output Conversion
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+void list_to_coord(std::vector<std::vector<CGAL_Polyline>>& output_plines, size_t*& groups_f, size_t& groups_f_s, size_t*& out_f, size_t& out_f_s, float*& out_v, size_t& out_v_s) {
+    out_f_s = 0;
+    out_v_s = 0;
+    groups_f_s = output_plines.size();
+
+    for (auto& plines : output_plines) {//plates
+        out_f_s += plines.size();
+        for (auto& pline : plines)//plate polylines
+            out_v_s += pline.size() * 3;
+    }
+
+    groups_f = new size_t[groups_f_s];
+    out_f = new size_t[out_f_s];
+    out_v = new float[out_v_s];
+
+    size_t face_count = 0;
+    size_t vertex_count = 0;
+    for (size_t i = 0; i < output_plines.size(); i++) {
+        groups_f[i] = output_plines[i].size();
+
+
+        for (size_t j = 0; j < output_plines[i].size(); j++) {
+            out_f[face_count] = output_plines[i][j].size();
+
+            for (size_t k = 0; k < output_plines[i][j].size(); k++) {
+                // CGAL_Debug(output_plines[i][j][k]);
+                out_v[vertex_count + 0] = output_plines[i][j][k].hx();
+                out_v[vertex_count + 1] = output_plines[i][j][k].hy();
+                out_v[vertex_count + 2] = output_plines[i][j][k].hz();
+                vertex_count += 3;
+            }
+            face_count++;
+        }
+    }
+
+    //coord_out = new double[3]{ 147.123,258.456,369.789 };
+    //coord_size_out = 3;
+}
+
+
 void list_to_coord(std::vector<std::vector<CGAL_Polyline>>& output_plines, int*& groups_f, int& groups_f_s, int*& out_f, int& out_f_s, double*& out_v, int& out_v_s) {
     out_f_s = 0;
     out_v_s = 0;
@@ -325,31 +405,62 @@ void list_to_coord(std::vector<std::vector<int>>& output_vectors, int*& out_f, i
     }
 }
 
+void list_to_coord(std::vector<std::vector<wood_cut::cut_type>>& output_vectors, size_t*& out_f, size_t& out_f_s, int*& out_v, size_t& out_v_s) {
+    out_f_s = output_vectors.size();
+    out_v_s = 0;
+
+    for (auto& list : output_vectors) {//vectors
+        out_v_s += list.size();
+    }
+
+    out_f = new size_t[output_vectors.size()];//number of arrays
+    out_v = new int[out_v_s];//number of coordinates
+
+
+    size_t vertex_count = 0;
+    for (size_t i = 0; i < output_vectors.size(); i++) {
+        out_f[i] = output_vectors[i].size();//number of sub-arrays
+
+        for (size_t j = 0; j < output_vectors[i].size(); j++) {
+            out_v[vertex_count] = (int)output_vectors[i][j];
+            vertex_count++;
+        }
+    }
+}
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //Implementations
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 PINVOKE void ctypes_get_connection_zones(
 
-    // input
+    // input geometry
     //size_t* in_polyline_pairs_f, size_t& in_polyline_pairs_f_s
     size_t* in_polyline_pairs_f, size_t& in_polyline_pairs_f_s, float* in_polyline_pairs_v, size_t& in_polyline_pairs_v_s,
     size_t* in_vectors_f, size_t& in_vectors_f_s, float* in_vectors_v, size_t& in_vectors_v_s,
-    size_t* in_joints_types_f, size_t& in_joints_types_f_s, int* in_joints_types_v, size_t& in_joints_types_v_s
+    size_t* in_joints_types_f, size_t& in_joints_types_f_s, int* in_joints_types_v, size_t& in_joints_types_v_s,
+    size_t* in_three_valence_f, size_t& in_three_valence_f_s, int* in_three_valence_v, size_t& in_three_valence_v_s,
+    int* in_adjancency_v, size_t& in_adjancency_v_s,
 
-    // int*& in_three_valence_f, int& in_three_valence_f_s, int*& in_three_valence_v, int& in_three_valence_v_s,
-    // int& in_search_type,
-    // double*& in_scale_v, int& in_scale_v_s
-    // int& in_output_type,
+    //input parameters
+    float* in_joint_parameters_v, size_t& in_joint_parameters_v_s,
+    int& in_search_type,
+    float* in_scale_v, size_t& in_scale_v_s,
+    int& in_output_type,
 
-    // // output
-    // int*& out_plines_groups_f, int& out_plines_groups_f_s, int*& out_plines_out_f, int& out_plines_out_f_s, double*& out_plines_out_v, int& out_plines_out_v_s,//std::vector<std::vector<CGAL_Polyline>> &output_plines,
-    // int*& out_types_f, int& out_types_f_s, int*& out_types_v, int& out_types_v_s,//std::vector<std::vector<wood_cut::cut_type>> &output_types,
+    // output
+    size_t*& out_plines_groups_f, size_t& out_plines_groups_f_s, size_t*& out_plines_out_f, size_t& out_plines_out_f_s, float*& out_plines_out_v, size_t& out_plines_out_v_s,
+    size_t*& out_types_f, size_t& out_types_f_s, int*& out_types_v, size_t& out_types_v_s,
 
-    // // global_parameters
-    // double*& in_joint_volume_parameters_v, int& in_joint_volume_parameters_v_s
+    // global_parameters
+    float* in_joint_volume_parameters_v, size_t& in_joint_volume_parameters_v_s
 ) {
-   
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Output
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    // input geometry
     std::vector<CGAL_Polyline> in_polyline_pairs;
     coord_to_list(in_polyline_pairs_f, in_polyline_pairs_f_s, in_polyline_pairs_v, in_polyline_pairs_v_s, in_polyline_pairs);
 
@@ -359,19 +470,84 @@ PINVOKE void ctypes_get_connection_zones(
     std::vector<std::vector<int>> in_joints_types;
     coord_to_list(in_joints_types_f, in_joints_types_f_s, in_joints_types_v, in_joints_types_v_s, in_joints_types);
 
-    
+    std::vector<std::vector<int>> in_three_valence;
+    coord_to_list(in_three_valence_f, in_three_valence_f_s, in_three_valence_v, in_three_valence_v_s, in_three_valence);
 
-    // printf(" %zu\n", in_polyline_pairs_f_s);
-    // printf(" %zu\n", in_polyline_pairs_v_s);
+    std::vector<int> in_adjancency;
+    coord_to_list(in_adjancency_v, in_adjancency_v_s, in_adjancency);
 
-    // for (size_t i = 0; i < in_polyline_pairs_f_s; i++) {
-    //     //in_polyline_pairs_f[i] += i;
-    //     printf("in_polyline_pairs_f[ %zu ]: %zu\n", i, in_polyline_pairs_f[i]);
+    // input parameters
+    std::vector<double> in_joint_parameters;
+    coord_to_list(in_joint_parameters_v, in_joint_parameters_v_s, in_joint_parameters);
+
+    // for (auto& i : in_joint_parameters) {
+    //     printf("in_joint_parameters: %f\n", i);
     // }
 
-    // for (size_t i = 0; i < in_polyline_pairs_v_s; i++) {
-    //     printf("in_polyline_pairs_v[%zu]: %f\n", i, in_polyline_pairs_v[i]);
+    std::vector<double> in_scale;
+    coord_to_list(in_scale_v, in_scale_v_s, in_scale);
+
+
+    // for (auto& i : in_scale) {
+    //     printf("in_scale: %f\n", i);
     // }
+
+    // global_parameters
+    std::vector<double> in_joint_volume_parameters;
+    coord_to_list(in_joint_volume_parameters_v, in_joint_volume_parameters_v_s, in_joint_volume_parameters);
+
+    // for (auto& i : in_joint_volume_parameters) {
+    //     printf("in_joint_volume_parameters: %f\n", i);
+    // }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Main Method of Wood
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    std::vector<std::vector<CGAL_Polyline>> out_plines;
+    std::vector<std::vector<wood_cut::cut_type>> out_types;
+    std::vector<std::vector<int>> top_face_triangulation;
+
+    wood_globals::JOINTS_PARAMETERS_AND_TYPES = in_joint_parameters;
+
+    for (size_t i = 0; i < in_joint_volume_parameters.size(); i++)
+        wood_globals::JOINT_VOLUME_EXTENSION[i] = (in_joint_volume_parameters[i]);
+
+    wood_globals::OUTPUT_GEOMETRY_TYPE = in_output_type;
+
+
+    wood_main::get_connection_zones(
+        // input
+        in_polyline_pairs,
+        in_vectors,
+        in_joints_types,
+        in_three_valence,
+        in_adjancency,
+        // output
+        out_plines,
+        out_types,
+        top_face_triangulation,
+        // global parameters
+        wood_globals::JOINTS_PARAMETERS_AND_TYPES,
+        in_scale,
+        in_search_type,
+        wood_globals::OUTPUT_GEOMETRY_TYPE,
+        0
+    );
+
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Convert polylines to double vector and cut types to int vector
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // size_t* out_plines_groups_f;
+    // size_t out_plines_groups_f_s = 0;
+    // size_t* out_plines_out_f;
+    // size_t out_plines_out_f_s = 0;
+    // float* out_plines_out_v;
+    // size_t out_plines_out_v_s = 0;
+    list_to_coord(out_plines, out_plines_groups_f, out_plines_groups_f_s, out_plines_out_f, out_plines_out_f_s, out_plines_out_v, out_plines_out_v_s);
+    list_to_coord(out_types, out_types_f, out_types_f_s, out_types_v, out_types_v_s);
+    // printf("out_plines_groups_f: %f\n", out_plines[0][0][0].x());
+    // printf("out_plines_groups_f: %zu\n", out_plines_groups_f[0]);
 
 }
 

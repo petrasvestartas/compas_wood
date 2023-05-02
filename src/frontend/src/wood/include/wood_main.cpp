@@ -2226,7 +2226,7 @@ namespace wood_main
             return;
         }
 
-       
+
 
 #ifdef DEBUG_MEASURE_TIME
         end = std::chrono::high_resolution_clock::now();
@@ -2293,7 +2293,7 @@ namespace wood_main
             return;
         }
 
-      
+
 
 #ifdef DEBUG_MEASURE_TIME
         end = std::chrono::high_resolution_clock::now();
@@ -2311,7 +2311,7 @@ namespace wood_main
         //////////////////////////////////////////////////////////////////////////////
         output_plines = std::vector<std::vector<CGAL_Polyline>>(elements.size());
         output_types = std::vector<std::vector<wood_cut::cut_type>>(elements.size());
-        
+
         try
         {
 
@@ -2370,7 +2370,7 @@ namespace wood_main
             return;
         }
 
-     
+
 
 #ifdef DEBUG_MEASURE_TIME
         end = std::chrono::high_resolution_clock::now();
