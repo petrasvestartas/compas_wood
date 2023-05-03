@@ -131,12 +131,12 @@ def test_connection_detection():
     ############################################################################################################
     # Load library and declare function signature
     ############################################################################################################
-    # lib = cdll.LoadLibrary(
-    #     "C:/legion_pro_7_16IRX8H/software/python/compas_wood/src/frontend/build/Release/pinvoke_wood.dll"
-    # )
     lib = cdll.LoadLibrary(
-        "C:/IBOIS57/_Code/Software/Python/compas_wood/src/frontend/build/Release/pinvoke_wood.dll"
+        "C:/legion_pro_7_16IRX8H/software/python/compas_wood/src/frontend/build/Release/pinvoke_wood.dll"
     )
+    # lib = cdll.LoadLibrary(
+    #     "C:/IBOIS57/_Code/Software/Python/compas_wood/src/frontend/build/Release/pinvoke_wood.dll"
+    # )
     lib.ctypes_get_connection_zones.restype = None
     lib.ctypes_get_connection_zones.argtypes = [
         # input geometry
