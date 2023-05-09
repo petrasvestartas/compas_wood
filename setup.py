@@ -63,8 +63,6 @@ ext_modules = [
                 # wrapper of the wood library | converters
                 "src/frontend/src/wood_pybind11/include_cpp/compas_wood.cpp",
                 "src/frontend/src/wood_pybind11/include_cpp/python_to_cpp__cpp_to_python.cpp",
-                # wrapper of the wood library | converters via ctypes
-                "src/frontend/src/wood_pinvoke/pinvoke.cpp",
                 # wood
                 "src/frontend/src/wood/include/wood_globals.cpp",
                 "src/frontend/src/wood/include/wood_xml.cpp",
@@ -97,8 +95,6 @@ ext_modules = [
             "src/frontend/",
             # wrapper of the wood library | converters
             "src/frontend/src/wood_pybind11/include_cpp/",
-            # wrapper of the wood library | converters via ctypes
-            "src/frontend/src/wood_pinvoke/",
             # wood
             "src/frontend/src/wood/include/",
             get_eigen_include(),
