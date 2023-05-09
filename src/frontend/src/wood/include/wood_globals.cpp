@@ -8,11 +8,11 @@ namespace wood_globals
 {
     // Clipper2 library mostly used in clipper_util
     int64_t CLIPPER_SCALE = 1000000;
-    double CLIPPER_AREA = 0.0001;
+    double CLIPPER_AREA = 0.01;
 
     // Tolerances for distance search
-    double DISTANCE = 0.01;
-    double DISTANCE_SQUARED = 0.0001;
+    double DISTANCE = 0.1;
+    double DISTANCE_SQUARED = 0.01;
     double ANGLE = 0.11;
 
     // File names

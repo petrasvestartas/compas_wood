@@ -750,7 +750,7 @@ namespace clipper_util
         if (C.size() > 0)
         {
 
-            if (std::abs(Area(C[0])) > std::abs(Area(pathA) * 0.9)) // C[0].size() > 3 &&
+            if (std::abs(Area(C[0])) > 0.0001) // C[0].size() > 3 && std::abs(Area(pathA) * 0.9)
             {                                                                              // skip triangles and very small polygons
 
                 // Not Sure if rotation is correct, I doubt that cp_id+1 is needed,

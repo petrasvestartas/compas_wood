@@ -49,6 +49,10 @@ Author: [Petras Vestartas](https://petrasvestartas.com/Petras-Vestartas-CV)
 ##### Video
 https://user-images.githubusercontent.com/18013985/147587822-cfb43c96-4a81-4b89-987f-8d201ec2e5ba.mp4
 
+##### ToDo
+- [ ] recenter geometry before processing
+- [ ] ctypes floating number conversion, currently precision is lost
+- [ ] ctypes user tolerance
 
 ## Examples
 - [x] "tests/compas_wood_1_test.py" - test if the library is loading
