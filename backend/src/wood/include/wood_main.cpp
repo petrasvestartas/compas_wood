@@ -309,7 +309,7 @@ namespace wood_main
         //////////////////////////////////////////////////////////////////////////////
 
         double angle = 90.0 - fabs(CGAL::approximate_angle(Plane0[0].orthogonal_vector(), Plane1[0].orthogonal_vector()) - 90);
-
+        
         if (angle < angleTol)
             return false;
 
@@ -626,6 +626,7 @@ namespace wood_main
             {
                 // Check if polygons are co-planar
                 bool coplanar = cgal_plane_util::is_coplanar(Plane0[i], Plane1[j], false); // O(n*n) +10 ms
+            
 
 #ifdef DEBUG_wood_MAIN_LOCAL_SEARCH
                 if (coplanar)
@@ -638,7 +639,7 @@ namespace wood_main
                     // Perform 2D Intersection 20 ms
                     bool include_triangles = i < 2 && j < 2;
                     bool hasIntersection = clipper_util::get_intersection_between_two_polylines(Polyline0[i], Polyline1[j], Plane0[i], joint_area, 0, include_triangles); // +20 ms 10000.0; GlobalClipperScale
-
+                    
 #ifdef DEBUG_wood_MAIN_LOCAL_SEARCH
                     printf("CPP hasIntersection %i\n", hasIntersection);
 #endif
@@ -681,11 +682,12 @@ namespace wood_main
 
                             // std::cout << alignmentSegment[0];
                             // std::cout << alignmentSegment[1];
-
+                           
                             // Planes to get a quad
                             if (isLine && joint_line0.squared_length() > wood_globals::DISTANCE)
                             { //
                                 bool isQuad = cgal_intersection_util::get_quad_from_line_topbottomplanes(Plane0[i], joint_line0, Plane0[0], Plane0[1], joint_quads0);
+                                 
                             }
                             else
                             {
@@ -729,24 +731,40 @@ namespace wood_main
                                 continue;
                             }
                         }
-
+                    
                         ////////////////////////////////////////////////////////////////////////////////
                         // extend wood::joint line, for plates it is negative, for beam positive e.g. wood_globals::JOINT_VOLUME_EXTENSION[2] = -20;
                         // check the limit so that the lines would not be 0 or inverse
                         ////////////////////////////////////////////////////////////////////////////////
 
                         double JOINT_LINE_EXTENSION_limit = (wood_globals::JOINT_VOLUME_EXTENSION[2] * 2) * (wood_globals::JOINT_VOLUME_EXTENSION[2] * 2);
-
+                        //JOINT_LINE_EXTENSION_limit = 0;
                         double joint_line0_squared_length = joint_line0.squared_length();
                         double joint_line1_squared_length = joint_line1.squared_length();
                         double LIMIT_MIN_JOINT_LENGTH_squared = std::pow(wood_globals::LIMIT_MIN_JOINT_LENGTH, 2);
-                        if (joint_line0.squared_length() > 0.001)
-                            if (JOINT_LINE_EXTENSION_limit > joint_line0.squared_length() - LIMIT_MIN_JOINT_LENGTH_squared)
+
+                        // printf("joint_line0.squared_length() %f \n", joint_line0.squared_length());
+                        // printf("joint_line1.squared_length() %f \n", joint_line1.squared_length());
+                        // printf("JOINT_LINE_EXTENSION_limit %f \n", JOINT_LINE_EXTENSION_limit);
+                        // printf("LIMIT_MIN_JOINT_LENGTH_squared %f \n", LIMIT_MIN_JOINT_LENGTH_squared);
+
+
+
+                        if (joint_line0.squared_length() > wood_globals::DISTANCE_SQUARED)
+                            if (JOINT_LINE_EXTENSION_limit > joint_line0.squared_length() - LIMIT_MIN_JOINT_LENGTH_squared) {
+                                printf("CPP reduce the joint volume \n");
                                 return false;
 
-                        if (joint_line1.squared_length() > 0.001)
-                            if (JOINT_LINE_EXTENSION_limit > joint_line1.squared_length() - LIMIT_MIN_JOINT_LENGTH_squared)
+
+                                }
+
+                        if (joint_line1.squared_length() > wood_globals::DISTANCE_SQUARED)
+                            if (JOINT_LINE_EXTENSION_limit > joint_line1.squared_length() - LIMIT_MIN_JOINT_LENGTH_squared){
+                                printf("CPP reduce the joint volume \n");
                                 return false;
+                            }
+
+
 
                         cgal_polyline_util::extend_equally(joint_line0, wood_globals::JOINT_VOLUME_EXTENSION[2]);
                         cgal_polyline_util::extend_equally(joint_line1, wood_globals::JOINT_VOLUME_EXTENSION[2]);
@@ -764,6 +782,8 @@ namespace wood_main
                             dirSet = (std::abs(dir.hx()) + std::abs(dir.hy()) + std::abs(dir.hz())) > 0.01;
                         }
 
+                        
+
                         //////////////////////////////////////////////////////////////////////////////////////////////////
                         // Identify connection volumes
                         //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -773,7 +793,7 @@ namespace wood_main
 #ifdef DEBUG_wood_MAIN_LOCAL_SEARCH
                             printf("Type0");
 #endif
-
+                            
                             joint_lines[0] = { joint_line0[0], joint_line0[1] };
                             joint_lines[1] = { joint_line1[0], joint_line1[1] };
 

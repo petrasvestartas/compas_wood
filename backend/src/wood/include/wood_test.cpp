@@ -2719,7 +2719,7 @@ namespace wood_test
         }
         int search_type = 0;
         std::vector<double> scale = {1, 1, 1};
-        wood_globals::JOINT_VOLUME_EXTENSION[2] = -10;
+        wood_globals::JOINT_VOLUME_EXTENSION[2] = -1;
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Main Method of Wood
