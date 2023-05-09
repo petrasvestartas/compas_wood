@@ -13,6 +13,7 @@ namespace opengl_triangulation
 		bool convex_only = false, double closed_tolerance = 0.001)
 	{
 
+        
 		// v.insert(v.end(), v_prime.begin(), v_prime.end());
 		// std::vector<std::vector<glm::vec3>> input_normals;
 		// input_normals.reserve(in_polylines.size());
@@ -95,7 +96,7 @@ namespace opengl_triangulation
 
 		out_normals.reserve(out_normals.size() + all_v_count);
 		out_vertices.reserve(out_vertices.size() + all_v_count);
-
+        
 		/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		// cdt https://github.com/artem-ogre/CDT/issues/73
 		// rules: order and orientation of curves does not matter
@@ -116,6 +117,7 @@ namespace opengl_triangulation
 
 		// print("normal");
 		// print(v.x, v.y, v.z);
+		//printf("\n");
 		for (int i = 0; i < in_polylines.size(); i++)
 		{
 			size_t is_closed = (glm::distance(in_polylines[i].front(), in_polylines[i].back()) < 0.01) ? -1 : 0;
@@ -128,17 +130,18 @@ namespace opengl_triangulation
 				out_normals.emplace_back(v);
 				auto p4 = to_xy * glm::vec4(in_polylines[i][j].x, in_polylines[i][j].y, in_polylines[i][j].z, 1);
 				auto p = glm::vec3(p4.x, p4.y, p4.z);
-				// print(p.x, p.y, p.z);
+				//printf("%f %f %f  \n", p.x, p.y, p.z);
 				// auto p = glm::vec3(in_polylines[i][j].x, in_polylines[i][j].y, in_polylines[i][j].z);
 				cdt_vertices.emplace_back(CDT::V2d<float>::make(p.x, p.y));
 			}
 			// input_normals.emplace_back(norm);
 		}
+		
 
 		//{ CDT::V2d<float>::make(15,-7),CDT::V2d<float>::make(9.62180016727275f,4.57060284363674f),CDT::V2d<float>::make(12,4.43070873582926f),CDT::V2d<float>::make(19,0),CDT::V2d<float>::make(16,-5),CDT::V2d<float>::make(6,-16),CDT::V2d<float>::make(15,-9),CDT::V2d<float>::make(22,-22),CDT::V2d<float>::make(22,2),CDT::V2d<float>::make(7,11),CDT::V2d<float>::make(6,-6),CDT::V2d<float>::make(-7,-2),CDT::V2d<float>::make(-15,16),CDT::V2d<float>::make(-17,23),CDT::V2d<float>::make(-43,28),CDT::V2d<float>::make(-24,-10),CDT::V2d<float>::make(-17,-11),CDT::V2d<float>::make(-23,8),CDT::V2d<float>::make(-14,2),CDT::V2d<float>::make(7,-33),CDT::V2d<float>::make(-3,-11),CDT::V2d<float>::make(-15,7),CDT::V2d<float>::make(-19,16),CDT::V2d<float>::make(-23,18),CDT::V2d<float>::make(-31,21),CDT::V2d<float>::make(-28,8),CDT::V2d<float>::make(-27,6),CDT::V2d<float>::make(-25,10),CDT::V2d<float>::make(-25,17) }
 		//;
 		cdt.insertVertices(cdt_vertices);
-
+        
 		// edges
 		if (!convex_only)
 		{
@@ -166,23 +169,31 @@ namespace opengl_triangulation
 				for (int j = 0; j < edge_per_polyline[i] - 1; j++)
 				{
 					edges.emplace_back(CDT::Edge(v_count, v_count + 1));
-					// print(v_count, v_count + 1);
 					v_count++;
 				}
 				edges.emplace_back(CDT::Edge(v_count, start));
-				// print(v_count, start);
-				// print("next");
 				v_count++;
 			}
-			cdt.insertEdges(edges);
 
+			try{
+				cdt.insertEdges(edges);
+			}
+			catch (std::exception& e)
+			{
+				std::cout << e.what() << std::endl;
+			}
+			
+            
 			cdt.eraseOuterTrianglesAndHoles();
 		}
 		else
 		{
+			
 			cdt.eraseSuperTriangle();
 		}
+		
 
+        
 		auto out_triangles_size = out_triangles.size() + cdt.triangles.size() * 3;
 		out_triangles.reserve(out_triangles_size);
 		// print("next");

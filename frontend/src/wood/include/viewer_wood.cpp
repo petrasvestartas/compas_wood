@@ -102,13 +102,15 @@ void viewer_wood::add(std::vector<std::vector<IK::Point_3>> &input_polyline_pair
 
 void viewer_wood::add_areas(std::vector<CGAL_Polyline> &polylines)
 {
-    // std::cout << "Hi<<\n";
+    
     std::vector<std::vector<glm::vec3>> vertices;
     vertices.reserve(polylines.size());
     float scale_inv = 1 / viewer_wood::scale;
 
     for (auto &polyline : polylines)
     {
+        if(polyline.size() == 0)
+            continue;
         vertices.emplace_back(std::vector<glm::vec3>());
         vertices.back().reserve(polyline.size() * 3);
         for (auto &point : polyline)
@@ -125,12 +127,14 @@ void viewer_wood::add_areas(std::vector<CGAL_Polyline> &polylines)
 
 void viewer_wood::add_areas(std::vector<std::vector<CGAL_Polyline>> &polylines)
 {
-
+   
     std::vector<CGAL_Polyline> polylines_merged;
     polylines_merged.reserve(polylines.size() * 4);
     for (auto &lists : polylines)
         for (auto &polyline : lists)
         {
+            if(polyline.size() == 0)
+                continue;
             polylines_merged.emplace_back(polyline);
         }
 

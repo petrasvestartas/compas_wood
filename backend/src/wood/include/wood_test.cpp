@@ -64,8 +64,18 @@ namespace wood_test
             switch (wood_globals::OUTPUT_GEOMETRY_TYPE)
             {
             case (0):
+                 
                 viewer_wood::add(input_polyline_pairs); // grey
+                //std::cout << "69 <<\n";
+                // printf("output_plines.size() = %d\n", output_plines.size());
+                // for (int i = 0; i < output_plines.size(); i++){
+                //     printf("output_plines[%d].size() = %zu\n", i, output_plines[i].size());
+                //     for(int j = 0; j < output_plines[i].size(); j++){
+                //         printf("output_plines[%d][%d].size() = %zu\n", i, j, output_plines[i][j].size());
+                //     }
+                // }
                 viewer_wood::add_areas(output_plines);
+                //std::cout << "71<<\n";
                 break;
             case (2):
                 viewer_wood::add(input_polyline_pairs); // grey
