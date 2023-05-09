@@ -16,8 +16,10 @@ int main(int argc, char **argv)
 	wood_globals::DISTANCE_SQUARED = 0.01;
 
 	opengl_globals::shader_type_0default_1transparent_2shaded_3shadedwireframe_4wireframe_5normals_6explode = 2;
-	opengl_globals::shaders_folder = "C:\\IBOIS57\\_Code\\Software\\Python\\compas_wood\\backend\\src\\viewer\\shaders\\";
-	opengl_render::render(wood_test::type_plates_name_vda_floor_0);
+	// opengl_globals::shaders_folder = "C:\\IBOIS57\\_Code\\Software\\Python\\compas_wood\\backend\\src\\viewer\\shaders\\";
+	opengl_globals::shaders_folder = "C:\\legion_pro_7_16IRX8H\\software\\python\\compas_wood\\backend\\src\\viewer\\shaders\\";
+	wood_globals::DATA_SET_INPUT_FOLDER = "C:\\legion_pro_7_16IRX8H\\software\\python\\compas_wood\\backend\\src\\wood\\dataset\\";
+	opengl_render::render(wood_test::type_plates_name_vda_floor_1);
 
 	// develop algorithm for notches
 	

@@ -20,6 +20,9 @@ void viewer_wood::add(std::vector<std::vector<CGAL_Polyline>> &polyline_groups, 
     for (auto &polyline_group : polyline_groups)
         for (auto &polyline : polyline_group)
         {
+        if (polyline.size() == 0)
+            continue;
+
             vertices.emplace_back(std::vector<float>());
             vertices.back().reserve(polyline.size() * 3);
             for (auto &point : polyline)
@@ -109,6 +112,8 @@ void viewer_wood::add_areas(std::vector<CGAL_Polyline> &polylines)
 
     for (auto &polyline : polylines)
     {
+        if(polyline.size() == 0) continue; 
+        
         vertices.emplace_back(std::vector<glm::vec3>());
         vertices.back().reserve(polyline.size() * 3);
         for (auto &point : polyline)
