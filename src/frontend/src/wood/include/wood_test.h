@@ -284,6 +284,22 @@ namespace wood_test
      */
     bool type_plates_name_top_to_side_and_side_to_side_outofplane_annen_grid_full_arch();
 
+    /**
+     * example for plates
+     * top-to-side and side-to-side out-of-plane joints
+     * VDA project, first test
+     * four boxes connected with extended connectors
+     */
+    bool type_plates_name_vda_floor_0();
+
+    /**
+     * example for plates
+     * top-to-side and side-to-side out-of-plane joints
+     * VDA project, first test
+     * four boxes connected with extended connectors
+     */
+    bool type_plates_name_vda_floor_1();
+
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // cross data sets
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -330,8 +346,6 @@ namespace wood_test
      * cross joints, vda pavilion consisting of two layers quad panels and connectors
      */
     bool type_plates_name_cross_vda_shell();
-
-
 
     /**
      * example for plates

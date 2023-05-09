@@ -1,7 +1,6 @@
 
 #include "../../../stdafx.h" //go up to the folder where the CMakeLists.txt is
 
-
 #include "wood_element.h"
 namespace wood
 {
@@ -10,12 +9,12 @@ namespace wood
         // ...
     }
 
-    element::element(int _id): id(_id)
+    element::element(int _id) : id(_id)
     {
         // ...
     }
 
-    void element::get_joints_geometry(std::vector<wood::joint>& joints, std::vector<std::vector<CGAL_Polyline>>& output, int what_to_expose, std::vector<std::vector<wood_cut::cut_type>>& output_cut_types)
+    void element::get_joints_geometry(std::vector<wood::joint> &joints, std::vector<std::vector<CGAL_Polyline>> &output, int what_to_expose, std::vector<std::vector<wood_cut::cut_type>> &output_cut_types)
     {
         // you are in a loop
         // printf("/n %i", id);
@@ -85,24 +84,21 @@ namespace wood
                 size_t male_or_female = joints[std::get<0>(j_mf[i][j])].v0 == this->id ? 0 : 1;
 
                 bool four_volumes = joints[std::get<0>(j_mf[i][j])].joint_volumes[0].size() > 0 &&
-                    joints[std::get<0>(j_mf[i][j])].joint_volumes[1].size() > 0 &&
-                    joints[std::get<0>(j_mf[i][j])].joint_volumes[2].size() > 0 &&
-                    joints[std::get<0>(j_mf[i][j])].joint_volumes[3].size() > 0;
-
-
+                                    joints[std::get<0>(j_mf[i][j])].joint_volumes[1].size() > 0 &&
+                                    joints[std::get<0>(j_mf[i][j])].joint_volumes[2].size() > 0 &&
+                                    joints[std::get<0>(j_mf[i][j])].joint_volumes[3].size() > 0;
 
                 std::pair<size_t, size_t> male_or_female_four_volumes = std::make_pair(0, 1);
                 if (four_volumes)
                     male_or_female_four_volumes = male_or_female ? std::make_pair(0, 1) : std::make_pair(2, 3);
 
-
                 switch (what_to_expose)
                 {
                 case (0): // Plate outlines
-                    // if (this->polylines.size() > 1 && i == 0) {
-                    //     output[this->id].emplace_back(this->polylines[0]); //cut
-                    //     output[this->id].emplace_back(this->polylines[1]); //cut
-                    // }
+                          // if (this->polylines.size() > 1 && i == 0) {
+                          //     output[this->id].emplace_back(this->polylines[0]); //cut
+                          //     output[this->id].emplace_back(this->polylines[1]); //cut
+                          // }
                 {
 
                     CGAL_Polyline joint_area(joints[std::get<0>(j_mf[i][j])].joint_area);
@@ -132,13 +128,15 @@ namespace wood
 
                 case (2): // wood::joint volumes
 
-                    if (four_volumes) {
+                    if (four_volumes)
+                    {
                         if (joints[std::get<0>(j_mf[i][j])].joint_volumes[male_or_female_four_volumes.first].size() > 0)
                             output[this->id].emplace_back(joints[std::get<0>(j_mf[i][j])].joint_volumes[male_or_female_four_volumes.first]);
                         if (joints[std::get<0>(j_mf[i][j])].joint_volumes[male_or_female_four_volumes.second].size() > 0)
                             output[this->id].emplace_back(joints[std::get<0>(j_mf[i][j])].joint_volumes[male_or_female_four_volumes.second]);
                     }
-                    else {
+                    else
+                    {
                         if (joints[std::get<0>(j_mf[i][j])].joint_volumes[0].size() > 0)
                             output[this->id].emplace_back(joints[std::get<0>(j_mf[i][j])].joint_volumes[0]);
                         if (joints[std::get<0>(j_mf[i][j])].joint_volumes[1].size() > 0)
@@ -147,9 +145,7 @@ namespace wood
                             output[this->id].emplace_back(joints[std::get<0>(j_mf[i][j])].joint_volumes[2]);
                         if (joints[std::get<0>(j_mf[i][j])].joint_volumes[3].size() > 0)
                             output[this->id].emplace_back(joints[std::get<0>(j_mf[i][j])].joint_volumes[3]);
-
                     }
-
 
                     break;
                 case (3):
@@ -177,12 +173,12 @@ namespace wood
         }
     }
 
-    inline bool sort_by_third(const std::tuple<int, bool, double>& a, const std::tuple<int, bool, double>& b)
+    inline bool sort_by_third(const std::tuple<int, bool, double> &a, const std::tuple<int, bool, double> &b)
     {
         return (std::get<2>(a) < std::get<2>(b));
     }
 
-    void element::get_joints_geometry_as_closed_polylines_replacing_edges(std::vector<wood::joint>& joints, std::vector<std::vector<CGAL_Polyline>>& output)
+    void element::get_joints_geometry_as_closed_polylines_replacing_edges(std::vector<wood::joint> &joints, std::vector<std::vector<CGAL_Polyline>> &output)
     {
         // you are in a loop
 
@@ -399,7 +395,7 @@ namespace wood
     }
 
     // inline bool element::intersection_closed_and_open_paths_2D(CGAL_Polyline& closed_pline_cutter, std::pair<int, int>& edge_pair, CGAL_Polyline& pline_to_cut, IK::Plane_3& plane, CGAL_Polyline& c, CGAL_Polyline& output, std::pair<double, double>& cp_pair) {
-    bool element::intersection_closed_and_open_paths_2D(CGAL_Polyline& closed_pline_cutter, CGAL_Polyline& pline_to_cut, IK::Plane_3& plane, CGAL_Polyline& c, int(&edge_pair)[2], std::pair<double, double>& cp_pair)
+    bool element::intersection_closed_and_open_paths_2D(CGAL_Polyline &closed_pline_cutter, CGAL_Polyline &pline_to_cut, IK::Plane_3 &plane, CGAL_Polyline &c, int (&edge_pair)[2], std::pair<double, double> &cp_pair)
     {
 
         // ATTENTION THIS IS A SPECIFIC CLIPPER FUNCTION TO CLIP USING OPEN PATHS TO OBTAIN CLEAN END POINTS
@@ -424,31 +420,6 @@ namespace wood
         IK::Vector_3 translation_vector();
         size_t n = joint_outline.size() - 1 + plate_outline.size() - 1;
 
-        // double max_coordinate = 0;
-        // for (int i = 0; i < joint_outline.size() - 1; i++) // plate
-        // {
-
-        //     // translation_vector += joint_outline[i];
-        //     if (max_coordinate < std::abs(joint_outline[i].hx()))
-        //         max_coordinate = std::abs(joint_outline[i].hx());
-
-        //     if (max_coordinate < std::abs(joint_outline[i].hy()))
-        //         max_coordinate = std::abs(joint_outline[i].hy());
-        // }
-
-        // for (int i = 0; i < plate_outline.size() - 1; i++) // joint
-        // {
-        //     // translation_vector += plate_outline[i];
-        //     if (max_coordinate < std::abs(plate_outline[i].hx()))
-        //         max_coordinate = std::abs(plate_outline[i].hx());
-
-        //     if (max_coordinate < std::abs(plate_outline[i].hy()))
-        //         max_coordinate = std::abs(plate_outline[i].hy());
-        // }
-
-        // double scale = std::pow(10, 10 - cgal_math_util::count_digits(std::ceil(max_coordinate)));
-        //  std::cout << max_coordinate << " " << cgal_math_util::count_digits(max_coordinate) << std::endl;
-        //    scale = 100000;
         /////////////////////////////////////////////////////////////////////////////////////
         // Convert to Clipper
         /////////////////////////////////////////////////////////////////////////////////////
@@ -460,26 +431,17 @@ namespace wood
         clipper_joint_outlines.emplace_back(std::vector<Clipper2Lib::PointD>());
         clipper_joint_outlines.back().reserve(joint_outline.size());
 
-        // printf("\n");
         // be aware that the scaling miust be done using int64_t, if int will be used the result will be wrong due to rounding
         for (int i = 0; i < plate_outline.size() - 1; i++) // this outline has no duplicate end point because it is "closed path"
         {
             clipper_plate_outlines.back().emplace_back((plate_outline[i].x()), (plate_outline[i].y()));
-            // std::cout << "__________ " << clipper_plate_outlines.back().back().x << " " << clipper_plate_outlines.back().back().y << std::endl;
-            //  printf("%f %f %f \n", a[i].x(), a[i].y(), a[i].z());
         }
-        // printf("\n");
+
         for (int i = 0; i < joint_outline.size(); i++) // this outline has duplicate end points because it is "open path"
         {
             clipper_joint_outlines.back().emplace_back((joint_outline[i].x()), (joint_outline[i].y()));
-            // printf("%f %f %f \n", b[i].x(), b[i].y(), b[i].z());
         }
-        // scale these paths by 1.0e10.
-        // int err = 0;
-        // clipper_plate_outlines = Clipper2Lib::ScalePaths<double, double>(clipper_plate_outlines, scale, scale, err);
-        // clipper_joint_outlines = Clipper2Lib::ScalePaths<double, double>(clipper_joint_outlines, scale, scale, err);
 
-        // printf("\n");
         try
         {
 
@@ -490,8 +452,6 @@ namespace wood
             clipper.AddOpenSubject(clipper_joint_outlines);
             clipper.AddClip(clipper_plate_outlines);
             clipper.Execute(Clipper2Lib::ClipType::Intersection, Clipper2Lib::FillRule::NonZero, clipper_result_closed, clipper_result_open);
-            // de-scale the result
-            // clipper_result_open = Clipper2Lib::ScalePaths<double, double>(clipper_result_open, 1 / scale, 1 / scale, err);
 
             if (clipper_result_open.size() > 0)
             {
@@ -501,7 +461,7 @@ namespace wood
                 // CGAL_Debug(count);
 
                 int count = 0;
-                for (auto& polynode : clipper_result_open)
+                for (auto &polynode : clipper_result_open)
 
                 {
                     // do stuff with polynode here
@@ -622,15 +582,6 @@ namespace wood
                 {
                 }
 
-                // std::cout << "\n";
-                // for (auto &p : plate_outline)
-                //     std::cout << p << "\n";
-                // std::cout << "\n";
-                // for (auto &p : c)
-                //     std::cout << p << "\n";
-                // std::cout << "\n";
-
-                // std::cout << "\nt0 " << t0 << " t1 " << t1 << "\n";
 
                 if (t0 != -1 && t1 != -1)
                 {
@@ -641,47 +592,7 @@ namespace wood
                 }
                 else
                 {
-                    // std::cout << "_______________no intersection found, result count: " << clipper_result_open.size() << "\n";
-                    //  if (clipper_result_open.size() > 0)
-                    //  {
-                    //      // CGAL_Polyline plate_outline = closed_pline_cutter;
-                    //      // CGAL_Polyline joint_outline = pline_to_cut;
 
-                    //     std::cout << clipper_result_open[0].size() << "\n";
-                    //     std::cout << "\n";
-                    //     for (auto &p : plate_outline)
-                    //         std::cout << p << "\n";
-                    //     std::cout << "\n";
-                    //     // for (auto &p : joint_outline)
-                    //     //     std::cout << p << "\n";
-                    //     // std::cout << "\n";
-                    //     for (auto &p : c)
-                    //         std::cout << p << "\n";
-                    //     std::cout << "\n";
-
-                    // scale = 100000000;
-                    // for (int i = 0; i < plate_outline.size() - 1; i++) // this outline has no duplicate end point because it is "closed path"
-                    // {
-                    //     std::cout << (int64_t)(plate_outline[i].x() * scale) << " " << (int64_t)(plate_outline[i].y() * scale) << " " << 0 << "\n";
-                    // }
-                    // std::cout << "\n";
-
-                    // for (int i = 0; i < joint_outline.size(); i++) // this outline has duplicate end points because it is "open path"
-                    // {
-
-                    //     std::cout << (int64_t)(joint_outline[i].x() * scale) << " " << (int64_t)(joint_outline[i].y() * scale) << " " << 0 << "\n";
-                    // }
-                    // std::cout << "\n";
-
-                    // std::cout << clipper_result_open[0].size() << "\n";
-                    // std::cout << "\n";
-                    // for (auto &p : plate_outline)
-                    //     std::cout << p << "\n";
-                    // std::cout << "\n";
-                    // for (auto &p : c)
-                    //     std::cout << p << "\n";
-                    // std::cout << "\n";
-                    //}
                     return false;
                 }
             }
@@ -691,7 +602,7 @@ namespace wood
                 return false;
             }
         }
-        catch (const std::exception& ex)
+        catch (const std::exception &ex)
         {
             // std::cout << "wood_element.cpp -> parameters: scale " << scale << "max_coordinate " << max_coordinate << "\n";
             printf("\nCPP   FILE %s    METHOD %s   LINE %i     WHAT %s   ", __FILE__, __FUNCTION__, __LINE__, ex.what());
@@ -703,11 +614,10 @@ namespace wood
         return true;
     }
 
-    void element::merge_joints(std::vector<wood::joint>& joints, std::vector<std::vector<CGAL_Polyline>>& output)
+    void element::merge_joints(std::vector<wood::joint> &joints, std::vector<std::vector<CGAL_Polyline>> &output)
     {
 
-
-        //printf( "merge function \n" );
+        // printf( "merge function \n" );
 
         // OPTIMIZE CASE(5) BECAUSE EDGE ARE KNOWN, BUT CHECK ALSO CROSS JOINT ENSURE THAT YOU TAKE CROSSING EDGES
         // CHANGE TO 2D METHOD, TO AVOID MULTIPLE THE SAME MATRIX CREATION FOR ORIENTATION TO 2D I.E. CLIPPER AND line_line_3d
@@ -1070,38 +980,38 @@ namespace wood
                         std::make_pair(
                             (size_t)(scale_0 * std::floor(cp_pair.first)) + (size_t)(scale_1 * std::fmod(cp_pair.first, 1)), // id + 0.1
                             std::pair<std::pair<double, double>, CGAL_Polyline>{
-                        cp_pair, // id + 0.1, id + 0.9
-                            joints[std::get<0>(j_mf[id + 2][j])](std::get<1>(j_mf[id + 2][j]), true)[0]}));
+                                cp_pair, // id + 0.1, id + 0.9
+                                joints[std::get<0>(j_mf[id + 2][j])](std::get<1>(j_mf[id + 2][j]), true)[0]}));
 
                     sorted_by_id_plines_1.insert(
                         std::make_pair(
                             (size_t)(scale_0 * std::floor(cp_pair.first)) + (size_t)(scale_1 * std::fmod(cp_pair.first, 1)), // id + 0.1
                             std::pair<std::pair<double, double>, CGAL_Polyline>{
-                        cp_pair, // id + 0.1, id + 0.9
-                            joints[std::get<0>(j_mf[id + 2][j])](std::get<1>(j_mf[id + 2][j]), false)[0]}));
+                                cp_pair, // id + 0.1, id + 0.9
+                                joints[std::get<0>(j_mf[id + 2][j])](std::get<1>(j_mf[id + 2][j]), false)[0]}));
 
                     point_count += joints[std::get<0>(j_mf[id + 2][j])](std::get<1>(j_mf[id + 2][j]), true)[0].size();
                     break;
                 }
 
-                /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                // Rectangle line joint geometry
-                // X - removed points
-                // █ - added or replaced intersection points
-                // ═ - joint polygon rectangle
-                // ─ - polygon edge
-                //
-                // ░░░░░░░░░╔═╗░░░░░░░░0░░░░░║1░░░░░░░░0║░░░║░░1░░░░░░░░0░░║░░░░1░║░░░░║░0░░░░░░║1░░░░░░░░0║░░░║░░1░░░░░░░░0░║░░░
-                // ░░░░░░╔══╝░╚═╗░░░░░░░░░░░░║░░░░░░░░░░║░░░║░░░░░░░░░░░░░░║░░░░░░║░░░░║░░░░░░░░║░░░░░░░░░░║░░░║░░░░░░░░░░░░░║░░░
-                // ░░░╔══╝1░X───╚═█────┐░░░░░█══════════█░░░║░X──────────X░║░░░┌──█════█──┐░░░░░X──────────X░░░╚═█═════════█═╝░░░
-                // ░░░╚╗░░░░│░░╔══╝t1░░│░░░░░│t0░░░░░░t1│░░░╚═█══════════█═╝░░░│t0║░░░░║t1│░░░░░║░░░░░░░░░░║░░░░░│t0░░░░░t1│░░░░░
-                // ░░░░╚═╗░░█══╝░░░░░░░│░░░░░│░░░░░░░░░░│░░░░░│░░░░░░░░░░│░░░░░│░░╚════╝░░│░░░░░█══════════█░░░░░│░░░░░░░░░│░░░░░
-                // ░░░░░░╚══╝t0░░░░░░░░│░░░░░│░░░░░░░░░░│░░░░░│░░░░░░░░░░│░░░░░│░░░░░░░░░░│░░░░░│t0░░░░░░t1│░░░░░│░░░░░░░░░│░░░░░
-                // ░░░░░░░░░└──────────┘░░░░░└──────────┘░░░░░└──────────┘░░░░░└──────────┘░░░░░└──────────┘░░░░░└─────────┘░░░░░
-                // ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
-                // ░░░░░░░░░░2░░░░░░░░░3░░░░░2░░░░░░░░░░3░░░░░2░░░░░░░░░░3░░░░░2░░░░░░░░░░3░░░░░2░░░░░░░░░░3░░░░░2░░░░░░░░░3░░░░░
-                //
-                /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                    // Rectangle line joint geometry
+                    // X - removed points
+                    // █ - added or replaced intersection points
+                    // ═ - joint polygon rectangle
+                    // ─ - polygon edge
+                    //
+                    // ░░░░░░░░░╔═╗░░░░░░░░0░░░░░║1░░░░░░░░0║░░░║░░1░░░░░░░░0░░║░░░░1░║░░░░║░0░░░░░░║1░░░░░░░░0║░░░║░░1░░░░░░░░0░║░░░
+                    // ░░░░░░╔══╝░╚═╗░░░░░░░░░░░░║░░░░░░░░░░║░░░║░░░░░░░░░░░░░░║░░░░░░║░░░░║░░░░░░░░║░░░░░░░░░░║░░░║░░░░░░░░░░░░░║░░░
+                    // ░░░╔══╝1░X───╚═█────┐░░░░░█══════════█░░░║░X──────────X░║░░░┌──█════█──┐░░░░░X──────────X░░░╚═█═════════█═╝░░░
+                    // ░░░╚╗░░░░│░░╔══╝t1░░│░░░░░│t0░░░░░░t1│░░░╚═█══════════█═╝░░░│t0║░░░░║t1│░░░░░║░░░░░░░░░░║░░░░░│t0░░░░░t1│░░░░░
+                    // ░░░░╚═╗░░█══╝░░░░░░░│░░░░░│░░░░░░░░░░│░░░░░│░░░░░░░░░░│░░░░░│░░╚════╝░░│░░░░░█══════════█░░░░░│░░░░░░░░░│░░░░░
+                    // ░░░░░░╚══╝t0░░░░░░░░│░░░░░│░░░░░░░░░░│░░░░░│░░░░░░░░░░│░░░░░│░░░░░░░░░░│░░░░░│t0░░░░░░t1│░░░░░│░░░░░░░░░│░░░░░
+                    // ░░░░░░░░░└──────────┘░░░░░└──────────┘░░░░░└──────────┘░░░░░└──────────┘░░░░░└──────────┘░░░░░└─────────┘░░░░░
+                    // ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+                    // ░░░░░░░░░░2░░░░░░░░░3░░░░░2░░░░░░░░░░3░░░░░2░░░░░░░░░░3░░░░░2░░░░░░░░░░3░░░░░2░░░░░░░░░░3░░░░░2░░░░░░░░░3░░░░░
+                    //
+                    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
                 case (5):
                 {
@@ -1169,22 +1079,19 @@ namespace wood
             // Unify windings of polylines
         }
 
-
-
-        //printf("Merge all polygons in one closed polyline \n");
+        // printf("Merge all polygons in one closed polyline \n");
 
         // auto j_mf_count_ = this->j_mf.size();
         // printf("The value of a : %zu", this->j_mf.size());
         // // test segmentation fault 1
         // return;
 
-
         ///////////////////////////////////////////////////////////////////////////////
         // Iterate pairs and mark skipped points ids
         // first is key, second - value (pair of cpt (first) and polyline (second))
         ///////////////////////////////////////////////////////////////////////////////
 
-        //printf("First polyline \n");
+        // printf("First polyline \n");
 
         //////////////////////////////////////// first polyline ////////////////////////////////////////
 
@@ -1192,7 +1099,7 @@ namespace wood
         std::vector<bool> point_flags_0(pline0.size(), true);
 
         // iterate sides faces of the element
-        for (auto& pair : sorted_by_id_plines_0)
+        for (auto &pair : sorted_by_id_plines_0)
             // iterate // id + 0.1, id + 0.9, this makes no sence
             for (size_t j = (size_t)std::ceil(pair.second.first.first); j <= (size_t)std::floor(pair.second.first.second); j++)
             { // are corners in between insertable polylines
@@ -1211,7 +1118,8 @@ namespace wood
 
         // std::cout << "__________dict: " << (sorted_by_id_plines_0.begin()->second.first.first) << " " << (sorted_by_id_plines_0.begin()->second.first.second) << "\n";
         // std::cout << "__________dict: " << (sorted_by_id_plines_0.rbegin()->second.first.first) << " " << (sorted_by_id_plines_0.rbegin()->second.first.second) << "\n";
-        if (sorted_by_id_plines_0.size()) {
+        if (sorted_by_id_plines_0.size())
+        {
             if (
                 sorted_by_id_plines_0.rbegin()->second.first.first > (pline0.size() - 2) &&
                 sorted_by_id_plines_0.rbegin()->second.first.second < 1)
@@ -1229,13 +1137,13 @@ namespace wood
             if (point_flags_0[i])
                 sorted_by_id_plines_0.insert(
                     std::make_pair((size_t)(i * scale_0),
-                        std::pair<std::pair<double, double>, CGAL_Polyline>{std::pair<double, double>((double)i, (double)i), CGAL_Polyline{ pline0[i] }}));
+                                   std::pair<std::pair<double, double>, CGAL_Polyline>{std::pair<double, double>((double)i, (double)i), CGAL_Polyline{pline0[i]}}));
 
         // Merge all polygons in one closed polyline
         // [ . ] [ . : : . ] [ . ] [ . : : . ] [ . ]
         CGAL_Polyline pline0_new;
         pline0_new.reserve(point_count);
-        for (auto const& x : sorted_by_id_plines_0)
+        for (auto const &x : sorted_by_id_plines_0)
             pline0_new.insert(pline0_new.end(), x.second.second.begin(), x.second.second.end());
 
         // // test segmentation fault 2
@@ -1243,53 +1151,55 @@ namespace wood
 
         //////////////////////////////////////// second polyline ////////////////////////////////////////
 
-        //printf("Second polyline \n");
-        //printf("point flags to keep corners \n");
+        // printf("Second polyline \n");
+        // printf("point flags to keep corners \n");
 
         std::vector<bool> point_flags_1(pline0.size(), true); // point flags to keep corners
-        //printf("0 \n");
+        // printf("0 \n");
 
-        for (auto& pair : sorted_by_id_plines_1) {
-            //printf("1 \n");
+        for (auto &pair : sorted_by_id_plines_1)
+        {
+            // printf("1 \n");
             for (size_t j = (size_t)std::ceil(pair.second.first.first); j <= (size_t)std::floor(pair.second.first.second); j++)
             { // are corners in between insertable polylines§§§
-                //printf("2 \n");
+                // printf("2 \n");
                 point_flags_1[j] = false;
             }
         }
 
         point_flags_1.back() = false; // ignore last
 
-        //printf("Corner Case \n");
+        // printf("Corner Case \n");
 
-        if (sorted_by_id_plines_1.size() > 0) {
+        if (sorted_by_id_plines_1.size() > 0)
+        {
             if (
                 sorted_by_id_plines_1.rbegin()->second.first.first > pline1.size() - 2 &&
                 sorted_by_id_plines_1.rbegin()->second.first.second < 1)
             {
-                //printf("0 \n");
-                if (point_flags_1.size() > 0) {
+                // printf("0 \n");
+                if (point_flags_1.size() > 0)
+                {
                     // No need to reverse, it is handled inside intersection_closed_and_open_paths_2D method -> // std::reverse(sorted_by_id_plines_1.begin()->second.second.begin(), sorted_by_id_plines_1.begin()->second.second.end());
                     point_flags_1[0] = false;
-                    //printf("1 \n");
+                    // printf("1 \n");
                 }
             }
         }
 
-        //printf("Add single point polygons \n");
+        // printf("Add single point polygons \n");
         for (size_t i = 0; i < point_flags_1.size(); i++)
             if (point_flags_1[i])
-                sorted_by_id_plines_1.insert(std::make_pair((size_t)scale_0 * i, std::pair<std::pair<double, double>, CGAL_Polyline>{std::pair<double, double>((double)i, (double)i), CGAL_Polyline{ pline1[i] }}));
+                sorted_by_id_plines_1.insert(std::make_pair((size_t)scale_0 * i, std::pair<std::pair<double, double>, CGAL_Polyline>{std::pair<double, double>((double)i, (double)i), CGAL_Polyline{pline1[i]}}));
 
-
-        //printf("Merge all polygons in one closed polyline \n");
+        // printf("Merge all polygons in one closed polyline \n");
         CGAL_Polyline pline1_new; // reserve optimize
         pline1_new.reserve(point_count);
 
-        for (auto const& x : sorted_by_id_plines_1)
+        for (auto const &x : sorted_by_id_plines_1)
             pline1_new.insert(pline1_new.end(), x.second.second.begin(), x.second.second.end());
 
-        //printf("Close \n");
+        // printf("Close \n");
 
         ///////////////////////////////////////////////////////////////////////////////
         // WARNING Close - Does this part make sense?
@@ -1304,14 +1214,13 @@ namespace wood
             }
         }
 
-
         pline0_new.emplace_back(pline0_new.front());
         pline1_new.emplace_back(pline1_new.front());
 
         // // test segmentation fault 3
-        //return;
+        // return;
 
-        //printf("Add holes to the top and bottop outlines \n");
+        // printf("Add holes to the top and bottop outlines \n");
 
         ///////////////////////////////////////////////////////////////////////////////
         // Only used for tenon-mortise joinery holes
@@ -1332,22 +1241,22 @@ namespace wood
 
         // std::cout << "iterate holes \n";
         // test segmentation fault 3.0 - error
-        //return;
-        //auto j_mf_count__ = this->j_mf.size();
-        //printf("The value of a : %zu \n", j_mf_count__);
-        //printf("The value of a : %zu", j_mf_count);
-
+        // return;
+        // auto j_mf_count__ = this->j_mf.size();
+        // printf("The value of a : %zu \n", j_mf_count__);
+        // printf("The value of a : %zu", j_mf_count);
 
         for (size_t i = 0; i < this->j_mf.size(); i++)
         { // iterate top outlines only, as i is always 0 and 1
-            if (i == 2) break;
+            if (i == 2)
+                break;
             // test segmentation fault 3.01 - error
             for (size_t j = 0; j < this->j_mf[i].size(); j++)
             {
 
                 // std::cout << "iterate holes \n";
                 // test segmentation fault 3.1 - error
-                //return;
+                // return;
 
                 int joint_id = std::get<0>(j_mf[i][j]);
                 bool male_or_female = std::get<1>(j_mf[i][j]);
@@ -1359,7 +1268,6 @@ namespace wood
                     continue;
                 if (joints[joint_id](male_or_female, false).size() == 0)
                     continue;
-
 
                 // test segmentation fault 3.2 - error
                 // return;
@@ -1409,7 +1317,7 @@ namespace wood
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Collect holes for sides
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        //printf("Collect holes for sides \n");
+        // printf("Collect holes for sides \n");
         for (int i = 2; i < this->j_mf.size(); i++)
         {
             for (int j = 0; j < this->j_mf[i].size(); j++)
@@ -1456,7 +1364,7 @@ namespace wood
                 ///////////////////////////////////////////////////////////////////////////////
                 // Check Winding and add holes
                 ///////////////////////////////////////////////////////////////////////////////
-                for (auto& k : id_of_holes)
+                for (auto &k : id_of_holes)
                 {
 
                     // Orient to 2D and check the winding using top outline
@@ -1481,12 +1389,10 @@ namespace wood
             }
         }
 
-
-
         /////////////////////////////////////////////////////////////////////////////
         // Output
         /////////////////////////////////////////////////////////////////////////////
-        //printf("Output \n");
+        // printf("Output \n");
         if (output.size() > this->id)
         { // else the input is bad
             output[this->id].emplace_back(pline0_new);
@@ -1494,7 +1400,7 @@ namespace wood
         }
     }
 
-    void element::update_lines_by_intersection(std::vector<wood::joint>& joints, std::vector<wood::element>& elements)
+    void element::update_lines_by_intersection(std::vector<wood::joint> &joints, std::vector<wood::element> &elements)
     {
     }
 }

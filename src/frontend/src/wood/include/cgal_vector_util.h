@@ -71,6 +71,16 @@ namespace cgal_vector_util
      * @param [out] interpolated_points divided points
      */
     void interpolate_points(const IK::Point_3 &from, const IK::Point_3 &to, const int &steps, std::vector<IK::Point_3> &points, int type_0_noends_1_end_2_oneend = 0);
+
+    /**
+     * Scale the vector to the given vertical height
+     * Often used for CNC machining
+     *
+     * @param [in] vector vector to scale
+     * @param [in] vertical_height vertical height of the vector
+     * @return scaled vector, whose vertical component length is equal to the vertical_height
+     */
+    IK::Vector_3 get_leveled_vector(const IK::Vector_3 &vector, const double &vertical_height);
 }
 
 #endif
