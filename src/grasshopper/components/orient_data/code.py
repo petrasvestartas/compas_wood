@@ -57,7 +57,7 @@ class MyComponent(component):
         if(len(_ids)==0 or len(_planes) != len(_ids)):
             
             for i in range(len(_data[0])):
-                xform = Transform.PlaneToPlane(self.get_plane(_data[0][i][0],_data[0][i][1][0]),target_planes[i%len(target_planes)])
+                xform = Transform.PlaneToPlane(self.get_plane(_data[0][i][-1],_data[0][i][-2][0]),target_planes[i%len(target_planes)])
                     
                 for j in range(len(_data[0][i])):
                     polyline_copy = Polyline(_data[0][i][j])
