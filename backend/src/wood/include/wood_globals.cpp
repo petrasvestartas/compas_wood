@@ -21,7 +21,7 @@ namespace wood_globals
     std::string DATA_SET_OUTPUT_FILE = DATA_SET_INPUT_FOLDER + "out.xml";
 
     // Wood library
-    double JOINT_VOLUME_EXTENSION[5] = { // this property is used within local searches: plane_to_face and face_to_face
+    std::vector<double> JOINT_VOLUME_EXTENSION = { // this property is used within local searches: plane_to_face and face_to_face
         0.0,                             // x
         0.0,                             // y
         0.0,                             // z
