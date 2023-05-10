@@ -12,9 +12,9 @@ int main(int argc, char **argv)
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	// Display
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	//wood_globals::DISTANCE = 0.01;
-	//wood_globals::DISTANCE_SQUARED = 0.001;
-	//wood_globals::ANGLE = 0.11;
+	wood_globals::DISTANCE = 10;
+	wood_globals::DISTANCE_SQUARED = 10;
+	wood_globals::ANGLE = 1.11;
 
 	opengl_globals::shader_type_0default_1transparent_2shaded_3shadedwireframe_4wireframe_5normals_6explode = 2;
 	// opengl_globals::shaders_folder = "C:\\IBOIS57\\_Code\\Software\\Python\\compas_wood\\backend\\src\\viewer\\shaders\\";
