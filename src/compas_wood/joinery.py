@@ -10,6 +10,12 @@ from compas.geometry import Polyline
 import time
 import os
 import numpy as np
+# import ctypes # An included library with Python install.
+
+
+# def Mbox(title, text, style):
+#   return ctypes.windll.user32.MessageBoxW(0, text, title, style)
+
 
 # from wood_pybind11 import test
 # from wood_pybind11 import read_xml_polylines
@@ -392,9 +398,10 @@ def get_connection_zones(
             _scale[i] = scale[i]
 
     if joint_volume_extension is not None:  # if the user has provided joint parameters
-        for i in range(len(joint_volume_extension)):
-            _joint_volume_extension[i] = joint_volume_extension[i]
-
+        if( len(joint_volume_extension) > 2):
+            _joint_volume_extension = WoodVectorDouble(joint_volume_extension)
+        
+    #Mbox("Size", str(_joint_volume_extension[5]), 0)
     ###################################################################################################
     # run the WOOD CPP code
     ###################################################################################################

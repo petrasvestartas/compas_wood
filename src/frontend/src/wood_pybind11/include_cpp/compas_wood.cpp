@@ -211,8 +211,10 @@ namespace compas_wood
 
         wood_globals::JOINTS_PARAMETERS_AND_TYPES = pybind11_wood_globals_JOINTS_PARAMETERS_AND_TYPES;
         wood_globals::OUTPUT_GEOMETRY_TYPE = output_type;
-        for (int i = 0; i < pybind11_joint_volume_parameters.size(); i++)
-            wood_globals::JOINT_VOLUME_EXTENSION[i] = pybind11_joint_volume_parameters[i];
+
+        if( pybind11_joint_volume_parameters.size()>2)
+            wood_globals::JOINT_VOLUME_EXTENSION  = pybind11_joint_volume_parameters; 
+
 
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
