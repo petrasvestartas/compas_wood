@@ -1350,7 +1350,7 @@ namespace wood_joint_lib
                 for (int i = 0; i < number_of_tenons; i++)
                 {
                     double z_ = z[1] + (z[0] - z[1]) * step * i;
-                    double z_mid = i % 2 == 0 ? z_ + (z[0] - z[1]) * step * t * 0.375 : z_ - (z[0] - z[1]) * step * t * 0.375;                                                           // female_modify_outline
+                    double z_mid = i % 2 == 0 ? z_ + (z[0] - z[1]) * step * t * 0.05 : z_ - (z[0] - z[1]) * step * t * 0.05;                                                           // female_modify_outline
                     double z_chamfer = i % 2 == 0 ? z_ + (z[0] - z[1]) * step * ((t * 0.5) + ((1 - t) * 0.5 * 0.25)) : z_ - (z[0] - z[1]) * step * ((t * 0.5) + ((1 - t) * 0.5 * 0.25)); // chamfer
                     z_ = i % 2 == 0 ? z_ + (z[0] - z[1]) * step * t * 0.5 : z_ - (z[0] - z[1]) * step * t * 0.5;
 
@@ -1503,14 +1503,14 @@ namespace wood_joint_lib
         if (jo.linked_joints.size() == 0 || jo.linked_joints.size() > 2)
 
         { // wood::joint can have no links
-            ss_e_op_4(jo, 0.5, true, true, -0.75, 0.5, -0.5, 0.5, -0.5, 0.5);
+            ss_e_op_4(jo, 0.00, true, true, -0.75, 0.5, -0.5, 0.5, -0.5, 0.5);
             jo.name = __func__;
             // std::cout << "ss_e_op_5" << std::endl;
             return;
         }
         else
         {
-            ss_e_op_4(jo, 0.25, false, true, -0.5, 0.5, -0.5, 0.5, -0.5, 0.5);
+            ss_e_op_4(jo, 0.00, false, true, -0.5, 0.5, -0.5, 0.5, -0.5, 0.5);
             jo.name = __func__;
         }
 
@@ -1522,7 +1522,7 @@ namespace wood_joint_lib
         int a = 0;
         int b = 1;
         all_joints[jo.linked_joints[a]].divisions = jo.divisions; // division must be the same to merge two joints correctly
-        ss_e_op_4(all_joints[jo.linked_joints[a]], 0.50, true, false, -0.5, 0.5, -0.5, 0.5, -0.5, 0.5);
+        ss_e_op_4(all_joints[jo.linked_joints[a]], 0.5, true, false, -0.5, 0.5, -0.5, 0.5, -0.5, 0.5);
 
         // set wood::joint sequences for wood::joint 0 and wood::joint 1
         // std::vector<std::vector<std::array<int, 4>>> linked_joints_seq; // assigned on wood_joint_library | it is nested because there can be umber of polylines | example {start_curr,step_curr} means that "start_curr+step_curr*i" and {start_link,step_link} -> "start_link+step_link*i"
@@ -1535,7 +1535,7 @@ namespace wood_joint_lib
         {
             // create geometry for linked wood::joint 1
             all_joints[jo.linked_joints[b]].divisions = disable_joint_divisions ? jo.divisions * 0 : jo.divisions; // division must be the same to merge two joints correctly
-            ss_e_op_4(all_joints[jo.linked_joints[b]], 0.50, true, false, -0.5, 0.5, -0.5, 0.5, -0.5, 0.5);
+            ss_e_op_4(all_joints[jo.linked_joints[b]], 0.00, true, false, -0.5, 0.5, -0.5, 0.5, -0.5, 0.5);
 
             std::vector<std::array<int, 4>> linked_joints_seq_1;
             // std::cout << "jo.f[0].size()" << jo.f[0].size() << "\n";
