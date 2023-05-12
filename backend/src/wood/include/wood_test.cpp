@@ -428,7 +428,7 @@ namespace wood_test
         // std::vector<std::vector<int>> input_three_valence_element_indices_and_instruction = {{1}, {16, 10, 11, 17}};
         std::vector<std::vector<int>> input_three_valence_element_indices_and_instruction = {
             {1},
-            {9, 15, 14, 8},   // long edge
+            {9, 15, 140, 8},   // long edge
             {16, 10, 11, 17}, // long edge
             {6, 12, 13, 7},   // long edge
             {15, 17, 16, 14}, // wall
@@ -2403,22 +2403,22 @@ namespace wood_test
             },
         };
 
-        std::vector<std::vector<int>> input_three_valence_element_indices_and_instruction; // = {{1}, {16, 10, 11, 17}};
-        // std::vector<std::vector<int>> input_three_valence_element_indices_and_instruction = {
-        //     {0}, // first index indicates that the corner case of 3 valence joints belongs to the Annen joint type
-        //     {
-        //         0,
-        //         7, // same - top plate
-        //         4,
-        //         7, // same - bottom plate
-        //     },
-        //     {
-        //         1,
-        //         7, // same - top plate
-        //         5,
-        //         7, // same - bottom plate
-        //     },
-        // };
+        //std::vector<std::vector<int>> input_three_valence_element_indices_and_instruction; // = {{1}, {16, 10, 11, 17}};
+        std::vector<std::vector<int>> input_three_valence_element_indices_and_instruction = {
+            {0}, // first index indicates that the corner case of 3 valence joints belongs to the Annen joint type
+            {
+                0,
+                7, // same - top plate
+                4,
+                7, // same - bottom plate
+            },
+            {
+                1,
+                7, // same - top plate
+                5,
+                7, // same - bottom plate
+            },
+        };
 
         std::vector<int> input_adjacency = {};
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
