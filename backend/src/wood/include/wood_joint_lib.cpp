@@ -938,7 +938,8 @@ namespace wood_joint_lib
         ////////////////////////////////////////////////////////////////////
 
         int divisions = (int)std::max(2, std::min(20, joint.divisions));
-        divisions += divisions % 2 + 2;
+        divisions += divisions % 2 + 2*0;
+
         ////////////////////////////////////////////////////////////////////
         // Interpolate points
         ////////////////////////////////////////////////////////////////////
@@ -1343,14 +1344,13 @@ namespace wood_joint_lib
             /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
             joint.m[j][0].emplace_back(sign * x[1], y[j], z_ext[1]);
             joint.m[j][0].emplace_back(x[1] + j * 0.01, y[j], z_ext[1]);
-   
 
             if (joint.divisions > 0)
             {
                 for (int i = 0; i < number_of_tenons; i++)
                 {
                     double z_ = z[1] + (z[0] - z[1]) * step * i;
-                    double z_mid = i % 2 == 0 ? z_ + (z[0] - z[1]) * step * t * 0.05 : z_ - (z[0] - z[1]) * step * t * 0.05;                                                           // female_modify_outline
+                    double z_mid = i % 2 == 0 ? z_ + (z[0] - z[1]) * step * t * 0.05 : z_ - (z[0] - z[1]) * step * t * 0.05;                                                             // female_modify_outline
                     double z_chamfer = i % 2 == 0 ? z_ + (z[0] - z[1]) * step * ((t * 0.5) + ((1 - t) * 0.5 * 0.25)) : z_ - (z[0] - z[1]) * step * ((t * 0.5) + ((1 - t) * 0.5 * 0.25)); // chamfer
                     z_ = i % 2 == 0 ? z_ + (z[0] - z[1]) * step * t * 0.5 : z_ - (z[0] - z[1]) * step * t * 0.5;
 
@@ -1468,9 +1468,6 @@ namespace wood_joint_lib
         //         for (int j = 0; j < joint.m[i].size(); j++)
         //             for (int k = 0; k < joint.m[i][j].size(); k++)
         //                 joint.m[i][j][k] = joint.m[i][j][k].transform(scale_xform);
-
-
-
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // boolean

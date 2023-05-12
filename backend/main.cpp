@@ -20,7 +20,7 @@ int main(int argc, char **argv)
 	// opengl_globals::shaders_folder = "C:\\IBOIS57\\_Code\\Software\\Python\\compas_wood\\backend\\src\\viewer\\shaders\\";
 	opengl_globals::shaders_folder = "C:\\legion_pro_7_16IRX8H\\software\\python\\compas_wood\\backend\\src\\viewer\\shaders\\";
 	wood_globals::DATA_SET_INPUT_FOLDER = "C:\\legion_pro_7_16IRX8H\\software\\python\\compas_wood\\backend\\src\\wood\\dataset\\";
-	opengl_render::render(wood_test::type_plates_name_top_to_side_and_side_to_side_outofplane_annen_box_pair);//wood_test::type_plates_name_vda_floor_1
+	opengl_render::render(wood_test::type_plates_name_vda_floor_0);//wood_test::type_plates_name_vda_floor_1
 
 	// develop algorithm for notches
 	
