@@ -1731,9 +1731,43 @@ namespace wood_main
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // check if the user gave the input
+        // check if the 3 valence number is within the range
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         if (in_s0_s1_e20_e31.size() < 2)
             return;
+        
+        for(int i = 1; i < in_s0_s1_e20_e31.size(); i++)
+        {
+            auto size = elements.size()-1;
+
+            if( in_s0_s1_e20_e31[i].size() != 4){
+                std::cout << "wood_main -> three_valence_joint_addition_vidy -> four elements must be present \n";
+                std::cout<< in_s0_s1_e20_e31[i].size() << "\n";
+                return;
+            }
+            
+            if(in_s0_s1_e20_e31[i][0] < 0 || in_s0_s1_e20_e31[i][1] < 0 || in_s0_s1_e20_e31[i][2] < 0 || in_s0_s1_e20_e31[i][3] < 0 ){
+                std::cout<< in_s0_s1_e20_e31[i][0] << " " << in_s0_s1_e20_e31[i][1] << " " << in_s0_s1_e20_e31[i][2] << " " << in_s0_s1_e20_e31[i][3] << "\n";
+                  std::cout << "wood_main -> three_valence_joint_addition_vidy -> id is negative \n";
+                 return;
+
+            }
+
+            if(in_s0_s1_e20_e31[i][0] > size || in_s0_s1_e20_e31[i][1] > size|| in_s0_s1_e20_e31[i][2] > size|| in_s0_s1_e20_e31[i][3] > size ){
+                std::cout << in_s0_s1_e20_e31[i][0] << " " << in_s0_s1_e20_e31[i][1] << " " << in_s0_s1_e20_e31[i][2] << " " << in_s0_s1_e20_e31[i][3] << " " << size << "\n";
+                std::cout << "wood_main -> three_valence_joint_addition_vidy -> id is bigger than the total number of elements \n";
+                return;
+
+            }
+
+        }
+        
+
+        
+
+
+
+        
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // 1. compute two additional connection volumes, meaning creating two additional wood::joint with index(id0, id_tenon) and (id1, id_tenon)
@@ -1781,51 +1815,6 @@ namespace wood_main
                 continue;
             }
 
-            // /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-            // // if wood::joint order was reversed, reverse the neighbors here:
-            // /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-            // // std::cout << "wood_main " <<in_s0_s1_e20_e31[i][0] << " " << in_s0_s1_e20_e31[i][1] << " " << in_s0_s1_e20_e31[i][2] << " " << in_s0_s1_e20_e31[i][3] << "\n";
-            // // std::cout << "wood_main " <<joints[id].v0 << " " << joints[id].v1 << "\n";
-            // if (joints[id].v0 == in_s0_s1_e20_e31[i][1])
-            // {
-            //     std::swap(in_s0_s1_e20_e31[i][2], in_s0_s1_e20_e31[i][3]);
-            //     std::swap(in_s0_s1_e20_e31[i][0], in_s0_s1_e20_e31[i][1]);
-            // }
-
-            //////////////////////////////////////////////////////////////////////////////////////////////////
-            // align wood::joint lines and volumes | currently the joints are aligned to the 4 valence wood::joint, but there can be opposite scenario
-            //////////////////////////////////////////////////////////////////////////////////////////////////
-            // if (align_joints)
-            // {
-            //     for (int j = 0; j < 2; j++)
-            //     {
-
-            //         if (joints[id_alignment_joint].joint_lines[j].size() > 0)
-            //         {
-
-            //             IK::Vector_3 v = 0.5 * (joints[id].joint_lines[j][1] - joints[id].joint_lines[j][0]);
-            //             // transform vectors
-            //             IK::Vector_3 v_before = 0.5 * (joints[id_alignment_joint].joint_lines[j][1] - joints[id_alignment_joint].joint_lines[j][0]);
-            //             v_before -= v;
-
-            //             IK::Point_3 mid_point = CGAL::midpoint(joints[id_alignment_joint].joint_lines[j][0], joints[id_alignment_joint].joint_lines[j][1]);
-            //             joints[id_alignment_joint].joint_lines[j][0] = mid_point - v;
-            //             joints[id_alignment_joint].joint_lines[j][1] = mid_point + v;
-
-            //             if (j == 0)
-            //             {
-            //                 // CGAL_Debug(v_before);
-            //                 cgal_polyline_util::move(joints[id_alignment_joint].joint_volumes[0], v_before);
-            //                 cgal_polyline_util::move(joints[id_alignment_joint].joint_volumes[1], -v_before);
-            //                 if (joints[id_alignment_joint].joint_volumes[2].size() != 0)
-            //                 {
-            //                     cgal_polyline_util::move(joints[id_alignment_joint].joint_volumes[2], v_before);
-            //                     cgal_polyline_util::move(joints[id_alignment_joint].joint_volumes[3], -v_before);
-            //                 }
-            //             }
-            //         }
-            //     }
-            // }
 
             //////////////////////////////////////////////////////////////////////////////////////////////////
             // if plates are parallel, then it would be enough to move the wood::joint volume, without performing intersection
@@ -2066,7 +2055,35 @@ namespace wood_main
 
     )
     {
+        if (in_s0_s1_e20_e31.size() < 2)
+            return;
+        
+        for(int i = 1; i < in_s0_s1_e20_e31.size(); i++)
+        {
+            auto size = elements.size()-1;
 
+            if( in_s0_s1_e20_e31[i].size() != 4){
+                std::cout << "wood_main -> three_valence_joint_addition_vidy -> four elements must be present \n";
+                std::cout<< in_s0_s1_e20_e31[i].size() << "\n";
+                return;
+            }
+            
+            if(in_s0_s1_e20_e31[i][0] < 0 || in_s0_s1_e20_e31[i][1] < 0 || in_s0_s1_e20_e31[i][2] < 0 || in_s0_s1_e20_e31[i][3] < 0 ){
+                std::cout<< in_s0_s1_e20_e31[i][0] << " " << in_s0_s1_e20_e31[i][1] << " " << in_s0_s1_e20_e31[i][2] << " " << in_s0_s1_e20_e31[i][3] << "\n";
+                  std::cout << "wood_main -> three_valence_joint_addition_vidy -> id is negative \n";
+                 return;
+
+            }
+
+            if(in_s0_s1_e20_e31[i][0] > size || in_s0_s1_e20_e31[i][1] > size|| in_s0_s1_e20_e31[i][2] > size|| in_s0_s1_e20_e31[i][3] > size ){
+                std::cout << in_s0_s1_e20_e31[i][0] << " " << in_s0_s1_e20_e31[i][1] << " " << in_s0_s1_e20_e31[i][2] << " " << in_s0_s1_e20_e31[i][3] << " " << size << "\n";
+                std::cout << "wood_main -> three_valence_joint_addition_vidy -> id is bigger than the total number of elements \n";
+                return;
+
+            }
+
+        }
+        
         //////////////////////////////////////////////////////////////////////////////////////////////////
         // For solving multiple valences (Specific case Annen), only works when only one wood::joint is possible
         // between two unique plates (wont work for plates with subdivided edges)
