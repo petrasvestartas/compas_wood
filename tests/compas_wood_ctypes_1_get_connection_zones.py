@@ -128,6 +128,8 @@ def test_connection_detection():
         in_joint_volume_parameters_v_s,
     ) = list_numbers_coord([0, 0, 0])
 
+    face_to_face_side_to_side_joints_dihedral_angle = c_float(160.0)
+
     ############################################################################################################
     # Load library and declare function signature
     ############################################################################################################
@@ -187,8 +189,9 @@ def test_connection_detection():
         POINTER(POINTER(c_int)),
         POINTER(c_size_t),
         # global_parameters
-        POINTER(c_float),
-        POINTER(c_size_t),
+        POINTER(c_float), # joint volume
+        POINTER(c_size_t), # joint volume
+        POINTER(c_float) # dihedral angle to switch between in-plane and out-of-plane jointery default is 150 degrees
     ]
 
     # generate joints
@@ -250,6 +253,8 @@ def test_connection_detection():
         # global_parameters
         in_joint_volume_parameters_v,
         byref(in_joint_volume_parameters_v_s),
+        byref(face_to_face_side_to_side_joints_dihedral_angle),
+
     )
 
     out_polylines = coord_polylines_lists(

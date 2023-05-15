@@ -802,7 +802,7 @@ namespace wood_main
                             auto v0 = joint_line0[0] - joint_line0[1];
                             auto v1 = joint_line1[0] - joint_line1[1];
 
-                            if (cgal_vector_util::is_parallel_to(v0, v1) == 0 || wood_globals::FORCE_SIDE_TO_SIDE_JOINTS_TO_BE_ROTATED)
+                            if (cgal_vector_util::is_parallel_to(v0, v1) == 0 || wood_globals::FACE_TO_FACE_SIDE_TO_SIDE_JOINTS_ALL_TREATED_AS_ROTATED)
                             { // wood_globals::DISTANCE
 #ifdef DEBUG_wood_MAIN_LOCAL_SEARCH
                                 printf("Elements Are rotated");
@@ -946,7 +946,7 @@ namespace wood_main
                                     // CGAL_Debug(20);
                                     return false;
                                 }
-                                else if (dihedralAngle <= 150)
+                                else if (dihedralAngle <= wood_globals::FACE_TO_FACE_SIDE_TO_SIDE_JOINTS_DIHEDRAL_ANGLE)
                                 { // OUT-OF-PLANE // && jointArea0.size()>0
 #ifdef DEBUG_wood_MAIN_LOCAL_SEARCH
                                     printf("Out-of-plane");
@@ -1253,72 +1253,6 @@ namespace wood_main
 #pragma endregion
 
 #pragma region SEARCH_GLOBAL_METHODS
-
-    //   void search(
-    //
-    //	//Input
-    //	std::vector<CGAL::Bbox_3>& AABB,
-    //	std::vector<IK::Vector_3[5]>& OOBs,
-    //	std::vector<std::vector<CGAL_Polyline>>& P,
-    //	std::vector<std::vector<IK::Plane_3>>& Pl,
-    //	std::vector<int>& pairs,
-    //	int searchType,
-    //
-    //	//Output
-    //	std::vector<int>& outputPairs, //Contact Element ID and Local ID
-    //	std::vector<CGAL_Polyline>& outputContactPolylines //Contact Areas + Lines
-    //
-    //
-    //
-    //
-    //) {
-    //
-    //
-    //
-    //	//////////////////////////////////////////////////////////////////////////////
-    //	// Search Contact zones
-    //	//////////////////////////////////////////////////////////////////////////////
-    //
-    //	for (int i = 0; i < pairs.size(); i += 2) {
-    //
-    //		CGAL_Polyline joint_area;
-    //		CGAL_Polyline joint_quads[2];
-    //		CGAL_Polyline joint_lines[2];
-    //		CGAL_Polyline joint_volumes_pairA_pairB[4];
-    //		int e0, e1, type;
-    //
-    //		bool flag = true;
-    //		switch (searchType) {
-    //		case(0):
-    //			flag = face_to_face(P[pairs[i]], P[pairs[i + 1]], Pl[pairs[i]], Pl[pairs[i + 1]], e0, e1, joint_area, joint_lines, joint_volumes_pairA_pairB, type);
-    //			break;
-    //		case(1):
-    //			flag = plane_to_face(P[pairs[i]], P[pairs[i + 1]], Pl[pairs[i]], Pl[pairs[i + 1]], e0, e1, joint_area, joint_lines, joint_volumes_pairA_pairB, type);
-    //			break;
-    //		}
-    //
-    //		if (!flag) continue;
-    //
-    //		if (e0 != e1) {
-    //
-    //			outputPairs.push_back(pairs[i]);
-    //			outputPairs.push_back(pairs[i + 1]);
-    //			outputPairs.push_back(e0);
-    //			outputPairs.push_back(e1);
-    //
-    //			outputContactPolylines.push_back(joint_area);
-    //			outputContactPolylines.insert(outputContactPolylines.end(), std::begin(joint_quads), std::end(joint_quads));
-    //			outputContactPolylines.insert(outputContactPolylines.end(), std::begin(joint_lines), std::end(joint_lines));
-    //			outputContactPolylines.insert(outputContactPolylines.end(), std::begin(joint_volumes_pairA_pairB), std::end(joint_volumes_pairA_pairB));
-    //
-    //		}
-    //	}
-    //
-    //
-    //
-    //
-    // }
-    //
 
     bool pair_search(
 

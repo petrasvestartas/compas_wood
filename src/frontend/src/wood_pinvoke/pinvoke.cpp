@@ -453,7 +453,8 @@ PINVOKE void ctypes_get_connection_zones(
     size_t*& out_types_f, size_t& out_types_f_s, int*& out_types_v, size_t& out_types_v_s,
 
     // global_parameters
-    float* in_joint_volume_parameters_v, size_t& in_joint_volume_parameters_v_s
+    float* in_joint_volume_parameters_v, size_t& in_joint_volume_parameters_v_s,
+    float& face_to_face_side_to_side_joints_dihedral_angle
 ) {
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -519,6 +520,9 @@ PINVOKE void ctypes_get_connection_zones(
 
 
     wood_globals::OUTPUT_GEOMETRY_TYPE = in_output_type;
+    wood_globals::FACE_TO_FACE_SIDE_TO_SIDE_JOINTS_DIHEDRAL_ANGLE = (double)face_to_face_side_to_side_joints_dihedral_angle;
+    // printf("%f \n ",  wood_globals::FACE_TO_FACE_SIDE_TO_SIDE_JOINTS_DIHEDRAL_ANGLE);
+
 
 
     wood_main::get_connection_zones(
