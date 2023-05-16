@@ -420,31 +420,6 @@ namespace wood
         IK::Vector_3 translation_vector();
         size_t n = joint_outline.size() - 1 + plate_outline.size() - 1;
 
-        // double max_coordinate = 0;
-        // for (int i = 0; i < joint_outline.size() - 1; i++) // plate
-        // {
-
-        //     // translation_vector += joint_outline[i];
-        //     if (max_coordinate < std::abs(joint_outline[i].hx()))
-        //         max_coordinate = std::abs(joint_outline[i].hx());
-
-        //     if (max_coordinate < std::abs(joint_outline[i].hy()))
-        //         max_coordinate = std::abs(joint_outline[i].hy());
-        // }
-
-        // for (int i = 0; i < plate_outline.size() - 1; i++) // joint
-        // {
-        //     // translation_vector += plate_outline[i];
-        //     if (max_coordinate < std::abs(plate_outline[i].hx()))
-        //         max_coordinate = std::abs(plate_outline[i].hx());
-
-        //     if (max_coordinate < std::abs(plate_outline[i].hy()))
-        //         max_coordinate = std::abs(plate_outline[i].hy());
-        // }
-
-        // double scale = std::pow(10, 10 - cgal_math_util::count_digits(std::ceil(max_coordinate)));
-        //  std::cout << max_coordinate << " " << cgal_math_util::count_digits(max_coordinate) << std::endl;
-        //    scale = 100000;
         /////////////////////////////////////////////////////////////////////////////////////
         // Convert to Clipper
         /////////////////////////////////////////////////////////////////////////////////////
@@ -456,26 +431,17 @@ namespace wood
         clipper_joint_outlines.emplace_back(std::vector<Clipper2Lib::PointD>());
         clipper_joint_outlines.back().reserve(joint_outline.size());
 
-        // printf("\n");
         // be aware that the scaling miust be done using int64_t, if int will be used the result will be wrong due to rounding
         for (int i = 0; i < plate_outline.size() - 1; i++) // this outline has no duplicate end point because it is "closed path"
         {
             clipper_plate_outlines.back().emplace_back((plate_outline[i].x()), (plate_outline[i].y()));
-            // std::cout << "__________ " << clipper_plate_outlines.back().back().x << " " << clipper_plate_outlines.back().back().y << std::endl;
-            //  printf("%f %f %f \n", a[i].x(), a[i].y(), a[i].z());
         }
-        // printf("\n");
+
         for (int i = 0; i < joint_outline.size(); i++) // this outline has duplicate end points because it is "open path"
         {
             clipper_joint_outlines.back().emplace_back((joint_outline[i].x()), (joint_outline[i].y()));
-            // printf("%f %f %f \n", b[i].x(), b[i].y(), b[i].z());
         }
-        // scale these paths by 1.0e10.
-        // int err = 0;
-        // clipper_plate_outlines = Clipper2Lib::ScalePaths<double, double>(clipper_plate_outlines, scale, scale, err);
-        // clipper_joint_outlines = Clipper2Lib::ScalePaths<double, double>(clipper_joint_outlines, scale, scale, err);
 
-        // printf("\n");
         try
         {
 
@@ -486,8 +452,6 @@ namespace wood
             clipper.AddOpenSubject(clipper_joint_outlines);
             clipper.AddClip(clipper_plate_outlines);
             clipper.Execute(Clipper2Lib::ClipType::Intersection, Clipper2Lib::FillRule::NonZero, clipper_result_closed, clipper_result_open);
-            // de-scale the result
-            // clipper_result_open = Clipper2Lib::ScalePaths<double, double>(clipper_result_open, 1 / scale, 1 / scale, err);
 
             if (clipper_result_open.size() > 0)
             {
@@ -618,15 +582,6 @@ namespace wood
                 {
                 }
 
-                // std::cout << "\n";
-                // for (auto &p : plate_outline)
-                //     std::cout << p << "\n";
-                // std::cout << "\n";
-                // for (auto &p : c)
-                //     std::cout << p << "\n";
-                // std::cout << "\n";
-
-                // std::cout << "\nt0 " << t0 << " t1 " << t1 << "\n";
 
                 if (t0 != -1 && t1 != -1)
                 {
@@ -637,47 +592,7 @@ namespace wood
                 }
                 else
                 {
-                    // std::cout << "_______________no intersection found, result count: " << clipper_result_open.size() << "\n";
-                    //  if (clipper_result_open.size() > 0)
-                    //  {
-                    //      // CGAL_Polyline plate_outline = closed_pline_cutter;
-                    //      // CGAL_Polyline joint_outline = pline_to_cut;
 
-                    //     std::cout << clipper_result_open[0].size() << "\n";
-                    //     std::cout << "\n";
-                    //     for (auto &p : plate_outline)
-                    //         std::cout << p << "\n";
-                    //     std::cout << "\n";
-                    //     // for (auto &p : joint_outline)
-                    //     //     std::cout << p << "\n";
-                    //     // std::cout << "\n";
-                    //     for (auto &p : c)
-                    //         std::cout << p << "\n";
-                    //     std::cout << "\n";
-
-                    // scale = 100000000;
-                    // for (int i = 0; i < plate_outline.size() - 1; i++) // this outline has no duplicate end point because it is "closed path"
-                    // {
-                    //     std::cout << (int64_t)(plate_outline[i].x() * scale) << " " << (int64_t)(plate_outline[i].y() * scale) << " " << 0 << "\n";
-                    // }
-                    // std::cout << "\n";
-
-                    // for (int i = 0; i < joint_outline.size(); i++) // this outline has duplicate end points because it is "open path"
-                    // {
-
-                    //     std::cout << (int64_t)(joint_outline[i].x() * scale) << " " << (int64_t)(joint_outline[i].y() * scale) << " " << 0 << "\n";
-                    // }
-                    // std::cout << "\n";
-
-                    // std::cout << clipper_result_open[0].size() << "\n";
-                    // std::cout << "\n";
-                    // for (auto &p : plate_outline)
-                    //     std::cout << p << "\n";
-                    // std::cout << "\n";
-                    // for (auto &p : c)
-                    //     std::cout << p << "\n";
-                    // std::cout << "\n";
-                    //}
                     return false;
                 }
             }

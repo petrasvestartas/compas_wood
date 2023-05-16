@@ -49,7 +49,7 @@ namespace wood_globals
     extern std::string DATA_SET_OUTPUT_FILE;
 
     // Wood library
-    extern double JOINT_VOLUME_EXTENSION[5]; // useful for plates to avoid collision with corner - negative, while on beam the value has to be positive
+    extern std::vector<double> JOINT_VOLUME_EXTENSION; // useful for plates to avoid collision with corner - negative, while on beam the value has to be positive
     extern int OUTPUT_GEOMETRY_TYPE;
     extern bool FORCE_SIDE_TO_SIDE_JOINTS_TO_BE_ROTATED; // when all joints are computed as if sides are rotated, it was implemented in the Touch Wood ZAZ
     extern double LIMIT_MIN_JOINT_LENGTH;                // minimum edge length on which the joint can be generated

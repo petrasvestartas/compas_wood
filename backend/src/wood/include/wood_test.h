@@ -288,9 +288,17 @@ namespace wood_test
      * example for plates
      * top-to-side and side-to-side out-of-plane joints
      * VDA project, first test
-     * four boxes connected with extendal connectors
+     * four boxes connected with extended connectors
      */
     bool type_plates_name_vda_floor_0();
+
+    /**
+     * example for plates
+     * top-to-side and side-to-side out-of-plane joints
+     * VDA project, first test
+     * four boxes connected with extended connectors
+     */
+    bool type_plates_name_vda_floor_1();
 
     /**
      * example for plates

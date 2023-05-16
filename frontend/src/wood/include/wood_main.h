@@ -36,6 +36,7 @@ namespace wood_main
         std::vector<wood::element> &elements);
 
     bool border_to_face(
+        size_t& joint_id,
         std::vector<CGAL_Polyline> &Polyline0,
         std::vector<IK::Plane_3> &Plane0,
         std::vector<IK::Vector_3> &insertion_vectors0,
@@ -46,6 +47,7 @@ namespace wood_main
         std::array<CGAL_Polyline, 4> &joint_volumes_pairA_pairB);
 
     bool plane_to_face(
+        size_t& joint_id,
         std::vector<CGAL_Polyline> &Polyline0,
         std::vector<CGAL_Polyline> &Polyline1,
         std::vector<IK::Plane_3> &Plane0,
@@ -66,6 +68,7 @@ namespace wood_main
 
     // ToDo: Currently one connection can be made with another object, but one multiple shared edges can be possible e.g. |_>-<_|
     bool face_to_face(
+        size_t& joint_id,
         std::vector<CGAL_Polyline> &Polyline0,
         std::vector<CGAL_Polyline> &Polyline1,
         std::vector<IK::Plane_3> &Plane0,

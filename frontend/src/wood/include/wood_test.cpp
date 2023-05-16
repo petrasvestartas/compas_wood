@@ -410,6 +410,7 @@ namespace wood_test
         internal::set_file_path_for_input_xml_and_screenshot(input_polyline_pairs, "type_plates_name_joint_linking_vidychapel_one_axis_two_layers");
 
         wood_globals::JOINT_VOLUME_EXTENSION[2] = -10;
+        wood_globals::JOINT_VOLUME_EXTENSION = {0,0,-10,0,0,-50};
         std::vector<double> JOINTS_TYPES = wood_globals::JOINTS_PARAMETERS_AND_TYPES;
         JOINTS_TYPES[1 * 3 + 0] = 50;
         int search_type = 0;

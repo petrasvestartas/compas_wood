@@ -7,7 +7,7 @@
 			"type": "shell",
 			"label": "BUILD ",
 			//"command": " cmake  --build ${fileDirname}\\build_win\\ -v --config Release  &&  ${fileDirname}\\build_win\\Release\\wood.exe",//--config Release 
-			"command": " cmake  --build C:\\IBOIS57\\_Code\\Software\\Python\\compas_wood\\backend\\build_win\\ -v --config Release --parallel 8 &&  C:\\IBOIS57\\_Code\\Software\\Python\\compas_wood\\backend\\build_win\\Release\\wood.exe",
+			"command": " cmake  --build C:\\legion_pro_7_16IRX8H\\software\\python\\compas_wood\\backend\\build_win\\ -v --config Release --parallel 8 &&  C:\\legion_pro_7_16IRX8H\\software\\python\\compas_wood\\backend\\build_win\\Release\\wood.exe",
 			// "problemMatcher": [
 			// 	"$gcc"
 			// ],
@@ -21,7 +21,7 @@
 			"type": "shell",
 			"label": "REBUILD",
 			//"command": " cmake  --build ${fileDirname}\\build_win\\ -v --config Release  &&  ${fileDirname}\\build_win\\Release\\wood.exe",
-			"command": "cmake --fresh -DGET_LIBS=OFF -DBUILD_MY_PROJECTS=ON -DRELEASE_DEBUG=ON -DCMAKE_BUILD_TYPE=\"Release\"  -G \"Visual Studio 17 2022\" -A x64 C:\\IBOIS57\\_Code\\Software\\Python\\compas_wood\\backend\\build_win\\  && cmake --build C:\\IBOIS57\\_Code\\Software\\Python\\compas_wood\\backend\\build_win\\ --config Release  &&  C:\\IBOIS57\\_Code\\Software\\Python\\compas_wood\\backend\\build_win\\Release\\wood.exe",
+			"command": "cmake --fresh -DGET_LIBS=OFF -DBUILD_MY_PROJECTS=ON -DRELEASE_DEBUG=ON -DCMAKE_BUILD_TYPE=\"Release\"  -G \"Visual Studio 17 2022\" -A x64 C:\\legion_pro_7_16IRX8H\\software\\python\\compas_wood\\backend\\build_win\\  && cmake --build C:\\legion_pro_7_16IRX8H\\software\\python\\compas_wood\\backend\\build_win\\ --config Release  &&  C:\\legion_pro_7_16IRX8H\\software\\python\\compas_wood\\backend\\build_win\\Release\\wood.exe",
 			"problemMatcher": [
 				"$gcc"
 			],
@@ -35,7 +35,7 @@
 			"type": "shell",
 			"label": "DOWNLOAD LIBRARIES",
 			//"command": " cmake  --build ${fileDirname}\\build_win\\ -v --config Release  &&  ${fileDirname}\\build_win\\Release\\wood.exe",
-			"command": "cmake --fresh -DGET_LIBS=ON -DBUILD_MY_PROJECTS=OFF -DRELEASE_DEBUG=ON -DCMAKE_BUILD_TYPE=\"Release\"  -G \"Visual Studio 17 2022\" -A x64 C:\\IBOIS57\\_Code\\Software\\Python\\compas_wood\\backend\\  && cmake --build C:\\IBOIS57\\_Code\\Software\\Python\\compas_wood\\backend\\build_win\\ --config Release  &&  C:\\IBOIS57\\_Code\\Software\\Python\\compas_wood\\backend\\build_win\\Release\\wood.exe",
+			"command": "cmake --fresh -DGET_LIBS=ON -DBUILD_MY_PROJECTS=OFF -DRELEASE_DEBUG=ON -DCMAKE_BUILD_TYPE=\"Release\"  -G \"Visual Studio 17 2022\" -A x64 C:\\legion_pro_7_16IRX8H\\software\\python\\compas_wood\\backend\\  && cmake --build C:\\legion_pro_7_16IRX8H\\software\\python\\compas_wood\\backend\\build_win\\ --config Release  &&  C:\\legion_pro_7_16IRX8H\\software\\python\\compas_wood\\backend\\build_win\\Release\\wood.exe",
 			"problemMatcher": [
 				"$gcc"
 			],

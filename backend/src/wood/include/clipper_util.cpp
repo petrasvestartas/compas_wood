@@ -207,7 +207,7 @@ namespace clipper_util
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Conversions of CGAL_Polyline and Clipper in 2D
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        void cgalpolylines_to_clipper_2d(const std::vector<CGAL_Polyline> &input, Clipper2Lib::Paths64 &output, bool closed_polyline)
+        void cgalpolylines_to_clipper_2d(const std::vector<CGAL_Polyline> &input, Clipper2Lib::PathsD &output, bool closed_polyline)
         {
 
             // clean the containter and reserve memory
@@ -218,7 +218,7 @@ namespace clipper_util
             for (auto &polyline : input)
             {
                 // add clipper polyline and reserve its memory
-                output.emplace_back(Clipper2Lib::Path64());
+                output.emplace_back(Clipper2Lib::PathD());
                 size_t size = closed_polyline ? polyline.size() : polyline.size() - 1;
                 output.back().reserve(size);
 
@@ -237,7 +237,7 @@ namespace clipper_util
             }
         }
 
-        void clipper_to_cgalpolylines_2d(const Clipper2Lib::Paths64 &input, std::vector<CGAL_Polyline> &output, bool closed_polyline)
+        void clipper_to_cgalpolylines_2d(const Clipper2Lib::PathsD &input, std::vector<CGAL_Polyline> &output, bool closed_polyline)
         {
             // clean the containter and reserve memory
             output.clear();
@@ -263,7 +263,7 @@ namespace clipper_util
             }
         }
 
-        void cgalpolyline_to_clipper_2d(const CGAL_Polyline &input, Clipper2Lib::Path64 &output, bool closed_polyline)
+        void cgalpolyline_to_clipper_2d(const CGAL_Polyline &input, Clipper2Lib::PathD &output, bool closed_polyline)
         {
             // clean the containter and reserve memory
             output.clear();
@@ -283,7 +283,7 @@ namespace clipper_util
                         (int64_t)(point.hy() * wood_globals::CLIPPER_SCALE));
         }
 
-        void clipper_to_cgalpolyline_2d(const Clipper2Lib::Path64 &input, CGAL_Polyline &output, bool closed_polyline)
+        void clipper_to_cgalpolyline_2d(const Clipper2Lib::PathD &input, CGAL_Polyline &output, bool closed_polyline)
         {
             // clean the containter and reserve memory
             output.clear();
@@ -300,7 +300,7 @@ namespace clipper_util
         // Conversions of CGAL_Polyline and Clipper in 3D
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        void cgalpolylines_to_clipper_3d(const std::vector<CGAL_Polyline> &input, Clipper2Lib::Paths64 &output, CGAL::Aff_transformation_3<IK> &xform_to_xy_inv, bool closed_polyline)
+        void cgalpolylines_to_clipper_3d(const std::vector<CGAL_Polyline> &input, Clipper2Lib::PathsD &output, CGAL::Aff_transformation_3<IK> &xform_to_xy_inv, bool closed_polyline)
         {
             // get plane from the first polyline
             IK::Point_3 origin;
@@ -319,7 +319,7 @@ namespace clipper_util
             for (auto &polyline : input)
             {
                 // add clipper polyline and reserve its memory
-                output.emplace_back(Clipper2Lib::Path64());
+                output.emplace_back(Clipper2Lib::PathD());
                 size_t size = closed_polyline ? polyline.size() : polyline.size() - 1;
                 output.back().reserve(size);
 
@@ -344,7 +344,7 @@ namespace clipper_util
             }
         }
 
-        void clipper_to_cgalpolylines_3d(const Clipper2Lib::Paths64 &input, CGAL::Aff_transformation_3<IK> &xform_to_xy_inv, std::vector<CGAL_Polyline> &output, bool closed_polyline)
+        void clipper_to_cgalpolylines_3d(const Clipper2Lib::PathsD &input, CGAL::Aff_transformation_3<IK> &xform_to_xy_inv, std::vector<CGAL_Polyline> &output, bool closed_polyline)
         {
             // clean the containter and reserve memory
             output.clear();
@@ -371,7 +371,7 @@ namespace clipper_util
             }
         }
 
-        void cgalpolyline_to_clipper_3d(const CGAL_Polyline &input, Clipper2Lib::Path64 &output, CGAL::Aff_transformation_3<IK> &xform_to_xy_inv, bool closed_polyline)
+        void cgalpolyline_to_clipper_3d(const CGAL_Polyline &input, Clipper2Lib::PathD &output, CGAL::Aff_transformation_3<IK> &xform_to_xy_inv, bool closed_polyline)
         {
             // get plane from the first polyline
             IK::Point_3 origin;
@@ -406,7 +406,7 @@ namespace clipper_util
                 }
         }
 
-        void clipper_to_cgalpolyline_3d(const Clipper2Lib::Path64 &input, CGAL::Aff_transformation_3<IK> &xform_to_xy_inv, CGAL_Polyline &output, bool closed_polyline)
+        void clipper_to_cgalpolyline_3d(const Clipper2Lib::PathD &input, CGAL::Aff_transformation_3<IK> &xform_to_xy_inv, CGAL_Polyline &output, bool closed_polyline)
         {
             // clean the containter and reserve memory
             output.clear();
@@ -423,7 +423,7 @@ namespace clipper_util
                 output.emplace_back(output[0]);
         }
 
-        void cgalpolylines_to_clipper_3d(const std::vector<CGAL_Polyline> &input, const IK::Plane_3 &plane, Clipper2Lib::Paths64 &output, CGAL::Aff_transformation_3<IK> &xform_to_xy_inv, bool closed_polyline)
+        void cgalpolylines_to_clipper_3d(const std::vector<CGAL_Polyline> &input, const IK::Plane_3 &plane, Clipper2Lib::PathsD &output, CGAL::Aff_transformation_3<IK> &xform_to_xy_inv, bool closed_polyline)
         {
 
             // get transformation from the 3D to xy plane and output its inverse
@@ -438,7 +438,7 @@ namespace clipper_util
             for (auto &polyline : input)
             {
                 // add clipper polyline and reserve its memory
-                output.emplace_back(Clipper2Lib::Path64());
+                output.emplace_back(Clipper2Lib::PathD());
                 size_t size = closed_polyline ? polyline.size() : polyline.size() - 1;
                 output.back().reserve(size);
 
@@ -463,7 +463,7 @@ namespace clipper_util
             }
         }
 
-        void cgalpolyline_to_clipper_3d(const CGAL_Polyline &input, const IK::Plane_3 &plane, Clipper2Lib::Path64 &output, CGAL::Aff_transformation_3<IK> &xform_to_xy_inv, bool closed_polyline)
+        void cgalpolyline_to_clipper_3d(const CGAL_Polyline &input, const IK::Plane_3 &plane, Clipper2Lib::PathD &output, CGAL::Aff_transformation_3<IK> &xform_to_xy_inv, bool closed_polyline)
         {
 
             // get transformation from the 3D to xy plane and output its inverse
@@ -519,13 +519,13 @@ namespace clipper_util
         /////////////////////////////////////////////////////////////////////////////////////
         // Convert to Clipper
         /////////////////////////////////////////////////////////////////////////////////////
-        std::vector<Clipper2Lib::Point64> pathA(a.size() - 1);
+        std::vector<Clipper2Lib::PointD> pathA(a.size() - 1);
         for (int i = 0; i < a.size() - 1; i++)
         {
-            pathA[i] = Clipper2Lib::Point64((int)(a[i].x() * wood_globals::CLIPPER_SCALE), (int)(a[i].y() * wood_globals::CLIPPER_SCALE));
+            pathA[i] = Clipper2Lib::PointD((int)(a[i].x() * wood_globals::CLIPPER_SCALE), (int)(a[i].y() * wood_globals::CLIPPER_SCALE));
         }
 
-        Clipper2Lib::Point64 point_clipper((int)(b.x() * wood_globals::CLIPPER_SCALE), (int)(b.y() * wood_globals::CLIPPER_SCALE));
+        Clipper2Lib::PointD point_clipper((int)(b.x() * wood_globals::CLIPPER_SCALE), (int)(b.y() * wood_globals::CLIPPER_SCALE));
 
         /////////////////////////////////////////////////////////////////////////////////////
         // Check if point is inside
@@ -536,6 +536,9 @@ namespace clipper_util
 
     bool get_intersection_between_two_polylines(CGAL_Polyline &polyline0, CGAL_Polyline &polyline1, IK::Plane_3 &plane, CGAL_Polyline &intersection_result, int intersection_type, bool include_triangles)
     {
+
+        //printf("get_intersection_between_two_polylines\n");
+
         /////////////////////////////////////////////////////////////////////////////////////
         // Orient from 3D to 2D
         /////////////////////////////////////////////////////////////////////////////////////
@@ -546,6 +549,7 @@ namespace clipper_util
 
         CGAL_Polyline a = polyline0;
         CGAL_Polyline b = polyline1;
+
 
         /////////////////////////////////////////////////////////////////////////////////////
         // Create Transformation
@@ -564,55 +568,61 @@ namespace clipper_util
         /////////////////////////////////////////////////////////////////////////////////////
         // Convert to Clipper
         /////////////////////////////////////////////////////////////////////////////////////
-        std::vector<Clipper2Lib::Point64> pathA(a.size() - 1);
-        std::vector<Clipper2Lib::Point64> pathB(b.size() - 1);
-        for (int i = 0; i < a.size() - 1; i++)
+        std::vector<Clipper2Lib::PointD> pathA(a.size() - 1);
+        std::vector<Clipper2Lib::PointD> pathB(b.size() - 1);
+        for (size_t i = 0; i < a.size() - 1; i++)
         {
-            pathA[i] = Clipper2Lib::Point64((int)(a[i].x() * wood_globals::CLIPPER_SCALE), (int)(a[i].y() * wood_globals::CLIPPER_SCALE));
+            pathA[i] = Clipper2Lib::PointD((a[i].x() ), (a[i].y() ));
         }
 
-        for (int i = 0; i < b.size() - 1; i++)
+        for (size_t i = 0; i < b.size() - 1; i++)
         {
-            pathB[i] = Clipper2Lib::Point64((int)(b[i].x() * wood_globals::CLIPPER_SCALE), (int)(b[i].y() * wood_globals::CLIPPER_SCALE));
+            pathB[i] = Clipper2Lib::PointD((b[i].x()), (b[i].y()));
         }
 
-        Clipper2Lib::Paths64 pathA_;
-        Clipper2Lib::Paths64 pathB_;
+        Clipper2Lib::PathsD pathA_;
+        Clipper2Lib::PathsD pathB_;
         pathA_.emplace_back(pathA);
         pathB_.emplace_back(pathB);
 
-        Clipper2Lib::Paths64 C;
+        Clipper2Lib::PathsD C;
 
+
+        int precision = 2;
         if (intersection_type == 0)
-            C = Clipper2Lib::Intersect(pathA_, pathB_, Clipper2Lib::FillRule::NonZero);
+            C = Clipper2Lib::Intersect(pathA_, pathB_, Clipper2Lib::FillRule::NonZero,precision);
         else if (intersection_type == 1)
-            C = Clipper2Lib::Union(pathA_, pathB_, Clipper2Lib::FillRule::NonZero);
+            C = Clipper2Lib::Union(pathA_, pathB_, Clipper2Lib::FillRule::NonZero,precision);
         else if (intersection_type == 2)
-            C = Clipper2Lib::Difference(pathA_, pathB_, Clipper2Lib::FillRule::NonZero);
+            C = Clipper2Lib::Difference(pathA_, pathB_, Clipper2Lib::FillRule::NonZero,precision);
         else if (intersection_type == 3)
-            C = Clipper2Lib::Xor(pathA_, pathB_, Clipper2Lib::FillRule::NonZero);
+            C = Clipper2Lib::Xor(pathA_, pathB_, Clipper2Lib::FillRule::NonZero,precision);
+
 
         if (C.size() > 0)
         {
-
+         
+            //printf("Area_0 %f Area_0 %f\n", Area(C[0]),Area(pathA) );
             // include triangles based on user input
             bool is_not_triangle = C[0].size() != 3;
             if (!is_not_triangle)
                 is_not_triangle = include_triangles;
 
-            if (C[0].size() > 2 && is_not_triangle && std::abs(Area(C[0])) > std::abs(Area(pathA) * wood_globals::CLIPPER_AREA))
-            { // skip triangles and very small polygons
+            if (C[0].size() > 2 && is_not_triangle && std::abs(Area(C[0])) > std::abs(Area(pathA)*0.9 ))//* due to imprecision are can be a little bit bigger
+            { 
+                
                 intersection_result.resize(C[0].size() + 1);
 
-                for (int i = 0; i < C[0].size(); i++)
+                for (size_t i = 0; i < C[0].size(); i++)
                 {
-                    IK::Point_3 p(C[0][i].x / wood_globals::CLIPPER_SCALE, C[0][i].y / wood_globals::CLIPPER_SCALE, 0);
+                    IK::Point_3 p(C[0][i].x  , C[0][i].y , 0);
                     p = p.transform(xform_to_xy_Inv); // Rotate back to 3D
 
                     intersection_result[i] = p;
                 }
 
                 intersection_result[C[0].size()] = intersection_result[0]; // Close
+               
             }
             else
             {
@@ -627,6 +637,8 @@ namespace clipper_util
         /////////////////////////////////////////////////////////////////////////////////////
         // Output
         /////////////////////////////////////////////////////////////////////////////////////
+        //intersection_result = polyline0;
+        //printf("intersection_result.size() %d\n", intersection_result.size());
         return true;
     }
 
@@ -643,28 +655,28 @@ namespace clipper_util
         /////////////////////////////////////////////////////////////////////////////////////
         // Convert to Clipper
         /////////////////////////////////////////////////////////////////////////////////////
-        Clipper2Lib::Path64 pathA(a.size() - 1);
+        Clipper2Lib::PathD pathA(a.size() - 1);
 
-        for (int i = 0; i < a.size() - 1; i++)
+        for (size_t i = 0; i < a.size() - 1; i++)
         {
-            pathA[i] = Clipper2Lib::Point64((int)(a[i].x() * wood_globals::CLIPPER_SCALE), (int)(a[i].y() * wood_globals::CLIPPER_SCALE));
+            pathA[i] = Clipper2Lib::PointD((a[i].x()  ), (a[i].y()  ));
         }
 
-        double offset_ = offset * wood_globals::CLIPPER_SCALE;
-        Clipper2Lib::Paths64 C;
+        double offset_ = offset;
+        Clipper2Lib::PathsD C;
         C.emplace_back(pathA);
-        C = Clipper2Lib::InflatePaths(C, offset_, Clipper2Lib::JoinType::Miter, Clipper2Lib::EndType::Polygon);
+        C = Clipper2Lib::InflatePaths(C, offset_, Clipper2Lib::JoinType::Miter, Clipper2Lib::EndType::Polygon, 2);
 
         if (C.size() > 0)
         {
 
-            if (std::abs(Area(C[0])) > std::abs(Area(pathA) * wood_globals::CLIPPER_AREA)) // C[0].size() > 3 &&
+             if (std::abs(Area(C[0])) > 0.0001) // C[0].size() > 3 && std::abs(Area(pathA) * 0.9)
             {                                                                              // skip triangles and very small polygons
 
                 // Not Sure if rotation is correct, I doubt that cp_id+1 is needed,
-                int cp_id = 0;
+                size_t cp_id = 0;
                 double cp_dist = std::pow(pathA[0].x - C[0][0].x, 2) + std::pow(pathA[0].y - C[0][0].y, 2);
-                for (int i = 1; i < C[0].size(); i++)
+                for (size_t i = 1; i < C[0].size(); i++)
                 {
                     double dist = std::pow(pathA[0].x - C[0][i].x, 2) + std::pow(pathA[0].y - C[0][i].y, 2);
                     if (dist < cp_dist)
@@ -674,14 +686,13 @@ namespace clipper_util
                     }
                 }
                 std::rotate(C[0].begin(), C[0].begin() + cp_id, C[0].end());
-                // std::rotate(C[0].begin(), C[0].begin()+ C[0].size()- cp_id, C[0].end());
 
                 polyline.clear();
                 polyline.resize(C[0].size() + 1);
 
-                for (int i = 0; i < C[0].size(); i++)
+                for (size_t i = 0; i < C[0].size(); i++)
                 {
-                    IK::Point_3 p(C[0][i].x / wood_globals::CLIPPER_SCALE, C[0][i].y / wood_globals::CLIPPER_SCALE, 0);
+                    IK::Point_3 p(C[0][i].x  , C[0][i].y , 0);
                     polyline[i] = p;
                 }
 
@@ -724,28 +735,28 @@ namespace clipper_util
         /////////////////////////////////////////////////////////////////////////////////////
         // Convert to Clipper
         /////////////////////////////////////////////////////////////////////////////////////
-        Clipper2Lib::Path64 pathA(a.size() - 1);
+        Clipper2Lib::PathD pathA(a.size() - 1);
 
-        for (int i = 0; i < a.size() - 1; i++)
+        for (size_t i = 0; i < a.size() - 1; i++)
         {
-            pathA[i] = Clipper2Lib::Point64((int)(a[i].x() * wood_globals::CLIPPER_SCALE), (int)(a[i].y() * wood_globals::CLIPPER_SCALE));
+            pathA[i] = Clipper2Lib::PointD(a[i].x() , a[i].y() );
         }
 
-        double offset_ = offset * wood_globals::CLIPPER_SCALE;
-        Clipper2Lib::Paths64 C;
+        double offset_ = offset ;
+        Clipper2Lib::PathsD C;
         C.emplace_back(pathA);
         C = Clipper2Lib::InflatePaths(C, offset_, Clipper2Lib::JoinType::Miter, Clipper2Lib::EndType::Polygon);
 
         if (C.size() > 0)
         {
 
-            if (std::abs(Area(C[0])) > std::abs(Area(pathA) * wood_globals::CLIPPER_AREA)) // C[0].size() > 3 &&
+             if (std::abs(Area(C[0])) > 0.0001) // C[0].size() > 3 && std::abs(Area(pathA) * 0.9)
             {                                                                              // skip triangles and very small polygons
 
                 // Not Sure if rotation is correct, I doubt that cp_id+1 is needed,
-                int cp_id = 0;
+                size_t cp_id = 0;
                 double cp_dist = std::pow(pathA[0].x - C[0][0].x, 2) + std::pow(pathA[0].y - C[0][0].y, 2);
-                for (int i = 1; i < C[0].size(); i++)
+                for (size_t i = 1; i < C[0].size(); i++)
                 {
                     double dist = std::pow(pathA[0].x - C[0][i].x, 2) + std::pow(pathA[0].y - C[0][i].y, 2);
                     if (dist < cp_dist)
@@ -754,15 +765,15 @@ namespace clipper_util
                         cp_id = i;
                     }
                 }
+
                 std::rotate(C[0].begin(), C[0].begin() + cp_id, C[0].end());
-                // std::rotate(C[0].begin(), C[0].begin()+ C[0].size()- cp_id, C[0].end());
 
                 polyline.clear();
                 polyline.resize(C[0].size() + 1);
 
-                for (int i = 0; i < C[0].size(); i++)
+                for (size_t i = 0; i < C[0].size(); i++)
                 {
-                    IK::Point_3 p(C[0][i].x / wood_globals::CLIPPER_SCALE, C[0][i].y / wood_globals::CLIPPER_SCALE, 0);
+                    IK::Point_3 p(C[0][i].x, C[0][i].y, 0);
                     p = p.transform(xform_to_xy_Inv); // Rotate back to 3D
                     polyline[i] = p;
                 }
@@ -801,7 +812,7 @@ namespace clipper_util
             *it = it->transform(xform_to_xy);
 
         std::vector<IK::Point_3> pts(test_points.size());
-        for (int i = 0; i < test_points.size(); i++)
+        for (size_t i = 0; i < test_points.size(); i++)
         {
             pts[i] = test_points[i];
             pts[i] = xform_to_xy.transform(pts[i]);
@@ -810,21 +821,21 @@ namespace clipper_util
         /////////////////////////////////////////////////////////////////////////////////////
         // Convert to Clipper
         /////////////////////////////////////////////////////////////////////////////////////
-        std::vector<Clipper2Lib::Point64> pathA(a.size() - 1);
-        for (int i = 0; i < a.size() - 1; i++)
+        std::vector<Clipper2Lib::PointD> pathA(a.size() - 1);
+        for (size_t i = 0; i < a.size() - 1; i++)
         {
-            pathA[i] = Clipper2Lib::Point64((int)(a[i].x() * wood_globals::CLIPPER_SCALE), (int)(a[i].y() * wood_globals::CLIPPER_SCALE));
+            pathA[i] = Clipper2Lib::PointD(a[i].x(), a[i].y() );
         }
 
         /////////////////////////////////////////////////////////////////////////////////////
         // Check if point is inside polyline
         /////////////////////////////////////////////////////////////////////////////////////
 
-        int count = 0;
+        size_t count = 0;
 
-        for (int i = 0; i < test_points.size(); i++)
+        for (size_t i = 0; i < test_points.size(); i++)
         {
-            auto p = Clipper2Lib::Point64((int)(pts[i].x() * wood_globals::CLIPPER_SCALE), (int)(pts[i].y() * wood_globals::CLIPPER_SCALE));
+            auto p = Clipper2Lib::PointD(pts[i].x() , pts[i].y() );
 
             Clipper2Lib::PointInPolygonResult result = Clipper2Lib::PointInPolygon(p, pathA);
 
@@ -855,31 +866,30 @@ namespace clipper_util
         CGAL::Aff_transformation_3<IK> xform_to_xy_Inv = xform_to_xy.inverse();
         for (auto it = polyline_copy.begin(); it != polyline_copy.end(); ++it)
             *it = it->transform(xform_to_xy);
-        //  Transform(polyline_copy, xform_to_xy);
 
         /////////////////////////////////////////////////////////////////////////////////////
         // Convert to Clipper
         /////////////////////////////////////////////////////////////////////////////////////
-        Clipper2Lib::Path64 polyline_clipper(polyline_copy.size() - 1);
+        Clipper2Lib::PathD polyline_clipper(polyline_copy.size() - 1);
 
-        for (int i = 0; i < polyline_copy.size() - 1; i++)
-            polyline_clipper[i] = Clipper2Lib::Point64((int)(polyline_copy[i].x() * wood_globals::CLIPPER_SCALE), (int)(polyline_copy[i].y() * wood_globals::CLIPPER_SCALE));
+        for (size_t i = 0; i < polyline_copy.size() - 1; i++)
+            polyline_clipper[i] = Clipper2Lib::PointD(polyline_copy[i].x() , polyline_copy[i].y());
 
         /////////////////////////////////////////////////////////////////////////////////////
         // Get Bounding Box
         /////////////////////////////////////////////////////////////////////////////////////
-        Clipper2Lib::Rect64 br = Clipper2Lib::GetBounds(polyline_clipper);
+        Clipper2Lib::RectD br = Clipper2Lib::GetBounds(polyline_clipper);
 
         /////////////////////////////////////////////////////////////////////////////////////
         // Convert to CGAL and orient back to 3D
         /////////////////////////////////////////////////////////////////////////////////////
         result.reserve(5);
         result = CGAL_Polyline{
-            IK::Point_3(br.left / wood_globals::CLIPPER_SCALE, br.bottom / wood_globals::CLIPPER_SCALE, 0),
-            IK::Point_3(br.right / wood_globals::CLIPPER_SCALE, br.bottom / wood_globals::CLIPPER_SCALE, 0),
-            IK::Point_3(br.right / wood_globals::CLIPPER_SCALE, br.top / wood_globals::CLIPPER_SCALE, 0),
-            IK::Point_3(br.left / wood_globals::CLIPPER_SCALE, br.top / wood_globals::CLIPPER_SCALE, 0)};
-        for (int i = 0; i < 4; i++)
+            IK::Point_3(br.left , br.bottom , 0),
+            IK::Point_3(br.right , br.bottom , 0),
+            IK::Point_3(br.right , br.top, 0),
+            IK::Point_3(br.left, br.top, 0)};
+        for (size_t i = 0; i < 4; i++)
             result[i] = result[i].transform(xform_to_xy_Inv);
         result.emplace_back(result[0]);
 
@@ -896,7 +906,7 @@ namespace clipper_util
         clipper_util::offset_in_3d(polygon_copy, plane, offset_distance);
 
         // interpolate two points in steps
-        for (int i = 0; i < polygon_copy.size() - 1; i++)
+        for (size_t i = 0; i < polygon_copy.size() - 1; i++)
         {
             std::vector<IK::Point_3> division_points;
             int divisions = (int)std::min(100.0, std::sqrt(CGAL::squared_distance(polygon_copy[i], polygon_copy[i + 1])) / division_distance);

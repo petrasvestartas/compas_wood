@@ -16,8 +16,8 @@ namespace opengl_globals
 
     // window
     glm::vec4 background(1.0f, 1.0f, 1.0f, 0.5f);
-    unsigned int SCR_FULL_WIDTH = 3840;
-    unsigned int SCR_FULL_HEIGHT = 2160;
+    unsigned int SCR_FULL_WIDTH = 2560;
+    unsigned int SCR_FULL_HEIGHT = 1600;
 
     //   unsigned int SCR_WIDTH = SCR_FULL_WIDTH / 2 + 500;
     //   unsigned int SCR_HEIGHT = SCR_FULL_HEIGHT - 175;

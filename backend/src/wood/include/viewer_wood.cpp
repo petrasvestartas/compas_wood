@@ -20,6 +20,9 @@ void viewer_wood::add(std::vector<std::vector<CGAL_Polyline>> &polyline_groups, 
     for (auto &polyline_group : polyline_groups)
         for (auto &polyline : polyline_group)
         {
+        if (polyline.size() == 0)
+            continue;
+
             vertices.emplace_back(std::vector<float>());
             vertices.back().reserve(polyline.size() * 3);
             for (auto &point : polyline)
@@ -109,6 +112,8 @@ void viewer_wood::add_areas(std::vector<CGAL_Polyline> &polylines)
 
     for (auto &polyline : polylines)
     {
+        if(polyline.size() == 0) continue; 
+        
         vertices.emplace_back(std::vector<glm::vec3>());
         vertices.back().reserve(polyline.size() * 3);
         for (auto &point : polyline)
@@ -119,22 +124,27 @@ void viewer_wood::add_areas(std::vector<CGAL_Polyline> &polylines)
                 static_cast<float>(point.z() * scale_inv));
         }
     }
+    //std::cout << "Hi<<\n";
     opengl_globals_geometry::meshes.add(vertices, colors::green, false, 0.001f, 1.0f, "mesh_outlines_wood");
     // opengl_globals_geometry::polylines.add(vertices, 5, colors::green, "mesh_outlines_wood");
 }
 
 void viewer_wood::add_areas(std::vector<std::vector<CGAL_Polyline>> &polylines)
 {
-
+    //std::cout << "Hi<<\n";  
     std::vector<CGAL_Polyline> polylines_merged;
     polylines_merged.reserve(polylines.size() * 4);
     for (auto &lists : polylines)
         for (auto &polyline : lists)
         {
+            if (polyline.size() == 0)
+                continue;
             polylines_merged.emplace_back(polyline);
         }
-
+    //std::cout << "Hi<<\n";  
     add_areas(polylines_merged);
+    //std::cout << "Hi<<\n"; 
+    return;
 }
 
 void viewer_wood::add(std::vector<std::array<CGAL_Polyline, 4>> &volume_pairs)
