@@ -608,7 +608,7 @@ namespace clipper_util
             if (!is_not_triangle)
                 is_not_triangle = include_triangles;
 
-            if (C[0].size() > 2 && is_not_triangle && std::abs(Area(C[0])) > std::abs(Area(pathA)*0.9 ))//* due to imprecision are can be a little bit bigger
+            if (C[0].size() > 2 && is_not_triangle && std::abs(Area(C[0])) > std::abs(Area(pathA)*0.05 ))//* due to imprecision are can be a little bit bigger
             { 
                 
                 intersection_result.resize(C[0].size() + 1);
