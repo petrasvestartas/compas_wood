@@ -8,12 +8,12 @@ namespace wood_globals
 {
     // Clipper2 library mostly used in clipper_util
     int64_t CLIPPER_SCALE = 1000000;
-    double CLIPPER_AREA = 0.0001;
+    double CLIPPER_AREA = 0.01; // default is 0.0001 but the tolerance is increased by purpose
 
     // Tolerances for distance search
-    double DISTANCE = 0.01;
-    double DISTANCE_SQUARED = 0.0001;
-    double ANGLE = 0.11;
+    double DISTANCE = 0.1; // default is 0.01 but the tolerance is increased by purpose
+    double DISTANCE_SQUARED = 0.01; // default is 0.0001 but the tolerance is increased by purpose
+    double ANGLE = 0.11; // default is 0.01 but the tolerance is increased by purpose
 
     // File names
     std::string PATH_AND_FILE_FOR_JOINTS = "";
@@ -29,7 +29,8 @@ namespace wood_globals
         0};
 
     int OUTPUT_GEOMETRY_TYPE = 4;
-    bool FORCE_SIDE_TO_SIDE_JOINTS_TO_BE_ROTATED = false;
+    bool FACE_TO_FACE_SIDE_TO_SIDE_JOINTS_ALL_TREATED_AS_ROTATED = false;
+    double FACE_TO_FACE_SIDE_TO_SIDE_JOINTS_DIHEDRAL_ANGLE = 150.0;
     double LIMIT_MIN_JOINT_LENGTH = 0;
 
     std::array<std::string, 7> JOINT_NAMES = {

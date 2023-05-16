@@ -2715,6 +2715,7 @@ namespace wood_test
         std::vector<std::vector<wood_cut::cut_type>> output_types;
         std::vector<std::vector<int>> top_face_triangulation;
 
+
         wood_main::get_connection_zones(
             // input
             input_polyline_pairs,
