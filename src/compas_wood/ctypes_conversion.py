@@ -16,7 +16,10 @@ def list_polylines_coord(polylines):
     for polyline in polylines:
         f.append(len(polyline))
         for point in polyline:
-            v.extend(point)
+            v.append(point[0]*10)
+            v.append(point[1]*10)
+            v.append(point[2]*10)
+            #v.extend(point)
     _f = (c_size_t * len(f))(*f)
     _v = (c_float * len(v))(*v)
     return _f, c_size_t(len(f)), _v, c_size_t(len(v))
@@ -68,51 +71,6 @@ def list_numbers_coord(numbers):
     return (c_float * len(f))(*f), c_size_t(f_s)
 
 
-# import concurrent.futures
-
-
-# def create_polyline(points, polyline):
-#     polyline.points = [Point(*point) for point in points]
-#     return polyline
-
-
-# def coord_polylines_lists_threaded(
-#     groups_f, groups_f_s, out_f, out_f_s, out_v, out_v_s
-# ):
-#     polylines = [
-#         [Polyline([]) for j in range(groups_f[i])] for i in range(groups_f_s.value)
-#     ]
-
-#     a = 0
-#     b = 0
-#     pline_count = 0
-#     num_points = 3
-#     num_groups = groups_f_s.value
-
-#     points = []
-#     futures = []
-#     with concurrent.futures.ThreadPoolExecutor() as executor:
-#         for i in range(0, out_v_s.value, num_points):
-#             points.append([out_v[i], out_v[i + 1], out_v[i + 2]])
-#             num_points_per_polyline = out_f[pline_count]
-
-#             if len(points) == num_points_per_polyline:
-#                 polyline = polylines[a][b]
-#                 futures.append(executor.submit(create_polyline, points, polyline))
-#                 points = []
-#                 num_polylines_per_group = groups_f[a]
-#                 if b == (num_polylines_per_group - 1):
-#                     a += 1
-#                     b = 0
-#                 else:
-#                     b += 1
-#                 pline_count += 1
-
-#     for future in concurrent.futures.as_completed(futures):
-#         future.result()
-
-#     return polylines
-
 
 def coord_polylines_lists(groups_f, groups_f_s, out_f, out_f_s, out_v, out_v_s):
     polylines = [
@@ -127,7 +85,7 @@ def coord_polylines_lists(groups_f, groups_f_s, out_f, out_f_s, out_v, out_v_s):
 
     points = []
     for i in range(0, out_v_s.value, num_points):
-        points.append([out_v[i], out_v[i + 1], out_v[i + 2]])
+        points.append([out_v[i]*0.1, out_v[i + 1]*0.1, out_v[i + 2]*0.1])
         num_points_per_polyline = out_f[pline_count]
 
         if len(points) == num_points_per_polyline:
@@ -147,59 +105,6 @@ def coord_polylines_lists(groups_f, groups_f_s, out_f, out_f_s, out_v, out_v_s):
             pline_count += 1
 
     return polylines
-
-
-# def coord_polylines_lists(groups_f, groups_f_s, out_f, out_f_s, out_v, out_v_s):
-#     # create Python polylines
-#     polylines = [
-#         [Polyline([]) for j in range(groups_f[i])] for i in range(groups_f_s.value)
-#     ]
-
-#     """
-#     polylines = [[None] * groups_f[i] for i in range(groups_f_s.value)]
-
-#     face_count = 0
-#     for i in range(groups_f_s.value):
-#         for j in range(groups_f[i]):
-#             polylines[i][j] = Polyline([])  # Polyline(out_f[face_count])
-#             face_count += 1
-#     """
-#     # fill polylines with points
-#     # a = 0
-#     # b = 0
-#     # pline_count = 0
-
-#     # for i in range(0, out_v_s.value, 3):
-#     #     polylines[a][b].points.append(Point(out_v[i], out_v[i + 1], out_v[i + 2]))
-
-#     #     if len(polylines[a][b]) == out_f[pline_count]:
-#     #         if b == (groups_f[a] - 1):
-#     #             a += 1
-#     #             b = 0
-#     #         else:
-#     #             b += 1
-#     #         pline_count += 1
-#     a = 0
-#     b = 0
-#     pline_count = 0
-#     num_points = 3
-#     num_groups = groups_f_s.value
-
-#     for i in range(0, out_v_s.value, num_points):
-#         polyline = polylines[a][b]
-#         polyline.points.append(Point(out_v[i], out_v[i + 1], out_v[i + 2]))
-
-#         num_points_per_polyline = out_f[pline_count]
-#         if len(polyline) == num_points_per_polyline:
-#             num_polylines_per_group = groups_f[a]
-#             if b == (num_polylines_per_group - 1):
-#                 a += 1
-#                 b = 0
-#             else:
-#                 b += 1
-#             pline_count += 1
-#     # output
-#     return polylines
 
 
 def coord_numbers_lists(out_f, out_f_s, out_v, out_v_s):
