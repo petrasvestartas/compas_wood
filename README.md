@@ -110,7 +110,8 @@ https://user-images.githubusercontent.com/18013985/147587822-cfb43c96-4a81-4b89-
 ![Folding](https://github.com/petrasvestartas/compas_wood/assets/18013985/aa9c8959-5a3d-472c-b96a-0f21dae89284)
 ![Roof](https://github.com/petrasvestartas/compas_wood/assets/18013985/f0a7f272-96e0-4e2b-95bc-dd527c0a83ca)
 ![slab_0](https://github.com/petrasvestartas/compas_wood/assets/18013985/cfbc30b6-d587-4fad-aeea-c1e7f6b0fca0)
-![slab_13](https://github.com/petrasvestartas/compas_wood/assets/18013985/78d24201-2603-4f3b-89dd-3f10d91abae6)![slab_1](https://github.com/petrasvestartas/compas_wood/assets/18013985/54998c08-7b7b-4380-8bc0-2e3bc185717b)
+
+![slab_1](https://github.com/petrasvestartas/compas_wood/assets/18013985/54998c08-7b7b-4380-8bc0-2e3bc185717b)
 ![slab_5](https://github.com/petrasvestartas/compas_wood/assets/18013985/e1ea09f6-6f16-499a-ad1f-5c74b1d59959)
 
 ![slab_8](https://github.com/petrasvestartas/compas_wood/assets/18013985/8614b367-2f61-41a1-85e8-b121a67b9fc1)
