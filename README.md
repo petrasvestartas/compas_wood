@@ -119,7 +119,6 @@ https://user-images.githubusercontent.com/18013985/147587822-cfb43c96-4a81-4b89-
 ![slab_8](https://github.com/petrasvestartas/compas_wood/assets/18013985/8614b367-2f61-41a1-85e8-b121a67b9fc1)
 ![slab_7](https://github.com/petrasvestartas/compas_wood/assets/18013985/14aad553-2cac-44ff-9289-ac4485bb5071)
 ![slab_9](https://github.com/petrasvestartas/compas_wood/assets/18013985/7a2c0727-7394-4930-b61f-135ba0d9fa6e)
-![slab_21](https://github.com/petrasvestartas/compas_wood/assets/18013985/2aceea16-1e97-447e-8fa7-228b22e1bb40)
 ![slab_20](https://github.com/petrasvestartas/compas_wood/assets/18013985/b7a16996-0e75-49ef-9309-4108ca5114cd)
 
 
