@@ -107,8 +107,10 @@ https://user-images.githubusercontent.com/18013985/147587822-cfb43c96-4a81-4b89-
 ## Rhino Implementation
 
 ![Test](https://github.com/petrasvestartas/compas_wood/assets/18013985/a4f9ee09-acdf-4f9d-ad68-daf1c988ee53)
+![Roof3](https://github.com/petrasvestartas/compas_wood/assets/18013985/4afc55b4-7d17-46ef-ba03-a3f1ade80fa3)
+
 ![Folding](https://github.com/petrasvestartas/compas_wood/assets/18013985/aa9c8959-5a3d-472c-b96a-0f21dae89284)
-![Roof](https://github.com/petrasvestartas/compas_wood/assets/18013985/f0a7f272-96e0-4e2b-95bc-dd527c0a83ca)
+
 ![slab_0](https://github.com/petrasvestartas/compas_wood/assets/18013985/cfbc30b6-d587-4fad-aeea-c1e7f6b0fca0)
 
 ![slab_1](https://github.com/petrasvestartas/compas_wood/assets/18013985/54998c08-7b7b-4380-8bc0-2e3bc185717b)
