@@ -104,6 +104,26 @@ https://user-images.githubusercontent.com/18013985/147587822-cfb43c96-4a81-4b89-
 ![type_plates_name_top_to_side_and_side_to_side_outofplane_annen_grid_small](https://user-images.githubusercontent.com/18013985/221280143-af0952b8-24df-48b1-b242-e56a5bea5ecf.png)
 
 
+## Rhino Implementation
+
+![Test](https://github.com/petrasvestartas/compas_wood/assets/18013985/a4f9ee09-acdf-4f9d-ad68-daf1c988ee53)
+![Roof3](https://github.com/petrasvestartas/compas_wood/assets/18013985/4afc55b4-7d17-46ef-ba03-a3f1ade80fa3)
+
+![Folding](https://github.com/petrasvestartas/compas_wood/assets/18013985/aa9c8959-5a3d-472c-b96a-0f21dae89284)
+
+![slab_1](https://github.com/petrasvestartas/compas_wood/assets/18013985/54998c08-7b7b-4380-8bc0-2e3bc185717b)
+![slab_5](https://github.com/petrasvestartas/compas_wood/assets/18013985/e1ea09f6-6f16-499a-ad1f-5c74b1d59959)
+
+![slab_8](https://github.com/petrasvestartas/compas_wood/assets/18013985/8614b367-2f61-41a1-85e8-b121a67b9fc1)
+![slab_7](https://github.com/petrasvestartas/compas_wood/assets/18013985/14aad553-2cac-44ff-9289-ac4485bb5071)
+![slab_9](https://github.com/petrasvestartas/compas_wood/assets/18013985/7a2c0727-7394-4930-b61f-135ba0d9fa6e)
+![slab_22](https://github.com/petrasvestartas/compas_wood/assets/18013985/d7998ed3-4078-4ebd-b87d-14ffc0e86b04)
+
+
+
+
+
+
 
 
 
