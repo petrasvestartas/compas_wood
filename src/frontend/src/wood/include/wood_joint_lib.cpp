@@ -4044,7 +4044,8 @@ namespace wood_joint_lib
             {p[0], p[3], p[3 + 12], p[0 + 12], p[0]}, // wood_cut::mill BotSide1
 
            {IK::Point_3(0.0, 0.0, -1.0), IK::Point_3(0.0, 0.0, 1.0)},     // wood_cut::drill line
-           {IK::Point_3(0, 1, 1), IK::Point_3(0, -1, 1)},     // wood_cut::drill line (smaller element)
+           {IK::Point_3(-1.0, 0, -0.55), IK::Point_3(1, 0, -0.55)},
+          //{IK::Point_3(0, 1, 1), IK::Point_3(0, -1, 1)},     // wood_cut::drill line (smaller element)
 
         };
 
