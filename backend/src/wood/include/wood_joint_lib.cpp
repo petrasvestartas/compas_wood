@@ -3453,6 +3453,200 @@ namespace wood_joint_lib
 
         IK::Vector_3 v0 = ((p[0] - p[1]) * (1 / (a * 2))) * (0.5 - a);
 
+        int n = 5;
+
+        joint.f[0].reserve(n * 2);
+        // Construct polylines from points
+        joint.f[0] = {
+
+            {p[0] + v0, p[1] - v0, p[2] - v0, p[3] + v0, p[0] + v0}, // center
+
+            {p[1] - v0, p[0] + v0, p[0 + 8] + v0, p[1 + 8] - v0, p[1] - v0}, // wood_cut::slice TopSide0
+            {p[3] + v0, p[2] - v0, p[2 + 8] - v0, p[3 + 8] + v0, p[3] + v0}, // wood_cut::slice TopSide1
+
+            {p[2], p[1], p[1 + 12], p[2 + 12], p[2]}, // wood_cut::mill BotSide0
+            {p[0], p[3], p[3 + 12], p[0 + 12], p[0]}, // wood_cut::mill BotSide1
+
+            // {IK::Point_3(0.3, 0.041421, -0.928477), IK::Point_3(0.041421, 0.3, 0.928477)},     // wood_cut::drill line
+            // {IK::Point_3(-0.3, -0.041421, -0.928477), IK::Point_3(-0.041421, -0.3, 0.928477)}, // wood_cut::drill line
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////////////////////////////
+        // extend rectangles to both sides to compensate for irregularities
+        ///////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        // to sides
+        
+        cgal_polyline_util::extend_equally(joint.f[0][3], 0, 0.15);
+        cgal_polyline_util::extend_equally(joint.f[0][3], 2, 0.15);
+        cgal_polyline_util::extend_equally(joint.f[0][4], 0, 0.15);
+        cgal_polyline_util::extend_equally(joint.f[0][4], 2, 0.15);
+
+        // vertically
+        cgal_polyline_util::extend_equally(joint.f[0][3], 1, 0.6);
+        cgal_polyline_util::extend_equally(joint.f[0][3], 3, 0.6);
+        cgal_polyline_util::extend_equally(joint.f[0][4], 1, 0.6);
+        cgal_polyline_util::extend_equally(joint.f[0][4], 3, 0.6);
+
+
+        // Offset and
+        // flip polylines
+        joint.f[1].reserve(n * 2);
+        joint.m[0].reserve(n * 2);
+        joint.m[1].reserve(n * 2);
+
+        auto xform = internal::rotation_in_xy_plane(IK::Vector_3(0, 1, 0), IK::Vector_3(1, 0, 0), IK::Vector_3(0, 0, -1));
+
+        double lenghts[5] = {0.5, 0.4, 0.4, 0.4, 0.4};
+        for (int i = 0; i < n; i++)
+        {
+            joint.f[1].emplace_back(joint.f[0][i]);
+
+            // offset distance
+            IK::Vector_3 cross = CGAL::cross_product(joint.f[1][i][1] - joint.f[1][i][0], joint.f[1][i][1] - joint.f[1][i][2]);
+            internal::unitize(cross);
+
+            // offset| skip wood_cut::drill lines
+            if (joint.f[1][i].size() )//> 2
+                for (int j = 0; j < joint.f[1][i].size(); j++)
+                    joint.f[1][i][j] += cross * lenghts[i];
+
+            joint.m[0].emplace_back(joint.f[0][i]);
+            for (auto it = joint.m[0][i].begin(); it != joint.m[0][i].end(); ++it)
+                *it = it->transform(xform);
+
+            joint.m[1].emplace_back(joint.f[1][i]);
+            for (auto it = joint.m[1][i].begin(); it != joint.m[1][i].end(); ++it)
+                *it = it->transform(xform);
+        }
+
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // duplicate two times
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        auto f0 = joint.f[0];
+        auto f1 = joint.f[1];
+        auto m0 = joint.m[0];
+        auto m1 = joint.m[1];
+        joint.f[0].clear();
+        joint.f[1].clear();
+        joint.m[0].clear();
+        joint.m[1].clear();
+
+        for (int i = 0; i < n; i++)
+        {
+            joint.f[0].emplace_back(f0[i]);
+            joint.f[0].emplace_back(f0[i]);
+
+            joint.f[1].emplace_back(f1[i]);
+            joint.f[1].emplace_back(f1[i]);
+
+            joint.m[0].emplace_back(m0[i]);
+            joint.m[0].emplace_back(m0[i]);
+
+            joint.m[1].emplace_back(m1[i]);
+            joint.m[1].emplace_back(m1[i]);
+        }
+
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // take sides of id = 1*2 and id = 2*2
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        for (int i = 0; i < 2; i++)
+        {
+            int id = (i + 1) * 2;
+            CGAL_Polyline side00 = {joint.f[0][id][0], joint.f[0][id][1], joint.f[1][id][1], joint.f[1][id][0], joint.f[0][id][0]};
+            CGAL_Polyline side01 = {joint.f[0][id][3], joint.f[0][id][2], joint.f[1][id][2], joint.f[1][id][3], joint.f[0][id][3]};
+            joint.f[0][id] = side00;
+            joint.f[1][id] = side01;
+            joint.f[0][id + 1] = side00;
+            joint.f[1][id + 1] = side01;
+
+            side00 = {joint.m[0][id][0], joint.m[0][id][1], joint.m[1][id][1], joint.m[1][id][0], joint.m[0][id][0]};
+            side01 = {joint.m[0][id][3], joint.m[0][id][2], joint.m[1][id][2], joint.m[1][id][3], joint.m[0][id][3]};
+            joint.m[0][id] = side00;
+            joint.m[1][id] = side01;
+            joint.m[0][id + 1] = side00;
+            joint.m[1][id + 1] = side01;
+        }
+
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // cut types
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        joint.m_boolean_type = {
+            wood_cut::mill_project,
+            wood_cut::mill_project,
+
+            wood_cut::slice_projectsheer,
+            wood_cut::slice_projectsheer,
+            wood_cut::slice_projectsheer,
+            wood_cut::slice_projectsheer,
+
+            wood_cut::mill_project,
+            wood_cut::mill_project,
+            wood_cut::mill_project,
+            wood_cut::mill_project,
+
+            // wood_cut::drill,
+            // wood_cut::drill,
+            // wood_cut::drill,
+            // wood_cut::drill,
+        };
+        joint.f_boolean_type = {
+            wood_cut::mill_project,
+            wood_cut::mill_project,
+
+            wood_cut::slice_projectsheer,
+            wood_cut::slice_projectsheer,
+            wood_cut::slice_projectsheer,
+            wood_cut::slice_projectsheer,
+
+            wood_cut::mill_project,
+            wood_cut::mill_project,
+            wood_cut::mill_project,
+            wood_cut::mill_project,
+
+            // wood_cut::drill,
+            // wood_cut::drill,
+            // wood_cut::drill,
+            // wood_cut::drill,
+
+        };
+
+        // joint.m_boolean_type = {};
+        // joint.m[0]= {};
+        // joint.m[1]= {};
+
+        // joint.f_boolean_type = {};
+        // joint.f[0]= {};
+        // joint.f[1]= {};
+    }
+
+
+    void cr_c_ip_3(wood::joint &joint)
+    {
+        joint.name = __func__;
+        // double shift = 0.5;
+
+        double s = std::max(std::min(joint.shift, 1.0), 0.0);
+        s = 0.05 + (s - 0.0) * (0.4 - 0.05) / (1.0 - 0.0);
+
+        double a = 0.5 - s;
+        double b = 0.5;
+        double c = 2 * (b - a);
+        double z = 0.5;
+
+        IK::Point_3 p[16] = {
+            IK::Point_3(a, -a, 0), IK::Point_3(-a, -a, 0), IK::Point_3(-a, a, 0), IK::Point_3(a, a, 0),                                 // center
+            IK::Point_3(a + c, -a - c, 0), IK::Point_3(-a - c, -a - c, 0), IK::Point_3(-a - c, a + c, 0), IK::Point_3(a + c, a + c, 0), // CenterOffset
+            IK::Point_3(b, -b, z), IK::Point_3(-b, -b, z), IK::Point_3(-b, b, z), IK::Point_3(b, b, z),                                 // Top
+            IK::Point_3(b, -b, -z), IK::Point_3(-b, -b, -z), IK::Point_3(-b, b, -z), IK::Point_3(b, b, -z)                              // Bottom
+        };
+
+        IK::Vector_3 v0 = ((p[0] - p[1]) * (1 / (a * 2))) * (0.5 - a);
+
         int n = 7;
 
         joint.f[0].reserve(n * 2);
@@ -3589,8 +3783,197 @@ namespace wood_joint_lib
             wood_cut::mill_project,
             wood_cut::mill_project,
 
-            // wood_cut::drill,
-            // wood_cut::drill,
+            wood_cut::drill,
+            wood_cut::drill,
+            wood_cut::drill,
+            wood_cut::drill,
+        };
+        joint.f_boolean_type = {
+            wood_cut::mill_project,
+            wood_cut::mill_project,
+
+            wood_cut::slice_projectsheer,
+            wood_cut::slice_projectsheer,
+            wood_cut::slice_projectsheer,
+            wood_cut::slice_projectsheer,
+
+            wood_cut::mill_project,
+            wood_cut::mill_project,
+            wood_cut::mill_project,
+            wood_cut::mill_project,
+
+            wood_cut::drill,
+            wood_cut::drill,
+            wood_cut::drill,
+            wood_cut::drill,
+
+        };
+    }
+
+
+    void cr_c_ip_4(wood::joint &joint)
+    {
+        joint.name = __func__;
+        // double shift = 0.5;
+
+        double s = std::max(std::min(joint.shift, 1.0), 0.0);
+        s = 0.05 + (s - 0.0) * (0.4 - 0.05) / (1.0 - 0.0);
+
+        double a = 0.5 - s;
+        double b = 0.5;
+        double c = 2 * (b - a);
+        double z = 0.5;
+
+        IK::Point_3 p[16] = {
+            IK::Point_3(a, -a, 0), IK::Point_3(-a, -a, 0), IK::Point_3(-a, a, 0), IK::Point_3(a, a, 0),                                 // center
+            IK::Point_3(a + c, -a - c, 0), IK::Point_3(-a - c, -a - c, 0), IK::Point_3(-a - c, a + c, 0), IK::Point_3(a + c, a + c, 0), // CenterOffset
+            IK::Point_3(b, -b, z), IK::Point_3(-b, -b, z), IK::Point_3(-b, b, z), IK::Point_3(b, b, z),                                 // Top
+            IK::Point_3(b, -b, -z), IK::Point_3(-b, -b, -z), IK::Point_3(-b, b, -z), IK::Point_3(b, b, -z)                              // Bottom
+        };
+
+        IK::Vector_3 v0 = ((p[0] - p[1]) * (1 / (a * 2))) * (0.5 - a);
+
+        int n = 6;
+
+        joint.f[0].reserve(n * 2);
+        // Construct polylines from points
+        joint.f[0] = {
+
+            {p[0] + v0, p[1] - v0, p[2] - v0, p[3] + v0, p[0] + v0}, // center
+
+            {p[1] - v0, p[0] + v0, p[0 + 8] + v0, p[1 + 8] - v0, p[1] - v0}, // wood_cut::slice TopSide0
+            {p[3] + v0, p[2] - v0, p[2 + 8] - v0, p[3 + 8] + v0, p[3] + v0}, // wood_cut::slice TopSide1
+
+            {p[2], p[1], p[1 + 12], p[2 + 12], p[2]}, // wood_cut::mill BotSide0
+            {p[0], p[3], p[3 + 12], p[0 + 12], p[0]}, // wood_cut::mill BotSide1
+
+           {IK::Point_3(0.0, 0.0, -1.0), IK::Point_3(0.0, 0.0, 1.0)},     // wood_cut::drill line
+
+
+            // {IK::Point_3(0.3, 0.041421, -0.928477), IK::Point_3(0.041421, 0.3, 0.928477)},     // wood_cut::drill line
+            // {IK::Point_3(-0.3, -0.041421, -0.928477), IK::Point_3(-0.041421, -0.3, 0.928477)}, // wood_cut::drill line
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////////////////////////////
+        // extend rectangles to both sides to compensate for irregularities
+        ///////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        // to sides
+        
+        cgal_polyline_util::extend_equally(joint.f[0][3], 0, 0.15);
+        cgal_polyline_util::extend_equally(joint.f[0][3], 2, 0.15);
+        cgal_polyline_util::extend_equally(joint.f[0][4], 0, 0.15);
+        cgal_polyline_util::extend_equally(joint.f[0][4], 2, 0.15);
+
+        // vertically
+        cgal_polyline_util::extend_equally(joint.f[0][3], 1, 0.6);
+        cgal_polyline_util::extend_equally(joint.f[0][3], 3, 0.6);
+        cgal_polyline_util::extend_equally(joint.f[0][4], 1, 0.6);
+        cgal_polyline_util::extend_equally(joint.f[0][4], 3, 0.6);
+
+
+        // Offset and
+        // flip polylines
+        joint.f[1].reserve(n * 2);
+        joint.m[0].reserve(n * 2);
+        joint.m[1].reserve(n * 2);
+
+        auto xform = internal::rotation_in_xy_plane(IK::Vector_3(0, 1, 0), IK::Vector_3(1, 0, 0), IK::Vector_3(0, 0, -1));
+
+        double lenghts[5] = {0.5, 0.4, 0.4, 0.4, 0.4};
+        for (int i = 0; i < n; i++)
+        {
+            joint.f[1].emplace_back(joint.f[0][i]);
+
+            // offset distance
+            IK::Vector_3 cross = CGAL::cross_product(joint.f[1][i][1] - joint.f[1][i][0], joint.f[1][i][1] - joint.f[1][i][2]);
+            internal::unitize(cross);
+
+            // offset| skip wood_cut::drill lines
+            if (joint.f[1][i].size() > 1)//
+                for (int j = 0; j < joint.f[1][i].size(); j++)
+                    joint.f[1][i][j] += cross * lenghts[i];
+
+            joint.m[0].emplace_back(joint.f[0][i]);
+            for (auto it = joint.m[0][i].begin(); it != joint.m[0][i].end(); ++it)
+                *it = it->transform(xform);
+
+            joint.m[1].emplace_back(joint.f[1][i]);
+            for (auto it = joint.m[1][i].begin(); it != joint.m[1][i].end(); ++it)
+                *it = it->transform(xform);
+        }
+
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // duplicate two times
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        auto f0 = joint.f[0];
+        auto f1 = joint.f[1];
+        auto m0 = joint.m[0];
+        auto m1 = joint.m[1];
+        joint.f[0].clear();
+        joint.f[1].clear();
+        joint.m[0].clear();
+        joint.m[1].clear();
+
+        for (int i = 0; i < n; i++)
+        {
+            joint.f[0].emplace_back(f0[i]);
+            joint.f[0].emplace_back(f0[i]);
+
+            joint.f[1].emplace_back(f1[i]);
+            joint.f[1].emplace_back(f1[i]);
+
+            joint.m[0].emplace_back(m0[i]);
+            joint.m[0].emplace_back(m0[i]);
+
+            joint.m[1].emplace_back(m1[i]);
+            joint.m[1].emplace_back(m1[i]);
+        }
+
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // take sides of id = 1*2 and id = 2*2
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        for (int i = 0; i < 2; i++)
+        {
+            int id = (i + 1) * 2;
+            CGAL_Polyline side00 = {joint.f[0][id][0], joint.f[0][id][1], joint.f[1][id][1], joint.f[1][id][0], joint.f[0][id][0]};
+            CGAL_Polyline side01 = {joint.f[0][id][3], joint.f[0][id][2], joint.f[1][id][2], joint.f[1][id][3], joint.f[0][id][3]};
+            joint.f[0][id] = side00;
+            joint.f[1][id] = side01;
+            joint.f[0][id + 1] = side00;
+            joint.f[1][id + 1] = side01;
+
+            side00 = {joint.m[0][id][0], joint.m[0][id][1], joint.m[1][id][1], joint.m[1][id][0], joint.m[0][id][0]};
+            side01 = {joint.m[0][id][3], joint.m[0][id][2], joint.m[1][id][2], joint.m[1][id][3], joint.m[0][id][3]};
+            joint.m[0][id] = side00;
+            joint.m[1][id] = side01;
+            joint.m[0][id + 1] = side00;
+            joint.m[1][id + 1] = side01;
+        }
+
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // cut types
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        joint.m_boolean_type = {
+            wood_cut::mill_project,
+            wood_cut::mill_project,
+
+            wood_cut::slice_projectsheer,
+            wood_cut::slice_projectsheer,
+            wood_cut::slice_projectsheer,
+            wood_cut::slice_projectsheer,
+
+            wood_cut::mill_project,
+            wood_cut::mill_project,
+            wood_cut::mill_project,
+            wood_cut::mill_project,
+
+            wood_cut::drill,
+            wood_cut::drill,
             // wood_cut::drill,
             // wood_cut::drill,
         };
@@ -3608,14 +3991,214 @@ namespace wood_joint_lib
             wood_cut::mill_project,
             wood_cut::mill_project,
 
-            // wood_cut::drill,
-            // wood_cut::drill,
+            wood_cut::drill,
+            wood_cut::drill,
             // wood_cut::drill,
             // wood_cut::drill,
 
         };
+
+        // joint.m_boolean_type = {};
+        // joint.m[0]= {};
+        // joint.m[1]= {};
+
+        // joint.f_boolean_type = {};
+        // joint.f[0]= {};
+        // joint.f[1]= {};
     }
 
+    void cr_c_ip_5(wood::joint &joint)
+    {
+        joint.name = __func__;
+        // double shift = 0.5;
+
+        double s = std::max(std::min(joint.shift, 1.0), 0.0);
+        s = 0.05 + (s - 0.0) * (0.4 - 0.05) / (1.0 - 0.0);
+
+        double a = 0.5 - s;
+        double b = 0.5;
+        double c = 2 * (b - a);
+        double z = 0.5;
+
+        IK::Point_3 p[16] = {
+            IK::Point_3(a, -a, 0), IK::Point_3(-a, -a, 0), IK::Point_3(-a, a, 0), IK::Point_3(a, a, 0),                                 // center
+            IK::Point_3(a + c, -a - c, 0), IK::Point_3(-a - c, -a - c, 0), IK::Point_3(-a - c, a + c, 0), IK::Point_3(a + c, a + c, 0), // CenterOffset
+            IK::Point_3(b, -b, z), IK::Point_3(-b, -b, z), IK::Point_3(-b, b, z), IK::Point_3(b, b, z),                                 // Top
+            IK::Point_3(b, -b, -z), IK::Point_3(-b, -b, -z), IK::Point_3(-b, b, -z), IK::Point_3(b, b, -z)                              // Bottom
+        };
+
+        IK::Vector_3 v0 = ((p[0] - p[1]) * (1 / (a * 2))) * (0.5 - a);
+
+        int n = 7;
+
+        joint.f[0].reserve(n * 2);
+        // Construct polylines from points
+        joint.f[0] = {
+
+            {p[0] + v0, p[1] - v0, p[2] - v0, p[3] + v0, p[0] + v0}, // center
+
+            {p[1] - v0, p[0] + v0, p[0 + 8] + v0, p[1 + 8] - v0, p[1] - v0}, // wood_cut::slice TopSide0
+            {p[3] + v0, p[2] - v0, p[2 + 8] - v0, p[3 + 8] + v0, p[3] + v0}, // wood_cut::slice TopSide1
+
+            {p[2], p[1], p[1 + 12], p[2 + 12], p[2]}, // wood_cut::mill BotSide0
+            {p[0], p[3], p[3 + 12], p[0 + 12], p[0]}, // wood_cut::mill BotSide1
+
+           {IK::Point_3(0.0, 0.0, -1.0), IK::Point_3(0.0, 0.0, 1.0)},     // wood_cut::drill line
+           {IK::Point_3(0, 1, 1), IK::Point_3(0, -1, 1)},     // wood_cut::drill line (smaller element)
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////////////////////////////
+        // extend rectangles to both sides to compensate for irregularities
+        ///////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        // to sides
+        
+        cgal_polyline_util::extend_equally(joint.f[0][3], 0, 0.15);
+        cgal_polyline_util::extend_equally(joint.f[0][3], 2, 0.15);
+        cgal_polyline_util::extend_equally(joint.f[0][4], 0, 0.15);
+        cgal_polyline_util::extend_equally(joint.f[0][4], 2, 0.15);
+
+        // vertically
+        cgal_polyline_util::extend_equally(joint.f[0][3], 1, 0.6);
+        cgal_polyline_util::extend_equally(joint.f[0][3], 3, 0.6);
+        cgal_polyline_util::extend_equally(joint.f[0][4], 1, 0.6);
+        cgal_polyline_util::extend_equally(joint.f[0][4], 3, 0.6);
+
+
+        // Offset and
+        // flip polylines
+        joint.f[1].reserve(n * 2);
+        joint.m[0].reserve(n * 2);
+        joint.m[1].reserve(n * 2);
+
+        auto xform = internal::rotation_in_xy_plane(IK::Vector_3(0, 1, 0), IK::Vector_3(1, 0, 0), IK::Vector_3(0, 0, -1));
+
+        double lenghts[5] = {0.5, 0.4, 0.4, 0.4, 0.4};
+        for (int i = 0; i < n; i++)
+        {
+            joint.f[1].emplace_back(joint.f[0][i]);
+
+            // offset distance
+            IK::Vector_3 cross = CGAL::cross_product(joint.f[1][i][1] - joint.f[1][i][0], joint.f[1][i][1] - joint.f[1][i][2]);
+            internal::unitize(cross);
+
+            // offset| skip wood_cut::drill lines
+            if (joint.f[1][i].size() > 2)//
+                for (int j = 0; j < joint.f[1][i].size(); j++)
+                    joint.f[1][i][j] += cross * lenghts[i];
+
+            joint.m[0].emplace_back(joint.f[0][i]);
+            for (auto it = joint.m[0][i].begin(); it != joint.m[0][i].end(); ++it)
+                *it = it->transform(xform);
+
+            joint.m[1].emplace_back(joint.f[1][i]);
+            for (auto it = joint.m[1][i].begin(); it != joint.m[1][i].end(); ++it)
+                *it = it->transform(xform);
+        }
+
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // duplicate two times
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        auto f0 = joint.f[0];
+        auto f1 = joint.f[1];
+        auto m0 = joint.m[0];
+        auto m1 = joint.m[1];
+        joint.f[0].clear();
+        joint.f[1].clear();
+        joint.m[0].clear();
+        joint.m[1].clear();
+
+        for (int i = 0; i < n; i++)
+        {
+            joint.f[0].emplace_back(f0[i]);
+            joint.f[0].emplace_back(f0[i]);
+
+            joint.f[1].emplace_back(f1[i]);
+            joint.f[1].emplace_back(f1[i]);
+
+            joint.m[0].emplace_back(m0[i]);
+            joint.m[0].emplace_back(m0[i]);
+
+            joint.m[1].emplace_back(m1[i]);
+            joint.m[1].emplace_back(m1[i]);
+        }
+
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // take sides of id = 1*2 and id = 2*2
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        for (int i = 0; i < 2; i++)
+        {
+            int id = (i + 1) * 2;
+            CGAL_Polyline side00 = {joint.f[0][id][0], joint.f[0][id][1], joint.f[1][id][1], joint.f[1][id][0], joint.f[0][id][0]};
+            CGAL_Polyline side01 = {joint.f[0][id][3], joint.f[0][id][2], joint.f[1][id][2], joint.f[1][id][3], joint.f[0][id][3]};
+            joint.f[0][id] = side00;
+            joint.f[1][id] = side01;
+            joint.f[0][id + 1] = side00;
+            joint.f[1][id + 1] = side01;
+
+            side00 = {joint.m[0][id][0], joint.m[0][id][1], joint.m[1][id][1], joint.m[1][id][0], joint.m[0][id][0]};
+            side01 = {joint.m[0][id][3], joint.m[0][id][2], joint.m[1][id][2], joint.m[1][id][3], joint.m[0][id][3]};
+            joint.m[0][id] = side00;
+            joint.m[1][id] = side01;
+            joint.m[0][id + 1] = side00;
+            joint.m[1][id + 1] = side01;
+        }
+
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // cut types
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        joint.m_boolean_type = {
+            wood_cut::mill_project,
+            wood_cut::mill_project,
+
+            wood_cut::slice_projectsheer,
+            wood_cut::slice_projectsheer,
+            wood_cut::slice_projectsheer,
+            wood_cut::slice_projectsheer,
+
+            wood_cut::mill_project,
+            wood_cut::mill_project,
+            wood_cut::mill_project,
+            wood_cut::mill_project,
+
+            wood_cut::drill,
+            wood_cut::drill,
+            wood_cut::drill,
+            wood_cut::drill,
+        };
+        joint.f_boolean_type = {
+            wood_cut::mill_project,
+            wood_cut::mill_project,
+
+            wood_cut::slice_projectsheer,
+            wood_cut::slice_projectsheer,
+            wood_cut::slice_projectsheer,
+            wood_cut::slice_projectsheer,
+
+            wood_cut::mill_project,
+            wood_cut::mill_project,
+            wood_cut::mill_project,
+            wood_cut::mill_project,
+
+            wood_cut::drill,
+            wood_cut::drill,
+            wood_cut::drill,
+            wood_cut::drill,
+
+        };
+
+        // joint.m_boolean_type = {};
+        // joint.m[0]= {};
+        // joint.m[1]= {};
+
+        // joint.f_boolean_type = {};
+        // joint.f[0]= {};
+        // joint.f[1]= {};
+    }
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Top-to-top edge plane joints 40-49
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -4010,6 +4593,9 @@ namespace wood_joint_lib
         joint_names[30] = "cr_c_ip_0";
         joint_names[31] = "cr_c_ip_1";
         joint_names[32] = "cr_c_ip_2";
+        joint_names[33] = "cr_c_ip_2";
+        joint_names[34] = "cr_c_ip_2";
+        joint_names[35] = "cr_c_ip_2";
         joint_names[38] = "side_removal";
         joint_names[39] = "cr_c_ip_9";
         joint_names[40] = "tt_e_p_0";
@@ -4320,6 +4906,15 @@ namespace wood_joint_lib
                     break;
                 case (32):
                     cr_c_ip_2(jo);
+                    break;
+                case (33):
+                    cr_c_ip_3(jo);
+                    break;
+                case (34):
+                    cr_c_ip_4(jo);
+                    break;
+                case (35):
+                    cr_c_ip_5(jo);
                     break;
                 case (38):
                     side_removal(jo, elements);
