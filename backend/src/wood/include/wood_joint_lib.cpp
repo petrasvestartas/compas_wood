@@ -3467,30 +3467,8 @@ namespace wood_joint_lib
             {p[2], p[1], p[1 + 12], p[2 + 12], p[2]}, // wood_cut::mill BotSide0
             {p[0], p[3], p[3 + 12], p[0 + 12], p[0]}, // wood_cut::mill BotSide1
 
-            //{ IK::Point_3(0.091902, 0.433324, -0.928477) ,IK::Point_3(-0.433324, -0.091902, 0.928477)}, //wood_cut::drill line
-            //{ IK::Point_3(-0.091902, -0.433324, -0.928477) ,IK::Point_3(0.433324, 0.091902, 0.928477)}, //wood_cut::drill line
-            //           { IK::Point_3(0.091421, -0.25, -0.928477) ,IK::Point_3(0.25, -0.091421, 0.928477)}, //wood_cut::drill line
-            //{ IK::Point_3(-0.091421, 0.25, -0.928477) ,IK::Point_3(-0.25, 0.091421, 0.928477)}, //wood_cut::drill line
-            //{ IK::Point_3(0.25, 0.091421, -0.928477) ,IK::Point_3(0.091421, 0.25, 0.928477)}, //wood_cut::drill line
-            //{ IK::Point_3(-0.25, -0.091421, -0.928477) ,IK::Point_3(-0.091421, -0.25, 0.928477)}, //wood_cut::drill line
-
             {IK::Point_3(0.3, 0.041421, -0.928477), IK::Point_3(0.041421, 0.3, 0.928477)},     // wood_cut::drill line
             {IK::Point_3(-0.3, -0.041421, -0.928477), IK::Point_3(-0.041421, -0.3, 0.928477)}, // wood_cut::drill line
-
-            //           {0.25, 0.091421, -0.928477}
-            //{0.091421, 0.25, 0.928477}
-            //{-0.25, -0.091421, -0.928477}
-            //{-0.091421, -0.25, 0.928477}
-
-            //           {0.091421, -0.25, -0.928477}
-            //{0.25, -0.091421, 0.928477}
-            //{-0.091421, 0.25, -0.928477}
-            //{-0.25, 0.091421, 0.928477}
-
-            //{0.091902, 0.433324, -0.928477}
-            //{-0.433324, -0.091902, 0.928477}
-            //{-0.091902, -0.433324, -0.928477}
-            //{0.433324, 0.091902, 0.928477}
 
         };
 
@@ -3499,6 +3477,7 @@ namespace wood_joint_lib
         ///////////////////////////////////////////////////////////////////////////////////////////////////////
 
         // to sides
+        
         cgal_polyline_util::extend_equally(joint.f[0][3], 0, 0.15);
         cgal_polyline_util::extend_equally(joint.f[0][3], 2, 0.15);
         cgal_polyline_util::extend_equally(joint.f[0][4], 0, 0.15);
@@ -3510,10 +3489,6 @@ namespace wood_joint_lib
         cgal_polyline_util::extend_equally(joint.f[0][4], 1, 0.6);
         cgal_polyline_util::extend_equally(joint.f[0][4], 3, 0.6);
 
-        // for (int i = 0; i < 9; i++) {
-        //     for (auto it = joint.f[0][i].begin(); it != joint.f[0][i].end(); ++it)
-        //         *it = it->transform(xform_scale);
-        // }
 
         // Offset and
         // flip polylines
@@ -3523,7 +3498,6 @@ namespace wood_joint_lib
 
         auto xform = internal::rotation_in_xy_plane(IK::Vector_3(0, 1, 0), IK::Vector_3(1, 0, 0), IK::Vector_3(0, 0, -1));
 
-        // double lenghts[9] = { 0.5, 0.4, 0.4, 0.4, 0.4, 0.1, 0.1, 0.1, 0.1 };
         double lenghts[5] = {0.5, 0.4, 0.4, 0.4, 0.4};
         for (int i = 0; i < n; i++)
         {
@@ -3615,10 +3589,10 @@ namespace wood_joint_lib
             wood_cut::mill_project,
             wood_cut::mill_project,
 
-            wood_cut::drill,
-            wood_cut::drill,
-            wood_cut::drill,
-            wood_cut::drill,
+            // wood_cut::drill,
+            // wood_cut::drill,
+            // wood_cut::drill,
+            // wood_cut::drill,
         };
         joint.f_boolean_type = {
             wood_cut::mill_project,
@@ -3634,10 +3608,10 @@ namespace wood_joint_lib
             wood_cut::mill_project,
             wood_cut::mill_project,
 
-            wood_cut::drill,
-            wood_cut::drill,
-            wood_cut::drill,
-            wood_cut::drill,
+            // wood_cut::drill,
+            // wood_cut::drill,
+            // wood_cut::drill,
+            // wood_cut::drill,
 
         };
     }

@@ -389,7 +389,7 @@ inline void loop_middle_imgui()
 
 	// Search type
 	// int state_0 =  wood_globals::OUTPUT_GEOMETRY_TYPE;
-	ImGui::SliderInt("get_joints_geometry", &wood_globals::OUTPUT_GEOMETRY_TYPE, 0, 4);
+	ImGui::SliderInt("get_joints_geometry", &wood_globals::OUTPUT_GEOMETRY_TYPE, 0, 3);
 
 	// wood_globals::RUN = ImGui::Button("run", ImVec2(100, 100)); // Buttons return true when clicked (most widgets return true when edited/activated)
 	if (ImGui::Button("run", ImVec2(100, 100)))
