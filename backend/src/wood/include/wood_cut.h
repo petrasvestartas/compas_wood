@@ -37,6 +37,8 @@ enum cut_type
     conic_reverse,
 
     drill,
+    drill_50,
+    drill_10,
 };
 
 static std::map<std::string, cut_type> string_to_cut_type{
