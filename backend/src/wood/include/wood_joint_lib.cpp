@@ -4165,10 +4165,10 @@ namespace wood_joint_lib
             wood_cut::mill_project,
             wood_cut::mill_project,
 
-            wood_cut::drill,
-            wood_cut::drill,
-            wood_cut::drill,
-            wood_cut::drill,
+            wood_cut::drill_50,
+            wood_cut::drill_50,
+            wood_cut::drill_10,
+            wood_cut::drill_10,
         };
         joint.f_boolean_type = {
             wood_cut::mill_project,
@@ -4184,10 +4184,10 @@ namespace wood_joint_lib
             wood_cut::mill_project,
             wood_cut::mill_project,
 
-            wood_cut::drill,
-            wood_cut::drill,
-            wood_cut::drill,
-            wood_cut::drill,
+            wood_cut::drill_50,
+            wood_cut::drill_50,
+            wood_cut::drill_10,
+            wood_cut::drill_10,
 
         };
 

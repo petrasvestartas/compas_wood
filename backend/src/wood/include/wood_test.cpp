@@ -3418,7 +3418,7 @@ namespace wood_test
 
         if (!wood_globals::RUN_COUNT) // this is needed to avoid overwriting after the first "Run" click by the user -> IMGUI
         {
-            wood_globals::JOINTS_PARAMETERS_AND_TYPES[3 * 3 + 2] = 32;
+            wood_globals::JOINTS_PARAMETERS_AND_TYPES[3 * 3 + 2] = 35;
             // wood_globals::JOINTS_PARAMETERS_AND_TYPES[0 * 3 + 2] = 3;
             // wood_globals::JOINTS_PARAMETERS_AND_TYPES[1 * 3 + 1] = 0.66;
             // wood_globals::JOINTS_PARAMETERS_AND_TYPES[1 * 3 + 2] = 12;
@@ -3464,6 +3464,14 @@ namespace wood_test
             search_type,
             wood_globals::OUTPUT_GEOMETRY_TYPE,
             0);
+
+    //     for (const auto& innerVec : output_types) {
+    //     for (const auto& value : innerVec) {
+    //         std::printf("%d ", value);
+    //     }
+    //     std::printf("\n");
+    // }
+
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Export
