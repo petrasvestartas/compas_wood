@@ -514,9 +514,9 @@ PINVOKE void ctypes_get_connection_zones(
         wood_globals::JOINT_VOLUME_EXTENSION = in_joint_volume_parameters;
         
 
-    std::string filename = "C:\\test\\output.txt";
-    std::ofstream o(filename.c_str());
-    o << "Hello, World\n" <<  wood_globals::JOINT_VOLUME_EXTENSION.size() <<  std::endl;
+    // std::string filename = "C:\\test\\output.txt";
+    // std::ofstream o(filename.c_str());
+    // o << "Hello, World\n" <<  wood_globals::JOINT_VOLUME_EXTENSION.size() <<  std::endl;
 
 
     wood_globals::OUTPUT_GEOMETRY_TYPE = in_output_type;
