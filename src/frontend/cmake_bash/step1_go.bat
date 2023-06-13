@@ -1,3 +1,3 @@
 @echo off
 cls
-cd C:\IBOIS57\_Code\Software\Python\compas_wood\src\frontend\build
+cd C:\legion_pro_7_16IRX8H\software\python\compas_wood\src\frontend\build
