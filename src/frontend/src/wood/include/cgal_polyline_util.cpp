@@ -283,7 +283,7 @@ namespace cgal_polyline_util
 
     bool is_closed(const CGAL_Polyline &polyline)
     {
-        return CGAL::squared_distance(polyline.front(), polyline.back()) < wood_globals::DISTANCE_SQUARED;
+        return CGAL::squared_distance(polyline.front(), polyline.back()) <  wood_globals::DISTANCE_SQUARED;
     }
 
     IK::Point_3 center(const CGAL_Polyline &polyline)
@@ -449,8 +449,12 @@ namespace cgal_polyline_util
 
     void extend_equally(CGAL_Polyline &pline, int segment_id, double dist, double proportion)
     {
+
+
         if (dist == 0 && proportion == 0)
             return;
+
+        bool is_pline_closed = is_closed(pline);
 
         IK::Point_3 p0 = pline[segment_id];
         IK::Point_3 p1 = pline[segment_id + 1];
@@ -474,12 +478,14 @@ namespace cgal_polyline_util
 
         if (pline.size() > 2)
         { // not a line
-            if (is_closed(pline))
-            { // user give, else you can compute the square distance
-                if (segment_id == 0)
+            if (is_pline_closed)
+            { // user given, else you can compute the square distance
+                if (segment_id == 0){
                     pline[pline.size() - 1] = pline[0];
-                else if ((segment_id + 1) == pline.size() - 1)
+                }
+                else if ((segment_id+1) == pline.size() - 1) {
                     pline[0] = pline[pline.size() - 1];
+                }
             }
         }
     }

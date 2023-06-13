@@ -300,6 +300,14 @@ namespace wood_test
      */
     bool type_plates_name_vda_floor_1();
 
+    /**
+     * example for plates
+     * top-to-side and side-to-side out-of-plane joints
+     * VDA project, first test
+     * four boxes connected with extendal connectors
+     */
+    bool type_plates_name_vda_floor_2();
+
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // cross data sets
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -367,6 +375,12 @@ namespace wood_test
      * Ibois pavilion, this model has no proper insertion sequence
      */
     bool type_plates_name_cross_ibois_pavilion();
+
+     /**
+     * example fro cross joints with a dowel-nut connection
+     * cross joints
+     */
+    bool type_plates_name_cross_brussels_sports_tower();
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // beam methods

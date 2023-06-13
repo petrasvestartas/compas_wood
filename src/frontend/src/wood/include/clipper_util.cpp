@@ -602,13 +602,13 @@ namespace clipper_util
         if (C.size() > 0)
         {
          
-            //printf("Area_0 %f Area_0 %f\n", Area(C[0]),Area(pathA) );
+            printf("Area_0 %f Area_0 %f\n", Area(C[0]),Area(pathA) );
             // include triangles based on user input
             bool is_not_triangle = C[0].size() != 3;
             if (!is_not_triangle)
                 is_not_triangle = include_triangles;
 
-            if (C[0].size() > 2 && is_not_triangle && std::abs(Area(C[0])) > std::abs(Area(pathA)*0.05 ))//* due to imprecision are can be a little bit bigger
+            if (C[0].size() > 2 && is_not_triangle && std::abs(Area(C[0])) > std::abs(Area(pathA)*0.05 ))//* the result is not a line, not a triangle, and not a very small polygon
             { 
                 
                 intersection_result.resize(C[0].size() + 1);
@@ -670,7 +670,7 @@ namespace clipper_util
         if (C.size() > 0)
         {
 
-            if (std::abs(Area(C[0])) > std::abs(Area(pathA) *0.9)) // C[0].size() > 3 &&
+             if (std::abs(Area(C[0])) > 0.0001) // C[0].size() > 3 && std::abs(Area(pathA) * 0.9)
             {                                                                              // skip triangles and very small polygons
 
                 // Not Sure if rotation is correct, I doubt that cp_id+1 is needed,
@@ -750,7 +750,7 @@ namespace clipper_util
         if (C.size() > 0)
         {
 
-            if (std::abs(Area(C[0])) > 0.0001) // C[0].size() > 3 && std::abs(Area(pathA) * 0.9)
+             if (std::abs(Area(C[0])) > 0.0001) // C[0].size() > 3 && std::abs(Area(pathA) * 0.9)
             {                                                                              // skip triangles and very small polygons
 
                 // Not Sure if rotation is correct, I doubt that cp_id+1 is needed,

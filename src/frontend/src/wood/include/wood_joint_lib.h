@@ -333,11 +333,32 @@ namespace wood_joint_lib
      */
     void cr_c_ip_1(wood::joint &joint);
     /**
-     * Unit joint - Cross cutting in-plane joints - beam simplified conical cuts from the Brussells Sports Tower project (5 cuts and two drilling joles)
+     * Unit joint - Cross cutting in-plane joints - beam simplified conical cuts from the Brussels Sports Tower project (5 cuts and no drilling joles)
      *
      * @param [in, out] joint node, to which geometry will be added
      */
     void cr_c_ip_2(wood::joint &joint);
+
+        /**
+     * Unit joint - Cross cutting in-plane joints - beam simplified conical cuts from the Brussels Sports Tower project (5 cuts and two inclined drilling joles (1:5 brussels prototype))
+     *
+     * @param [in, out] joint node, to which geometry will be added
+     */
+    void cr_c_ip_3(wood::joint &joint);
+
+        /**
+     * Unit joint - Cross cutting in-plane joints - beam simplified conical cuts from the Brussels Sports Tower project (5 cuts and 1 vertical drilling hole)
+     *
+     * @param [in, out] joint node, to which geometry will be added
+     */
+    void cr_c_ip_4(wood::joint &joint);
+
+        /**
+     * Unit joint - Cross cutting in-plane joints - beam simplified conical cuts from the Brussels Sports Tower project (5 cuts and 1 vertical drilling hole one perpendicular to create the dowel-nutl)
+     *
+     * @param [in, out] joint node, to which geometry will be added
+     */
+    void cr_c_ip_5(wood::joint &joint);
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Top-to-top edge plane joints 40-49
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -29,12 +29,12 @@ namespace wood_xml
         printf(file_path.c_str());
         if (!file_exists_0(file_path))
         {
-            printf("\nwood_xml -> File does not exist");
+            printf("\nread_wood_xml -> File does not exist");
             return false;
         }
         else
         {
-            printf("\nwood_xml -> File exists");
+            printf("\read_nwood_xml -> File exists");
         }
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -63,7 +63,7 @@ namespace wood_xml
         catch (std::exception &e)
         {
             (void)e;
-            printf("wood_xml -> CPP Wrong property, probaby wrong path \n");
+            printf("read_wood_xml -> CPP Wrong property, probaby wrong path \n");
             return false;
         }
         return true;
@@ -79,17 +79,17 @@ namespace wood_xml
         // Check if XML file exists, path_and_file_for_joints is a global path
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        printf("wood_xml ->  read_xml_polylines -> ");
+        printf("read_wood_xml ->  read_xml_polylines -> ");
         printf(file_path.c_str());
         printf("\n");
         if (!file_exists_0(file_path))
         {
-            printf("wood_xml -> wood_xml|read_xml_polylines|File does not exist \n");
+            printf("read_wood_xml -> read_wood_xml|read_xml_polylines|File does not exist \n");
             return false;
         }
         else
         {
-            printf("wood_xml -> read_xml_polylines|file exists \n");
+            printf("read_wood_xml -> read_xml_polylines|file exists \n");
         }
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -127,7 +127,7 @@ namespace wood_xml
         catch (std::exception &e)
         {
             (void)e;
-            printf("nwood_xml -> |read_xml_polylines|CPP Wrong property \n");
+            printf("nread_wood_xml -> |read_xml_polylines|CPP Wrong property \n");
             return false;
         }
         return true;
@@ -143,17 +143,17 @@ namespace wood_xml
         // Check if XML file exists, path_and_file_for_joints is a global path
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        printf("wood_xml ->  read_xml_polylines -> ");
+        printf("read_wood_xml ->  read_xml_polylines -> ");
         printf(file_path.c_str());
         printf("\n");
         if (!file_exists_0(file_path))
         {
-            printf("wood_xml -> wood_xml|read_xml_polylines|File does not exist \n");
+            printf("read_wood_xml -> read_wood_xml|read_xml_polylines|File does not exist \n");
             return false;
         }
         else
         {
-            printf("wood_xml -> read_xml_polylines|file exists \n");
+            printf("read_wood_xml -> read_xml_polylines|file exists \n");
         }
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -186,7 +186,7 @@ namespace wood_xml
         catch (std::exception &e)
         {
             (void)e;
-            printf("nwood_xml -> |read_xml_polylines|CPP Wrong property \n");
+            printf("nread_wood_xml -> |read_xml_polylines|CPP Wrong property \n");
             return false;
         }
         return true;
@@ -209,17 +209,17 @@ namespace wood_xml
         // Check if XML file exists, path_and_file_for_joints is a global path
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        printf("wood_xml ->  read_xml_polylines -> ");
+        printf("read_wood_xml ->  read_xml_polylines -> ");
         printf(file_path.c_str());
         printf("\n");
         if (!file_exists_0(file_path))
         {
-            printf("wood_xml -> wood_xml|read_xml_polylines|File does not exist \n");
+            printf("read_wood_xml -> read_wood_xml|read_xml_polylines|File does not exist \n");
             return false;
         }
         else
         {
-            printf("wood_xml -> read_xml_polylines|file exists \n");
+            printf("read_wood_xml -> read_xml_polylines|file exists \n");
         }
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -319,7 +319,7 @@ namespace wood_xml
         catch (std::exception &e)
         {
             (void)e;
-            printf("nwood_xml -> |read_xml_polylines|CPP Wrong property \n");
+            printf("nread_wood_xml -> |read_xml_polylines|CPP Wrong property \n");
             return false;
         }
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -333,14 +333,14 @@ namespace wood_xml
             {
                 std::cout << "\n"
                           << input_polyline_pairs.size() * 0.5 << " " << input_insertion_vectors.size() << "\n";
-                printf("nwood_xml -> |read_xml_polylines|CPP insertion vectors are given, but count of them is not equal to polyline count \n");
+                printf("nread_wood_xml -> |read_xml_polylines|CPP insertion vectors are given, but count of them is not equal to polyline count \n");
                 return false;
             }
         // check if the number of polyliens is equal to the number of joints types
         if (input_JOINTS_TYPES.size() > 0)
             if (input_JOINTS_TYPES.size() != input_polyline_pairs.size() * 0.5)
             {
-                printf("nwood_xml -> |read_xml_polylines|CPP joint types are given, but count of them is not equal to polyline count \n");
+                printf("nread_wood_xml -> |read_xml_polylines|CPP joint types are given, but count of them is not equal to polyline count \n");
                 std::cout << "\n"
                           << input_polyline_pairs.size() << " " << input_JOINTS_TYPES.size() << "\n";
                 return false;
@@ -365,17 +365,17 @@ namespace wood_xml
         // Check if XML file exists, path_and_file_for_joints is a global path
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        printf("wood_xml ->  read_xml_polylines -> ");
+        printf("read_wood_xml ->  read_xml_polylines -> ");
         printf(file_path.c_str());
         printf("\n");
         if (!file_exists_0(file_path))
         {
-            printf("wood_xml -> wood_xml|read_xml_polylines|File does not exist \n");
+            printf("read_wood_xml -> wood_xml|read_xml_polylines|File does not exist \n");
             return false;
         }
         else
         {
-            printf("wood_xml -> read_xml_polylines|file exists \n");
+            printf("read_wood_xml -> read_xml_polylines|file exists \n");
         }
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -480,7 +480,7 @@ namespace wood_xml
         catch (std::exception &e)
         {
             (void)e;
-            printf("nwood_xml -> |read_xml_polylines|CPP Wrong property \n");
+            printf("nread_wood_xml -> |read_xml_polylines|CPP Wrong property \n");
             return false;
         }
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -494,14 +494,14 @@ namespace wood_xml
             {
                 std::cout << "\n"
                           << input_polyline_pairs.size() * 0.5 << " " << input_insertion_vectors.size() << "\n";
-                printf("nwood_xml -> |read_xml_polylines|CPP insertion vectors are given, but count of them is not equal to polyline count \n");
+                printf("nread_wood_xml -> |read_xml_polylines|CPP insertion vectors are given, but count of them is not equal to polyline count \n");
                 return false;
             }
         // check if the number of polyliens is equal to the number of joints types
         if (input_JOINTS_TYPES.size() > 0)
             if (input_JOINTS_TYPES.size() != input_polyline_pairs.size() * 0.5)
             {
-                printf("nwood_xml -> |read_xml_polylines|CPP joint types are given, but count of them is not equal to polyline count \n");
+                printf("nread_wood_xml -> |read_xml_polylines|CPP joint types are given, but count of them is not equal to polyline count \n");
                 std::cout << "\n"
                           << input_polyline_pairs.size() << " " << input_JOINTS_TYPES.size() << "\n";
                 return false;
@@ -550,7 +550,7 @@ namespace wood_xml
         catch (std::exception &e)
         {
             (void)e;
-            printf("wood_xml -> CPP Something went wrong, probaby wrong path \n");
+            printf("write_wood_xml -> CPP Something went wrong, probaby wrong path \n");
             return false;
         }
         return true;
@@ -609,7 +609,7 @@ namespace wood_xml
         catch (std::exception &e)
         {
             (void)e;
-            printf("wood_xml -> CPP Something went wrong, probaby wrong path \n");
+            printf("write_wood_xml -> CPP Something went wrong, probaby wrong path \n");
             return false;
         }
         return true;
@@ -714,7 +714,7 @@ namespace wood_xml
         catch (std::exception &e)
         {
             (void)e;
-            printf("wood_xml -> CPP Something went wrong, probaby wrong path \n");
+            printf("write_wood_xml -> CPP Something went wrong, probaby wrong path \n");
             return false;
         }
         return true;
