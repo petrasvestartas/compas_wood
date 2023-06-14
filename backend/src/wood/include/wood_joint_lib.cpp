@@ -4054,10 +4054,10 @@ namespace wood_joint_lib
 
         // to sides
         
-        cgal_polyline_util::extend_equally(joint.f[0][3], 0, 0.15);
-        cgal_polyline_util::extend_equally(joint.f[0][3], 2, 0.15);
-        cgal_polyline_util::extend_equally(joint.f[0][4], 0, 0.15);
-        cgal_polyline_util::extend_equally(joint.f[0][4], 2, 0.15);
+        cgal_polyline_util::extend_equally(joint.f[0][3], 0, 0.15*2);
+        cgal_polyline_util::extend_equally(joint.f[0][3], 2, 0.15*2);
+        cgal_polyline_util::extend_equally(joint.f[0][4], 0, 0.15*2);
+        cgal_polyline_util::extend_equally(joint.f[0][4], 2, 0.15*2);
 
         // vertically
         cgal_polyline_util::extend_equally(joint.f[0][3], 1, 0.6);
@@ -4191,9 +4191,9 @@ namespace wood_joint_lib
 
         };
 
-        // joint.m_boolean_type = {};
-        // joint.m[0]= {};
-        // joint.m[1]= {};
+        joint.m_boolean_type = {};
+        joint.m[0]= {};
+        joint.m[1]= {};
 
         // joint.f_boolean_type = {};
         // joint.f[0]= {};
