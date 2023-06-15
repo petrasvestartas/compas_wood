@@ -3465,12 +3465,12 @@ namespace wood_test
             wood_globals::OUTPUT_GEOMETRY_TYPE,
             0);
 
-    //     for (const auto& innerVec : output_types) {
-    //     for (const auto& value : innerVec) {
-    //         std::printf("%d ", value);
-    //     }
-    //     std::printf("\n");
-    // }
+        for (const auto& innerVec : output_types) {
+        for (const auto& value : innerVec) {
+            std::printf("%d ", value);
+        }
+        std::printf("\n");
+    }
 
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
