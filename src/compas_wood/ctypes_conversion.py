@@ -108,13 +108,6 @@ def coord_polylines_lists(groups_f, groups_f_s, out_f, out_f_s, out_v, out_v_s):
 
 
 def coord_numbers_lists(out_f, out_f_s, out_v, out_v_s):
-    # transfer data from C++
-    # sharp_out_f = (c_int * out_f_s)()
-    # sharp_out_v = (c_int * out_v_s)()
-    # ctypes.memmove(sharp_out_f, out_f, out_f_s * sizeof(c_int))
-    # ctypes.memmove(sharp_out_v, out_v, out_v_s * sizeof(c_int))
-    # ctypes.windll.kernel32.GlobalFree(out_f)
-    # ctypes.windll.kernel32.GlobalFree(out_v)
 
     # create Python objects
     ids = [[] for _ in range(out_f_s.value)]

@@ -179,10 +179,10 @@ class connections_zones(component):
             
             #add colors
             if(count<2):
-                temp_ngon_mesh.VertexColors.CreateMonotoneMesh(Color.DeepPink)
-            else:
                 temp_ngon_mesh.VertexColors.CreateMonotoneMesh(Color.LightGray)
-            
+            else:
+                temp_ngon_mesh.VertexColors.CreateMonotoneMesh(Color.DeepPink)
+
             unwelded_ngon_mesh.Append(temp_ngon_mesh)
             count = count + 1
         

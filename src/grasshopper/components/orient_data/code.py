@@ -8,8 +8,6 @@
 __author__ = "petras"
 __version__ = "2023.04.02"
 
-import System
-import Rhino
 import rhinoscriptsyntax as rs
 import ghpythonlib.treehelpers as th
 from Rhino.Geometry import Polyline

@@ -23,7 +23,7 @@
                 "scriptParamAccess": "tree",
                 "wireDisplay": "faint",
                 "sourceCount": 0,
-                "typeHintID": "curve",
+                "typeHintID": "geometrybase",
                 "reverse": false,
                 "simplify": false
             },

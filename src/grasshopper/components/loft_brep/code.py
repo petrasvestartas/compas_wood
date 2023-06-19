@@ -106,9 +106,9 @@ class connections_zones(component):
 
         for i in range(solid.Faces.Count):
             if i < 2:
-                solid.Faces[i].PerFaceColor = Color.DeepPink  # Color.LightGray
+                solid.Faces[i].PerFaceColor = Color.LightGray  # Color.LightGray
             else:
-                solid.Faces[i].PerFaceColor = Color.LightGray
+                solid.Faces[i].PerFaceColor = Color.DeepPink
 
         return solid
 

@@ -602,7 +602,7 @@ namespace clipper_util
         if (C.size() > 0)
         {
          
-            printf("Area_0 %f Area_0 %f\n", Area(C[0]),Area(pathA) );
+            //printf("Area_0 %f Area_0 %f\n", Area(C[0]),Area(pathA) );
             // include triangles based on user input
             bool is_not_triangle = C[0].size() != 3;
             if (!is_not_triangle)

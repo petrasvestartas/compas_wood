@@ -1,4 +1,16 @@
 
+from ghpythonlib.componentbase import executingcomponent as component
+
+# STEP 0 - Installation, anaconda prompt:
+# python -m compas_rhino.install
+# python -m compas_rhino.install -p compas_wood
+# STEP 1 - check the environment name
+# import compas_bootstrapper
+# print(compas_bootstrapper.ENVIRONMENT_NAME)
+# STEP 2 - import proxy from compas.rpc
+# https://compas.dev/compas/latest/tutorial/rpc.html#supported-data-types-1
+from compas.rpc import Proxy  # https://compas.dev/compas/latest/api/compas.rpc.html
+
 proxy = Proxy('compas_wood.joinery') # import module
 from compas_rhino import conversions
 from ghpythonlib import treehelpers

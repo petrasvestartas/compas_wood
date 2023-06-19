@@ -257,6 +257,8 @@ def test_connection_detection():
 
     )
 
+
+
     out_polylines = coord_polylines_lists(
         out_plines_groups_f,
         out_plines_groups_f_s,
@@ -269,6 +271,15 @@ def test_connection_detection():
     out_types = coord_numbers_lists(
         out_types_f, out_types_f_s, out_types_v, out_types_v_s
     )
+
+    print("types")
+    print(out_types_f)
+    print(out_types_f_s)
+    print(out_types_v)
+    print(out_types_v_s)
+    print(out_types)
+
+    print("types")
 
     print(
         "\n______________________________________ %s ms ______________________________________"
