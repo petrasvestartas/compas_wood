@@ -6,7 +6,8 @@
 #include<cstdio>
 
 
-#define PINVOKE extern "C" __declspec(dllexport)
+// #define PINVOKE extern "C" __declspec(dllexport)
+#define PINVOKE extern "C" __attribute__((visibility("default")))
 #define deletePtr(ptr, isArray) if (isArray) {delete[] arr;} else {delete arr;}
 
 PINVOKE int test_get_square(int n);

@@ -375,8 +375,8 @@ namespace wood_joint_lib
         std::swap(jo.f0_0, jo.f1_0);
         std::swap(jo.f0_1, jo.f1_1);
         std::swap(jo.joint_lines[1], jo.joint_lines[0]);
-        std::swap(jo.joint_volumes[0], jo.joint_lines[2]);
-        std::swap(jo.joint_volumes[1], jo.joint_lines[3]);
+        std::swap(jo.joint_volumes[0], jo.joint_volumes[2]);
+        std::swap(jo.joint_volumes[1], jo.joint_volumes[3]);
 
         /////////////////////////////////////////////////////////////////////////////////
         // offset vector
@@ -1981,8 +1981,8 @@ namespace wood_joint_lib
         std::swap(jo.f0_0, jo.f1_0);
         std::swap(jo.f0_1, jo.f1_1);
         std::swap(jo.joint_lines[1], jo.joint_lines[0]);
-        std::swap(jo.joint_volumes[0], jo.joint_lines[2]);
-        std::swap(jo.joint_volumes[1], jo.joint_lines[3]);
+        std::swap(jo.joint_volumes[0], jo.joint_volumes[2]);
+        std::swap(jo.joint_volumes[1], jo.joint_volumes[3]);
 
         // printf("Side_Removal");
 

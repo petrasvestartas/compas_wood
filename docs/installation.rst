@@ -3,6 +3,14 @@ Installation
 ********************************************************************************
 
 ################################################################################
+Rhino Installation
+################################################################################
+
+*    Install compas_wood via Rhino3d package manager, close Rhino
+*    Download dependencies for Windows: https://1drv.ms/u/s!AnwaB50XU22ejqhau0SCjdSqBajWuQ?e=KntEYu for Mac: https://1drv.ms/u/s!AnwaB50XU22ejqhbMwL3iCf0CxtnRg?e=Dfbj6X
+*    Place the contents of the downloaded files to the following directories for Windows: "C:/compas_wood/" , for Mac: "/Users/compas_wood/"
+
+################################################################################
 Windows
 ################################################################################
 

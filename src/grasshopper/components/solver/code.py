@@ -13,6 +13,7 @@ import Grasshopper, GhPython
 import Rhino
 from Rhino.Geometry import Polyline, Point3d
 #from compas_rhino import conversions
+import System
 
 import time
 from ctypes import *
@@ -346,22 +347,18 @@ class connections_zones(component):
         # Load library and declare function signature
         ############################################################################################################
         
-        lib_ = cdll.LoadLibrary(
-        
-            "C:/compas_wood/libgmp-10.dll"
-        )
-        lib = cdll.LoadLibrary(
-            "C:/compas_wood/pinvoke_wood.dll"
-        )
-        """
-        lib_ = cdll.LoadLibrary(
-        
-            "C:/IBOIS57/_Code/Software/Python/compas_wood/src/frontend/build/Release/libgmp-10.dll"
-        )
-        lib = cdll.LoadLibrary(
-            "C:/IBOIS57/_Code/Software/Python/compas_wood/src/frontend/build/Release/pinvoke_wood.dll"
-        )
-        """
+
+        if System.Environment.OSVersion.Platform == System.PlatformID.Win32NT:
+            print("Windows")
+            lib_ = cdll.LoadLibrary("C:/compas_wood/libgmp-10.dll")
+            lib = cdll.LoadLibrary("C:/compas_wood/pinvoke_wood.dll")
+        elif System.Environment.OSVersion.Platform == System.PlatformID.Unix:
+            print("macOS")
+            lib = cdll.LoadLibrary("/Users/compas_wood/libpinvoke_wood.dylib")
+        else:
+            print("Unknown operating system")
+                
+
         lib.ctypes_get_connection_zones.restype = None
         lib.ctypes_get_connection_zones.argtypes = [
             # input geometry
