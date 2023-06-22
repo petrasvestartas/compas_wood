@@ -1,14 +1,4 @@
-__author__ = "petras vestartas"
-__version__ = "2023.03.29"
 
-"""
-Output joint parameters in one list
-"""
-from ghpythonlib.componentbase import executingcomponent as component
-
-
-class joint_parameters_component(component):
-    def RunScript(
         self,
         _ss_e_ip,
         _ss_e_op,
@@ -41,7 +31,10 @@ class joint_parameters_component(component):
 
         for i in range(len(_cr_c_ip)):
             joint_parameters[3*3+i] = _cr_c_ip[i]
-
+        
+        if(math.floor(joint_parameters[3*3+2]) == 38):
+            joint_parameters[3*3+2]= 30
+        
         for i in range(len(_tt_e_p)):
             joint_parameters[4*3+i] = _tt_e_p[i]
 

@@ -41,6 +41,21 @@
                 "reverse": false,
                 "simplify": false
             }
+            ,
+            {
+                "name": "_color",
+                "nickname": "_c",
+                "description": "color, if given all the brep is colorized else only the sides, this is useful for boolean difference",
+                "optional": true,
+                "allowTreeAccess": true,
+                "showTypeHints": true,
+                "scriptParamAccess": "item",
+                "wireDisplay": "faint",
+                "sourceCount": 0,
+                "typeHintID": "color",
+                "reverse": false,
+                "simplify": false
+            }
            
         ],
         "outputParameters": [

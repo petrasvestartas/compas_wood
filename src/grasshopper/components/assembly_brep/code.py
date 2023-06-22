@@ -73,6 +73,9 @@ class MyComponent(component):
         self.joint_per_face_current_text_entity = []
         self.breps =  []
         
+        if(len(_breps) == 0):
+            return
+        
         _n = 1
         group_count = _n if _n is not None else 1
         t = _t if _t is not None else 0.0

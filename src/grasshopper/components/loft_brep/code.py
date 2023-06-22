@@ -12,7 +12,7 @@ from System.Drawing import Color
 
 
 class connections_zones(component):
-    def loft_polylines_with_holes(self, curves0, curves1):
+    def loft_polylines_with_holes(self, curves0, curves1, color):
         """Loft polylines with holes
 
         Parameters
@@ -29,7 +29,17 @@ class connections_zones(component):
         ###############################################################################
         # user input
         ###############################################################################
-
+        
+        if(curves0 == [None]):
+            return
+        if(curves1 == [None]):
+            return
+        print(curves0)
+        if(len(curves0) == 0):
+            return
+        if(len(curves1) == 0):
+            return
+        
         flag = len(curves0) is not 0 if True else len(curves1) != 0
         if flag:
             curves = []
@@ -60,10 +70,12 @@ class connections_zones(component):
         # Create mesh of the bottom face
         ###############################################################################
         brep_bottom = Rhino.Geometry.Brep.CreatePlanarBreps(
-            curves0, Rhino.RhinoDoc.ActiveDoc.ModelAbsoluteTolerance * 1000
+            curves0, Rhino.RhinoDoc.ActiveDoc.ModelAbsoluteTolerance*100
         )[0]
+        
+        
         brep_top = Rhino.Geometry.Brep.CreatePlanarBreps(
-            curves1, Rhino.RhinoDoc.ActiveDoc.ModelAbsoluteTolerance * 1000
+            curves1, Rhino.RhinoDoc.ActiveDoc.ModelAbsoluteTolerance*100
         )[0]
 
         ###############################################################################
@@ -84,34 +96,37 @@ class connections_zones(component):
         # Join Brep
         ###############################################################################
         solid = Rhino.Geometry.Brep.JoinBreps(
-            breps_to_join, Rhino.RhinoDoc.ActiveDoc.ModelAbsoluteTolerance
+            breps_to_join, Rhino.RhinoDoc.ActiveDoc.ModelAbsoluteTolerance*10
         )[0]
-
-        ###############################################################################
-        # Because kinked surface can cause problems down stream, Rhino
-        # always splits kinked surfaces when adding Breps to the document. Since
-        # we are not adding this Brep to the document, lets split the kinked
-        # surfaces ourself.
-        ###############################################################################
-        solid.Faces.SplitKinkyFaces(Rhino.RhinoMath.DefaultAngleTolerance, True)
-
-        ###############################################################################
-        # The profile curve, created by the input points, is oriented clockwise.
-        # Thus when the profile is extruded, the resulting surface will have its
-        # normals pointed inwards. So lets check the orientation and, if inwards,
-        # flip the face normals.
-        ###############################################################################
-        if Rhino.Geometry.BrepSolidOrientation.Inward == solid.SolidOrientation:
-            solid.Flip()
-
+        
+        faces = []
         for i in range(solid.Faces.Count):
-            if i < 2:
-                solid.Faces[i].PerFaceColor = Color.LightGray  # Color.LightGray
-            else:
-                solid.Faces[i].PerFaceColor = Color.DeepPink
+            faces.append(solid.Faces[i].DuplicateFace(False))
+        
+        solid = Rhino.Geometry.Brep.JoinBreps(
+            faces, Rhino.RhinoDoc.ActiveDoc.ModelAbsoluteTolerance*10
+        )[0]
+        
+        
+        if solid:
+            solid.Faces.SplitKinkyFaces(Rhino.RhinoMath.DefaultAngleTolerance, True)
+            
+            if (Rhino.Geometry.BrepSolidOrientation.Inward is solid.SolidOrientation):
+              solid.Flip();
+            
+        
+        if(color is not None):
+            for i in range(solid.Faces.Count):
+                solid.Faces[i].PerFaceColor = color
+        else:
+            for i in range(solid.Faces.Count):
+                if i < 2:
+                    solid.Faces[i].PerFaceColor = Color.LightGray  # Color.LightGray
+                else:
+                    solid.Faces[i].PerFaceColor = Color.DeepPink
 
         return solid
 
-    def RunScript(self, _p0, _p1):
+    def RunScript(self, _p0, _p1, _c):
         if _p0 and _p1:
-            return self.loft_polylines_with_holes(_p0, _p1)
+            return self.loft_polylines_with_holes(_p0, _p1, _c)
