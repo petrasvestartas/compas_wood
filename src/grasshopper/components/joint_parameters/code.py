@@ -1,4 +1,9 @@
+from ghpythonlib.componentbase import executingcomponent as component
+import Grasshopper, GhPython
+import math
 
+class joint_parameters_component(component):
+    def RunScript(
         self,
         _ss_e_ip,
         _ss_e_op,
