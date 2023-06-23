@@ -896,6 +896,106 @@ namespace wood_joint_lib
         // return true;
     }
 
+
+    void ss_e_ip_3(wood::joint &joint)
+    {
+        joint.name = __func__;
+
+        // Joint lines, always the last line or rectangle is not a wood::joint but an cutting wood::element
+
+        joint.m[0] = {
+            {
+                IK::Point_3(1.5, 0.5, -0.5), 
+            IK::Point_3(1.5, -0.2, -0.5), 
+            IK::Point_3(-1.5, 0.2, -0.5), 
+            IK::Point_3(-1.5, 0.5, -0.5), 
+            IK::Point_3(1.5, 0.5, -0.5)
+            },
+            {IK::Point_3(0, -0.5, 0.5), IK::Point_3(0, -0.5, -0.5)}};
+
+        joint.m[1] = {
+            {           
+            IK::Point_3(1.5, 0.5, 0.5), 
+            IK::Point_3(1.5, -0.2, 0.5), 
+            IK::Point_3(-1.5, 0.2, 0.5), 
+            IK::Point_3(-1.5, 0.5, 0.5), 
+            IK::Point_3(1.5, 0.5, 0.5)},
+            {IK::Point_3(0, 0.5, 0.5), IK::Point_3(0, 0.5, -0.5)}};
+
+
+
+
+
+
+        joint.f[0] = {
+            {
+IK::Point_3(-1.5, 0.5, -0.5),
+IK::Point_3(-1.5, -0.2, -0.5),
+IK::Point_3(1.5, 0.2, -0.5),
+IK::Point_3(1.5, 0.5, -0.5),
+IK::Point_3(-1.5, 0.5, -0.5),
+            
+            },
+            {IK::Point_3(0, -0.5, 0.5), IK::Point_3(0, -0.5, -0.5)}};
+
+        joint.f[1] = {
+            {
+
+IK::Point_3(-1.5, 0.5, 0.5),
+IK::Point_3(-1.5, -0.2, 0.5),
+IK::Point_3(1.5, 0.2, 0.5),
+IK::Point_3(1.5, 0.5, 0.5),
+IK::Point_3(-1.5, 0.5, 0.5),
+            
+            },
+            {IK::Point_3(0, 0.5, 0.5), IK::Point_3(0, 0.5, -0.5)}};
+        // // joint.f[0] = {
+        // //     {
+        //     IK::Point_3(1.5, 0.5, -0.5), 
+        //     IK::Point_3(1.5, -0.2, -0.5), 
+        //     IK::Point_3(-1.5, 0.2, -0.5), 
+        //     IK::Point_3(-1.5, 0.5, -0.5), 
+        //     IK::Point_3(1.5, 0.5, -0.5)
+        // //     },
+        // //     {IK::Point_3(0, -0.5, 0.5), IK::Point_3(0, -0.5, -0.5)}
+        // //     };
+
+        // // joint.f[1] = { 
+        //     IK::Point_3(1.5, 0.5, 0.5), 
+        //     IK::Point_3(1.5, -0.2, 0.5), 
+        //     IK::Point_3(-1.5, 0.2, 0.5), 
+        //     IK::Point_3(-1.5, 0.5, 0.5), 
+        //     IK::Point_3(1.5, 0.5, 0.5)
+        // //     },
+        // //     {IK::Point_3(0, 0.5, 0.5), IK::Point_3(0, 0.5, -0.5)}
+        // //     };
+
+        // // joint.m[0] = {
+        // //     {
+        //     IK::Point_3(-1.5, -0.5, -0.5), 
+        //     IK::Point_3(-1.5, 0.2, -0.5), 
+        //     IK::Point_3(1.5, -0.2, -0.5), 
+        //     IK::Point_3(1.5, -0.5, -0.5), 
+        //     IK::Point_3(-1.5, -0.5, -0.5)
+        // //     },
+           
+        // //     {IK::Point_3(0, -0.5, 0.5), IK::Point_3(0, -0.5, -0.5)}
+        // //     };
+
+        // // joint.m[1] = {
+        // //     {
+        //     IK::Point_3(-1.5, -0.5, 0.5), 
+        //     IK::Point_3(-1.5, 0.2, 0.5), 
+        //     IK::Point_3(1.5, -0.2, 0.5), 
+        //     IK::Point_3(1.5, -0.5, 0.5), 
+        //     IK::Point_3(-1.5, -0.5, 0.5)
+        // //     },
+            
+        //     {IK::Point_3(0, 0.5, 0.5), IK::Point_3(0, 0.5, -0.5)}};
+
+        joint.f_boolean_type = {wood_cut::mill_project, wood_cut::mill_project};
+        joint.m_boolean_type = {wood_cut::mill_project, wood_cut::mill_project};
+    }
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Side-to-side edge out-of-plane joints 10-19
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -4571,6 +4671,7 @@ namespace wood_joint_lib
         joint_names[1] = "ss_e_ip_0";
         joint_names[2] = "ss_e_ip_1";
         joint_names[3] = "ss_e_ip_2";
+        joint_names[4] = "ss_e_ip_3";
         joint_names[8] = "side_removal";
         joint_names[9] = "ss_e_ip_9";
         joint_names[10] = "ss_e_op_0";
@@ -4796,6 +4897,9 @@ namespace wood_joint_lib
 
                 case (3):
                     ss_e_ip_2(jo, elements);
+                    break;
+                case (4):
+                    ss_e_ip_3(jo);
                     break;
                 case (8):
                     side_removal(jo, elements);

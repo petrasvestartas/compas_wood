@@ -797,21 +797,25 @@ namespace wood_main
 
                             ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
                             // Elements are rotated
-                            ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                            ///////////////////////////////////////////////////§/////////////////////////////////////////////////////////////////
                             // CGAL_Debug(cgal_vector_util::Distance(jointLine0[0], jointLine0[1]));
                             // CGAL_Debug(cgal_vector_util::Distance(jointLine1[0], jointLine1[1]));
 
                             auto v0 = joint_line0[0] - joint_line0[1];
                             auto v1 = joint_line1[0] - joint_line1[1];
 
-                            if (cgal_vector_util::is_parallel_to(v0, v1) == -1 || wood_globals::FACE_TO_FACE_SIDE_TO_SIDE_JOINTS_ALL_TREATED_AS_ROTATED)
+                            //the rotation is checked between the line vectors
+                            //std::cout<< "Side-to-side \n";
+                            //std::cout<<(cgal_vector_util::is_parallel_to(v0, v1) ) << "\n";
+                            if ( (cgal_vector_util::is_parallel_to(v0, v1) == 0 || wood_globals::FACE_TO_FACE_SIDE_TO_SIDE_JOINTS_ALL_TREATED_AS_ROTATED) )
                             { 
-                                std::cout<<cgal_vector_util::is_parallel_to(v0, v1) <<"\n" << v0 << "\n" << v1 << "\n";
+                                //std::cout<<cgal_vector_util::is_parallel_to(v0, v1) <<"\n" << v0 << "\n" << v1 << "\n";
                                 
                                 // wood_globals::DISTANCE
 #ifdef DEBUG_wood_MAIN_LOCAL_SEARCH
                                 printf("Elements Are rotated");
-#endif
+#endif                          
+                                //printf("Elements Are rotated \n");
                                 // joint_lines[0] = { joint_line0[0], joint_line0[1] };
                                 // joint_lines[1] = { joint_line1[0], joint_line1[1] };
 
