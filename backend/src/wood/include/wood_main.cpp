@@ -717,6 +717,8 @@ namespace wood_main
                         IK::Plane_3 averagePlane1(CGAL::midpoint(Polyline1[0][0], Polyline1[1][0]), Plane1[0].orthogonal_vector()); // center Plane
                         CGAL_Polyline joint_quads1;
 
+                     
+
                         if (j > 1)
                         { // Side-Side
                           // Middle line for alignment
@@ -787,7 +789,7 @@ namespace wood_main
 #ifdef DEBUG_wood_MAIN_LOCAL_SEARCH
                             printf("Type0");
 #endif
-
+                            //printf("Type0");
                             joint_lines[0] = {joint_line0[0], joint_line0[1]};
                             joint_lines[1] = {joint_line1[0], joint_line1[1]};
 
@@ -802,12 +804,14 @@ namespace wood_main
                             auto v0 = joint_line0[0] - joint_line0[1];
                             auto v1 = joint_line1[0] - joint_line1[1];
 
-                            if (cgal_vector_util::is_parallel_to(v0, v1) == 0 || wood_globals::FACE_TO_FACE_SIDE_TO_SIDE_JOINTS_ALL_TREATED_AS_ROTATED)
-                            { // wood_globals::DISTANCE
+                            if (cgal_vector_util::is_parallel_to(v0, v1) == -1 || wood_globals::FACE_TO_FACE_SIDE_TO_SIDE_JOINTS_ALL_TREATED_AS_ROTATED)
+                            { 
+                                std::cout<<cgal_vector_util::is_parallel_to(v0, v1) <<"\n" << v0 << "\n" << v1 << "\n";
+                                
+                                // wood_globals::DISTANCE
 #ifdef DEBUG_wood_MAIN_LOCAL_SEARCH
                                 printf("Elements Are rotated");
 #endif
-
                                 // joint_lines[0] = { joint_line0[0], joint_line0[1] };
                                 // joint_lines[1] = { joint_line1[0], joint_line1[1] };
 
@@ -908,7 +912,6 @@ namespace wood_main
 #ifdef DEBUG_wood_MAIN_LOCAL_SEARCH
                                 printf("Elements are parallel");
 #endif
-
                                 ////////////////////////////////////////////////////////////////////////////////
                                 // Get Overlap-Line // scale it down ?
                                 ////////////////////////////////////////////////////////////////////////////////

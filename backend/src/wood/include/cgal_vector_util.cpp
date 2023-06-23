@@ -85,12 +85,52 @@ namespace cgal_vector_util
 
     int is_parallel_to(const IK::Vector_3 &v0, const IK::Vector_3 &v1)
     {
+        // double ll = length(v0.x(), v0.y(), v0.z()) * length(v1.x(), v1.y(), v1.z());
+        // if(ll == 0.0){
+        //     return 0;
+        // }
+
+        // double dot = 0.0;
+        // double mag1 = 0.0;
+        // double mag2 = 0.0;
+
+ 
+        // dot += v0.hx() * v1.hx();
+        // mag1 += v0.hx() * v0.hx();
+        // mag2 += v1.hx() * v1.hx();
+
+        // dot += v0.hy() * v1.hy();
+        // mag1 += v0.hy() * v0.hy();
+        // mag2 += v1.hy() * v1.hy();
+
+        // dot += v0.hz() * v1.hz();
+        // mag1 += v0.hz() * v0.hz();
+        // mag2 += v1.hz() * v1.hz();
+ 
+
+        // mag1 = std::sqrt(mag1);
+        // mag2 = std::sqrt(mag2);
+
+        // int rc = 0;
+
+        // if( std::abs(dot / (mag1 * mag2) - 1.0) < wood_globals::ANGLE*0.01){
+        //     rc = 1;
+        // }
+        // else{
+        //     rc = -1;
+        // }
+
+        // std::cout<<rc<<std::endl;
+        // return -rc;
         int rc = 0;
 
         double ll = length(v0.x(), v0.y(), v0.z()) * length(v1.x(), v1.y(), v1.z());
+        //std::cout<<"ll: "<<ll<<std::endl;
         if (ll > 0.0)
         {
             const double cos_angle = (v0.x() * v1.x() + v0.y() * v1.y() + v0.z() * v1.z()) / ll;
+
+            //std::cout<<"cos_angle: "<<cos_angle<<std::endl;
             const double cos_tol = cos(wood_globals::ANGLE);
             if (cos_angle >= cos_tol)
                 rc = 1;
