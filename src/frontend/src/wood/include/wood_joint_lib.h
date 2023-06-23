@@ -179,6 +179,21 @@ namespace wood_joint_lib
      */
     void ss_e_ip_2(wood::joint &joint, std::vector<wood::element> &elements);
 
+        /**
+     * Unit joint - Side-to-side edge in-plane joints - beam joints
+     *
+     * @param [in, out] joint node, to which geometry will be added
+     */
+    void ss_e_ip_3(wood::joint &joint, std::vector<wood::element> &elements);
+
+
+        /**
+     * Unit joint - Side-to-side edge in-plane joints - beam joints
+     *
+     * @param [in, out] joint node, to which geometry will be added
+     */
+    void ss_e_ip_4(wood::joint &joint, std::vector<wood::element> &elements);
+
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Side-to-side edge out-of-plane joints 10-19
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
