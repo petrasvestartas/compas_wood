@@ -180,11 +180,18 @@ namespace wood_joint_lib
     void ss_e_ip_2(wood::joint &joint, std::vector<wood::element> &elements);
 
     /**
-     * Unit joint - Side-to-side edge in-plane joints - beam scarf joint
+     * Unit joint - Side-to-side edge in-plane joints - beam \ scarf joint
      *
      * @param [in, out] joint node, to which geometry will be added
      */
     void ss_e_ip_3(wood::joint &joint);
+
+     /**
+     * Unit joint - Side-to-side edge in-plane joints - beam doubled >< scarf joint
+     *
+     * @param [in, out] joint node, to which geometry will be added
+     */
+    void ss_e_ip_4(wood::joint &joint);
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Side-to-side edge out-of-plane joints 10-19
@@ -217,6 +224,8 @@ namespace wood_joint_lib
      * @param [in, out] joint node, to which geometry will be added
      */
     void ss_e_op_3(wood::joint &joint);
+
+    
 
     /**
      * Unit joint - Side-to-side edge in-plane joints - plate Vidy tenon-mortise with different configurations
