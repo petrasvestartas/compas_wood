@@ -84,7 +84,7 @@ namespace wood_xml
         printf("\n");
         if (!file_exists_0(file_path))
         {
-            printf("read_wood_xml -> read_wood_xml|read_xml_polylines|File does not exist \n");
+            printf("read_wood_xml -> read_wood_xml | read_xml_polylines | File does not exist \n");
             return false;
         }
         else
