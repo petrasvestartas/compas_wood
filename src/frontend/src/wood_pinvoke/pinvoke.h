@@ -6,8 +6,12 @@
 #include<cstdio>
 
 
-// #define PINVOKE extern "C" __declspec(dllexport)
-#define PINVOKE extern "C" __attribute__((visibility("default")))
+#ifdef _WIN32 // Check if the target platform is Windows
+    #define PINVOKE extern "C" __declspec(dllexport)
+#else // Assuming the target platform is Mac
+    #define PINVOKE extern "C" __attribute__((visibility("default")))
+#endif
+
 #define deletePtr(ptr, isArray) if (isArray) {delete[] arr;} else {delete arr;}
 
 PINVOKE int test_get_square(int n);

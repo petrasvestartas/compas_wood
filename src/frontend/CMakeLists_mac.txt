@@ -8,6 +8,7 @@ cmake_minimum_required(VERSION 3.24.2)
 
 project(pinvoke_wood LANGUAGES C CXX)
 
+set(CMAKE_BUILD_TYPE Release)
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -131,69 +132,6 @@ if (GET_LIBS)
     INSTALL_COMMAND "" #installer for now is empty
   )
   
-  
-  ########################################################################
-  # CGAL
-  ######################################################################## 
-
-  ExternalProject_Add(cgal
-    URL https://github.com/CGAL/cgal/releases/download/v5.5.1/CGAL-5.5.1-library.zip
-    #GIT_REPOSITORY https://github.com/CGAL/cgal.git
-    #GIT_TAG v5.4.1
-    CMAKE_ARGS
-      -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
-      -DCMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER}
-      #-DCMAKE_INSTALL_PREFIX:PATH=${CMAKE_INSTALL_PREFIX}
-    SOURCE_DIR   "${CMAKE_BINARY_DIR}/install/cgal"
-    BUILD_ALWAYS "" #do not buld
-    INSTALL_COMMAND "" #installer for now is empty
-  )
-
-
-  ExternalProject_Add(cgal_auxiliary
-    URL https://github.com/CGAL/cgal/releases/download/v5.5/CGAL-5.5-win64-auxiliary-libraries-gmp-mpfr.zip
-    CMAKE_ARGS
-      -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
-      -DCMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER}
-      #-DCMAKE_INSTALL_PREFIX:PATH="${CMAKE_BINARY_DIR}/install"
-    SOURCE_DIR   "${CMAKE_BINARY_DIR}/install/cgal/auxiliary"
-      #INSTALL_DIR   "${CMAKE_INSTALL_PREFIX}/install"
-    CONFIGURE_COMMAND "" #do not configure
-    BUILD_COMMAND "" #do not buld
-    INSTALL_COMMAND "" #installer for now is empty
-  )
-
-
-  ########################################################################
-  # BOOST
-  ######################################################################## 
-  if (WIN32)
-    set(BOOST_BOOTSTRAP_CMD ${CMAKE_CURRENT_BINARY_DIR}/boost-prefix/src/boost/bootstrap.bat)
-    set(BOOST_BUILD_CMD ${CMAKE_CURRENT_BINARY_DIR}/boost-prefix/src/boost/b2.exe)
-  elseif (UNIX)
-    set(BOOST_BOOTSTRAP_CMD ${CMAKE_CURRENT_BINARY_DIR}/boost-prefix/src/boost/bootstrap.sh)
-    set(BOOST_BUILD_CMD ${CMAKE_CURRENT_BINARY_DIR}/boost-prefix/src/boost/b2)
-  endif ()
-
-  ExternalProject_Add(boost
-    GIT_REPOSITORY https://github.com/boostorg/boost.git
-    GIT_TAG boost-1.78.0
-    CONFIGURE_COMMAND ${BOOST_BOOTSTRAP_CMD}
-    BUILD_COMMAND
-      ${BOOST_BUILD_CMD}
-      --prefix=${CMAKE_BINARY_DIR}/install/boost
-      -sZLIB_LIBRARY_PATH=${CMAKE_BINARY_DIR}/install/boost/lib
-      --without-python
-      address-model=64
-      variant=debug,release
-      link=shared
-      runtime-link=shared
-      threading=multi
-      install
-    BUILD_IN_SOURCE 1
-    INSTALL_COMMAND ""
-    #SOURCE_DIR "${CMAKE_BINARY_DIR}/install/boost" #install directory is in build/install/eigen
-  )
 
 endif ()
 
@@ -204,6 +142,13 @@ endif ()
 # CONFIGURE THE PROJECT
 #
 ########################################################################
+
+# Find CGAL package
+find_package(CGAL REQUIRED)
+
+
+
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fdeclspec")
 
 ###############################################################################
 #
@@ -309,7 +254,7 @@ if (BUILD_MY_PROJECTS)
 
 
 
-    message("${BoldBlue} ${CMAKE_BINARY_DIR}/install/cgal/auxiliary/gmp/lib/ ${ColourReset}" )
+    #message("${BoldBlue} ${CMAKE_BINARY_DIR}/install/cgal/auxiliary/gmp/lib/ ${ColourReset}" )
 
   # target_link_libraries(
   #   "${PYTHON_MODULE_NAME}" 
@@ -351,17 +296,20 @@ if (BUILD_MY_PROJECTS)
   # else()
   target_link_directories("${PROJECT_NAME}" 
   # cgal
-  PUBLIC "${CMAKE_BINARY_DIR}/install/cgal/auxiliary/gmp/lib/" 
+  #PUBLIC "${CMAKE_BINARY_DIR}/install/cgal/auxiliary/gmp/lib/" 
   # clipper
   PUBLIC "${CMAKE_BINARY_DIR}/Release/"
   )
   
 
+  find_package(GMP REQUIRED)
+  find_package(MPFR REQUIRED)
 
     target_link_libraries(${PROJECT_NAME} PUBLIC 
     Clipper2 
-    libgmp-10
-    libmpfr-4
+    CGAL::CGAL
+    #GMP::GMP
+    #MPFR::MPFR
   ) #gmp mpfr link library | zlibstatic WINDOWS
 
 
@@ -381,11 +329,11 @@ if (BUILD_MY_PROJECTS)
   # CGAL
   ###############################################################################
   #target_link_libraries(${PROJECT_NAME} PUBLIC "${CMAKE_BINARY_DIR}/install/cgal/auxiliary/gmp/lib/" ) # WINDOWS
-  if(COMPILER_NINJA)
-    target_link_directories(${PROJECT_NAME} PUBLIC "C:/msys64/mingw64/lib/" )
-  else()
-    target_link_directories(${PROJECT_NAME} PUBLIC "${CMAKE_BINARY_DIR}/install/cgal/auxiliary/gmp/lib/" )
-  endif()
+  # if(COMPILER_NINJA)
+  #   target_link_directories(${PROJECT_NAME} PUBLIC "C:/msys64/mingw64/lib/" )
+  # else()
+  #   target_link_directories(${PROJECT_NAME} PUBLIC "${CMAKE_BINARY_DIR}/install/cgal/auxiliary/gmp/lib/" )
+  # endif()
 
 
 endif()
@@ -422,25 +370,25 @@ if (COMPILE_LIBS)
   ###############################################################################
   # CGAL
   ###############################################################################
-  #target_link_libraries(${PROJECT_NAME} PUBLIC "${CMAKE_BINARY_DIR}/install/cgal/auxiliary/gmp/lib/" ) # WINDOWS
-  if(COMPILER_NINJA)
-    target_link_directories(${PROJECT_NAME} PUBLIC "C:/msys64/mingw64/lib/" )
-  else()
-    target_link_directories(${PROJECT_NAME} PUBLIC "${CMAKE_BINARY_DIR}/install/cgal/auxiliary/gmp/lib/" )
-  endif()
+  # #target_link_libraries(${PROJECT_NAME} PUBLIC "${CMAKE_BINARY_DIR}/install/cgal/auxiliary/gmp/lib/" ) # WINDOWS
+  # if(COMPILER_NINJA)
+  #   target_link_directories(${PROJECT_NAME} PUBLIC "C:/msys64/mingw64/lib/" )
+  # else()
+  #   target_link_directories(${PROJECT_NAME} PUBLIC "${CMAKE_BINARY_DIR}/install/cgal/auxiliary/gmp/lib/" )
+  # endif()
 
   
-  if(NOT COMPILER_NINJA)
-    add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD        # Adds a post-build event to MyTest
-      COMMAND ${CMAKE_COMMAND} -E copy_if_different  # which executes "cmake - E copy_if_different..."
-          "${CMAKE_BINARY_DIR}/install/cgal/auxiliary/gmp/lib/libgmp-10.dll"      # <--this is in-file
-          "${CMAKE_BINARY_DIR}/Release")                 # <--this is out-file path
+  # if(NOT COMPILER_NINJA)
+  #   add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD        # Adds a post-build event to MyTest
+  #     COMMAND ${CMAKE_COMMAND} -E copy_if_different  # which executes "cmake - E copy_if_different..."
+  #         "${CMAKE_BINARY_DIR}/install/cgal/auxiliary/gmp/lib/libgmp-10.dll"      # <--this is in-file
+  #         "${CMAKE_BINARY_DIR}/Release")                 # <--this is out-file path
 
-    add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD        # Adds a post-build event to MyTest
-      COMMAND ${CMAKE_COMMAND} -E copy_if_different  # which executes "cmake - E copy_if_different..."
-          "${CMAKE_BINARY_DIR}/install/cgal/auxiliary/gmp/lib/libmpfr-4.dll"      # <--this is in-file
-          "${CMAKE_BINARY_DIR}/Release")                 # <--this is out-file path
-  endif()
+  #   add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD        # Adds a post-build event to MyTest
+  #     COMMAND ${CMAKE_COMMAND} -E copy_if_different  # which executes "cmake - E copy_if_different..."
+  #         "${CMAKE_BINARY_DIR}/install/cgal/auxiliary/gmp/lib/libmpfr-4.dll"      # <--this is in-file
+  #         "${CMAKE_BINARY_DIR}/Release")                 # <--this is out-file path
+  # endif()
 
  
 
