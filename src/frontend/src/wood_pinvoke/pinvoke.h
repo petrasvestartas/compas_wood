@@ -101,36 +101,30 @@ PINVOKE void ctypes_get_connection_zones(
     float& face_to_face_side_to_side_joints_dihedral_angle
 );
 
-// PINVOKE int pinvoke_get_connection_zones(
-//     //input
-//     int* f, int f_s, double* v, int v_s,
-//     int* vec_f, int vec_f_s, double* vec_v, int vec_v_s,
-//     int* jointtypes_f, int jointtypes_f_s, int* jointtypes_v, int jointtypes_v_s,
-//     int* threevalence_f, int threevalence_f_s, int* threevalence_v, int threevalence_v_s,
-//     int* adjacency_v, int adjacency_v_s,
-//     double* jointparams_v, int jointparams_v_s,
-//     double* scale_v, int scale_v_s,
-//     const char* file_and_folder_of_joint_library_xml,
-//     //output
-//     int*& groups_f, int& groups_f_s, int*& out_f, int& out_f_s, double*& out_v, int& out_v_s,
-//     //optional inputs
-//     int search_type = 1, int output_type = 4, int triangulate = 0
+PINVOKE void ctypes_get_connection_zones_with_custom_joints(
 
-// );
+    // input geometry
+    size_t* in_polyline_pairs_f, size_t& in_polyline_pairs_f_s, float* in_polyline_pairs_v, size_t& in_polyline_pairs_v_s,
+    size_t* in_vectors_f, size_t& in_vectors_f_s, float* in_vectors_v, size_t& in_vectors_v_s,
+    size_t* in_joints_types_f, size_t& in_joints_types_f_s, int* in_joints_types_v, size_t& in_joints_types_v_s,
+    size_t* in_three_valence_f, size_t& in_three_valence_f_s, int* in_three_valence_v, size_t& in_three_valence_v_s,
+    int* in_adjancency_v, size_t& in_adjancency_v_s,
 
-// PINVOKE int pinvoke_find_closest_plateside_to_line(
-//     //input - polylines flat list and a flat list of lines
-//     int* f, int f_s, double* v, int v_s,
-//     double* lines_v, int lines_v_s,
-//     //output - jagged array of vectors
-//     int*& out_f, int& out_f_s, double*& out_v, int& out_v_s
-// );
+    //custom joints
+    size_t* in_joint_polyline_pairs_f, size_t& in_joint_polyline_pairs_f_s, float* in_joint_polyline_pairs_v, size_t& in_joint_polyline_pairs_v_s,
+    int* in_joint_types_v, size_t& in_joint_types_v_s,
 
-// PINVOKE int pinvoke_find_closest_plateside_to_indexedpoint(
-//     //input - polylines flat list and a flat list of lines
-//     int* f, int f_s, double* v, int v_s,
-//     double* pts_v, int pts_v_s,
-//     int* ids_v, int ids_v_s,
-//     //output - jagged array of vectors
-//     int*& out_f, int& out_f_s, int*& out_v, int& out_v_s
-// );
+    //input parameters
+    float* in_joint_parameters_v, size_t& in_joint_parameters_v_s,
+    int& in_search_type,
+    float* in_scale_v, size_t& in_scale_v_s,
+    int& in_output_type,
+
+    // output
+    size_t*& out_plines_groups_f, size_t& out_plines_groups_f_s, size_t*& out_plines_out_f, size_t& out_plines_out_f_s, float*& out_plines_out_v, size_t& out_plines_out_v_s,
+    size_t*& out_types_f, size_t& out_types_f_s, int*& out_types_v, size_t& out_types_v_s,
+
+    // global_parameters
+    float* in_joint_volume_parameters_v, size_t& in_joint_volume_parameters_v_s,
+    float& face_to_face_side_to_side_joints_dihedral_angle
+);

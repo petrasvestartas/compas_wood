@@ -435,7 +435,6 @@ void list_to_coord(std::vector<std::vector<wood_cut::cut_type>>& output_vectors,
 PINVOKE void ctypes_get_connection_zones(
 
     // input geometry
-    //size_t* in_polyline_pairs_f, size_t& in_polyline_pairs_f_s
     size_t* in_polyline_pairs_f, size_t& in_polyline_pairs_f_s, float* in_polyline_pairs_v, size_t& in_polyline_pairs_v_s,
     size_t* in_vectors_f, size_t& in_vectors_f_s, float* in_vectors_v, size_t& in_vectors_v_s,
     size_t* in_joints_types_f, size_t& in_joints_types_f_s, int* in_joints_types_v, size_t& in_joints_types_v_s,
@@ -481,25 +480,13 @@ PINVOKE void ctypes_get_connection_zones(
     std::vector<double> in_joint_parameters;
     coord_to_list(in_joint_parameters_v, in_joint_parameters_v_s, in_joint_parameters);
 
-    // for (auto& i : in_joint_parameters) {
-    //     printf("in_joint_parameters: %f\n", i);
-    // }
-
     std::vector<double> in_scale;
     coord_to_list(in_scale_v, in_scale_v_s, in_scale);
-
-
-    // for (auto& i : in_scale) {
-    //     printf("in_scale: %f\n", i);
-    // }
 
     // global_parameters
     std::vector<double> in_joint_volume_parameters;
     coord_to_list(in_joint_volume_parameters_v, in_joint_volume_parameters_v_s, in_joint_volume_parameters);
 
-    // for (auto& i : in_joint_volume_parameters) {
-    //     printf("in_joint_volume_parameters: %f\n", i);
-    // }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Main Method of Wood
@@ -512,18 +499,9 @@ PINVOKE void ctypes_get_connection_zones(
 
     if( in_joint_volume_parameters.size()>2)
         wood_globals::JOINT_VOLUME_EXTENSION = in_joint_volume_parameters;
-        
-
-    // std::string filename = "C:\\test\\output.txt";
-    // std::ofstream o(filename.c_str());
-    // o << "Hello, World\n" <<  wood_globals::JOINT_VOLUME_EXTENSION.size() <<  std::endl;
-
 
     wood_globals::OUTPUT_GEOMETRY_TYPE = in_output_type;
     wood_globals::FACE_TO_FACE_SIDE_TO_SIDE_JOINTS_DIHEDRAL_ANGLE = (double)face_to_face_side_to_side_joints_dihedral_angle;
-    // printf("%f \n ",  wood_globals::FACE_TO_FACE_SIDE_TO_SIDE_JOINTS_DIHEDRAL_ANGLE);
-
-
 
     wood_main::get_connection_zones(
         // input
@@ -548,294 +526,209 @@ PINVOKE void ctypes_get_connection_zones(
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Convert polylines to double vector and cut types to int vector
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    // size_t* out_plines_groups_f;
-    // size_t out_plines_groups_f_s = 0;
-    // size_t* out_plines_out_f;
-    // size_t out_plines_out_f_s = 0;
-    // float* out_plines_out_v;
-    // size_t out_plines_out_v_s = 0;
     list_to_coord(out_plines, out_plines_groups_f, out_plines_groups_f_s, out_plines_out_f, out_plines_out_f_s, out_plines_out_v, out_plines_out_v_s);
     list_to_coord(out_types, out_types_f, out_types_f_s, out_types_v, out_types_v_s);
-    // printf("out_plines_groups_f: %f\n", out_plines[0][0][0].x());
-    // printf("out_plines_groups_f: %zu\n", out_plines_groups_f[0]);
 
 }
 
-// PINVOKE void pinvoke_get_connection_zones(
-//     // _____________________________________________________ input
-//     float** input_polyline_pairs_coords, size_t input_polyline_pairs_rows, size_t* input_polyline_pairs_cols,
-//     // _____________________________________________________ output
-//     float* arr, size_t& size
-//     // _____________________________________________________ global parameters
-//     // float** input_polyline_pairs_coords, int input_polyline_pairs_rows, int* input_polyline_pairs_cols
-//     // // input
-//     // std::vector<std::vector<double>>& pybind11_input_polyline_pairs,
-//     // std::vector<std::vector<double>>& pybind11_input_insertion_vectors,
-//     // std::vector<std::vector<int>>& pybind11_input_JOINTS_TYPES,
-//     // std::vector<std::vector<int>>& pybind11_input_three_valence_element_indices_and_instruction,
-//     // std::vector<int>& pybind11_input_adjacency,
-//     // std::vector<double>& pybind11_wood_globals_JOINTS_PARAMETERS_AND_TYPES,
-//     // int& _search_type,
-//     // std::vector<double>& _scale,
-//     // int& _output_type,
-//     // // output
-//     // std::vector<std::vector<std::vector<double>>>& pybind11_output_plines,
-//     // std::vector<std::vector<int>>& pybind11_output_types,
-//     // // global_parameters
-//     // std::vector<double>& pybind11_joint_volume_parameters
-// )
-// {
-
-//     std::vector<std::vector<IK::Point_3>> input_polyline_pairs;
-//     // Process each row of the nested array
-//     for (size_t i = 0; i < input_polyline_pairs_rows; i++) {
-//         float* row = input_polyline_pairs_coords[i];
-//         size_t num_cols_in_row = input_polyline_pairs_cols[i];
-//         // Process each element in the row
-//         input_polyline_pairs.emplace_back(std::vector<IK::Point_3>());
-//         for (size_t j = 0; j < num_cols_in_row; j += 3) {
-//             input_polyline_pairs.back().emplace_back(IK::Point_3(row[j], row[j + 1], row[j + 2]));
-//         }
-//     }
-
-//     // Populate the array with some values
-//     arr[0] = 1.0;
-//     arr[1] = 2.0;
-//     arr[2] = 3.0;
-//     arr[3] = 4.0;
-//     arr[4] = 5.0;
-
-//     // Set the size variable to the length of the array
-//     size = 5;
-//     // ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//     // // The filename of the xml file and the screenshot directory
-//     // ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-//     // std::vector<std::vector<IK::Point_3>> input_polyline_pairs;
-//     // python_to_cpp__cpp_to_python::coord_to_vector_of_polylines(pybind11_input_polyline_pairs, input_polyline_pairs);
 
-//     // std::vector<std::vector<IK::Vector_3>> input_insertion_vectors;
-//     // python_to_cpp__cpp_to_python::coord_to_vector_of_vectors(pybind11_input_insertion_vectors, input_insertion_vectors);
+PINVOKE void ctypes_get_connection_zones_with_custom_joints(
+
+    // input geometry
+    size_t* in_polyline_pairs_f, size_t& in_polyline_pairs_f_s, float* in_polyline_pairs_v, size_t& in_polyline_pairs_v_s,
+    size_t* in_vectors_f, size_t& in_vectors_f_s, float* in_vectors_v, size_t& in_vectors_v_s,
+    size_t* in_joints_types_f, size_t& in_joints_types_f_s, int* in_joints_types_v, size_t& in_joints_types_v_s,
+    size_t* in_three_valence_f, size_t& in_three_valence_f_s, int* in_three_valence_v, size_t& in_three_valence_v_s,
+    int* in_adjancency_v, size_t& in_adjancency_v_s,
+
+    //custom joints
+    size_t* in_joint_polyline_pairs_f, size_t& in_joint_polyline_pairs_f_s, float* in_joint_polyline_pairs_v, size_t& in_joint_polyline_pairs_v_s,
+    int* in_joint_types_v, size_t& in_joint_types_v_s,
+
+    //input parameters
+    float* in_joint_parameters_v, size_t& in_joint_parameters_v_s,
+    int& in_search_type,
+    float* in_scale_v, size_t& in_scale_v_s,
+    int& in_output_type,
+
+    // output
+    size_t*& out_plines_groups_f, size_t& out_plines_groups_f_s, size_t*& out_plines_out_f, size_t& out_plines_out_f_s, float*& out_plines_out_v, size_t& out_plines_out_v_s,
+    size_t*& out_types_f, size_t& out_types_f_s, int*& out_types_v, size_t& out_types_v_s,
+
+    // global_parameters
+    float* in_joint_volume_parameters_v, size_t& in_joint_volume_parameters_v_s,
+    float& face_to_face_side_to_side_joints_dihedral_angle
+) {
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Output
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    // input geometry
+    std::vector<CGAL_Polyline> in_polyline_pairs;
+    coord_to_list(in_polyline_pairs_f, in_polyline_pairs_f_s, in_polyline_pairs_v, in_polyline_pairs_v_s, in_polyline_pairs);
+
+    std::vector<std::vector<IK::Vector_3>> in_vectors;
+    coord_to_list(in_vectors_f, in_vectors_f_s, in_vectors_v, in_vectors_v_s, in_vectors);
+
+    std::vector<std::vector<int>> in_joints_types;
+    coord_to_list(in_joints_types_f, in_joints_types_f_s, in_joints_types_v, in_joints_types_v_s, in_joints_types);
+
+    std::vector<std::vector<int>> in_three_valence;
+    coord_to_list(in_three_valence_f, in_three_valence_f_s, in_three_valence_v, in_three_valence_v_s, in_three_valence);
+
+    std::vector<int> in_adjancency;
+    coord_to_list(in_adjancency_v, in_adjancency_v_s, in_adjancency);
+
+    // input parameters
+    std::vector<double> in_joint_parameters;
+    coord_to_list(in_joint_parameters_v, in_joint_parameters_v_s, in_joint_parameters);
+
+    std::vector<double> in_scale;
+    coord_to_list(in_scale_v, in_scale_v_s, in_scale);
+
+    // global_parameters
+    std::vector<double> in_joint_volume_parameters;
+    coord_to_list(in_joint_volume_parameters_v, in_joint_volume_parameters_v_s, in_joint_volume_parameters);
+
+    // custom joints
+    std::vector<CGAL_Polyline> in_joint_polyline_pairs;
+    coord_to_list(in_joint_polyline_pairs_f, in_joint_polyline_pairs_f_s, in_joint_polyline_pairs_v, in_joint_polyline_pairs_v_s, in_joint_polyline_pairs);
+
+    std::vector<int> in_joint_types;
+    coord_to_list(in_joint_types_v, in_joint_types_v_s, in_joint_types);
 
 
-//     // std::vector<std::vector<int>> input_JOINTS_TYPES = pybind11_input_JOINTS_TYPES = pybind11_input_JOINTS_TYPES;
-//     // std::vector<std::vector<int>> input_three_valence_element_indices_and_instruction = pybind11_input_three_valence_element_indices_and_instruction;
-//     // std::vector<int> input_adjacency = pybind11_input_adjacency;
 
-//     // int search_type = _search_type;
-//     // std::vector<double> scale = _scale;
-//     // int output_type = _output_type;
-
-//     // wood_globals::JOINTS_PARAMETERS_AND_TYPES = pybind11_wood_globals_JOINTS_PARAMETERS_AND_TYPES;
-//     // wood_globals::OUTPUT_GEOMETRY_TYPE = output_type;
-//     // for (int i = 0; i < pybind11_joint_volume_parameters.size(); i++)
-//     //     wood_globals::JOINT_VOLUME_EXTENSION[i] = pybind11_joint_volume_parameters[i];
-
-
-//     // ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//     // // Main Method of Wood
-//     // ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//     // std::vector<std::vector<CGAL_Polyline>> output_plines;
-//     // std::vector<std::vector<wood_cut::cut_type>> output_types;
-//     // std::vector<std::vector<int>> top_face_triangulation;
-
-
-//     // wood_main::get_connection_zones(
-//     //     // input
-//     //     input_polyline_pairs,
-//     //     input_insertion_vectors,
-//     //     input_JOINTS_TYPES,
-//     //     input_three_valence_element_indices_and_instruction,
-//     //     input_adjacency,
-//     //     // output
-//     //     output_plines,
-//     //     output_types,
-//     //     top_face_triangulation,
-//     //     // Global Parameters
-//     //     wood_globals::JOINTS_PARAMETERS_AND_TYPES,
-//     //     scale,
-//     //     search_type,
-//     //     wood_globals::OUTPUT_GEOMETRY_TYPE,
-//     //     0);
-
-//     // //printf("CPP 6");
-//     // ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//     // // Convert polylines to double vector and cut types to int vector
-//     // ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//     // python_to_cpp__cpp_to_python::nested_vector_of_polylines_to_coord(output_plines, pybind11_output_plines);
-//     // python_to_cpp__cpp_to_python::nested_vector_of_cut_type_to_nested_vector_of_int(output_types, pybind11_output_types); // only filled when 3rd output type is uesd
-//     // //printf("CPP 7");
-// }
+    //9
+    wood_globals::custom_joints_ss_e_ip_male.clear();
+    wood_globals::custom_joints_ss_e_ip_female.clear();
+    //19
+    wood_globals::custom_joints_ss_e_op_male.clear();
+    wood_globals::custom_joints_ss_e_op_female.clear();
+    //29
+    wood_globals::custom_joints_ts_e_p_male.clear();
+    wood_globals::custom_joints_ts_e_p_female.clear();
+    //39
+    wood_globals::custom_joints_cr_c_ip_male.clear();
+    wood_globals::custom_joints_cr_c_ip_female.clear();
+    //49
+    wood_globals::custom_joints_tt_e_p_male.clear();
+    wood_globals::custom_joints_tt_e_p_female.clear();
+    //59
+    wood_globals::custom_joints_ss_e_r_male.clear();
+    wood_globals::custom_joints_ss_e_r_female.clear();
+    //69
+    wood_globals::custom_joints_b_male.clear();
+    wood_globals::custom_joints_b_female.clear();
 
 
-// PINVOKE int pinvoke_get_connection_zones(
-//     //input
-//     int* f, int f_s, double* v, int v_s,
-//     int* vec_f, int vec_f_s, double* vec_v, int vec_v_s,
-//     int* jointtypes_f, int jointtypes_f_s, int* jointtypes_v, int jointtypes_v_s,
-//     int* threevalence_f, int threevalence_f_s, int* threevalence_v, int threevalence_v_s,
-//     int* adjacency_v, int adjacency_v_s,
-//     double* jointparams_v, int jointparams_v_s,
-//     double* scale_v, int scale_v_s,
-//     const char* file_and_folder_of_joint_library_xml,
-//     //output
-//     int*& groups_f, int& groups_f_s, int*& out_f, int& out_f_s, double*& out_v, int& out_v_s,
-//     //optional inputs
-//     int search_type, int output_type, int triangulate
-// ) {
-//     path_and_file_for_joints = std::string(file_and_folder_of_joint_library_xml) + "\\joinery_library.xml";
+    if(in_joint_polyline_pairs.size() == in_joint_types.size()){
+        for(int i = 0; i < in_joint_polyline_pairs.size(); i++){
 
-//     //std::ofstream myfile;
-//     //myfile.open("C:\\Users\\petra\\AppData\\Roaming\\Grasshopper\\Libraries\\compas_wood\\example.txt");
-//     //myfile << "Dir\n";
-//     //myfile << path_and_file_for_joints;
-//     //myfile.close();
+            switch (in_joint_types[i])
+            {
+            case (9) :
+                wood_globals::custom_joints_ss_e_ip_male.emplace_back(in_joint_polyline_pairs[i]);
+                break;
+            case (-9) :
+                wood_globals::custom_joints_ss_e_ip_female.emplace_back(in_joint_polyline_pairs[i]);
+                break;
+            case (19) :
+                wood_globals::custom_joints_ss_e_op_male.emplace_back(in_joint_polyline_pairs[i]);
+                break;
+            case (-19) :
+                wood_globals::custom_joints_ss_e_op_female.emplace_back(in_joint_polyline_pairs[i]);
+                break;
+            case (29) :
+                wood_globals::custom_joints_ts_e_p_male.emplace_back(in_joint_polyline_pairs[i]);
+                break;
+            case (-29) :
+                wood_globals::custom_joints_ts_e_p_female.emplace_back(in_joint_polyline_pairs[i]);
+                break;
+            case (39) :
+                wood_globals::custom_joints_cr_c_ip_male.emplace_back(in_joint_polyline_pairs[i]);
+                break;
+            case (-39) :
+                wood_globals::custom_joints_cr_c_ip_female.emplace_back(in_joint_polyline_pairs[i]);
+                break;
+            case (49) :
+                wood_globals::custom_joints_tt_e_p_male.emplace_back(in_joint_polyline_pairs[i]);
+                break;
+            case (-49) :
+                wood_globals::custom_joints_tt_e_p_female.emplace_back(in_joint_polyline_pairs[i]);
+                break;
+            case (59) :
+                wood_globals::custom_joints_ss_e_r_male.emplace_back(in_joint_polyline_pairs[i]);
+                break;
+            case (-59) :
+                wood_globals::custom_joints_ss_e_r_female.emplace_back(in_joint_polyline_pairs[i]);
+                break;
+            case (69) :
+                wood_globals::custom_joints_b_male.emplace_back(in_joint_polyline_pairs[i]);
+                break;
+            case (-69) :
+                wood_globals::custom_joints_b_female.emplace_back(in_joint_polyline_pairs[i]);
+                break;
+                
+            
+            default:
+                break;
+            }
+            
+        }
 
-//     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//     //input_convertion
-//     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//     std::vector<CGAL_Polyline> input_polyline_pairs;
-//     std::vector<std::vector<IK::Vector_3>> input_insertion_vectors;
-//     std::vector<std::vector<int>> input_JOINTS_TYPES;
-//     std::vector<std::vector<int>> input_three_valence_element_indices_and_instruction;
-//     std::vector<int> input_adjacency;
-//     std::vector<double> default_parameters_for_JOINTS_TYPES;
-//     std::vector<double> scale;
+    }
+    // std::ofstream outputFile("C:/compas_wood/output.txt"); 
+    // outputFile << in_joint_polyline_pairs.size() << std::endl;
+    // outputFile << in_joint_types.size() << std::endl;
+    // outputFile << wood_globals::custom_joints_ts_e_p_male.size() << std::endl;
+    // outputFile << wood_globals::custom_joints_ts_e_p_female.size() << std::endl;
+    // outputFile << wood_globals::custom_joints_cr_c_ip_male.size() << std::endl;
+    // outputFile << wood_globals::custom_joints_cr_c_ip_female.size() << std::endl;
+    // outputFile.close(); 
 
-//     coord_to_list(f, f_s, v, v_s, input_polyline_pairs);
-//     //if (v_s == vec_v_s && f_s == vec_f_s)
-//     coord_to_list(vec_f, vec_f_s, vec_v, vec_v_s, input_insertion_vectors);
-//     //if (f_s == vec_f_s)
-//     coord_to_list(jointtypes_f, jointtypes_f_s, jointtypes_v, jointtypes_v_s, input_JOINTS_TYPES);
-//     //if (threevalence_v_s % 4 == 0)
-//     coord_to_list(threevalence_f, threevalence_f_s, threevalence_v, threevalence_v_s, input_three_valence_element_indices_and_instruction);
-//     //if (adjacency_v_s % 2 == 0)
-//     coord_to_list(adjacency_v, adjacency_v_s, input_adjacency);
-//     //if (jointparams_v_s % 3 == 0)
-//     coord_to_list(jointparams_v, jointparams_v_s, default_parameters_for_JOINTS_TYPES);
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Main Method of Wood
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    std::vector<std::vector<CGAL_Polyline>> out_plines;
+    std::vector<std::vector<wood_cut::cut_type>> out_types;
+    std::vector<std::vector<int>> top_face_triangulation;
 
-//     coord_to_list(scale_v, scale_v_s, scale);
-//     //for (auto& o : default_parameters_for_JOINTS_TYPES)
-//         //CGAL_Debug(o);
+    wood_globals::JOINTS_PARAMETERS_AND_TYPES = in_joint_parameters;
 
-//     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//     //run
-//     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//     groups_f_s = 0;
-//     out_f_s = 0;
-//     out_v_s = 0;
-//     //CGAL_Debug(search_type);
-//     //CGAL_Debug(f_s);
-//     //CGAL_Debug(v_s);
-//     std::vector<std::vector<CGAL_Polyline>> output_plines;
-//     std::vector<std::vector<int>> output_top_face_triangulation;
+    if( in_joint_volume_parameters.size()>2)
+        wood_globals::JOINT_VOLUME_EXTENSION = in_joint_volume_parameters;
 
-//     get_connection_zones(
-//         input_polyline_pairs, input_insertion_vectors, input_JOINTS_TYPES, input_three_valence_element_indices_and_instruction, input_adjacency,
-//         output_plines, output_top_face_triangulation,
-//         default_parameters_for_JOINTS_TYPES, scale,
-//         search_type, output_type, triangulate
-//     );//division_distance, shift,
+    wood_globals::OUTPUT_GEOMETRY_TYPE = in_output_type;
+    wood_globals::FACE_TO_FACE_SIDE_TO_SIDE_JOINTS_DIHEDRAL_ANGLE = (double)face_to_face_side_to_side_joints_dihedral_angle;
 
-//     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//     //output_conversion
-//     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//     //std::ofstream myfile;
-//     //myfile.open("C:\\Users\\petra\\AppData\\Roaming\\Grasshopper\\Libraries\\compas_wood\\example.txt");
+    wood_main::get_connection_zones(
+        // input
+        in_polyline_pairs,
+        in_vectors,
+        in_joints_types,
+        in_three_valence,
+        in_adjancency,
+        // output
+        out_plines,
+        out_types,
+        top_face_triangulation,
+        // global parameters
+        wood_globals::JOINTS_PARAMETERS_AND_TYPES,
+        in_scale,
+        in_search_type,
+        wood_globals::OUTPUT_GEOMETRY_TYPE,
+        0
+    );
 
-//     //for (auto& p : output_plines[0][0]) {
-//     //    myfile << p[0];
-//     //    myfile << "\n";
-//     //    myfile << p[1];
-//     //    myfile << "\n";
-//     //    myfile << p[2];
-//     //    myfile << "\n";
-//     //    myfile << "\n";
-//     //}
 
-//     //myfile.close();
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Convert polylines to double vector and cut types to int vector
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    list_to_coord(out_plines, out_plines_groups_f, out_plines_groups_f_s, out_plines_out_f, out_plines_out_f_s, out_plines_out_v, out_plines_out_v_s);
+    list_to_coord(out_types, out_types_f, out_types_f_s, out_types_v, out_types_v_s);
 
-//     list_to_coord(output_plines, groups_f, groups_f_s, out_f, out_f_s, out_v, out_v_s);
-
-//     return 1;
-// }
-
-// PINVOKE int pinvoke_find_closest_plateside_to_line(
-//     //input - polylines flat list and a flat list of lines
-//     int* f, int f_s, double* v, int v_s,
-//     double* lines_v, int lines_v_s,
-//     //output - jagged array of vectors
-//     int*& out_f, int& out_f_s, double*& out_v, int& out_v_s
-// ) {
-//     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//     //input_convertion
-//     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//     std::vector<CGAL_Polyline> input_polyline_pairs;
-//     std::vector<IK::Segment_3> input_insertion_segments;
-
-//     coord_to_list(f, f_s, v, v_s, input_polyline_pairs);
-//     coord_to_list(lines_v, lines_v_s, input_insertion_segments);
-
-//     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//     //run
-//     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//     std::vector<std::vector<IK::Vector_3>> output_insertion_vectors;
-
-//     rtree_util::find_closest_plateside_to_line(input_polyline_pairs, input_insertion_segments, output_insertion_vectors);
-//     //for (int i = 0; i < output_insertion_vectors.size(); i++) {
-//     //    CGAL_Debug(0);
-//     //    for (int j = 0; j < output_insertion_vectors[i].size(); j++) {
-//     //        CGAL_Debug(output_insertion_vectors[i][j]);
-//     //    }
-//     //}
-
-//     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//     //output_conversion
-//     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//     //CGAL_Debug(output_plines.size());
-//     list_to_coord(output_insertion_vectors, out_f, out_f_s, out_v, out_v_s);
-
-//     return 1;
-// }
-
-// PINVOKE int pinvoke_find_closest_plateside_to_indexedpoint(
-//     //input - polylines flat list and a flat list of lines
-//     int* f, int f_s, double* v, int v_s,
-//     double* pts_v, int pts_v_s,
-//     int* ids_v, int ids_v_s,
-//     //output - jagged array of integers, representing joint types
-//     int*& out_f, int& out_f_s, int*& out_v, int& out_v_s
-// ) {
-//     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// //input_convertion
-// /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//     std::vector<CGAL_Polyline> input_polyline_pairs;
-//     std::vector<IK::Point_3> input_joint_pts;
-//     std::vector<int> input_joint_ids;
-
-//     coord_to_list(f, f_s, v, v_s, input_polyline_pairs);
-//     coord_to_list(pts_v, pts_v_s, input_joint_pts);
-//     coord_to_list(ids_v, ids_v_s, input_joint_ids);
-
-//     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//     //run
-//     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//     std::vector<std::vector<int>> output_JOINTS_TYPES;
-
-//     rtree_util::find_closest_plateside_to_indexedpoint(input_polyline_pairs, input_joint_pts, input_joint_ids, output_JOINTS_TYPES);
-//     //for (int i = 0; i < output_JOINTS_TYPES.size(); i++) {
-//     //    CGAL_Debug(0);
-//     //    for (int j = 0; j < output_JOINTS_TYPES[i].size(); j++) {
-//     //        CGAL_Debug(output_JOINTS_TYPES[i][j]);
-//     //    }
-//     //}
-
-//     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//     //output_conversion
-//     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//     //CGAL_Debug(output_plines.size());
-//     list_to_coord(output_JOINTS_TYPES, out_f, out_f_s, out_v, out_v_s);
-
-//     return 1;
-// }
+}

@@ -60,6 +60,22 @@ namespace wood_globals
 
     // Wood viewer
     extern size_t RUN_COUNT;
+
+    // custom joint types
+    extern std::vector<CGAL_Polyline> custom_joints_ss_e_ip_male;
+    extern std::vector<CGAL_Polyline> custom_joints_ss_e_ip_female;
+    extern std::vector<CGAL_Polyline> custom_joints_ss_e_op_male;
+    extern std::vector<CGAL_Polyline> custom_joints_ss_e_op_female;
+    extern std::vector<CGAL_Polyline> custom_joints_ts_e_p_male;
+    extern std::vector<CGAL_Polyline> custom_joints_ts_e_p_female;
+    extern std::vector<CGAL_Polyline> custom_joints_cr_c_ip_male;
+    extern std::vector<CGAL_Polyline> custom_joints_cr_c_ip_female;
+    extern std::vector<CGAL_Polyline> custom_joints_tt_e_p_male;
+    extern std::vector<CGAL_Polyline> custom_joints_tt_e_p_female;
+    extern std::vector<CGAL_Polyline> custom_joints_ss_e_r_male;
+    extern std::vector<CGAL_Polyline> custom_joints_ss_e_r_female;
+    extern std::vector<CGAL_Polyline> custom_joints_b_male;
+    extern std::vector<CGAL_Polyline> custom_joints_b_female;
 }
 
 #endif

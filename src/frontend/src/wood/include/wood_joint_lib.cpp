@@ -896,7 +896,6 @@ namespace wood_joint_lib
         // return true;
     }
 
-
     void ss_e_ip_3(wood::joint &joint)
     {
         joint.name = __func__;
@@ -1050,33 +1049,9 @@ IK::Point_3(1.25, 0.5, 0.5),
             };
 
 
-        joint.f_boolean_type = {wood_cut::mill_project, wood_cut::mill_project, wood_cut::drill, wood_cut::drill};
-        joint.m_boolean_type = {wood_cut::mill_project, wood_cut::mill_project, wood_cut::drill, wood_cut::drill};
+        joint.f_boolean_type = {wood_cut::mill_project, wood_cut::mill_project, wood_cut::drill, wood_cut::drill, wood_cut::drill, wood_cut::drill};
+        joint.m_boolean_type = {wood_cut::mill_project, wood_cut::mill_project, wood_cut::drill, wood_cut::drill, wood_cut::drill, wood_cut::drill};
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     void ss_e_ip_4(wood::joint &joint)
     {
@@ -1326,10 +1301,36 @@ IK::Point_3(1.25, -0.5, 0.5),
             };
 
 
-        joint.f_boolean_type = {wood_cut::mill_project, wood_cut::mill_project, wood_cut::drill, wood_cut::drill};
-        joint.m_boolean_type = {wood_cut::mill_project, wood_cut::mill_project, wood_cut::drill, wood_cut::drill};
+        joint.f_boolean_type = {wood_cut::mill_project, wood_cut::mill_project,wood_cut::mill_project, wood_cut::mill_project, wood_cut::drill, wood_cut::drill, wood_cut::drill, wood_cut::drill};
+        joint.m_boolean_type = {wood_cut::mill_project, wood_cut::mill_project,wood_cut::mill_project, wood_cut::mill_project, wood_cut::drill, wood_cut::drill, wood_cut::drill, wood_cut::drill};
     }
     
+    void ss_e_ip_custom(wood::joint &joint)
+    {
+
+        joint.name = __func__;
+
+        for (size_t i = 0; i < wood_globals::custom_joints_ss_e_ip_male.size(); i+=2)
+        {
+            joint.m[0].emplace_back(wood_globals::custom_joints_ss_e_ip_male[i]);
+            joint.m[0].emplace_back(wood_globals::custom_joints_ss_e_ip_male[i]);
+            joint.m[1].emplace_back(wood_globals::custom_joints_ss_e_ip_male[i+1]);
+            joint.m[1].emplace_back(wood_globals::custom_joints_ss_e_ip_male[i+1]);
+            joint.m_boolean_type.emplace_back(wood_cut::nothing);
+            joint.m_boolean_type.emplace_back(wood_cut::nothing);
+        }
+
+        for (size_t i = 0; i < wood_globals::custom_joints_ss_e_ip_female.size(); i+=2)
+        {
+            joint.f[0].emplace_back(wood_globals::custom_joints_ss_e_ip_female[i]);
+            joint.f[0].emplace_back(wood_globals::custom_joints_ss_e_ip_female[i]);
+            joint.f[1].emplace_back(wood_globals::custom_joints_ss_e_ip_female[i+1]);
+            joint.f[1].emplace_back(wood_globals::custom_joints_ss_e_ip_female[i+1]);
+            joint.f_boolean_type.emplace_back(wood_cut::nothing);
+            joint.f_boolean_type.emplace_back(wood_cut::nothing);
+        }
+
+    }
     
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Side-to-side edge out-of-plane joints 10-19
@@ -1988,6 +1989,34 @@ IK::Point_3(1.25, -0.5, 0.5),
         ss_e_op_5(jo, all_joints, true);
         jo.name = __func__;
     }
+
+    void ss_e_op_custom(wood::joint &joint)
+    {
+
+        joint.name = __func__;
+
+        for (size_t i = 0; i < wood_globals::custom_joints_ss_e_op_male.size(); i+=2)
+        {
+            joint.m[0].emplace_back(wood_globals::custom_joints_ss_e_op_male[i]);
+            joint.m[0].emplace_back(wood_globals::custom_joints_ss_e_op_male[i]);
+            joint.m[1].emplace_back(wood_globals::custom_joints_ss_e_op_male[i+1]);
+            joint.m[1].emplace_back(wood_globals::custom_joints_ss_e_op_male[i+1]);
+            joint.m_boolean_type.emplace_back(wood_cut::nothing);
+            joint.m_boolean_type.emplace_back(wood_cut::nothing);
+        }
+
+        for (size_t i = 0; i < wood_globals::custom_joints_ss_e_op_female.size(); i+=2)
+        {
+            joint.f[0].emplace_back(wood_globals::custom_joints_ss_e_op_female[i]);
+            joint.f[0].emplace_back(wood_globals::custom_joints_ss_e_op_female[i]);
+            joint.f[1].emplace_back(wood_globals::custom_joints_ss_e_op_female[i+1]);
+            joint.f[1].emplace_back(wood_globals::custom_joints_ss_e_op_female[i+1]);
+            joint.f_boolean_type.emplace_back(wood_cut::nothing);
+            joint.f_boolean_type.emplace_back(wood_cut::nothing);
+        }
+
+    }
+
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Side-to-side edge rotated joints 20-29
@@ -2729,6 +2758,34 @@ IK::Point_3(1.25, -0.5, 0.5),
             std::swap(jo.m[1], jo.f[1]);
             std::swap(jo.m_boolean_type[1], jo.f_boolean_type[1]);
         }
+    }
+
+
+    void ss_e_r_custom(wood::joint &joint)
+    {
+
+        joint.name = __func__;
+
+        for (size_t i = 0; i < wood_globals::custom_joints_ss_e_r_male.size(); i+=2)
+        {
+            joint.m[0].emplace_back(wood_globals::custom_joints_ss_e_r_male[i]);
+            joint.m[0].emplace_back(wood_globals::custom_joints_ss_e_r_male[i]);
+            joint.m[1].emplace_back(wood_globals::custom_joints_ss_e_r_male[i+1]);
+            joint.m[1].emplace_back(wood_globals::custom_joints_ss_e_r_male[i+1]);
+            joint.m_boolean_type.emplace_back(wood_cut::nothing);
+            joint.m_boolean_type.emplace_back(wood_cut::nothing);
+        }
+
+        for (size_t i = 0; i < wood_globals::custom_joints_ss_e_r_female.size(); i+=2)
+        {
+            joint.f[0].emplace_back(wood_globals::custom_joints_ss_e_r_female[i]);
+            joint.f[0].emplace_back(wood_globals::custom_joints_ss_e_r_female[i]);
+            joint.f[1].emplace_back(wood_globals::custom_joints_ss_e_r_female[i+1]);
+            joint.f[1].emplace_back(wood_globals::custom_joints_ss_e_r_female[i+1]);
+            joint.f_boolean_type.emplace_back(wood_cut::nothing);
+            joint.f_boolean_type.emplace_back(wood_cut::nothing);
+        }
+
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -3703,6 +3760,38 @@ IK::Point_3(1.25, -0.5, 0.5),
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         joint.unit_scale = true;
     }
+    
+    void ts_e_p_custom(wood::joint &joint)
+    {
+        // std::ofstream outputFile("C:/compas_wood/output.txt"); 
+        // outputFile << wood_globals::custom_joints_ts_e_p_male.size() << std::endl;
+        // outputFile << wood_globals::custom_joints_ts_e_p_female.size() << std::endl;
+        // outputFile.close();
+
+        joint.name = __func__;
+
+        for (size_t i = 0; i < wood_globals::custom_joints_ts_e_p_male.size(); i+=2)
+        {
+            joint.m[0].emplace_back(wood_globals::custom_joints_ts_e_p_male[i]);
+            joint.m[0].emplace_back(wood_globals::custom_joints_ts_e_p_male[i]);
+            joint.m[1].emplace_back(wood_globals::custom_joints_ts_e_p_male[i+1]);
+            joint.m[1].emplace_back(wood_globals::custom_joints_ts_e_p_male[i+1]);
+            joint.m_boolean_type.emplace_back(wood_cut::nothing);
+            joint.m_boolean_type.emplace_back(wood_cut::nothing);
+        }
+
+        for (size_t i = 0; i < wood_globals::custom_joints_ts_e_p_female.size(); i+=2)
+        {
+            joint.f[0].emplace_back(wood_globals::custom_joints_ts_e_p_female[i]);
+            joint.f[0].emplace_back(wood_globals::custom_joints_ts_e_p_female[i]);
+            joint.f[1].emplace_back(wood_globals::custom_joints_ts_e_p_female[i+1]);
+            joint.f[1].emplace_back(wood_globals::custom_joints_ts_e_p_female[i+1]);
+            joint.f_boolean_type.emplace_back(wood_cut::nothing);
+            joint.f_boolean_type.emplace_back(wood_cut::nothing);
+        }
+
+    }
+    
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Cross cutting in-plane joints 30-39
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -4634,6 +4723,38 @@ IK::Point_3(1.25, -0.5, 0.5),
         // joint.f[0]= {};
         // joint.f[1]= {};
     }
+
+
+     void cr_c_ip_custom(wood::joint &joint)
+    {
+
+        // std::ofstream outputFile("C:/compas_wood/output.txt"); 
+
+        joint.name = __func__;
+        // outputFile << wood_globals::custom_joints_cr_c_ip_male.size() << std::endl;
+        // outputFile << wood_globals::custom_joints_cr_c_ip_female.size() << std::endl;
+        // outputFile.close();  // Close the file
+        for (size_t i = 0; i < wood_globals::custom_joints_cr_c_ip_male.size(); i+=2)
+        {
+            joint.m[0].emplace_back(wood_globals::custom_joints_cr_c_ip_male[i]);
+            joint.m[0].emplace_back(wood_globals::custom_joints_cr_c_ip_male[i]);
+            joint.m[1].emplace_back(wood_globals::custom_joints_cr_c_ip_male[i+1]);
+            joint.m[1].emplace_back(wood_globals::custom_joints_cr_c_ip_male[i+1]);
+            joint.m_boolean_type.emplace_back(wood_cut::nothing);
+            joint.m_boolean_type.emplace_back(wood_cut::nothing);
+        }
+
+        for (size_t i = 0; i < wood_globals::custom_joints_cr_c_ip_female.size(); i+=2)
+        {
+            joint.f[0].emplace_back(wood_globals::custom_joints_cr_c_ip_female[i]);
+            joint.f[0].emplace_back(wood_globals::custom_joints_cr_c_ip_female[i]);
+            joint.f[1].emplace_back(wood_globals::custom_joints_cr_c_ip_female[i+1]);
+            joint.f[1].emplace_back(wood_globals::custom_joints_cr_c_ip_female[i+1]);
+            joint.f_boolean_type.emplace_back(wood_cut::nothing);
+            joint.f_boolean_type.emplace_back(wood_cut::nothing);
+        }
+
+    }
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Top-to-top edge plane joints 40-49
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -4911,6 +5032,34 @@ IK::Point_3(1.25, -0.5, 0.5),
         joint.key += std::to_string(joint.id);
     }
 
+
+    void tt_e_p_custom(wood::joint &joint)
+    {
+
+        joint.name = __func__;
+
+        for (size_t i = 0; i < wood_globals::custom_joints_tt_e_p_male.size(); i+=2)
+        {
+            joint.m[0].emplace_back(wood_globals::custom_joints_tt_e_p_male[i]);
+            joint.m[0].emplace_back(wood_globals::custom_joints_tt_e_p_male[i]);
+            joint.m[1].emplace_back(wood_globals::custom_joints_tt_e_p_male[i+1]);
+            joint.m[1].emplace_back(wood_globals::custom_joints_tt_e_p_male[i+1]);
+            joint.m_boolean_type.emplace_back(wood_cut::nothing);
+            joint.m_boolean_type.emplace_back(wood_cut::nothing);
+        }
+
+        for (size_t i = 0; i < wood_globals::custom_joints_tt_e_p_female.size(); i+=2)
+        {
+            joint.f[0].emplace_back(wood_globals::custom_joints_tt_e_p_female[i]);
+            joint.f[0].emplace_back(wood_globals::custom_joints_tt_e_p_female[i]);
+            joint.f[1].emplace_back(wood_globals::custom_joints_tt_e_p_female[i+1]);
+            joint.f[1].emplace_back(wood_globals::custom_joints_tt_e_p_female[i+1]);
+            joint.f_boolean_type.emplace_back(wood_cut::nothing);
+            joint.f_boolean_type.emplace_back(wood_cut::nothing);
+        }
+
+    }
+
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Boundary joint 60-69
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -4989,6 +5138,32 @@ IK::Point_3(1.25, -0.5, 0.5),
         // joint.f_boolean_type = { '1', '1' };
     }
 
+    void b_custom(wood::joint &joint)
+    {
+
+        joint.name = __func__;
+
+        for (size_t i = 0; i < wood_globals::custom_joints_b_male.size(); i+=2)
+        {
+            joint.m[0].emplace_back(wood_globals::custom_joints_b_male[i]);
+            joint.m[0].emplace_back(wood_globals::custom_joints_b_male[i]);
+            joint.m[1].emplace_back(wood_globals::custom_joints_b_male[i+1]);
+            joint.m[1].emplace_back(wood_globals::custom_joints_b_male[i+1]);
+            joint.m_boolean_type.emplace_back(wood_cut::nothing);
+            joint.m_boolean_type.emplace_back(wood_cut::nothing);
+        }
+
+        for (size_t i = 0; i < wood_globals::custom_joints_b_female.size(); i+=2)
+        {
+            joint.f[0].emplace_back(wood_globals::custom_joints_b_female[i]);
+            joint.f[0].emplace_back(wood_globals::custom_joints_b_female[i]);
+            joint.f[1].emplace_back(wood_globals::custom_joints_b_female[i+1]);
+            joint.f[1].emplace_back(wood_globals::custom_joints_b_female[i+1]);
+            joint.f_boolean_type.emplace_back(wood_cut::nothing);
+            joint.f_boolean_type.emplace_back(wood_cut::nothing);
+        }
+
+    }
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Key function that iterates through all joints and calls the function that constructs the joint geometry
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -5008,7 +5183,7 @@ IK::Point_3(1.25, -0.5, 0.5),
         joint_names[3] = "ss_e_ip_2";
         joint_names[4] = "ss_e_ip_3";
         joint_names[8] = "side_removal";
-        joint_names[9] = "ss_e_ip_9";
+        joint_names[9] = "ss_e_ip_custom";
         joint_names[10] = "ss_e_op_0";
         joint_names[11] = "ss_e_op_1";
         joint_names[12] = "ss_e_op_2";
@@ -5017,7 +5192,7 @@ IK::Point_3(1.25, -0.5, 0.5),
         joint_names[15] = "ss_e_op_5";
         joint_names[16] = "ss_e_op_6";
         joint_names[18] = "side_removal";
-        joint_names[19] = "ss_e_op_9";
+        joint_names[19] = "ss_e_op_custom";
         joint_names[20] = "ts_e_p_0";
         joint_names[21] = "ts_e_p_1";
         joint_names[22] = "ts_e_p_2";
@@ -5025,15 +5200,15 @@ IK::Point_3(1.25, -0.5, 0.5),
         joint_names[24] = "ts_e_p_4";
         joint_names[25] = "ts_e_p_5";
         joint_names[28] = "side_removal";
-        joint_names[29] = "ts_e_p_9";
+        joint_names[29] = "ts_e_p_custom";
         joint_names[30] = "cr_c_ip_0";
         joint_names[31] = "cr_c_ip_1";
         joint_names[32] = "cr_c_ip_2";
-        joint_names[33] = "cr_c_ip_2";
-        joint_names[34] = "cr_c_ip_2";
-        joint_names[35] = "cr_c_ip_2";
+        joint_names[33] = "cr_c_ip_3";
+        joint_names[34] = "cr_c_ip_4";
+        joint_names[35] = "cr_c_ip_5";
+        joint_names[39] = "cr_c_ip_custom";
         joint_names[38] = "side_removal";
-        joint_names[39] = "cr_c_ip_9";
         joint_names[40] = "tt_e_p_0";
         joint_names[41] = "tt_e_p_1";
         joint_names[42] = "tt_e_p_2";
@@ -5041,9 +5216,11 @@ IK::Point_3(1.25, -0.5, 0.5),
         joint_names[44] = "tt_e_p_4";
         joint_names[45] = "tt_e_p_5";
         joint_names[48] = "side_removal";
+        joint_names[49] = "tt_e_p_custom";
         joint_names[58] = "side_removal_ss_e_r_1";
-        joint_names[59] = "ss_e_r_9";
+        joint_names[59] = "ss_e_r_custom";
         joint_names[60] = "b_0";
+        joint_names[69] = "b_custom";
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Most joints are often the same
@@ -5243,8 +5420,9 @@ IK::Point_3(1.25, -0.5, 0.5),
                     side_removal(jo, elements);
                     break;
                 case (9):
+                    ss_e_ip_custom(jo);
                     // wont work, because not oriented to connection zones, need additional layer e.g. std::map of all joints
-                    internal::read_xml(jo, jo.type); // is it 0 or 12 ?
+                    //internal::read_xml(jo, jo.type); // is it 0 or 12 ?
                     // CGAL_Debug(elements[joint.v0].thickness);
                     break;
                 default:
@@ -5285,6 +5463,7 @@ IK::Point_3(1.25, -0.5, 0.5),
                     side_removal(jo, elements);
                     break;
                 case (19):
+                    ss_e_op_custom(jo);
                     // if (true) {
                     //     std::ofstream myfile2;
                     //     myfile2.open("C:\\Users\\petra\\AppData\\Roaming\\Grasshopper\\Libraries\\compas_wood\\19.txt");
@@ -5293,7 +5472,7 @@ IK::Point_3(1.25, -0.5, 0.5),
                     //     myfile2.close();
                     // }
                     // wont work, because not oriented to connection zones, need additional layer e.g. std::map of all joints
-                    internal::read_xml(jo, jo.type); // is it 0 or 12 ?
+                    //internal::read_xml(jo, jo.type); // is it 0 or 12 ?
                     break;
                 default:
                     ss_e_op_1(jo);
@@ -5329,8 +5508,9 @@ IK::Point_3(1.25, -0.5, 0.5),
                     side_removal(jo, elements);
                     break;
                 case (29):
+                    ts_e_p_custom(jo);
                     // wont work, because not oriented to connection zones, need additional layer e.g. std::map of all joints
-                    internal::read_xml(jo, jo.type); // is it 0 or 12 ?
+                    //internal::read_xml(jo, jo.type); // is it 0 or 12 ?
                     break;
                 default:
                     ts_e_p_3(jo);
@@ -5362,8 +5542,9 @@ IK::Point_3(1.25, -0.5, 0.5),
                     side_removal(jo, elements);
                     break;
                 case (39):
+                    cr_c_ip_custom(jo);
                     // wont work, because not oriented to connection zones, need additional layer e.g. std::map of all joints
-                    internal::read_xml(jo, jo.type); // is it 0 or 12 ?
+                    //internal::read_xml(jo, jo.type); // is it 0 or 12 ?
                     break;
                 default:
                     cr_c_ip_0(jo);
@@ -5396,6 +5577,9 @@ IK::Point_3(1.25, -0.5, 0.5),
                 case (48):
                     side_removal(jo, elements);
                     break;
+                case (49):
+                    tt_e_p_custom(jo);
+                    break;
                 default:
                     tt_e_p_0(jo, elements);
                     break;
@@ -5416,11 +5600,10 @@ IK::Point_3(1.25, -0.5, 0.5),
                     side_removal(jo, elements, true);
                     break;
                 case (59):
+                    ss_e_r_custom(jo);
                     // CGAL_Debug(99999);
                     // ss_e_ip_1(jo);
-
-                    internal::read_xml(jo, jo.type); // is it 0 or 12 ?
-
+                    //internal::read_xml(jo, jo.type); // is it 0 or 12 ?
                     break;
                 default:
 
@@ -5438,6 +5621,10 @@ IK::Point_3(1.25, -0.5, 0.5),
                 case (60):
                     // printf("\nhi %i", id_representing_joint_name);
                     b_0(jo);
+                    break;
+                case (69):
+                    // printf("\nhi %i", id_representing_joint_name);
+                    b_custom(jo);
                     break;
                 default:
                     b_0(jo);

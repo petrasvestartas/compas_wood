@@ -1,0 +1,78 @@
+{
+    "name": "solver",
+    "nickname": "solver",
+    "description": "generate joints between elements",
+    "category": "compas_wood",
+    "subcategory": "data",
+    "exposure": 2,
+    "instanceGuid": "158E4B65-83F4-4612-8E30-1D0455EE26A2",
+    "ghpython": {
+        "hideOutput": true,
+        "hideInput": true,
+        "isAdvancedMode": true,
+        "marshalOutGuids": true,
+        "iconDisplay": 2,
+        "inputParameters": [
+            {
+                "name": "_cuts0",
+                "nickname": "_cuts0",
+                "description": "cuts for removal from the first beam",
+                "optional": true,
+                "allowTreeAccess": true,
+                "showTypeHints": true,
+                "scriptParamAccess": "list",
+                "wireDisplay": "faint",
+                "sourceCount": 0,
+                "typeHintID": "curve",
+                "reverse": false,
+                "simplify": false
+            },
+            {
+                "name": "_cuts1",
+                "nickname": "_cuts1",
+                "description": "cuts for removal from the second beam",
+                "optional": true,
+                "allowTreeAccess": true,
+                "showTypeHints": true,
+                "scriptParamAccess": "list",
+                "wireDisplay": "faint",
+                "sourceCount": 0,
+                "typeHintID": "curve",
+                "reverse": false,
+                "simplify": false
+            },
+            {
+                "name": "_type",
+                "nickname": "_type",
+                "description": "custom type that the geometry is assigned to",
+                "optional": true,
+                "allowTreeAccess": true,
+                "showTypeHints": true,
+                "scriptParamAccess": "item",
+                "wireDisplay": "faint",
+                "sourceCount": 0,
+                "typeHintID": "int",
+                "reverse": false,
+                "simplify": false
+            }
+        ],
+        "outputParameters": [
+            {
+                "name": "_custom_joints",
+                "nickname": "_custom_joints",
+                "description": "geometry for all the cuts",
+                "optional": false,
+                "sourceCount": 0,
+                "graft": false
+            },
+            {
+                "name": "_custom_types",
+                "nickname": "_custom_types",
+                "description": "types for all the cuts",
+                "optional": false,
+                "sourceCount": 0,
+                "graft": false
+            }
+        ]
+    }
+}

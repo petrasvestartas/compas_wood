@@ -46,15 +46,15 @@
         "outputParameters": [
             {
                 "name": "_plines_0",
-                "nickname": "_plines",
+                "nickname": "_plines_0",
                 "description": "polyline pairs",
                 "optional": false,
                 "sourceCount": 0,
                 "graft": true
             },
             {
-                "name": "_plines_0",
-                "nickname": "_plines",
+                "name": "_plines_1",
+                "nickname": "_plines_1",
                 "description": "polyline pairs",
                 "optional": false,
                 "sourceCount": 0,
@@ -62,7 +62,7 @@
             },
             {
                 "name": "_lines",
-                "nickname": "_plines",
+                "nickname": "_lines",
                 "description": "polyline pairs",
                 "optional": false,
                 "sourceCount": 0,
