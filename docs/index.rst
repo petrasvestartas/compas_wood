@@ -26,6 +26,7 @@ Table of Contents
    installation
    examples
    video_tutorials
+   workshops
    api
    license
    citation
