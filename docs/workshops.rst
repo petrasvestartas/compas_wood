@@ -10,8 +10,6 @@ If you have any question open a github issue: https://github.com/petrasvestartas
 
 `Download the built version for this workshop, slides and examples files <https://github.com/petrasvestartas/compas_wood/blob/main/docs/_images/workshops/digital_timber_construction.zip>`_
 
-
-
 .. image:: _images/workshops/dtc_1.jpg
     :width: 100%
     :align: center
