@@ -1,7 +1,8 @@
 ********************************************************************************
-VDA 2023: Slab from boxes, teaching MA student Egle Dimaityte
+VDA 2023: Slab from boxes
 ********************************************************************************
 
+Teaching MA student Egle Dimaityte
 
 `Download the built version for this workshop, slides and examples files <https://github.com/petrasvestartas/compas_wood/blob/main/src/grasshopper/vda_slab.zip>`_
 
