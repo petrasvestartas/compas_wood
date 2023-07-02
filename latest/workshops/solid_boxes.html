@@ -3,7 +3,7 @@
 
 <head>
   
-  <title>compas_wood - tests/compas_wood_4_rtree.py</title>
+  <title>compas_wood - Solid Boxes</title>
   
 
   <meta charset="utf-8" />
@@ -20,11 +20,11 @@
   <link rel="stylesheet" type="text/css" href="../_static/css/compas-reference.css" />
 
   
-  <link rel="next" title="tests/compas_wood_5_get_connection_zones.py" href="compas_wood_5_get_connection_zones.html" />
+  <link rel="next" title="Slab from Boxes" href="vda_slab.html" />
   
 
   
-  <link rel="prev" title="tests/compas_wood_3_joints.py" href="compas_wood_3_joints.html" />
+  <link rel="prev" title="Post-grad course: Digital Timber Construction (IBOIS, EPFL)" href="digital_timber_construction.html" />
   
 
   <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
@@ -82,68 +82,55 @@
           <ol class="breadcrumb mb-3 bg-white px-0">
             <li class="breadcrumb-item"><a href="../index.html">compas_wood</a></li>
             
-            <li class="breadcrumb-item"><a href="../examples.html">Examples</a></li>
+            <li class="breadcrumb-item"><a href="../workshops.html">Workshops</a></li>
             
-            <!-- <li class="breadcrumb-item active" aria-current="page">tests/compas_wood_4_rtree.py</li> -->
+            <!-- <li class="breadcrumb-item active" aria-current="page">Solid Boxes</li> -->
           </ol>
         </nav>
         
 
         
         
-        <section id="tests-compas-wood-4-rtree-py">
-<h1>tests/compas_wood_4_rtree.py</h1>
-<ul class="simple">
-<li><p><strong>Description:</strong> Test if compas_wood works</p></li>
-<li><p><strong>Output:</strong> Message</p></li>
-</ul>
-<div class="language-python notranslate"><div class="highlight"><pre><button class="btn copy"><i class="far fa-copy"></i></button><code><span></span><span class="c1"># compas_wood</span>
-<span class="kn">from</span> <span class="nn">compas_wood.joinery</span> <span class="kn">import</span> <span class="n">rtree</span>
-<span class="kn">import</span> <span class="nn">data_set_plates</span>
-
-<span class="c1"># viewer</span>
-<span class="kn">from</span> <span class="nn">compas_wood.viewer_helpers</span> <span class="kn">import</span> <span class="n">display</span>
-
-<span class="c1"># ==============================================================================</span>
-<span class="c1"># Get Adjancency between Elements using RTree Search</span>
-<span class="c1"># ==============================================================================</span>
-
-
-<span class="k">def</span> <span class="nf">test_rtree</span><span class="p">(</span><span class="n">boxes_AABB_or_boxes_OOBB</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-    <span class="c1"># Get a list of polyline pairs</span>
-    <span class="nb">input</span> <span class="o">=</span> <span class="n">data_set_plates</span><span class="o">.</span><span class="n">annen_small_polylines</span><span class="p">()</span>
-
-    <span class="c1"># Compute Rtree</span>
-    <span class="n">neighbours</span><span class="p">,</span> <span class="n">boxes_AABB</span><span class="p">,</span> <span class="n">boxes_OOBB</span> <span class="o">=</span> <span class="n">rtree</span><span class="p">(</span><span class="nb">input</span><span class="p">)</span>
-
-    <span class="c1"># get aabb or oobb boxes</span>
-    <span class="n">selected_id</span> <span class="o">=</span> <span class="mi">22</span>
-    <span class="n">boxes_selected</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="n">boxes</span> <span class="o">=</span> <span class="n">boxes_AABB</span> <span class="k">if</span> <span class="n">boxes_AABB_or_boxes_OOBB</span> <span class="k">else</span> <span class="n">boxes_OOBB</span>
-
-    <span class="c1"># get first and its neighbors</span>
-    <span class="n">boxes_selected</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">boxes</span><span class="p">[</span><span class="n">selected_id</span><span class="p">])</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">neighbours</span><span class="p">[</span><span class="n">selected_id</span><span class="p">])</span>
-    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">neighbours</span><span class="p">[</span><span class="n">selected_id</span><span class="p">]:</span>
-        <span class="n">boxes_selected</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">boxes</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
-
-    <span class="c1"># Display via Compas_View2</span>
-    <span class="n">display</span><span class="p">(</span><span class="nb">input</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">boxes_selected</span><span class="p">,</span> <span class="mf">0.0001</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
-
-    <span class="c1"># output</span>
-    <span class="k">return</span> <span class="n">neighbours</span>
-
-
-<span class="c1"># ==============================================================================</span>
-<span class="c1"># call the compas_wood methods</span>
-<span class="c1"># ==============================================================================</span>
-<span class="n">test_rtree</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
-</code></pre></div>
-</div>
-<p><strong>Terminal Output</strong></p>
-<div class="language-python notranslate"><div class="highlight"><pre><button class="btn copy"><i class="far fa-copy"></i></button><code><span></span><span class="s2">&quot;[21, 31, 16, 17, 20, 22]&quot;</span>
-</code></pre></div>
-</div>
+        <section id="solid-boxes">
+<h1>Solid Boxes</h1>
+<p>Hexagonal Boxes connected by finger and dovetail sliding joints</p>
+<p><a class="reference external" href="https://github.com/petrasvestartas/compas_wood/blob/main/src/grasshopper/solid_boxes.zip">Download the built version for this workshop, slides and examples files</a></p>
+<figure class="align-center">
+<a class="reference internal image-reference" href="../_images/solid_boxes_0.jpg"><img alt="../_images/solid_boxes_0.jpg" src="../_images/solid_boxes_0.jpg" style="width: 60%;" /></a>
+</figure>
+<figure class="align-center">
+<a class="reference internal image-reference" href="../_images/solid_boxes_1.jpg"><img alt="../_images/solid_boxes_1.jpg" src="../_images/solid_boxes_1.jpg" style="width: 60%;" /></a>
+</figure>
+<figure class="align-center">
+<a class="reference internal image-reference" href="../_images/solid_boxes_2.jpg"><img alt="../_images/solid_boxes_2.jpg" src="../_images/solid_boxes_2.jpg" style="width: 60%;" /></a>
+</figure>
+<figure class="align-center">
+<a class="reference internal image-reference" href="../_images/solid_boxes_3.jpg"><img alt="../_images/solid_boxes_3.jpg" src="../_images/solid_boxes_3.jpg" style="width: 60%;" /></a>
+</figure>
+<figure class="align-center">
+<a class="reference internal image-reference" href="../_images/solid_boxes_4.jpg"><img alt="../_images/solid_boxes_4.jpg" src="../_images/solid_boxes_4.jpg" style="width: 60%;" /></a>
+</figure>
+<figure class="align-center">
+<a class="reference internal image-reference" href="../_images/solid_boxes_5.jpg"><img alt="../_images/solid_boxes_5.jpg" src="../_images/solid_boxes_5.jpg" style="width: 60%;" /></a>
+</figure>
+<figure class="align-center">
+<a class="reference internal image-reference" href="../_images/solid_boxes_6.jpg"><img alt="../_images/solid_boxes_6.jpg" src="../_images/solid_boxes_6.jpg" style="width: 60%;" /></a>
+</figure>
+<figure class="align-center">
+<a class="reference internal image-reference" href="../_images/solid_boxes_7.jpg"><img alt="../_images/solid_boxes_7.jpg" src="../_images/solid_boxes_7.jpg" style="width: 60%;" /></a>
+</figure>
+<figure class="align-center">
+<a class="reference internal image-reference" href="../_images/solid_boxes_8.jpg"><img alt="../_images/solid_boxes_8.jpg" src="../_images/solid_boxes_8.jpg" style="width: 60%;" /></a>
+</figure>
+<figure class="align-center">
+<a class="reference internal image-reference" href="../_images/solid_boxes_9.jpg"><img alt="../_images/solid_boxes_9.jpg" src="../_images/solid_boxes_9.jpg" style="width: 60%;" /></a>
+</figure>
+<figure class="align-center">
+<a class="reference internal image-reference" href="../_images/solid_boxes_10.jpg"><img alt="../_images/solid_boxes_10.jpg" src="../_images/solid_boxes_10.jpg" style="width: 60%;" /></a>
+</figure>
+<figure class="align-center">
+<a class="reference internal image-reference" href="../_images/solid_boxes_11.jpg"><img alt="../_images/solid_boxes_11.jpg" src="../_images/solid_boxes_11.jpg" style="width: 60%;" /></a>
+</figure>
 </section>
 
         
@@ -170,21 +157,21 @@
 </ul>
 </li>
 <li class="toctree-l1 nav-item"><a class="nav-link reference internal" href="../installation.html">Installation</a></li>
-<li class="toctree-l1 nav-item active"><a class="nav-link reference internal" href="../examples.html">Examples</a><ul class="nav flex-column collapse show active">
-<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="compas_wood_1_test.html">tests/compas_wood_1_test.py</a></li>
-<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="compas_wood_2_read_xml.html">tests/compas_wood_2_read_xml.py</a></li>
-<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="compas_wood_3_joints.html">tests/compas_wood_3_joints.py</a></li>
-<li class="toctree-l2 nav-item active"><a class="nav-link active reference internal" href="#">tests/compas_wood_4_rtree.py</a></li>
-<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="compas_wood_5_get_connection_zones.html">tests/compas_wood_5_get_connection_zones.py</a></li>
-<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="compas_wood_6_closed_mesh_from_polylines.html">tests/compas_wood_6_closed_mesh_from_polylines.py</a></li>
-<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="compas_wood_7_mooc_homework.html">tests/compas_wood_7_mooc_homework.py</a></li>
+<li class="toctree-l1 nav-item"><a class="nav-link reference internal" href="../examples.html">Examples</a><ul class="nav flex-column collapse">
+<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="../examples/compas_wood_1_test.html">tests/compas_wood_1_test.py</a></li>
+<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="../examples/compas_wood_2_read_xml.html">tests/compas_wood_2_read_xml.py</a></li>
+<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="../examples/compas_wood_3_joints.html">tests/compas_wood_3_joints.py</a></li>
+<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="../examples/compas_wood_4_rtree.html">tests/compas_wood_4_rtree.py</a></li>
+<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="../examples/compas_wood_5_get_connection_zones.html">tests/compas_wood_5_get_connection_zones.py</a></li>
+<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="../examples/compas_wood_6_closed_mesh_from_polylines.html">tests/compas_wood_6_closed_mesh_from_polylines.py</a></li>
+<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="../examples/compas_wood_7_mooc_homework.html">tests/compas_wood_7_mooc_homework.py</a></li>
 </ul>
 </li>
 <li class="toctree-l1 nav-item"><a class="nav-link reference internal" href="../video_tutorials.html">Video Tutorials</a></li>
-<li class="toctree-l1 nav-item"><a class="nav-link reference internal" href="../workshops.html">Workshops</a><ul class="nav flex-column collapse">
-<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="../workshops/digital_timber_construction.html">Post-grad course: Digital Timber Construction (IBOIS, EPFL)</a></li>
-<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="../workshops/solid_boxes.html">Solid Boxes</a></li>
-<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="../workshops/vda_slab.html">Slab from Boxes</a></li>
+<li class="toctree-l1 nav-item active"><a class="nav-link reference internal" href="../workshops.html">Workshops</a><ul class="nav flex-column collapse show active">
+<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="digital_timber_construction.html">Post-grad course: Digital Timber Construction (IBOIS, EPFL)</a></li>
+<li class="toctree-l2 nav-item active"><a class="nav-link active reference internal" href="#">Solid Boxes</a></li>
+<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="vda_slab.html">Slab from Boxes</a></li>
 </ul>
 </li>
 <li class="toctree-l1 nav-item"><a class="nav-link reference internal" href="../api.html">API Reference</a><ul class="nav flex-column collapse">
@@ -229,7 +216,7 @@
       <div class="d-none d-xl-block col-xl-2 compas-toc" role="toc">
         
         <ul class="nav flex-column" id="compas-toc">
-<li class="nav-item"><a class="nav-link reference internal" href="#">tests/compas_wood_4_rtree.py</a></li>
+<li class="nav-item"><a class="nav-link reference internal" href="#">Solid Boxes</a></li>
 </ul>
 
       </div>
@@ -241,20 +228,20 @@
   <footer class="compas-footer">
     <nav class="nav p-2">
       
-      <a href="compas_wood_3_joints.html" title="tests/compas_wood_3_joints.py" class="nav-link footer-link float-start text-left d-flex w-50" rel="prev">
+      <a href="digital_timber_construction.html" title="Post-grad course: Digital Timber Construction (IBOIS, EPFL)" class="nav-link footer-link float-start text-left d-flex w-50" rel="prev">
         <div class="nav-button p-2 m-2"><i class="fas fa-arrow-left"></i></div>
         <div class="nav-title flex-grow-1 align-self-center">
           <div class="nav-direction small font-weight-light">Previous</div>
-          tests/compas_wood_3_joints.py
+          Post-grad course: Digital Timber Construction (IBOIS, EPFL)
         </div>
       </a>
       
 
       
-      <a href="compas_wood_5_get_connection_zones.html" title="tests/compas_wood_5_get_connection_zones.py" class="nav-link footer-link float-end text-right d-flex w-50" rel="next">
+      <a href="vda_slab.html" title="Slab from Boxes" class="nav-link footer-link float-end text-right d-flex w-50" rel="next">
         <div class="nav-title footer-link flex-grow-1 align-self-center">
           <div class="nav-direction small font-weight-light">Next</div>
-          tests/compas_wood_5_get_connection_zones.py
+          Slab from Boxes
         </div>
         <div class="nav-button p-2 m-2"><i class="fas fa-arrow-right"></i></div>
       </a>
