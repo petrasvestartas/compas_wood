@@ -1,9 +1,6 @@
 ********************************************************************************
-Video Tutorials
+EdX course: Advanced Timber Plate Structural Design
 ********************************************************************************
-
-
-**EdX course: Advanced Timber Plate Structural Design**
 
 Section: 4. Digital architecture and advanced geometry processing
 
@@ -12,6 +9,6 @@ Section: 4. Digital architecture and advanced geometry processing
 
 
 
-.. image:: _images/video_tutorials/edx.jpg
+.. image:: ../_images/video_tutorials/edx.jpg
     :width: 100%
     :align: center
