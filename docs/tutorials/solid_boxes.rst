@@ -4,7 +4,7 @@ Solid Boxes
 
 Hexagonal Boxes connected by finger and dovetail sliding joints
 
-`Download the built version for this workshop, slides and examples files <https://github.com/petrasvestartas/compas_wood/blob/main/src/grasshopper/solid_boxes.zip>`_
+`Download the built version for this workshop, slides and examples files <https://github.com/petrasvestartas/compas_wood/blob/main/src/grasshopper/examples/solid_boxes.zip>`_
 
 .. figure:: ../_images/workshops/solid_boxes/solid_boxes_0.jpg
     :width: 60%
