@@ -3,7 +3,7 @@
 
 <head>
   
-  <title>compas_wood - tests/compas_wood_7_mooc_homework.py</title>
+  <title>compas_wood - Solid Boxes</title>
   
 
   <meta charset="utf-8" />
@@ -20,11 +20,11 @@
   <link rel="stylesheet" type="text/css" href="../_static/css/compas-reference.css" />
 
   
-  <link rel="next" title="Tutorials" href="../tutorials.html" />
+  <link rel="next" title="Slab from Boxes" href="vda_slab.html" />
   
 
   
-  <link rel="prev" title="tests/compas_wood_6_closed_mesh_from_polylines.py" href="compas_wood_6_closed_mesh_from_polylines.html" />
+  <link rel="prev" title="EdX course: Advanced Timber Plate Structural Design" href="edx_course.html" />
   
 
   <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
@@ -82,83 +82,55 @@
           <ol class="breadcrumb mb-3 bg-white px-0">
             <li class="breadcrumb-item"><a href="../index.html">compas_wood</a></li>
             
-            <li class="breadcrumb-item"><a href="../examples.html">Examples</a></li>
+            <li class="breadcrumb-item"><a href="../tutorials.html">Tutorials</a></li>
             
-            <!-- <li class="breadcrumb-item active" aria-current="page">tests/compas_wood_7_mooc_homework.py</li> -->
+            <!-- <li class="breadcrumb-item active" aria-current="page">Solid Boxes</li> -->
           </ol>
         </nav>
         
 
         
         
-        <section id="tests-compas-wood-7-mooc-homework-py">
-<h1>tests/compas_wood_7_mooc_homework.py</h1>
-<ul class="simple">
-<li><p><strong>Description:</strong> Double tenon mortise joint first implemented in the Vidy Theater project. The data-set contains the adjancency information. For a correct merging with the plate outline the joits area is reduced by 10 units.</p></li>
-<li><p><strong>Output:</strong> Preview of the data-set in compas_view2</p></li>
-</ul>
-<div class="language-python notranslate"><div class="highlight"><pre><button class="btn copy"><i class="far fa-copy"></i></button><code><span></span><span class="kn">from</span> <span class="nn">compas_wood.joinery</span> <span class="kn">import</span> <span class="n">filenames_of_datasets</span>
-<span class="kn">from</span> <span class="nn">compas_wood.joinery</span> <span class="kn">import</span> <span class="n">get_connection_zones</span>
-<span class="kn">from</span> <span class="nn">compas_wood.viewer_helpers</span> <span class="kn">import</span> <span class="n">display</span>
-<span class="kn">from</span> <span class="nn">compas_wood.joinery</span> <span class="kn">import</span> <span class="n">read_xml_polylines_and_properties</span>
-<span class="kn">from</span> <span class="nn">compas_wood.joinery</span> <span class="kn">import</span> <span class="n">closed_mesh_from_polylines</span>
-
-<span class="k">def</span> <span class="nf">test_connection_detection</span><span class="p">():</span>
-
-    <span class="c1"># joinery parameters</span>
-    <span class="n">joint_parameters</span> <span class="o">=</span> <span class="p">[</span>
-        <span class="mi">300</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span>   <span class="c1"># 1-9 ss_e_ip (side-to-side edge in-plane)</span>
-        <span class="mi">50</span><span class="p">,</span> <span class="mf">0.64</span><span class="p">,</span> <span class="mi">15</span><span class="p">,</span>  <span class="c1"># 10-19 ss_e_op (side-to-side edge out-of-plane)</span>
-        <span class="mi">450</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span>  <span class="c1"># 20-29 ts_e_p (top-to-side edge plane)</span>
-        <span class="mi">300</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span>  <span class="c1"># 30-39 cr_c_ip (cross cutting in-plane)</span>
-        <span class="mi">6</span><span class="p">,</span> <span class="mf">0.95</span><span class="p">,</span> <span class="mi">40</span><span class="p">,</span>   <span class="c1"># 40-49 tt_e_p  (top-to-top edge plane)</span>
-        <span class="mi">300</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mi">58</span><span class="p">,</span>  <span class="c1"># 50-59 ss_e_r (side-to-side edge rotated)</span>
-        <span class="mi">300</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mi">60</span>   <span class="c1"># 60-69 b (boundary)</span>
-    <span class="p">]</span>
-
-    <span class="c1"># read the xml file</span>
-    <span class="n">foldername</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="s2">&quot;../compas_wood/src/frontend/src/wood/dataset/&quot;</span>
-    <span class="p">)</span>
-
-    <span class="n">filename_of_dataset_with_properties</span> <span class="o">=</span> <span class="n">filenames_of_datasets</span><span class="p">[</span><span class="mi">13</span><span class="p">]</span>
-    <span class="p">(</span><span class="n">output_polylines_with_properties</span><span class="p">,</span> <span class="n">output_vectors</span><span class="p">,</span> <span class="n">output_joints_types</span><span class="p">,</span> <span class="n">output_three_valence_element_indices_and_instruction</span><span class="p">,</span> <span class="n">output_adjacency</span><span class="p">)</span> <span class="o">=</span> <span class="n">read_xml_polylines_and_properties</span><span class="p">(</span><span class="n">foldername</span><span class="p">,</span> <span class="n">filename_of_dataset_with_properties</span><span class="p">)</span>
-
-    <span class="nb">print</span><span class="p">(</span><span class="n">foldername</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">filename_of_dataset_with_properties</span><span class="p">)</span>
-
-    <span class="n">result</span> <span class="o">=</span> <span class="n">get_connection_zones</span><span class="p">(</span>
-        <span class="n">output_polylines_with_properties</span><span class="p">,</span>
-        <span class="n">output_vectors</span><span class="p">,</span>
-        <span class="n">output_joints_types</span><span class="p">,</span>
-        <span class="n">output_three_valence_element_indices_and_instruction</span><span class="p">,</span>
-        <span class="n">output_adjacency</span><span class="p">,</span>
-        <span class="n">joint_parameters</span><span class="p">,</span>
-        <span class="mi">0</span><span class="p">,</span>
-        <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
-        <span class="mi">4</span><span class="p">,</span>
-        <span class="kc">False</span><span class="p">,</span>
-        <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">10</span><span class="p">])</span>
-
-
-    <span class="c1"># display</span>
-    
-    <span class="n">result_flat_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">item</span> <span class="k">for</span> <span class="n">sublist</span> <span class="ow">in</span> <span class="n">result</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">sublist</span><span class="p">]</span>
-    <span class="c1"># display(result_flat_list, None, None, 0.001, 0, 0, 0, False)</span>
-
-    <span class="c1"># mesh polylines</span>
-    <span class="n">meshes</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">result</span><span class="p">)):</span>
-        <span class="n">mesh_result</span> <span class="o">=</span> <span class="n">closed_mesh_from_polylines</span><span class="p">(</span><span class="n">result</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
-        <span class="n">meshes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">mesh_result</span><span class="p">)</span>
-    <span class="n">display</span><span class="p">(</span><span class="n">result_flat_list</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">meshes</span><span class="p">,</span> <span class="mf">0.001</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
-
-
-<span class="n">test_connection_detection</span><span class="p">()</span>
-</code></pre></div>
-</div>
-<p><strong>Viewer Output</strong></p>
-<a class="reference internal image-reference" href="../_images/compas_wood_7_mooc_homework.jpg"><img alt="../_images/compas_wood_7_mooc_homework.jpg" class="align-center" src="../_images/compas_wood_7_mooc_homework.jpg" style="width: 100%;" /></a>
+        <section id="solid-boxes">
+<h1>Solid Boxes</h1>
+<p>Hexagonal Boxes connected by finger and dovetail sliding joints</p>
+<p><a class="reference external" href="https://github.com/petrasvestartas/compas_wood/blob/main/src/grasshopper/solid_boxes.zip">Download the built version for this workshop, slides and examples files</a></p>
+<figure class="align-center">
+<a class="reference internal image-reference" href="../_images/solid_boxes_0.jpg"><img alt="../_images/solid_boxes_0.jpg" src="../_images/solid_boxes_0.jpg" style="width: 60%;" /></a>
+</figure>
+<figure class="align-center">
+<a class="reference internal image-reference" href="../_images/solid_boxes_1.jpg"><img alt="../_images/solid_boxes_1.jpg" src="../_images/solid_boxes_1.jpg" style="width: 60%;" /></a>
+</figure>
+<figure class="align-center">
+<a class="reference internal image-reference" href="../_images/solid_boxes_2.jpg"><img alt="../_images/solid_boxes_2.jpg" src="../_images/solid_boxes_2.jpg" style="width: 60%;" /></a>
+</figure>
+<figure class="align-center">
+<a class="reference internal image-reference" href="../_images/solid_boxes_3.jpg"><img alt="../_images/solid_boxes_3.jpg" src="../_images/solid_boxes_3.jpg" style="width: 60%;" /></a>
+</figure>
+<figure class="align-center">
+<a class="reference internal image-reference" href="../_images/solid_boxes_4.jpg"><img alt="../_images/solid_boxes_4.jpg" src="../_images/solid_boxes_4.jpg" style="width: 60%;" /></a>
+</figure>
+<figure class="align-center">
+<a class="reference internal image-reference" href="../_images/solid_boxes_5.jpg"><img alt="../_images/solid_boxes_5.jpg" src="../_images/solid_boxes_5.jpg" style="width: 60%;" /></a>
+</figure>
+<figure class="align-center">
+<a class="reference internal image-reference" href="../_images/solid_boxes_6.jpg"><img alt="../_images/solid_boxes_6.jpg" src="../_images/solid_boxes_6.jpg" style="width: 60%;" /></a>
+</figure>
+<figure class="align-center">
+<a class="reference internal image-reference" href="../_images/solid_boxes_7.jpg"><img alt="../_images/solid_boxes_7.jpg" src="../_images/solid_boxes_7.jpg" style="width: 60%;" /></a>
+</figure>
+<figure class="align-center">
+<a class="reference internal image-reference" href="../_images/solid_boxes_8.jpg"><img alt="../_images/solid_boxes_8.jpg" src="../_images/solid_boxes_8.jpg" style="width: 60%;" /></a>
+</figure>
+<figure class="align-center">
+<a class="reference internal image-reference" href="../_images/solid_boxes_9.jpg"><img alt="../_images/solid_boxes_9.jpg" src="../_images/solid_boxes_9.jpg" style="width: 60%;" /></a>
+</figure>
+<figure class="align-center">
+<a class="reference internal image-reference" href="../_images/solid_boxes_10.jpg"><img alt="../_images/solid_boxes_10.jpg" src="../_images/solid_boxes_10.jpg" style="width: 60%;" /></a>
+</figure>
+<figure class="align-center">
+<a class="reference internal image-reference" href="../_images/solid_boxes_11.jpg"><img alt="../_images/solid_boxes_11.jpg" src="../_images/solid_boxes_11.jpg" style="width: 60%;" /></a>
+</figure>
 </section>
 
         
@@ -185,21 +157,21 @@
 </ul>
 </li>
 <li class="toctree-l1 nav-item"><a class="nav-link reference internal" href="../installation.html">Installation</a></li>
-<li class="toctree-l1 nav-item active"><a class="nav-link reference internal" href="../examples.html">Examples</a><ul class="nav flex-column collapse show active">
-<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="compas_wood_1_test.html">tests/compas_wood_1_test.py</a></li>
-<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="compas_wood_2_read_xml.html">tests/compas_wood_2_read_xml.py</a></li>
-<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="compas_wood_3_joints.html">tests/compas_wood_3_joints.py</a></li>
-<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="compas_wood_4_rtree.html">tests/compas_wood_4_rtree.py</a></li>
-<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="compas_wood_5_get_connection_zones.html">tests/compas_wood_5_get_connection_zones.py</a></li>
-<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="compas_wood_6_closed_mesh_from_polylines.html">tests/compas_wood_6_closed_mesh_from_polylines.py</a></li>
-<li class="toctree-l2 nav-item active"><a class="nav-link active reference internal" href="#">tests/compas_wood_7_mooc_homework.py</a></li>
+<li class="toctree-l1 nav-item"><a class="nav-link reference internal" href="../examples.html">Examples</a><ul class="nav flex-column collapse">
+<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="../examples/compas_wood_1_test.html">tests/compas_wood_1_test.py</a></li>
+<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="../examples/compas_wood_2_read_xml.html">tests/compas_wood_2_read_xml.py</a></li>
+<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="../examples/compas_wood_3_joints.html">tests/compas_wood_3_joints.py</a></li>
+<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="../examples/compas_wood_4_rtree.html">tests/compas_wood_4_rtree.py</a></li>
+<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="../examples/compas_wood_5_get_connection_zones.html">tests/compas_wood_5_get_connection_zones.py</a></li>
+<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="../examples/compas_wood_6_closed_mesh_from_polylines.html">tests/compas_wood_6_closed_mesh_from_polylines.py</a></li>
+<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="../examples/compas_wood_7_mooc_homework.html">tests/compas_wood_7_mooc_homework.py</a></li>
 </ul>
 </li>
-<li class="toctree-l1 nav-item"><a class="nav-link reference internal" href="../tutorials.html">Tutorials</a><ul class="nav flex-column collapse">
-<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="../tutorials/digital_timber_construction.html">Post-grad course: Digital Timber Construction (IBOIS, EPFL)</a></li>
-<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="../tutorials/edx_course.html">EdX course: Advanced Timber Plate Structural Design</a></li>
-<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="../tutorials/solid_boxes.html">Solid Boxes</a></li>
-<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="../tutorials/vda_slab.html">Slab from Boxes</a></li>
+<li class="toctree-l1 nav-item active"><a class="nav-link reference internal" href="../tutorials.html">Tutorials</a><ul class="nav flex-column collapse show active">
+<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="digital_timber_construction.html">Post-grad course: Digital Timber Construction (IBOIS, EPFL)</a></li>
+<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="edx_course.html">EdX course: Advanced Timber Plate Structural Design</a></li>
+<li class="toctree-l2 nav-item active"><a class="nav-link active reference internal" href="#">Solid Boxes</a></li>
+<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="vda_slab.html">Slab from Boxes</a></li>
 </ul>
 </li>
 <li class="toctree-l1 nav-item"><a class="nav-link reference internal" href="../api.html">API Reference</a><ul class="nav flex-column collapse">
@@ -244,7 +216,7 @@
       <div class="d-none d-xl-block col-xl-2 compas-toc" role="toc">
         
         <ul class="nav flex-column" id="compas-toc">
-<li class="nav-item"><a class="nav-link reference internal" href="#">tests/compas_wood_7_mooc_homework.py</a></li>
+<li class="nav-item"><a class="nav-link reference internal" href="#">Solid Boxes</a></li>
 </ul>
 
       </div>
@@ -256,20 +228,20 @@
   <footer class="compas-footer">
     <nav class="nav p-2">
       
-      <a href="compas_wood_6_closed_mesh_from_polylines.html" title="tests/compas_wood_6_closed_mesh_from_polylines.py" class="nav-link footer-link float-start text-left d-flex w-50" rel="prev">
+      <a href="edx_course.html" title="EdX course: Advanced Timber Plate Structural Design" class="nav-link footer-link float-start text-left d-flex w-50" rel="prev">
         <div class="nav-button p-2 m-2"><i class="fas fa-arrow-left"></i></div>
         <div class="nav-title flex-grow-1 align-self-center">
           <div class="nav-direction small font-weight-light">Previous</div>
-          tests/compas_wood_6_closed_mesh_from_polylines.py
+          EdX course: Advanced Timber Plate Structural Design
         </div>
       </a>
       
 
       
-      <a href="../tutorials.html" title="Tutorials" class="nav-link footer-link float-end text-right d-flex w-50" rel="next">
+      <a href="vda_slab.html" title="Slab from Boxes" class="nav-link footer-link float-end text-right d-flex w-50" rel="next">
         <div class="nav-title footer-link flex-grow-1 align-self-center">
           <div class="nav-direction small font-weight-light">Next</div>
-          Tutorials
+          Slab from Boxes
         </div>
         <div class="nav-button p-2 m-2"><i class="fas fa-arrow-right"></i></div>
       </a>
