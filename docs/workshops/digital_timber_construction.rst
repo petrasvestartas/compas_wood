@@ -1,5 +1,5 @@
 ********************************************************************************
-EPFL IBOIS post-grad course: Digital Timber Construction
+Post-grad course: Digital Timber Construction (IBOIS, EPFL)
 ********************************************************************************
 
 
@@ -18,7 +18,6 @@ EPFL IBOIS post-grad course: Digital Timber Construction
 .. image:: ../_images/workshops/digital_timber_construction/dtc_3.jpg
     :width: 100%
     :align: center
-
 
 .. image:: ../_images/workshops/digital_timber_construction/dtc_4.jpg
     :width: 100%
