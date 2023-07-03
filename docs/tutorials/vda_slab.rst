@@ -6,6 +6,11 @@ Teaching MA student Egle Dimaityte
 
 `Download the built version for this workshop, slides and examples files <https://github.com/petrasvestartas/compas_wood/blob/main/src/grasshopper/vda_slab.zip>`_
 
+.. image:: ../_images/workshops/vda_slab/timber_slab_0.jpg
+    :width: 100%
+    :align: center
+
+
 .. image:: ../_images/workshops/vda_slab/timber_slab_1.jpg
     :width: 100%
     :align: center
