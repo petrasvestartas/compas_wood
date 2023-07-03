@@ -70,3 +70,8 @@ Teaching MA student Egle Dimaityte
     :width: 100%
     :align: center
 
+
+.. image:: ../_images/workshops/vda_slab/timber_slab_13.jpg
+    :width: 100%
+    :align: center
+
