@@ -3,21 +3,15 @@ Installation
 ********************************************************************************
 
 ################################################################################
-Rhino Installation
-################################################################################
-
-*    Install compas_wood via Rhino3d package manager, close Rhino
-*    Download dependencies for Windows: https://1drv.ms/u/s!AnwaB50XU22ejqhau0SCjdSqBajWuQ?e=KntEYu for Mac: https://1drv.ms/u/s!AnwaB50XU22ejqhbMwL3iCf0CxtnRg?e=Dfbj6X
-*    Place the contents of the downloaded files to the following directories for Windows: "C:/compas_wood/" , for Mac: "/Users/compas_wood/"
-
-################################################################################
 Windows
 ################################################################################
 
-.. code-block:: 
+.. code-block::
 
+    conda config --add channels conda-forge
     conda create -n wood-dev python=3.8 mpir mpfr boost-cpp eigen=3.4 cgal-cpp=5.5 pybind11 compas compas_view2 --yes
     conda activate wood-dev 
+    conda install -c anaconda freetype
     git clone https://github.com/petrasvestartas/compas_wood.git
     cd compas_wood
     pip install -e .
@@ -29,8 +23,10 @@ Mac
 
 .. code-block:: 
 
+    conda config --add channels conda-forge
     conda create -n wood-dev python=3.8 gmp mpfr boost-cpp eigen=3.4 cgal-cpp=5.5 pybind11 compas compas_view2 --yes
     conda activate wood-dev
+    conda install -c anaconda freetype
     git clone https://github.com/petrasvestartas/compas_wood.git
     cd compas_wood 
     pip install -e .
@@ -67,7 +63,7 @@ If you never used VSCode, Anaconda, Git
     :figclass: figure
     :class: figure-img img-fluid 
 
-*    Step 8 - change default terminal to "Command Line", type "Ctrl+Shift+P" and type "Select Default Shell" and select "Command Line"
+*    Step 8 - change default terminal to "Command Line", type "Ctrl+Shift+P" and type "Select Default Shell" and select "Command Line". Afterwards, in Terminal, top right corner, click "+" sign to add a new command line that has activated environment.
 
 .. figure:: /_images/installation/8.png
     :figclass: figure
@@ -80,27 +76,41 @@ If you never used VSCode, Anaconda, Git
     :figclass: figure
     :class: figure-img img-fluid 
 
+*   Step 10 - install ironPython: https://github.com/IronLanguages/ironpython2/releases/download/ipy-2.7.12/IronPython-2.7.12.msi
+Add "C:\Program Files\IronPython" 2.7 to the PATH environment variable
+
 *    Even if the first time the whole installation seems complex, this process is standard to other compas packages, following this link: https://compas.dev/compas/latest/installation.html
 
+
+
 ################################################################################
-Rhino Grasshopper 
+Rhino Installation )
 ################################################################################
 
-Open Anaconda Prompt:
+*    Install compas_wood via Rhino3d package manager, close Rhino
+*    Download dependencies for Windows: https://1drv.ms/u/s!AnwaB50XU22ejqhau0SCjdSqBajWuQ?e=KntEYu for Mac: https://1drv.ms/u/s!AnwaB50XU22ejqhbMwL3iCf0CxtnRg?e=Dfbj6X
+*    Place the contents of the downloaded files to the following directories for Windows: "C:/compas_wood/" , for Mac: "/Users/compas_wood/"
 
-.. code-block:: 
 
-    conda activate wood-dev
-    python -m compas_rhino.install
-    python -m compas_rhino.install -p compas_wood
+.. ################################################################################
+.. Rhino Grasshopper 
+.. ################################################################################
 
-.. code-block:: 
+.. Open Anaconda Prompt:
 
-    Download the zipped files and place them in libraries folder.
-    Current suppoorted Grasshopper is version is Windows only.
-    You can find this folder when you open Grasshopper. 
-    File->Special Folder->Component Folder.
-    https://github.com/petrasvestartas/compas_wood/releases/tag/compas_wood_GH_1.0.0
+.. .. code-block:: 
+
+..     conda activate wood-dev
+..     python -m compas_rhino.install
+..     python -m compas_rhino.install -p compas_wood
+
+.. .. code-block:: 
+
+..     Download the zipped files and place them in libraries folder.
+..     Current suppoorted Grasshopper is version is Windows only.
+..     You can find this folder when you open Grasshopper. 
+..     File->Special Folder->Component Folder.
+..     https://github.com/petrasvestartas/compas_wood/releases/tag/compas_wood_GH_1.0.0
 
 ################################################################################
 C++

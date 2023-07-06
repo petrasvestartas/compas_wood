@@ -14,10 +14,23 @@ import Rhino
 from Rhino.Geometry import Polyline, Point3d
 #from compas_rhino import conversions
 import System
-
 import time
 from ctypes import *
 #from compas_wood.ctypes_conversion import *
+
+import os
+
+app_data = os.getenv('APPDATA')
+vers = Rhino.RhinoApp.Version.Major
+plugin_name = 'compas_wood'
+plugin_path = "{0}\McNeel\Rhinoceros\packages\{1}.0\{2}".format(app_data, vers, plugin_name)
+
+for _path in os.walk(plugin_path):
+    if os.path.isdir(_path[0]):
+        plugin_path =  _path[0]
+
+
+
 
 def list_polylines_coord(polylines):
     f = []
@@ -299,7 +312,7 @@ class connections_zones(component):
         ) = lists_numbers_coord(input_three_valence)
     
         #input_adjacency = []
-        print(input_adjacency)
+        #print(input_adjacency)
         (
             in_adjancency_v,
             in_adjancency_v_s,
@@ -349,11 +362,11 @@ class connections_zones(component):
         
 
         if System.Environment.OSVersion.Platform == System.PlatformID.Win32NT:
-            print("Windows")
-            lib_ = cdll.LoadLibrary("C:/compas_wood/libgmp-10.dll")
-            lib = cdll.LoadLibrary("C:/compas_wood/pinvoke_wood.dll")
+            #print("Windows")
+            lib_ = cdll.LoadLibrary(plugin_path+"\libgmp-10.dll")
+            lib = cdll.LoadLibrary(plugin_path+"\pinvoke_wood.dll")
         elif System.Environment.OSVersion.Platform == System.PlatformID.Unix:
-            print("macOS")
+            #print("macOS")
             lib = cdll.LoadLibrary("/Users/compas_wood/libpinvoke_wood.dylib")
         else:
             print("Unknown operating system")
@@ -530,12 +543,13 @@ class connections_zones(component):
         print  out_types_f, out_types_f_s, out_types_v, out_types_v_s
         print out_types_v[0]
         print out_types_f[0]
-        """
+        
         print(
             "\n______________________________________ %s ms ______________________________________"
             % round((time.time() - start_time) * 1000.0, 2)
         )
         
+        """
     
     
 

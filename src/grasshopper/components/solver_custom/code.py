@@ -10,6 +10,17 @@ import time
 from ctypes import *
 #from compas_wood.ctypes_conversion import *
 
+import os
+
+app_data = os.getenv('APPDATA')
+vers = Rhino.RhinoApp.Version.Major
+plugin_name = 'compas_wood'
+plugin_path = "{0}\McNeel\Rhinoceros\packages\{1}.0\{2}".format(app_data, vers, plugin_name)
+
+for _path in os.walk(plugin_path):
+    if os.path.isdir(_path[0]):
+        plugin_path =  _path[0]
+
 def list_polylines_coord(polylines, scale = 10):
     f = []
     v = []
@@ -360,18 +371,16 @@ class connections_zones(component):
         ############################################################################################################
         # Load library and declare function signature
         ############################################################################################################
-        
-
         if System.Environment.OSVersion.Platform == System.PlatformID.Win32NT:
             #print("Windows")
-            lib_ = cdll.LoadLibrary("C:/compas_wood/libgmp-10.dll")
-            lib = cdll.LoadLibrary("C:/compas_wood/pinvoke_wood.dll")
+            lib_ = cdll.LoadLibrary(plugin_path+"\libgmp-10.dll")
+            lib = cdll.LoadLibrary(plugin_path+"\pinvoke_wood.dll")
         elif System.Environment.OSVersion.Platform == System.PlatformID.Unix:
             #print("macOS")
             lib = cdll.LoadLibrary("/Users/compas_wood/libpinvoke_wood.dylib")
         else:
             print("Unknown operating system")
-                
+   
 
         lib.ctypes_get_connection_zones_with_custom_joints.restype = None
         lib.ctypes_get_connection_zones_with_custom_joints.argtypes = [
