@@ -100,7 +100,7 @@
 <div class="language-python notranslate"><div class="highlight"><pre><button class="btn copy"><i class="far fa-copy"></i></button><code><span></span><span class="kn">from</span> <span class="nn">compas_wood.joinery</span> <span class="kn">import</span> <span class="n">filenames_of_datasets</span>
 <span class="kn">from</span> <span class="nn">compas_wood.joinery</span> <span class="kn">import</span> <span class="n">get_connection_zones</span>
 <span class="kn">from</span> <span class="nn">compas_wood.viewer_helpers</span> <span class="kn">import</span> <span class="n">display</span>
-<span class="kn">from</span> <span class="nn">compas_wood.joinery</span> <span class="kn">import</span> <span class="n">read_xml_polylines_and_properties</span>
+<span class="kn">from</span> <span class="nn">compas_wood.joinery</span> <span class="kn">import</span> <span class="n">read_xml_polylines</span><span class="p">,</span> <span class="n">read_xml_polylines_and_properties</span>
 <span class="kn">from</span> <span class="nn">compas_wood.joinery</span> <span class="kn">import</span> <span class="n">closed_mesh_from_polylines</span>
 
 <span class="k">def</span> <span class="nf">test_connection_detection</span><span class="p">():</span>
@@ -124,8 +124,9 @@
     <span class="n">filename_of_dataset_with_properties</span> <span class="o">=</span> <span class="n">filenames_of_datasets</span><span class="p">[</span><span class="mi">13</span><span class="p">]</span>
     <span class="p">(</span><span class="n">output_polylines_with_properties</span><span class="p">,</span> <span class="n">output_vectors</span><span class="p">,</span> <span class="n">output_joints_types</span><span class="p">,</span> <span class="n">output_three_valence_element_indices_and_instruction</span><span class="p">,</span> <span class="n">output_adjacency</span><span class="p">)</span> <span class="o">=</span> <span class="n">read_xml_polylines_and_properties</span><span class="p">(</span><span class="n">foldername</span><span class="p">,</span> <span class="n">filename_of_dataset_with_properties</span><span class="p">)</span>
 
-    <span class="nb">print</span><span class="p">(</span><span class="n">foldername</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">filename_of_dataset_with_properties</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span> <span class="n">filename_of_dataset_with_properties</span> <span class="p">)</span>
+
+
 
     <span class="n">result</span> <span class="o">=</span> <span class="n">get_connection_zones</span><span class="p">(</span>
         <span class="n">output_polylines_with_properties</span><span class="p">,</span>

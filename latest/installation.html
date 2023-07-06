@@ -91,18 +91,12 @@
         
         <section id="installation">
 <h1>Installation</h1>
-<section id="rhino-installation">
-<h2>Rhino Installation</h2>
-<ul class="simple">
-<li><p>Install compas_wood via Rhino3d package manager, close Rhino</p></li>
-<li><p>Download dependencies for Windows: <a class="reference external" href="https://1drv.ms/u/s!AnwaB50XU22ejqhau0SCjdSqBajWuQ?e=KntEYu">https://1drv.ms/u/s!AnwaB50XU22ejqhau0SCjdSqBajWuQ?e=KntEYu</a> for Mac: <a class="reference external" href="https://1drv.ms/u/s!AnwaB50XU22ejqhbMwL3iCf0CxtnRg?e=Dfbj6X">https://1drv.ms/u/s!AnwaB50XU22ejqhbMwL3iCf0CxtnRg?e=Dfbj6X</a></p></li>
-<li><p>Place the contents of the downloaded files to the following directories for Windows: “C:/compas_wood/” , for Mac: “/Users/compas_wood/”</p></li>
-</ul>
-</section>
 <section id="windows">
 <h2>Windows</h2>
-<div class="language-python notranslate"><div class="highlight"><pre><button class="btn copy"><i class="far fa-copy"></i></button><code><span></span><span class="n">conda</span> <span class="n">create</span> <span class="o">-</span><span class="n">n</span> <span class="n">wood</span><span class="o">-</span><span class="n">dev</span> <span class="n">python</span><span class="o">=</span><span class="mf">3.8</span> <span class="n">mpir</span> <span class="n">mpfr</span> <span class="n">boost</span><span class="o">-</span><span class="n">cpp</span> <span class="n">eigen</span><span class="o">=</span><span class="mf">3.4</span> <span class="n">cgal</span><span class="o">-</span><span class="n">cpp</span><span class="o">=</span><span class="mf">5.5</span> <span class="n">pybind11</span> <span class="n">compas</span> <span class="n">compas_view2</span> <span class="o">--</span><span class="n">yes</span>
+<div class="language-python notranslate"><div class="highlight"><pre><button class="btn copy"><i class="far fa-copy"></i></button><code><span></span><span class="n">conda</span> <span class="n">config</span> <span class="o">--</span><span class="n">add</span> <span class="n">channels</span> <span class="n">conda</span><span class="o">-</span><span class="n">forge</span>
+<span class="n">conda</span> <span class="n">create</span> <span class="o">-</span><span class="n">n</span> <span class="n">wood</span><span class="o">-</span><span class="n">dev</span> <span class="n">python</span><span class="o">=</span><span class="mf">3.8</span> <span class="n">mpir</span> <span class="n">mpfr</span> <span class="n">boost</span><span class="o">-</span><span class="n">cpp</span> <span class="n">eigen</span><span class="o">=</span><span class="mf">3.4</span> <span class="n">cgal</span><span class="o">-</span><span class="n">cpp</span><span class="o">=</span><span class="mf">5.5</span> <span class="n">pybind11</span> <span class="n">compas</span> <span class="n">compas_view2</span> <span class="o">--</span><span class="n">yes</span>
 <span class="n">conda</span> <span class="n">activate</span> <span class="n">wood</span><span class="o">-</span><span class="n">dev</span>
+<span class="n">conda</span> <span class="n">install</span> <span class="o">-</span><span class="n">c</span> <span class="n">anaconda</span> <span class="n">freetype</span>
 <span class="n">git</span> <span class="n">clone</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">petrasvestartas</span><span class="o">/</span><span class="n">compas_wood</span><span class="o">.</span><span class="n">git</span>
 <span class="n">cd</span> <span class="n">compas_wood</span>
 <span class="n">pip</span> <span class="n">install</span> <span class="o">-</span><span class="n">e</span> <span class="o">.</span>
@@ -111,8 +105,10 @@
 </section>
 <section id="mac">
 <h2>Mac</h2>
-<div class="language-python notranslate"><div class="highlight"><pre><button class="btn copy"><i class="far fa-copy"></i></button><code><span></span><span class="n">conda</span> <span class="n">create</span> <span class="o">-</span><span class="n">n</span> <span class="n">wood</span><span class="o">-</span><span class="n">dev</span> <span class="n">python</span><span class="o">=</span><span class="mf">3.8</span> <span class="n">gmp</span> <span class="n">mpfr</span> <span class="n">boost</span><span class="o">-</span><span class="n">cpp</span> <span class="n">eigen</span><span class="o">=</span><span class="mf">3.4</span> <span class="n">cgal</span><span class="o">-</span><span class="n">cpp</span><span class="o">=</span><span class="mf">5.5</span> <span class="n">pybind11</span> <span class="n">compas</span> <span class="n">compas_view2</span> <span class="o">--</span><span class="n">yes</span>
+<div class="language-python notranslate"><div class="highlight"><pre><button class="btn copy"><i class="far fa-copy"></i></button><code><span></span><span class="n">conda</span> <span class="n">config</span> <span class="o">--</span><span class="n">add</span> <span class="n">channels</span> <span class="n">conda</span><span class="o">-</span><span class="n">forge</span>
+<span class="n">conda</span> <span class="n">create</span> <span class="o">-</span><span class="n">n</span> <span class="n">wood</span><span class="o">-</span><span class="n">dev</span> <span class="n">python</span><span class="o">=</span><span class="mf">3.8</span> <span class="n">gmp</span> <span class="n">mpfr</span> <span class="n">boost</span><span class="o">-</span><span class="n">cpp</span> <span class="n">eigen</span><span class="o">=</span><span class="mf">3.4</span> <span class="n">cgal</span><span class="o">-</span><span class="n">cpp</span><span class="o">=</span><span class="mf">5.5</span> <span class="n">pybind11</span> <span class="n">compas</span> <span class="n">compas_view2</span> <span class="o">--</span><span class="n">yes</span>
 <span class="n">conda</span> <span class="n">activate</span> <span class="n">wood</span><span class="o">-</span><span class="n">dev</span>
+<span class="n">conda</span> <span class="n">install</span> <span class="o">-</span><span class="n">c</span> <span class="n">anaconda</span> <span class="n">freetype</span>
 <span class="n">git</span> <span class="n">clone</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">petrasvestartas</span><span class="o">/</span><span class="n">compas_wood</span><span class="o">.</span><span class="n">git</span>
 <span class="n">cd</span> <span class="n">compas_wood</span>
 <span class="n">pip</span> <span class="n">install</span> <span class="o">-</span><span class="n">e</span> <span class="o">.</span>
@@ -149,7 +145,7 @@
 <img alt="_images/7.png" class="figure-img img-fluid" src="_images/7.png" />
 </figure>
 <ul class="simple">
-<li><p>Step 8 - change default terminal to “Command Line”, type “Ctrl+Shift+P” and type “Select Default Shell” and select “Command Line”</p></li>
+<li><p>Step 8 - change default terminal to “Command Line”, type “Ctrl+Shift+P” and type “Select Default Shell” and select “Command Line”. Afterwards, in Terminal, top right corner, click “+” sign to add a new command line that has activated environment.</p></li>
 </ul>
 <figure class="figure align-default">
 <img alt="_images/8.png" class="figure-img img-fluid" src="_images/8.png" />
@@ -161,24 +157,20 @@
 <img alt="_images/9.png" class="figure-img img-fluid" src="_images/9.png" />
 </figure>
 <ul class="simple">
+<li><p>Step 10 - install ironPython: <a class="reference external" href="https://github.com/IronLanguages/ironpython2/releases/download/ipy-2.7.12/IronPython-2.7.12.msi">https://github.com/IronLanguages/ironpython2/releases/download/ipy-2.7.12/IronPython-2.7.12.msi</a></p></li>
+</ul>
+<p>Add “C:Program FilesIronPython” 2.7 to the PATH environment variable</p>
+<ul class="simple">
 <li><p>Even if the first time the whole installation seems complex, this process is standard to other compas packages, following this link: <a class="reference external" href="https://compas.dev/compas/latest/installation.html">https://compas.dev/compas/latest/installation.html</a></p></li>
 </ul>
 </section>
-<section id="rhino-grasshopper">
-<h2>Rhino Grasshopper</h2>
-<p>Open Anaconda Prompt:</p>
-<div class="language-python notranslate"><div class="highlight"><pre><button class="btn copy"><i class="far fa-copy"></i></button><code><span></span><span class="n">conda</span> <span class="n">activate</span> <span class="n">wood</span><span class="o">-</span><span class="n">dev</span>
-<span class="n">python</span> <span class="o">-</span><span class="n">m</span> <span class="n">compas_rhino</span><span class="o">.</span><span class="n">install</span>
-<span class="n">python</span> <span class="o">-</span><span class="n">m</span> <span class="n">compas_rhino</span><span class="o">.</span><span class="n">install</span> <span class="o">-</span><span class="n">p</span> <span class="n">compas_wood</span>
-</code></pre></div>
-</div>
-<div class="language-python notranslate"><div class="highlight"><pre><button class="btn copy"><i class="far fa-copy"></i></button><code><span></span><span class="n">Download</span> <span class="n">the</span> <span class="n">zipped</span> <span class="n">files</span> <span class="ow">and</span> <span class="n">place</span> <span class="n">them</span> <span class="ow">in</span> <span class="n">libraries</span> <span class="n">folder</span><span class="o">.</span>
-<span class="n">Current</span> <span class="n">suppoorted</span> <span class="n">Grasshopper</span> <span class="ow">is</span> <span class="n">version</span> <span class="ow">is</span> <span class="n">Windows</span> <span class="n">only</span><span class="o">.</span>
-<span class="n">You</span> <span class="n">can</span> <span class="n">find</span> <span class="n">this</span> <span class="n">folder</span> <span class="n">when</span> <span class="n">you</span> <span class="nb">open</span> <span class="n">Grasshopper</span><span class="o">.</span>
-<span class="n">File</span><span class="o">-&gt;</span><span class="n">Special</span> <span class="n">Folder</span><span class="o">-&gt;</span><span class="n">Component</span> <span class="n">Folder</span><span class="o">.</span>
-<span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">petrasvestartas</span><span class="o">/</span><span class="n">compas_wood</span><span class="o">/</span><span class="n">releases</span><span class="o">/</span><span class="n">tag</span><span class="o">/</span><span class="n">compas_wood_GH_1</span><span class="mf">.0.0</span>
-</code></pre></div>
-</div>
+<section id="rhino-installation">
+<h2>Rhino Installation )</h2>
+<ul class="simple">
+<li><p>Install compas_wood via Rhino3d package manager, close Rhino</p></li>
+<li><p>Download dependencies for Windows: <a class="reference external" href="https://1drv.ms/u/s!AnwaB50XU22ejqhau0SCjdSqBajWuQ?e=KntEYu">https://1drv.ms/u/s!AnwaB50XU22ejqhau0SCjdSqBajWuQ?e=KntEYu</a> for Mac: <a class="reference external" href="https://1drv.ms/u/s!AnwaB50XU22ejqhbMwL3iCf0CxtnRg?e=Dfbj6X">https://1drv.ms/u/s!AnwaB50XU22ejqhbMwL3iCf0CxtnRg?e=Dfbj6X</a></p></li>
+<li><p>Place the contents of the downloaded files to the following directories for Windows: “C:/compas_wood/” , for Mac: “/Users/compas_wood/”</p></li>
+</ul>
 </section>
 <section id="c">
 <h2>C++</h2>
@@ -291,11 +283,10 @@ cd build_win
         
         <ul class="nav flex-column" id="compas-toc">
 <li class="nav-item"><a class="nav-link reference internal" href="#">Installation</a><ul class="nav flex-column">
-<li class="nav-item"><a class="nav-link reference internal" href="#rhino-installation">Rhino Installation</a></li>
 <li class="nav-item"><a class="nav-link reference internal" href="#windows">Windows</a></li>
 <li class="nav-item"><a class="nav-link reference internal" href="#mac">Mac</a></li>
 <li class="nav-item"><a class="nav-link reference internal" href="#if-you-never-used-vscode-anaconda-git">If you never used VSCode, Anaconda, Git</a></li>
-<li class="nav-item"><a class="nav-link reference internal" href="#rhino-grasshopper">Rhino Grasshopper</a></li>
+<li class="nav-item"><a class="nav-link reference internal" href="#rhino-installation">Rhino Installation )</a></li>
 <li class="nav-item"><a class="nav-link reference internal" href="#c">C++</a></li>
 </ul>
 </li>
