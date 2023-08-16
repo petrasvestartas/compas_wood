@@ -31,6 +31,20 @@ Mac
     cd compas_wood 
     pip install -e .
 
+################################################################################
+Linux
+################################################################################
+
+.. code-block:: 
+
+    conda config --add channels conda-forge
+    conda create -n wood-dev python=3.8 gmp mpfr boost-cpp eigen=3.4 cgal-cpp=5.5 pybind11 compas compas_view2 --yes
+    conda activate wood-dev
+    conda install -c anaconda freetype
+    git clone https://github.com/petrasvestartas/compas_wood.git
+    cd compas_wood 
+    pip install -e .
+
 
 ################################################################################
 If you never used VSCode, Anaconda, Git
