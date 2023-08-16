@@ -18,6 +18,9 @@ frontend/build_mac/**
 frontend/build_linux/**
 frontend/build/**
 
+#linux temp ingore frontend
+temp/**
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
