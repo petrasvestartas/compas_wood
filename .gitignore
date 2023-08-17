@@ -3,6 +3,8 @@ src/build/**
 src/build
 src/frontend/build
 src/frontend/build/**
+src/frontend/build_win/**
+src/frontend/build_win
 
 #wood ingore backend
 backend/
@@ -146,3 +148,4 @@ dist/**
 scripts/.idea/**
 
 docs/api/generated
+

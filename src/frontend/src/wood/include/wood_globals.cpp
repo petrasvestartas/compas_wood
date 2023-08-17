@@ -86,21 +86,4 @@ namespace wood_globals
     };
 
     size_t RUN_COUNT = 0;
-
-
-    // custom joint types
-    std::vector<CGAL_Polyline> custom_joints_ss_e_ip_male{};
-    std::vector<CGAL_Polyline> custom_joints_ss_e_ip_female{};
-    std::vector<CGAL_Polyline> custom_joints_ss_e_op_male{};
-    std::vector<CGAL_Polyline> custom_joints_ss_e_op_female{};
-    std::vector<CGAL_Polyline> custom_joints_ts_e_p_male{};
-    std::vector<CGAL_Polyline> custom_joints_ts_e_p_female{};
-    std::vector<CGAL_Polyline> custom_joints_cr_c_ip_male{};
-    std::vector<CGAL_Polyline> custom_joints_cr_c_ip_female{};
-    std::vector<CGAL_Polyline> custom_joints_tt_e_p_male{};
-    std::vector<CGAL_Polyline> custom_joints_tt_e_p_female{};
-    std::vector<CGAL_Polyline> custom_joints_ss_e_r_male{};
-    std::vector<CGAL_Polyline> custom_joints_ss_e_r_female{};
-    std::vector<CGAL_Polyline> custom_joints_b_male{};
-    std::vector<CGAL_Polyline> custom_joints_b_female{};
 }

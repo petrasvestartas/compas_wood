@@ -26,7 +26,7 @@ namespace wood_xml
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Check if XML file exists, path_and_file_for_joints is a global path
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        printf("%s",file_path.c_str());
+        printf(file_path.c_str());
         if (!file_exists_0(file_path))
         {
             printf("\nread_wood_xml -> File does not exist");
@@ -80,11 +80,11 @@ namespace wood_xml
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         printf("read_wood_xml ->  read_xml_polylines -> ");
-        printf("%s",file_path.c_str());
+        printf(file_path.c_str());
         printf("\n");
         if (!file_exists_0(file_path))
         {
-            printf("read_wood_xml -> read_wood_xml|read_xml_polylines|File does not exist \n");
+            printf("read_wood_xml -> read_wood_xml | read_xml_polylines | File does not exist \n");
             return false;
         }
         else
@@ -144,7 +144,7 @@ namespace wood_xml
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         printf("read_wood_xml ->  read_xml_polylines -> ");
-        printf("%s",file_path.c_str());
+        printf(file_path.c_str());
         printf("\n");
         if (!file_exists_0(file_path))
         {
@@ -210,7 +210,7 @@ namespace wood_xml
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         printf("read_wood_xml ->  read_xml_polylines -> ");
-        printf("%s",file_path.c_str());
+        printf(file_path.c_str());
         printf("\n");
         if (!file_exists_0(file_path))
         {
@@ -366,23 +366,21 @@ namespace wood_xml
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         printf("read_wood_xml ->  read_xml_polylines -> ");
-        printf("%s",file_path.c_str());
+        printf(file_path.c_str());
         printf("\n");
         if (!file_exists_0(file_path))
         {
-            printf("read_wood_xml -> wood_xml|read_xml_polylines | File does not exist \n");
+            printf("read_wood_xml -> wood_xml|read_xml_polylines|File does not exist \n");
             return false;
         }
         else
         {
-            printf("read_wood_xml -> read_xml_polylines | file exists \n");
+            printf("read_wood_xml -> read_xml_polylines|file exists \n");
         }
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Get properties from XML and create polylines
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        
-        printf("start reading \n");
         try
         {
             boost::property_tree::ptree tree;
@@ -395,11 +393,9 @@ namespace wood_xml
                 {"three_valence_element_indices_and_instruction", 3},
                 {"adjacency", 4}};
 
-
             for (boost::property_tree::ptree::value_type &v : tree.get_child(property_to_read))
             {
-                //printf(v.first.c_str());
-                if (v.first == "polyline" || v.first == "Polyline")
+                if (v.first == "polyline")
                 {
 
                     // iterate through <point> array and add points to the polyline
@@ -410,7 +406,6 @@ namespace wood_xml
                         double x = point.second.get<double>("x");
                         double y = point.second.get<double>("y");
                         double z = point.second.get<double>("z");
-                        //printf("read_wood_xml -> read_xml_polylines | x: %f y: %f z: %f \n", x, y, z);
                         // IK::Point_3 p(x, y, z);
 
                         // skip duplicate points
@@ -485,7 +480,7 @@ namespace wood_xml
         catch (std::exception &e)
         {
             (void)e;
-            printf("nread_wood_xml -> | read_xml_polylines | CPP Wrong property \n");
+            printf("nread_wood_xml -> |read_xml_polylines|CPP Wrong property \n");
             return false;
         }
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -502,7 +497,7 @@ namespace wood_xml
                 printf("nread_wood_xml -> |read_xml_polylines|CPP insertion vectors are given, but count of them is not equal to polyline count \n");
                 return false;
             }
-        // check if the number of polylines is equal to the number of joints types
+        // check if the number of polyliens is equal to the number of joints types
         if (input_JOINTS_TYPES.size() > 0)
             if (input_JOINTS_TYPES.size() != input_polyline_pairs.size() * 0.5)
             {
