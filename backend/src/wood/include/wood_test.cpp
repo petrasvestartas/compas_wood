@@ -2755,7 +2755,7 @@ namespace wood_test
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         std::vector<std::vector<IK::Point_3>> input_polyline_pairs;
         internal::set_file_path_for_input_xml_and_screenshot(input_polyline_pairs, "type_plates_name_top_to_side_test");
-        std::cout<<input_polyline_pairs.size() <<"\n";
+        std::cout << input_polyline_pairs.size() << "\n";
 
         if (!wood_globals::RUN_COUNT) // this is needed to avoid overwriting after the first "Run" click by the user -> IMGUI
         {
@@ -2806,7 +2806,7 @@ namespace wood_test
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Display
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        internal::set_plate_display(input_polyline_pairs, output_plines);
+        // internal::set_plate_display(input_polyline_pairs, output_plines);
         return true;
     }
 

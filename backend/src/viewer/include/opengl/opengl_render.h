@@ -186,6 +186,13 @@ namespace opengl_render
 			std::cout << "Failed to initialize GLAD" << std::endl;
 			return;
 		}
+
+		// int version = gladLoadGL(glfwGetProcAddress);
+		// if (version == 0)
+		// {
+		// 	printf("Failed to initialize OpenGL context\n");
+		// 	return;
+		// }
 		// std::cout << "start_glfw 5\n";
 		//  tell stb_image.h to flip loaded texture's on the y-axis (before loading model).
 		stbi_set_flip_vertically_on_load(true);
@@ -199,6 +206,7 @@ namespace opengl_render
 			glGetIntegerv(GL_CONTEXT_FLAGS, &flags);
 			if (flags & GL_CONTEXT_FLAG_DEBUG_BIT)
 			{
+
 				std::cout << "\nOPENGL DEBUG MODE SLOW, REMOVE WHEN SHIPPING APPLICATION\n"
 						  << std::endl;
 				glEnable(GL_DEBUG_OUTPUT);
@@ -461,40 +469,9 @@ namespace opengl_render
 		/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		// camera
 		opengl_cameras::projection_matrix(); // ARCBALL_PERSPECTIVE
-											 // print("a");
-		// draw
-
-		// opengl_render::meshes.mesh_list.front().xform = glm::translate(glm::vec3(0, 0, opengl_globals::time * 0.1));
-		// print(opengl_globals::time);
-
+		// geometries
 		opengl_globals_geometry::meshes.draw();
-
-		// print("b");
-		// opengl_globals_geometry::polylines._geo.back().xform = opengl_transform::rotate_around_axis(
-		//	glm::vec3(-1.190432f, -0.544969f, -0.08755f),
-		//	glm::vec3(0.265586f, -0.365549f, 0.892097f),
-		//	opengl_globals::time * 1
-		//);
-		// opengl_globals_geometry::draw_robots();
-		//
-
-		// opengl_render::polylines._geo.back().xform = glm::translate(glm::vec3(0, 0, opengl_globals::time * 0.1));
-		// print(opengl_globals::time);
 		opengl_globals_geometry::polylines.draw();
-
-		// opengl_render::pointclouds._geo.back().xform = glm::translate(glm::vec3(0, 0, opengl_globals::time * 0.1));
-		// print(opengl_globals::time);
-
-		// auto axis_positions = opengl_globals_geometry::robot_abb_6700_origins();
-		// glm::mat4 sixth_xform = opengl_transform::xy_to_plane(
-		//	axis_positions.back().x + 0.0f, axis_positions.back().y - 0.6f, axis_positions.back().z - 0.75f,
-		//	0, 0, 1,
-		//	0, 1, 0,
-		//	1, 0, 0
-
-		//);
-
-		// opengl_globals_geometry::pointclouds._geo.back().xform = opengl_globals_geometry::loaded_robots_last_xforms[0] * sixth_xform;
 		opengl_globals_geometry::pointclouds.draw();
 	}
 

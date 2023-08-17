@@ -6,12 +6,10 @@ uniform float u_thickness ;
 uniform   vec2    u_viewportSize ;
 uniform   bool    u_scale_width_by_zoom ;
 
-in gl_PerVertex
-{
-  vec4 gl_Position;
-  //float gl_PointSize;
-  //float gl_ClipDistance[];
-} gl_in[];
+// in gl_PerVertex
+// {
+//   vec4 gl_Position;
+// } gl_in[];
 
 vec4 rotate(vec4 p, vec4 axis,float angle  )
 {

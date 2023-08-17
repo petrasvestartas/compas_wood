@@ -113,8 +113,14 @@ namespace opengl_test_light
 		if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
 		{
 			std::cout << "Failed to initialize GLAD" << std::endl;
-			return -1;
+			return;
 		}
+		// int version = gladLoadGL(glfwGetProcAddress);
+		// if (version == 0)
+		// {
+		// 	printf("Failed to initialize OpenGL context\n");
+		// 	return;
+		// }
 		stbi_set_flip_vertically_on_load(true);
 		glEnable(GL_PROGRAM_POINT_SIZE); // https://www.informit.com/articles/article.aspx?p=1616796&seqNum=4
 		// glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);	// draw in wireframe

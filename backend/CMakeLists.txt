@@ -187,20 +187,20 @@ if (GET_LIBS)
 ########################################################################
 # GLAD
 ######################################################################## 
-ExternalProject_Add(glad
-URL "https://github.com/Dav1dde/glad/archive/v0.1.29.zip"
-CMAKE_ARGS 
-  -DCMAKE_INSTALL_PREFIX="${CMAKE_BINARY_DIR}/install/glad"
-  #-DGLAD_INSTALL=OFF
-  -DGLAD_PROFILE="core"
-  -DGLAD_GENERATOR="c"
-UPDATE_COMMAND ""
-SOURCE_DIR "${CMAKE_BINARY_DIR}/install/glad"
-#CONFIGURE_COMMAND "" #do not configure
-BUILD_IN_SOURCE 1
-#BUILD_COMMAND "ON" #do not build
-INSTALL_COMMAND "" #installer for now is empty
-)
+# ExternalProject_Add(glad
+# URL "https://github.com/Dav1dde/glad/archive/v0.1.29.zip"
+# CMAKE_ARGS 
+#   -DCMAKE_INSTALL_PREFIX="${CMAKE_BINARY_DIR}/install/glad"
+#   #-DGLAD_INSTALL=OFF
+#   -DGLAD_PROFILE="core"
+#   -DGLAD_GENERATOR="c"
+# UPDATE_COMMAND ""
+# SOURCE_DIR "${CMAKE_BINARY_DIR}/install/glad"
+# #CONFIGURE_COMMAND "" #do not configure
+# BUILD_IN_SOURCE 1
+# #BUILD_COMMAND "ON" #do not build
+# INSTALL_COMMAND "" #installer for now is empty
+# )
 
 
 
@@ -410,8 +410,7 @@ if (BUILD_MY_PROJECTS)
   "${CMAKE_SOURCE_DIR}/src/wood/include/wood_xml.cpp"
   "${CMAKE_SOURCE_DIR}/src/wood/include/cgal_mesh_boolean.cpp"
   "${CMAKE_SOURCE_DIR}/src/viewer/include/opengl/opengl_globals_geometry.cpp"
-  "${CMAKE_SOURCE_DIR}/src/viewer/include/opengl/opengl_globals.cpp"
-  
+  "${CMAKE_SOURCE_DIR}/src/viewer/include/opengl/opengl_globals.cpp"  
   ) 
   
   ###############################################################################
@@ -460,8 +459,10 @@ if (BUILD_MY_PROJECTS)
   #glfw
   "${CMAKE_BINARY_DIR}/install/glfw/include/"
   #glad
-  "${CMAKE_BINARY_DIR}/install/glad/include/"
-  "${CMAKE_BINARY_DIR}/install/glad/include/glad"
+  # "${CMAKE_BINARY_DIR}/install/glad/include/"
+  # "${CMAKE_BINARY_DIR}/install/glad/include/glad"
+  "${CMAKE_SOURCE_DIR}/src/viewer/include/glad/include/"
+  "${CMAKE_SOURCE_DIR}/src/viewer/include/glad/KHR/"
   #glm
   "${CMAKE_BINARY_DIR}/install/glm/"
   #assimp
@@ -531,8 +532,8 @@ if (BUILD_MY_PROJECTS)
   ###############################################################################
   # GLAD
   ###############################################################################
-  target_link_directories(${PROJECT_NAME} PUBLIC "${CMAKE_BINARY_DIR}/install/glad/")
-
+  # target_link_directories(${PROJECT_NAME} PUBLIC "${CMAKE_BINARY_DIR}/install/glad/")
+  target_link_directories(${PROJECT_NAME} PUBLIC "${CMAKE_SOURCE_DIR}/src/viewer/include/glad/include/")
   ###############################################################################
   # ASSIMP
   ###############################################################################
@@ -648,6 +649,20 @@ endif ()
 SET(COMPILE_LIBS "" CACHE STRING "Set option to compile dependencies")
 if (COMPILE_LIBS)
 
+  ###############################################################################
+  # GLAD
+  ###############################################################################
+  set(GLAD_INC
+  "${CMAKE_SOURCE_DIR}/src/viewer/include/glad/include/glad/glad.h"
+  "${CMAKE_SOURCE_DIR}/src/viewer/include/glad/include/KHR/khrplatform.h"
+  )
+
+  set(GLAD_SRC
+  "${CMAKE_SOURCE_DIR}/src/viewer/include/glad/src/glad.c"
+  )
+
+  add_library(glad STATIC ${GLAD_INC} ${GLAD_SRC}  )
+  target_include_directories(glad  PUBLIC "${CMAKE_SOURCE_DIR}/src/viewer/include/glad/include/") #link headers to clipper library
   ###############################################################################
   # CLIPPER
   ###############################################################################

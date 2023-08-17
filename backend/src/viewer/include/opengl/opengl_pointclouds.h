@@ -323,7 +323,7 @@ namespace opengl_geometry
 
 				// assign shader properties unique for this geometry
 				// if (i == 0)
-				glPointSize(_line_thickness[i]);
+				// glPointSize(_line_thickness[i]);
 
 				// std::cout << i << " " << _line_thickness[i] << std::endl;
 				//_shader_line.setVec4("uniform_fragment_color", _colors[i]);
@@ -333,7 +333,7 @@ namespace opengl_geometry
 			}
 
 			// assign back origina line thickness value
-			glPointSize(opengl_globals::default_line_thickness);
+			// glPointSize(opengl_globals::default_line_thickness);
 		}
 	};
 }
