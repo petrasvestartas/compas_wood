@@ -476,8 +476,11 @@ namespace opengl_render
 	}
 
 	// all steps
-	inline void render(bool (*function)())
+	inline void render(bool (*function)(), std::string asset_directory = "C:\\brg\\2_code\\compas_wood\\backend\\src\\")
 	{
+		opengl_globals::shaders_folder = asset_directory + "viewer\\shaders\\";
+		wood_globals::DATA_SET_INPUT_FOLDER = asset_directory + "wood\\dataset\\";
+		wood_globals::DATA_SET_OUTPUT_FILE = wood_globals::DATA_SET_INPUT_FOLDER + "out.xml";
 		// std::cout << "render 0\n";
 		start_glfw();
 		// std::cout << "render 1\n";

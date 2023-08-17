@@ -331,8 +331,6 @@ namespace wood_test
      */
     bool type_plates_name_cross_vda_shell();
 
-
-
     /**
      * example for plates
      * cross joints, square reciprocal structure taken from an architecture museum
@@ -353,6 +351,13 @@ namespace wood_test
      * Ibois pavilion, this model has no proper insertion sequence
      */
     bool type_plates_name_cross_ibois_pavilion();
+
+    /**
+     * example for plates
+     * cross joints, plate cross and side joints
+     * Block Research Group, ETH Zurich - development of slab
+     */
+    bool type_plates_name_cross_brg_slab_0();
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // beam methods

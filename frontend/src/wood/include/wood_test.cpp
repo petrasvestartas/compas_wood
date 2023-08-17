@@ -1,7 +1,6 @@
 
 #include "../../../stdafx.h" //go up to the folder where the CMakeLists.txt is
 
- 
 #include "wood_test.h"
 
 namespace wood_test
@@ -410,7 +409,7 @@ namespace wood_test
         internal::set_file_path_for_input_xml_and_screenshot(input_polyline_pairs, "type_plates_name_joint_linking_vidychapel_one_axis_two_layers");
 
         wood_globals::JOINT_VOLUME_EXTENSION[2] = -10;
-        wood_globals::JOINT_VOLUME_EXTENSION = {0,0,-10,0,0,-50};
+        wood_globals::JOINT_VOLUME_EXTENSION = {0, 0, -10, 0, 0, -50};
         std::vector<double> JOINTS_TYPES = wood_globals::JOINTS_PARAMETERS_AND_TYPES;
         JOINTS_TYPES[1 * 3 + 0] = 50;
         int search_type = 0;
@@ -3200,6 +3199,74 @@ namespace wood_test
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         std::vector<std::vector<IK::Point_3>> input_polyline_pairs;
         internal::set_file_path_for_input_xml_and_screenshot(input_polyline_pairs, "type_plates_name_cross_ibois_pavilion");
+
+        if (!wood_globals::RUN_COUNT) // this is needed to avoid overwriting after the first "Run" click by the user -> IMGUI
+        {
+            // wood_globals::JOINTS_PARAMETERS_AND_TYPES[0 * 3 + 2] = 3;
+            // wood_globals::JOINTS_PARAMETERS_AND_TYPES[1 * 3 + 1] = 0.66;
+            // wood_globals::JOINTS_PARAMETERS_AND_TYPES[1 * 3 + 2] = 12;
+            // wood_globals::JOINTS_PARAMETERS_AND_TYPES[2 * 3 + 0] = 500; // this property is assigned to the individual joint.division_length
+            // wood_globals::JOINTS_PARAMETERS_AND_TYPES[2 * 3 + 1] = 0.5; // this property is assignes to the individual joint.shift parameter
+            // wood_globals::JOINTS_PARAMETERS_AND_TYPES[2 * 3 + 2] = 25;
+            // wood_globals::JOINTS_PARAMETERS_AND_TYPES[4 * 3 + 0] = 400;
+        }
+
+        wood_globals::JOINT_VOLUME_EXTENSION[2] = -20;
+
+        int search_type = 2;
+        std::vector<double> scale = {1, 1, 1};
+        std::vector<std::vector<IK::Vector_3>> input_insertion_vectors{};
+        std::vector<std::vector<int>> input_JOINTS_TYPES{};
+        // std::vector<std::vector<int>> input_three_valence_element_indices_and_instruction = {{1}, {16, 10, 11, 17}};
+        std::vector<std::vector<int>> input_three_valence_element_indices_and_instruction = {};
+
+        std::vector<int> input_adjacency = {};
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Main Method of Wood
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        std::vector<std::vector<CGAL_Polyline>>
+            output_plines;
+        std::vector<std::vector<wood_cut::cut_type>> output_types;
+        std::vector<std::vector<int>> top_face_triangulation;
+
+        wood_main::get_connection_zones(
+            // input
+            input_polyline_pairs,
+            input_insertion_vectors,
+            input_JOINTS_TYPES,
+            input_three_valence_element_indices_and_instruction,
+            input_adjacency,
+            // output
+            output_plines,
+            output_types,
+            top_face_triangulation,
+            // Global Parameters
+            wood_globals::JOINTS_PARAMETERS_AND_TYPES,
+            scale,
+            search_type,
+            wood_globals::OUTPUT_GEOMETRY_TYPE,
+            0);
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Export
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        wood_xml::path_and_file_for_output_polylines = wood_globals::DATA_SET_OUTPUT_FILE;
+        wood_xml::write_xml_polylines_and_types(output_plines, output_types);
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Display
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        internal::set_plate_display(input_polyline_pairs, output_plines);
+        return true;
+    }
+
+    bool type_plates_name_cross_brg_slab_0()
+    {
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // The filename of the xml file and the screenshot directory
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        std::vector<std::vector<IK::Point_3>> input_polyline_pairs;
+        internal::set_file_path_for_input_xml_and_screenshot(input_polyline_pairs, "type_plates_name_cross_brg_slab_0");
 
         if (!wood_globals::RUN_COUNT) // this is needed to avoid overwriting after the first "Run" click by the user -> IMGUI
         {

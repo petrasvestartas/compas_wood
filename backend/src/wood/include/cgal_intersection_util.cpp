@@ -1,7 +1,6 @@
 
 #include "../../../stdafx.h" //go up to the folder where the CMakeLists.txt is
-
- 
+// #define DEBUG
 #include "cgal_intersection_util.h"
 
 namespace cgal_intersection_util
@@ -565,6 +564,8 @@ namespace cgal_intersection_util
         if (is_finite && (t < 0 || t > 1))
             return false;
 
+        // std::cout << t << " t\n";
+
         return rc;
     }
 
@@ -772,13 +773,13 @@ namespace cgal_intersection_util
 
             if (CGAL::squared_distance(plane.projection(segment[0]), segment[0]) < wood_globals::DISTANCE_SQUARED)
             {
-                // std::cout << "polylines are coincident \n";
+                // std::cout << "polyline segment points are coincident \n";
                 return false;
             }
 
             if (CGAL::squared_distance(plane.projection(segment[1]), segment[1]) < wood_globals::DISTANCE_SQUARED)
             {
-                // std::cout << "polylines are coincident \n";
+                // std::cout << "polyline segment points are coincident \n";
                 return false;
             }
             IK::Point_3 output_point;
@@ -786,7 +787,12 @@ namespace cgal_intersection_util
 
             if (result)
             {
-                // std::cout << output_point.hx() << " " << output_point.hy() << " " << output_point.hz() << std::endl;
+#ifdef DEBUG
+                std::cout << "Plane Origin " << plane.point() << std::endl;
+                std::cout << "Plane " << plane.orthogonal_vector() << std::endl;
+                std::cout << "Segment " << segment << std::endl;
+                std::cout << "Point " << output_point.hx() << " " << output_point.hy() << " " << output_point.hz() << std::endl;
+#endif
                 points.emplace_back(output_point);
                 edge_ids.emplace_back(i);
             }
@@ -808,7 +814,7 @@ namespace cgal_intersection_util
         std::vector<int> edge_ids_0;
         if (!polyline_plane(c0, p1, pts0, edge_ids_0))
         {
-            if (debug)
+#ifdef DEBUG
             {
                 for (auto &p_temp : c0)
                     std::cout << (p_temp) << std::endl;
@@ -817,36 +823,43 @@ namespace cgal_intersection_util
                     std::cout << (p_temp) << std::endl;
                 printf("CPP cgal_intersection_util -> polyline_plane(c0, p1, pts0, edge_ids_0) \n");
             }
-
+#endif
             return false;
         }
+#ifdef DEBUG
+        for (auto &id : edge_ids_0)
+            std::cout << "edge_ids_0 " << (id) << std::endl;
+#endif
 
         std::vector<IK::Point_3> pts1;
         std::vector<int> edge_ids_1;
         if (!polyline_plane(c1, p0, pts1, edge_ids_1))
         {
-            if (debug)
-                printf("CPP polyline_plane(c1, p0, pts1, edge_ids_1) \n");
+#ifdef DEBUG
+            printf("CPP polyline_plane(c1, p0, pts1, edge_ids_1) \n");
+#endif
             return false;
         }
-
-        /////////////////////////////////////////////////////////////////////////////////////////////////////////
-        // Check1: if there are 2 intersections
-        /////////////////////////////////////////////////////////////////////////////////////////////////////////
+#ifdef DEBUG
+        for (auto &id : edge_ids_1)
+            std::cout << "edge_ids_1 " << (id) << std::endl;
+#endif
+            /////////////////////////////////////////////////////////////////////////////////////////////////////////
+            // Check1: if there are 2 intersections
+            /////////////////////////////////////////////////////////////////////////////////////////////////////////
+#ifdef DEBUG
         if (pts0.size() < 2)
         {
-            if (debug)
-                printf("CPP PlanePolylineIntersection 0 Not2 \n");
-            return false;
+
+            printf("CPP PlanePolylineIntersection 0 Not2 \n");
         }
 
         if (pts1.size() < 2)
         {
-            if (debug)
-                printf("CPP PlanePolylineIntersection 1 Not2 \n");
+            printf("CPP PlanePolylineIntersection 1 Not2 \n");
             return false;
         }
-
+#endif
         /////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Check2: if any of points are in the other curve,
         // If one point is inside, perform second intersection else curve are inside curves
@@ -859,6 +872,14 @@ namespace cgal_intersection_util
         std::vector<int> ID0;
         int count1 = clipper_util::are_points_inside(c1, p1, pts0, ID0);
 
+#ifdef DEBUG
+        for (auto &id : ID1)
+            std::cout << "ID1 " << (id) << std::endl;
+
+        for (auto &id : ID0)
+            std::cout << "ID0 " << (id) << std::endl;
+#endif
+
         if (count0 == 0 && count1 == 0)
         {
             return false;
@@ -867,51 +888,125 @@ namespace cgal_intersection_util
         { // rectangle curve inside a rectangle curve
             line = count0 == 2 ? IK::Segment_3(pts0[0], pts0[1]) : IK::Segment_3(pts1[0], pts1[1]);
             pair = count0 == 2 ? std::pair<int, int>(edge_ids_0[0], edge_ids_0[1]) : std::pair<int, int>(edge_ids_1[0], edge_ids_1[1]);
-
+#ifdef DEBUG
+            printf("return a \n");
+#endif
             return true;
         }
         else if (count0 == 1 && count1 == 1)
         {
+            // printf("return b \n");
             line = IK::Segment_3(pts0[ID0[0]], pts1[ID1[0]]);
             pair = std::pair<int, int>(edge_ids_0[ID0[0]], edge_ids_1[ID1[0]]);
+#ifdef DEBUG
+            printf("return b \n");
+#endif
             return true;
         }
         else if (count0 > 1 || count1 > 1)
         {
+            // this is the case when polygons are conincident
+
+            // collect the four points
             std::vector<IK::Point_3> pts(ID0.size() + ID1.size());
             for (int i = 0; i < ID0.size(); i++)
+            {
                 pts[i] = pts0[ID0[i]];
+                // std::cout << pts0[ID0[i]] << "\n";
+            }
 
             for (int i = 0; i < ID1.size(); i++)
+            {
                 pts[i + ID0.size()] = pts1[ID1[i]];
+                // std::cout << pts1[ID1[i]] << "\n";
+            }
+
+            // take the two extreme points
+#ifdef DEBUG
+            for (auto &p : pts)
+                std::cout << "__________________" << p << "\n";
+#endif
 
             CGAL::Bbox_3 AABB = CGAL::bbox_3(pts.begin(), pts.end(), IK());
             auto p0 = IK::Point_3(AABB.xmin(), AABB.ymin(), AABB.zmin());
             auto p1 = IK::Point_3(AABB.xmax(), AABB.ymax(), AABB.zmax());
-            line = IK::Segment_3(p0, p1);
-            int e0, e1;
+
+            // find nearest points to the bbox points
+            IK::Point_3 nearest_p0;
+            IK::Point_3 nearest_p1;
+            auto min_distance_p0 = 1e18;
+            auto min_distance_p1 = 1e18;
+
+            for (const auto &pt : pts)
+            {
+                auto distance_p0 = CGAL::squared_distance(pt, p0);
+                if (distance_p0 < min_distance_p0)
+                {
+                    min_distance_p0 = distance_p0;
+                    nearest_p0 = pt;
+                }
+
+                auto distance_p1 = CGAL::squared_distance(pt, p1);
+                if (distance_p1 < min_distance_p1)
+                {
+                    min_distance_p1 = distance_p1;
+                    nearest_p1 = pt;
+                }
+            }
+
+            p0 = nearest_p0;
+            p1 = nearest_p1;
+
+            line = IK::Segment_3(nearest_p0, nearest_p1);
+#ifdef DEBUG
+            std::cout << "__________________" << p0 << "\n";
+            std::cout << "__________________" << p1 << "\n";
+#endif
+            int e0 = -9999, e1 = -9999;
 
             // Find edge ID - not optimized...
             for (int i = 0; i < ID0.size(); i++)
             {
-                if (CGAL::squared_distance(p0, pts0[ID0[i]]) < 0.001 || CGAL::squared_distance(p1, pts0[ID0[i]]) < 0.001)
+#ifdef DEBUG
+                printf("a %f \n", (CGAL::squared_distance(p0, pts0[ID0[i]])));
+                printf("a %f \n", (CGAL::squared_distance(p1, pts0[ID0[i]])));
+
+#endif
+                // if (CGAL::squared_distance(p0, IK::Segment_3( pts0[ID0[i]], pts0[ID0[i]+1]  ) DISTANCE_SQUARED || CGAL::squared_distance(p1, pts0[ID0[i]]) < wood_globals::DISTANCE_SQUARED)
+                // {
+                if (CGAL::squared_distance(line, pts0[ID0[i]]) < wood_globals::DISTANCE_SQUARED)
                 {
                     e0 = edge_ids_0[ID0[i]];
+                    // printf("e0 %d \n", e0);
                     break;
                 }
             }
 
             for (int i = 0; i < ID1.size(); i++)
             {
-                if (CGAL::squared_distance(p0, pts1[ID1[i]]) < 0.001 || CGAL::squared_distance(p1, pts1[ID1[i]]) < 0.001)
+#ifdef DEBUG
+                printf("b %f \n", (CGAL::squared_distance(p0, pts0[ID1[i]])));
+                printf("b %f \n", (CGAL::squared_distance(p1, pts0[ID1[i]])));
+
+#endif
+                if (CGAL::squared_distance(line, pts0[ID1[i]]) < wood_globals::DISTANCE_SQUARED)
+                // if (CGAL::squared_distance(p0, pts1[ID1[i]]) < wood_globals::DISTANCE_SQUARED || CGAL::squared_distance(p1, pts1[ID1[i]]) < wood_globals::DISTANCE_SQUARED)
                 {
                     e1 = edge_ids_1[ID1[i]];
+                    // printf("e1 %d \n", e1);
                     break;
                 }
             }
             pair = std::pair<int, int>(e0, e1);
-
-            return true;
+#ifdef DEBUG
+            printf("return c \n");
+            std::cout << e0 << " " << e1 << "\n";
+            std::cout << line << "\n";
+#endif
+            if (e0 == -9999 || e1 == -9999)
+                return false;
+            else
+                return true;
         }
 
         return false;

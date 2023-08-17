@@ -189,7 +189,7 @@ namespace wood_main
 #pragma region SEARCH_LOCAL_METHODS
 
     bool border_to_face(
-        size_t& joint_id,
+        size_t &joint_id,
         std::vector<CGAL_Polyline> &Polyline0,
         std::vector<IK::Plane_3> &Plane0,
         std::vector<IK::Vector_3> &insertion_vectors0,
@@ -200,8 +200,8 @@ namespace wood_main
         std::array<CGAL_Polyline, 4> &joint_volumes_pairA_pairB)
     {
 
-        size_t extension_variables_count = size_t(std::floor ( wood_globals::JOINT_VOLUME_EXTENSION.size() / 3.0 )-1);
-        size_t extension_id = extension_variables_count == 0 ? 0 : (joint_id%extension_variables_count)*3;
+        size_t extension_variables_count = size_t(std::floor(wood_globals::JOINT_VOLUME_EXTENSION.size() / 3.0) - 1);
+        size_t extension_id = extension_variables_count == 0 ? 0 : (joint_id % extension_variables_count) * 3;
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////
         // The wifth and offset bretween two rectangles must be changed by user given scale values
@@ -283,7 +283,7 @@ namespace wood_main
     }
 
     bool plane_to_face(
-        size_t& joint_id,
+        size_t &joint_id,
         std::vector<CGAL_Polyline> &Polyline0,
         std::vector<CGAL_Polyline> &Polyline1,
         std::vector<IK::Plane_3> &Plane0,
@@ -307,9 +307,8 @@ namespace wood_main
         face_ids.second[0] = -1;
         face_ids.second[1] = -1;
         type = 30;
-        size_t extension_variables_count = size_t(std::floor ( wood_globals::JOINT_VOLUME_EXTENSION.size() / 3.0 )-1);
-        size_t extension_id = extension_variables_count == 0 ? 0 : (joint_id%extension_variables_count)*3;
-
+        size_t extension_variables_count = size_t(std::floor(wood_globals::JOINT_VOLUME_EXTENSION.size() / 3.0) - 1);
+        size_t extension_id = extension_variables_count == 0 ? 0 : (joint_id % extension_variables_count) * 3;
 
         //////////////////////////////////////////////////////////////////////////////
         // Check
@@ -512,11 +511,11 @@ namespace wood_main
         IK::Vector_3 v = maxID == 1 ? lMax[1] - midPlane_lMax : -(lMax[0] - midPlane_lMax);
 
         // exten only when user gives positive values
-        
-        if (wood_globals::JOINT_VOLUME_EXTENSION[2+extension_id] > 0)
+
+        if (wood_globals::JOINT_VOLUME_EXTENSION[2 + extension_id] > 0)
         {
             double length = cgal_vector_util::length(v.hx(), v.hy(), v.hz());
-            double target_length = length + wood_globals::JOINT_VOLUME_EXTENSION[2+extension_id];
+            double target_length = length + wood_globals::JOINT_VOLUME_EXTENSION[2 + extension_id];
             v *= (target_length / length);
         }
 
@@ -583,17 +582,17 @@ namespace wood_main
         // jointArea1 = rm.Translate(lMax.direction().Unit() * ((1 + this.extend[2]) + 0.00) * maxLength);//For some reason extend by 1.5
 
         // does not work
-        if (wood_globals::JOINT_VOLUME_EXTENSION[0+extension_id] + wood_globals::JOINT_VOLUME_EXTENSION[1+extension_id] > 0)
+        if (wood_globals::JOINT_VOLUME_EXTENSION[0 + extension_id] + wood_globals::JOINT_VOLUME_EXTENSION[1 + extension_id] > 0)
         {
-            cgal_polyline_util::extend(joint_volumes_pairA_pairB[0], 0, wood_globals::JOINT_VOLUME_EXTENSION[0+extension_id], wood_globals::JOINT_VOLUME_EXTENSION[0+extension_id]);
-            cgal_polyline_util::extend(joint_volumes_pairA_pairB[0], 2, wood_globals::JOINT_VOLUME_EXTENSION[0+extension_id], wood_globals::JOINT_VOLUME_EXTENSION[0+extension_id]);
-            cgal_polyline_util::extend(joint_volumes_pairA_pairB[0], 1, wood_globals::JOINT_VOLUME_EXTENSION[1+extension_id], wood_globals::JOINT_VOLUME_EXTENSION[1+extension_id]);
-            cgal_polyline_util::extend(joint_volumes_pairA_pairB[0], 3, wood_globals::JOINT_VOLUME_EXTENSION[1+extension_id], wood_globals::JOINT_VOLUME_EXTENSION[1+extension_id]);
+            cgal_polyline_util::extend(joint_volumes_pairA_pairB[0], 0, wood_globals::JOINT_VOLUME_EXTENSION[0 + extension_id], wood_globals::JOINT_VOLUME_EXTENSION[0 + extension_id]);
+            cgal_polyline_util::extend(joint_volumes_pairA_pairB[0], 2, wood_globals::JOINT_VOLUME_EXTENSION[0 + extension_id], wood_globals::JOINT_VOLUME_EXTENSION[0 + extension_id]);
+            cgal_polyline_util::extend(joint_volumes_pairA_pairB[0], 1, wood_globals::JOINT_VOLUME_EXTENSION[1 + extension_id], wood_globals::JOINT_VOLUME_EXTENSION[1 + extension_id]);
+            cgal_polyline_util::extend(joint_volumes_pairA_pairB[0], 3, wood_globals::JOINT_VOLUME_EXTENSION[1 + extension_id], wood_globals::JOINT_VOLUME_EXTENSION[1 + extension_id]);
 
-            cgal_polyline_util::extend(joint_volumes_pairA_pairB[1], 0, wood_globals::JOINT_VOLUME_EXTENSION[0+extension_id], wood_globals::JOINT_VOLUME_EXTENSION[0+extension_id]);
-            cgal_polyline_util::extend(joint_volumes_pairA_pairB[1], 2, wood_globals::JOINT_VOLUME_EXTENSION[0+extension_id], wood_globals::JOINT_VOLUME_EXTENSION[0+extension_id]);
-            cgal_polyline_util::extend(joint_volumes_pairA_pairB[1], 1, wood_globals::JOINT_VOLUME_EXTENSION[1+extension_id], wood_globals::JOINT_VOLUME_EXTENSION[1+extension_id]);
-            cgal_polyline_util::extend(joint_volumes_pairA_pairB[1], 3, wood_globals::JOINT_VOLUME_EXTENSION[1+extension_id], wood_globals::JOINT_VOLUME_EXTENSION[1+extension_id]);
+            cgal_polyline_util::extend(joint_volumes_pairA_pairB[1], 0, wood_globals::JOINT_VOLUME_EXTENSION[0 + extension_id], wood_globals::JOINT_VOLUME_EXTENSION[0 + extension_id]);
+            cgal_polyline_util::extend(joint_volumes_pairA_pairB[1], 2, wood_globals::JOINT_VOLUME_EXTENSION[0 + extension_id], wood_globals::JOINT_VOLUME_EXTENSION[0 + extension_id]);
+            cgal_polyline_util::extend(joint_volumes_pairA_pairB[1], 1, wood_globals::JOINT_VOLUME_EXTENSION[1 + extension_id], wood_globals::JOINT_VOLUME_EXTENSION[1 + extension_id]);
+            cgal_polyline_util::extend(joint_volumes_pairA_pairB[1], 3, wood_globals::JOINT_VOLUME_EXTENSION[1 + extension_id], wood_globals::JOINT_VOLUME_EXTENSION[1 + extension_id]);
         }
 
         // For the sake of consistency
@@ -611,7 +610,7 @@ namespace wood_main
 
     // ToDo: Currently one connection can be made with another object, but one multiple shared edges can be possible e.g. |_>-<_|
     bool face_to_face(
-        size_t& joint_id,
+        size_t &joint_id,
         std::vector<CGAL_Polyline> &Polyline0,
         std::vector<CGAL_Polyline> &Polyline1,
         std::vector<IK::Plane_3> &Plane0,
@@ -625,8 +624,8 @@ namespace wood_main
         std::array<CGAL_Polyline, 2> &joint_lines,
         std::array<CGAL_Polyline, 4> &joint_volumes_pairA_pairB)
     {
-        size_t extension_variables_count = size_t(std::floor ( wood_globals::JOINT_VOLUME_EXTENSION.size() / 3.0 )-1);
-        size_t extension_id = extension_variables_count == 0 ? 0 : (joint_id%extension_variables_count)*3;
+        size_t extension_variables_count = size_t(std::floor(wood_globals::JOINT_VOLUME_EXTENSION.size() / 3.0) - 1);
+        size_t extension_id = extension_variables_count == 0 ? 0 : (joint_id % extension_variables_count) * 3;
 
 #ifdef DEBUG_wood_MAIN_LOCAL_SEARCH
         printf("\nCPP face_to_face \nCPP planes %zi, %zi  \n", Plane0.size(), Plane1.size());
@@ -747,7 +746,7 @@ namespace wood_main
                         // check the limit so that the lines would not be 0 or inverse
                         ////////////////////////////////////////////////////////////////////////////////
 
-                        double JOINT_LINE_EXTENSION_limit = (wood_globals::JOINT_VOLUME_EXTENSION[2+extension_id] * 2) * (wood_globals::JOINT_VOLUME_EXTENSION[2+extension_id] * 2);
+                        double JOINT_LINE_EXTENSION_limit = (wood_globals::JOINT_VOLUME_EXTENSION[2 + extension_id] * 2) * (wood_globals::JOINT_VOLUME_EXTENSION[2 + extension_id] * 2);
 
                         double joint_line0_squared_length = joint_line0.squared_length();
                         double joint_line1_squared_length = joint_line1.squared_length();
@@ -760,8 +759,8 @@ namespace wood_main
                             if (JOINT_LINE_EXTENSION_limit > joint_line1.squared_length() - LIMIT_MIN_JOINT_LENGTH_squared)
                                 return false;
 
-                        cgal_polyline_util::extend_equally(joint_line0, wood_globals::JOINT_VOLUME_EXTENSION[2+extension_id]);
-                        cgal_polyline_util::extend_equally(joint_line1, wood_globals::JOINT_VOLUME_EXTENSION[2+extension_id]);
+                        cgal_polyline_util::extend_equally(joint_line0, wood_globals::JOINT_VOLUME_EXTENSION[2 + extension_id]);
+                        cgal_polyline_util::extend_equally(joint_line1, wood_globals::JOINT_VOLUME_EXTENSION[2 + extension_id]);
 
                         ////////////////////////////////////////////////////////////////////////////////
                         // ToDo set edge direction - Check Insertion angle if edge axis is assigned
@@ -884,15 +883,15 @@ namespace wood_main
                                 joint_volumes_pairA_pairB[1] = {average_rectangle[2] + offset_vector, average_rectangle[2] - offset_vector, average_rectangle[1] - offset_vector, average_rectangle[1] + offset_vector, average_rectangle[2] + offset_vector};
 
                                 // extend the polygons to scale the joint if the values are not set to zero
-                                cgal_polyline_util::extend_equally(joint_volumes_pairA_pairB[0], 0, wood_globals::JOINT_VOLUME_EXTENSION[0+extension_id]);
-                                cgal_polyline_util::extend_equally(joint_volumes_pairA_pairB[0], 2, wood_globals::JOINT_VOLUME_EXTENSION[0+extension_id]);
-                                cgal_polyline_util::extend_equally(joint_volumes_pairA_pairB[1], 0, wood_globals::JOINT_VOLUME_EXTENSION[0+extension_id]);
-                                cgal_polyline_util::extend_equally(joint_volumes_pairA_pairB[1], 2, wood_globals::JOINT_VOLUME_EXTENSION[0+extension_id]);
+                                cgal_polyline_util::extend_equally(joint_volumes_pairA_pairB[0], 0, wood_globals::JOINT_VOLUME_EXTENSION[0 + extension_id]);
+                                cgal_polyline_util::extend_equally(joint_volumes_pairA_pairB[0], 2, wood_globals::JOINT_VOLUME_EXTENSION[0 + extension_id]);
+                                cgal_polyline_util::extend_equally(joint_volumes_pairA_pairB[1], 0, wood_globals::JOINT_VOLUME_EXTENSION[0 + extension_id]);
+                                cgal_polyline_util::extend_equally(joint_volumes_pairA_pairB[1], 2, wood_globals::JOINT_VOLUME_EXTENSION[0 + extension_id]);
 
-                                cgal_polyline_util::extend_equally(joint_volumes_pairA_pairB[0], 1, wood_globals::JOINT_VOLUME_EXTENSION[1+extension_id]);
-                                cgal_polyline_util::extend_equally(joint_volumes_pairA_pairB[0], 3, wood_globals::JOINT_VOLUME_EXTENSION[1+extension_id]);
-                                cgal_polyline_util::extend_equally(joint_volumes_pairA_pairB[1], 1, wood_globals::JOINT_VOLUME_EXTENSION[1+extension_id]);
-                                cgal_polyline_util::extend_equally(joint_volumes_pairA_pairB[1], 3, wood_globals::JOINT_VOLUME_EXTENSION[1+extension_id]);
+                                cgal_polyline_util::extend_equally(joint_volumes_pairA_pairB[0], 1, wood_globals::JOINT_VOLUME_EXTENSION[1 + extension_id]);
+                                cgal_polyline_util::extend_equally(joint_volumes_pairA_pairB[0], 3, wood_globals::JOINT_VOLUME_EXTENSION[1 + extension_id]);
+                                cgal_polyline_util::extend_equally(joint_volumes_pairA_pairB[1], 1, wood_globals::JOINT_VOLUME_EXTENSION[1 + extension_id]);
+                                cgal_polyline_util::extend_equally(joint_volumes_pairA_pairB[1], 3, wood_globals::JOINT_VOLUME_EXTENSION[1 + extension_id]);
 
                                 // set type for the wood_joint_lib
                                 type = 13;
@@ -1015,15 +1014,15 @@ namespace wood_main
                                     joint_volumes_pairA_pairB[0].emplace_back(joint_volumes_pairA_pairB[0][0]);
                                     joint_volumes_pairA_pairB[1].emplace_back(joint_volumes_pairA_pairB[1][0]);
                                     // extend the polygons to scale the joint if the values are not set to zero
-                                    cgal_polyline_util::extend_equally(joint_volumes_pairA_pairB[0], 0, wood_globals::JOINT_VOLUME_EXTENSION[0+extension_id]);
-                                    cgal_polyline_util::extend_equally(joint_volumes_pairA_pairB[0], 2, wood_globals::JOINT_VOLUME_EXTENSION[0+extension_id]);
-                                    cgal_polyline_util::extend_equally(joint_volumes_pairA_pairB[1], 0, wood_globals::JOINT_VOLUME_EXTENSION[0+extension_id]);
-                                    cgal_polyline_util::extend_equally(joint_volumes_pairA_pairB[1], 2, wood_globals::JOINT_VOLUME_EXTENSION[0+extension_id]);
+                                    cgal_polyline_util::extend_equally(joint_volumes_pairA_pairB[0], 0, wood_globals::JOINT_VOLUME_EXTENSION[0 + extension_id]);
+                                    cgal_polyline_util::extend_equally(joint_volumes_pairA_pairB[0], 2, wood_globals::JOINT_VOLUME_EXTENSION[0 + extension_id]);
+                                    cgal_polyline_util::extend_equally(joint_volumes_pairA_pairB[1], 0, wood_globals::JOINT_VOLUME_EXTENSION[0 + extension_id]);
+                                    cgal_polyline_util::extend_equally(joint_volumes_pairA_pairB[1], 2, wood_globals::JOINT_VOLUME_EXTENSION[0 + extension_id]);
 
-                                    cgal_polyline_util::extend_equally(joint_volumes_pairA_pairB[0], 1, wood_globals::JOINT_VOLUME_EXTENSION[1+extension_id]);
-                                    cgal_polyline_util::extend_equally(joint_volumes_pairA_pairB[0], 3, wood_globals::JOINT_VOLUME_EXTENSION[1+extension_id]);
-                                    cgal_polyline_util::extend_equally(joint_volumes_pairA_pairB[1], 1, wood_globals::JOINT_VOLUME_EXTENSION[1+extension_id]);
-                                    cgal_polyline_util::extend_equally(joint_volumes_pairA_pairB[1], 3, wood_globals::JOINT_VOLUME_EXTENSION[1+extension_id]);
+                                    cgal_polyline_util::extend_equally(joint_volumes_pairA_pairB[0], 1, wood_globals::JOINT_VOLUME_EXTENSION[1 + extension_id]);
+                                    cgal_polyline_util::extend_equally(joint_volumes_pairA_pairB[0], 3, wood_globals::JOINT_VOLUME_EXTENSION[1 + extension_id]);
+                                    cgal_polyline_util::extend_equally(joint_volumes_pairA_pairB[1], 1, wood_globals::JOINT_VOLUME_EXTENSION[1 + extension_id]);
+                                    cgal_polyline_util::extend_equally(joint_volumes_pairA_pairB[1], 3, wood_globals::JOINT_VOLUME_EXTENSION[1 + extension_id]);
 
                                     // set type for the wood_joint_lib
                                     type = 11;
@@ -1063,25 +1062,25 @@ namespace wood_main
                                     cgal_intersection_util::plane_4planes(plEnd1, loopOfPlanes1, joint_volumes_pairA_pairB[3]);
 
                                     // extend the polygons to scale the joint if the values are not set to zero
-                                    cgal_polyline_util::extend_equally(joint_volumes_pairA_pairB[0], 0, wood_globals::JOINT_VOLUME_EXTENSION[0+extension_id]);
-                                    cgal_polyline_util::extend_equally(joint_volumes_pairA_pairB[0], 2, wood_globals::JOINT_VOLUME_EXTENSION[0+extension_id]);
-                                    cgal_polyline_util::extend_equally(joint_volumes_pairA_pairB[1], 0, wood_globals::JOINT_VOLUME_EXTENSION[0+extension_id]);
-                                    cgal_polyline_util::extend_equally(joint_volumes_pairA_pairB[1], 2, wood_globals::JOINT_VOLUME_EXTENSION[0+extension_id]);
+                                    cgal_polyline_util::extend_equally(joint_volumes_pairA_pairB[0], 0, wood_globals::JOINT_VOLUME_EXTENSION[0 + extension_id]);
+                                    cgal_polyline_util::extend_equally(joint_volumes_pairA_pairB[0], 2, wood_globals::JOINT_VOLUME_EXTENSION[0 + extension_id]);
+                                    cgal_polyline_util::extend_equally(joint_volumes_pairA_pairB[1], 0, wood_globals::JOINT_VOLUME_EXTENSION[0 + extension_id]);
+                                    cgal_polyline_util::extend_equally(joint_volumes_pairA_pairB[1], 2, wood_globals::JOINT_VOLUME_EXTENSION[0 + extension_id]);
 
-                                    cgal_polyline_util::extend_equally(joint_volumes_pairA_pairB[0], 1, wood_globals::JOINT_VOLUME_EXTENSION[1+extension_id]);
-                                    cgal_polyline_util::extend_equally(joint_volumes_pairA_pairB[0], 3, wood_globals::JOINT_VOLUME_EXTENSION[1+extension_id]);
-                                    cgal_polyline_util::extend_equally(joint_volumes_pairA_pairB[1], 1, wood_globals::JOINT_VOLUME_EXTENSION[1+extension_id]);
-                                    cgal_polyline_util::extend_equally(joint_volumes_pairA_pairB[1], 3, wood_globals::JOINT_VOLUME_EXTENSION[1+extension_id]);
+                                    cgal_polyline_util::extend_equally(joint_volumes_pairA_pairB[0], 1, wood_globals::JOINT_VOLUME_EXTENSION[1 + extension_id]);
+                                    cgal_polyline_util::extend_equally(joint_volumes_pairA_pairB[0], 3, wood_globals::JOINT_VOLUME_EXTENSION[1 + extension_id]);
+                                    cgal_polyline_util::extend_equally(joint_volumes_pairA_pairB[1], 1, wood_globals::JOINT_VOLUME_EXTENSION[1 + extension_id]);
+                                    cgal_polyline_util::extend_equally(joint_volumes_pairA_pairB[1], 3, wood_globals::JOINT_VOLUME_EXTENSION[1 + extension_id]);
 
-                                    cgal_polyline_util::extend_equally(joint_volumes_pairA_pairB[2], 0, wood_globals::JOINT_VOLUME_EXTENSION[0+extension_id]);
-                                    cgal_polyline_util::extend_equally(joint_volumes_pairA_pairB[2], 2, wood_globals::JOINT_VOLUME_EXTENSION[0+extension_id]);
-                                    cgal_polyline_util::extend_equally(joint_volumes_pairA_pairB[3], 0, wood_globals::JOINT_VOLUME_EXTENSION[0+extension_id]);
-                                    cgal_polyline_util::extend_equally(joint_volumes_pairA_pairB[3], 2, wood_globals::JOINT_VOLUME_EXTENSION[0+extension_id]);
+                                    cgal_polyline_util::extend_equally(joint_volumes_pairA_pairB[2], 0, wood_globals::JOINT_VOLUME_EXTENSION[0 + extension_id]);
+                                    cgal_polyline_util::extend_equally(joint_volumes_pairA_pairB[2], 2, wood_globals::JOINT_VOLUME_EXTENSION[0 + extension_id]);
+                                    cgal_polyline_util::extend_equally(joint_volumes_pairA_pairB[3], 0, wood_globals::JOINT_VOLUME_EXTENSION[0 + extension_id]);
+                                    cgal_polyline_util::extend_equally(joint_volumes_pairA_pairB[3], 2, wood_globals::JOINT_VOLUME_EXTENSION[0 + extension_id]);
 
-                                    cgal_polyline_util::extend_equally(joint_volumes_pairA_pairB[2], 1, wood_globals::JOINT_VOLUME_EXTENSION[1+extension_id]);
-                                    cgal_polyline_util::extend_equally(joint_volumes_pairA_pairB[2], 3, wood_globals::JOINT_VOLUME_EXTENSION[1+extension_id]);
-                                    cgal_polyline_util::extend_equally(joint_volumes_pairA_pairB[3], 1, wood_globals::JOINT_VOLUME_EXTENSION[1+extension_id]);
-                                    cgal_polyline_util::extend_equally(joint_volumes_pairA_pairB[3], 3, wood_globals::JOINT_VOLUME_EXTENSION[1+extension_id]);
+                                    cgal_polyline_util::extend_equally(joint_volumes_pairA_pairB[2], 1, wood_globals::JOINT_VOLUME_EXTENSION[1 + extension_id]);
+                                    cgal_polyline_util::extend_equally(joint_volumes_pairA_pairB[2], 3, wood_globals::JOINT_VOLUME_EXTENSION[1 + extension_id]);
+                                    cgal_polyline_util::extend_equally(joint_volumes_pairA_pairB[3], 1, wood_globals::JOINT_VOLUME_EXTENSION[1 + extension_id]);
+                                    cgal_polyline_util::extend_equally(joint_volumes_pairA_pairB[3], 3, wood_globals::JOINT_VOLUME_EXTENSION[1 + extension_id]);
 
                                     // set type for the wood_joint_lib
                                     type = 12;
@@ -1146,15 +1145,15 @@ namespace wood_main
                             joint_volumes_pairA_pairB[f_id] = {(*quad_0)[3], (*quad_0)[2], (*quad_0)[2] + offset_vector, (*quad_0)[3] + offset_vector, (*quad_0)[3]};
 
                             // extend the polygons to scale the joint if the values are not set to zero
-                            cgal_polyline_util::extend_equally(joint_volumes_pairA_pairB[m_id], 0, wood_globals::JOINT_VOLUME_EXTENSION[0+extension_id]);
-                            cgal_polyline_util::extend_equally(joint_volumes_pairA_pairB[m_id], 2, wood_globals::JOINT_VOLUME_EXTENSION[0+extension_id]);
-                            cgal_polyline_util::extend_equally(joint_volumes_pairA_pairB[f_id], 0, wood_globals::JOINT_VOLUME_EXTENSION[0+extension_id]);
-                            cgal_polyline_util::extend_equally(joint_volumes_pairA_pairB[f_id], 2, wood_globals::JOINT_VOLUME_EXTENSION[0+extension_id]);
+                            cgal_polyline_util::extend_equally(joint_volumes_pairA_pairB[m_id], 0, wood_globals::JOINT_VOLUME_EXTENSION[0 + extension_id]);
+                            cgal_polyline_util::extend_equally(joint_volumes_pairA_pairB[m_id], 2, wood_globals::JOINT_VOLUME_EXTENSION[0 + extension_id]);
+                            cgal_polyline_util::extend_equally(joint_volumes_pairA_pairB[f_id], 0, wood_globals::JOINT_VOLUME_EXTENSION[0 + extension_id]);
+                            cgal_polyline_util::extend_equally(joint_volumes_pairA_pairB[f_id], 2, wood_globals::JOINT_VOLUME_EXTENSION[0 + extension_id]);
 
-                            cgal_polyline_util::extend_equally(joint_volumes_pairA_pairB[m_id], 1, wood_globals::JOINT_VOLUME_EXTENSION[1+extension_id]);
-                            cgal_polyline_util::extend_equally(joint_volumes_pairA_pairB[m_id], 3, wood_globals::JOINT_VOLUME_EXTENSION[1+extension_id]);
-                            cgal_polyline_util::extend_equally(joint_volumes_pairA_pairB[f_id], 1, wood_globals::JOINT_VOLUME_EXTENSION[1+extension_id]);
-                            cgal_polyline_util::extend_equally(joint_volumes_pairA_pairB[f_id], 3, wood_globals::JOINT_VOLUME_EXTENSION[1+extension_id]);
+                            cgal_polyline_util::extend_equally(joint_volumes_pairA_pairB[m_id], 1, wood_globals::JOINT_VOLUME_EXTENSION[1 + extension_id]);
+                            cgal_polyline_util::extend_equally(joint_volumes_pairA_pairB[m_id], 3, wood_globals::JOINT_VOLUME_EXTENSION[1 + extension_id]);
+                            cgal_polyline_util::extend_equally(joint_volumes_pairA_pairB[f_id], 1, wood_globals::JOINT_VOLUME_EXTENSION[1 + extension_id]);
+                            cgal_polyline_util::extend_equally(joint_volumes_pairA_pairB[f_id], 3, wood_globals::JOINT_VOLUME_EXTENSION[1 + extension_id]);
 
                             // set type for the wood_joint_lib
                             type = 20;
@@ -1224,15 +1223,15 @@ namespace wood_main
                             joint_volumes_pairA_pairB[1] = joint_volumes_pairA_pairB_temp1;
 
                             // extend the polygons to scale the joint if the values are not set to zero
-                            cgal_polyline_util::extend_equally(joint_volumes_pairA_pairB[0], 0, wood_globals::JOINT_VOLUME_EXTENSION[0+extension_id]);
-                            cgal_polyline_util::extend_equally(joint_volumes_pairA_pairB[0], 2, wood_globals::JOINT_VOLUME_EXTENSION[0+extension_id]);
-                            cgal_polyline_util::extend_equally(joint_volumes_pairA_pairB[1], 0, wood_globals::JOINT_VOLUME_EXTENSION[0+extension_id]);
-                            cgal_polyline_util::extend_equally(joint_volumes_pairA_pairB[1], 2, wood_globals::JOINT_VOLUME_EXTENSION[0+extension_id]);
+                            cgal_polyline_util::extend_equally(joint_volumes_pairA_pairB[0], 0, wood_globals::JOINT_VOLUME_EXTENSION[0 + extension_id]);
+                            cgal_polyline_util::extend_equally(joint_volumes_pairA_pairB[0], 2, wood_globals::JOINT_VOLUME_EXTENSION[0 + extension_id]);
+                            cgal_polyline_util::extend_equally(joint_volumes_pairA_pairB[1], 0, wood_globals::JOINT_VOLUME_EXTENSION[0 + extension_id]);
+                            cgal_polyline_util::extend_equally(joint_volumes_pairA_pairB[1], 2, wood_globals::JOINT_VOLUME_EXTENSION[0 + extension_id]);
 
-                            cgal_polyline_util::extend_equally(joint_volumes_pairA_pairB[0], 1, wood_globals::JOINT_VOLUME_EXTENSION[1+extension_id]);
-                            cgal_polyline_util::extend_equally(joint_volumes_pairA_pairB[0], 3, wood_globals::JOINT_VOLUME_EXTENSION[1+extension_id]);
-                            cgal_polyline_util::extend_equally(joint_volumes_pairA_pairB[1], 1, wood_globals::JOINT_VOLUME_EXTENSION[1+extension_id]);
-                            cgal_polyline_util::extend_equally(joint_volumes_pairA_pairB[1], 3, wood_globals::JOINT_VOLUME_EXTENSION[1+extension_id]);
+                            cgal_polyline_util::extend_equally(joint_volumes_pairA_pairB[0], 1, wood_globals::JOINT_VOLUME_EXTENSION[1 + extension_id]);
+                            cgal_polyline_util::extend_equally(joint_volumes_pairA_pairB[0], 3, wood_globals::JOINT_VOLUME_EXTENSION[1 + extension_id]);
+                            cgal_polyline_util::extend_equally(joint_volumes_pairA_pairB[1], 1, wood_globals::JOINT_VOLUME_EXTENSION[1 + extension_id]);
+                            cgal_polyline_util::extend_equally(joint_volumes_pairA_pairB[1], 3, wood_globals::JOINT_VOLUME_EXTENSION[1 + extension_id]);
 
                             // set type for the wood_joint_lib
                             type = 40;
@@ -1634,9 +1633,8 @@ namespace wood_main
             if (!found_type)
                 continue;
 
-            if (joint_area.size() > 0)
+            if (joint_area.size() > 0 && face_ids.first[0] < elements[el_ids.first].j_mf.size() && face_ids.second[0] < elements[el_ids.second].j_mf.size()
             {
-
                 // int joint_id = joints.size();
 
                 joints.emplace_back(
@@ -1649,10 +1647,6 @@ namespace wood_main
                     type);
 
                 joints_map.emplace(cgal_math_util::unique_from_two_int(el_ids.first, el_ids.second), joint_id);
-                // std::cout << "\n joint id "
-                //           << joint_id << " el_ids.first "
-                //           << el_ids.first << " el_ids.second "
-                //           << el_ids.second << std::endl;
 
                 //////////////////////////////////////////////////////////////////////////////////////////////////////
                 // Place wood::joint ids and male or female flags to wood::joint list

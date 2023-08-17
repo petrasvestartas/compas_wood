@@ -308,7 +308,7 @@ namespace wood_test
      */
     bool type_plates_name_vda_floor_2();
 
-        /**
+    /**
      * example for plates
      * in_plane top_to_side snap fit
      */
@@ -382,11 +382,18 @@ namespace wood_test
      */
     bool type_plates_name_cross_ibois_pavilion();
 
-     /**
+    /**
      * example fro cross joints with a dowel-nut connection
      * cross joints
      */
     bool type_plates_name_cross_brussels_sports_tower();
+
+    /**
+     * example for plates
+     * cross joints, plate cross and side joints
+     * Block Research Group, ETH Zurich - development of slab
+     */
+    bool type_plates_name_cross_brg_slab_0();
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // beam methods
