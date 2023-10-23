@@ -10,25 +10,7 @@ Author: [Petras Vestartas](https://petrasvestartas.com/Petras-Vestartas-CV)
 
 ### Installation
 
-##### Windows
-
-    conda create -n wood-dev python=3.8 mpir mpfr boost-cpp eigen=3.4 cgal-cpp=5.5 pybind11 compas compas_view2 --yes
-    conda activate wood-dev
-    git clone https://github.com/petrasvestartas/compas_wood
-    cd compas_wood
-    pip install -e .
-
-##### Mac
-
-
-    conda create -n wood-dev python=3.8 gmp mpfr boost-cpp eigen=3.4 cgal-cpp=5.5 pybind11 compas compas_view2 --yes
-    conda activate wood-dev
-    git clone https:/github.com/petrasvestartas/compas_wood
-    cd compas_wood 
-    pip install -e . 
-
-* Note: Be aware that "pip install -e ." command will take some time to run without any messages. This is normal for C++ compilation that is done only once.
-
+https://petrasvestartas.github.io/compas_wood/latest/installation.html
 
 ##### If you install this library on a new computer that did not have Anaconda Prompt or VScode follow these steps
 

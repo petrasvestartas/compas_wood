@@ -208,6 +208,7 @@ namespace python_to_cpp__cpp_to_python
     {
 
         // create a vertex and face matrix
+
         int vertices_count = mesh.number_of_vertices();
         int faces_count = mesh.number_of_faces();
 

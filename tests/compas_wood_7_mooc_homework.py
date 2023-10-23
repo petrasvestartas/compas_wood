@@ -1,7 +1,7 @@
 from compas_wood.joinery import filenames_of_datasets
 from compas_wood.joinery import get_connection_zones
 from compas_wood.viewer_helpers import display
-from compas_wood.joinery import read_xml_polylines_and_properties
+from compas_wood.joinery import read_xml_polylines, read_xml_polylines_and_properties
 from compas_wood.joinery import closed_mesh_from_polylines
 
 def test_connection_detection():
@@ -25,9 +25,15 @@ def test_connection_detection():
     filename_of_dataset_with_properties = filenames_of_datasets[13]
     (output_polylines_with_properties, output_vectors, output_joints_types, output_three_valence_element_indices_and_instruction, output_adjacency) = read_xml_polylines_and_properties(foldername, filename_of_dataset_with_properties)
 
+<<<<<<< HEAD
     print(foldername)
     print(filename_of_dataset_with_properties)
     print(output_joints_types)
+=======
+    print( filename_of_dataset_with_properties )
+
+
+>>>>>>> 5c71155edc0ec1d5e85ae6457de26195bca3ac39
 
     # result = get_connection_zones(
     #     output_polylines_with_properties,

@@ -220,6 +220,7 @@ def read_xml_polylines_and_properties(
         input_three_valence_element_indices_and_instruction,
         input_adjacency,
     )
+
     # print(
     #     "\n____________________________________end_of_WOOD______________________________________"
     # )

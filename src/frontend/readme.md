@@ -1,16 +1,46 @@
-# wood frontend
+# compas_wood backend
 
-### How to prepare the project from backend
 
-There are 3 main steps:
-* prepare precompiled header "stdafx.h"
-* Copy the whole "src/wood" folder from backend to frontend.
-* Write CPP and Python files in "src/wood_pybind11"
+## To-do
 
+- wood_join_lib
+- [x] implement drilling methods for top-to-top connections
+- [ ] add snap-fit joint for top-to-side connection
+- [x] butterfly n-times
+
+
+## Library Notes
+
+- For geometry library files cgal_name_util.h/cpp create self contained headers, internal to the file functions must be in the "internal" namespace.
+## CMAKE
 
 ### Superbuild
 
-Use "cmake_bash" folder to build the project.
+
+#### Step 1: Create a build directory and cd into it:
+```cmake
+cd C:\IBOIS57\_Code\Software\Python\compas_wood\backend\build_win
+```
+
+#### Step 2: Run CMake to download libraries:
+```cmake
+cmake --fresh -DGET_LIBS=ON -DCOMPILE_LIBS=OFF -DBUILD_MY_PROJECTS=OFF -DRELEASE_DEBUG=ON -DCMAKE_BUILD_TYPE="Release"  -G "Visual Studio 17 2022" -A x64 .. && cmake --build . --config Release 
+```
+
+#### Step 3: Run CMake to build 3rd-party libraries:
+```cmake
+cmake --fresh -DGET_LIBS=OFF -DBUILD_MY_PROJECTS=ON -DCOMPILE_LIBS=ON -DRELEASE_DEBUG=ON -DCMAKE_BUILD_TYPE="Release"  -G "Visual Studio 17 2022" -A x64 .. && cmake --build . --config Release 
+```
+
+#### Step 4: Run CMake to build the code:
+```cmake
+cmake --fresh -DGET_LIBS=OFF -DBUILD_MY_PROJECTS=ON -DCOMPILE_LIBS=OFF -DRELEASE_DEBUG=ON -DCMAKE_BUILD_TYPE="Release"  -G "Visual Studio 17 2022" -A x64 .. && cmake --build . --config Release
+```
+
+#### Step 5: Run the code. You can use this as a default VScode task:
+```cmake
+cmake  --build C:\\IBOIS57\\_Code\\Software\\Python\\compas_wood\\backend\\build_win\\ -v --config Release --parallel 4 &&  C:\\IBOIS57\\_Code\\Software\\Python\\compas_wood\\backend\\build_win\\Release\\wood.exe
+```
 
 ## Visual Studio Code Shortcuts
 ```

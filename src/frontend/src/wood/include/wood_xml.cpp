@@ -26,7 +26,7 @@ namespace wood_xml
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Check if XML file exists, path_and_file_for_joints is a global path
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        printf("%s",file_path.c_str());
+        printf(file_path.c_str());
         if (!file_exists_0(file_path))
         {
             printf("\nread_wood_xml -> File does not exist");
@@ -80,11 +80,11 @@ namespace wood_xml
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         printf("read_wood_xml ->  read_xml_polylines -> ");
-        printf("%s",file_path.c_str());
+        printf(file_path.c_str());
         printf("\n");
         if (!file_exists_0(file_path))
         {
-            printf("read_wood_xml -> read_wood_xml|read_xml_polylines|File does not exist \n");
+            printf("read_wood_xml -> read_wood_xml | read_xml_polylines | File does not exist \n");
             return false;
         }
         else
@@ -144,7 +144,7 @@ namespace wood_xml
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         printf("read_wood_xml ->  read_xml_polylines -> ");
-        printf("%s",file_path.c_str());
+        printf(file_path.c_str());
         printf("\n");
         if (!file_exists_0(file_path))
         {
@@ -210,7 +210,7 @@ namespace wood_xml
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         printf("read_wood_xml ->  read_xml_polylines -> ");
-        printf("%s",file_path.c_str());
+        printf(file_path.c_str());
         printf("\n");
         if (!file_exists_0(file_path))
         {
@@ -366,7 +366,7 @@ namespace wood_xml
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         printf("read_wood_xml ->  read_xml_polylines -> ");
-        printf("%s",file_path.c_str());
+        printf(file_path.c_str());
         printf("\n");
         if (!file_exists_0(file_path))
         {
