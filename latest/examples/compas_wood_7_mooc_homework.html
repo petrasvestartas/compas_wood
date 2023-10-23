@@ -124,35 +124,41 @@
     <span class="n">filename_of_dataset_with_properties</span> <span class="o">=</span> <span class="n">filenames_of_datasets</span><span class="p">[</span><span class="mi">13</span><span class="p">]</span>
     <span class="p">(</span><span class="n">output_polylines_with_properties</span><span class="p">,</span> <span class="n">output_vectors</span><span class="p">,</span> <span class="n">output_joints_types</span><span class="p">,</span> <span class="n">output_three_valence_element_indices_and_instruction</span><span class="p">,</span> <span class="n">output_adjacency</span><span class="p">)</span> <span class="o">=</span> <span class="n">read_xml_polylines_and_properties</span><span class="p">(</span><span class="n">foldername</span><span class="p">,</span> <span class="n">filename_of_dataset_with_properties</span><span class="p">)</span>
 
+<span class="o">&lt;&lt;&lt;&lt;&lt;&lt;&lt;</span> <span class="n">HEAD</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">foldername</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">filename_of_dataset_with_properties</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">output_joints_types</span><span class="p">)</span>
+<span class="o">=======</span>
     <span class="nb">print</span><span class="p">(</span> <span class="n">filename_of_dataset_with_properties</span> <span class="p">)</span>
 
 
+<span class="o">&gt;&gt;&gt;&gt;&gt;&gt;&gt;</span> <span class="mi">5</span><span class="n">c71155edc0ec1d5e85ae6457de26195bca3ac39</span>
 
-    <span class="n">result</span> <span class="o">=</span> <span class="n">get_connection_zones</span><span class="p">(</span>
-        <span class="n">output_polylines_with_properties</span><span class="p">,</span>
-        <span class="n">output_vectors</span><span class="p">,</span>
-        <span class="n">output_joints_types</span><span class="p">,</span>
-        <span class="n">output_three_valence_element_indices_and_instruction</span><span class="p">,</span>
-        <span class="n">output_adjacency</span><span class="p">,</span>
-        <span class="n">joint_parameters</span><span class="p">,</span>
-        <span class="mi">0</span><span class="p">,</span>
-        <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
-        <span class="mi">4</span><span class="p">,</span>
-        <span class="kc">False</span><span class="p">,</span>
-        <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">10</span><span class="p">])</span>
+    <span class="c1"># result = get_connection_zones(</span>
+    <span class="c1">#     output_polylines_with_properties,</span>
+    <span class="c1">#     output_vectors,</span>
+    <span class="c1">#     output_joints_types,</span>
+    <span class="c1">#     output_three_valence_element_indices_and_instruction,</span>
+    <span class="c1">#     output_adjacency,</span>
+    <span class="c1">#     joint_parameters,</span>
+    <span class="c1">#     0,</span>
+    <span class="c1">#     [1, 1, 1],</span>
+    <span class="c1">#     4,</span>
+    <span class="c1">#     False,</span>
+    <span class="c1">#     [0, 0, -10])</span>
 
 
-    <span class="c1"># display</span>
+    <span class="c1"># # display</span>
     
-    <span class="n">result_flat_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">item</span> <span class="k">for</span> <span class="n">sublist</span> <span class="ow">in</span> <span class="n">result</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">sublist</span><span class="p">]</span>
-    <span class="c1"># display(result_flat_list, None, None, 0.001, 0, 0, 0, False)</span>
+    <span class="c1"># result_flat_list = [item for sublist in result for item in sublist]</span>
+    <span class="c1"># # display(result_flat_list, None, None, 0.001, 0, 0, 0, False)</span>
 
-    <span class="c1"># mesh polylines</span>
-    <span class="n">meshes</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">result</span><span class="p">)):</span>
-        <span class="n">mesh_result</span> <span class="o">=</span> <span class="n">closed_mesh_from_polylines</span><span class="p">(</span><span class="n">result</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
-        <span class="n">meshes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">mesh_result</span><span class="p">)</span>
-    <span class="n">display</span><span class="p">(</span><span class="n">result_flat_list</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">meshes</span><span class="p">,</span> <span class="mf">0.001</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+    <span class="c1"># # mesh polylines</span>
+    <span class="c1"># meshes = []</span>
+    <span class="c1"># for i in range(len(result)):</span>
+    <span class="c1">#     mesh_result = closed_mesh_from_polylines(result[i])</span>
+    <span class="c1">#     meshes.append(mesh_result)</span>
+    <span class="c1"># display(result_flat_list, None, meshes, 0.001, 0, 0, 0, False)</span>
 
 
 <span class="n">test_connection_detection</span><span class="p">()</span>
