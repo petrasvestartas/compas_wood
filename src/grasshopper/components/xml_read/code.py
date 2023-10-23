@@ -36,31 +36,31 @@ class write_component(component):
         group_count_a = 0 
         group_count_b = 0 
         for node in doc.DocumentElement.ChildNodes:
-            print(node)
-            if(node.Name == "polyline_group"):
-                
+            
+            if(node.Name == "Polyline" or node.Name == "polyline"):
+                polyline = rg.Polyline() 
                 # Iterate polylines
                 for node_0 in node.ChildNodes:
+                    if(node_0.Name == "point"):
                     
-                    polyline = rg.Polyline() 
-                    
-                    # Iterate points
-                    for node_1 in node_0.ChildNodes:
-                        
+                        # Iterate points
                         # Convert coordinates to points
-                        if(node_1.Name == "point"):
-                            p = rg.Point3d(
-                            float(node_1.ChildNodes[0].InnerText),
-                            float(node_1.ChildNodes[1].InnerText),
-                            float(node_1.ChildNodes[2].InnerText)
-                            )
-                            
-                            polyline.Add(p) 
-                    polylines_tree.Add(polyline, gh.Kernel.Data.GH_Path(group_count_a))
+                        p = rg.Point3d(
+                        float(node_0.ChildNodes[0].InnerText),
+                        float(node_0.ChildNodes[1].InnerText),
+                        float(node_0.ChildNodes[2].InnerText)
+                        )
+                
+                    polyline.Add(p) 
+                
+                if(polyline.Count>0):
+                    path = gh.Kernel.Data.GH_Path(group_count_a)
+                    polylines_tree.Add(polyline, path)
                     
                 group_count_a = group_count_a + 1
                 
             elif(node.Name == "type_group"):
+                
                 for node_0 in node.ChildNodes:
                     types_tree.Add((node_0.ChildNodes[0].InnerText), gh.Kernel.Data.GH_Path(group_count_b)) 
                 group_count_b= group_count_b+1
@@ -71,5 +71,5 @@ class write_component(component):
         #############################################################################################################################################
         __plines = polylines_tree 
         __types = types_tree 
-
+        
         return polylines_tree, types_tree

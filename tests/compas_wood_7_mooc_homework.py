@@ -27,32 +27,33 @@ def test_connection_detection():
 
     print(foldername)
     print(filename_of_dataset_with_properties)
+    print(output_joints_types)
 
-    result = get_connection_zones(
-        output_polylines_with_properties,
-        output_vectors,
-        output_joints_types,
-        output_three_valence_element_indices_and_instruction,
-        output_adjacency,
-        joint_parameters,
-        0,
-        [1, 1, 1],
-        4,
-        False,
-        [0, 0, -10])
+    # result = get_connection_zones(
+    #     output_polylines_with_properties,
+    #     output_vectors,
+    #     output_joints_types,
+    #     output_three_valence_element_indices_and_instruction,
+    #     output_adjacency,
+    #     joint_parameters,
+    #     0,
+    #     [1, 1, 1],
+    #     4,
+    #     False,
+    #     [0, 0, -10])
 
 
-    # display
+    # # display
     
-    result_flat_list = [item for sublist in result for item in sublist]
-    # display(result_flat_list, None, None, 0.001, 0, 0, 0, False)
+    # result_flat_list = [item for sublist in result for item in sublist]
+    # # display(result_flat_list, None, None, 0.001, 0, 0, 0, False)
 
-    # mesh polylines
-    meshes = []
-    for i in range(len(result)):
-        mesh_result = closed_mesh_from_polylines(result[i])
-        meshes.append(mesh_result)
-    display(result_flat_list, None, meshes, 0.001, 0, 0, 0, False)
+    # # mesh polylines
+    # meshes = []
+    # for i in range(len(result)):
+    #     mesh_result = closed_mesh_from_polylines(result[i])
+    #     meshes.append(mesh_result)
+    # display(result_flat_list, None, meshes, 0.001, 0, 0, 0, False)
 
 
 test_connection_detection()
