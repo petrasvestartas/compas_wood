@@ -1,6 +1,4 @@
 from compas_wood.joinery import get_connection_zones
-import data_set_plates
-from compas_wood.viewer_helpers import display
 import time
 from compas_wood.joinery import filenames_of_datasets
 from compas_wood.joinery import read_xml_polylines_and_properties
@@ -69,8 +67,6 @@ def test_connection_detection():
 
     # display
     result_flat_list = [item for sublist in result for item in sublist]
-    # print(result_flat_list)
-    display(result_flat_list, None, None, 0.001, 0, 0, 0, False)
-
+    print(result_flat_list)
 
 test_connection_detection()

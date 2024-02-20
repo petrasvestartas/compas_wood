@@ -179,19 +179,27 @@ namespace wood_joint_lib
      */
     void ss_e_ip_2(wood::joint &joint, std::vector<wood::element> &elements);
 
-    /**
-     * Unit joint - Side-to-side edge in-plane joints - beam \ scarf joint
+        /**
+     * Unit joint - Side-to-side edge in-plane joints - beam joints
      *
      * @param [in, out] joint node, to which geometry will be added
      */
-    void ss_e_ip_3(wood::joint &joint);
+    void ss_e_ip_3(wood::joint &joint, std::vector<wood::element> &elements);
+
+
+        /**
+     * Unit joint - Side-to-side edge in-plane joints - beam joints
+     *
+     * @param [in, out] joint node, to which geometry will be added
+     */
+    void ss_e_ip_4(wood::joint &joint, std::vector<wood::element> &elements);
 
      /**
-     * Unit joint - Side-to-side edge in-plane joints - beam doubled >< scarf joint
+     * Unit joint - Custom Joint
      *
      * @param [in, out] joint node, to which geometry will be added
      */
-    void ss_e_ip_4(wood::joint &joint);
+    void ss_e_ip_custom(wood::joint &joint);
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Side-to-side edge out-of-plane joints 10-19
@@ -225,7 +233,6 @@ namespace wood_joint_lib
      */
     void ss_e_op_3(wood::joint &joint);
 
-    
 
     /**
      * Unit joint - Side-to-side edge in-plane joints - plate Vidy tenon-mortise with different configurations
@@ -263,6 +270,14 @@ namespace wood_joint_lib
      * @param [in] all_joints existing joints to find the links to add the mortise and join the tenons
      */
     void ss_e_op_6(wood::joint &jo, std::vector<wood::joint> &all_joints);
+
+     /**
+     * Unit joint - Custom Joint
+     *
+     * @param [in, out] joint node, to which geometry will be added
+     */
+    void ss_e_op_custom(wood::joint &joint);
+
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Side-to-side edge rotated joints 20-29
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -291,6 +306,13 @@ namespace wood_joint_lib
      * @param [in] merge_with_joint WARNING: unknwon
      */
     void side_removal_ss_e_r_1(wood::joint &jo, std::vector<wood::element> &elements, bool merge_with_joint = false);
+
+     /**
+     * Unit joint - Custom Joint
+     *
+     * @param [in, out] joint node, to which geometry will be added
+     */
+    void ss_e_r_custom(wood::joint &joint);
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Top-to-side edge plane joints 20-29
@@ -330,6 +352,13 @@ namespace wood_joint_lib
      * @param [in] elements elements are needed to determina the joint thickness, since two plates can have different thicknesses
      */
     void ts_e_p_5(wood::joint &joint);
+
+     /**
+     * Unit joint - Custom Joint
+     *
+     * @param [in, out] joint node, to which geometry will be added
+     */
+    void ts_e_p_custom(wood::joint &joint);
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Cross cutting in-plane joints 30-39
@@ -375,6 +404,14 @@ namespace wood_joint_lib
      * @param [in, out] joint node, to which geometry will be added
      */
     void cr_c_ip_5(wood::joint &joint);
+
+     /**
+     * Unit joint - Custom Joint
+     *
+     * @param [in, out] joint node, to which geometry will be added
+     */
+    void cr_c_ip_custom(wood::joint &joint);
+
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Top-to-top edge plane joints 40-49
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -477,6 +514,13 @@ namespace wood_joint_lib
      */
     void tt_e_p_5(wood::joint &joint, std::vector<wood::element> &elements);
 
+     /**
+     * Unit joint - Custom Joint
+     *
+     * @param [in, out] joint node, to which geometry will be added
+     */
+    void tt_e_p_custom(wood::joint &joint);
+
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Boundary joint 60-69
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -487,6 +531,14 @@ namespace wood_joint_lib
      * @param joint node, to which geometry will be added
      */
     void b_0(wood::joint &joint);
+
+     /**
+     * Unit joint - Custom Joint
+     *
+     * @param [in, out] joint node, to which geometry will be added
+     */
+    void b_custom(wood::joint &joint);
+
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Key function that iterates through all joints and calls the function that constructs the joint geometry
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

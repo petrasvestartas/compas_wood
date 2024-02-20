@@ -276,6 +276,9 @@ def get_connection_zones(
     output_type=4,
     flatten_output=False,
     joint_volume_extension=[0, 0, 0],
+    face_to_face_side_to_side_joints_all_treated_as_rotated=False,
+    custom_joints=[],
+    custom_joints_types=[],
 ):
     """detect connection zones between two polylines and generate joinery
     Parameters
@@ -314,6 +317,12 @@ def get_connection_zones(
         4 - wood::joint areas with bounding box and cut types
     joint_volume_extension : list[double], optional
         a list of 3 doubles for extending the joint volume in x, y and z directions
+    face_to_face_side_to_side_joints_all_treated_as_rotated : bool, optional
+        if true, all face-to-face and side-to-side joints are treated as rotated
+    custom_joints : list[Polyline], optional
+        a list of custom joints polylines
+    custom_joints_types : list[int], optional¨
+        a list of custom joints types
     Returns
     -------
     list[Polyline]
@@ -399,10 +408,12 @@ def get_connection_zones(
             _scale[i] = scale[i]
 
     if joint_volume_extension is not None:  # if the user has provided joint parameters
-        if( len(joint_volume_extension) > 2):
+        if (len(joint_volume_extension) > 2):
             _joint_volume_extension = WoodVectorDouble(joint_volume_extension)
-        
-    #Mbox("Size", str(_joint_volume_extension[5]), 0)
+
+    _input_joint_polyline_pairs = conv.lists_of_vectors_to_WoodNestedVectorDouble(custom_joints)
+    _input_joint_types = WoodVectorInt(custom_joints_types)
+
     ###################################################################################################
     # run the WOOD CPP code
     ###################################################################################################
@@ -422,7 +433,10 @@ def get_connection_zones(
     # print(output_type)
     # print(_output_plines)
     # print(_output_types)
-
+    print(custom_joints)
+    print(custom_joints_types)
+    print(_input_joint_polyline_pairs)
+    print(_input_joint_types)
     start_time = time.time()
     wood_pybind11.get_connection_zones(
         # input
@@ -440,6 +454,9 @@ def get_connection_zones(
         _output_types,
         # global_parameters
         _joint_volume_extension,
+        face_to_face_side_to_side_joints_all_treated_as_rotated,
+        _input_joint_polyline_pairs,
+        _input_joint_types
     )
 
     # print(

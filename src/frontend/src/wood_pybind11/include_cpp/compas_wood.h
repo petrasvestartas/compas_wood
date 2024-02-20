@@ -42,8 +42,8 @@
  * @param [in] z The third coordinate of the vector
  * @return The length of the vector
  */
-//
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ //
+ ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 #pragma once
 
@@ -62,7 +62,7 @@ namespace compas_wood
          * @param [in] c coordinate on the z axis
          * @return point on the plane
          */
-        IK::Point_3 point_at(IK::Vector_3 (&box)[5], const double &s, const double &t, const double &c);
+        IK::Point_3 point_at(IK::Vector_3(&box)[5], const double& s, const double& t, const double& c);
 
         /**
          * get eight corners of a box
@@ -70,7 +70,7 @@ namespace compas_wood
          * @param [in] box 0 - origin, 1 - xaxis, 2 - yaxis, 3 - zaxis, 4 - size
          * @param [out] corners corners of a box, bottom rectangle and top rectangle
          */
-        void get_corners(IK::Vector_3 (&box)[5], CGAL_Polyline &corners);
+        void get_corners(IK::Vector_3(&box)[5], CGAL_Polyline& corners);
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -89,28 +89,28 @@ namespace compas_wood
      *
      * @param [in] vec a list of integers
      */
-    void test_opaque_types_wood_vector_int(std::vector<int> &vec);
+    void test_opaque_types_wood_vector_int(std::vector<int>& vec);
 
     /**
      * share a nested vector of int between C++ and Python without copying
      *
      * @param [in] vec a nested list of integers
      */
-    void test_opaque_types_wood_nested_vector_int(std::vector<std::vector<int>> &vec);
+    void test_opaque_types_wood_nested_vector_int(std::vector<std::vector<int>>& vec);
 
     /**
      * share a vector of int between C++ and Python without copying
      *
      * @param [in] vec a list of doubles
      */
-    void test_opaque_types_wood_vector_double(std::vector<double> &vec);
+    void test_opaque_types_wood_vector_double(std::vector<double>& vec);
 
     /**
      * share a nested vector of double between C++ and Python without copying
      *
      * @param [in] vec a nested list of doubles
      */
-    void test_opaque_types_wood_nested_vector_double(std::vector<std::vector<double>> &vec);
+    void test_opaque_types_wood_nested_vector_double(std::vector<std::vector<double>>& vec);
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Primary methods
@@ -123,7 +123,7 @@ namespace compas_wood
      * @param [in] filename_of_dataset file name of the xml file, without the ending
      * @param [out] polylines_coordinates a nest vectors of coordinates, that represents pairs of polylines
      */
-    void read_xml_polylines(std::string &foldername, std::string &filename_of_dataset, std::vector<std::vector<double>> &polylines_coordinates);
+    void read_xml_polylines(std::string& foldername, std::string& filename_of_dataset, std::vector<std::vector<double>>& polylines_coordinates);
 
     /**
      * read_data_set from the xml file, they will be numbered from 0 to n
@@ -138,13 +138,13 @@ namespace compas_wood
      *
      */
     void read_xml_polylines_and_properties(
-        std::string &foldername,
-        std::string &filename_of_dataset,
-        std::vector<std::vector<double>> &input_polyline_pairs_coord,
-        std::vector<std::vector<double>> &input_insertion_vectors_coord,
-        std::vector<std::vector<int>> &input_JOINTS_TYPES,
-        std::vector<std::vector<int>> &input_three_valence_element_indices_and_instruction,
-        std::vector<int> &input_adjacency);
+        std::string& foldername,
+        std::string& filename_of_dataset,
+        std::vector<std::vector<double>>& input_polyline_pairs_coord,
+        std::vector<std::vector<double>>& input_insertion_vectors_coord,
+        std::vector<std::vector<int>>& input_JOINTS_TYPES,
+        std::vector<std::vector<int>>& input_three_valence_element_indices_and_instruction,
+        std::vector<int>& input_adjacency);
 
     /**
      * the main method to detect the joinery
@@ -162,21 +162,24 @@ namespace compas_wood
      */
     void get_connection_zones(
         // input
-        std::vector<std::vector<double>> &pybind11_input_polyline_pairs,
-        std::vector<std::vector<double>> &pybind11_input_insertion_vectors,
-        std::vector<std::vector<int>> &pybind11_input_JOINTS_TYPES,
-        std::vector<std::vector<int>> &pybind11_input_three_valence_element_indices_and_instruction,
-        std::vector<int> &pybind11_input_adjacency,
-        std::vector<double> &pybind11_wood_globals_JOINTS_PARAMETERS_AND_TYPES,
-        int &search_type,
-        std::vector<double> &scale,
-        int &output_type,
+        std::vector<std::vector<double>>& pybind11_input_polyline_pairs,
+        std::vector<std::vector<double>>& pybind11_input_insertion_vectors,
+        std::vector<std::vector<int>>& pybind11_input_JOINTS_TYPES,
+        std::vector<std::vector<int>>& pybind11_input_three_valence_element_indices_and_instruction,
+        std::vector<int>& pybind11_input_adjacency,
+        std::vector<double>& pybind11_wood_globals_JOINTS_PARAMETERS_AND_TYPES,
+        int& search_type,
+        std::vector<double>& scale,
+        int& output_type,
         // output
-        std::vector<std::vector<std::vector<double>>> &pybind11_output_plines,
-        std::vector<std::vector<int>> &pybind11_output_types,
+        std::vector<std::vector<std::vector<double>>>& pybind11_output_plines,
+        std::vector<std::vector<int>>& pybind11_output_types,
         // global_parameters
-        std::vector<double>& pybind11_joint_volume_parameters
-        );
+        std::vector<double>& pybind11_joint_volume_parameters,
+        bool& face_to_face_side_to_side_joints_all_treated_as_rotated,
+        std::vector<std::vector<double>>& pybind11_custom_joints,
+        std::vector<int>& pybind11_custom_joints_types
+    );
 
     /**
      * mesh a list of polylines with holes
@@ -187,10 +190,10 @@ namespace compas_wood
      * @param [out] out_triangles a vector of triangles
      */
     void closed_mesh_from_polylines_vnf(
-        std::vector<std::vector<double>> &polylines_coordinates,
-        std::vector<float> &out_vertices,
-        std::vector<float> &out_normals,
-        std::vector<int> &out_triangles);
+        std::vector<std::vector<double>>& polylines_coordinates,
+        std::vector<float>& out_vertices,
+        std::vector<float>& out_normals,
+        std::vector<int>& out_triangles);
 
     /**
      * get indices colliding the current elements
@@ -202,10 +205,10 @@ namespace compas_wood
      * @param [out] out_triangles a vector of triangles
      */
     void rtree(
-        std::vector<std::vector<double>> &polylines_coordinates,
-        std::vector<std::vector<int>> &elements_neighbours,
-        std::vector<std::vector<double>> &elements_AABB,
-        std::vector<std::vector<double>> &elements_OOBB);
+        std::vector<std::vector<double>>& polylines_coordinates,
+        std::vector<std::vector<int>>& elements_neighbours,
+        std::vector<std::vector<double>>& elements_AABB,
+        std::vector<std::vector<double>>& elements_OOBB);
 
     /**
      * get joints from the get_connection_zones function without geometry
@@ -217,11 +220,11 @@ namespace compas_wood
      * @param [out] joint_types type of joint e.g. side-to-side, top-to-side, cross ...
      */
     void joints(
-        std::vector<std::vector<double>> &polylines_coordinates,
-        int &search_type,
-        std::vector<std::vector<int>> &element_pairs,
-        std::vector<std::vector<double>> &joint_areas,
-        std::vector<int> &joint_types);
+        std::vector<std::vector<double>>& polylines_coordinates,
+        int& search_type,
+        std::vector<std::vector<int>>& element_pairs,
+        std::vector<std::vector<double>>& joint_areas,
+        std::vector<int>& joint_types);
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Secondary Methods

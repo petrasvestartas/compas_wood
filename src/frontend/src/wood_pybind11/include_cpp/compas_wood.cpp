@@ -177,7 +177,10 @@ namespace compas_wood
         std::vector<std::vector<std::vector<double>>>& pybind11_output_plines,
         std::vector<std::vector<int>>& pybind11_output_types,
         // global_parameters
-        std::vector<double>& pybind11_joint_volume_parameters
+        std::vector<double>& pybind11_joint_volume_parameters,
+        bool& face_to_face_side_to_side_joints_all_treated_as_rotated,
+        std::vector<std::vector<double>>& pybind11_custom_joints,
+        std::vector<int>& pybind11_custom_joints_types
     )
     {
         // internal::set_file_path_for_input_xml_and_screenshot(
@@ -201,7 +204,7 @@ namespace compas_wood
         python_to_cpp__cpp_to_python::coord_to_vector_of_vectors(pybind11_input_insertion_vectors, input_insertion_vectors);
 
 
-        std::vector<std::vector<int>> input_JOINTS_TYPES = pybind11_input_JOINTS_TYPES = pybind11_input_JOINTS_TYPES;
+        std::vector<std::vector<int>> input_JOINTS_TYPES = pybind11_input_JOINTS_TYPES;
         std::vector<std::vector<int>> input_three_valence_element_indices_and_instruction = pybind11_input_three_valence_element_indices_and_instruction;
         std::vector<int> input_adjacency = pybind11_input_adjacency;
 
@@ -212,9 +215,97 @@ namespace compas_wood
         wood_globals::JOINTS_PARAMETERS_AND_TYPES = pybind11_wood_globals_JOINTS_PARAMETERS_AND_TYPES;
         wood_globals::OUTPUT_GEOMETRY_TYPE = output_type;
 
-        if( pybind11_joint_volume_parameters.size()>2)
-            wood_globals::JOINT_VOLUME_EXTENSION  = pybind11_joint_volume_parameters; 
+        if (pybind11_joint_volume_parameters.size() > 2)
+            wood_globals::JOINT_VOLUME_EXTENSION = pybind11_joint_volume_parameters;
 
+        wood_globals::FACE_TO_FACE_SIDE_TO_SIDE_JOINTS_ALL_TREATED_AS_ROTATED = face_to_face_side_to_side_joints_all_treated_as_rotated;
+
+
+        // custom joints
+
+        std::vector<CGAL_Polyline> in_joint_polyline_pairs;
+        python_to_cpp__cpp_to_python::coord_to_vector_of_polylines(pybind11_custom_joints, in_joint_polyline_pairs);
+        std::vector<int> in_joint_types = pybind11_custom_joints_types;
+
+
+        //9
+        wood_globals::custom_joints_ss_e_ip_male.clear();
+        wood_globals::custom_joints_ss_e_ip_female.clear();
+        //19
+        wood_globals::custom_joints_ss_e_op_male.clear();
+        wood_globals::custom_joints_ss_e_op_female.clear();
+        //29
+        wood_globals::custom_joints_ts_e_p_male.clear();
+        wood_globals::custom_joints_ts_e_p_female.clear();
+        //39
+        wood_globals::custom_joints_cr_c_ip_male.clear();
+        wood_globals::custom_joints_cr_c_ip_female.clear();
+        //49
+        wood_globals::custom_joints_tt_e_p_male.clear();
+        wood_globals::custom_joints_tt_e_p_female.clear();
+        //59
+        wood_globals::custom_joints_ss_e_r_male.clear();
+        wood_globals::custom_joints_ss_e_r_female.clear();
+        //69
+        wood_globals::custom_joints_b_male.clear();
+        wood_globals::custom_joints_b_female.clear();
+
+
+        if (in_joint_polyline_pairs.size() == in_joint_types.size()) {
+            for (int i = 0; i < in_joint_polyline_pairs.size(); i++) {
+
+                switch (in_joint_types[i])
+                {
+                case (9):
+                    wood_globals::custom_joints_ss_e_ip_male.emplace_back(in_joint_polyline_pairs[i]);
+                    break;
+                case (-9):
+                    wood_globals::custom_joints_ss_e_ip_female.emplace_back(in_joint_polyline_pairs[i]);
+                    break;
+                case (19):
+                    wood_globals::custom_joints_ss_e_op_male.emplace_back(in_joint_polyline_pairs[i]);
+                    break;
+                case (-19):
+                    wood_globals::custom_joints_ss_e_op_female.emplace_back(in_joint_polyline_pairs[i]);
+                    break;
+                case (29):
+                    wood_globals::custom_joints_ts_e_p_male.emplace_back(in_joint_polyline_pairs[i]);
+                    break;
+                case (-29):
+                    wood_globals::custom_joints_ts_e_p_female.emplace_back(in_joint_polyline_pairs[i]);
+                    break;
+                case (39):
+                    wood_globals::custom_joints_cr_c_ip_male.emplace_back(in_joint_polyline_pairs[i]);
+                    break;
+                case (-39):
+                    wood_globals::custom_joints_cr_c_ip_female.emplace_back(in_joint_polyline_pairs[i]);
+                    break;
+                case (49):
+                    wood_globals::custom_joints_tt_e_p_male.emplace_back(in_joint_polyline_pairs[i]);
+                    break;
+                case (-49):
+                    wood_globals::custom_joints_tt_e_p_female.emplace_back(in_joint_polyline_pairs[i]);
+                    break;
+                case (59):
+                    wood_globals::custom_joints_ss_e_r_male.emplace_back(in_joint_polyline_pairs[i]);
+                    break;
+                case (-59):
+                    wood_globals::custom_joints_ss_e_r_female.emplace_back(in_joint_polyline_pairs[i]);
+                    break;
+                case (69):
+                    wood_globals::custom_joints_b_male.emplace_back(in_joint_polyline_pairs[i]);
+                    break;
+                case (-69):
+                    wood_globals::custom_joints_b_female.emplace_back(in_joint_polyline_pairs[i]);
+                    break;
+
+
+                default:
+                    break;
+                }
+
+            }
+        }
 
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -317,13 +408,13 @@ namespace compas_wood
             std::vector<int> element_neigbhours;
 
             auto callback = [&element_neigbhours, i, &e](int foundValue) -> bool
-            {
-                if (cgal_box_util::get_collision(e[i].oob, e[foundValue].oob))
                 {
-                    element_neigbhours.push_back(foundValue);
-                }
-                return true;
-            };
+                    if (cgal_box_util::get_collision(e[i].oob, e[foundValue].oob))
+                    {
+                        element_neigbhours.push_back(foundValue);
+                    }
+                    return true;
+                };
 
             double min[3] = { e[i].aabb.xmin(), e[i].aabb.ymin(), e[i].aabb.zmin() };
             double max[3] = { e[i].aabb.xmax(), e[i].aabb.ymax(), e[i].aabb.zmax() };
@@ -571,7 +662,10 @@ PYBIND11_MODULE(wood_pybind11, m)
         // outputs
         pybind11::arg("pybind11_output_plines").noconvert(),
         pybind11::arg("pybind11_output_types").noconvert(),
-        pybind11::arg("pybind11_joint_volume_parameters").noconvert());
+        pybind11::arg("pybind11_joint_volume_parameters").noconvert(),
+        pybind11::arg("face_to_face_side_to_side_joints_all_treated_as_rotated").noconvert(),
+        pybind11::arg("pybind11_custom_joints").noconvert(),
+        pybind11::arg("pybind11_custom_joints_types").noconvert());
 
     m.def("closed_mesh_from_polylines_vnf", &compas_wood::closed_mesh_from_polylines_vnf,
         // inputs

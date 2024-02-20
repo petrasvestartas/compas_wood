@@ -833,7 +833,7 @@ namespace wood_main
                                 double thickness = std::max(
                                     std::sqrt(CGAL::squared_distance(Plane0[0].point(), Plane0[1].projection(Plane0[0].point()))),
                                     std::sqrt(CGAL::squared_distance(Plane1[0].point(), Plane1[1].projection(Plane1[0].point()))));
-                                y *= (thickness)*2;
+                                y *= (thickness) * 2;
                                 IK::Segment_3 y_line(center + y, center - y);
                                 cgal_intersection_util::line_two_planes(y_line, Plane0[0], Plane1[1]);
                                 y = y_line[1] - y_line[0];
@@ -2286,10 +2286,9 @@ namespace wood_main
         try
         {
 
-            // size_t start = 35;
             for (auto i = 0; i < elements.size(); i++) // elements.size()
             {                                          // takes 30-50 ms just to copy-paste polyline geometry
-
+                printf("\n CPP %i ", output_type);
                 switch (output_type)
                 {
                 case (0):
@@ -2331,6 +2330,10 @@ namespace wood_main
                         printf("\nCPP   FILE %s    METHOD %s   LINE %i     WHAT %s  ", __FILE__, __FUNCTION__, __LINE__, " // this executes if f() throws std::string or int or any other unrelated type");
                     } // this executes if f() throws std::string or int or any other unrelated type
 
+                    break;
+
+                case (5):
+                    elements[i].get_joints_geometry(joints, output_plines, 5, output_types);
                     break;
                 }
             }

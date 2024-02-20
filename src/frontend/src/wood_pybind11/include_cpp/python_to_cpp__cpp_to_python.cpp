@@ -16,7 +16,7 @@ namespace python_to_cpp__cpp_to_python
     // Python to CPP Mesh
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    Mesh mesh_from_vertices_and_faces(const RowMatrixXd &vertices, const RowMatrixXi &faces)
+    Mesh mesh_from_vertices_and_faces(const RowMatrixXd& vertices, const RowMatrixXi& faces)
     {
         // get count of rows in both matrices
         // each row consists of 3 doubles or 3 integers
@@ -56,7 +56,7 @@ namespace python_to_cpp__cpp_to_python
         return mesh;
     }
 
-    Mesh ngon_from_vertices_and_faces(const RowMatrixXd &vertices, const std::vector<std::vector<int>> &faces)
+    Mesh ngon_from_vertices_and_faces(const RowMatrixXd& vertices, const std::vector<std::vector<int>>& faces)
     {
 
         // get count of rows in both matrices
@@ -99,16 +99,16 @@ namespace python_to_cpp__cpp_to_python
     // Python to CPP Polyline
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    std::vector<CGAL_Polyline> matrix_to_polylines(const RowMatrixXd &vertices)
+    std::vector<CGAL_Polyline> matrix_to_polylines(const RowMatrixXd& vertices)
     {
     }
 
-    void coord_to_vector_of_polylines(std::vector<std::vector<double>> &nested_vector_of_numbers, std::vector<std::vector<IK::Point_3>> &vector_of_polylines)
+    void coord_to_vector_of_polylines(std::vector<std::vector<double>>& nested_vector_of_numbers, std::vector<std::vector<IK::Point_3>>& vector_of_polylines)
     {
         if (nested_vector_of_numbers.size() == 0) return;
 
-            vector_of_polylines.reserve(nested_vector_of_numbers.size());
-        for (auto &polyline : nested_vector_of_numbers)
+        vector_of_polylines.reserve(nested_vector_of_numbers.size());
+        for (auto& polyline : nested_vector_of_numbers)
         {
             if (polyline.size() == 0)
                 continue;
@@ -118,7 +118,7 @@ namespace python_to_cpp__cpp_to_python
 
             for (size_t i = 0; i < polyline.size(); i += 3)
                 vector_of_polylines.back().emplace_back(polyline[i], polyline[i + 1], polyline[i + 2]);
-          
+
         }
     }
 
@@ -126,14 +126,14 @@ namespace python_to_cpp__cpp_to_python
     // Python to CPP std::vector<std::vector<IK::Vector_3>>
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    std::vector<std::vector<IK::Vector_3>> matrix_to_nested_vector(const RowMatrixXd &vertices)
+    std::vector<std::vector<IK::Vector_3>> matrix_to_nested_vector(const RowMatrixXd& vertices)
     {
     }
 
-    void coord_to_vector_of_vectors(std::vector<std::vector<double>> &nested_vector_of_numbers, std::vector<std::vector<IK::Vector_3>> &nested_vector_of_vectors)
+    void coord_to_vector_of_vectors(std::vector<std::vector<double>>& nested_vector_of_numbers, std::vector<std::vector<IK::Vector_3>>& nested_vector_of_vectors)
     {
         nested_vector_of_vectors.reserve(nested_vector_of_numbers.size());
-        for (auto &vector : nested_vector_of_numbers)
+        for (auto& vector : nested_vector_of_numbers)
         {
             nested_vector_of_vectors.push_back(std::vector<IK::Vector_3>());
             nested_vector_of_vectors.back().reserve(vector.size() / 3);
@@ -148,11 +148,11 @@ namespace python_to_cpp__cpp_to_python
     // Python to CPP std::vector<std::vector<int>> and <std::vector<int>
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    std::vector<std::vector<int>> matrix_to_nested_vector(const RowMatrixXi &indices)
+    std::vector<std::vector<int>> matrix_to_nested_vector(const RowMatrixXi& indices)
     {
     }
 
-    std::vector<int> matrix_to_vector(const RowMatrixXi &indices)
+    std::vector<int> matrix_to_vector(const RowMatrixXi& indices)
     {
     }
 
@@ -169,7 +169,7 @@ namespace python_to_cpp__cpp_to_python
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     struct ResultMesh result_mesh;
 
-    std::tuple<RowMatrixXd, RowMatrixXi> mesh_to_vertices_and_faces(const Mesh &mesh)
+    std::tuple<RowMatrixXd, RowMatrixXi> mesh_to_vertices_and_faces(const Mesh& mesh)
     {
 
         // create a vertex and face matrix
@@ -181,7 +181,7 @@ namespace python_to_cpp__cpp_to_python
 
         // assign vertices
         Mesh::Property_map<Mesh::Vertex_index, IK::Point_3> location = mesh.points();
-        for (Mesh::Vertex_index &vd : mesh.vertices())
+        for (Mesh::Vertex_index& vd : mesh.vertices())
         {
             vertex_matrix(vd.idx(), 0) = (double)location[vd][0];
             vertex_matrix(vd.idx(), 1) = (double)location[vd][1];
@@ -189,7 +189,7 @@ namespace python_to_cpp__cpp_to_python
         }
 
         // assign faces
-        for (Mesh::Face_index &fd : mesh.faces())
+        for (Mesh::Face_index& fd : mesh.faces())
         {
             int i = 0;
             for (Mesh::Vertex_index vd : vertices_around_face(mesh.halfedge(fd), mesh))
@@ -204,7 +204,7 @@ namespace python_to_cpp__cpp_to_python
         return result;
     }
 
-    std::tuple<RowMatrixXd, RowMatrixXi> quadmesh_to_vertices_and_faces(const Mesh &mesh)
+    std::tuple<RowMatrixXd, RowMatrixXi> quadmesh_to_vertices_and_faces(const Mesh& mesh)
     {
 
         // create a vertex and face matrix
@@ -218,7 +218,7 @@ namespace python_to_cpp__cpp_to_python
         // assign vertices
         Mesh::Property_map<Mesh::Vertex_index, IK::Point_3> location = mesh.points();
 
-        for (Mesh::Vertex_index &vd : mesh.vertices())
+        for (Mesh::Vertex_index& vd : mesh.vertices())
         {
             vertex_matrix(vd.idx(), 0) = (double)location[vd][0];
             vertex_matrix(vd.idx(), 1) = (double)location[vd][1];
@@ -226,7 +226,7 @@ namespace python_to_cpp__cpp_to_python
         }
 
         // assign faces
-        for (Mesh::Face_index &fd : mesh.faces())
+        for (Mesh::Face_index& fd : mesh.faces())
         {
             int i = 0;
             for (Mesh::Vertex_index vd : vertices_around_face(mesh.halfedge(fd), mesh))
@@ -241,7 +241,7 @@ namespace python_to_cpp__cpp_to_python
         return result;
     }
 
-    ResultMesh result_from_mesh(const Mesh &mesh)
+    ResultMesh result_from_mesh(const Mesh& mesh)
     {
 
         // create a result mesh
@@ -278,11 +278,11 @@ namespace python_to_cpp__cpp_to_python
     // Polyline to Python
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    std::vector<RowMatrixXd> result_from_polylines(const std::vector<CGAL_Polyline> &polylines)
+    std::vector<RowMatrixXd> result_from_polylines(const std::vector<CGAL_Polyline>& polylines)
     {
         std::vector<RowMatrixXd> pointsets;
 
-        for (auto &polyline : polylines)
+        for (auto& polyline : polylines)
         {
             // create a matrix of points of size 3
             RowMatrixXd points(polyline.size(), 3);
@@ -301,7 +301,7 @@ namespace python_to_cpp__cpp_to_python
         return pointsets;
     }
 
-    void nested_vector_of_polylines_to_coord(std::vector<std::vector<CGAL_Polyline>> &nested_vector_of_polylines, std::vector<std::vector<std::vector<double>>> &nested_nested_vector_of_coords)
+    void nested_vector_of_polylines_to_coord(std::vector<std::vector<CGAL_Polyline>>& nested_vector_of_polylines, std::vector<std::vector<std::vector<double>>>& nested_nested_vector_of_coords)
     {
 
         nested_nested_vector_of_coords.reserve(nested_vector_of_polylines.size());
@@ -323,7 +323,7 @@ namespace python_to_cpp__cpp_to_python
         }
     }
 
-    void nested_vector_of_cut_type_to_nested_vector_of_int(std::vector<std::vector<wood_cut::cut_type>> &output_types, std::vector<std::vector<int>> &output_types_int)
+    void nested_vector_of_cut_type_to_nested_vector_of_int(std::vector<std::vector<wood_cut::cut_type>>& output_types, std::vector<std::vector<int>>& output_types_int)
     {
 
         output_types_int.reserve(output_types.size());
@@ -342,7 +342,7 @@ namespace python_to_cpp__cpp_to_python
     // XML to Python
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    std::vector<RowMatrixXd> read_xml_as_polyline_pairs(std::string &filename)
+    std::vector<RowMatrixXd> read_xml_as_polyline_pairs(std::string& filename)
     {
     }
 }

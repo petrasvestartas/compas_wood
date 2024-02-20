@@ -497,7 +497,7 @@ PINVOKE void ctypes_get_connection_zones(
 
     wood_globals::JOINTS_PARAMETERS_AND_TYPES = in_joint_parameters;
 
-    if( in_joint_volume_parameters.size()>2)
+    if (in_joint_volume_parameters.size() > 2)
         wood_globals::JOINT_VOLUME_EXTENSION = in_joint_volume_parameters;
 
     wood_globals::OUTPUT_GEOMETRY_TYPE = in_output_type;
@@ -625,59 +625,59 @@ PINVOKE void ctypes_get_connection_zones_with_custom_joints(
     wood_globals::custom_joints_b_female.clear();
 
 
-    if(in_joint_polyline_pairs.size() == in_joint_types.size()){
-        for(int i = 0; i < in_joint_polyline_pairs.size(); i++){
+    if (in_joint_polyline_pairs.size() == in_joint_types.size()) {
+        for (int i = 0; i < in_joint_polyline_pairs.size(); i++) {
 
             switch (in_joint_types[i])
             {
-            case (9) :
+            case (9):
                 wood_globals::custom_joints_ss_e_ip_male.emplace_back(in_joint_polyline_pairs[i]);
                 break;
-            case (-9) :
+            case (-9):
                 wood_globals::custom_joints_ss_e_ip_female.emplace_back(in_joint_polyline_pairs[i]);
                 break;
-            case (19) :
+            case (19):
                 wood_globals::custom_joints_ss_e_op_male.emplace_back(in_joint_polyline_pairs[i]);
                 break;
-            case (-19) :
+            case (-19):
                 wood_globals::custom_joints_ss_e_op_female.emplace_back(in_joint_polyline_pairs[i]);
                 break;
-            case (29) :
+            case (29):
                 wood_globals::custom_joints_ts_e_p_male.emplace_back(in_joint_polyline_pairs[i]);
                 break;
-            case (-29) :
+            case (-29):
                 wood_globals::custom_joints_ts_e_p_female.emplace_back(in_joint_polyline_pairs[i]);
                 break;
-            case (39) :
+            case (39):
                 wood_globals::custom_joints_cr_c_ip_male.emplace_back(in_joint_polyline_pairs[i]);
                 break;
-            case (-39) :
+            case (-39):
                 wood_globals::custom_joints_cr_c_ip_female.emplace_back(in_joint_polyline_pairs[i]);
                 break;
-            case (49) :
+            case (49):
                 wood_globals::custom_joints_tt_e_p_male.emplace_back(in_joint_polyline_pairs[i]);
                 break;
-            case (-49) :
+            case (-49):
                 wood_globals::custom_joints_tt_e_p_female.emplace_back(in_joint_polyline_pairs[i]);
                 break;
-            case (59) :
+            case (59):
                 wood_globals::custom_joints_ss_e_r_male.emplace_back(in_joint_polyline_pairs[i]);
                 break;
-            case (-59) :
+            case (-59):
                 wood_globals::custom_joints_ss_e_r_female.emplace_back(in_joint_polyline_pairs[i]);
                 break;
-            case (69) :
+            case (69):
                 wood_globals::custom_joints_b_male.emplace_back(in_joint_polyline_pairs[i]);
                 break;
-            case (-69) :
+            case (-69):
                 wood_globals::custom_joints_b_female.emplace_back(in_joint_polyline_pairs[i]);
                 break;
-                
-            
+
+
             default:
                 break;
             }
-            
+
         }
 
     }
@@ -699,7 +699,7 @@ PINVOKE void ctypes_get_connection_zones_with_custom_joints(
 
     wood_globals::JOINTS_PARAMETERS_AND_TYPES = in_joint_parameters;
 
-    if( in_joint_volume_parameters.size()>2)
+    if (in_joint_volume_parameters.size() > 2)
         wood_globals::JOINT_VOLUME_EXTENSION = in_joint_volume_parameters;
 
     wood_globals::OUTPUT_GEOMETRY_TYPE = in_output_type;

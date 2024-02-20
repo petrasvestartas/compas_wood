@@ -52,14 +52,30 @@ namespace wood_globals
     extern std::vector<double> JOINT_VOLUME_EXTENSION; // useful for plates to avoid collision with corner - negative, while on beam the value has to be positive
     extern int OUTPUT_GEOMETRY_TYPE;
     extern bool FACE_TO_FACE_SIDE_TO_SIDE_JOINTS_ALL_TREATED_AS_ROTATED; // when all joints are computed as if sides are rotated, it was implemented in the Touch Wood ZAZ
-    extern double FACE_TO_FACE_SIDE_TO_SIDE_JOINTS_DIHEDRAL_ANGLE; // value to decide when a joint is in-plane or out-of-plane
-    extern double LIMIT_MIN_JOINT_LENGTH;                // minimum edge length on which the joint can be generated
+    extern double FACE_TO_FACE_SIDE_TO_SIDE_JOINTS_DIHEDRAL_ANGLE;       // value to decide when a joint is in-plane or out-of-plane
+    extern double LIMIT_MIN_JOINT_LENGTH;                                // minimum edge length on which the joint can be generated
     extern std::array<std::string, 7> JOINT_NAMES;
     extern std::vector<std::string> EXISTING_TYPES;
     extern std::vector<double> JOINTS_PARAMETERS_AND_TYPES;
 
     // Wood viewer
     extern size_t RUN_COUNT;
+
+    // custom joint types
+    extern std::vector<CGAL_Polyline> custom_joints_ss_e_ip_male;
+    extern std::vector<CGAL_Polyline> custom_joints_ss_e_ip_female;
+    extern std::vector<CGAL_Polyline> custom_joints_ss_e_op_male;
+    extern std::vector<CGAL_Polyline> custom_joints_ss_e_op_female;
+    extern std::vector<CGAL_Polyline> custom_joints_ts_e_p_male;
+    extern std::vector<CGAL_Polyline> custom_joints_ts_e_p_female;
+    extern std::vector<CGAL_Polyline> custom_joints_cr_c_ip_male;
+    extern std::vector<CGAL_Polyline> custom_joints_cr_c_ip_female;
+    extern std::vector<CGAL_Polyline> custom_joints_tt_e_p_male;
+    extern std::vector<CGAL_Polyline> custom_joints_tt_e_p_female;
+    extern std::vector<CGAL_Polyline> custom_joints_ss_e_r_male;
+    extern std::vector<CGAL_Polyline> custom_joints_ss_e_r_female;
+    extern std::vector<CGAL_Polyline> custom_joints_b_male;
+    extern std::vector<CGAL_Polyline> custom_joints_b_female;
 }
 
 #endif

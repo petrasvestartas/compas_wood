@@ -222,7 +222,7 @@ def WoodVectorDouble_to_box(wood_vector_double):
     zaxis = points[0] - points[1]
     frame = Frame(point_center, xaxis, yaxis)
 
-    box = Box(frame, xaxis.length, yaxis.length, zaxis.length)
+    box = Box(frame=frame, xsize=xaxis.length, ysize=yaxis.length, zsize=zaxis.length)
     vertices, faces = box.to_vertices_and_faces()
     mesh_box = Mesh.from_vertices_and_faces(vertices, faces)
 

@@ -220,6 +220,20 @@ namespace wood_test
      */
     bool type_plates_name_side_to_side_edge_outofplane_inplane_and_top_to_top_hexboxes();
 
+    /**
+     * example for plates
+     * in_plane and out_of_plane finger joints and top_to_top joints in one assembly - Rossiniere First Version from timber boards
+     * look how simply we can change the planarity tolerance: wood_globals::DISTANCE_SQUARED *= 100;
+     * THERE IS A BUG IN THE VIEWER, DISPLAY DISAPPEARS AFTER GOING FROM 4 TO 3 TO 4 MODE
+     */
+    bool type_plates_name_side_to_side_edge_outofplane_inplane_and_top_to_top_hexboxes();
+
+    /**
+     * example for block like plates
+     * rotated joints set to all face-to-face detection
+     */
+    bool type_plates_name_hex_block_rossiniere();
+
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // top-to-side data sets
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -308,12 +322,6 @@ namespace wood_test
      */
     bool type_plates_name_vda_floor_2();
 
-    /**
-     * example for plates
-     * in_plane top_to_side snap fit
-     */
-    bool type_plates_name_top_to_side_test();
-
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // cross data sets
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -387,13 +395,6 @@ namespace wood_test
      * cross joints
      */
     bool type_plates_name_cross_brussels_sports_tower();
-
-    /**
-     * example for plates
-     * cross joints, plate cross and side joints
-     * Block Research Group, ETH Zurich - development of slab
-     */
-    bool type_plates_name_cross_brg_slab_0();
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // beam methods

@@ -166,6 +166,15 @@ namespace wood
                     // std::cout << " new line \n";
 
                     break;
+                case (5):
+                    // Plate outlines
+                    if (this->polylines.size() > 1)
+                    {
+                        output[this->id].emplace_back(this->polylines[0]); // cut
+                        output[this->id].emplace_back(this->polylines[1]); // cut
+                    }
+                    // output[this->id].emplace_back(joints[std::get<0>(j_mf[i][j])].joint_area);
+                    break;
                 default:
                     break;
                 }
@@ -581,7 +590,6 @@ namespace wood
                 else
                 {
                 }
-
 
                 if (t0 != -1 && t1 != -1)
                 {

@@ -1,9 +1,7 @@
 # compas_wood
 from compas_wood.joinery import rtree
-import data_set_plates
+from compas_wood.data_set_plates import annen_small_polylines
 
-# viewer
-from compas_wood.viewer_helpers import display
 
 # ==============================================================================
 # Get Adjancency between Elements using RTree Search
@@ -12,7 +10,7 @@ from compas_wood.viewer_helpers import display
 
 def test_rtree(boxes_AABB_or_boxes_OOBB=False):
     # Get a list of polyline pairs
-    input = data_set_plates.annen_small_polylines()
+    input = annen_small_polylines()
 
     # Compute Rtree
     neighbours, boxes_AABB, boxes_OOBB = rtree(input)
@@ -27,9 +25,6 @@ def test_rtree(boxes_AABB_or_boxes_OOBB=False):
     print(neighbours[selected_id])
     for i in neighbours[selected_id]:
         boxes_selected.append(boxes[i])
-
-    # Display via Compas_View2
-    display(input, None, boxes_selected, 0.0001, 0, 0, 0, True)
 
     # output
     return neighbours
