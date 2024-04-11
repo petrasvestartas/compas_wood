@@ -1,9 +1,6 @@
 # compas_wood
 
-timber joinery generation
-
-- activate correct environment: export PATH="~/anaconda3/envs/compas_wood/bin:$PATH"
-
+Project for timber joinery generation.
 
 ## Getting started with this project
 
