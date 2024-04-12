@@ -1,17 +1,11 @@
-graft include
 graft src
 
 prune .github
-prune .vscode
-
 prune data
 prune docs
-prune ext
 prune scripts
-prune temp
 prune tests
-prune var
-prune wheels
+prune temp
 
 include LICENSE
 include README.md
@@ -23,7 +17,6 @@ exclude requirements-dev.txt
 exclude pytest.ini .bumpversion.cfg .editorconfig
 exclude tasks.py
 exclude CONTRIBUTING.md
-exclude env_osx.yml
-exclude env_win.yml
+exclude conftest.py
 
-global-exclude *.py[cod] __pycache__ *.dylib *.nb[ic] .DS_Store *.so
+global-exclude *.py[cod] __pycache__ *.dylib *.nb[ic] .DS_Store
