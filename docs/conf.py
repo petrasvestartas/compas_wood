@@ -4,13 +4,22 @@
 from sphinx.writers import html, html5
 import sphinx_compas2_theme
 
+# import os
+# import sys
+# sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../src')))
+# sys.path.insert(0, '/home/petras/brg/2_code/wood_nano/src')
+# import compas_wood
+# import wood_nano
+# import compas_wood.binding
+
+
 # -- General configuration ------------------------------------------------
 
 project = "compas_wood"
 copyright = "petras vestartas"
 author = "petras vestartas"
 package = "compas_wood"
-organization = ""
+organization = "petrasvestartas"
 
 master_doc = "index"
 source_suffix = {".rst": "restructuredtext", ".md": "markdown"}
@@ -50,6 +59,7 @@ autodoc_typehints_format = "short"
 autodoc_typehints_description_target = "documented"
 
 autodoc_mock_imports = sphinx_compas2_theme.default_mock_imports
+autodoc_mock_imports = ['wood_nano']
 
 autodoc_default_options = {
     "undoc-members": True,
@@ -57,6 +67,7 @@ autodoc_default_options = {
 }
 
 autodoc_member_order = "groupwise"
+
 
 autoclass_content = "class"
 
@@ -69,6 +80,7 @@ def setup(app):
 
 autosummary_generate = True
 autosummary_mock_imports = sphinx_compas2_theme.default_mock_imports
+
 
 # graph options
 

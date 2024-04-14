@@ -10,5 +10,5 @@ isort
 sphinx_compas2_theme
 twine
 wheel
-wood-cpp-nano
+wood-nano
 -e .

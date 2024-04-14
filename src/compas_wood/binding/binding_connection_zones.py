@@ -1,4 +1,4 @@
-import wood_nano
+import wood_nano as wn
 from wood_nano.conversions_python import to_int2, to_int1, to_double1, from_cut_type2
 from compas_wood.conversions_compas import to_point2, to_vector2, from_point3
 
@@ -18,11 +18,50 @@ def get_connection_zones(
     input_custom_joints=[],
     input_custom_joints_types=[],
 ):
+    """
+    Get connection zones for the given input parameters.
 
-    w_output_plines = wood_nano.point3()
-    w_output_types = wood_nano.cut_type2()
+    Parameters
+    ----------
+    input_polyline_pairs : list[list[compas.geometry.Polyline]]
+        List of polylines that represents the timber elements.
+    input_insertion_vectors : list[compas.geometry.Vector], optional
+        List of insertion vectors.
+    input_joint_types : list[int], optional
+        List of joint types.
+    input_three_valence_element_indices_and_instruction : list[int], optional
+        List of three valence element indices and instruction.
+    input_adjacency : list[int], optional
+        List of adjacency.
+    input_joint_parameters_and_types : list[float], optional
+        List of joint parameters and types.
+    input_search_type : int, optional
+        Search type.
+    input_scale : list[float], optional
+        Scale.
+    input_output_type : int, optional
+        Output type.
+    input_joint_volume_parameters : list[float], optional
+        Joint volume parameters.
+    face_to_face_side_to_side_joints_all_treated_as_rotated : bool, optional
+        Face to face side to side joints all treated as rotated.
+    input_custom_joints : list[compas.geometry.Point], optional
+        Custom joints.
+    input_custom_joints_types : list[int], optional
+        Custom joints types.
 
-    wood_nano.get_connection_zones(
+    Returns
+    -------
+    list[list[compas.geometry.Polyline]]
+        List of polylines that represents the timber elements.
+    list[wood_nano.CutType2]
+        List of cut types.
+    """
+
+    w_output_plines = wn.point3()
+    w_output_types = wn.cut_type2()
+
+    wn.get_connection_zones(
         to_point2(input_polyline_pairs),
         to_vector2(input_insertion_vectors),
         to_int2(input_joint_types),
@@ -93,7 +132,7 @@ if __name__ == "__main__":
 
         scale = 1e-3
         scale_transform = Scale.from_factors([scale, scale, scale])
-        viewer = Viewer()
+        viewer = Viewer(show_grid=False)
         for polylines in output_polylines:
             for polyline in polylines:
                 polyline.transform(scale_transform)

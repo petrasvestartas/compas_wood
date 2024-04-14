@@ -1,4 +1,4 @@
-import wood_nano
+import wood_nano as wn
 from wood_nano.conversions_python import from_int2
 from compas_wood.conversions_compas import to_point2, from_point2
 
@@ -9,19 +9,25 @@ def rtree(polylines):
 
     Parameters
     ----------
-    list_of_polylines : list[point2]
-        list of polylines that represents the timber elements
-
-    Returnsto_point
-        point2 obb
+    polylines : list[compas.geometry.Polyline]
+        List of polylines.
+    
+    Returns
+    -------
+    list[int]
+        List of neighbors.
+    list[compas.geometry.Box]
+        List of aabb boxes.
+    list[compas.geometry.Box]
+        List of obb boxes.
     """
 
     w_polylines = to_point2(polylines)
-    w_neighbors = wood_nano.int2()
-    w_aabb = wood_nano.point2()
-    w_obb = wood_nano.point2()
+    w_neighbors = wn.int2()
+    w_aabb = wn.point2()
+    w_obb = wn.point2()
 
-    wood_nano.rtree(w_polylines, w_neighbors, w_aabb, w_obb)
+    wn.rtree(w_polylines, w_neighbors, w_aabb, w_obb)
 
     return from_int2(w_neighbors), from_point2(w_aabb, "Box"), from_point2(w_obb, "Box")
 
