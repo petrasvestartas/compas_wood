@@ -11,6 +11,18 @@ timber joinery generation
      :class: figure-img img-fluid
 
 
+Installation
+============
+
+.. code-block:: bash
+    conda create -n compas_wood python=3.9.18 compas compas_viewer
+
+Installation for Rhino3d
+========================
+
+.. code-block:: bash
+    conda create -n compas_wood python=3.9.10 compas
+
 Table of Contents
 =================
 
