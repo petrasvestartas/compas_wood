@@ -1,8 +1,8 @@
 from __future__ import print_function
 
 import platform
+import compas_wood
 
-import compas_cra
 
 if __name__ == "__main__":
     print()

@@ -1,6 +1,13 @@
-import wood_nano as wn
-from wood_nano.conversions_python import to_int2, to_int1, to_double1, from_cut_type2
-from compas_wood.conversions_compas import to_point2, to_vector2, from_point3
+from wood_nano import get_connection_zones as wood_nano_get_connection_zones
+from wood_nano import cut_type2 as wood_nano_cut_type2
+from wood_nano import point3 as wood_nano_point3
+from wood_nano.conversions_python import to_int2
+from wood_nano.conversions_python import to_int1
+from wood_nano.conversions_python import to_double1
+from wood_nano.conversions_python import from_cut_type2
+from compas_wood.conversions_compas import to_point2
+from compas_wood.conversions_compas import to_vector2
+from compas_wood.conversions_compas import from_point3
 
 
 def get_connection_zones(
@@ -58,10 +65,10 @@ def get_connection_zones(
         List of cut types.
     """
 
-    w_output_plines = wn.point3()
-    w_output_types = wn.cut_type2()
+    w_output_plines = wood_nano_point3()
+    w_output_types = wood_nano_cut_type2()
 
-    wn.get_connection_zones(
+    wood_nano_get_connection_zones(
         to_point2(input_polyline_pairs),
         to_vector2(input_insertion_vectors),
         to_int2(input_joint_types),
