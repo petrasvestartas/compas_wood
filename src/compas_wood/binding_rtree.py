@@ -15,7 +15,7 @@ def rtree(polylines):
     Returnsto_point
         point2 obb
     """
-    
+
     w_polylines = to_point2(polylines)
     w_neighbors = wood_nano.int2()
     w_aabb = wood_nano.point2()
@@ -24,6 +24,7 @@ def rtree(polylines):
     wood_nano.rtree(w_polylines, w_neighbors, w_aabb, w_obb)
 
     return from_int2(w_neighbors), from_point2(w_aabb, "Box"), from_point2(w_obb, "Box")
+
 
 if __name__ == "__main__":
 
@@ -44,6 +45,7 @@ if __name__ == "__main__":
     print(obb)
 
     import sys
+
     if sys.version_info >= (3, 9):
         from compas_viewer import Viewer
 

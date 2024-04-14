@@ -1,9 +1,6 @@
 import wood_nano
 from wood_nano.conversions_python import to_int2, to_int1, to_double1, from_cut_type2
-from numpy import double
 from compas_wood.conversions_compas import to_point2, to_vector2, from_point3
-
-
 
 
 def get_connection_zones(
@@ -20,9 +17,8 @@ def get_connection_zones(
     face_to_face_side_to_side_joints_all_treated_as_rotated=False,
     input_custom_joints=[],
     input_custom_joints_types=[],
+):
 
-):  
-    
     w_output_plines = wood_nano.point3()
     w_output_types = wood_nano.cut_type2()
 
@@ -44,17 +40,15 @@ def get_connection_zones(
         to_int1(input_custom_joints_types),
     )
 
-
     return from_point3(w_output_plines), from_cut_type2(w_output_types)
-
 
 
 if __name__ == "__main__":
 
-    from compas.geometry import Point, Polyline
-    from  compas_wood import data_sets_plates
+    from compas.geometry import Polyline
+    from compas_wood import data_sets_plates
 
-  # joinery parameters
+    # joinery parameters
     division_length = 300
     joint_parameters = [
         division_length,
@@ -87,14 +81,16 @@ if __name__ == "__main__":
         joint_parameters,
         0,
         [1, 1, 1],
-        4   
+        4,
     )
 
     import sys
+
     if sys.version_info >= (3, 9):
 
         from compas_viewer import Viewer
         from compas.geometry import Scale
+
         scale = 1e-3
         scale_transform = Scale.from_factors([scale, scale, scale])
         viewer = Viewer()
@@ -102,6 +98,5 @@ if __name__ == "__main__":
             for polyline in polylines:
                 polyline.transform(scale_transform)
                 viewer.scene.add(Polyline(polyline), show_points=False)
-        
-        viewer.show()
 
+        viewer.show()

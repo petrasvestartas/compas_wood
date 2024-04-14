@@ -1669,6 +1669,7 @@ def annen_small_edge_joints():
         [0, 0, 10, 10, 10, 10],
     ]
 
+
 def annen_small_three_valance_element_indices_and_instruction():
     return [
         [0],
