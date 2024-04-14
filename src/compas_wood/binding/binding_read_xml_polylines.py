@@ -10,7 +10,7 @@ def read_xml_polylines(
     scale=1e-2,
 ):
     """Read polylines from XML file.
-    
+
     Parameters
     ----------
     foldername : str, optional
@@ -19,7 +19,7 @@ def read_xml_polylines(
         Filename of dataset.
     scale : float, optional
         Scale.
-    
+
     Returns
     -------
     list[compas.geometry.Polyline]
