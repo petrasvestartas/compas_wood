@@ -83,3 +83,18 @@ Vizualize...
 --------------------------------------------------------------------------------
 Planarized quad shell:
 --------------------------------------------------------------------------------
+
+.. literalinclude:: ./type_plates_name_side_to_side_edge_in_plane_hilti_part4.py
+   :language: python
+   :lines: 1-33
+
+Vizualize...
+
+.. literalinclude:: ./type_plates_name_side_to_side_edge_in_plane_hilti_part4.py
+   :language: python
+   :lines: 34-
+
+
+.. figure:: ./type_plates_name_side_to_side_edge_in_plane_hilti_part3.png
+    :figclass: figure
+    :class: figure-img img-fluid
