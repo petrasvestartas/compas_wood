@@ -5,6 +5,7 @@ from .binding_read_xml_polylines import read_xml_polylines
 from .binding_read_xml_polylines_and_properties import read_xml_polylines_and_properties
 from .binding_closed_mesh_from_polylines import closed_mesh_from_polylines
 from .binding_joints import joints
+from .binding_globals import joint_parameters_and_types
 
 __all__ = [
     "get_connection_zones",
@@ -14,4 +15,5 @@ __all__ = [
     "read_xml_polylines_and_properties",
     "closed_mesh_from_polylines",
     "joints",
+    "joint_parameters_and_types"
 ]
