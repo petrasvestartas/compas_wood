@@ -86,15 +86,23 @@ Planarized quad shell:
 
 .. literalinclude:: ./type_plates_name_side_to_side_edge_in_plane_hilti_part4.py
    :language: python
-   :lines: 1-33
 
-Vizualize...
+Mesh dual of a cone and a sphere intersection:
 
-.. literalinclude:: ./type_plates_name_side_to_side_edge_in_plane_hilti_part4.py
-   :language: python
-   :lines: 34-
+.. figure:: ./type_plates_name_side_to_side_edge_in_plane_hilti_part4_0.png
+    :figclass: figure
+    :class: figure-img img-fluid
 
+.. figure:: ./type_plates_name_side_to_side_edge_in_plane_hilti_part4_1.png
+    :figclass: figure
+    :class: figure-img img-fluid
 
-.. figure:: ./type_plates_name_side_to_side_edge_in_plane_hilti_part3.png
+Rescale the mesh to 8000 mm and apply joinery:
+
+.. figure:: ./type_plates_name_side_to_side_edge_in_plane_hilti_part4_2.png
+    :figclass: figure
+    :class: figure-img img-fluid
+
+.. figure:: ./type_plates_name_side_to_side_edge_in_plane_hilti_part4_3.png
     :figclass: figure
     :class: figure-img img-fluid
