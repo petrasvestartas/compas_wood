@@ -1,118 +1,91 @@
+# flake8: noqa
 # -*- coding: utf-8 -*-
 
-# If your documentation needs a minimal Sphinx version, state it here.
-#
-# needs_sphinx = "1.0"
+from sphinx.writers import html, html5
+import sphinx_compas2_theme
 
-import sys
-import os
-import inspect
-import importlib
+# import os
+# import sys
+# sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../src')))
+# sys.path.insert(0, '/home/petras/brg/2_code/wood_nano/src')
+# import compas_wood
+# import wood_nano
+# import compas_wood.binding
 
-import sphinx_compas_theme
-from sphinx.ext.napoleon.docstring import NumpyDocstring
-
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), "../src"))
 
 # -- General configuration ------------------------------------------------
 
 project = "compas_wood"
-copyright = "Petras Vestartas"
-author = "Petras Vestartas"
-release = "1.0.0"
-version = ".".join(release.split(".")[0:2])
+copyright = "petras vestartas"
+author = "petras vestartas"
+package = "compas_wood"
+organization = "petrasvestartas"
 
 master_doc = "index"
-source_suffix = [
-    ".rst",
-]
-templates_path = sphinx_compas_theme.get_autosummary_templates_path()
-exclude_patterns = []
-
-pygments_style = "sphinx"
-show_authors = True
+source_suffix = {".rst": "restructuredtext", ".md": "markdown"}
+templates_path = sphinx_compas2_theme.get_autosummary_templates_path()
+exclude_patterns = sphinx_compas2_theme.default_exclude_patterns
 add_module_names = True
-language = None
+language = "en"
 
+latest_version = sphinx_compas2_theme.get_latest_version()
+
+if latest_version == "Unreleased":
+    release = "Unreleased"
+    version = "latest"
+else:
+    release = latest_version
+    version = ".".join(release.split(".")[0:2])  # type: ignore
 
 # -- Extension configuration ------------------------------------------------
 
-extensions = [
-    "sphinx.ext.autodoc",
-    "sphinx.ext.autosummary",
-    "sphinx.ext.doctest",
-    "sphinx.ext.coverage",
-    "sphinx.ext.linkcode",
-    "sphinx.ext.extlinks",
-    "sphinx.ext.intersphinx",
-    "sphinx.ext.mathjax",
-    "sphinx.ext.napoleon",
-    "sphinx.ext.githubpages",
-    "matplotlib.sphinxext.plot_directive",
-]
+extensions = sphinx_compas2_theme.default_extensions
+extensions.remove("sphinx.ext.linkcode")
+extensions.append('nbsphinx')
+
+# numpydoc options
+
+numpydoc_show_class_members = False
+numpydoc_class_members_toctree = False
+numpydoc_attributes_as_param_list = True
+
+# bibtex options
 
 # autodoc options
+
+autodoc_type_aliases = {}
+
+autodoc_typehints = "description"
+autodoc_typehints_format = "short"
+autodoc_typehints_description_target = "documented"
+
+autodoc_mock_imports = sphinx_compas2_theme.default_mock_imports
+autodoc_mock_imports = ['wood_nano']
 
 autodoc_default_options = {
     "undoc-members": True,
     "show-inheritance": True,
 }
 
-autodoc_member_order = "alphabetical"
+autodoc_member_order = "groupwise"
+
 
 autoclass_content = "class"
 
 
-def skip(app, what, name, obj, would_skip, options):
-    if name.startswith("_"):
-        return True
-    return would_skip
-
-
 def setup(app):
-    app.connect("autodoc-skip-member", skip)
+    app.connect("autodoc-skip-member", sphinx_compas2_theme.skip)
 
 
 # autosummary options
 
 autosummary_generate = True
+autosummary_mock_imports = sphinx_compas2_theme.default_mock_imports
 
-# napoleon options
 
-napoleon_google_docstring = False
-napoleon_numpy_docstring = True
-napoleon_include_init_with_doc = False
-napoleon_include_private_with_doc = False
-napoleon_include_special_with_doc = True
-napoleon_use_admonition_for_examples = False
-napoleon_use_admonition_for_notes = False
-napoleon_use_admonition_for_references = False
-napoleon_use_ivar = False
-napoleon_use_param = False
-napoleon_use_rtype = False
+# graph options
 
 # plot options
-
-plot_html_show_source_link = False
-plot_html_show_formats = False
-
-# docstring sections
-
-
-def parse_attributes_section(self, section):
-    return self._format_fields("Attributes", self._consume_fields())
-
-
-NumpyDocstring._parse_attributes_section = parse_attributes_section
-
-
-def patched_parse(self):
-    self._sections["attributes"] = self._parse_attributes_section
-    self._unpatched_parse()
-
-
-NumpyDocstring._unpatched_parse = NumpyDocstring._parse
-NumpyDocstring._parse = patched_parse
 
 # intersphinx options
 
@@ -123,66 +96,78 @@ intersphinx_mapping = {
 
 # linkcode
 
-
-def linkcode_resolve(domain, info):
-    if domain != "py":
-        return None
-    if not info["module"]:
-        return None
-    if not info["fullname"]:
-        return None
-
-    package = info["module"].split(".")[0]
-    if not package.startswith("compas_wood"):
-        return None
-
-    module = importlib.import_module(info["module"])
-    parts = info["fullname"].split(".")
-
-    if len(parts) == 1:
-        obj = getattr(module, info["fullname"])
-        filename = inspect.getmodule(obj).__name__.replace(".", "/")
-        lineno = inspect.getsourcelines(obj)[1]
-    elif len(parts) == 2:
-        obj_name, attr_name = parts
-        obj = getattr(module, obj_name)
-        attr = getattr(obj, attr_name)
-        if inspect.isfunction(attr):
-            filename = inspect.getmodule(obj).__name__.replace(".", "/")
-            lineno = inspect.getsourcelines(attr)[1]
-        else:
-            return None
-    else:
-        return None
-
-    return f"https://github.com/petrasvestartas/compas_wood/blob/master/src/{filename}.py#L{lineno}"
-
+linkcode_resolve = sphinx_compas2_theme.get_linkcode_resolve(organization, package)
 
 # extlinks
 
 extlinks = {}
 
+# from pytorch
+
+sphinx_compas2_theme.replace(html.HTMLTranslator)
+sphinx_compas2_theme.replace(html5.HTML5Translator)
+
 # -- Options for HTML output ----------------------------------------------
 
-html_theme = "compaspkg"
-html_theme_path = sphinx_compas_theme.get_html_theme_path()
+html_theme = "sidebaronly"
+html_title = project
+
+favicons = [
+    {
+        "rel": "icon",
+        "href": "compas.ico",
+    }
+]
 
 html_theme_options = {
-    "package_name": "compas_wood",
-    "package_title": project,
-    "package_version": release,
-    "package_author": "Petras Vestartas",
-    "package_docs": "https://petrasvestartas.github.io/compas_wood/",
-    "package_repo": "https://github.com/petrasvestartas/compas_wood",
-    "package_old_versions_txt": "https://petrasvestartas.github.io/compas-wood/doc_versions.txt",
+    "icon_links": [
+        {
+            "name": "GitHub",
+            "url": f"https://github.com/{organization}/{package}",
+            "icon": "fa-brands fa-github",
+            "type": "fontawesome",
+        },
+        {
+            "name": "Discourse",
+            "url": "http://forum.compas-framework.org/",
+            "icon": "fa-brands fa-discourse",
+            "type": "fontawesome",
+        },
+        {
+            "name": "PyPI",
+            "url": f"https://pypi.org/project/{package}/",
+            "icon": "fa-brands fa-python",
+            "type": "fontawesome",
+        },
+    ],
+    "switcher": {
+        "json_url": f"https://raw.githubusercontent.com/{organization}/{package}/gh-pages/versions.json",
+        "version_match": version,
+    },
+    "check_switcher": False,
+    "logo": {
+        "image_light": "_static/compas_icon_white.png",
+        "image_dark": "_static/compas_icon_white.png",
+        "text": project,
+    },
+    "navigation_depth": 3,
 }
 
-html_context = {}
-html_static_path = sphinx_compas_theme.get_html_static_path()
+
+html_context = {
+    "github_url": "https://github.com",
+    "github_user": organization,
+    "github_repo": package,
+    "github_version": "main",
+    "doc_path": "docs",
+}
+
+html_static_path = sphinx_compas2_theme.get_html_static_path() + ["_static"]
+html_css_files = []
 html_extra_path = []
 html_last_updated_fmt = ""
 html_copy_source = False
-html_show_sourcelink = False
+html_show_sourcelink = True
 html_permalinks = False
-html_add_permalinks = None
+html_permalinks_icon = ""
 html_compact_lists = True

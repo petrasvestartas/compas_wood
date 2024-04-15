@@ -1,3 +1,1 @@
-compas
-nptyping
-typing_extensions
+wood-nano

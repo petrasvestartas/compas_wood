@@ -45,3 +45,4 @@ Citation
         Design-to-Fabrication Workflow for Raw-Sawn-Timber using Joinery Solver, 2017-2021
     2) The translation from C# to C++ was started during the funding of NCCR in two steps
         A - standalone C++ version of the joinery solver and B - integration to COMPAS framework (Python Pybind11)
+    3) Pacakge was rewritten to be compatible with COMPAS2 framework and easier C++ integration via Nanobind.
