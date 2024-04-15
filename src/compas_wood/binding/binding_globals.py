@@ -1,11 +1,12 @@
 from wood_nano import joint_parameters_and_types as wood_nano_joint_parameters_and_types
 from wood_nano.conversions_python import from_double1
 
+
 def joint_parameters_and_types():
     """
     Default joint parameters and types.
     This property is use in get_connection_zones function and helps to define the joint parameters and types.
-   
+
     Returns
     -------
     list[float]
@@ -22,7 +23,7 @@ def joint_parameters_and_types():
             6, 0.95, 40,   // 40-49 tt_e_p  (top-to-top edge plane)
 
             300, 0.5, 58,  // 50-59 ss_e_r (side-to-side edge rotated)
-            
+
             300, 1.0, 60   // 60-69 b (boundary)
     """
     return from_double1(wood_nano_joint_parameters_and_types)

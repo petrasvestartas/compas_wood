@@ -6,8 +6,8 @@ from compas.geometry import Scale
 
 def read_xml_polylines(
     foldername="/home/petras/brg/2_code/wood_nano/src/wood/cmake/src/wood/dataset/",
-    filename_of_dataset="type_plates_name_cross_vda_hexshell_reciprocal",
-    scale=1e-2,
+    filename="type_plates_name_cross_vda_hexshell_reciprocal",
+    scale=1,
 ):
     """Read polylines from XML file.
 
@@ -28,9 +28,10 @@ def read_xml_polylines(
     polylines_coordinates = double2()
     wood_nano_read_xml_polylines(
         foldername,
-        filename_of_dataset,
+        filename,
         polylines_coordinates,
     )
+    print(len(polylines_coordinates))
 
     polylines = []
     xform = Scale.from_factors([scale, scale, scale])
