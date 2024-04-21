@@ -31,7 +31,7 @@ jobs:
       - name: Install Wood-Nano with pip
         run: |
           echo "Installing Wood-Nano..."
-          pip install wood-nano --platform manylinux_2_35_x86_64
+          pip install wood-nano --only-binary=:all: --no-deps
 
       - name: Install dependencies with Conda
         run: |
