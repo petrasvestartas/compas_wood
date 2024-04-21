@@ -23,7 +23,7 @@ jobs:
         uses: conda-incubator/setup-miniconda@v2
         with:
           activate-environment: compas_wood_3_9_10
-          python-version: 3.9
+          python-version: 3.9.10
           auto-activate-base: false
           channel-priority: strict
           channels: conda-forge,defaults  # This ensures conda-forge is used primarily, but defaults can also be accessed
