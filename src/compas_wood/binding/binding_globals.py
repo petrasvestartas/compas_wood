@@ -1,29 +1,316 @@
-from wood_nano import joint_parameters_and_types as wood_nano_joint_parameters_and_types
-from wood_nano.conversions_python import from_double1
+from wood_nano import GLOBALS
 
 
-def joint_parameters_and_types():
-    """
-    Default joint parameters and types.
-    This property is use in get_connection_zones function and helps to define the joint parameters and types.
+class _Globals:
+    @property
+    def clipper_scale(cls):
+        return GLOBALS.CLIPPER_SCALE
 
-    Returns
-    -------
-    list[float]
-        Joint parameters and types.
+    @clipper_scale.setter
+    def clipper_scale(cls, value):
+        GLOBALS.CLIPPER_SCALE = value
 
-            300, 0.5, 3,   // 1-9 ss_e_ip (side-to-side edge in-plane)
+    @property
+    def clipper_area(cls):
+        return GLOBALS.CLIPPER_AREA
 
-            450, 0.64, 15, // 10-19 ss_e_op (side-to-side edge out-of-plane)
+    @clipper_area.setter
+    def clipper_area(cls, value):
+        GLOBALS.CLIPPER_AREA = value
 
-            450, 0.5, 20,  // 20-29 ts_e_p (top-to-side edge plane)
+    @property
+    def distance(cls):
+        return GLOBALS.DISTANCE
 
-            300, 0.5, 30,  // 30-39 cr_c_ip (cross cutting in-plane)
+    @distance.setter
+    def distance(cls, value):
+        GLOBALS.DISTANCE = value
 
-            6, 0.95, 40,   // 40-49 tt_e_p  (top-to-top edge plane)
+    @property
+    def distance_squared(cls):
+        return GLOBALS.DISTANCE_SQUARED
 
-            300, 0.5, 58,  // 50-59 ss_e_r (side-to-side edge rotated)
+    @distance_squared.setter
+    def distance_squared(cls, value):
+        GLOBALS.DISTANCE_SQUARED = value
 
-            300, 1.0, 60   // 60-69 b (boundary)
-    """
-    return from_double1(wood_nano_joint_parameters_and_types)
+    @property
+    def angle(cls):
+        return GLOBALS.ANGLE
+
+    @angle.setter
+    def angle(cls, value):
+        GLOBALS.ANGLE = value
+
+    @property
+    def path_and_file_for_joints(cls):
+        return GLOBALS.PATH_AND_FILE_FOR_JOINTS
+
+    @path_and_file_for_joints.setter
+    def path_and_file_for_joints(cls, value):
+        GLOBALS.PATH_AND_FILE_FOR_JOINTS = value
+
+    @property
+    def data_set_input_folder(cls):
+        return GLOBALS.DATA_SET_INPUT_FOLDER
+
+    @data_set_input_folder.setter
+    def data_set_input_folder(cls, value):
+        GLOBALS.DATA_SET_INPUT_FOLDER = value
+
+    @property
+    def data_set_output_file(cls):
+        return GLOBALS.DATA_SET_OUTPUT_FILE
+
+    @data_set_output_file.setter
+    def data_set_output_file(cls, value):
+        GLOBALS.DATA_SET_OUTPUT_FILE = value
+
+    @property
+    def data_set_output_database(cls):
+        return GLOBALS.DATA_SET_OUTPUT_DATABASE
+
+    @data_set_output_database.setter
+    def data_set_output_database(cls, value):
+        GLOBALS.DATA_SET_OUTPUT_DATABASE = value
+
+    @property
+    def joint_volume_extension(cls):
+        from wood_nano.conversions_python import from_int1
+
+        return from_int1(GLOBALS.JOINT_VOLUME_EXTENSION)
+
+    @joint_volume_extension.setter
+    def joint_volume_extension(cls, value):
+        from wood_nano.conversions_python import to_int1
+
+        GLOBALS.JOINT_VOLUME_EXTENSION = to_int1(value)
+
+    @property
+    def output_geometry_type(cls):
+        return GLOBALS.OUTPUT_GEOMETRY_TYPE
+
+    @output_geometry_type.setter
+    def output_geometry_type(cls, value):
+        GLOBALS.OUTPUT_GEOMETRY_TYPE = value
+
+    @property
+    def face_to_face_side_to_side_joints_all_treated_as_rotated(cls):
+        return GLOBALS.FACE_TO_FACE_SIDE_TO_SIDE_JOINTS_ALL_TREATED_AS_ROTATED
+
+    @face_to_face_side_to_side_joints_all_treated_as_rotated.setter
+    def face_to_face_side_to_side_joints_all_treated_as_rotated(cls, value):
+        GLOBALS.FACE_TO_FACE_SIDE_TO_SIDE_JOINTS_ALL_TREATED_AS_ROTATED = value
+
+    @property
+    def face_to_face_side_to_side_joints_rotated_joint_as_average(cls):
+        return GLOBALS.FACE_TO_FACE_SIDE_TO_SIDE_JOINTS_ROTATED_JOINT_AS_AVERAGE
+
+    @face_to_face_side_to_side_joints_rotated_joint_as_average.setter
+    def face_to_face_side_to_side_joints_rotated_joint_as_average(cls, value):
+        GLOBALS.FACE_TO_FACE_SIDE_TO_SIDE_JOINTS_ROTATED_JOINT_AS_AVERAGE = value
+
+    @property
+    def face_to_face_side_to_side_joints_dihedral_angle(cls):
+        return GLOBALS.FACE_TO_FACE_SIDE_TO_SIDE_JOINTS_DIHEDRAL_ANGLE
+
+    @face_to_face_side_to_side_joints_dihedral_angle.setter
+    def face_to_face_side_to_side_joints_dihedral_angle(cls, value):
+        GLOBALS.FACE_TO_FACE_SIDE_TO_SIDE_JOINTS_DIHEDRAL_ANGLE = value
+
+    @property
+    def limit_min_joint_length(cls):
+        return GLOBALS.LIMIT_MIN_JOINT_LENGTH
+
+    @limit_min_joint_length.setter
+    def limit_min_joint_length(cls, value):
+        GLOBALS.LIMIT_MIN_JOINT_LENGTH = value
+
+    @property
+    def existing_types(cls):
+        from wood_nano.conversions_python import from_string1
+
+        return from_string1(GLOBALS.EXISTING_TYPES)
+
+    @property
+    def joints_parameters_and_types(cls):
+        from wood_nano.conversions_python import from_double1
+
+        return from_double1(GLOBALS.JOINTS_PARAMETERS_AND_TYPES)
+
+    @joints_parameters_and_types.setter
+    def joints_parameters_and_types(cls, value):
+        from wood_nano.conversions_python import to_double1
+
+        GLOBALS.JOINTS_PARAMETERS_AND_TYPES = to_double1(value)
+
+    @property
+    def custom_joints_ss_e_ip_male(cls):
+        from compas_wood.conversions_compas import from_point2
+
+        return from_point2(GLOBALS.CUSTOM_JOINTS_SS_E_IP_MALE)
+
+    @custom_joints_ss_e_ip_male.setter
+    def custom_joints_ss_e_ip_male(cls, value):
+        from compas_wood.conversions_compas import to_point2
+
+        GLOBALS.CUSTOM_JOINTS_SS_E_IP_MALE = to_point2(value)
+
+    @property
+    def custom_joints_ss_e_ip_female(cls):
+        from compas_wood.conversions_compas import from_point2
+
+        return from_point2(GLOBALS.CUSTOM_JOINTS_SS_E_IP_FEMALE)
+
+    @custom_joints_ss_e_ip_female.setter
+    def custom_joints_ss_e_ip_female(cls, value):
+        from compas_wood.conversions_compas import to_point2
+
+        GLOBALS.CUSTOM_JOINTS_SS_E_IP_FEMALE = to_point2(value)
+
+    @property
+    def custom_joints_ss_e_op_male(cls):
+        from compas_wood.conversions_compas import from_point2
+
+        return from_point2(GLOBALS.CUSTOM_JOINTS_SS_E_OP_MALE)
+
+    @custom_joints_ss_e_op_male.setter
+    def custom_joints_ss_e_op_male(cls, value):
+        from compas_wood.conversions_compas import to_point2
+
+        GLOBALS.CUSTOM_JOINTS_SS_E_OP_MALE = to_point2(value)
+
+    @property
+    def custom_joints_ss_e_op_female(cls):
+        from compas_wood.conversions_compas import from_point2
+
+        return from_point2(GLOBALS.CUSTOM_JOINTS_SS_E_OP_FEMALE)
+
+    @custom_joints_ss_e_op_female.setter
+    def custom_joints_ss_e_op_female(cls, value):
+        from compas_wood.conversions_compas import to_point2
+
+        GLOBALS.CUSTOM_JOINTS_SS_E_OP_FEMALE = to_point2(value)
+
+    @property
+    def custom_joints_ts_e_p_male(cls):
+        from compas_wood.conversions_compas import from_point2
+
+        return from_point2(GLOBALS.CUSTOM_JOINTS_TS_E_P_MALE)
+
+    @custom_joints_ts_e_p_male.setter
+    def custom_joints_ts_e_p_male(cls, value):
+        from compas_wood.conversions_compas import to_point2
+
+        GLOBALS.CUSTOM_JOINTS_TS_E_P_MALE = to_point2(value)
+
+    @property
+    def custom_joints_ts_e_p_female(cls):
+        from compas_wood.conversions_compas import from_point2
+
+        return from_point2(GLOBALS.CUSTOM_JOINTS_TS_E_P_FEMALE)
+
+    @custom_joints_ts_e_p_female.setter
+    def custom_joints_ts_e_p_female(cls, value):
+        from compas_wood.conversions_compas import to_point2
+
+        GLOBALS.CUSTOM_JOINTS_TS_E_P_FEMALE = to_point2(value)
+
+    @property
+    def custom_joints_cr_c_ip_male(cls):
+        from compas_wood.conversions_compas import from_point2
+
+        return from_point2(GLOBALS.CUSTOM_JOINTS_CR_C_IP_MALE)
+
+    @custom_joints_cr_c_ip_male.setter
+    def custom_joints_cr_c_ip_male(cls, value):
+        from compas_wood.conversions_compas import to_point2
+
+        GLOBALS.CUSTOM_JOINTS_CR_C_IP_MALE = to_point2(value)
+
+    @property
+    def custom_joints_cr_c_ip_female(cls):
+        from compas_wood.conversions_compas import from_point2
+
+        return from_point2(GLOBALS.CUSTOM_JOINTS_CR_C_IP_FEMALE)
+
+    @custom_joints_cr_c_ip_female.setter
+    def custom_joints_cr_c_ip_female(cls, value):
+        from compas_wood.conversions_compas import to_point2
+
+        GLOBALS.CUSTOM_JOINTS_CR_C_IP_FEMALE = to_point2(value)
+
+    @property
+    def custom_joints_tt_e_p_male(cls):
+        from compas_wood.conversions_compas import from_point2
+
+        return from_point2(GLOBALS.CUSTOM_JOINTS_TT_E_P_MALE)
+
+    @custom_joints_tt_e_p_male.setter
+    def custom_joints_tt_e_p_male(cls, value):
+        from compas_wood.conversions_compas import to_point2
+
+        GLOBALS.CUSTOM_JOINTS_TT_E_P_MALE = to_point2(value)
+
+    @property
+    def custom_joints_tt_e_p_female(cls):
+        from compas_wood.conversions_compas import from_point2
+
+        return from_point2(GLOBALS.CUSTOM_JOINTS_TT_E_P_FEMALE)
+
+    @custom_joints_tt_e_p_female.setter
+    def custom_joints_tt_e_p_female(cls, value):
+        from compas_wood.conversions_compas import to_point2
+
+        GLOBALS.CUSTOM_JOINTS_TT_E_P_FEMALE = to_point2(value)
+
+    @property
+    def custom_joints_ss_e_r_male(cls):
+        from compas_wood.conversions_compas import from_point2
+
+        return from_point2(GLOBALS.CUSTOM_JOINTS_SS_E_R_MALE)
+
+    @custom_joints_ss_e_r_male.setter
+    def custom_joints_ss_e_r_male(cls, value):
+        from compas_wood.conversions_compas import to_point2
+
+        GLOBALS.CUSTOM_JOINTS_SS_E_R_MALE = to_point2(value)
+
+    @property
+    def custom_joints_ss_e_r_female(cls):
+        from compas_wood.conversions_compas import from_point2
+
+        return from_point2(GLOBALS.CUSTOM_JOINTS_SS_E_R_FEMALE)
+
+    @custom_joints_ss_e_r_female.setter
+    def custom_joints_ss_e_r_female(cls, value):
+        from compas_wood.conversions_compas import to_point2
+
+        GLOBALS.CUSTOM_JOINTS_SS_E_R_FEMALE = to_point2(value)
+
+    @property
+    def custom_joints_b_male(cls):
+        from compas_wood.conversions_compas import from_point2
+
+        return from_point2(GLOBALS.CUSTOM_JOINTS_B_MALE)
+
+    @custom_joints_b_male.setter
+    def custom_joints_b_male(cls, value):
+        from compas_wood.conversions_compas import to_point2
+
+        GLOBALS.CUSTOM_JOINTS_B_MALE = to_point2(value)
+
+    @property
+    def custom_joints_b_female(cls):
+        from compas_wood.conversions_compas import from_point2
+
+        return from_point2(GLOBALS.CUSTOM_JOINTS_B_FEMALE)
+
+    @custom_joints_b_female.setter
+    def custom_joints_b_female(cls, value):
+        from compas_wood.conversions_compas import to_point2
+
+        GLOBALS.CUSTOM_JOINTS_B_FEMALE = to_point2(value)
+
+
+Globals = _Globals()

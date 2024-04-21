@@ -68,28 +68,19 @@ for polygon0, polygon1 in zip(polygons0, polygons1):
 
 # Create joints.
 Globals.distance_squared = 10
+Globals.face_to_face_side_to_side_joints_rotated_joint_as_average = True
+Globals.face_to_face_side_to_side_joints_all_treated_as_rotated = True
+
 
 polylines_lists, output_types = get_connection_zones(
     input_polyline_pairs=input_polylines,
-    input_joint_parameters_and_types=[100, 0.4, 1],
-    # input_joint_parameters_and_types=[15, 0.4, 3],
-    input_output_type=4,
-    # input_scale=[1, 1.0, 1],
-    input_scale=[0.2, 1.0, 1])
+    input_joint_parameters_and_types=[1200, 1.0, 55],
+    input_output_type=5,
+    input_scale=[1, 1.0, 1])
 
-
-# Remove duplicate polylines - bug in the code.
-new_polyline_lists = []
-for polylines in polylines_lists:
-    new_polylines = []
-    for polyline in polylines:
-        if polyline not in new_polylines:
-            new_polylines.append(polyline)
-    new_polyline_lists.append(new_polylines)
-polylines_lists = new_polyline_lists
 
 # Create meshes.
-# meshes = mesh_boolean_difference_from_polylines(polylines_lists)
+meshes = mesh_boolean_difference_from_polylines(polylines_lists)
 
 # Vizualize.
 import sys
@@ -97,13 +88,10 @@ if sys.version_info >= (3, 9):
     from compas_viewer import Viewer
     from compas.geometry import Scale
 
-    viewer = Viewer(show_grid=False, rendermode='ghosted')
+    viewer = Viewer(show_grid=False, rendermode='lighted')
 
-    scale = 1e-3
+    scale = 1e-2
 
-    # for polyline in input_polylines:
-    #     polyline.transform(Scale.from_factors([scale, scale, scale]))
-    #     viewer.scene.add(polyline, show_points=False)
 
     for polylines in polylines_lists:
         for polyline in polylines:
@@ -112,8 +100,8 @@ if sys.version_info >= (3, 9):
 
 
 
-    # for mesh in meshes:
-    #     mesh.transform(Scale.from_factors([scale, scale, scale]))
-    #     viewer.scene.add(mesh, show_points=False, show_lines=False)
+    for mesh in meshes:
+        mesh.transform(Scale.from_factors([scale, scale, scale]))
+        viewer.scene.add(mesh, show_points=False, show_lines=False, hide_coplanaredges=False)
 
     viewer.show()

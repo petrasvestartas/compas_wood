@@ -1,6 +1,7 @@
 from compas.geometry import Polyline
 from compas_wood.binding import get_connection_zones
 from compas_wood.binding import mesh_boolean_difference_from_polylines
+from compas_wood.binding import Globals
 
 # Create two polylines.
 polyline00 = Polyline([[0, 150, 0], [-300, 150, 0], [-300, -150, 0], [0, -150, 0], [0, 150, 0]])
@@ -10,11 +11,13 @@ polyline11 = Polyline([[0,150,120], [0, -150, 120], [300, -150, 120], [300, 150,
 polylines = [polyline00, polyline01, polyline10, polyline11]
 
 # Create joints.
+Globals.face_to_face_side_to_side_joints_rotated_joint_as_average = True
+Globals.face_to_face_side_to_side_joints_all_treated_as_rotated = True
+
 polylines_lists, output_types = get_connection_zones(
     input_polyline_pairs=polylines,
-    input_joint_parameters_and_types=[500, 0.5, 55],
-    input_output_type=5,
-    input_face_to_face_side_to_side_joints_all_treated_as_rotated=True)
+    input_joint_parameters_and_types=[500, 1.0, 55],
+    input_output_type=5)
 
 # Create meshes.
 meshes = mesh_boolean_difference_from_polylines(polylines_lists)

@@ -31,7 +31,6 @@ def read_xml_polylines(
         filename,
         polylines_coordinates,
     )
-    print(len(polylines_coordinates))
 
     polylines = []
     xform = Scale.from_factors([scale, scale, scale])

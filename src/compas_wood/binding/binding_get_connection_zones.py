@@ -1,15 +1,14 @@
 from wood_nano import get_connection_zones as wood_nano_get_connection_zones
 from wood_nano import cut_type2 as wood_nano_cut_type2
 from wood_nano import point3 as wood_nano_point3
-from wood_nano import joint_parameters_and_types as wood_nano_joint_parameters_and_types
 from wood_nano.conversions_python import to_int2
 from wood_nano.conversions_python import to_int1
 from wood_nano.conversions_python import to_double1
 from wood_nano.conversions_python import from_cut_type2
-from wood_nano.conversions_python import from_double1
 from compas_wood.conversions_compas import to_point2
 from compas_wood.conversions_compas import to_vector2
 from compas_wood.conversions_compas import from_point3
+from compas_wood.binding import Globals
 from math import floor
 
 
@@ -24,10 +23,8 @@ def get_connection_zones(
     input_scale=[1, 1, 1],
     input_output_type=3,
     input_joint_volume_parameters=[0, 0, 0],
-    input_face_to_face_side_to_side_joints_all_treated_as_rotated=False,
     input_custom_joints=[],
     input_custom_joints_types=[],
-    input_face_to_face_side_to_side_joints_rotated_joint_as_average=False,
 ):
     """
     Get connection zones for the given input parameters.
@@ -70,7 +67,7 @@ def get_connection_zones(
         List of cut types.
     """
 
-    joint_parameters = from_double1(wood_nano_joint_parameters_and_types)
+    joint_parameters = Globals.joints_parameters_and_types
     for i in range(0, len(input_joint_parameters_and_types), 3):
         insertion_id = floor(input_joint_parameters_and_types[i + 2] / 10)
         joint_parameters[insertion_id * 3 + 0] = input_joint_parameters_and_types[i + 0]
@@ -93,69 +90,8 @@ def get_connection_zones(
         w_output_plines,
         w_output_types,
         to_double1(input_joint_volume_parameters),
-        bool(input_face_to_face_side_to_side_joints_all_treated_as_rotated),
         to_point2(input_custom_joints),
         to_int1(input_custom_joints_types),
-        bool(input_face_to_face_side_to_side_joints_rotated_joint_as_average),
     )
 
     return from_point3(w_output_plines), from_cut_type2(w_output_types)
-
-
-# if __name__ == "__main__":
-
-#     from compas.geometry import Polyline
-#     from compas_wood import data_sets_plates
-
-#     # joinery parameters
-#     division_length = 300
-#     joint_parameters = [
-#         division_length,
-#         0.5,
-#         9,
-#         division_length * 1.5,
-#         0.65,
-#         10,
-#         division_length * 1.5,
-#         0.5,
-#         21,
-#         division_length,
-#         0.95,
-#         30,
-#         division_length,
-#         0.95,
-#         40,
-#         division_length,
-#         0.95,
-#         50,
-#     ]
-
-#     # generate joints
-#     output_polylines, output_types = get_connection_zones(
-#         data_sets_plates.annen_small_polylines(),
-#         data_sets_plates.annen_small_edge_directions(),
-#         data_sets_plates.annen_small_edge_joints(),
-#         data_sets_plates.annen_small_three_valance_element_indices_and_instruction(),
-#         [],
-#         joint_parameters,
-#         0,
-#         [1, 1, 1],
-#         4,
-#     )
-
-#     import sys
-
-#     if sys.version_info >= (3, 9):
-
-#         from compas_viewer import Viewer
-#         from compas.geometry import Scale
-
-#         scale = 1e-3
-#         scale_transform = Scale.from_factors([scale, scale, scale])
-#         viewer = Viewer(show_grid=False)
-#         for polylines in output_polylines:
-#             for polyline in polylines:
-#                 polyline.transform(scale_transform)
-#                 viewer.scene.add(Polyline(polyline), show_points=False)
-
-#         viewer.show()
