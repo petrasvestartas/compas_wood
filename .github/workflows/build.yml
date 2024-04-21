@@ -26,13 +26,12 @@ jobs:
           python-version: 3.9
           auto-activate-base: false
           channel-priority: strict
-          channels: conda-forge,defaults  # Add defaults if specific packages are not found in conda-forge
+          channels: conda-forge,defaults  # This ensures conda-forge is used primarily, but defaults can also be accessed
 
       - name: Install dependencies with Conda
         run: |
-          echo "Creating Conda environment with Python 3.9"
-          conda create --name compas_wood_3_9_10 python=3.9 compas -c conda-forge
-          conda activate compas_wood_3_9_10
+          echo "Installing COMPAS and other dependencies..."
+          conda install compas -c conda-forge
 
       - name: Install dependencies with pip
         run: |
