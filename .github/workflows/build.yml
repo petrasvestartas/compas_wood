@@ -1,3 +1,4 @@
+
 name: Install Environment
 
 on:
@@ -13,7 +14,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-latest, windows-latest]
+        os: [windows-latest]
 
     steps:
       - name: Checkout code
@@ -34,7 +35,7 @@ jobs:
       - name: Install Wood-Nano with pip
         run: |
           echo "Installing Wood-Nano..."
-          pip install wood-nano
+          pip install wood-nano -i https://pypi.org/simple/
 
       - name: Install dependencies with Conda
         run: |
