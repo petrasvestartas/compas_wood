@@ -1,4 +1,4 @@
-name: build
+name: Install Environment
 
 on:
   push:
@@ -31,7 +31,7 @@ jobs:
       - name: Install Wood-Nano with pip
         run: |
           echo "Installing Wood-Nano..."
-          pip install wood-nano
+          pip install wood-nano==0.0.7  # Replace 1.0.0 with the specific version you need
 
       - name: Install dependencies with Conda
         run: |
