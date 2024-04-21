@@ -25,11 +25,11 @@ jobs:
           miniconda-version: "latest"
           activate-environment: wood
           channels: conda-forge
-          python-version: 3.8
+          python-version: 3.9.10
 
       - name: build (windows)
         run: |
-          conda install mpir mpfr boost-cpp eigen=3.4 cgal-cpp=5.5 pybind11 compas compas_view2 -y
+          conda install compas
           pip install -r requirements-dev.txt
           invoke docs
 
