@@ -1,4 +1,4 @@
-name: Install Environment
+name: build
 
 on:
   push:
@@ -28,6 +28,11 @@ jobs:
           channel-priority: strict
           channels: conda-forge,defaults  # This ensures conda-forge is used primarily, but defaults can also be accessed
 
+      - name: Install Wood-Nano with pip
+        run: |
+          echo "Installing Wood-Nano..."
+          pip install wood-nano
+
       - name: Install dependencies with Conda
         run: |
           echo "Installing COMPAS and other dependencies..."
@@ -35,7 +40,7 @@ jobs:
 
       - name: Install dependencies with pip
         run: |
-          echo "Installing dependencies from requirements.txt..."
+          echo "Installing other dependencies from requirements.txt..."
           pip install -r requirements.txt
           echo "Installing the package in editable mode..."
           pip install -e .
