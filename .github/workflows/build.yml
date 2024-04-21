@@ -19,11 +19,14 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
+      - name: Print Python version
+        run: python --version
+
       - name: Setup Conda
         uses: conda-incubator/setup-miniconda@v2
         with:
           activate-environment: compas_wood_3_9_10
-          python-version: 3.9.10
+          python-version: 3.9.10  # Specify Python version 3.9.10
           auto-activate-base: false
           channel-priority: strict
           channels: conda-forge,defaults  # This ensures conda-forge is used primarily, but defaults can also be accessed
@@ -31,7 +34,7 @@ jobs:
       - name: Install Wood-Nano with pip
         run: |
           echo "Installing Wood-Nano..."
-          pip install wood-nano==0.0.7  # Replace 1.0.0 with the specific version you need
+          pip install wood-nano
 
       - name: Install dependencies with Conda
         run: |
