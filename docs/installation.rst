@@ -7,6 +7,7 @@ Conda
 
 .. code-block:: bash
 
+    git clone https://github.com/petrasvestartas/compas_wood.git
     conda create -n compas_wood_3_9_10 python=3.9.10 compas
     conda activate compas_wood_3_9_10
     pip install -r requirements.txt
