@@ -22,12 +22,12 @@ Clone and install compas_wood
     pip install -e .
 
 
-Display via compas_viewer
--------------------------
-
+Optional
+--------
 
 .. code-block:: bash
 
+    cd ..
     git clone https://github.com/compas-dev/compas_viewer.git
     cd compas_viewer
     conda activate compas_wood_3_9_10
