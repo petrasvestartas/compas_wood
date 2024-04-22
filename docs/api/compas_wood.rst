@@ -9,3 +9,4 @@ compas_wood
     :maxdepth: 1
 
     compas_wood.binding
+    compas_wood.binding.GLOBALS

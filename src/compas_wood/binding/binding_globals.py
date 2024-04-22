@@ -1,7 +1,95 @@
 from wood_nano import GLOBALS
 
 
-class _Globals:
+class Globals:
+    """Class to access global variables of the wood_nano library using class instance globals:
+
+    >>> from compas_wood.binding import globals
+    >>> globals.distance_squared = 10
+    >>> globals.face_to_face_side_to_side_joints_rotated_joint_as_average = True
+    >>> globals.face_to_face_side_to_side_joints_all_treated_as_rotated = True
+
+    Attributes
+    ----------
+    clipper_scale : int, default 1e6
+        The clipper scale.
+    clipper_area : float, default 1e-2
+        The clipper area.
+    distance : float, default 1e-1
+        The distance.
+    distance_squared : float, default 1e-2
+        The distance squared.
+    angle : float, default 0.11
+        The angle.
+    path_and_file_for_joints : str, default ""
+        The path and file for joints.
+    data_set_input_folder : str
+        The data set input folder.
+    data_set_output_file : str,  default data_set_input_folder + "out.xml"
+        The data set output file.
+    data_set_output_database : str, default data_set_input_folder + "out.db"
+        The data set output database.
+    joint_volume_extension : list[float], default [0.0, 0.0, 0.0, 0.0, 0.0]
+        The joint volume extension, first 3 values are for xyz of the joint volume.
+    output_geometry_type : int, default 4
+        The output geometry type.
+    face_to_face_side_to_side_joints_all_treated_as_rotated : bool, default False
+        The face to face side to side joints all treated as rotated.
+    face_to_face_side_to_side_joints_rotated_joint_as_average : bool, default False
+        The face to face side to side joints rotated joint as average.
+    face_to_face_side_to_side_joints_dihedral_angle : float, default 150.0
+        The face to face side to side joints dihedral angle.
+    limit_min_joint_length : float, default 0.0
+        The limit min joint length.
+    existing_types : list[str], read-only
+        The existing types of joints.
+    joints_parameters_and_types : list[float], default:
+
+        300, 0.5, 3,   // 1-9 ss_e_ip (side-to-side edge in-plane)
+
+        450, 0.64, 15, // 10-19 ss_e_op (side-to-side edge out-of-plane)
+
+        450, 0.5, 20,  // 20-29 ts_e_p (top-to-side edge plane)
+
+        300, 0.5, 30,  // 30-39 cr_c_ip (cross cutting in-plane)
+
+        6, 0.95, 40,   // 40-49 tt_e_p  (top-to-top edge plane)
+
+        300, 0.5, 58,  // 50-59 ss_e_r (side-to-side edge rotated)
+
+        300, 1.0, 60   // 60-69 b (boundary)
+        
+    custom_joints_ss_e_ip_male : list[Polyline], default []
+        Joinery polylines for custom side-to-side edge in-plane male joints.
+    custom_joints_ss_e_ip_female : list[Polyline], default []
+        Joinery polylines for custom side-to-side edge in-plane female joints.
+    custom_joints_ss_e_op_male : list[Polyline], default []
+        Joinery polylines for custom side-to-side edge out-of-plane male joints.
+    custom_joints_ss_e_op_female : list[Polyline], default []
+        Joinery polylines for custom side-to-side edge out-of-plane female joints.
+    custom_joints_ts_e_p_male : list[Polyline], default []
+        Joinery polylines for custom top-to-side edge in-plane male joints.
+    custom_joints_ts_e_p_female : list[Polyline], default []
+        Joinery polylines for custom top-to-side edge in-plane female joints.
+    custom_joints_cr_c_ip_male : list[Polyline], default []
+        Joinery polylines for custom corner-to-corner in-plane male joints.
+    custom_joints_cr_c_ip_female : list[Polyline], default []
+        Joinery polylines for custom corner-to-corner in-plane female joints.
+    custom_joints_tt_e_p_male : list[Polyline], default []
+        Joinery polylines for custom top-to-top edge in-plane male joints.
+    custom_joints_tt_e_p_female : list[Polyline], default []
+        Joinery polylines for custom top-to-top edge in-plane female joints.
+    custom_joints_ss_e_r_male : list[Polyline], default []
+        Joinery polylines for custom side-to-side edge rounded male joints.
+    custom_joints_ss_e_r_female : list[Polyline], default []
+        Joinery polylines for custom side-to-side edge rounded female joints.
+    custom_joints_b_male : list[Polyline], default []
+        Joinery polylines for custom base male joints.
+    custom_joints_b_female : list[Polyline], default []
+        Joinery polylines for custom base female joints.
+
+    """
+
     @property
     def clipper_scale(cls):
         return GLOBALS.CLIPPER_SCALE
@@ -313,4 +401,4 @@ class _Globals:
         GLOBALS.CUSTOM_JOINTS_B_FEMALE = to_point2(value)
 
 
-Globals = _Globals()
+globals = Globals()

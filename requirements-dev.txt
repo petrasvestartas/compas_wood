@@ -8,6 +8,7 @@ flake8
 invoke >=0.14
 isort
 sphinx_compas2_theme
+nbsphinx
 twine
 wheel
 wood-nano

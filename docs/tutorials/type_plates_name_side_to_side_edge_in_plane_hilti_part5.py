@@ -3,7 +3,7 @@ from compas_wood.binding import get_connection_zones
 from compas_wood.binding import mesh_boolean_difference_from_polylines
 from compas_wood.binding import read_xml_polylines
 from compas.datastructures import Mesh
-from compas_wood.binding import Globals
+from compas_wood.binding import globals
 
 # Hard code mesh.
 vertices = [
@@ -67,9 +67,9 @@ for polygon0, polygon1 in zip(polygons0, polygons1):
 
 
 # Create joints.
-Globals.distance_squared = 10
-Globals.face_to_face_side_to_side_joints_rotated_joint_as_average = True
-Globals.face_to_face_side_to_side_joints_all_treated_as_rotated = True
+globals.distance_squared = 10
+globals.face_to_face_side_to_side_joints_rotated_joint_as_average = True
+globals.face_to_face_side_to_side_joints_all_treated_as_rotated = True
 
 
 polylines_lists, output_types = get_connection_zones(
