@@ -585,7 +585,7 @@ document.write(`
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">compas.geometry</span> <span class="kn">import</span> <span class="n">Polyline</span>
 <span class="kn">from</span> <span class="nn">compas_wood.binding</span> <span class="kn">import</span> <span class="n">get_connection_zones</span>
 <span class="kn">from</span> <span class="nn">compas_wood.binding</span> <span class="kn">import</span> <span class="n">mesh_boolean_difference_from_polylines</span>
-<span class="kn">from</span> <span class="nn">compas_wood.binding</span> <span class="kn">import</span> <span class="n">Globals</span>
+<span class="kn">from</span> <span class="nn">compas_wood.binding</span> <span class="kn">import</span> <span class="nb">globals</span>
 
 <span class="c1"># Create two polylines.</span>
 <span class="n">polyline00</span> <span class="o">=</span> <span class="n">Polyline</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">150</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="o">-</span><span class="mi">300</span><span class="p">,</span> <span class="mi">150</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="o">-</span><span class="mi">300</span><span class="p">,</span> <span class="o">-</span><span class="mi">150</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">150</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">150</span><span class="p">,</span> <span class="mi">0</span><span class="p">]])</span>
@@ -595,8 +595,8 @@ document.write(`
 <span class="n">polylines</span> <span class="o">=</span> <span class="p">[</span><span class="n">polyline00</span><span class="p">,</span> <span class="n">polyline01</span><span class="p">,</span> <span class="n">polyline10</span><span class="p">,</span> <span class="n">polyline11</span><span class="p">]</span>
 
 <span class="c1"># Create joints.</span>
-<span class="n">Globals</span><span class="o">.</span><span class="n">face_to_face_side_to_side_joints_rotated_joint_as_average</span> <span class="o">=</span> <span class="kc">True</span>
-<span class="n">Globals</span><span class="o">.</span><span class="n">face_to_face_side_to_side_joints_all_treated_as_rotated</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="nb">globals</span><span class="o">.</span><span class="n">face_to_face_side_to_side_joints_rotated_joint_as_average</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="nb">globals</span><span class="o">.</span><span class="n">face_to_face_side_to_side_joints_all_treated_as_rotated</span> <span class="o">=</span> <span class="kc">True</span>
 
 <span class="n">polylines_lists</span><span class="p">,</span> <span class="n">output_types</span> <span class="o">=</span> <span class="n">get_connection_zones</span><span class="p">(</span>
     <span class="n">input_polyline_pairs</span><span class="o">=</span><span class="n">polylines</span><span class="p">,</span>
@@ -641,7 +641,7 @@ document.write(`
 <span class="kn">from</span> <span class="nn">compas_wood.binding</span> <span class="kn">import</span> <span class="n">get_connection_zones</span>
 <span class="kn">from</span> <span class="nn">compas_wood.binding</span> <span class="kn">import</span> <span class="n">mesh_boolean_difference_from_polylines</span>
 <span class="kn">from</span> <span class="nn">compas_wood.binding</span> <span class="kn">import</span> <span class="n">read_xml_polylines</span>
-<span class="kn">from</span> <span class="nn">compas_wood.binding</span> <span class="kn">import</span> <span class="n">Globals</span>
+<span class="kn">from</span> <span class="nn">compas_wood.binding</span> <span class="kn">import</span> <span class="nb">globals</span>
 
 <span class="c1"># Read polylines from an exrernal file, in this case compas_wood xml dataset.</span>
 <span class="n">xml_polylines</span> <span class="o">=</span> <span class="n">read_xml_polylines</span><span class="p">(</span>
@@ -651,8 +651,8 @@ document.write(`
 <span class="p">)</span>
 
 <span class="c1"># Create joints.</span>
-<span class="n">Globals</span><span class="o">.</span><span class="n">face_to_face_side_to_side_joints_rotated_joint_as_average</span> <span class="o">=</span> <span class="kc">True</span>
-<span class="n">Globals</span><span class="o">.</span><span class="n">face_to_face_side_to_side_joints_all_treated_as_rotated</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="nb">globals</span><span class="o">.</span><span class="n">face_to_face_side_to_side_joints_rotated_joint_as_average</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="nb">globals</span><span class="o">.</span><span class="n">face_to_face_side_to_side_joints_all_treated_as_rotated</span> <span class="o">=</span> <span class="kc">True</span>
 
 <span class="n">polylines_lists</span><span class="p">,</span> <span class="n">output_types</span> <span class="o">=</span> <span class="n">get_connection_zones</span><span class="p">(</span>
     <span class="n">input_polyline_pairs</span><span class="o">=</span><span class="n">xml_polylines</span><span class="p">,</span>
@@ -698,7 +698,7 @@ document.write(`
 <span class="kn">from</span> <span class="nn">compas_wood.binding</span> <span class="kn">import</span> <span class="n">get_connection_zones</span>
 <span class="kn">from</span> <span class="nn">compas_wood.binding</span> <span class="kn">import</span> <span class="n">mesh_boolean_difference_from_polylines</span>
 <span class="kn">from</span> <span class="nn">compas_wood.binding</span> <span class="kn">import</span> <span class="n">read_xml_polylines</span>
-<span class="kn">from</span> <span class="nn">compas_wood.binding</span> <span class="kn">import</span> <span class="n">Globals</span>
+<span class="kn">from</span> <span class="nn">compas_wood.binding</span> <span class="kn">import</span> <span class="nb">globals</span>
 
 <span class="c1"># Read polylines from an exrernal file, in this case compas_wood xml dataset.</span>
 <span class="n">xml_polylines</span> <span class="o">=</span> <span class="n">read_xml_polylines</span><span class="p">(</span>
@@ -710,8 +710,8 @@ document.write(`
 <span class="n">xml_polylines</span><span class="o">.</span><span class="n">reverse</span><span class="p">()</span>
 
 <span class="c1"># Create joints.</span>
-<span class="n">Globals</span><span class="o">.</span><span class="n">face_to_face_side_to_side_joints_rotated_joint_as_average</span> <span class="o">=</span> <span class="kc">True</span>
-<span class="n">Globals</span><span class="o">.</span><span class="n">face_to_face_side_to_side_joints_all_treated_as_rotated</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="nb">globals</span><span class="o">.</span><span class="n">face_to_face_side_to_side_joints_rotated_joint_as_average</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="nb">globals</span><span class="o">.</span><span class="n">face_to_face_side_to_side_joints_all_treated_as_rotated</span> <span class="o">=</span> <span class="kc">True</span>
 
 <span class="n">polylines_lists</span><span class="p">,</span> <span class="n">output_types</span> <span class="o">=</span> <span class="n">get_connection_zones</span><span class="p">(</span>
     <span class="n">input_polyline_pairs</span><span class="o">=</span><span class="n">xml_polylines</span><span class="p">,</span>
@@ -770,7 +770,7 @@ document.write(`
 <span class="kn">from</span> <span class="nn">compas_wood.binding</span> <span class="kn">import</span> <span class="n">mesh_boolean_difference_from_polylines</span>
 <span class="kn">from</span> <span class="nn">compas_wood.binding</span> <span class="kn">import</span> <span class="n">read_xml_polylines</span>
 <span class="kn">from</span> <span class="nn">compas.datastructures</span> <span class="kn">import</span> <span class="n">Mesh</span>
-<span class="kn">from</span> <span class="nn">compas_wood.binding</span> <span class="kn">import</span> <span class="n">Globals</span>
+<span class="kn">from</span> <span class="nn">compas_wood.binding</span> <span class="kn">import</span> <span class="nb">globals</span>
 
 <span class="c1"># Hard code mesh.</span>
 <span class="n">vertices</span> <span class="o">=</span> <span class="p">[</span>
@@ -834,7 +834,7 @@ document.write(`
 
 
 <span class="c1"># Create joints.</span>
-<span class="n">Globals</span><span class="o">.</span><span class="n">distance_squared</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="nb">globals</span><span class="o">.</span><span class="n">distance_squared</span> <span class="o">=</span> <span class="mi">10</span>
 
 <span class="n">polylines_lists</span><span class="p">,</span> <span class="n">output_types</span> <span class="o">=</span> <span class="n">get_connection_zones</span><span class="p">(</span>
     <span class="n">input_polyline_pairs</span><span class="o">=</span><span class="n">input_polylines</span><span class="p">,</span>

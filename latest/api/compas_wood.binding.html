@@ -570,13 +570,98 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article" role="main">
                   
-  <section id="compas-model-binding">
-<h1>compas_model.binding</h1>
-<section id="module-compas_wood.binding">
-<span id="module-contents"></span><h2>Module contents</h2>
+  <section id="module-compas_wood.binding">
+<span id="compas-model-binding"></span><h1>compas_model.binding</h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="compas_wood.binding.Globals">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">compas_wood.binding.</span></span><span class="sig-name descname"><span class="pre">Globals</span></span><a class="reference internal" href="../_modules/compas_wood/binding/binding_globals.html#Globals"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Class to access global variables of the wood_nano library using class instance globals:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">compas_wood.binding</span> <span class="kn">import</span> <span class="nb">globals</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">globals</span><span class="o">.</span><span class="n">distance_squared</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">globals</span><span class="o">.</span><span class="n">face_to_face_side_to_side_joints_rotated_joint_as_average</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">globals</span><span class="o">.</span><span class="n">face_to_face_side_to_side_joints_all_treated_as_rotated</span> <span class="o">=</span> <span class="kc">True</span>
+</pre></div>
+</div>
+<dl class="field-list">
+<dt class="field-odd">Attributes<span class="colon">:</span></dt>
+<dd class="field-odd"><dl>
+<dt><strong>clipper_scale</strong><span class="classifier">int, default 1e6</span></dt><dd><p>The clipper scale.</p>
+</dd>
+<dt><strong>clipper_area</strong><span class="classifier">float, default 1e-2</span></dt><dd><p>The clipper area.</p>
+</dd>
+<dt><strong>distance</strong><span class="classifier">float, default 1e-1</span></dt><dd><p>The distance.</p>
+</dd>
+<dt><strong>distance_squared</strong><span class="classifier">float, default 1e-2</span></dt><dd><p>The distance squared.</p>
+</dd>
+<dt><strong>angle</strong><span class="classifier">float, default 0.11</span></dt><dd><p>The angle.</p>
+</dd>
+<dt><strong>path_and_file_for_joints</strong><span class="classifier">str, default “”</span></dt><dd><p>The path and file for joints.</p>
+</dd>
+<dt><strong>data_set_input_folder</strong><span class="classifier">str</span></dt><dd><p>The data set input folder.</p>
+</dd>
+<dt><strong>data_set_output_file</strong><span class="classifier">str,  default data_set_input_folder + “out.xml”</span></dt><dd><p>The data set output file.</p>
+</dd>
+<dt><strong>data_set_output_database</strong><span class="classifier">str, default data_set_input_folder + “out.db”</span></dt><dd><p>The data set output database.</p>
+</dd>
+<dt><strong>joint_volume_extension</strong><span class="classifier">list[float], default [0.0, 0.0, 0.0, 0.0, 0.0]</span></dt><dd><p>The joint volume extension, first 3 values are for xyz of the joint volume.</p>
+</dd>
+<dt><strong>output_geometry_type</strong><span class="classifier">int, default 4</span></dt><dd><p>The output geometry type.</p>
+</dd>
+<dt><strong>face_to_face_side_to_side_joints_all_treated_as_rotated</strong><span class="classifier">bool, default False</span></dt><dd><p>The face to face side to side joints all treated as rotated.</p>
+</dd>
+<dt><strong>face_to_face_side_to_side_joints_rotated_joint_as_average</strong><span class="classifier">bool, default False</span></dt><dd><p>The face to face side to side joints rotated joint as average.</p>
+</dd>
+<dt><strong>face_to_face_side_to_side_joints_dihedral_angle</strong><span class="classifier">float, default 150.0</span></dt><dd><p>The face to face side to side joints dihedral angle.</p>
+</dd>
+<dt><strong>limit_min_joint_length</strong><span class="classifier">float, default 0.0</span></dt><dd><p>The limit min joint length.</p>
+</dd>
+<dt><strong>existing_types</strong><span class="classifier">list[str], read-only</span></dt><dd><p>The existing types of joints.</p>
+</dd>
+<dt><strong>joints_parameters_and_types</strong><span class="classifier">list[float], default:</span></dt><dd><p>300, 0.5, 3,   // 1-9 ss_e_ip (side-to-side edge in-plane)</p>
+<p>450, 0.64, 15, // 10-19 ss_e_op (side-to-side edge out-of-plane)</p>
+<p>450, 0.5, 20,  // 20-29 ts_e_p (top-to-side edge plane)</p>
+<p>300, 0.5, 30,  // 30-39 cr_c_ip (cross cutting in-plane)</p>
+<p>6, 0.95, 40,   // 40-49 tt_e_p  (top-to-top edge plane)</p>
+<p>300, 0.5, 58,  // 50-59 ss_e_r (side-to-side edge rotated)</p>
+<p>300, 1.0, 60   // 60-69 b (boundary)</p>
+</dd>
+<dt><strong>custom_joints_ss_e_ip_male</strong><span class="classifier">list[Polyline], default []</span></dt><dd><p>Joinery polylines for custom side-to-side edge in-plane male joints.</p>
+</dd>
+<dt><strong>custom_joints_ss_e_ip_female</strong><span class="classifier">list[Polyline], default []</span></dt><dd><p>Joinery polylines for custom side-to-side edge in-plane female joints.</p>
+</dd>
+<dt><strong>custom_joints_ss_e_op_male</strong><span class="classifier">list[Polyline], default []</span></dt><dd><p>Joinery polylines for custom side-to-side edge out-of-plane male joints.</p>
+</dd>
+<dt><strong>custom_joints_ss_e_op_female</strong><span class="classifier">list[Polyline], default []</span></dt><dd><p>Joinery polylines for custom side-to-side edge out-of-plane female joints.</p>
+</dd>
+<dt><strong>custom_joints_ts_e_p_male</strong><span class="classifier">list[Polyline], default []</span></dt><dd><p>Joinery polylines for custom top-to-side edge in-plane male joints.</p>
+</dd>
+<dt><strong>custom_joints_ts_e_p_female</strong><span class="classifier">list[Polyline], default []</span></dt><dd><p>Joinery polylines for custom top-to-side edge in-plane female joints.</p>
+</dd>
+<dt><strong>custom_joints_cr_c_ip_male</strong><span class="classifier">list[Polyline], default []</span></dt><dd><p>Joinery polylines for custom corner-to-corner in-plane male joints.</p>
+</dd>
+<dt><strong>custom_joints_cr_c_ip_female</strong><span class="classifier">list[Polyline], default []</span></dt><dd><p>Joinery polylines for custom corner-to-corner in-plane female joints.</p>
+</dd>
+<dt><strong>custom_joints_tt_e_p_male</strong><span class="classifier">list[Polyline], default []</span></dt><dd><p>Joinery polylines for custom top-to-top edge in-plane male joints.</p>
+</dd>
+<dt><strong>custom_joints_tt_e_p_female</strong><span class="classifier">list[Polyline], default []</span></dt><dd><p>Joinery polylines for custom top-to-top edge in-plane female joints.</p>
+</dd>
+<dt><strong>custom_joints_ss_e_r_male</strong><span class="classifier">list[Polyline], default []</span></dt><dd><p>Joinery polylines for custom side-to-side edge rounded male joints.</p>
+</dd>
+<dt><strong>custom_joints_ss_e_r_female</strong><span class="classifier">list[Polyline], default []</span></dt><dd><p>Joinery polylines for custom side-to-side edge rounded female joints.</p>
+</dd>
+<dt><strong>custom_joints_b_male</strong><span class="classifier">list[Polyline], default []</span></dt><dd><p>Joinery polylines for custom base male joints.</p>
+</dd>
+<dt><strong>custom_joints_b_female</strong><span class="classifier">list[Polyline], default []</span></dt><dd><p>Joinery polylines for custom base female joints.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
 <dl class="py function">
 <dt class="sig sig-object py" id="compas_wood.binding.closed_mesh_from_polylines">
-<span class="sig-prename descclassname"><span class="pre">compas_wood.binding.</span></span><span class="sig-name descname"><span class="pre">closed_mesh_from_polylines</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_polyline_pairs</span></span></em><span class="sig-paren">)</span></dt>
+<span class="sig-prename descclassname"><span class="pre">compas_wood.binding.</span></span><span class="sig-name descname"><span class="pre">closed_mesh_from_polylines</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_polyline_pairs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/compas_wood/binding/binding_closed_mesh_from_polylines.html#closed_mesh_from_polylines"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><p>Get closed mesh from polylines, where the first two polylines are the top and bottom polylines,
 and the rest are the holes.</p>
 <dl class="field-list simple">
@@ -597,7 +682,7 @@ and the rest are the holes.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="compas_wood.binding.get_connection_zones">
-<span class="sig-prename descclassname"><span class="pre">compas_wood.binding.</span></span><span class="sig-name descname"><span class="pre">get_connection_zones</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_polyline_pairs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_insertion_vectors</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_joint_types</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_three_valence_element_indices_and_instruction</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_adjacency</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_joint_parameters_and_types</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_search_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_scale</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[1,</span> <span class="pre">1,</span> <span class="pre">1]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_output_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_joint_volume_parameters</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[0,</span> <span class="pre">0,</span> <span class="pre">0]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_custom_joints</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_custom_joints_types</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em><span class="sig-paren">)</span></dt>
+<span class="sig-prename descclassname"><span class="pre">compas_wood.binding.</span></span><span class="sig-name descname"><span class="pre">get_connection_zones</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_polyline_pairs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_insertion_vectors</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_joint_types</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_three_valence_element_indices_and_instruction</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_adjacency</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_joint_parameters_and_types</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_search_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_scale</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[1,</span> <span class="pre">1,</span> <span class="pre">1]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_output_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_joint_volume_parameters</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[0,</span> <span class="pre">0,</span> <span class="pre">0]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_custom_joints</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_custom_joints_types</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/compas_wood/binding/binding_get_connection_zones.html#get_connection_zones"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><p>Get connection zones for the given input parameters.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -644,7 +729,7 @@ and the rest are the holes.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="compas_wood.binding.joints">
-<span class="sig-prename descclassname"><span class="pre">compas_wood.binding.</span></span><span class="sig-name descname"><span class="pre">joints</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_polyline_pairs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">search_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span></dt>
+<span class="sig-prename descclassname"><span class="pre">compas_wood.binding.</span></span><span class="sig-name descname"><span class="pre">joints</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_polyline_pairs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">search_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/compas_wood/binding/binding_joints.html#joints"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><p>Get joints for the given input parameters.
 This is the very first step in the process of creating a timber structure - detection of interfaces.</p>
 <dl class="field-list simple">
@@ -671,7 +756,7 @@ This is the very first step in the process of creating a timber structure - dete
 
 <dl class="py function">
 <dt class="sig sig-object py" id="compas_wood.binding.mesh_boolean_difference_from_polylines">
-<span class="sig-prename descclassname"><span class="pre">compas_wood.binding.</span></span><span class="sig-name descname"><span class="pre">mesh_boolean_difference_from_polylines</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">polylines_lists</span></span></em><span class="sig-paren">)</span></dt>
+<span class="sig-prename descclassname"><span class="pre">compas_wood.binding.</span></span><span class="sig-name descname"><span class="pre">mesh_boolean_difference_from_polylines</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">polylines_lists</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/compas_wood/binding/binding_mesh_boolean_difference_from_polylines.html#mesh_boolean_difference_from_polylines"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><p>The polylines lists first items represnts elements outlines and the second items represents joinery outlines.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -691,7 +776,7 @@ This is the very first step in the process of creating a timber structure - dete
 
 <dl class="py function">
 <dt class="sig sig-object py" id="compas_wood.binding.read_xml_polylines">
-<span class="sig-prename descclassname"><span class="pre">compas_wood.binding.</span></span><span class="sig-name descname"><span class="pre">read_xml_polylines</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">foldername</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'/home/petras/brg/2_code/wood_nano/src/wood/cmake/src/wood/dataset/'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'type_plates_name_cross_vda_hexshell_reciprocal'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scale</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span></dt>
+<span class="sig-prename descclassname"><span class="pre">compas_wood.binding.</span></span><span class="sig-name descname"><span class="pre">read_xml_polylines</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">foldername</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'/home/petras/brg/2_code/wood_nano/src/wood/cmake/src/wood/dataset/'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'type_plates_name_cross_vda_hexshell_reciprocal'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scale</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/compas_wood/binding/binding_read_xml_polylines.html#read_xml_polylines"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><p>Read polylines from XML file.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -715,7 +800,7 @@ This is the very first step in the process of creating a timber structure - dete
 
 <dl class="py function">
 <dt class="sig sig-object py" id="compas_wood.binding.read_xml_polylines_and_properties">
-<span class="sig-prename descclassname"><span class="pre">compas_wood.binding.</span></span><span class="sig-name descname"><span class="pre">read_xml_polylines_and_properties</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">foldername</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'/home/petras/brg/2_code/wood_nano/src/wood/cmake/src/wood/dataset/'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename_of_dataset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'type_plates_name_cross_vda_hexshell_reciprocal'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scale</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.01</span></span></em><span class="sig-paren">)</span></dt>
+<span class="sig-prename descclassname"><span class="pre">compas_wood.binding.</span></span><span class="sig-name descname"><span class="pre">read_xml_polylines_and_properties</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">foldername</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'/home/petras/brg/2_code/wood_nano/src/wood/cmake/src/wood/dataset/'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename_of_dataset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'type_plates_name_cross_vda_hexshell_reciprocal'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scale</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.01</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/compas_wood/binding/binding_read_xml_polylines_and_properties.html#read_xml_polylines_and_properties"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><p>Read polylines from XML file with attributes:</p>
 <ul class="simple">
 <li><p>insertion vectors per face</p></li>
@@ -753,7 +838,7 @@ This is the very first step in the process of creating a timber structure - dete
 
 <dl class="py function">
 <dt class="sig sig-object py" id="compas_wood.binding.rtree">
-<span class="sig-prename descclassname"><span class="pre">compas_wood.binding.</span></span><span class="sig-name descname"><span class="pre">rtree</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">polylines</span></span></em><span class="sig-paren">)</span></dt>
+<span class="sig-prename descclassname"><span class="pre">compas_wood.binding.</span></span><span class="sig-name descname"><span class="pre">rtree</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">polylines</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/compas_wood/binding/binding_rtree.html#rtree"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><p>Given a list of polylines-pairs find neighbors between them via aabb and obb collisions.
 Polyline pairs means the top and bottom polylines of plates.</p>
 <dl class="field-list simple">
@@ -778,11 +863,10 @@ Polyline pairs means the top and bottom polylines of plates.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="compas_wood.binding.test">
-<span class="sig-prename descclassname"><span class="pre">compas_wood.binding.</span></span><span class="sig-name descname"><span class="pre">test</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span></dt>
+<span class="sig-prename descclassname"><span class="pre">compas_wood.binding.</span></span><span class="sig-name descname"><span class="pre">test</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/compas_wood/binding/binding_test.html#test"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><p>Test if wood_nano package is loaded by printing message in C++.</p>
 </dd></dl>
 
-</section>
 </section>
 
 
@@ -806,17 +890,15 @@ Polyline pairs means the top and bottom polylines of plates.</p>
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-compas_wood.binding">Module contents</a><ul class="visible nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#compas_wood.binding.closed_mesh_from_polylines"><code class="docutils literal notranslate"><span class="pre">closed_mesh_from_polylines()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#compas_wood.binding.get_connection_zones"><code class="docutils literal notranslate"><span class="pre">get_connection_zones()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#compas_wood.binding.joints"><code class="docutils literal notranslate"><span class="pre">joints()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#compas_wood.binding.mesh_boolean_difference_from_polylines"><code class="docutils literal notranslate"><span class="pre">mesh_boolean_difference_from_polylines()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#compas_wood.binding.read_xml_polylines"><code class="docutils literal notranslate"><span class="pre">read_xml_polylines()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#compas_wood.binding.read_xml_polylines_and_properties"><code class="docutils literal notranslate"><span class="pre">read_xml_polylines_and_properties()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#compas_wood.binding.rtree"><code class="docutils literal notranslate"><span class="pre">rtree()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#compas_wood.binding.test"><code class="docutils literal notranslate"><span class="pre">test()</span></code></a></li>
-</ul>
-</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#compas_wood.binding.Globals"><code class="docutils literal notranslate"><span class="pre">Globals</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#compas_wood.binding.closed_mesh_from_polylines"><code class="docutils literal notranslate"><span class="pre">closed_mesh_from_polylines()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#compas_wood.binding.get_connection_zones"><code class="docutils literal notranslate"><span class="pre">get_connection_zones()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#compas_wood.binding.joints"><code class="docutils literal notranslate"><span class="pre">joints()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#compas_wood.binding.mesh_boolean_difference_from_polylines"><code class="docutils literal notranslate"><span class="pre">mesh_boolean_difference_from_polylines()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#compas_wood.binding.read_xml_polylines"><code class="docutils literal notranslate"><span class="pre">read_xml_polylines()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#compas_wood.binding.read_xml_polylines_and_properties"><code class="docutils literal notranslate"><span class="pre">read_xml_polylines_and_properties()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#compas_wood.binding.rtree"><code class="docutils literal notranslate"><span class="pre">rtree()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#compas_wood.binding.test"><code class="docutils literal notranslate"><span class="pre">test()</span></code></a></li>
 </ul>
   </nav></div>
 
