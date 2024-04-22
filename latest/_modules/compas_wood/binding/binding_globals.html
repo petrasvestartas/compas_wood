@@ -565,12 +565,12 @@ document.write(`
 
 
 <div class="viewcode-block" id="Globals"><a class="viewcode-back" href="../../../api/compas_wood.binding.html#compas_wood.binding.Globals">[docs]</a><span class="k">class</span> <span class="nc">Globals</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Class to access global variables of the wood_nano library using class instance globals:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Class to access global variables of the wood_nano library using class instance wood_globals:</span>
 
-<span class="sd">    &gt;&gt;&gt; from compas_wood.binding import globals</span>
-<span class="sd">    &gt;&gt;&gt; globals.distance_squared = 10</span>
-<span class="sd">    &gt;&gt;&gt; globals.face_to_face_side_to_side_joints_rotated_joint_as_average = True</span>
-<span class="sd">    &gt;&gt;&gt; globals.face_to_face_side_to_side_joints_all_treated_as_rotated = True</span>
+<span class="sd">    &gt;&gt;&gt; from compas_wood.binding import wood_globals</span>
+<span class="sd">    &gt;&gt;&gt; wood_globals.distance_squared = 10</span>
+<span class="sd">    &gt;&gt;&gt; wood_globals.face_to_face_side_to_side_joints_rotated_joint_as_average = True</span>
+<span class="sd">    &gt;&gt;&gt; wood_globals.face_to_face_side_to_side_joints_all_treated_as_rotated = True</span>
 
 <span class="sd">    Attributes</span>
 <span class="sd">    ----------</span>
@@ -621,7 +621,7 @@ document.write(`
 <span class="sd">        300, 0.5, 58,  // 50-59 ss_e_r (side-to-side edge rotated)</span>
 
 <span class="sd">        300, 1.0, 60   // 60-69 b (boundary)</span>
-<span class="sd">        </span>
+
 <span class="sd">    custom_joints_ss_e_ip_male : list[Polyline], default []</span>
 <span class="sd">        Joinery polylines for custom side-to-side edge in-plane male joints.</span>
 <span class="sd">    custom_joints_ss_e_ip_female : list[Polyline], default []</span>
@@ -964,7 +964,7 @@ document.write(`
         <span class="n">GLOBALS</span><span class="o">.</span><span class="n">CUSTOM_JOINTS_B_FEMALE</span> <span class="o">=</span> <span class="n">to_point2</span><span class="p">(</span><span class="n">value</span><span class="p">)</span></div>
 
 
-<span class="nb">globals</span> <span class="o">=</span> <span class="n">Globals</span><span class="p">()</span>
+<span class="n">wood_globals</span> <span class="o">=</span> <span class="n">Globals</span><span class="p">()</span>
 </pre></div>
 
                 </article>

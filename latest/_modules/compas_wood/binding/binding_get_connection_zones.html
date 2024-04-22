@@ -571,7 +571,7 @@ document.write(`
 <span class="kn">from</span> <span class="nn">compas_wood.conversions_compas</span> <span class="kn">import</span> <span class="n">to_point2</span>
 <span class="kn">from</span> <span class="nn">compas_wood.conversions_compas</span> <span class="kn">import</span> <span class="n">to_vector2</span>
 <span class="kn">from</span> <span class="nn">compas_wood.conversions_compas</span> <span class="kn">import</span> <span class="n">from_point3</span>
-<span class="kn">from</span> <span class="nn">compas_wood.binding</span> <span class="kn">import</span> <span class="nb">globals</span>
+<span class="kn">from</span> <span class="nn">compas_wood.binding</span> <span class="kn">import</span> <span class="n">wood_globals</span>
 <span class="kn">from</span> <span class="nn">math</span> <span class="kn">import</span> <span class="n">floor</span>
 
 
@@ -630,7 +630,7 @@ document.write(`
 <span class="sd">        List of cut types.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="n">joint_parameters</span> <span class="o">=</span> <span class="nb">globals</span><span class="o">.</span><span class="n">joints_parameters_and_types</span>
+    <span class="n">joint_parameters</span> <span class="o">=</span> <span class="n">wood_globals</span><span class="o">.</span><span class="n">joints_parameters_and_types</span>
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">input_joint_parameters_and_types</span><span class="p">),</span> <span class="mi">3</span><span class="p">):</span>
         <span class="n">insertion_id</span> <span class="o">=</span> <span class="n">floor</span><span class="p">(</span><span class="n">input_joint_parameters_and_types</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">2</span><span class="p">]</span> <span class="o">/</span> <span class="mi">10</span><span class="p">)</span>
         <span class="n">joint_parameters</span><span class="p">[</span><span class="n">insertion_id</span> <span class="o">*</span> <span class="mi">3</span> <span class="o">+</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">input_joint_parameters_and_types</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">0</span><span class="p">]</span>
