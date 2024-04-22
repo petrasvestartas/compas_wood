@@ -10,15 +10,14 @@ polylines = [polyline0, polyline1, polyline2, polyline3]
 
 mesh = closed_mesh_from_polylines(polylines)
 
-import sys
 
-if sys.version_info >= (3, 9):
-    try:
-        from compas_viewer import Viewer
-    except ImportError:
-        print("compas_viewer is not installed.")
+try:
+
+    from compas_viewer import Viewer
 
     viewer = Viewer()
-
     viewer.add(mesh, show_faces=True, show_edges=True, show_points=False)
     viewer.show()
+
+except ImportError:
+    print("compas_viewer is not installed.")

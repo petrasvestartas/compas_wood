@@ -39,13 +39,10 @@ output_polylines, output_types = get_connection_zones(
     4,
 )
 
-import sys
 
-if sys.version_info >= (3, 9):
-    try:
-        from compas_viewer import Viewer
-    except ImportError:
-        print("compas_viewer is not installed.")
+try:
+
+    from compas_viewer import Viewer
     from compas.geometry import Scale
 
     scale = 1e-3
@@ -57,3 +54,6 @@ if sys.version_info >= (3, 9):
             viewer.scene.add(Polyline(polyline), show_points=False)
 
     viewer.show()
+
+except ImportError:
+    print("compas_viewer is not installed.")

@@ -19,14 +19,10 @@ element_pairs, joint_areas, joint_types = joints(polylines)
 print(element_pairs)
 print(joint_types)
 
-import sys
 
-if sys.version_info >= (3, 9):
-    try:
-        from compas_viewer import Viewer
-    except ImportError:
-        print("compas_viewer is not installed.")
+try:
 
+    from compas_viewer import Viewer
     viewer = Viewer(show_grid=False)
 
     for polyline in polylines:
@@ -36,3 +32,6 @@ if sys.version_info >= (3, 9):
         viewer.scene.add(polyline, show_points=True, lineswidth=3)
 
     viewer.show()
+
+except ImportError:
+    print("compas_viewer is not installed.")

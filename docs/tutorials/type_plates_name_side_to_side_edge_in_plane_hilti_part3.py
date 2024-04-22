@@ -39,16 +39,13 @@ polylines_lists = new_polyline_lists
 meshes = mesh_boolean_difference_from_polylines(polylines_lists)
 
 # Vizualize.
-import sys
-if sys.version_info >= (3, 9):
-    try:
-        from compas_viewer import Viewer
-    except ImportError:
-        print("compas_viewer is not installed.")
+
+try:
+
+    from compas_viewer import Viewer
     from compas.geometry import Scale
 
     viewer = Viewer(show_grid=False, rendermode='ghosted')
-
     scale = 1e-2
 
     # for polylines in polylines_lists:
@@ -61,3 +58,6 @@ if sys.version_info >= (3, 9):
         mesh.transform(Scale.from_factors([scale, scale, scale]))
         viewer.scene.add(mesh, show_points=False, hide_coplanaredges=True, lineswidth=2, linecolor=(0, 0, 0))
     viewer.show()
+
+except ImportError:
+    print("compas_viewer is not installed.")

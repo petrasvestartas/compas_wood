@@ -4,13 +4,10 @@ from compas_wood.binding import read_xml_polylines
 
 polylines = read_xml_polylines()
 
-import sys
 
-if sys.version_info >= (3, 9):
-    try:
-        from compas_viewer import Viewer
-    except ImportError:
-        print("compas_viewer is not installed.")
+try:
+    
+    from compas_viewer import Viewer
 
     viewer = Viewer()
 
@@ -18,3 +15,7 @@ if sys.version_info >= (3, 9):
         viewer.scene.add(polyline, show_points=False)
 
     viewer.show()
+
+
+except ImportError:
+    print("compas_viewer is not installed.")

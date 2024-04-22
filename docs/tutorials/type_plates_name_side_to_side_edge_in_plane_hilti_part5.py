@@ -83,28 +83,23 @@ polylines_lists, output_types = get_connection_zones(
 meshes = mesh_boolean_difference_from_polylines(polylines_lists)
 
 # Vizualize.
-import sys
-if sys.version_info >= (3, 9):
-    try:
-        from compas_viewer import Viewer
-    except ImportError:
-        print("compas_viewer is not installed.")
+
+try:
+    from compas_viewer import Viewer
     from compas.geometry import Scale
 
     viewer = Viewer(show_grid=False, rendermode='lighted')
-
     scale = 1e-2
-
 
     for polylines in polylines_lists:
         for polyline in polylines:
             polyline.transform(Scale.from_factors([scale, scale, scale]))
             viewer.scene.add(polyline, show_points=False, line_width=2, linecolor=(0, 0, 0))
 
-
-
     for mesh in meshes:
         mesh.transform(Scale.from_factors([scale, scale, scale]))
         viewer.scene.add(mesh, show_points=False, show_lines=False, hide_coplanaredges=False)
 
     viewer.show()
+except ImportError:
+    print("compas_viewer is not installed.")

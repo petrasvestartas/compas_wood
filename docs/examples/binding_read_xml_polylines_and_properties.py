@@ -10,13 +10,11 @@ from compas.geometry import Line
     input_adjacency,
 ) = read_xml_polylines_and_properties()
 
-import sys
 
-if sys.version_info >= (3, 9):
-    try:
-        from compas_viewer import Viewer
-    except ImportError:
-        print("compas_viewer is not installed.")
+
+try:
+    
+    from compas_viewer import Viewer
 
     viewer = Viewer()
 
@@ -31,13 +29,7 @@ if sys.version_info >= (3, 9):
             else:
                 viewer.scene.add(line.start, show_points=True, points_size=0.02)
 
-    # for i in input_joints_types:
-    #     print(i)
-
-    # for i in input_three_valence_element_indices_and_instruction:
-    #     print(i)
-
-    # for i in range(0, len(input_adjacency), 4):
-    #     print(input_adjacency[i:i + 4])
-
     viewer.show()
+
+except ImportError:
+    print("compas_viewer is not installed.")

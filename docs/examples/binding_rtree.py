@@ -16,13 +16,9 @@ print(neighbors)
 print(aabb)
 print(obb)
 
-import sys
+try:
 
-if sys.version_info >= (3, 9):
-    try:
-        from compas_viewer import Viewer
-    except ImportError:
-        print("compas_viewer is not installed.")
+    from compas_viewer import Viewer
 
     viewer = Viewer()
 
@@ -36,3 +32,6 @@ if sys.version_info >= (3, 9):
         viewer.scene.add(box, show_points=False)
 
     viewer.show()
+
+except ImportError:
+    print("compas_viewer is not installed.")
