@@ -5,16 +5,28 @@ Installation
 Conda
 =====
 
+Create environment
+------------------
+
+.. code-block:: bash
+
+    conda create -n compas_wood_3_9_10 python=3.9.10 compas
+    conda activate compas_wood_3_9_10
+
+
+Clone and install compas_wood
+-----------------------------
+
 .. code-block:: bash
 
     git clone https://github.com/petrasvestartas/compas_wood.git
-    conda create -n compas_wood_3_9_10 python=3.9.10 compas
-    conda activate compas_wood_3_9_10
+    cd compas_wood
     pip install -r requirements.txt
     pip install -e .
 
 
-Geometry is displayed using compas_viewer. Please clone the viewer to have the latest version install in the current environment:¨
+Display via compas_viewer
+-------------------------
 
 
 .. code-block:: bash
@@ -25,8 +37,33 @@ Geometry is displayed using compas_viewer. Please clone the viewer to have the l
     pip install -e .
 
 
-Pip
-===
-.. code-block:: bash
+Visual Studio Code
+------------------
 
-    pip install compas_wood
+- Launch ``VSCode`` and select the ``compas_wood_3_9_10`` Python environment using ``CTRL+SHIFT+P``.
+- Open a new terminal via ``Terminal -> New Terminal``.
+- Navigate to the ``docs/examples`` folder and execute any ``.py`` example file by right-clicking and selecting ``Run Python File in Terminal``.
+
+.. figure:: /_images/vscode_environment.gif
+     :figclass: figure
+     :class: figure-img img-fluid
+
+Notes
+=====
+
+If you are new to Anaconda World, install these tools first:
+
+- `Anaconda <https://www.anaconda.com/download>`_
+
+- `Visual Studio Code <https://code.visualstudio.com/download>`_
+
+- `Git <https://git-scm.com/downloads>`_
+
+
+
+
+.. Pip
+.. ===
+.. .. code-block:: bash
+
+..     pip install compas_wood
