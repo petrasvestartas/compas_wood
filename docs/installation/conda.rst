@@ -27,11 +27,7 @@ Optional
 
 .. code-block:: bash
 
-    cd ..
-    git clone https://github.com/compas-dev/compas_viewer.git
-    cd compas_viewer
-    conda activate compas_wood_3_9_10
-    pip install -e .
+    pip install compas_viewer==1.1.2
 
 
 Visual Studio Code
