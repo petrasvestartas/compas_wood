@@ -8,7 +8,7 @@ from wood_nano.conversions_python import from_cut_type2
 from compas_wood.conversions_compas import to_point2
 from compas_wood.conversions_compas import to_vector2
 from compas_wood.conversions_compas import from_point3
-from compas_wood.binding import globals
+from compas_wood.binding import wood_globals
 from math import floor
 
 
@@ -67,7 +67,7 @@ def get_connection_zones(
         List of cut types.
     """
 
-    joint_parameters = globals.joints_parameters_and_types
+    joint_parameters = wood_globals.joints_parameters_and_types
     for i in range(0, len(input_joint_parameters_and_types), 3):
         insertion_id = floor(input_joint_parameters_and_types[i + 2] / 10)
         joint_parameters[insertion_id * 3 + 0] = input_joint_parameters_and_types[i + 0]

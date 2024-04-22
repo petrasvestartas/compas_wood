@@ -1,4 +1,4 @@
-from compas_wood.binding import globals
+from compas_wood.binding import wood_globals
 
 # Property used in get_connection_zones function.
 # Pacakge compas_wood relies on extensive joinery library.
@@ -10,4 +10,4 @@ from compas_wood.binding import globals
 # 6, 0.95, 40,   // 40-49 tt_e_p  (top-to-top edge plane)
 # 300, 0.5, 58,  // 50-59 ss_e_r (side-to-side edge rotated)        
 # 300, 1.0, 60   // 60-69 b (boundary)
-print(globals.joints_parameters_and_types)
+print(wood_globals.joints_parameters_and_types)

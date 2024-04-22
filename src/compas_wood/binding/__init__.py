@@ -1,4 +1,4 @@
-from .binding_globals import globals, Globals
+from .binding_globals import wood_globals, Globals
 from .binding_get_connection_zones import get_connection_zones
 from .binding_rtree import rtree
 from .binding_test import test
@@ -9,7 +9,7 @@ from .binding_joints import joints
 from .binding_mesh_boolean_difference_from_polylines import mesh_boolean_difference_from_polylines
 
 __all__ = [
-    "globals",
+    "wood_globals",
     "Globals",
     "get_connection_zones",
     "rtree",

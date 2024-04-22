@@ -1,7 +1,7 @@
 from compas.geometry import Polyline
 from compas_wood.binding import get_connection_zones
 from compas_wood.binding import mesh_boolean_difference_from_polylines
-from compas_wood.binding import globals
+from compas_wood.binding import wood_globals
 
 # Create two polylines.
 polyline00 = Polyline([[0, 150, 0], [-300, 150, 0], [-300, -150, 0], [0, -150, 0], [0, 150, 0]])
@@ -11,8 +11,8 @@ polyline11 = Polyline([[0,150,120], [0, -150, 120], [300, -150, 120], [300, 150,
 polylines = [polyline00, polyline01, polyline10, polyline11]
 
 # Create joints.
-globals.face_to_face_side_to_side_joints_rotated_joint_as_average = True
-globals.face_to_face_side_to_side_joints_all_treated_as_rotated = True
+wood_globals.face_to_face_side_to_side_joints_rotated_joint_as_average = True
+wood_globals.face_to_face_side_to_side_joints_all_treated_as_rotated = True
 
 polylines_lists, output_types = get_connection_zones(
     input_polyline_pairs=polylines,
@@ -26,7 +26,11 @@ meshes = mesh_boolean_difference_from_polylines(polylines_lists)
 # Vizualize.
 import sys
 if sys.version_info >= (3, 9):
-    from compas_viewer import Viewer
+    try:
+        from compas_viewer import Viewer
+    except ImportError:
+        print("compas_viewer is not installed.")
+
     from compas.geometry import Scale
 
     viewer = Viewer(show_grid=False, rendermode='ghosted')

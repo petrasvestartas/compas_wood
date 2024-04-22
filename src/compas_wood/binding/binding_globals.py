@@ -2,12 +2,12 @@ from wood_nano import GLOBALS
 
 
 class Globals:
-    """Class to access global variables of the wood_nano library using class instance globals:
+    """Class to access global variables of the wood_nano library using class instance wood_globals:
 
-    >>> from compas_wood.binding import globals
-    >>> globals.distance_squared = 10
-    >>> globals.face_to_face_side_to_side_joints_rotated_joint_as_average = True
-    >>> globals.face_to_face_side_to_side_joints_all_treated_as_rotated = True
+    >>> from compas_wood.binding import wood_globals
+    >>> wood_globals.distance_squared = 10
+    >>> wood_globals.face_to_face_side_to_side_joints_rotated_joint_as_average = True
+    >>> wood_globals.face_to_face_side_to_side_joints_all_treated_as_rotated = True
 
     Attributes
     ----------
@@ -58,7 +58,7 @@ class Globals:
         300, 0.5, 58,  // 50-59 ss_e_r (side-to-side edge rotated)
 
         300, 1.0, 60   // 60-69 b (boundary)
-        
+
     custom_joints_ss_e_ip_male : list[Polyline], default []
         Joinery polylines for custom side-to-side edge in-plane male joints.
     custom_joints_ss_e_ip_female : list[Polyline], default []
@@ -401,4 +401,4 @@ class Globals:
         GLOBALS.CUSTOM_JOINTS_B_FEMALE = to_point2(value)
 
 
-globals = Globals()
+wood_globals = Globals()

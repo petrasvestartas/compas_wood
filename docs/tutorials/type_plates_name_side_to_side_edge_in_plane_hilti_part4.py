@@ -3,7 +3,7 @@ from compas_wood.binding import get_connection_zones
 from compas_wood.binding import mesh_boolean_difference_from_polylines
 from compas_wood.binding import read_xml_polylines
 from compas.datastructures import Mesh
-from compas_wood.binding import globals
+from compas_wood.binding import wood_globals
 
 # Hard code mesh.
 vertices = [
@@ -67,7 +67,7 @@ for polygon0, polygon1 in zip(polygons0, polygons1):
 
 
 # Create joints.
-globals.distance_squared = 10
+wood_globals.distance_squared = 10
 
 polylines_lists, output_types = get_connection_zones(
     input_polyline_pairs=input_polylines,
@@ -94,7 +94,10 @@ polylines_lists = new_polyline_lists
 # Vizualize.
 import sys
 if sys.version_info >= (3, 9):
-    from compas_viewer import Viewer
+    try:
+        from compas_viewer import Viewer
+    except ImportError:
+        print("compas_viewer is not installed.")
     from compas.geometry import Scale
 
     viewer = Viewer(show_grid=False, rendermode='ghosted')

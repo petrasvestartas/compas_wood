@@ -28,7 +28,7 @@ optional_requirements = {}
 
 setup(
     name="compas_wood",
-    version="2.0.8",
+    version="2.0.9",
     description="timber joinery generation",
     long_description=long_description,
     long_description_content_type="text/markdown",

@@ -13,7 +13,10 @@ from compas.geometry import Line
 import sys
 
 if sys.version_info >= (3, 9):
-    from compas_viewer import Viewer
+    try:
+        from compas_viewer import Viewer
+    except ImportError:
+        print("compas_viewer is not installed.")
 
     viewer = Viewer()
 
