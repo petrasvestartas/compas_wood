@@ -1,0 +1,986 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+    <link rel="icon" href="../_static/compas.ico" type="image/x-icon">
+    <title>type: plates name: side-to-side edge in-plane hilti &#8212; compas_wood</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/compas.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/tabs.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script src="../_static/tabs.js"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js"></script>
+    <script src="../_static/design-tabs.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'tutorials/type_plates_name_side_to_side_edge_in_plane_hilti';</script>
+    <script>
+        DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://raw.githubusercontent.com/petrasvestartas/compas_wood/gh-pages/versions.json';
+        DOCUMENTATION_OPTIONS.theme_switcher_version_match = 'latest';
+        </script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Examples" href="../examples.html" />
+    <link rel="prev" title="Tutorial" href="../tutorial.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+<div class="bd-header__inner bd-page-width">
+  <label class="sidebar-toggle primary-toggle" for="__primary">
+    <span class="fa-solid fa-bars"></span>
+  </label>
+  
+  <div class="navbar-header-items__start">
+    
+      <div class="navbar-item">
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/compas_icon_white.png" class="logo__image only-light" alt="Logo image"/>
+    <script>document.write(`<img src="../_static/compas_icon_white.png" class="logo__image only-dark" alt="Logo image"/>`);</script>
+  
+  
+    <p class="title logo__title">compas_wood</p>
+  
+</a></div>
+    
+  </div>
+  
+  
+  <div class=" navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item"><nav class="navbar-nav">
+  <!-- <p class="sidebar-header-items__title"
+     role="heading"
+     aria-level="1"
+     aria-label="Site Navigation">
+    Site Navigation
+  </p>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../index.html">
+                        Introduction
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../installation.html">
+                        Installation
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item current active">
+                      <a class="nav-link nav-internal" href="../tutorial.html">
+                        Tutorial
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../examples.html">
+                        Examples
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../api.html">
+                        API Reference
+                      </a>
+                    </li>
+                
+            <div class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    More
+                </button>
+                <div class="dropdown-menu">
+                    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../license.html">
+                        License
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../citation.html">
+                        Citation
+                      </a>
+                    </li>
+                
+                </div>
+            </div>
+            
+  </ul> -->
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
+        </div>
+      
+      
+        <div class="navbar-item">
+<script>
+document.write(`
+  <div class="version-switcher__container dropdown">
+    <button type="button" class="version-switcher__button btn btn-sm navbar-btn dropdown-toggle" data-bs-toggle="dropdown">
+      latest  <!-- this text may get changed later by javascript -->
+      <span class="caret"></span>
+    </button>
+    <div class="version-switcher__menu dropdown-menu list-group-flush py-0">
+    <!-- dropdown will be populated by javascript on page load -->
+    </div>
+  </div>
+`);
+</script></div>
+      
+        <div class="navbar-item">
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  </button>
+`);
+</script></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links navbar-nav"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/petrasvestartas/compas_wood" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-github"></i></span>
+            <label class="sr-only">GitHub</label></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="http://forum.compas-framework.org/" title="Discourse" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-discourse"></i></span>
+            <label class="sr-only">Discourse</label></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://pypi.org/project/compas_wood/" title="PyPI" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-python"></i></span>
+            <label class="sr-only">PyPI</label></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
+    </div>
+  
+
+  
+    <label class="sidebar-toggle secondary-toggle" for="__secondary">
+      <span class="fa-solid fa-outdent"></span>
+    </label>
+  
+</div>
+
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          <div class="navbar-item"><nav class="navbar-nav">
+  <!-- <p class="sidebar-header-items__title"
+     role="heading"
+     aria-level="1"
+     aria-label="Site Navigation">
+    Site Navigation
+  </p>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../index.html">
+                        Introduction
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../installation.html">
+                        Installation
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item current active">
+                      <a class="nav-link nav-internal" href="../tutorial.html">
+                        Tutorial
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../examples.html">
+                        Examples
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../api.html">
+                        API Reference
+                      </a>
+                    </li>
+                
+            <div class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    More
+                </button>
+                <div class="dropdown-menu">
+                    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../license.html">
+                        License
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../citation.html">
+                        Citation
+                      </a>
+                    </li>
+                
+                </div>
+            </div>
+            
+  </ul> -->
+</nav></div>
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+<script>
+document.write(`
+  <div class="version-switcher__container dropdown">
+    <button type="button" class="version-switcher__button btn btn-sm navbar-btn dropdown-toggle" data-bs-toggle="dropdown">
+      latest  <!-- this text may get changed later by javascript -->
+      <span class="caret"></span>
+    </button>
+    <div class="version-switcher__menu dropdown-menu list-group-flush py-0">
+    <!-- dropdown will be populated by javascript on page load -->
+    </div>
+  </div>
+`);
+</script></div>
+        
+          <div class="navbar-item">
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  </button>
+`);
+</script></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links navbar-nav"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/petrasvestartas/compas_wood" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-github"></i></span>
+            <label class="sr-only">GitHub</label></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="http://forum.compas-framework.org/" title="Discourse" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-discourse"></i></span>
+            <label class="sr-only">Discourse</label></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://pypi.org/project/compas_wood/" title="PyPI" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-python"></i></span>
+            <label class="sr-only">PyPI</label></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../index.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="../tutorial.html">Tutorial</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">type: plates name: side-to-side edge in-plane hilti</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../examples.html">Examples</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-2"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../examples/binding_closed_mesh_from_polylines.html">binding_closed_mesh_from_polylines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../examples/binding_get_connection_zones.html">binding_get_connection_zones</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../examples/binding_globals.html">binding_globals</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../examples/binding_joints.html">binding_joints</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../examples/binding_read_xml_polylines.html">binding_read_xml_polylines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../examples/binding_read_xml_polylines_and_properties.html">binding_read_xml_polylines_and_properties</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../examples/binding_rtree.html">binding_rtree</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../examples/binding_test.html">binding_test</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../api.html">API Reference</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-3"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../api/compas_wood.html">compas_wood</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-4"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api/compas_wood.binding.html">compas_model.binding</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../license.html">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../citation.html">Citation</a></li>
+</ul>
+
+    </div>
+</nav></div>
+        <div class="sidebar-primary-item"><div class="sidebar-primary-item">
+    <a href="https://compas.dev" target="_blank">
+        COMPAS.dev <i class="fa fa-external-link" aria-hidden="true"></i>
+    </a>
+</div></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+
+
+<nav aria-label="Breadcrumbs">
+  <ul class="bd-breadcrumbs" role="navigation" aria-label="Breadcrumb">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../tutorial.html" class="nav-link">Tutorial</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page">type: plates name: side-to-side edge in-plane hilti</li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <section id="type-plates-name-side-to-side-edge-in-plane-hilti">
+<h1>type: plates name: side-to-side edge in-plane hilti</h1>
+<p>This tutorial focuses on Hilti CLT connectors. The objective is to demonstrate how to create a model consisting of pairs of polylines that represent timber plates, detect the interfaces between these plates, and create connectors. Subsequently, the geometry is meshed, and a mesh boolean difference is applied for visualization purposes.</p>
+<p>Scope of the tutorial:</p>
+<ul class="simple">
+<li><p>We begin with simple pairwise connections.</p></li>
+<li><p>Then, we apply the process to a planar hexagonal shell.</p></li>
+<li><p>Finally, we test the process on a planar quad shell.</p></li>
+</ul>
+<p>The connector requires a 240x90x93 mm cutout. The LVL timber element measures 128x78.5x90 mm, and the inner thin part is 27.7x40x90 mm. The angles are set at 45 degrees, and the cuts are made with a router with a diameter of up to 40 mm. The minimum distance between two connectors is 300 mm, and the maximum is 3000 mm; the minimum distance to a corner is 300 mm, and the minimum CLT thickness is 120 mm. It can withstand tensile forces of up to 35 kN and shear forces of up to 40 kN.</p>
+<figure class="figure align-default">
+<img alt="../_images/type_plates_name_side_to_side_edge_in_plane_hilti0.png" class="figure-img img-fluid" src="../_images/type_plates_name_side_to_side_edge_in_plane_hilti0.png" />
+</figure>
+<section id="single-pair">
+<h2>Single pair:</h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">compas.geometry</span> <span class="kn">import</span> <span class="n">Polyline</span>
+<span class="kn">from</span> <span class="nn">compas_wood.binding</span> <span class="kn">import</span> <span class="n">get_connection_zones</span>
+<span class="kn">from</span> <span class="nn">compas_wood.binding</span> <span class="kn">import</span> <span class="n">mesh_boolean_difference_from_polylines</span>
+<span class="kn">from</span> <span class="nn">compas_wood.binding</span> <span class="kn">import</span> <span class="n">Globals</span>
+
+<span class="c1"># Create two polylines.</span>
+<span class="n">polyline00</span> <span class="o">=</span> <span class="n">Polyline</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">150</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="o">-</span><span class="mi">300</span><span class="p">,</span> <span class="mi">150</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="o">-</span><span class="mi">300</span><span class="p">,</span> <span class="o">-</span><span class="mi">150</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">150</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">150</span><span class="p">,</span> <span class="mi">0</span><span class="p">]])</span>
+<span class="n">polyline01</span> <span class="o">=</span> <span class="n">Polyline</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">150</span><span class="p">,</span> <span class="mi">120</span><span class="p">],</span> <span class="p">[</span><span class="o">-</span><span class="mi">300</span><span class="p">,</span> <span class="mi">150</span><span class="p">,</span> <span class="mi">120</span><span class="p">],</span> <span class="p">[</span><span class="o">-</span><span class="mi">300</span><span class="p">,</span> <span class="o">-</span><span class="mi">150</span><span class="p">,</span> <span class="mi">120</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">150</span><span class="p">,</span> <span class="mi">120</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">150</span><span class="p">,</span> <span class="mi">120</span><span class="p">]])</span>
+<span class="n">polyline10</span> <span class="o">=</span> <span class="n">Polyline</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span><span class="mi">150</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">150</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">300</span><span class="p">,</span> <span class="o">-</span><span class="mi">150</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">300</span><span class="p">,</span> <span class="mi">150</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">150</span><span class="p">,</span> <span class="mi">0</span><span class="p">]])</span>
+<span class="n">polyline11</span> <span class="o">=</span> <span class="n">Polyline</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span><span class="mi">150</span><span class="p">,</span><span class="mi">120</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">150</span><span class="p">,</span> <span class="mi">120</span><span class="p">],</span> <span class="p">[</span><span class="mi">300</span><span class="p">,</span> <span class="o">-</span><span class="mi">150</span><span class="p">,</span> <span class="mi">120</span><span class="p">],</span> <span class="p">[</span><span class="mi">300</span><span class="p">,</span> <span class="mi">150</span><span class="p">,</span> <span class="mi">120</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">150</span><span class="p">,</span> <span class="mi">120</span><span class="p">]])</span>
+<span class="n">polylines</span> <span class="o">=</span> <span class="p">[</span><span class="n">polyline00</span><span class="p">,</span> <span class="n">polyline01</span><span class="p">,</span> <span class="n">polyline10</span><span class="p">,</span> <span class="n">polyline11</span><span class="p">]</span>
+
+<span class="c1"># Create joints.</span>
+<span class="n">Globals</span><span class="o">.</span><span class="n">face_to_face_side_to_side_joints_rotated_joint_as_average</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="n">Globals</span><span class="o">.</span><span class="n">face_to_face_side_to_side_joints_all_treated_as_rotated</span> <span class="o">=</span> <span class="kc">True</span>
+
+<span class="n">polylines_lists</span><span class="p">,</span> <span class="n">output_types</span> <span class="o">=</span> <span class="n">get_connection_zones</span><span class="p">(</span>
+    <span class="n">input_polyline_pairs</span><span class="o">=</span><span class="n">polylines</span><span class="p">,</span>
+    <span class="n">input_joint_parameters_and_types</span><span class="o">=</span><span class="p">[</span><span class="mi">500</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mi">55</span><span class="p">],</span>
+    <span class="n">input_output_type</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+
+<span class="c1"># Create meshes.</span>
+</pre></div>
+</div>
+<p>Vizualize…</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">meshes</span> <span class="o">=</span> <span class="n">mesh_boolean_difference_from_polylines</span><span class="p">(</span><span class="n">polylines_lists</span><span class="p">)</span>
+
+
+<span class="c1"># Vizualize.</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span> <span class="o">&gt;=</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">9</span><span class="p">):</span>
+    <span class="kn">from</span> <span class="nn">compas_viewer</span> <span class="kn">import</span> <span class="n">Viewer</span>
+    <span class="kn">from</span> <span class="nn">compas.geometry</span> <span class="kn">import</span> <span class="n">Scale</span>
+
+    <span class="n">viewer</span> <span class="o">=</span> <span class="n">Viewer</span><span class="p">(</span><span class="n">show_grid</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">rendermode</span><span class="o">=</span><span class="s1">&#39;ghosted&#39;</span><span class="p">)</span>
+
+    <span class="n">scale</span> <span class="o">=</span> <span class="mf">1e-2</span>
+    <span class="k">for</span> <span class="n">polylines</span> <span class="ow">in</span> <span class="n">polylines_lists</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">polyline</span> <span class="ow">in</span> <span class="n">polylines</span><span class="p">:</span>
+            <span class="n">polyline</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">Scale</span><span class="o">.</span><span class="n">from_factors</span><span class="p">([</span><span class="n">scale</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">scale</span><span class="p">]))</span>
+            <span class="n">viewer</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">polyline</span><span class="p">,</span> <span class="n">show_points</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+            
+    <span class="k">for</span> <span class="n">mesh</span> <span class="ow">in</span> <span class="n">meshes</span><span class="p">:</span>
+        <span class="n">mesh</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">Scale</span><span class="o">.</span><span class="n">from_factors</span><span class="p">([</span><span class="n">scale</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">scale</span><span class="p">]))</span>
+        <span class="n">viewer</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">mesh</span><span class="p">,</span> <span class="n">show_points</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">hide_coplanaredges</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">lineswidth</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">linecolor</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+
+    <span class="n">viewer</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<figure class="figure align-default">
+<img alt="../_images/type_plates_name_side_to_side_edge_in_plane_hilti_part1.png" class="figure-img img-fluid" src="../_images/type_plates_name_side_to_side_edge_in_plane_hilti_part1.png" />
+</figure>
+</section>
+<section id="multiple-pairs-in-varying-angles">
+<h2>Multiple pairs in varying angles:</h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">compas.geometry</span> <span class="kn">import</span> <span class="n">Polyline</span>
+<span class="kn">from</span> <span class="nn">compas_wood.binding</span> <span class="kn">import</span> <span class="n">get_connection_zones</span>
+<span class="kn">from</span> <span class="nn">compas_wood.binding</span> <span class="kn">import</span> <span class="n">mesh_boolean_difference_from_polylines</span>
+<span class="kn">from</span> <span class="nn">compas_wood.binding</span> <span class="kn">import</span> <span class="n">read_xml_polylines</span>
+<span class="kn">from</span> <span class="nn">compas_wood.binding</span> <span class="kn">import</span> <span class="n">Globals</span>
+
+<span class="c1"># Read polylines from an exrernal file, in this case compas_wood xml dataset.</span>
+<span class="n">xml_polylines</span> <span class="o">=</span> <span class="n">read_xml_polylines</span><span class="p">(</span>
+    <span class="n">foldername</span><span class="o">=</span><span class="s2">&quot;/home/petras/brg/2_code/wood_nano/src/wood/cmake/src/wood/dataset/&quot;</span><span class="p">,</span>
+    <span class="n">filename</span><span class="o">=</span><span class="s1">&#39;type_plates_name_side_to_side_edge_inplane_hilti&#39;</span><span class="p">,</span>
+    <span class="n">scale</span><span class="o">=</span><span class="mf">1e0</span>
+<span class="p">)</span>
+
+<span class="c1"># Create joints.</span>
+<span class="n">Globals</span><span class="o">.</span><span class="n">face_to_face_side_to_side_joints_rotated_joint_as_average</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="n">Globals</span><span class="o">.</span><span class="n">face_to_face_side_to_side_joints_all_treated_as_rotated</span> <span class="o">=</span> <span class="kc">True</span>
+
+<span class="n">polylines_lists</span><span class="p">,</span> <span class="n">output_types</span> <span class="o">=</span> <span class="n">get_connection_zones</span><span class="p">(</span>
+    <span class="n">input_polyline_pairs</span><span class="o">=</span><span class="n">xml_polylines</span><span class="p">,</span>
+    <span class="n">input_joint_parameters_and_types</span><span class="o">=</span><span class="p">[</span><span class="mi">5000</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mi">55</span><span class="p">],</span>
+    <span class="n">input_output_type</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+
+</pre></div>
+</div>
+<p>Vizualize…</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create meshes.</span>
+<span class="n">meshes</span> <span class="o">=</span> <span class="n">mesh_boolean_difference_from_polylines</span><span class="p">(</span><span class="n">polylines_lists</span><span class="p">)</span>
+
+
+<span class="c1"># Vizualize.</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span> <span class="o">&gt;=</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">9</span><span class="p">):</span>
+    <span class="kn">from</span> <span class="nn">compas_viewer</span> <span class="kn">import</span> <span class="n">Viewer</span>
+    <span class="kn">from</span> <span class="nn">compas.geometry</span> <span class="kn">import</span> <span class="n">Scale</span>
+
+    <span class="n">viewer</span> <span class="o">=</span> <span class="n">Viewer</span><span class="p">(</span><span class="n">show_grid</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">rendermode</span><span class="o">=</span><span class="s1">&#39;ghosted&#39;</span><span class="p">)</span>
+
+    <span class="n">scale</span> <span class="o">=</span> <span class="mf">1e-2</span>
+
+    <span class="c1"># for polylines in polylines_lists:</span>
+    <span class="c1">#     for polyline in polylines:</span>
+    <span class="c1">#         polyline.transform(Scale.from_factors([scale, scale, scale]))</span>
+    <span class="c1">#         viewer.scene.add(polyline, show_points=False, line_width=2, linecolor=(255, 0, 100))</span>
+
+    <span class="k">for</span> <span class="n">mesh</span> <span class="ow">in</span> <span class="n">meshes</span><span class="p">:</span>
+        <span class="n">mesh</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">Scale</span><span class="o">.</span><span class="n">from_factors</span><span class="p">([</span><span class="n">scale</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">scale</span><span class="p">]))</span>
+        <span class="n">viewer</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">mesh</span><span class="p">,</span> <span class="n">show_points</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">hide_coplanaredges</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">lineswidth</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">linecolor</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+
+    <span class="n">viewer</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<figure class="figure align-default">
+<img alt="../_images/type_plates_name_side_to_side_edge_in_plane_hilti_part2.png" class="figure-img img-fluid" src="../_images/type_plates_name_side_to_side_edge_in_plane_hilti_part2.png" />
+</figure>
+</section>
+<section id="heaxagonel-shell">
+<h2>Heaxagonel shell:</h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">compas.geometry</span> <span class="kn">import</span> <span class="n">Polyline</span>
+<span class="kn">from</span> <span class="nn">compas_wood.binding</span> <span class="kn">import</span> <span class="n">get_connection_zones</span>
+<span class="kn">from</span> <span class="nn">compas_wood.binding</span> <span class="kn">import</span> <span class="n">mesh_boolean_difference_from_polylines</span>
+<span class="kn">from</span> <span class="nn">compas_wood.binding</span> <span class="kn">import</span> <span class="n">read_xml_polylines</span>
+<span class="kn">from</span> <span class="nn">compas_wood.binding</span> <span class="kn">import</span> <span class="n">Globals</span>
+
+<span class="c1"># Read polylines from an exrernal file, in this case compas_wood xml dataset.</span>
+<span class="n">xml_polylines</span> <span class="o">=</span> <span class="n">read_xml_polylines</span><span class="p">(</span>
+    <span class="n">foldername</span><span class="o">=</span><span class="s2">&quot;/home/petras/brg/2_code/wood_nano/src/wood/cmake/src/wood/dataset/&quot;</span><span class="p">,</span>
+    <span class="n">filename</span><span class="o">=</span><span class="s1">&#39;type_plates_name_side_to_side_edge_inplane_hexshell&#39;</span><span class="p">,</span>
+    <span class="n">scale</span><span class="o">=</span><span class="mf">0.25e1</span>
+<span class="p">)</span>
+
+<span class="n">xml_polylines</span><span class="o">.</span><span class="n">reverse</span><span class="p">()</span>
+
+<span class="c1"># Create joints.</span>
+<span class="n">Globals</span><span class="o">.</span><span class="n">face_to_face_side_to_side_joints_rotated_joint_as_average</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="n">Globals</span><span class="o">.</span><span class="n">face_to_face_side_to_side_joints_all_treated_as_rotated</span> <span class="o">=</span> <span class="kc">True</span>
+
+<span class="n">polylines_lists</span><span class="p">,</span> <span class="n">output_types</span> <span class="o">=</span> <span class="n">get_connection_zones</span><span class="p">(</span>
+    <span class="n">input_polyline_pairs</span><span class="o">=</span><span class="n">xml_polylines</span><span class="p">,</span>
+    <span class="n">input_joint_parameters_and_types</span><span class="o">=</span><span class="p">[</span><span class="mi">500</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mi">55</span><span class="p">],</span>
+    <span class="n">input_output_type</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+
+
+
+
+<span class="c1"># Remove duplicate polylines - bug in the code.</span>
+<span class="n">new_polyline_lists</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">polylines</span> <span class="ow">in</span> <span class="n">polylines_lists</span><span class="p">:</span>
+    <span class="n">new_polylines</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">polyline</span> <span class="ow">in</span> <span class="n">polylines</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">polyline</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">new_polylines</span><span class="p">:</span>
+</pre></div>
+</div>
+<p>Vizualize…</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>            <span class="n">new_polylines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">polyline</span><span class="p">)</span>
+    <span class="n">new_polyline_lists</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">new_polylines</span><span class="p">)</span>
+<span class="n">polylines_lists</span> <span class="o">=</span> <span class="n">new_polyline_lists</span>
+
+<span class="c1"># Create meshes.</span>
+<span class="n">meshes</span> <span class="o">=</span> <span class="n">mesh_boolean_difference_from_polylines</span><span class="p">(</span><span class="n">polylines_lists</span><span class="p">)</span>
+
+<span class="c1"># Vizualize.</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span> <span class="o">&gt;=</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">9</span><span class="p">):</span>
+    <span class="kn">from</span> <span class="nn">compas_viewer</span> <span class="kn">import</span> <span class="n">Viewer</span>
+    <span class="kn">from</span> <span class="nn">compas.geometry</span> <span class="kn">import</span> <span class="n">Scale</span>
+
+    <span class="n">viewer</span> <span class="o">=</span> <span class="n">Viewer</span><span class="p">(</span><span class="n">show_grid</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">rendermode</span><span class="o">=</span><span class="s1">&#39;ghosted&#39;</span><span class="p">)</span>
+
+    <span class="n">scale</span> <span class="o">=</span> <span class="mf">1e-2</span>
+
+    <span class="c1"># for polylines in polylines_lists:</span>
+    <span class="c1">#     for polyline in polylines:</span>
+    <span class="c1">#         polyline.transform(Scale.from_factors([scale, scale, scale]))</span>
+    <span class="c1">#         viewer.scene.add(polyline, show_points=False, line_width=2, linecolor=(255, 0, 100))</span>
+
+    <span class="c1"># print(meshes[0])</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">mesh</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">meshes</span><span class="p">):</span>
+        <span class="n">mesh</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">Scale</span><span class="o">.</span><span class="n">from_factors</span><span class="p">([</span><span class="n">scale</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">scale</span><span class="p">]))</span>
+        <span class="n">viewer</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">mesh</span><span class="p">,</span> <span class="n">show_points</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">hide_coplanaredges</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">lineswidth</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">linecolor</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+    <span class="n">viewer</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<figure class="figure align-default">
+<img alt="../_images/type_plates_name_side_to_side_edge_in_plane_hilti_part3.png" class="figure-img img-fluid" src="../_images/type_plates_name_side_to_side_edge_in_plane_hilti_part3.png" />
+</figure>
+</section>
+<section id="planarized-quad-shell">
+<h2>Planarized quad shell:</h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">compas.geometry</span> <span class="kn">import</span> <span class="n">Polyline</span>
+<span class="kn">from</span> <span class="nn">compas_wood.binding</span> <span class="kn">import</span> <span class="n">get_connection_zones</span>
+<span class="kn">from</span> <span class="nn">compas_wood.binding</span> <span class="kn">import</span> <span class="n">mesh_boolean_difference_from_polylines</span>
+<span class="kn">from</span> <span class="nn">compas_wood.binding</span> <span class="kn">import</span> <span class="n">read_xml_polylines</span>
+<span class="kn">from</span> <span class="nn">compas.datastructures</span> <span class="kn">import</span> <span class="n">Mesh</span>
+<span class="kn">from</span> <span class="nn">compas_wood.binding</span> <span class="kn">import</span> <span class="n">Globals</span>
+
+<span class="c1"># Hard code mesh.</span>
+<span class="n">vertices</span> <span class="o">=</span> <span class="p">[</span>
+<span class="p">[</span><span class="mf">1978.5396270848985</span><span class="p">,</span> <span class="mf">112.18997185154055</span><span class="p">,</span> <span class="mf">577.3224456715213</span><span class="p">],</span> 
+<span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">],</span> 
+<span class="p">[</span><span class="o">-</span><span class="mf">112.18997185154105</span><span class="p">,</span> <span class="o">-</span><span class="mf">1978.5396270848892</span><span class="p">,</span> <span class="mf">577.3224456715292</span><span class="p">],</span> 
+<span class="p">[</span><span class="mf">1920.162503885306</span><span class="p">,</span> <span class="o">-</span><span class="mf">1920.1625038852967</span><span class="p">,</span> <span class="mf">1187.7604905134772</span><span class="p">],</span> 
+<span class="p">[</span><span class="mf">3999.999999999999</span><span class="p">,</span> <span class="mf">146.9968976249949</span><span class="p">,</span> <span class="mf">756.473945159439</span><span class="p">],</span> 
+<span class="p">[</span><span class="mf">3999.999999999999</span><span class="p">,</span> <span class="o">-</span><span class="mf">1902.0308010453325</span><span class="p">,</span> <span class="mf">1377.3914296049913</span><span class="p">],</span> 
+<span class="p">[</span><span class="mf">6021.4603729151</span><span class="p">,</span> <span class="mf">112.18997185154055</span><span class="p">,</span> <span class="mf">577.3224456715213</span><span class="p">],</span> 
+<span class="p">[</span><span class="mf">6079.837496114693</span><span class="p">,</span> <span class="o">-</span><span class="mf">1920.1625038852965</span><span class="p">,</span> <span class="mf">1187.7604905134772</span><span class="p">],</span> 
+<span class="p">[</span><span class="mf">7999.999999999998</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">],</span> 
+<span class="p">[</span><span class="mf">8112.18997185154</span><span class="p">,</span> <span class="o">-</span><span class="mf">1978.5396270848892</span><span class="p">,</span> <span class="mf">577.3224456715253</span><span class="p">],</span> 
+<span class="p">[</span><span class="o">-</span><span class="mf">146.9968976249954</span><span class="p">,</span> <span class="o">-</span><span class="mf">4000.000000000001</span><span class="p">,</span> <span class="mf">756.473945159439</span><span class="p">],</span> 
+<span class="p">[</span><span class="mf">1902.0308010453416</span><span class="p">,</span> <span class="o">-</span><span class="mf">4000.000000000001</span><span class="p">,</span> <span class="mf">1377.3914296049952</span><span class="p">],</span> 
+<span class="p">[</span><span class="mf">3999.9999999999986</span><span class="p">,</span> <span class="o">-</span><span class="mf">4000.000000000001</span><span class="p">,</span> <span class="mf">1570.3422579488933</span><span class="p">],</span> 
+<span class="p">[</span><span class="mf">6097.9691989546545</span><span class="p">,</span> <span class="o">-</span><span class="mf">4000.000000000001</span><span class="p">,</span> <span class="mf">1377.3914296049952</span><span class="p">],</span> 
+<span class="p">[</span><span class="mf">8146.996897624993</span><span class="p">,</span> <span class="o">-</span><span class="mf">4000.000000000001</span><span class="p">,</span> <span class="mf">756.473945159439</span><span class="p">],</span> 
+<span class="p">[</span><span class="o">-</span><span class="mf">112.18997185154203</span><span class="p">,</span> <span class="o">-</span><span class="mf">6021.460372915113</span><span class="p">,</span> <span class="mf">577.3224456715213</span><span class="p">],</span> 
+<span class="p">[</span><span class="mf">1920.1625038853044</span><span class="p">,</span> <span class="o">-</span><span class="mf">6079.8374961147065</span><span class="p">,</span> <span class="mf">1187.7604905134772</span><span class="p">],</span> 
+<span class="p">[</span><span class="mf">3999.999999999998</span><span class="p">,</span> <span class="o">-</span><span class="mf">6097.96919895467</span><span class="p">,</span> <span class="mf">1377.3914296049913</span><span class="p">],</span> 
+<span class="p">[</span><span class="mf">6079.837496114693</span><span class="p">,</span> <span class="o">-</span><span class="mf">6079.8374961147065</span><span class="p">,</span> <span class="mf">1187.7604905134772</span><span class="p">],</span> 
+<span class="p">[</span><span class="mf">8112.18997185154</span><span class="p">,</span> <span class="o">-</span><span class="mf">6021.460372915113</span><span class="p">,</span> <span class="mf">577.3224456715253</span><span class="p">],</span> 
+<span class="p">[</span><span class="o">-</span><span class="mf">1.9675624286558107e-12</span><span class="p">,</span> <span class="o">-</span><span class="mf">8000.000000000001</span><span class="p">,</span> <span class="o">-</span><span class="mf">3.935124857311621e-12</span><span class="p">],</span> 
+<span class="p">[</span><span class="mf">1978.539627084896</span><span class="p">,</span> <span class="o">-</span><span class="mf">8112.1899718515415</span><span class="p">,</span> <span class="mf">577.3224456715253</span><span class="p">],</span> 
+<span class="p">[</span><span class="mf">3999.999999999998</span><span class="p">,</span> <span class="o">-</span><span class="mf">8146.9968976249975</span><span class="p">,</span> <span class="mf">756.473945159439</span><span class="p">],</span> 
+<span class="p">[</span><span class="mf">6021.4603729151</span><span class="p">,</span> <span class="o">-</span><span class="mf">8112.1899718515415</span><span class="p">,</span> <span class="mf">577.3224456715213</span><span class="p">],</span> 
+<span class="p">[</span><span class="mf">7999.999999999998</span><span class="p">,</span> <span class="o">-</span><span class="mf">8000.000000000002</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">]]</span>
+
+<span class="n">faces</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> 
+         <span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">],</span> 
+         <span class="p">[</span><span class="mi">6</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">7</span><span class="p">],</span> 
+         <span class="p">[</span><span class="mi">8</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">9</span><span class="p">],</span> 
+         <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">11</span><span class="p">],</span> 
+         <span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">12</span><span class="p">],</span> 
+         <span class="p">[</span><span class="mi">7</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">13</span><span class="p">],</span> 
+         <span class="p">[</span><span class="mi">9</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">13</span><span class="p">,</span> <span class="mi">14</span><span class="p">],</span> 
+         <span class="p">[</span><span class="mi">11</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">15</span><span class="p">,</span> <span class="mi">16</span><span class="p">],</span> 
+         <span class="p">[</span><span class="mi">12</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="mi">17</span><span class="p">],</span> 
+         <span class="p">[</span><span class="mi">13</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">17</span><span class="p">,</span> <span class="mi">18</span><span class="p">],</span>
+         <span class="p">[</span><span class="mi">14</span><span class="p">,</span> <span class="mi">13</span><span class="p">,</span> <span class="mi">18</span><span class="p">,</span> <span class="mi">19</span><span class="p">],</span> 
+         <span class="p">[</span><span class="mi">16</span><span class="p">,</span> <span class="mi">15</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">21</span><span class="p">],</span> 
+         <span class="p">[</span><span class="mi">17</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="mi">21</span><span class="p">,</span> <span class="mi">22</span><span class="p">],</span> 
+         <span class="p">[</span><span class="mi">18</span><span class="p">,</span> <span class="mi">17</span><span class="p">,</span> <span class="mi">22</span><span class="p">,</span> <span class="mi">23</span><span class="p">],</span> 
+         <span class="p">[</span><span class="mi">19</span><span class="p">,</span> <span class="mi">18</span><span class="p">,</span> <span class="mi">23</span><span class="p">,</span> <span class="mi">24</span><span class="p">]]</span>
+
+<span class="n">mesh1</span> <span class="o">=</span> <span class="n">Mesh</span><span class="o">.</span><span class="n">from_vertices_and_faces</span><span class="p">(</span><span class="n">vertices</span><span class="p">,</span> <span class="n">faces</span><span class="p">)</span>
+<span class="n">scale</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">mesh1</span><span class="o">.</span><span class="n">scale</span><span class="p">(</span><span class="n">scale</span><span class="p">)</span>
+<span class="n">mesh2</span> <span class="o">=</span> <span class="n">mesh1</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span><span class="o">.</span><span class="n">offset</span><span class="p">(</span><span class="mi">120</span><span class="o">*</span><span class="n">scale</span><span class="p">)</span>
+<span class="n">polygons0</span> <span class="o">=</span> <span class="n">mesh1</span><span class="o">.</span><span class="n">to_polygons</span><span class="p">()</span>
+<span class="n">polygons1</span> <span class="o">=</span> <span class="n">mesh2</span><span class="o">.</span><span class="n">to_polygons</span><span class="p">()</span>
+
+<span class="c1"># conert polygons to polylines</span>
+<span class="n">input_polylines</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">polygon0</span><span class="p">,</span> <span class="n">polygon1</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">polygons0</span><span class="p">,</span> <span class="n">polygons1</span><span class="p">):</span>
+    <span class="n">input_polylines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Polyline</span><span class="p">(</span><span class="n">polygon0</span><span class="p">))</span>
+    <span class="n">input_polylines</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">points</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">input_polylines</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">points</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">input_polylines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Polyline</span><span class="p">(</span><span class="n">polygon1</span><span class="p">))</span>
+    <span class="n">input_polylines</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">points</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">input_polylines</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">points</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+
+<span class="c1"># Create joints.</span>
+<span class="n">Globals</span><span class="o">.</span><span class="n">distance_squared</span> <span class="o">=</span> <span class="mi">10</span>
+
+<span class="n">polylines_lists</span><span class="p">,</span> <span class="n">output_types</span> <span class="o">=</span> <span class="n">get_connection_zones</span><span class="p">(</span>
+    <span class="n">input_polyline_pairs</span><span class="o">=</span><span class="n">input_polylines</span><span class="p">,</span>
+    <span class="n">input_joint_parameters_and_types</span><span class="o">=</span><span class="p">[</span><span class="mi">100</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+    <span class="c1"># input_joint_parameters_and_types=[15, 0.4, 3],</span>
+    <span class="n">input_output_type</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
+    <span class="c1"># input_scale=[1, 1.0, 1],</span>
+    <span class="n">input_scale</span><span class="o">=</span><span class="p">[</span><span class="mf">0.2</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+
+
+<span class="c1"># Remove duplicate polylines - bug in the code.</span>
+<span class="n">new_polyline_lists</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">polylines</span> <span class="ow">in</span> <span class="n">polylines_lists</span><span class="p">:</span>
+    <span class="n">new_polylines</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">polyline</span> <span class="ow">in</span> <span class="n">polylines</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">polyline</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">new_polylines</span><span class="p">:</span>
+            <span class="n">new_polylines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">polyline</span><span class="p">)</span>
+    <span class="n">new_polyline_lists</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">new_polylines</span><span class="p">)</span>
+<span class="n">polylines_lists</span> <span class="o">=</span> <span class="n">new_polyline_lists</span>
+
+<span class="c1"># Create meshes.</span>
+<span class="c1"># meshes = mesh_boolean_difference_from_polylines(polylines_lists)</span>
+
+<span class="c1"># Vizualize.</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span> <span class="o">&gt;=</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">9</span><span class="p">):</span>
+    <span class="kn">from</span> <span class="nn">compas_viewer</span> <span class="kn">import</span> <span class="n">Viewer</span>
+    <span class="kn">from</span> <span class="nn">compas.geometry</span> <span class="kn">import</span> <span class="n">Scale</span>
+
+    <span class="n">viewer</span> <span class="o">=</span> <span class="n">Viewer</span><span class="p">(</span><span class="n">show_grid</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">rendermode</span><span class="o">=</span><span class="s1">&#39;ghosted&#39;</span><span class="p">)</span>
+
+    <span class="n">scale</span> <span class="o">=</span> <span class="mf">1e-3</span>
+
+    <span class="c1"># for polyline in input_polylines:</span>
+    <span class="c1">#     polyline.transform(Scale.from_factors([scale, scale, scale]))</span>
+    <span class="c1">#     viewer.scene.add(polyline, show_points=False)</span>
+
+    <span class="k">for</span> <span class="n">polylines</span> <span class="ow">in</span> <span class="n">polylines_lists</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">polyline</span> <span class="ow">in</span> <span class="n">polylines</span><span class="p">:</span>
+            <span class="n">polyline</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">Scale</span><span class="o">.</span><span class="n">from_factors</span><span class="p">([</span><span class="n">scale</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">scale</span><span class="p">]))</span>
+            <span class="n">viewer</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">polyline</span><span class="p">,</span> <span class="n">show_points</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">line_width</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">linecolor</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+
+
+
+    <span class="c1"># for mesh in meshes:</span>
+    <span class="c1">#     mesh.transform(Scale.from_factors([scale, scale, scale]))</span>
+    <span class="c1">#     viewer.scene.add(mesh, show_points=False, show_lines=False)</span>
+
+    <span class="n">viewer</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Mesh dual of a cone and a sphere intersection:</p>
+<figure class="figure align-default">
+<img alt="../_images/type_plates_name_side_to_side_edge_in_plane_hilti_part4_0.png" class="figure-img img-fluid" src="../_images/type_plates_name_side_to_side_edge_in_plane_hilti_part4_0.png" />
+</figure>
+<figure class="figure align-default">
+<img alt="../_images/type_plates_name_side_to_side_edge_in_plane_hilti_part4_1.png" class="figure-img img-fluid" src="../_images/type_plates_name_side_to_side_edge_in_plane_hilti_part4_1.png" />
+</figure>
+<p>Rescale the mesh to 8000 mm and apply joinery:</p>
+<figure class="figure align-default">
+<img alt="../_images/type_plates_name_side_to_side_edge_in_plane_hilti_part4_2.png" class="figure-img img-fluid" src="../_images/type_plates_name_side_to_side_edge_in_plane_hilti_part4_2.png" />
+</figure>
+<figure class="figure align-default">
+<img alt="../_images/type_plates_name_side_to_side_edge_in_plane_hilti_part4_3.png" class="figure-img img-fluid" src="../_images/type_plates_name_side_to_side_edge_in_plane_hilti_part4_3.png" />
+</figure>
+</section>
+</section>
+
+
+                </article>
+              
+              
+              
+                <footer class="bd-footer-article">
+                  
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#single-pair">Single pair:</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#multiple-pairs-in-varying-angles">Multiple pairs in varying angles:</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#heaxagonel-shell">Heaxagonel shell:</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#planarized-quad-shell">Planarized quad shell:</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=e353d410970836974a52"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+  <p class="copyright">
+    
+      © Copyright petras vestartas.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 6.2.1.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item"><p class="theme-version">
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.13.3.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>
