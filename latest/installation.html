@@ -568,14 +568,24 @@ document.write(`
 <h1>Installation</h1>
 <section id="conda">
 <h2>Conda</h2>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/petrasvestartas/compas_wood.git
-conda<span class="w"> </span>create<span class="w"> </span>-n<span class="w"> </span>compas_wood_3_9_10<span class="w"> </span><span class="nv">python</span><span class="o">=</span><span class="m">3</span>.9.10<span class="w"> </span>compas
+<section id="create-environment">
+<h3>Create environment</h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>conda<span class="w"> </span>create<span class="w"> </span>-n<span class="w"> </span>compas_wood_3_9_10<span class="w"> </span><span class="nv">python</span><span class="o">=</span><span class="m">3</span>.9.10<span class="w"> </span>compas
 conda<span class="w"> </span>activate<span class="w"> </span>compas_wood_3_9_10
+</pre></div>
+</div>
+</section>
+<section id="clone-and-install-compas-wood">
+<h3>Clone and install compas_wood</h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/petrasvestartas/compas_wood.git
+<span class="nb">cd</span><span class="w"> </span>compas_wood
 pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </span>requirements.txt
 pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span>.
 </pre></div>
 </div>
-<p>Geometry is displayed using compas_viewer. Please clone the viewer to have the latest version install in the current environment:¨</p>
+</section>
+<section id="display-via-compas-viewer">
+<h3>Display via compas_viewer</h3>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/compas-dev/compas_viewer.git
 <span class="nb">cd</span><span class="w"> </span>compas_viewer
 conda<span class="w"> </span>activate<span class="w"> </span>compas_wood_3_9_10
@@ -583,11 +593,26 @@ pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </s
 </pre></div>
 </div>
 </section>
-<section id="pip">
-<h2>Pip</h2>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>compas_wood
-</pre></div>
-</div>
+<section id="visual-studio-code">
+<h3>Visual Studio Code</h3>
+<ul class="simple">
+<li><p>Launch <code class="docutils literal notranslate"><span class="pre">VSCode</span></code> and select the <code class="docutils literal notranslate"><span class="pre">compas_wood_3_9_10</span></code> Python environment using <code class="docutils literal notranslate"><span class="pre">CTRL+SHIFT+P</span></code>.</p></li>
+<li><p>Open a new terminal via <code class="docutils literal notranslate"><span class="pre">Terminal</span> <span class="pre">-&gt;</span> <span class="pre">New</span> <span class="pre">Terminal</span></code>.</p></li>
+<li><p>Navigate to the <code class="docutils literal notranslate"><span class="pre">docs/examples</span></code> folder and execute any <code class="docutils literal notranslate"><span class="pre">.py</span></code> example file by right-clicking and selecting <code class="docutils literal notranslate"><span class="pre">Run</span> <span class="pre">Python</span> <span class="pre">File</span> <span class="pre">in</span> <span class="pre">Terminal</span></code>.</p></li>
+</ul>
+<figure class="figure align-default">
+<img alt="_images/vscode_environment.gif" class="figure-img img-fluid" src="_images/vscode_environment.gif" />
+</figure>
+</section>
+</section>
+<section id="notes">
+<h2>Notes</h2>
+<p>If you are new to Anaconda World, install these tools first:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://www.anaconda.com/download">Anaconda</a></p></li>
+<li><p><a class="reference external" href="https://code.visualstudio.com/download">Visual Studio Code</a></p></li>
+<li><p><a class="reference external" href="https://git-scm.com/downloads">Git</a></p></li>
+</ul>
 </section>
 </section>
 
@@ -612,8 +637,14 @@ pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </s
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#conda">Conda</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pip">Pip</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#conda">Conda</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#create-environment">Create environment</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#clone-and-install-compas-wood">Clone and install compas_wood</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#display-via-compas-viewer">Display via compas_viewer</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#visual-studio-code">Visual Studio Code</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#notes">Notes</a></li>
 </ul>
   </nav></div>
 
