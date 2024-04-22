@@ -584,13 +584,11 @@ document.write(`
     <span class="n">input_adjacency</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">=</span> <span class="n">read_xml_polylines_and_properties</span><span class="p">()</span>
 
-<span class="kn">import</span> <span class="nn">sys</span>
 
-<span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span> <span class="o">&gt;=</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">9</span><span class="p">):</span>
-    <span class="k">try</span><span class="p">:</span>
-        <span class="kn">from</span> <span class="nn">compas_viewer</span> <span class="kn">import</span> <span class="n">Viewer</span>
-    <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;compas_viewer is not installed.&quot;</span><span class="p">)</span>
+
+<span class="k">try</span><span class="p">:</span>
+    
+    <span class="kn">from</span> <span class="nn">compas_viewer</span> <span class="kn">import</span> <span class="n">Viewer</span>
 
     <span class="n">viewer</span> <span class="o">=</span> <span class="n">Viewer</span><span class="p">()</span>
 
@@ -605,16 +603,10 @@ document.write(`
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">viewer</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">line</span><span class="o">.</span><span class="n">start</span><span class="p">,</span> <span class="n">show_points</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">points_size</span><span class="o">=</span><span class="mf">0.02</span><span class="p">)</span>
 
-    <span class="c1"># for i in input_joints_types:</span>
-    <span class="c1">#     print(i)</span>
-
-    <span class="c1"># for i in input_three_valence_element_indices_and_instruction:</span>
-    <span class="c1">#     print(i)</span>
-
-    <span class="c1"># for i in range(0, len(input_adjacency), 4):</span>
-    <span class="c1">#     print(input_adjacency[i:i + 4])</span>
-
     <span class="n">viewer</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;compas_viewer is not installed.&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </section>
