@@ -76,7 +76,16 @@ Vizualize...
    :lines: 34-
 
 
-.. figure:: ./type_plates_name_side_to_side_edge_in_plane_hilti_part3.png
+.. figure:: ./type_plates_name_side_to_side_edge_in_plane_hilti_part3_1.png
+    :figclass: figure
+    :class: figure-img img-fluid
+
+.. figure:: ./type_plates_name_side_to_side_edge_in_plane_hilti_part3_2.png
+    :figclass: figure
+    :class: figure-img img-fluid
+
+
+.. figure:: ./type_plates_name_side_to_side_edge_in_plane_hilti_part3_3.png
     :figclass: figure
     :class: figure-img img-fluid
 
@@ -97,6 +106,8 @@ Mesh dual of a cone and a sphere intersection:
     :figclass: figure
     :class: figure-img img-fluid
 
+
+
 Rescale the mesh to 8000 mm and apply joinery:
 
 .. figure:: ./type_plates_name_side_to_side_edge_in_plane_hilti_part4_2.png
@@ -106,3 +117,4 @@ Rescale the mesh to 8000 mm and apply joinery:
 .. figure:: ./type_plates_name_side_to_side_edge_in_plane_hilti_part4_3.png
     :figclass: figure
     :class: figure-img img-fluid
+
