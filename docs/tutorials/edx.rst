@@ -1,11 +1,14 @@
 ********************************************************************************
-compas_wood
+EdX
 ********************************************************************************
 
-.. currentmodule:: compas_wood
 
 
 .. toctree::
-    :maxdepth: 1
+   :maxdepth: 1
+   :titlesonly:
+   :glob:
 
-    compas_wood.binding
+   edx/*
+
+
