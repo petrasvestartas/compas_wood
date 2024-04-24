@@ -1,6 +1,6 @@
 # compas_wood
 
-Project for timber joinery generation developed by Petras Vestartas.
+[Read the documentation](https://petrasvestartas.github.io/compas_wood/latest/)
 
 ## Getting started with this project
 
