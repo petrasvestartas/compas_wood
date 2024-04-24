@@ -10,7 +10,6 @@ polylines = [polyline0, polyline1, polyline2, polyline3]
 
 mesh = closed_mesh_from_polylines(polylines)
 
-
 try:
 
     from compas_viewer import Viewer

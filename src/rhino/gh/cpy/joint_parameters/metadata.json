@@ -1,0 +1,126 @@
+{
+    "name": "joint_parameters",
+    "nickname": "joint_parameters",
+    "description": "Create a list of joint parameters",
+    "category": "compas_wood",
+    "subcategory": "data",
+    "exposure": 4,
+    "instanceGuid": "2efc1f5a-65bd-492a-9f0c-567e1d3ed173",
+    "ghpython": {
+        "hideOutput": true,
+        "hideInput": true,
+        "isAdvancedMode": true,
+        "marshalOutGuids": true,
+        "iconDisplay": 2,
+        "inputParameters": [
+            {
+                "name": "_ss_e_ip",
+                "nickname": "_ss_e_ip",
+                "description": "side-to-side in-plane joint parameters",
+                "optional": true,
+                "allowTreeAccess": true,
+                "showTypeHints": true,
+                "scriptParamAccess": "list",
+                "wireDisplay": "faint",
+                "sourceCount": 0,
+                "typeHintID": "float",
+                "reverse": false,
+                "simplify": false
+            },
+            {
+                "name": "_ss_e_op",
+                "nickname": "_ss_e_op",
+                "description": "side-to-side out-of-plane joint parameters",
+                "optional": true,
+                "allowTreeAccess": true,
+                "showTypeHints": true,
+                "scriptParamAccess": "list",
+                "wireDisplay": "faint",
+                "sourceCount": 0,
+                "typeHintID": "float",
+                "reverse": false,
+                "simplify": false
+            },
+            {
+                "name": "_ts_e_p",
+                "nickname": "_ts_e_p",
+                "description": "top-to-side joint parameters",
+                "optional": true,
+                "allowTreeAccess": true,
+                "showTypeHints": true,
+                "scriptParamAccess": "list",
+                "wireDisplay": "faint",
+                "sourceCount": 0,
+                "typeHintID": "float",
+                "reverse": false,
+                "simplify": false
+            },
+            {
+                "name": "_cr_c_ip",
+                "nickname": "_cr_c_ip",
+                "description": "cross joint parameters",
+                "optional": true,
+                "allowTreeAccess": true,
+                "showTypeHints": true,
+                "scriptParamAccess": "list",
+                "wireDisplay": "faint",
+                "sourceCount": 0,
+                "typeHintID": "float",
+                "reverse": false,
+                "simplify": false
+            },
+            {
+                "name": "_tt_e_p",
+                "nickname": "_tt_e_p",
+                "description": "top-to-top joint parameters",
+                "optional": true,
+                "allowTreeAccess": true,
+                "showTypeHints": true,
+                "scriptParamAccess": "list",
+                "wireDisplay": "faint",
+                "sourceCount": 0,
+                "typeHintID": "float",
+                "reverse": false,
+                "simplify": false
+            },
+            {
+                "name": "_ss_e_r",
+                "nickname": "_ss_e_r",
+                "description": "side-to-side rotated joint parameters",
+                "optional": true,
+                "allowTreeAccess": true,
+                "showTypeHints": true,
+                "scriptParamAccess": "list",
+                "wireDisplay": "faint",
+                "sourceCount": 0,
+                "typeHintID": "float",
+                "reverse": false,
+                "simplify": false
+            },
+            {
+                "name": "_b",
+                "nickname": "_b",
+                "description": "boundary joint parameters",
+                "optional": true,
+                "allowTreeAccess": true,
+                "showTypeHints": true,
+                "scriptParamAccess": "list",
+                "wireDisplay": "faint",
+                "sourceCount": 0,
+                "typeHintID": "float",
+                "reverse": false,
+                "simplify": false
+            }
+        ],
+        "outputParameters": [
+            {
+                "name": "p",
+                "nickname": "p",
+                "description": "a list of joint parameters",
+                "optional": false,
+                "sourceCount": 0,
+                "graft": false
+            }
+        ]
+    }
+}
