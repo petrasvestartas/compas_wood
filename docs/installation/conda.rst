@@ -7,7 +7,7 @@ Create environment
 
 .. code-block:: bash
 
-    conda create -n compas_wood_3_9_10 python=3.9.10 compas
+    conda create -n compas_wood_3_9_10 -c conda-forge python=3.9.10 compas
     conda activate compas_wood_3_9_10
 
 
