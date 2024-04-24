@@ -1,0 +1,158 @@
+{
+    "name": "case_3_folded_plates",
+    "nickname": "case_3_folded_plates",
+    "description": "Suface division into a diamon grid and giving thickness to each mesh face ",
+    "category": "compas_wood",
+    "subcategory": "cases",
+    "exposure": 8,
+    "instanceGuid": "acefda02-27e6-4df0-abb8-11b2c242ce0d",
+    "ghpython": {
+        "hideOutput": true,
+        "hideInput": true,
+        "isAdvancedMode": true,
+        "marshalOutGuids": true,
+        "iconDisplay": 2,
+        "inputParameters": [
+            {
+                "name": "surface",
+                "nickname": "surface",
+                "description": "Surface to be divided into plates",
+                "optional": false,
+                "allowTreeAccess": true,
+                "showTypeHints": true,
+                "scriptParamAccess": "item",
+                "wireDisplay": "faint",
+                "sourceCount": 0,
+                "typeHintID": "surface",
+                "reverse": false,
+                "simplify": false
+            },
+            {
+                "name": "u_divisions",
+                "nickname": "u_divisions",
+                "description": "divisions in the first direction",
+                "optional": true,
+                "allowTreeAccess": true,
+                "showTypeHints": true,
+                "scriptParamAccess": "item",
+                "wireDisplay": "faint",
+                "sourceCount": 0,
+                "typeHintID": "int",
+                "reverse": false,
+                "simplify": false
+            },
+            {
+                "name": "v_divisions",
+                "nickname": "v_divisions",
+                "description": "divisions in the second direction",
+                "optional": true,
+                "allowTreeAccess": true,
+                "showTypeHints": true,
+                "scriptParamAccess": "item",
+                "wireDisplay": "faint",
+                "sourceCount": 0,
+                "typeHintID": "int",
+                "reverse": false,
+                "simplify": false
+            },
+            {
+                "name": "base_planes",
+                "nickname": "base_planes",
+                "description": "planes to adjust the base of the mesh",
+                "optional": true,
+                "allowTreeAccess": true,
+                "showTypeHints": true,
+                "scriptParamAccess": "list",
+                "wireDisplay": "faint",
+                "sourceCount": 0,
+                "typeHintID": "int",
+                "reverse": false,
+                "simplify": false
+            },
+            {
+                "name": "thickness",
+                "nickname": "thickness",
+                "description": "thickness of the plates",
+                "optional": true,
+                "allowTreeAccess": true,
+                "showTypeHints": true,
+                "scriptParamAccess": "item",
+                "wireDisplay": "faint",
+                "sourceCount": 0,
+                "typeHintID": "float",
+                "reverse": false,
+                "simplify": false
+            },
+            {
+                "name": "chamfer",
+                "nickname": "chamfer",
+                "description": "distance to chamfer the corners of the plates",
+                "optional": true,
+                "allowTreeAccess": true,
+                "showTypeHints": true,
+                "scriptParamAccess": "item",
+                "wireDisplay": "faint",
+                "sourceCount": 0,
+                "typeHintID": "float",
+                "reverse": false,
+                "simplify": false
+            },
+            {
+                "name": "face_positions",
+                "nickname": "face_positions",
+                "description": "offset of the plates",
+                "optional": true,
+                "allowTreeAccess": true,
+                "showTypeHints": true,
+                "scriptParamAccess": "list",
+                "wireDisplay": "faint",
+                "sourceCount": 0,
+                "typeHintID": "float",
+                "reverse": false,
+                "simplify": false
+            }
+        ],
+        "outputParameters": [
+            {
+                "name": "mesh",
+                "nickname": "mesh",
+                "description": "triangulated mesh",
+                "optional": false,
+                "sourceCount": 0,
+                "graft": false
+            },
+            {
+                "name": "plates",
+                "nickname": "plates",
+                "description": "pairs of polylines representing the plates",
+                "optional": false,
+                "sourceCount": 0,
+                "graft": false
+            },
+            {
+                "name": "insertion",
+                "nickname": "insertion",
+                "description": "lines representing inesertion vectors for the solver",
+                "optional": false,
+                "sourceCount": 0,
+                "graft": false
+            },
+            {
+                "name": "adjacency",
+                "nickname": "adjacency",
+                "description": "adjacent faces, edges are marked as -1",
+                "optional": false,
+                "sourceCount": 0,
+                "graft": false
+            },
+            {
+                "name": "flags",
+                "nickname": "flags",
+                "description": "boolean values for mesh faces indicating a checkerboard pattern",
+                "optional": false,
+                "sourceCount": 0,
+                "graft": false
+            }
+        ]
+    }
+}

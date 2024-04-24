@@ -1,0 +1,93 @@
+{
+    "name": "line_volume",
+    "nickname": "line_volume",
+    "description": "create a volume around a curve",
+    "category": "compas_wood",
+    "subcategory": "beam",
+    "exposure": 2,
+    "instanceGuid": "aaffda50-51e0-5df0-abb8-11b5c187ce5d",
+    "ghpython": {
+        "hideOutput": true,
+        "hideInput": true,
+        "isAdvancedMode": true,
+        "marshalOutGuids": true,
+        "iconDisplay": 2,
+        "inputParameters": [
+            {
+                "name": "_crv",
+                "nickname": "_crv",
+                "description": "axis, can be a line or a curve",
+                "optional": true,
+                "allowTreeAccess": true,
+                "showTypeHints": true,
+                "scriptParamAccess": "item",
+                "wireDisplay": "faint",
+                "sourceCount": 0,
+                "typeHintID": "curve",
+                "reverse": false,
+                "simplify": false
+            },
+            {
+                "name": "_align_vec",
+                "nickname": "_align_vec",
+                "description": "vector that is used to align the rectangles",
+                "optional": true,
+                "allowTreeAccess": true,
+                "showTypeHints": true,
+                "scriptParamAccess": "item",
+                "wireDisplay": "faint",
+                "sourceCount": 0,
+                "typeHintID": "vector",
+                "reverse": false,
+                "simplify": false
+            },
+            {
+                "name": "_radius",
+                "nickname": "_radius",
+                "description": "radius of a pipe",
+                "optional": true,
+                "allowTreeAccess": true,
+                "showTypeHints": true,
+                "scriptParamAccess": "item",
+                "wireDisplay": "faint",
+                "sourceCount": 0,
+                "typeHintID": "float",
+                "reverse": false,
+                "simplify": false
+            },
+            {
+                "name": "_circ_rect",
+                "nickname": "_circ_rect",
+                "description": "circle or rectangle",
+                "optional": true,
+                "allowTreeAccess": true,
+                "showTypeHints": true,
+                "scriptParamAccess": "item",
+                "wireDisplay": "faint",
+                "sourceCount": 0,
+                "typeHintID": "bool",
+                "reverse": false,
+                "simplify": false
+            }
+           
+        ],
+        "outputParameters": [
+            {
+                "name": "_brep",
+                "nickname": "_brep",
+                "description": "lofted and capped brep with holes",
+                "optional": false,
+                "sourceCount": 0,
+                "graft": false
+            },
+            {
+                "name": "_plines",
+                "nickname": "_plines",
+                "description": "a list of rectangles around the curve divisions",
+                "optional": false,
+                "sourceCount": 0,
+                "graft": false
+            }
+        ]
+    }
+}

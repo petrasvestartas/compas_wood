@@ -13,9 +13,6 @@ This component does nothing useful, it's only a kitchen sink (but in python3) ex
 from ghpythonlib.componentbase import executingcomponent as component
 
 import System
-import platform
-import Rhino
-import Grasshopper
 import math
 
 class joint_parameters_component(component):
@@ -40,30 +37,34 @@ class joint_parameters_component(component):
             300, 0.5, 58,  # 50-59 ss_e_r (side-to-side edge rotated)
             300, 1.0, 60   # 60-69 b (boundary)
         ]
-
-        for i in range(len(_ss_e_ip)):
-            joint_parameters[0*3+i] = _ss_e_ip[i]
-
-        for i in range(len(_ss_e_op)):
-            joint_parameters[1*3+i] = _ss_e_op[i]
-
-        for i in range(len(_ts_e_p)):
-            joint_parameters[2*3+i] = _ts_e_p[i]
-
-        for i in range(len(_cr_c_ip)):
-            joint_parameters[3*3+i] = _cr_c_ip[i]
         
-        if(math.floor(joint_parameters[3*3+2]) == 38):
-            joint_parameters[3*3+2]= 30
+        if _ss_e_ip:
+            for i in range(len(_ss_e_ip)):
+                joint_parameters[0*3+i] = _ss_e_ip[i]
+
+        if _ss_e_op:
+            for i in range(len(_ss_e_op)):
+                joint_parameters[1*3+i] = _ss_e_op[i]
+
+        if _ts_e_p:
+            for i in range(len(_ts_e_p)):
+                joint_parameters[2*3+i] = _ts_e_p[i]
+
+        if _cr_c_ip:
+            for i in range(len(_cr_c_ip)):
+                joint_parameters[3*3+i] = _cr_c_ip[i]
         
-        for i in range(len(_tt_e_p)):
-            joint_parameters[4*3+i] = _tt_e_p[i]
+        if _tt_e_p:        
+            for i in range(len(_tt_e_p)):
+                joint_parameters[4*3+i] = _tt_e_p[i]
 
-        for i in range(len(_ss_e_r)):
-            joint_parameters[5*3+i] = _ss_e_r[i]
+        if _ss_e_r:
+            for i in range(len(_ss_e_r)):
+                joint_parameters[5*3+i] = _ss_e_r[i]
 
-        for i in range(len(_b)):
-            joint_parameters[6*3+i] = _b[i]
+        if _b:
+            for i in range(len(_b)):
+                joint_parameters[6*3+i] = _b[i]
 
         _joint_p = joint_parameters
 

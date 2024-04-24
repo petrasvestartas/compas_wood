@@ -1,0 +1,76 @@
+{
+    "name": "assembly",
+    "nickname": "assembly",
+    "description": "display assembly sequence",
+    "category": "compas_wood",
+    "subcategory": "preview",
+    "exposure": 16,
+    "instanceGuid": "0F2965A4-50E5-4883-AEF9-DDE4D2D990E7",
+    "ghpython": {
+        "hideOutput": true,
+        "hideInput": true,
+        "isAdvancedMode": true,
+        "marshalOutGuids": true,
+        "iconDisplay": 2,
+        "inputParameters": [
+            {
+                "name": "_data",
+                "nickname": "_data",
+                "description": "collection of inputs that represent the elements, insertion vectors, joint types and adjacency, use input_set commonent to group these inputs",
+                "optional": true,
+                "allowTreeAccess": true,
+                "showTypeHints": true,
+                "scriptParamAccess": "item",
+                "wireDisplay": "faint",
+                "sourceCount": 0,
+                "typeHintID": "none",
+                "reverse": false,
+                "simplify": false
+            },
+            {
+                "name": "_dir",
+                "nickname": "_dir",
+                "description": "a list of lines that represent the direction of the assembly sequence per element or a group, depending on the inpout N",
+                "optional": true,
+                "allowTreeAccess": true,
+                "showTypeHints": true,
+                "scriptParamAccess": "list",
+                "wireDisplay": "faint",
+                "sourceCount": 0,
+                "typeHintID": "line",
+                "reverse": false,
+                "simplify": false
+            },
+            {
+                "name": "_n",
+                "nickname": "_n",
+                "description": "number of plates that are group e.g. one box contains 4 plates, then N = 4",
+                "optional": true,
+                "allowTreeAccess": true,
+                "showTypeHints": true,
+                "scriptParamAccess": "item",
+                "wireDisplay": "faint",
+                "sourceCount": 0,
+                "typeHintID": "int",
+                "reverse": false,
+                "simplify": false
+            },
+            {
+                "name": "_t",
+                "nickname": "_t",
+                "description": "slider from 0.00 to number of groups, that helps to animate the assembly sequence",
+                "optional": true,
+                "allowTreeAccess": true,
+                "showTypeHints": true,
+                "scriptParamAccess": "item",
+                "wireDisplay": "faint",
+                "sourceCount": 0,
+                "typeHintID": "float",
+                "reverse": false,
+                "simplify": false
+            }
+        ],
+        "outputParameters": [
+        ]
+    }
+}

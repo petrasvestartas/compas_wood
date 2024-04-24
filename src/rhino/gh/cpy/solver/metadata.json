@@ -1,0 +1,113 @@
+{
+    "name": "solver",
+    "nickname": "solver",
+    "description": "generate joints between elements",
+    "category": "compas_wood",
+    "subcategory": "solver",
+    "exposure": 2,
+    "instanceGuid": "962E4B65-83F4-4612-8E30-4D0455EE26A2",
+    "ghpython": {
+        "hideOutput": true,
+        "hideInput": true,
+        "isAdvancedMode": true,
+        "marshalOutGuids": true,
+        "iconDisplay": 2,
+        "inputParameters": [
+            {
+                "name": "_data",
+                "nickname": "_data",
+                "description": "collection of inputs that represent the elements, insertion vectors, joint types and adjacency, use input_set commonent to group these inputs",
+                "optional": true,
+                "allowTreeAccess": true,
+                "showTypeHints": true,
+                "scriptParamAccess": "item",
+                "wireDisplay": "faint",
+                "sourceCount": 0,
+                "typeHintID": "none",
+                "reverse": false,
+                "simplify": false
+            },
+            {
+                "name": "_joint_p",
+                "nickname": "_joint_p",
+                "description": "joint parameters",
+                "optional": true,
+                "allowTreeAccess": true,
+                "showTypeHints": true,
+                "scriptParamAccess": "list",
+                "wireDisplay": "faint",
+                "sourceCount": 0,
+                "typeHintID": "float",
+                "reverse": false,
+                "simplify": false
+            },
+            {
+                "name": "_scale",
+                "nickname": "_scale",
+                "description": "scale of joint, default is [1,1,1]",
+                "optional": true,
+                "allowTreeAccess": true,
+                "showTypeHints": true,
+                "scriptParamAccess": "list",
+                "wireDisplay": "faint",
+                "sourceCount": 0,
+                "typeHintID": "float",
+                "reverse": false,
+                "simplify": false
+            },
+            {
+                "name": "_extension",
+                "nickname": "_extension",
+                "description": "extension by distance, plates often has [0,0,10], whereas beams [10,10,10], default is [0,0,0]",
+                "optional": true,
+                "allowTreeAccess": true,
+                "showTypeHints": true,
+                "scriptParamAccess": "list",
+                "wireDisplay": "faint",
+                "sourceCount": 0,
+                "typeHintID": "float",
+                "reverse": false,
+                "simplify": false
+            },
+            {
+                "name": "_find",
+                "nickname": "_find",
+                "description": "search_type search type 0 - side-to-side, 1 - cross, 2 - both",
+                "optional": true,
+                "allowTreeAccess": true,
+                "showTypeHints": true,
+                "scriptParamAccess": "item",
+                "wireDisplay": "faint",
+                "sourceCount": 0,
+                "typeHintID": "int",
+                "reverse": false,
+                "simplify": false
+            },
+            {
+                "name": "_get",
+                "nickname": "_get",
+                "description": "output_type 0 - outlines | 1 - lines | 2 - areas | 3 - volumes | 4 - merged geometry of joints",
+                "optional": true,
+                "allowTreeAccess": true,
+                "showTypeHints": true,
+                "scriptParamAccess": "item",
+                "wireDisplay": "faint",
+                "sourceCount": 0,
+                "typeHintID": "int",
+                "reverse": false,
+                "simplify": false
+            }
+
+        ],
+        "outputParameters": [
+            {
+                "name": "_data",
+                "nickname": "_data",
+                "description": "user input_get component to ungroup all the data to the individual data-trees",
+                "optional": false,
+                "sourceCount": 0,
+                "graft": false
+            }
+        ]
+    }
+}

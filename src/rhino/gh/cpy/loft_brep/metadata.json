@@ -1,0 +1,72 @@
+{
+    "name": "loft_brep",
+    "nickname": "loft_b",
+    "description": "loft outlines with holes, to create a brep",
+    "category": "compas_wood",
+    "subcategory": "preview",
+    "exposure": 2,
+    "instanceGuid": "aaffda50-51e0-5df0-abb8-11b5c241ce5d",
+    "ghpython": {
+        "hideOutput": true,
+        "hideInput": true,
+        "isAdvancedMode": true,
+        "marshalOutGuids": true,
+        "iconDisplay": 2,
+        "inputParameters": [
+            {
+                "name": "_polylines0",
+                "nickname": "_p0",
+                "description": "polylines with holes, bottom",
+                "optional": true,
+                "allowTreeAccess": true,
+                "showTypeHints": true,
+                "scriptParamAccess": "list",
+                "wireDisplay": "faint",
+                "sourceCount": 0,
+                "typeHintID": "curve",
+                "reverse": false,
+                "simplify": false
+            },
+            {
+                "name": "_polylines1",
+                "nickname": "_p1",
+                "description": "polylines with holes, top",
+                "optional": true,
+                "allowTreeAccess": true,
+                "showTypeHints": true,
+                "scriptParamAccess": "list",
+                "wireDisplay": "faint",
+                "sourceCount": 0,
+                "typeHintID": "curve",
+                "reverse": false,
+                "simplify": false
+            }
+            ,
+            {
+                "name": "_color",
+                "nickname": "_c",
+                "description": "color, if given all the brep is colorized else only the sides, this is useful for boolean difference",
+                "optional": true,
+                "allowTreeAccess": true,
+                "showTypeHints": true,
+                "scriptParamAccess": "item",
+                "wireDisplay": "faint",
+                "sourceCount": 0,
+                "typeHintID": "color",
+                "reverse": false,
+                "simplify": false
+            }
+           
+        ],
+        "outputParameters": [
+            {
+                "name": "_brep",
+                "nickname": "_brep",
+                "description": "lofted and capped brep with holes",
+                "optional": false,
+                "sourceCount": 0,
+                "graft": false
+            }
+        ]
+    }
+}

@@ -1,0 +1,129 @@
+{
+    "name": "beam_volume",
+    "nickname": "beam_volume",
+    "description": "generate beam nodes around curves given circles are an input",
+    "category": "compas_wood",
+    "subcategory": "beam",
+    "exposure": 2,
+    "instanceGuid": "962E4B65-83F4-4612-1E30-4D0455EE26A2",
+    "ghpython": {
+        "hideOutput": true,
+        "hideInput": true,
+        "isAdvancedMode": true,
+        "marshalOutGuids": true,
+        "iconDisplay": 2,
+        "inputParameters": [
+            {
+                "name": "_circles",
+                "nickname": "_circles",
+                "description": "circles around curves that represntes the radius along the axes",
+                "optional": true,
+                "allowTreeAccess": true,
+                "showTypeHints": true,
+                "scriptParamAccess": "tree",
+                "wireDisplay": "faint",
+                "sourceCount": 0,
+                "typeHintID": "circle",
+                "reverse": false,
+                "simplify": false
+            },
+            {
+                "name": "_length_of_box",
+                "nickname": "_length_of_box",
+                "description": "the length of the joint volumes",
+                "optional": true,
+                "allowTreeAccess": true,
+                "showTypeHints": true,
+                "scriptParamAccess": "item",
+                "wireDisplay": "faint",
+                "sourceCount": 0,
+                "typeHintID": "float",
+                "reverse": false,
+                "simplify": false
+            },
+            {
+                "name": "_distance_tolerance",
+                "nickname": "_distance_tolerance",
+                "description": "closest distance between two curves",
+                "optional": true,
+                "allowTreeAccess": true,
+                "showTypeHints": true,
+                "scriptParamAccess": "item",
+                "wireDisplay": "faint",
+                "sourceCount": 0,
+                "typeHintID": "float",
+                "reverse": false,
+                "simplify": false
+            },
+            {
+                "name": "_parallel_tolerance",
+                "nickname": "_parallel_tolerance",
+                "description": "angle tolerance that defines the detection of end beams",
+                "optional": true,
+                "allowTreeAccess": true,
+                "showTypeHints": true,
+                "scriptParamAccess": "item",
+                "wireDisplay": "faint",
+                "sourceCount": 0,
+                "typeHintID": "float",
+                "reverse": false,
+                "simplify": false
+            },
+            {
+                "name": "_cross_or_toptoside",
+                "nickname": "_cross_or_toptoside",
+                "description": "switch between half lap or top-to-side joint volume generation",
+                "optional": true,
+                "allowTreeAccess": true,
+                "showTypeHints": true,
+                "scriptParamAccess": "item",
+                "wireDisplay": "faint",
+                "sourceCount": 0,
+                "typeHintID": "bool",
+                "reverse": false,
+                "simplify": false
+            },
+            {
+                "name": "_create_pipes",
+                "nickname": "_create_pipes",
+                "description": "generate lofted solids from the curves",
+                "optional": true,
+                "allowTreeAccess": true,
+                "showTypeHints": true,
+                "scriptParamAccess": "item",
+                "wireDisplay": "faint",
+                "sourceCount": 0,
+                "typeHintID": "bool",
+                "reverse": false,
+                "simplify": false
+            }
+
+        ],
+        "outputParameters": [
+            {
+                "name": "_volumes",
+                "nickname": "_volumes",
+                "description": "pair of rectangles that represent the beam volume around the joint",
+                "optional": false,
+                "sourceCount": 0,
+                "graft": false
+            },
+            {
+                "name": "_pipes",
+                "nickname": "_pipes",
+                "description": "if _create_pipes input is set to True the circles are lofted and outputted here",
+                "optional": false,
+                "sourceCount": 0,
+                "graft": false
+            },
+            {
+                "name": "_group_id",
+                "nickname": "_group_id",
+                "description": "grouping of beam volumes",
+                "optional": false,
+                "sourceCount": 0,
+                "graft": false
+            }
+        ]
+    }
+}

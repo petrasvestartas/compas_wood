@@ -1,0 +1,209 @@
+{
+    "name": "connectors",
+    "nickname": "connectors",
+    "description": "create extruded polygon on each mesh edge",
+    "category": "compas_wood",
+    "subcategory": "cases",
+    "exposure": 16,
+    "instanceGuid": "0E4B538D-1C08-418F-A49F-FEFA21A5AF9F",
+    "ghpython": {
+        "hideOutput": true,
+        "hideInput": true,
+        "isAdvancedMode": true,
+        "marshalOutGuids": true,
+        "iconDisplay": 2,
+        "inputParameters": [
+            {
+                "name": "_mesh",
+                "nickname": "_mesh",
+                "description": "mesh with ngons or without",
+                "optional": false,
+                "allowTreeAccess": true,
+                "showTypeHints": true,
+                "scriptParamAccess": "item",
+                "wireDisplay": "faint",
+                "sourceCount": 0,
+                "typeHintID": "mesh",
+                "reverse": false,
+                "simplify": false
+            },
+            {
+                "name": "_face_positions",
+                "nickname": "_face_positions",
+                "description": "offset of the panels",
+                "optional": true,
+                "allowTreeAccess": true,
+                "showTypeHints": true,
+                "scriptParamAccess": "list",
+                "wireDisplay": "faint",
+                "sourceCount": 0,
+                "typeHintID": "float",
+                "reverse": false,
+                "simplify": false
+            },
+            {
+                "name": "_face_thickness",
+                "nickname": "_face_thickness",
+                "description": "thicknes of the panels",
+                "optional": true,
+                "allowTreeAccess": true,
+                "showTypeHints": true,
+                "scriptParamAccess": "item",
+                "wireDisplay": "faint",
+                "sourceCount": 0,
+                "typeHintID": "float",
+                "reverse": false,
+                "simplify": false
+            },
+            {
+                "name": "_divisions",
+                "nickname": "_divisions",
+                "description": "divisions per edges, you can change individual edge divisions if a list equal to edge length is given",
+                "optional": true,
+                "allowTreeAccess": true,
+                "showTypeHints": true,
+                "scriptParamAccess": "list",
+                "wireDisplay": "faint",
+                "sourceCount": 0,
+                "typeHintID": "int",
+                "reverse": false,
+                "simplify": false
+            },
+            {
+                "name": "_division_len",
+                "nickname": "_division_len",
+                "description": "connectors are added based on the edge length, also list is supported, if user inputs 0, the _divisions parameter is used instead",
+                "optional": true,
+                "allowTreeAccess": true,
+                "showTypeHints": true,
+                "scriptParamAccess": "list",
+                "wireDisplay": "faint",
+                "sourceCount": 0,
+                "typeHintID": "float",
+                "reverse": false,
+                "simplify": false
+            },
+            {
+                "name": ":_edge_vectors",
+                "nickname": "_edge_vectors",
+                "description": "line list that helps to change the direction of the connectors",
+                "optional": true,
+                "allowTreeAccess": true,
+                "showTypeHints": true,
+                "scriptParamAccess": "list",
+                "wireDisplay": "faint",
+                "sourceCount": 0,
+                "typeHintID": "line",
+                "reverse": false,
+                "simplify": false
+            },
+            {
+                "name": "_rect_width",
+                "nickname": "_rect_width",
+                "description": "width of the connector",
+                "optional": true,
+                "allowTreeAccess": true,
+                "showTypeHints": true,
+                "scriptParamAccess": "item",
+                "wireDisplay": "faint",
+                "sourceCount": 0,
+                "typeHintID": "float",
+                "reverse": false,
+                "simplify": false
+            },
+            {
+                "name": "_rect_height",
+                "nickname": "_rect_height",
+                "description": "height of the connector",
+                "optional": true,
+                "allowTreeAccess": true,
+                "showTypeHints": true,
+                "scriptParamAccess": "item",
+                "wireDisplay": "faint",
+                "sourceCount": 0,
+                "typeHintID": "float",
+                "reverse": false,
+                "simplify": false
+            },
+            {
+                "name": "_rect_thickness",
+                "nickname": "_rect_thickness",
+                "description": "thickness of the connector",
+                "optional": true,
+                "allowTreeAccess": true,
+                "showTypeHints": true,
+                "scriptParamAccess": "item",
+                "wireDisplay": "faint",
+                "sourceCount": 0,
+                "typeHintID": "float",
+                "reverse": false,
+                "simplify": false
+            },
+            {
+                "name": "_projection",
+                "nickname": "_projection",
+                "description": "list of breps that helps to project panels to XY plane",
+                "optional": true,
+                "allowTreeAccess": true,
+                "showTypeHints": true,
+                "scriptParamAccess": "list",
+                "wireDisplay": "faint",
+                "sourceCount": 0,
+                "typeHintID": "brep",
+                "reverse": false,
+                "simplify": false
+            }
+        ],
+        "outputParameters": [
+            {
+                "name": "_f",
+                "nickname": "_f",
+                "description": "panels top and bottom outlines",
+                "optional": false,
+                "sourceCount": 0,
+                "graft": false
+            },
+            {
+                "name": "_f_pl",
+                "nickname": "_f_pl",
+                "description": "panels planes",
+                "optional": false,
+                "sourceCount": 0,
+                "graft": false
+            },
+            {
+                "name": "_f_id",
+                "nickname": "_f_id",
+                "description": "panels indices",
+                "optional": false,
+                "sourceCount": 0,
+                "graft": false
+            },
+            {
+                "name": "_e",
+                "nickname": "_e",
+                "description": "connectors top and bottom outlines",
+                "optional": false,
+                "sourceCount": 0,
+                "graft": false
+            },
+            {
+                "name": "_e_pl",
+                "nickname": "_e_pl",
+                "description": "connectors planes",
+                "optional": false,
+                "sourceCount": 0,
+                "graft": false
+            },
+            {
+                "name": "_e_id",
+                "nickname": "_e_id",
+                "description": "connectors indices",
+                "optional": false,
+                "sourceCount": 0,
+                "graft": false
+            }
+        ]
+        
+    }
+}

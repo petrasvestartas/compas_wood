@@ -1,0 +1,96 @@
+{
+    "name": "joints",
+    "nickname": "joints",
+    "description": "get connection zones from polylines and indices of neighboring elements",
+    "category": "compas_wood",
+    "subcategory": "solver",
+    "exposure": 4,
+    "instanceGuid": "d5454962-1363-4e75-a4b5-078104a9c642",
+    "ghpython": {
+        "hideOutput": true,
+        "hideInput": true,
+        "isAdvancedMode": true,
+        "marshalOutGuids": true,
+        "iconDisplay": 2,
+        "inputParameters": [
+            {
+                "name": "_polylines",
+                "nickname": "_polylines",
+                "description": "a data-tree of polyline pairs",
+                "optional": true,
+                "allowTreeAccess": true,
+                "showTypeHints": true,
+                "scriptParamAccess": "tree",
+                "wireDisplay": "faint",
+                "sourceCount": 0,
+                "typeHintID": "polyline",
+                "reverse": false,
+                "simplify": false
+            },
+            {
+                "name": "_id",
+                "nickname": "_id",
+                "description": "index of xml file, if _polylines are not given",
+                "optional": true,
+                "allowTreeAccess": true,
+                "showTypeHints": true,
+                "scriptParamAccess": "item",
+                "wireDisplay": "faint",
+                "sourceCount": 0,
+                "typeHintID": "int",
+                "reverse": false,
+                "simplify": false
+            }
+        ],
+        "outputParameters": [
+            {
+                "name": "_polylines_out",
+                "nickname": "_polylines_out",
+                "description": "polyline input",
+                "optional": false,
+                "sourceCount": 0,
+                "graft": false
+            },
+            {
+                "name": "_element_pairs",
+                "nickname": "_element_pairs",
+                "description": "indices of neighboring elements and their faces -> joints[i].v0, joints[i].v1, joints[i].f0_0, joints[i].f1_0, joints[i].f0_1, joints[i].f1_1",
+                "optional": false,
+                "sourceCount": 0,
+                "graft": false
+            },
+            {
+                "name": "_joint_areas",
+                "nickname": "_joint_areas",
+                "description": "polylines that define the connection zones",
+                "optional": false,
+                "sourceCount": 0,
+                "graft": false
+            },
+            {
+                "name": "_joint_areas_mesh",
+                "nickname": "_joint_areas_mesh",
+                "description": "mesh that define the connection zones",
+                "optional": false,
+                "sourceCount": 0,
+                "graft": false
+            },
+            {
+                "name": "_joint_types",
+                "nickname": "_joint_types",
+                "description": "type of connection zone",
+                "optional": false,
+                "sourceCount": 0,
+                "graft": false
+            },
+            {
+                "name": "_element_neighbors",
+                "nickname": "_element_neighbors",
+                "description": "ids of neighbors connected to a current element",
+                "optional": false,
+                "sourceCount": 0,
+                "graft": false
+            }
+        ]
+    }
+}

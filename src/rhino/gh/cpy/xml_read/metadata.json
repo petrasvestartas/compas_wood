@@ -1,0 +1,50 @@
+{
+    "name": "xml_read_plines",
+    "nickname": "xml_read_plines",
+    "description": "Read a data tree of polylines to an xml file.",
+    "category": "compas_wood",
+    "subcategory": "serialize",
+    "exposure": 4,
+    "instanceGuid": "acefda05-27e6-7df0-abb8-11b5c245ce8d",
+    "ghpython": {
+        "hideOutput": true,
+        "hideInput": true,
+        "isAdvancedMode": true,
+        "marshalOutGuids": true,
+        "iconDisplay": 2,
+        "inputParameters": [
+            {
+                "name": "_path",
+                "nickname": "_path",
+                "description": "path where to read the xml file",
+                "optional": true,
+                "allowTreeAccess": true,
+                "showTypeHints": true,
+                "scriptParamAccess": "item",
+                "wireDisplay": "faint",
+                "sourceCount": 0,
+                "typeHintID": "str",
+                "reverse": false,
+                "simplify": false
+            }
+        ],
+        "outputParameters": [
+            {
+                "name": "_plines",
+                "nickname": "_plines",
+                "description": "polyline pairs",
+                "optional": false,
+                "sourceCount": 0,
+                "graft": false
+            },
+            {
+                "name": "_types",
+                "nickname": "_types",
+                "description": "types for the polylines polylines representing the cutting toolpaths",
+                "optional": false,
+                "sourceCount": 0,
+                "graft": false
+            }
+        ]
+    }
+}

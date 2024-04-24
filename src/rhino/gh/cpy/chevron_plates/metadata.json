@@ -1,0 +1,135 @@
+{
+    "name": "chevron_plates",
+    "nickname": "chevron_plates",
+    "description": "create box plates from mesh faces",
+    "category": "compas_wood",
+    "subcategory": "cases",
+    "exposure": 2,
+    "instanceGuid": "5FC003ED-70BA-4117-81CB-09BA0F5A6830",
+    "ghpython": {
+        "hideOutput": true,
+        "hideInput": true,
+        "isAdvancedMode": true,
+        "marshalOutGuids": true,
+        "iconDisplay": 2,
+        "inputParameters": [
+            {
+                "name": "_mesh",
+                "nickname": "_mesh",
+                "description": "mesh coming from chevron component",
+                "optional": true,
+                "allowTreeAccess": true,
+                "showTypeHints": true,
+                "scriptParamAccess": "item",
+                "wireDisplay": "faint",
+                "sourceCount": 0,
+                "typeHintID": "mesh",
+                "reverse": false,
+                "simplify": false
+            },
+            {
+                "name": "_edge_rotation",
+                "nickname": "_edge_rotation",
+                "description": "rotate mesh edges in one direction",
+                "optional": true,
+                "allowTreeAccess": true,
+                "showTypeHints": true,
+                "scriptParamAccess": "item",
+                "wireDisplay": "faint",
+                "sourceCount": 0,
+                "typeHintID": "float",
+                "reverse": false,
+                "simplify": false
+            },
+            {
+                "name": "_edge_offset",
+                "nickname": "_edge_offset",
+                "description": "slide edges instead of rotation",
+                "optional": true,
+                "allowTreeAccess": true,
+                "showTypeHints": true,
+                "scriptParamAccess": "item",
+                "wireDisplay": "faint",
+                "sourceCount": 0,
+                "typeHintID": "float",
+                "reverse": false,
+                "simplify": false
+            },
+            {
+                "name": "_box_height",
+                "nickname": "_box_height",
+                "description": "the height of the box (mesh offset)",
+                "optional": true,
+                "allowTreeAccess": true,
+                "showTypeHints": true,
+                "scriptParamAccess": "item",
+                "wireDisplay": "faint",
+                "sourceCount": 0,
+                "typeHintID": "float",
+                "reverse": false,
+                "simplify": false
+            },
+            {
+                "name": "_top_plate_inlet",
+                "nickname": "_top_plate_inlet",
+                "description": "to accomodate joints the plates have to be move inwards e.g. by thickness of a plate",
+                "optional": true,
+                "allowTreeAccess": true,
+                "showTypeHints": true,
+                "scriptParamAccess": "item",
+                "wireDisplay": "faint",
+                "sourceCount": 0,
+                "typeHintID": "float",
+                "reverse": false,
+                "simplify": false
+            },
+            {
+                "name": "_plate_thickness",
+                "nickname": "_plate_thickness",
+                "description": "thickness of the timber plate",
+                "optional": true,
+                "allowTreeAccess": true,
+                "showTypeHints": true,
+                "scriptParamAccess": "item",
+                "wireDisplay": "faint",
+                "sourceCount": 0,
+                "typeHintID": "float",
+                "reverse": false,
+                "simplify": false
+            },
+            {
+                "name": "_ortho",
+                "nickname": "_ortho",
+                "description": "project sides of the surface",
+                "optional": true,
+                "allowTreeAccess": true,
+                "showTypeHints": true,
+                "scriptParamAccess": "item",
+                "wireDisplay": "faint",
+                "sourceCount": 0,
+                "typeHintID": "bool",
+                "reverse": false,
+                "simplify": false
+            }
+        ],
+        "outputParameters": [
+            {
+                "name": "_data",
+                "nickname": "_data",
+                "description": "a list of data: [plines, insertion_vectors, joint_per_face, three_valence, adjacency]",
+                "optional": false,
+                "sourceCount": 0,
+                "graft": false
+                },
+
+            {
+                "name": "_dir",
+                "nickname": "_dir",
+                "description": "insertion directions",
+                "optional": false,
+                "sourceCount": 0,
+                "graft": false
+                }
+        ]
+    }
+}

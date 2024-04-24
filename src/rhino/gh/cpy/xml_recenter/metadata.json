@@ -1,0 +1,59 @@
+{
+    "name": "xml_recenter",
+    "nickname": "xml_recenter",
+    "description": "Recenter geometry before xml write",
+    "category": "compas_wood",
+    "subcategory": "serialize",
+    "exposure": 2,
+    "instanceGuid": "acefda02-27e6-4df0-abb6-11b2c247ce0d",
+    "ghpython": {
+        "hideOutput": true,
+        "hideInput": true,
+        "isAdvancedMode": true,
+        "marshalOutGuids": true,
+        "iconDisplay": 2,
+        "inputParameters": [
+            {
+                "name": "_geo",
+                "nickname": "_geo",
+                "description": "geometry to recenter",
+                "optional": false,
+                "allowTreeAccess": true,
+                "showTypeHints": true,
+                "scriptParamAccess": "tree",
+                "wireDisplay": "faint",
+                "sourceCount": 0,
+                "typeHintID": "geometrybase",
+                "reverse": false,
+                "simplify": false
+            },
+            {
+                "name": "_scale",
+                "nickname": "_scale",
+                "description": "scale around center",
+                "optional": true,
+                "allowTreeAccess": true,
+                "showTypeHints": true,
+                "scriptParamAccess": "item",
+                "wireDisplay": "faint",
+                "sourceCount": 0,
+                "typeHintID": "float",
+                "reverse": false,
+                "simplify": false
+            }
+            
+        ],
+        "outputParameters": [
+            {
+                "name": "_output",
+                "nickname": "_output",
+                "description": "transformed geometry",
+                "optional": false,
+                "sourceCount": 0,
+                "graft": false
+            }
+           
+           
+        ]
+    }
+}

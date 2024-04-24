@@ -1,0 +1,120 @@
+{
+    "name": "xml_write_plines",
+    "nickname": "xml_write_plines",
+    "description": "Write a data tree of polylines to an xml file.",
+    "category": "compas_wood",
+    "subcategory": "serialize",
+    "exposure": 2,
+    "instanceGuid": "acefda35-27e6-4df0-abb8-13b1c245ce0d",
+    "ghpython": {
+        "hideOutput": true,
+        "hideInput": true,
+        "isAdvancedMode": true,
+        "marshalOutGuids": true,
+        "iconDisplay": 2,
+        "inputParameters": [
+            {
+                "name": "_plines",
+                "nickname": "_plines",
+                "description": "a data tree of polylines pairs",
+                "optional": false,
+                "allowTreeAccess": true,
+                "showTypeHints": true,
+                "scriptParamAccess": "tree",
+                "wireDisplay": "faint",
+                "sourceCount": 0,
+                "typeHintID": "polyline",
+                "reverse": false,
+                "simplify": false
+            },
+            {
+                "name": "_insertion_vectors",
+                "nickname": "_insertion_vectors",
+                "description": "vectors for each side of a plate: top and bottom and sides", 
+                "optional": false,
+                "allowTreeAccess": true,
+                "showTypeHints": true,
+                "scriptParamAccess": "tree",
+                "wireDisplay": "faint",
+                "sourceCount": 0,
+                "typeHintID": "vector",
+                "reverse": false,
+                "simplify": false
+            },
+            {
+                "name": "_joints_types",
+                "nickname": "_joints_types",
+                "description": "joint types for each side of a plate: top and bottom and sides", 
+                "optional": false,
+                "allowTreeAccess": true,
+                "showTypeHints": true,
+                "scriptParamAccess": "tree",
+                "wireDisplay": "faint",
+                "sourceCount": 0,
+                "typeHintID": "int",
+                "reverse": false,
+                "simplify": false
+            },
+            {
+                "name": "_type_of_three_valance",
+                "nickname": "_type_of_three_valance",
+                "description": "single integer for the type of three valance joint 0 - Vidy, 1 - Annen", 
+                "optional": false,
+                "allowTreeAccess": true,
+                "showTypeHints": true,
+                "scriptParamAccess": "item",
+                "wireDisplay": "faint",
+                "sourceCount": 0,
+                "typeHintID": "int",
+                "reverse": false,
+                "simplify": false
+            },
+            {
+                "name": "_three_valence",
+                "nickname": "_three_valence",
+                "description": "integer pairs: current, next, additional for the current, additional for the next", 
+                "optional": false,
+                "allowTreeAccess": true,
+                "showTypeHints": true,
+                "scriptParamAccess": "tree",
+                "wireDisplay": "faint",
+                "sourceCount": 0,
+                "typeHintID": "int",
+                "reverse": false,
+                "simplify": false
+            },
+
+            {
+                "name": "_adjacency",
+                "nickname": "_adjacency",
+                "description": "integer pairs: element id0, element id1, face id0, face id1 (face ids can be set to -1 as default)", 
+                "optional": false,
+                "allowTreeAccess": true,
+                "showTypeHints": true,
+                "scriptParamAccess": "tree",
+                "wireDisplay": "faint",
+                "sourceCount": 0,
+                "typeHintID": "int",
+                "reverse": false,
+                "simplify": false
+            },
+            {
+                "name": "_path",
+                "nickname": "_path",
+                "description": "path where to write the xml file",
+                "optional": true,
+                "allowTreeAccess": true,
+                "showTypeHints": true,
+                "scriptParamAccess": "item",
+                "wireDisplay": "faint",
+                "sourceCount": 0,
+                "typeHintID": "str",
+                "reverse": false,
+                "simplify": false
+            }
+        ],
+        "outputParameters": [
+          
+        ]
+    }
+}

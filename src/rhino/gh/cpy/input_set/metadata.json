@@ -1,0 +1,99 @@
+{
+    "name": "input_set",
+    "nickname": "input_set",
+    "description": "combine different data sets into one list for a faster data transder between grasshopper wires",
+    "category": "compas_wood",
+    "subcategory": "data",
+    "exposure": 2,
+    "instanceGuid": "EE224B2A-20EA-4DF8-9475-F4315833A3F2",
+    "ghpython": {
+        "hideOutput": true,
+        "hideInput": true,
+        "isAdvancedMode": true,
+        "marshalOutGuids": true,
+        "iconDisplay": 2,
+        "inputParameters": [
+            {
+                "name": "_polylines",
+                "nickname": "_polylines",
+                "description": "a data-tree of polyline pairs",
+                "optional": true,
+                "allowTreeAccess": true,
+                "showTypeHints": true,
+                "scriptParamAccess": "tree",
+                "wireDisplay": "faint",
+                "sourceCount": 0,
+                "typeHintID": "polyline",
+                "reverse": false,
+                "simplify": false
+            },
+            {
+                "name": "_vectors",
+                "nickname": "_vectors",
+                "description": "insertion direction",
+                "optional": true,
+                "allowTreeAccess": true,
+                "showTypeHints": true,
+                "scriptParamAccess": "tree",
+                "wireDisplay": "faint",
+                "sourceCount": 0,
+                "typeHintID": "vector",
+                "reverse": false,
+                "simplify": false
+            },
+            {
+                "name": "_joint_types",
+                "nickname": "_joint_types",
+                "description": "joint type per side, top, bottom, and sides",
+                "optional": true,
+                "allowTreeAccess": true,
+                "showTypeHints": true,
+                "scriptParamAccess": "tree",
+                "wireDisplay": "faint",
+                "sourceCount": 0,
+                "typeHintID": "int",
+                "reverse": false,
+                "simplify": false
+            },
+            {
+                "name": "_three_valence",
+                "nickname": "_three_valence",
+                "description": "three valance joinery that starts 0 - Vidy, 1 - Annen, and 4 indices current, next, current-neighbor, next-neighbor",
+                "optional": true,
+                "allowTreeAccess": true,
+                "showTypeHints": true,
+                "scriptParamAccess": "tree",
+                "wireDisplay": "faint",
+                "sourceCount": 0,
+                "typeHintID": "int",
+                "reverse": false,
+                "simplify": false
+            },
+            {
+                "name": "_adjacency",
+                "nickname": "_adjacency",
+                "description": "joint parameters",
+                "optional": true,
+                "allowTreeAccess": true,
+                "showTypeHints": true,
+                "scriptParamAccess": "tree",
+                "wireDisplay": "faint",
+                "sourceCount": 0,
+                "typeHintID": "int",
+                "reverse": false,
+                "simplify": false
+            }
+
+        ],
+        "outputParameters": [
+            {
+                "name": "_data",
+                "nickname": "_data",
+                "description": "user input_get component to ungroup all the data to the individual data-trees",
+                "optional": false,
+                "sourceCount": 0,
+                "graft": false
+            }
+        ]
+    }
+}

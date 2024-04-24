@@ -1,0 +1,57 @@
+{
+    "name": "loft_mesh",
+    "nickname": "loft_m",
+    "description": "loft outlines with holes to create a mesh",
+    "category": "compas_wood",
+    "subcategory": "preview",
+    "exposure": 2,
+    "instanceGuid": "aaefda50-51e0-5da0-abb8-11b5c241ce5d",
+    "ghpython": {
+        "hideOutput": true,
+        "hideInput": true,
+        "isAdvancedMode": true,
+        "marshalOutGuids": true,
+        "iconDisplay": 2,
+        "inputParameters": [
+            {
+                "name": "_polylines0",
+                "nickname": "_p0",
+                "description": "polylines with holes, bottom",
+                "optional": true,
+                "allowTreeAccess": true,
+                "showTypeHints": true,
+                "scriptParamAccess": "list",
+                "wireDisplay": "faint",
+                "sourceCount": 0,
+                "typeHintID": "curve",
+                "reverse": false,
+                "simplify": false
+            },
+            {
+                "name": "_polylines1",
+                "nickname": "_p1",
+                "description": "polylines with holes, top",
+                "optional": true,
+                "allowTreeAccess": true,
+                "showTypeHints": true,
+                "scriptParamAccess": "list",
+                "wireDisplay": "faint",
+                "sourceCount": 0,
+                "typeHintID": "curve",
+                "reverse": false,
+                "simplify": false
+            }
+           
+        ],
+        "outputParameters": [
+            {
+                "name": "_mesh",
+                "nickname": "_mesh",
+                "description": "lofted and capped mesh with holes",
+                "optional": false,
+                "sourceCount": 0,
+                "graft": false
+            }
+        ]
+    }
+}

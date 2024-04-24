@@ -1,0 +1,71 @@
+{
+    "name": "orient_data",
+    "nickname": "orient_data",
+    "description": "orient element polylines from their average plane to a user given target plane",
+    "category": "compas_wood",
+    "subcategory": "fab",
+    "exposure": 8,
+    "instanceGuid": "648053E6-23FE-4D8D-B8F3-9A1E48056A50",
+    "ghpython": {
+        "hideOutput": true,
+        "hideInput": true,
+        "isAdvancedMode": true,
+        "marshalOutGuids": true,
+        "iconDisplay": 2,
+        "inputParameters": [
+            {
+                "name": "_data",
+                "nickname": "_data",
+                "description": "collection of inputs that represent the elements, insertion vectors, joint types and adjacency, use input_set commonent to group these inputs",
+                "optional": true,
+                "allowTreeAccess": true,
+                "showTypeHints": true,
+                "scriptParamAccess": "item",
+                "wireDisplay": "faint",
+                "sourceCount": 0,
+                "typeHintID": "none",
+                "reverse": false,
+                "simplify": false
+            },
+            {
+                "name": "_planes",
+                "nickname": "_planes",
+                "description": "target planes for orientation of elements",
+                "optional": true,
+                "allowTreeAccess": true,
+                "showTypeHints": true,
+                "scriptParamAccess": "list",
+                "wireDisplay": "faint",
+                "sourceCount": 0,
+                "typeHintID": "plane",
+                "reverse": false,
+                "simplify": false
+            },
+            {
+                "name": "_ids",
+                "nickname": "_ids",
+                "description": "indices to orient only certain elements",
+                "optional": true,
+                "allowTreeAccess": true,
+                "showTypeHints": true,
+                "scriptParamAccess": "list",
+                "wireDisplay": "faint",
+                "sourceCount": 0,
+                "typeHintID": "int",
+                "reverse": false,
+                "simplify": false
+            }
+
+        ],
+        "outputParameters": [
+            {
+                "name": "_plines_o",
+                "nickname": "_plines_o",
+                "description": "oriented outlines using plane to plane transformation",
+                "optional": false,
+                "sourceCount": 0,
+                "graft": false
+            }
+        ]
+    }
+}

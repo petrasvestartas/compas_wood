@@ -1,0 +1,149 @@
+{
+    "name": "ears",
+    "nickname": "ears",
+    "description": "generate notches also known as mickey mouse ears",
+    "category": "compas_wood",
+    "subcategory": "fab",
+    "exposure": 4,
+    "instanceGuid": "aeefda51-51e6-5df0-aeb8-11b5c241ce5d",
+    "ghpython": {
+        "hideOutput": true,
+        "hideInput": true,
+        "isAdvancedMode": true,
+        "marshalOutGuids": true,
+        "iconDisplay": 2,
+        "inputParameters": [
+            {
+                "name": "_p0",
+                "nickname": "_p0",
+                "description": "a data-tree of polyline pairs with holes",
+                "optional": true,
+                "allowTreeAccess": true,
+                "showTypeHints": true,
+                "scriptParamAccess": "tree",
+                "wireDisplay": "faint",
+                "sourceCount": 0,
+                "typeHintID": "curve",
+                "reverse": false,
+                "simplify": false
+            },
+            {
+                "name": "_p1",
+                "nickname": "_p1",
+                "description": "a data-tree of polyline pairs with holes",
+                "optional": true,
+                "allowTreeAccess": true,
+                "showTypeHints": true,
+                "scriptParamAccess": "tree",
+                "wireDisplay": "faint",
+                "sourceCount": 0,
+                "typeHintID": "curve",
+                "reverse": false,
+                "simplify": false
+            },
+            {
+                "name": "_radius",
+                "nickname": "_radius",
+                "description": "notch radius that is equal to cutting tool radius",
+                "optional": true,
+                "allowTreeAccess": true,
+                "showTypeHints": true,
+                "scriptParamAccess": "item",
+                "wireDisplay": "faint",
+                "sourceCount": 0,
+                "typeHintID": "float",
+                "reverse": false,
+                "simplify": false
+            },
+
+            {
+                "name": "_notch_type",
+                "nickname": "_notch_type",
+                "description": "0 - none, 1 - diagonal, 2 - translation",
+                "optional": true,
+                "allowTreeAccess": true,
+                "showTypeHints": true,
+                "scriptParamAccess": "item",
+                "wireDisplay": "faint",
+                "sourceCount": 0,
+                "typeHintID": "int",
+                "reverse": false,
+                "simplify": false
+            },
+
+            {
+                "name": "_union",
+                "nickname": "_union",
+                "description": "get cutting elements for boolean difference and union",
+                "optional": true,
+                "allowTreeAccess": true,
+                "showTypeHints": true,
+                "scriptParamAccess": "item",
+                "wireDisplay": "faint",
+                "sourceCount": 0,
+                "typeHintID": "bool",
+                "reverse": false,
+                "simplify": false
+            }
+        ],
+        "outputParameters": [
+            {
+                "name": "_lines",
+                "nickname": "_lines",
+                "description": "notch lines",
+                "optional": false,
+                "sourceCount": 0,
+                "graft": false
+            },
+            {
+                "name": "_lines_corners",
+                "nickname": "_lines_corners",
+                "description": "lines which shows the correners from where the notch starts",
+                "optional": false,
+                "sourceCount": 0,
+                "graft": false
+            },
+            {
+                "name": "_lines_horizontal",
+                "nickname": "_lines_horizontal",
+                "description": "notches are represented as horizontal lines that can be used for milling",
+                "optional": false,
+                "sourceCount": 0,
+                "graft": false
+            },
+            {
+                "name": "_offset0",
+                "nickname": "_offset0",
+                "description": "offset outrline for cutting without notches",
+                "optional": false,
+                "sourceCount": 0,
+                "graft": false
+            },
+            {
+                "name": "_offset1",
+                "nickname": "_offset1",
+                "description": "offset outrline for cutting without notches",
+                "optional": false,
+                "sourceCount": 0,
+                "graft": false
+            },
+            {
+                "name": "_planes",
+                "nickname": "_planes",
+                "description": "element plane that can be used for orientation",
+                "optional": false,
+                "sourceCount": 0,
+                "graft": false
+            },
+            {
+                "name": "_cut_extrusions",
+                "nickname": "_cut_extrusions",
+                "description": "breps that can be used for boolean difference",
+                "optional": false,
+                "sourceCount": 0,
+                "graft": false
+            }
+            
+        ]
+    }
+}

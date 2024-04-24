@@ -1,0 +1,105 @@
+{
+    "name": "input_get",
+    "nickname": "input_get",
+    "description": "unwrap element data to polylines, insertion vectors, joint types and etc",
+    "category": "compas_wood",
+    "subcategory": "data",
+    "exposure": 2,
+    "instanceGuid": "9814342B-4039-477D-9ECD-09BEDD6BB503",
+    "ghpython": {
+        "hideOutput": true,
+        "hideInput": true,
+        "isAdvancedMode": true,
+        "marshalOutGuids": true,
+        "iconDisplay": 2,
+        "inputParameters": [
+            {
+                "name": "_data",
+                "nickname": "_data",
+                "description": "collection of inputs that represent the elements, insertion vectors, joint types and adjacency, use input_set commonent to group these inputs",
+                "optional": true,
+                "allowTreeAccess": true,
+                "showTypeHints": true,
+                "scriptParamAccess": "item",
+                "wireDisplay": "faint",
+                "sourceCount": 0,
+                "typeHintID": "none",
+                "reverse": false,
+                "simplify": false
+            },
+            {
+                "name": "_split",
+                "nickname": "_split",
+                "description": "split output into closed outlines and lines",
+                "optional": true,
+                "allowTreeAccess": true,
+                "showTypeHints": true,
+                "scriptParamAccess": "item",
+                "wireDisplay": "faint",
+                "sourceCount": 0,
+                "typeHintID": "bool",
+                "reverse": false,
+                "simplify": false
+            }
+
+        ],
+        "outputParameters": [
+            {
+                "name": "_plines_0",
+                "nickname": "_plines_0",
+                "description": "polyline pairs",
+                "optional": false,
+                "sourceCount": 0,
+                "graft": true
+            },
+            {
+                "name": "_plines_1",
+                "nickname": "_plines_1",
+                "description": "polyline pairs",
+                "optional": false,
+                "sourceCount": 0,
+                "graft": true
+            },
+            {
+                "name": "_lines",
+                "nickname": "_lines",
+                "description": "polyline pairs",
+                "optional": false,
+                "sourceCount": 0,
+                "graft": false
+            },
+            {
+                "name": "_insertion_vectors",
+                "nickname": "_insertion_vectors",
+                "description": "insertion vectors per element top bottom and side faces",
+                "optional": false,
+                "sourceCount": 0,
+                "graft": false
+            },
+            {
+                "name": "_joints_per_face",
+                "nickname": "_joints_per_face",
+                "description": "joinery types per element top bottom and side faces",
+                "optional": false,
+                "sourceCount": 0,
+                "graft": false
+            },
+            {
+                "name": "_three_valence",
+                "nickname": "_three_valence",
+                "description": "three valence indices for special cases where one element is connected with two others",
+                "optional": false,
+                "sourceCount": 0,
+                "graft": false
+            },
+            {
+                "name": "_adjacency",
+                "nickname": "_adjacency",
+                "description": "connectivity between elements and their faces",
+                "optional": false,
+                "sourceCount": 0,
+                "graft": false
+            }
+        ]
+    }
+}

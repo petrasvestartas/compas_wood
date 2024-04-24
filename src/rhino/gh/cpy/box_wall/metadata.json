@@ -1,0 +1,92 @@
+{
+    "name": "box_wall",
+    "nickname": "box_wall",
+    "description": "create box wall by offset mesh planes and intersecting them",
+    "category": "compas_wood",
+    "subcategory": "fab",
+    "exposure": 2,
+    "instanceGuid": "2512b78e-3052-4008-a335-a04b66074fc4",
+    "ghpython": {
+        "hideOutput": true,
+        "hideInput": true,
+        "isAdvancedMode": true,
+        "marshalOutGuids": true,
+        "iconDisplay": 2,
+        "inputParameters": [
+            {
+                "name": "_mesh",
+                "nickname": "_mesh",
+                "description": "ngon mesh",
+                "optional": true,
+                "allowTreeAccess": true,
+                "showTypeHints": true,
+                "scriptParamAccess": "item",
+                "wireDisplay": "faint",
+                "sourceCount": 0,
+                "typeHintID": "mesh",
+                "reverse": false,
+                "simplify": false
+            },
+            {
+                "name": "_offset",
+                "nickname": "_offset",
+                "description": "offset_distance",
+                "optional": true,
+                "allowTreeAccess": true,
+                "showTypeHints": true,
+                "scriptParamAccess": "item",
+                "wireDisplay": "faint",
+                "sourceCount": 0,
+                "typeHintID": "float",
+                "reverse": false,
+                "simplify": false
+            },
+            {
+                "name": "_inlay_0",
+                "nickname": "_inlay_0",
+                "description": "offset the plate inwards",
+                "optional": true,
+                "allowTreeAccess": true,
+                "showTypeHints": true,
+                "scriptParamAccess": "item",
+                "wireDisplay": "faint",
+                "sourceCount": 0,
+                "typeHintID": "bool",
+                "reverse": false,
+                "simplify": false
+            },
+            {
+                "name": "_inlay_1",
+                "nickname": "_inlay_1",
+                "description": "offset the plate inwards",
+                "optional": true,
+                "allowTreeAccess": true,
+                "showTypeHints": true,
+                "scriptParamAccess": "item",
+                "wireDisplay": "faint",
+                "sourceCount": 0,
+                "typeHintID": "bool",
+                "reverse": false,
+                "simplify": false
+            }
+        ],
+        "outputParameters": [
+            {
+                "name": "_p0",
+                "nickname": "_polylines_0",
+                "description": "top outline",
+                "optional": false,
+                "sourceCount": 0,
+                "graft": false
+            },
+            {
+                "name": "_p1",
+                "nickname": "_polylines_1",
+                "description": "bottom outline",
+                "optional": false,
+                "sourceCount": 0,
+                "graft": false
+            }
+        ]
+    }
+}

@@ -1,0 +1,57 @@
+{
+    "name": "group_cuts",
+    "nickname": "group_cuts",
+    "description": "match data tree of beam-nodes component with the output of the solver",
+    "category": "compas_wood",
+    "subcategory": "beam",
+    "exposure": 2,
+    "instanceGuid": "962E4B33-83F4-4612-8E11-4D0455EE26A2",
+    "ghpython": {
+        "hideOutput": true,
+        "hideInput": true,
+        "isAdvancedMode": true,
+        "marshalOutGuids": true,
+        "iconDisplay": 2,
+        "inputParameters": [
+            {
+                "name": "_geometry",
+                "nickname": "_geometry",
+                "description": "lofted breps",
+                "optional": true,
+                "allowTreeAccess": true,
+                "showTypeHints": true,
+                "scriptParamAccess": "tree",
+                "wireDisplay": "faint",
+                "sourceCount": 0,
+                "typeHintID": "geometrybase",
+                "reverse": false,
+                "simplify": false
+            },
+            {
+                "name": "_group_id",
+                "nickname": "_group_id",
+                "description": "group indices from the beam nodes component",
+                "optional": true,
+                "allowTreeAccess": true,
+                "showTypeHints": true,
+                "scriptParamAccess": "tree",
+                "wireDisplay": "faint",
+                "sourceCount": 0,
+                "typeHintID": "int",
+                "reverse": false,
+                "simplify": false
+            }
+
+        ],
+        "outputParameters": [
+            {
+                "name": "_result",
+                "nickname": "_result",
+                "description": "geometry ready for boolean difference",
+                "optional": false,
+                "sourceCount": 0,
+                "graft": false
+            }
+        ]
+    }
+}
