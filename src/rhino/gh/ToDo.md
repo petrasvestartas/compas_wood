@@ -13,7 +13,6 @@ connection_zones
 connectors
 custom_joints
 cut_group
-ears
 folding_diamonds
 input_get
 input_set
@@ -31,7 +30,6 @@ xml_write_with_properties
 # Examples
 
 1_solver_joints___
-5_utilities_ears
 7_assign_directions_and_joint_types
 8_cases_chevron_boxes_0___
 8_cases_chevron_input_surfaces_ctypes
