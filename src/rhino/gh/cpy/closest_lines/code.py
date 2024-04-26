@@ -6,7 +6,7 @@ import rhinoscriptsyntax as rs
 
 __author__ = "petra"
 __version__ = "2023.04.04"
-
+import System
 import Rhino.Geometry
 from Rhino.Geometry import RTree
 from Rhino.Geometry import BoundingBox
@@ -20,7 +20,9 @@ import ghpythonlib.treehelpers as th
 
 
 class MyComponent(component):
-    def RunScript(self, _polylines, _lines):
+    def RunScript(self,
+            _polylines: Grasshopper.DataTree[Rhino.Geometry.Curve],
+            _lines: Grasshopper.DataTree[Rhino.Geometry.Line]):
         """Provides a scripting component.
         Inputs:
             x: The x script variable
@@ -57,9 +59,8 @@ class MyComponent(component):
         ###############################################################################
 
         # convert element polylines to a flattened dictionary:
-        segments_dictionary = (
-            {}
-        )  # stores ids e.g. int , [element_int,bottom_or_top_polyline_int,edge,int, bounding_box, hit_count, point_id]
+        segments_dictionary = {}
+        # stores ids e.g. int , [element_int,bottom_or_top_polyline_int,edge,int, bounding_box, hit_count, point_id]
         vectors = []
         count = 0
         for i in range(len(polylines)):
@@ -68,9 +69,8 @@ class MyComponent(component):
                 for k in range(polylines[i][j].SegmentCount):
                     bbox = polylines[i][j].SegmentAt(k).BoundingBox
                     bbox.Inflate(0.02)
-                    segments_dictionary.Add(
-                        count, [i, j, k, bbox, polylines[i][j].SegmentAt(k)]
-                    )
+                    segments_dictionary[count]= [i, j, k, bbox, polylines[i][j].SegmentAt(k)]
+                    
                     count = count + 1
 
         # create a tree

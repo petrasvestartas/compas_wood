@@ -7,15 +7,12 @@ beam_volume
 box_wall
 chevron
 chevron_plates
-closest_indexed_points
-closest_lines
 connection_zones
 connectors
 custom_joints
 cut_group
 folding_diamonds
 input_get
-input_set
 joints
 line_volume
 orient_data

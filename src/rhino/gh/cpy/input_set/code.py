@@ -1,3 +1,4 @@
+"""combine different data sets into one list for a faster data transder between grasshopper wires"""
 from ghpythonlib.componentbase import executingcomponent as component
 import Grasshopper, GhPython
 __author__ = "petras"
@@ -36,21 +37,26 @@ class MyComponent(component):
     
     
     
-    def RunScript(self, _plines, _insertion_vectors, _joints_per_face, _three_valence, _adjacency):
+    def RunScript(self,
+            _polylines: Grasshopper.DataTree[Rhino.Geometry.Polyline],
+            _vectors: Grasshopper.DataTree[Rhino.Geometry.Vector3d],
+            _joint_types: Grasshopper.DataTree[int],
+            _three_valence: Grasshopper.DataTree[int],
+            _adjacency: Grasshopper.DataTree[int]):
         
         
         
         plines = []
         planes = []
-        if( _plines.DataCount > 0):
-            for i in range(_plines.BranchCount):
-                plines.append(_plines.Branch(i))
+        if( _polylines.DataCount > 0):
+            for i in range(_polylines.BranchCount):
+                plines.append(_polylines.Branch(i))
                 # create planes for orientation
                 
-                planes.append(self.get_plane(_plines.Branch(i)[0],_plines.Branch(i)[1][0]))
+                planes.append(self.get_plane(_polylines.Branch(i)[0],_polylines.Branch(i)[1][0]))
         
-        insertion_vectors =  th.tree_to_list(_insertion_vectors) if _insertion_vectors.DataCount > 0 else []
-        joints_per_face =  th.tree_to_list(_joints_per_face) if _joints_per_face.DataCount > 0 else []
+        insertion_vectors =  th.tree_to_list(_vectors) if _vectors.DataCount > 0 else []
+        joints_per_face =  th.tree_to_list(_joint_types) if _joint_types.DataCount > 0 else []
         three_valence =  th.tree_to_list(_three_valence) if _three_valence.DataCount > 0 else []
         adjacency = th.tree_to_list(_adjacency) if _adjacency.DataCount > 0 else []
         
