@@ -82,10 +82,8 @@ class connections_zones(component):
         curves0 = self.project_curves_to_plane(curves0)
         brep_0 = Rhino.Geometry.Brep.CreatePlanarBreps(curves0, Rhino.RhinoDoc.ActiveDoc.ModelAbsoluteTolerance)[0]
 
-
         curves1 = self.project_curves_to_plane(curves1)
         brep_1 = Rhino.Geometry.Brep.CreatePlanarBreps(curves1, Rhino.RhinoDoc.ActiveDoc.ModelAbsoluteTolerance)[0]
-
 
         ###############################################################################
         # Create lofts
@@ -131,9 +129,11 @@ class connections_zones(component):
 
         return solid
 
-    def RunScript(self,
-            _p0: System.Collections.Generic.List[Rhino.Geometry.Curve],
-            _p1: System.Collections.Generic.List[Rhino.Geometry.Curve],
-            _c: System.Drawing.Color):
+    def RunScript(
+        self,
+        _p0: System.Collections.Generic.List[Rhino.Geometry.Curve],
+        _p1: System.Collections.Generic.List[Rhino.Geometry.Curve],
+        _c: System.Drawing.Color,
+    ):
         if _p0 and _p1:
             return self.loft_polylines_with_holes(_p0, _p1, _c)

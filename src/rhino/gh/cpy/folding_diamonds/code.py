@@ -9,8 +9,6 @@ import math
 
 
 class case_3_folded_plates:
-
-
     def __init__(
         self,
         surface,
@@ -60,9 +58,8 @@ class case_3_folded_plates:
 
         self._f_polylines_planes = []  # Plane[][]
         self._f_polylines = []  # Polyline[][]
-            
+
         self._surface = surface
-        
 
         if self._surface == None:
             crv = RhinoGeometry.Arc(
@@ -76,16 +73,15 @@ class case_3_folded_plates:
         self._u_divisions = u_divisions if u_divisions != None else 5
         self._v_divisions = v_divisions if v_divisions != None else 2
         self._base_planes = list(base_planes) if base_planes else []
-        
 
         # Run
         self.diamond_subdivision()
-        
+
         self._has_ngons = self._mesh.Ngons.Count > 0
         self._face_thickness = thickness if thickness != None else 1.4
         self._chamfer = chamfer if chamfer else 0
         self._face_positions = [0] if not face_positions else face_positions
-        
+
         # Properties for plates
         self.get_face_vertices()
         self.get_faces_planes()
@@ -592,18 +588,19 @@ class case_3_folded_plates:
 
 
 class case_3_folded_plates_component(component):
-    def RunScript(self,
-            surface: Rhino.Geometry.Surface,
-            u_divisions: int,
-            v_divisions: int,
-            base_planes: System.Collections.Generic.List[Rhino.Geometry.Plane],
-            thickness: float,
-            chamfer: float,
-            face_positions: System.Collections.Generic.List[float]):
+    def RunScript(
+        self,
+        surface: Rhino.Geometry.Surface,
+        u_divisions: int,
+        v_divisions: int,
+        base_planes: System.Collections.Generic.List[Rhino.Geometry.Plane],
+        thickness: float,
+        chamfer: float,
+        face_positions: System.Collections.Generic.List[float],
+    ):
 
-        
         try:
-       
+
             mtsj = case_3_folded_plates(
                 surface,
                 u_divisions,
@@ -625,5 +622,6 @@ class case_3_folded_plates_component(component):
             return self.mesh, self.plates, self.insertion, self.adjacency, self.flags
         except Exception as e:
             import traceback
+
             # Catch any exception and print the traceback
             traceback.print_exc()

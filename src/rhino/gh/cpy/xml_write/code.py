@@ -7,6 +7,8 @@ Write polylines to xml file
 
 from ghpythonlib.componentbase import executingcomponent as component
 import clr
+import Rhino
+import Grasshopper
 
 clr.AddReference("System.Xml")
 import System.Xml

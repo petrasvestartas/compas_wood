@@ -1,3 +1,4 @@
+"""generate joints between elements"""
 from ghpythonlib.componentbase import executingcomponent as component
 import Grasshopper, GhPython
 import System
@@ -7,7 +8,21 @@ from Rhino.Geometry import Polyline, Point3d
 
 
 class MyComponent(component):
-    def RunScript(self, _cuts0, _cuts1, _type):
+    def RunScript(
+        self,
+        _cuts0: System.Collections.Generic.List[Rhino.Geometry.Curve],
+        _cuts1: System.Collections.Generic.List[Rhino.Geometry.Curve],
+        _type: int,
+    ):
+
+        if not _cuts0:
+            return
+
+        if not _cuts1:
+            return
+
+        if not _type:
+            return
 
         _custom_joints = []
         _custom_types = []

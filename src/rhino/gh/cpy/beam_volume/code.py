@@ -26,13 +26,15 @@ from System.Collections.Generic import SortedDictionary
 
 
 class MyComponent(component):
-    def RunScript(self,
-            _circles: Grasshopper.DataTree[Rhino.Geometry.Circle],
-            _length_of_box: float,
-            _distance_tolerance: float,
-            _parallel_tolerance: float,
-            _cross_or_toptoside: bool,
-            _create_pipes: bool):
+    def RunScript(
+        self,
+        _circles: Grasshopper.DataTree[Rhino.Geometry.Circle],
+        _length_of_box: float,
+        _distance_tolerance: float,
+        _parallel_tolerance: float,
+        _cross_or_toptoside: bool,
+        _create_pipes: bool,
+    ):
         class Cut:
             pass
 
@@ -526,7 +528,11 @@ class MyComponent(component):
                     )
 
                 curve = Rhino.Geometry.Curve.CreateInterpolatedCurve(
-                    point3ds, 3, Rhino.Geometry.CurveKnotStyle.Uniform, centreCurve.TangentAtStart, centreCurve.TangentAtEnd
+                    point3ds,
+                    3,
+                    Rhino.Geometry.CurveKnotStyle.Uniform,
+                    centreCurve.TangentAtStart,
+                    centreCurve.TangentAtEnd,
                 )
                 if curve is None:
                     raise Exception("FreeformGlulam::CreateOffsetCurve:: Failed to create interpolated curve!")

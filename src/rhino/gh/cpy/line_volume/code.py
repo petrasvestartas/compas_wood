@@ -18,11 +18,9 @@ import math
 
 
 class MyComponent(component):
-    def RunScript(self,
-            _crv: Rhino.Geometry.Curve,
-            _align_vec: Rhino.Geometry.Vector3d,
-            _radius: float,
-            _circ_rect: bool):
+    def RunScript(
+        self, _crv: Rhino.Geometry.Curve, _align_vec: Rhino.Geometry.Vector3d, _radius: float, _circ_rect: bool
+    ):
 
         if _crv is None:
             return
