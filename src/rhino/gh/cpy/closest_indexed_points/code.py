@@ -27,10 +27,12 @@ import ghpythonlib.treehelpers as th
 
 
 class MyComponent(component):
-    def RunScript(self,
-            _polylines: Grasshopper.DataTree[Rhino.Geometry.Curve],
-            _points: Grasshopper.DataTree[Rhino.Geometry.Point3d],
-            _joint_types: Grasshopper.DataTree[int]):
+    def RunScript(
+        self,
+        _polylines: Grasshopper.DataTree[Rhino.Geometry.Curve],
+        _points: Grasshopper.DataTree[Rhino.Geometry.Point3d],
+        _joint_types: Grasshopper.DataTree[int],
+    ):
         ###############################################################################
         # Input
         ###############################################################################
@@ -45,9 +47,7 @@ class MyComponent(component):
         count = 0
         for curve in _polylines.AllData():
             result, polyline = curve.TryGetPolyline()
-            polylines_out.Add(
-                polyline, Grasshopper.Kernel.Data.GH_Path(int(count * 0.5))
-            )
+            polylines_out.Add(polyline, Grasshopper.Kernel.Data.GH_Path(int(count * 0.5)))
             if count % 2 == 0:
                 polylines.append([polyline])
             else:
@@ -98,15 +98,8 @@ class MyComponent(component):
             data_by_reference = []
             if rtree.Search(Sphere(pts[i], 0), search_callback, data_by_reference):
                 for j in data_by_reference:
-                    if (
-                        pts[i].DistanceToSquared(
-                            segments_dictionary[j][4].ClosestPoint(pts[i], True)
-                        )
-                        < 0.001
-                    ):
-                        joint_types[segments_dictionary[j][0]][
-                            segments_dictionary[j][2] + 2
-                        ] = ids[i]
+                    if pts[i].DistanceToSquared(segments_dictionary[j][4].ClosestPoint(pts[i], True)) < 0.001:
+                        joint_types[segments_dictionary[j][0]][segments_dictionary[j][2] + 2] = ids[i]
 
         ###############################################################################
         # Output

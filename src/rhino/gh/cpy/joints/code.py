@@ -1,85 +1,100 @@
-
+"""get connection zones from polylines and indices of neighboring elements"""
 from ghpythonlib.componentbase import executingcomponent as component
-
-# STEP 0 - Installation, anaconda prompt:
-# python -m compas_rhino.install
-# python -m compas_rhino.install -p compas_wood
-# STEP 1 - check the environment name
-# import compas_bootstrapper
-# print(compas_bootstrapper.ENVIRONMENT_NAME)
-# STEP 2 - import proxy from compas.rpc
-# https://compas.dev/compas/latest/tutorial/rpc.html#supported-data-types-1
-from compas.rpc import Proxy  # https://compas.dev/compas/latest/api/compas.rpc.html
-
-proxy = Proxy('compas_wood.joinery') # import module
-from compas_rhino import conversions
+import System
 from ghpythonlib import treehelpers
-import Grasshopper as gh
+import Grasshopper
 import Rhino
+import os
+from wood_nano import read_xml_polylines as wood_nano_read_xml_polylines
+from wood_nano import double2
+from wood_nano import joints as wood_nano_joints
+from wood_nano import int2
+from wood_nano import point2
+from wood_nano import int1
+import compas_wood
+from compas_wood.conversions_rhino import to_point2
+from compas_wood.conversions_rhino import from_point2
+from wood_nano.conversions_python import from_int2
+from wood_nano.conversions_python import from_int1
 
-# STEP 3 - start server
-#proxy.stop_server()
-#proxy.start_server()
 
 class joints(component):
-    def RunScript(self, _polylines, _id):
+    def RunScript(self, _polylines: System.Collections.Generic.List[Rhino.Geometry.Polyline], _id: int, _scale: float):
+
         # ==============================================================================
         # input
         # ==============================================================================
-        output_polylines = []
-        if( _polylines.AllData().Count!= 0):
-            print("user_input")
-            #convert to compas polylines
-            for i in _polylines.AllData():
-                output_polylines.append(conversions.polyline_to_compas(i))
+        dataset_index = _id if _id else 0
+        module_path = os.path.dirname(compas_wood.__file__)
+        foldername = os.path.join(module_path, "datasets")
+        foldername = os.path.join(module_path, "datasets") + os.sep
+        files = os.listdir(foldername)
+
+        file_names_without_extensions = [os.path.splitext(file)[0] for file in files]
+        filename = file_names_without_extensions[dataset_index % len(file_names_without_extensions)]
+
+        scale = _scale if _scale else 1
+        xform = Rhino.Geometry.Transform.Scale(Rhino.Geometry.Point3d(0, 0, 0), scale)
+
+        # ==============================================================================
+        # xml
+        # ==============================================================================
+
+        input_polyline_pairs = []
+
+        if _polylines:
+            for polyline in _polylines:
+                copy = Rhino.Geometry.Polyline(polyline)
+                copy.Transform(xform)
+                input_polyline_pairs.append(copy)
         else:
-            print("xml_input")
-            feasible_ids = [1,3,7,10,11,12,14,16,17,18,19,20,21,22,23,24,25,27,28,29,30,31,34,36,37]
-            
-            # read the xml file and get a data-set
-            foldername = (
-                proxy.get_cwd()+"/frontend/src/wood/dataset/" 
+            polylines_coordinates = double2()
+            wood_nano_read_xml_polylines(
+                foldername,
+                filename,
+                polylines_coordinates,
             )
-            
-            # read polylines from an xml files
-            id = feasible_ids[max(min(24, _id), 0)]
-            filename_of_dataset = proxy.get_filenames_of_datasets()[id]
-            output_polylines = proxy.read_xml_polylines(foldername, filename_of_dataset)
-        
+
+            for polyline_coord in polylines_coordinates:
+                polyline = Rhino.Geometry.Polyline()
+                for i in range(0, len(polyline_coord), 3):
+                    polyline.Add(
+                        Rhino.Geometry.Point3d(polyline_coord[i], polyline_coord[i + 1], polyline_coord[i + 2])
+                    )
+                polyline.Transform(xform)
+                input_polyline_pairs.append(polyline)
+
         # ==============================================================================
-        # get joints
+        # interface detection
         # ==============================================================================
-        element_pairs_list, joint_areas_polylines, joint_types = proxy.joints(output_polylines, 2) 
-        
-        
-        # ==============================================================================
-        # output
-        # ==============================================================================
-        _element_pairs = treehelpers.list_to_tree(element_pairs_list)
-        
+        wood_nano_input_polyline_pairs = to_point2(input_polyline_pairs)
+        element_pairs = int2()
+        joint_areas = point2()
+        joint_types = int1()
+
+        wood_nano_joints(wood_nano_input_polyline_pairs, 2, element_pairs, joint_areas, joint_types)
+
+        tree_element_pairs = treehelpers.list_to_tree(from_int2(element_pairs))
+        tree_joint_areas = treehelpers.list_to_tree(from_point2(joint_areas))
+        tree_joint_types = treehelpers.list_to_tree(from_int1(joint_types))
+
         # iterate joints add neighbors to individual elements element
-        _element_neighbors = gh.DataTree[int]()
-        for i in element_pairs_list:
-            _element_neighbors.Add(i[1],gh.Kernel.Data.GH_Path(i[0]))
-            _element_neighbors.Add(i[0],gh.Kernel.Data.GH_Path(i[1]))
-        
-        
-        _joint_areas = []
-        _joint_areas_mesh = []
-        for i in joint_areas_polylines:
-            polyline = conversions.polyline_to_rhino(i)
+        tree_element_neighbors = Grasshopper.DataTree[int]()
+        for i in element_pairs:
+            tree_element_neighbors.Add(i[1], Grasshopper.Kernel.Data.GH_Path(i[0]))
+            tree_element_neighbors.Add(i[0], Grasshopper.Kernel.Data.GH_Path(i[1]))
+
+        list_joint_areas_mesh = []
+        for polyline in tree_joint_areas.AllData():
             polyline.MergeColinearSegments(0.02, True)
             polyline.CollapseShortSegments(0.02)
-            _joint_areas.append(polyline)
-            _joint_areas_mesh.append(Rhino.Geometry.Mesh.CreateFromClosedPolyline(polyline))
-        
-        remap_joint_types = {11: 1, 12: 0, 13: 5, 20: 2, 30: 3, 40: 4}
-        _joint_types = []
-        for i in joint_types:
-            _joint_types.append(remap_joint_types[i])
-        
-        _polylines_out = []
-        for i in output_polylines:
-            _polylines_out.append(conversions.polyline_to_rhino(i))
-        
-        return _polylines_out, _element_pairs, _joint_areas, _joint_areas_mesh, _joint_types, _element_neighbors
+            list_joint_areas_mesh.append(Rhino.Geometry.Mesh.CreateFromClosedPolyline(polyline))
+
+        return (
+            input_polyline_pairs,
+            tree_element_pairs,
+            tree_joint_areas,
+            list_joint_areas_mesh,
+            tree_joint_types,
+            tree_element_neighbors,
+        )

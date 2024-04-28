@@ -65,7 +65,7 @@
                 "scriptParamAccess": "list",
                 "wireDisplay": "faint",
                 "sourceCount": 0,
-                "typeHintID": "int",
+                "typeHintID": "plane",
                 "reverse": false,
                 "simplify": false
             },

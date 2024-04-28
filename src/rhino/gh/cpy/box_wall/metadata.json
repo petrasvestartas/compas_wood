@@ -68,6 +68,20 @@
                 "typeHintID": "bool",
                 "reverse": false,
                 "simplify": false
+            },
+            {
+                "name": "_skipped",
+                "nickname": "_skipped",
+                "description": "skip offsets of plats",
+                "optional": true,
+                "allowTreeAccess": true,
+                "showTypeHints": true,
+                "scriptParamAccess": "list",
+                "wireDisplay": "faint",
+                "sourceCount": 0,
+                "typeHintID": "int",
+                "reverse": false,
+                "simplify": false
             }
         ],
         "outputParameters": [

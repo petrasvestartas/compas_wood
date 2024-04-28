@@ -48,17 +48,13 @@ TYPES_MAP = dict(
     surface="f4070a37-c822-410f-9057-100d2e22a22d",
     subd="20f4ca9c-6c90-4fd6-ba8a-5bf9ca79db08",
     brep="2ceb0405-fdfe-403d-a4d6-8786da45fb9d",
-    geometrybase="c37956f4-d39c-49c7-af71-1e87f8031b26"
+    geometrybase="c37956f4-d39c-49c7-af71-1e87f8031b26",
 )
 
 EXPOSURE = dict(valid=set([-1, 2, 4, 8, 16, 32, 64, 128]), default=2)
 ACCESS = dict(valid=set([0, 1, 2]), map=dict(item=0, list=1, tree=2), default=0)
-PARAM_TYPE = dict(
-    valid=set(TYPES_MAP.values()), map=TYPES_MAP, default=TYPES_MAP["ghdoc"]
-)
-WIRE_DISPLAY = dict(
-    valid=set([0, 1, 2]), map=dict(default=0, faint=1, hidden=2), default=0
-)
+PARAM_TYPE = dict(valid=set(TYPES_MAP.values()), map=TYPES_MAP, default=TYPES_MAP["ghdoc"])
+WIRE_DISPLAY = dict(valid=set([0, 1, 2]), map=dict(default=0, faint=1, hidden=2), default=0)
 
 
 def fetch_ghio_lib(target_folder="temp"):
@@ -103,23 +99,11 @@ def validate_source_bundle(source):
     data = os.path.join(source, "metadata.json")
 
     if not os.path.exists(icon):
-        raise ValueError(
-            "icon missing, make sure icon.png is present in the source bundle: {}".format(
-                source
-            )
-        )
+        raise ValueError("icon missing, make sure icon.png is present in the source bundle: {}".format(source))
     if not os.path.exists(code):
-        raise ValueError(
-            "code missing, make sure code.py is present in the source bundle: {}".format(
-                source
-            )
-        )
+        raise ValueError("code missing, make sure code.py is present in the source bundle: {}".format(source))
     if not os.path.exists(data):
-        raise ValueError(
-            "metadata missing, make sure metadata.json is present in the source bundle: {}".format(
-                source
-            )
-        )
+        raise ValueError("metadata missing, make sure metadata.json is present in the source bundle: {}".format(source))
 
     icon = bitmap_from_image_path(icon)
 
@@ -133,11 +117,7 @@ def validate_source_bundle(source):
         data["exposure"] = EXPOSURE["default"]
 
     if data["exposure"] not in EXPOSURE["valid"]:
-        raise ValueError(
-            "Invalid exposure value. Accepted values are {}".format(
-                sorted(EXPOSURE["valid"])
-            )
-        )
+        raise ValueError("Invalid exposure value. Accepted values are {}".format(sorted(EXPOSURE["valid"])))
 
     ghpython = data.get("ghpython")
 
@@ -159,11 +139,7 @@ def parse_param_access(access):
         access = ACCESS["map"].get(access)
 
     if access not in ACCESS["valid"]:
-        raise ValueError(
-            "Invalid param access value. Valid values are {}".format(
-                sorted(ACCESS["valid"])
-            )
-        )
+        raise ValueError("Invalid param access value. Valid values are {}".format(sorted(ACCESS["valid"])))
 
     return access
 
@@ -175,11 +151,7 @@ def parse_wire_display(wire_display):
         wire_display = WIRE_DISPLAY["map"].get(wire_display)
 
     if wire_display not in WIRE_DISPLAY["valid"]:
-        raise ValueError(
-            "Invalid wire display value. Valid values are {}".format(
-                sorted(WIRE_DISPLAY["valid"])
-            )
-        )
+        raise ValueError("Invalid wire display value. Valid values are {}".format(sorted(WIRE_DISPLAY["valid"])))
 
     return wire_display
 
@@ -192,9 +164,7 @@ def parse_param_type_hint(type_hint_id):
 
     if type_hint_id not in PARAM_TYPE["valid"]:
         raise ValueError(
-            'Invalid param type hint ID ("{}"). Valid values are {}'.format(
-                type_hint_id, sorted(PARAM_TYPE["valid"])
-            )
+            'Invalid param type hint ID ("{}"). Valid values are {}'.format(type_hint_id, sorted(PARAM_TYPE["valid"]))
         )
 
     try:
@@ -265,14 +235,10 @@ def create_ghuser_component(source, target, version=None, prefix=None):
 
     params.SetInt32("InputCount", len(inputParam))
     for i, _pi in enumerate(inputParam):
-        params.SetGuid(
-            "InputId", i, System.Guid.Parse("08908df5-fa14-4982-9ab2-1aa0927566aa")
-        )
+        params.SetGuid("InputId", i, System.Guid.Parse("08908df5-fa14-4982-9ab2-1aa0927566aa"))
     params.SetInt32("OutputCount", len(outputParam))
     for i, _po in enumerate(outputParam):
-        params.SetGuid(
-            "OutputId", i, System.Guid.Parse("08908df5-fa14-4982-9ab2-1aa0927566aa")
-        )
+        params.SetGuid("OutputId", i, System.Guid.Parse("08908df5-fa14-4982-9ab2-1aa0927566aa"))
 
     for i, pi in enumerate(inputParam):
         input_instance_guid = System.Guid.NewGuid()
@@ -335,9 +301,7 @@ def create_ghuser_component(source, target, version=None, prefix=None):
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(
-        description="Create GHUser components out of python code."
-    )
+    parser = argparse.ArgumentParser(description="Create GHUser components out of python code.")
     parser.add_argument(
         "source",
         type=str,
@@ -350,9 +314,7 @@ if __name__ == "__main__":
         required=False,
         help="Folder where the GH_IO.dll assembly is located. Defaults to ./lib",
     )
-    parser.add_argument(
-        "--version", type=str, required=False, help="Version to tag components"
-    )
+    parser.add_argument("--version", type=str, required=False, help="Version to tag components")
     parser.add_argument(
         "--prefix",
         type=str,
@@ -378,8 +340,7 @@ if __name__ == "__main__":
     source_bundles = [
         d
         for d in os.listdir(sourcedir)
-        if os.path.isdir(os.path.join(sourcedir, d))
-        and d not in ("__pycache__", ".git")
+        if os.path.isdir(os.path.join(sourcedir, d)) and d not in ("__pycache__", ".git")
     ]
 
     print("GHPython componentizer")
@@ -396,7 +357,7 @@ if __name__ == "__main__":
         sys.exit(-1)
 
     clr.AddReference(os.path.splitext(gh_io)[0])
-    
+
     print("[x] GH_IO assembly: {}".format(gh_io))
 
     print("Processing component bundles:")

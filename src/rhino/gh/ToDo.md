@@ -1,36 +1,21 @@
-C:/Users/vboxuser/.rhinocode/py39-rh8/python.exe -m pip install -e .
+C:/Users/petras/.rhinocode/py39-rh8/python.exe -m pip install .
+
+# Bugs
+
+Solve the joint orientation planarity problem.
+7_assign_directions_and_joint_types.gh
+38 joint crashes on 15_beams_simple_volume_a.gh example
+
+
+
 
 # Components
 
-assembly
-assembly_brep
-assembly_mesh
-beam_volume
-box_wall
-chevron
-chevron_plates
 connection_zones
-connectors
 custom_joints
-cut_group
-folding_diamonds
-input_get
-joints
-line_volume
-orient_data
-solver
-solver_custom
-solver_rpc
+
 xml_read
-xml_recenter
 xml_write
 xml_write_with_properties
 
-# Examples
-
-1_solver_joints___
-7_assign_directions_and_joint_types
-8_cases_chevron_boxes_0___
-8_cases_chevron_input_surfaces_ctypes
-8_cases_chevron_input_surfaces
-9_assembly_sequence
+add # r: compas_wood, compas in every component

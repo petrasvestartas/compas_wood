@@ -1,17 +1,26 @@
-"""get joints ids and connections areas between elements"""
-
-__author__ = "petras vestartas"
-__version__ = "2023.03.31"
-
-
 from ghpythonlib.componentbase import executingcomponent as component
 import Rhino
-import Rhino.Geometry
 from System.Drawing import Color
 import System
 
 
 class connections_zones(component):
+    def project_curves_to_plane(self, curves):
+        points = []
+        for curve in curves:
+            for point in curve.ToNurbsCurve().Points:
+                points.append(point.Location)
+
+        result, plane = Rhino.Geometry.Plane.FitPlaneToPoints(points)
+
+        xform = Rhino.Geometry.Transform.PlanarProjection(plane)
+        curves_projected = []
+        for curve in curves:
+            curve_projected = curve.DuplicateCurve()
+            curve_projected.Transform(xform)
+            curves_projected.append(curve_projected)
+        return curves_projected
+
     def loft_polylines_with_holes(self, curves0, curves1, color):
         """Loft polylines with holes
 
@@ -29,17 +38,17 @@ class connections_zones(component):
         ###############################################################################
         # user input
         ###############################################################################
-        
-        if(curves0 == [None]):
+
+        if curves0 == [None]:
             return
-        if(curves1 == [None]):
+        if curves1 == [None]:
             return
-        print(curves0)
-        if(len(curves0) == 0):
+
+        if len(curves0) == 0:
             return
-        if(len(curves1) == 0):
+        if len(curves1) == 0:
             return
-        
+
         flag = len(curves0) is not 0 if True else len(curves1) != 0
         if flag:
             curves = []
@@ -69,19 +78,19 @@ class connections_zones(component):
         ###############################################################################
         # Create mesh of the bottom face
         ###############################################################################
-        brep_bottom = Rhino.Geometry.Brep.CreatePlanarBreps(
-            curves0, Rhino.RhinoDoc.ActiveDoc.ModelAbsoluteTolerance*100
-        )[0]
-        
-        
-        brep_top = Rhino.Geometry.Brep.CreatePlanarBreps(
-            curves1, Rhino.RhinoDoc.ActiveDoc.ModelAbsoluteTolerance*100
-        )[0]
+
+        curves0 = self.project_curves_to_plane(curves0)
+        brep_0 = Rhino.Geometry.Brep.CreatePlanarBreps(curves0, Rhino.RhinoDoc.ActiveDoc.ModelAbsoluteTolerance)[0]
+
+
+        curves1 = self.project_curves_to_plane(curves1)
+        brep_1 = Rhino.Geometry.Brep.CreatePlanarBreps(curves1, Rhino.RhinoDoc.ActiveDoc.ModelAbsoluteTolerance)[0]
+
 
         ###############################################################################
         # Create lofts
         ###############################################################################
-        breps_to_join = [brep_bottom, brep_top]
+        breps_to_join = [brep_0, brep_1]
         for i in range(len(curves0)):
             wall = Rhino.Geometry.Brep.CreateFromLoft(
                 [curves0[i], curves1[i]],
@@ -95,27 +104,22 @@ class connections_zones(component):
         ###############################################################################
         # Join Brep
         ###############################################################################
-        solid = Rhino.Geometry.Brep.JoinBreps(
-            breps_to_join, Rhino.RhinoDoc.ActiveDoc.ModelAbsoluteTolerance*10
-        )[0]
-        
+
+        solid = Rhino.Geometry.Brep.JoinBreps(breps_to_join, Rhino.RhinoDoc.ActiveDoc.ModelAbsoluteTolerance)[0]
+
         faces = []
         for i in range(solid.Faces.Count):
             faces.append(solid.Faces[i].DuplicateFace(False))
-        
-        solid = Rhino.Geometry.Brep.JoinBreps(
-            faces, Rhino.RhinoDoc.ActiveDoc.ModelAbsoluteTolerance*10
-        )[0]
-        
-        
+
+        solid = Rhino.Geometry.Brep.JoinBreps(faces, Rhino.RhinoDoc.ActiveDoc.ModelAbsoluteTolerance)[0]
+
         if solid:
             solid.Faces.SplitKinkyFaces(Rhino.RhinoMath.DefaultAngleTolerance, True)
-            
-            if (Rhino.Geometry.BrepSolidOrientation.Inward is solid.SolidOrientation):
-              solid.Flip();
-            
-        
-        if(color is not None):
+
+            if Rhino.Geometry.BrepSolidOrientation.Inward is solid.SolidOrientation:
+                solid.Flip()
+
+        if color is not None:
             for i in range(solid.Faces.Count):
                 solid.Faces[i].PerFaceColor = color
         else:
@@ -127,6 +131,9 @@ class connections_zones(component):
 
         return solid
 
-    def RunScript(self, _p0, _p1, _c):
+    def RunScript(self,
+            _p0: System.Collections.Generic.List[Rhino.Geometry.Curve],
+            _p1: System.Collections.Generic.List[Rhino.Geometry.Curve],
+            _c: System.Drawing.Color):
         if _p0 and _p1:
             return self.loft_polylines_with_holes(_p0, _p1, _c)

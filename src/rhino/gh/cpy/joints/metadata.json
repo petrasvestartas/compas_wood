@@ -20,7 +20,7 @@
                 "optional": true,
                 "allowTreeAccess": true,
                 "showTypeHints": true,
-                "scriptParamAccess": "tree",
+                "scriptParamAccess": "list",
                 "wireDisplay": "faint",
                 "sourceCount": 0,
                 "typeHintID": "polyline",
@@ -38,6 +38,21 @@
                 "wireDisplay": "faint",
                 "sourceCount": 0,
                 "typeHintID": "int",
+                "reverse": false,
+                "simplify": false
+            }
+            ,
+            {
+                "name": "_scale",
+                "nickname": "_scale",
+                "description": "scale polylines",
+                "optional": true,
+                "allowTreeAccess": true,
+                "showTypeHints": true,
+                "scriptParamAccess": "item",
+                "wireDisplay": "faint",
+                "sourceCount": 0,
+                "typeHintID": "float",
                 "reverse": false,
                 "simplify": false
             }

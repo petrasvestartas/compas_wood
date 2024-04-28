@@ -11,7 +11,7 @@ def to_point(vectors, depth):
     if depth == 1:  # Single polyline
         polyline = m.point1()
         for rhino_point in vectors:
-            polyline.append(m.point([rhino_point.X, rhino_point.Y, rhino_point.Z]))
+            polyline.append(m.point(rhino_point.X, rhino_point.Y, rhino_point.Z))
         return polyline
     else:  # Nested polyline
         polyline = getattr(m, f"point{depth}")()
@@ -42,12 +42,15 @@ def from_point1(point1, type="Polyline"):
         point = point1[i]
         points.append(Point3d(point[0], point[1], point[2]))
     if type == "Polyline":
-        return Polyline(points)
+        polyline = Polyline(len(points))
+        for point in points:
+            polyline.Add(point)
+        return polyline
     elif type == "Box" and len(points) == 8:
         mesh = Mesh()
         for point in points:
             mesh.Vertices.Add(point)
-        
+
         mesh.Faces.AddFace(3, 2, 1, 0)
         mesh.Faces.AddFace(4, 5, 6, 7)
         mesh.Faces.AddFace(0, 1, 5, 4)
@@ -77,7 +80,7 @@ def to_vector(vectors, depth):
     if depth == 1:  # Single vector_of_vectors
         vector_of_vectors = m.vector1()
         for rhino_vector in vectors:
-            vector_of_vectors.append(m.vector([rhino_vector.X, rhino_vector.Y, rhino_vector.Z]))
+            vector_of_vectors.append(m.vector(rhino_vector.X, rhino_vector.Y, rhino_vector.Z))
         return vector_of_vectors
     else:  # Nested vector_of_vectors
         vector = getattr(m, f"vector{depth}")()
@@ -120,4 +123,3 @@ def from_vector3(vector3):
 
 def from_vector4(vector4):
     return [from_vector3(v) for v in vector4]
-

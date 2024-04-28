@@ -8,8 +8,6 @@ import Grasshopper
 import ghpythonlib.treehelpers as th
 from Rhino.Geometry import (
     Mesh,
-    Surface,
-    Brep,
     Vector3d,
     Vector3f,
     Plane,
@@ -27,16 +25,16 @@ import math
 class MyComponent(component):
     def RunScript(
         self,
-        _mesh,
-        _face_positions,
-        _face_thickness,
-        _divisions,
-        _division_len,
-        _edge_vectors,
-        _rect_width,
-        _rect_height,
-        _rect_thickness,
-        _projection,
+        _mesh: Rhino.Geometry.Mesh,
+        _face_positions: System.Collections.Generic.List[float],
+        _face_thickness: float,
+        _divisions: System.Collections.Generic.List[int],
+        _division_len: System.Collections.Generic.List[float],
+        _edge_vectors: System.Collections.Generic.List[Rhino.Geometry.Line],
+        _rect_width: float,
+        _rect_height: float,
+        _rect_thickness: float,
+        _projection: System.Collections.Generic.List[Rhino.Geometry.Brep],
     ):
         class case_2_vda:
             def __init__(
@@ -93,33 +91,23 @@ class MyComponent(component):
                     Rhino.RhinoDoc.ActiveDoc.Objects.AddMesh(self.m)
 
                 self.s = None
-                self.face_thickness = (
-                    face_thickness if face_thickness is not None else 1
-                )
-                self.face_positions = (
-                    face_positions if face_positions is not None else [0]
-                )
+                self.face_thickness = face_thickness if face_thickness is not None else 1
+                self.face_positions = list(face_positions) if face_positions is not None else [0]
                 self.face_positions.sort()
 
                 if len(self.face_positions) == 0:
                     self.face_positions = [0]
 
                 self.projection_breps = projection_breps
-                self.edge_divisions = (
-                    edge_divisions if edge_divisions is not None else [2]
-                )
-                self.edge_division_len = (
-                    edge_division_len if edge_division_len is not None else []
-                )
+                self.edge_divisions = edge_divisions if edge_divisions is not None else [2]
+                self.edge_division_len = edge_division_len if edge_division_len is not None else []
                 if len(self.edge_division_len) > 0:
                     if self.edge_division_len[0] < 0.01:
                         self.edge_division_len = []
                 self.has_ngons = len(self.m.Ngons) > 0
                 self.rect_width = rect_width if rect_width is not None else 10
                 self.rect_height = rect_height if rect_height is not None else 10
-                self.rect_thickness = (
-                    rect_thickness if rect_thickness is not None else 1
-                )
+                self.rect_thickness = rect_thickness if rect_thickness is not None else 1
                 self.f = None
                 self.e = None
                 self.f_v = None
@@ -163,20 +151,14 @@ class MyComponent(component):
             def vertex_topo_vertex(self, mesh, vertex_ids):
                 topo_vertices = []
                 for i in range(len(vertex_ids)):
-                    topo_vertices.append(
-                        mesh.TopologyVertices.TopologyVertexIndex(vertex_ids[i])
-                    )
+                    topo_vertices.append(mesh.TopologyVertices.TopologyVertexIndex(vertex_ids[i]))
 
                 return topo_vertices
 
             def get_ngons_topo_boundaries(self, mesh):
                 boundaries = []
                 for i in range(mesh.Ngons.Count):
-                    boundaries.append(
-                        self.vertex_topo_vertex(
-                            mesh, mesh.Ngons[i].BoundaryVertexIndexList()
-                        )
-                    )
+                    boundaries.append(self.vertex_topo_vertex(mesh, mesh.Ngons[i].BoundaryVertexIndexList()))
 
                 return boundaries
 
@@ -316,19 +298,13 @@ class MyComponent(component):
                             normal = s.NormalAt(u, v)
                             self.fe_planes[i][j] = Plane(
                                 self.fe_planes[i][j].Origin,
-                                Vector3d.CrossProduct(
-                                    normal, self.fe_planes[i][j].ZAxis
-                                ),
+                                Vector3d.CrossProduct(normal, self.fe_planes[i][j].ZAxis),
                                 normal,
                             )
 
                         for brep in self.projection_breps:
-                            if brep.IsPointInside(
-                                self.fe_planes[i][j].Origin, 0.01, False
-                            ):
-                                xform = Rhino.Geometry.Transform.PlanarProjection(
-                                    Plane.WorldXY
-                                )
+                            if brep.IsPointInside(self.fe_planes[i][j].Origin, 0.01, False):
+                                xform = Rhino.Geometry.Transform.PlanarProjection(Plane.WorldXY)
                                 self.fe_planes[i][j].Transform(xform)
 
             #        print(self.fe_planes)
@@ -338,9 +314,7 @@ class MyComponent(component):
 
             def dihedral_plane(self, plane0, plane1):
                 # Plane between two Planes
-                result, l = Rhino.Geometry.Intersect.Intersection.PlanePlane(
-                    plane0, plane1
-                )
+                result, l = Rhino.Geometry.Intersect.Intersection.PlanePlane(plane0, plane1)
                 result, t = Rhino.Geometry.Intersect.Intersection.LinePlane(l, plane0)
                 centerDihedral = l.PointAt(t)
 
@@ -354,9 +328,7 @@ class MyComponent(component):
                     and plane0.Origin.DistanceToSquared(plane1.Origin) > 0.001
                 ):
                     # Intersect two lines to get center
-                    result, t0, t1 = Rhino.Geometry.Intersect.Intersection.LineLine(
-                        angleLine0, angleLine1, 0.01, False
-                    )
+                    result, t0, t1 = Rhino.Geometry.Intersect.Intersection.LineLine(angleLine0, angleLine1, 0.01, False)
 
                     # Construct plane from LineLine center and plane origins
                     center = angleLine0.PointAt(t0)
@@ -366,9 +338,7 @@ class MyComponent(component):
                     v1.Unitize()
 
                     # Compute Plane
-                    dihedralPlane = Rhino.Geometry.Plane(
-                        centerDihedral, l.Direction, v0 + v1
-                    )
+                    dihedralPlane = Rhino.Geometry.Plane(centerDihedral, l.Direction, v0 + v1)
 
                     return dihedralPlane
                 else:
@@ -397,9 +367,7 @@ class MyComponent(component):
                     if topo:
                         v.append(int(uintv[i]))
                     else:
-                        v.append(
-                            mesh.TopologyVertices.TopologyVertexIndex(int(uintv[i]))
-                        )
+                        v.append(mesh.TopologyVertices.TopologyVertexIndex(int(uintv[i])))
 
                 return v
 
@@ -446,9 +414,7 @@ class MyComponent(component):
                 connected_ngons = []
 
                 for face_index in connected_faces:
-                    connected_ngons.append(
-                        mesh.Ngons.NgonIndexFromFaceIndex(face_index)
-                    )
+                    connected_ngons.append(mesh.Ngons.NgonIndexFromFaceIndex(face_index))
 
                 return connected_ngons
 
@@ -489,9 +455,7 @@ class MyComponent(component):
                 self.e_lines = [Line.Unset] * self.e
                 for pair in self.e_ngon_e:
                     # print(self.e_ngon_e[pair])
-                    self.e_lines[self.e_ngon_e[pair]] = self.m.TopologyEdges.EdgeLine(
-                        pair
-                    )
+                    self.e_lines[self.e_ngon_e[pair]] = self.m.TopologyEdges.EdgeLine(pair)
                 if len(lines) == 0:
                     return
                 # Create rtree and add lines
@@ -507,25 +471,19 @@ class MyComponent(component):
                     bbox.Inflate(Rhino.RhinoDoc.ActiveDoc.ModelAbsoluteTolerance)
                     bbox.Inflate(1)
                     # print(bbox.IsValid)
-                    rTree.Search(
-                        lines[i].BoundingBox, self.BoundingBoxCallback, self.found_ids
-                    )
+                    rTree.Search(lines[i].BoundingBox, self.BoundingBoxCallback, self.found_ids)
 
                     # Iterate through found ids and check if end point lies on a mesh edge
                     for id in self.found_ids:
                         # print(id)
                         if (
-                            self.e_lines[id]
-                            .ClosestPoint(lines[i].From, True)
-                            .DistanceToSquared(lines[i].From)
+                            self.e_lines[id].ClosestPoint(lines[i].From, True).DistanceToSquared(lines[i].From)
                             < Rhino.RhinoDoc.ActiveDoc.ModelAbsoluteTolerance
                         ):
                             self.insertion_vectors[id] = lines[i].Direction
                             self.insertion_vectors[id].Unitize()
                         elif (
-                            self.e_lines[id]
-                            .ClosestPoint(lines[i].To, True)
-                            .DistanceToSquared(lines[i].To)
+                            self.e_lines[id].ClosestPoint(lines[i].To, True).DistanceToSquared(lines[i].To)
                             < Rhino.RhinoDoc.ActiveDoc.ModelAbsoluteTolerance
                         ):
                             self.insertion_vectors[id] = lines[i].Direction
@@ -595,12 +553,7 @@ class MyComponent(component):
                     zaxis.Unitize()
                     pair = self.m.TopologyEdges.GetTopologyVertices(id)
                     # edge vertex normals
-                    yaxis = (
-                        (
-                            Vector3d(self.m.Normals[pair.I])
-                            + Vector3d(self.m.Normals[pair.J])
-                        )
-                    ) * 0.5
+                    yaxis = ((Vector3d(self.m.Normals[pair.I]) + Vector3d(self.m.Normals[pair.J]))) * 0.5
                     # or face normals
                     # print(len(self.f_planes))
                     # print(i)
@@ -609,10 +562,7 @@ class MyComponent(component):
                     # print(self.e_f[i][0])
                     # print(self.e_f[i][1])
 
-                    yaxis = (
-                        self.f_planes[self.e_f[i][0]].ZAxis
-                        + self.f_planes[self.e_f[i][1]].ZAxis
-                    ) * 0.5
+                    yaxis = (self.f_planes[self.e_f[i][0]].ZAxis + self.f_planes[self.e_f[i][1]].ZAxis) * 0.5
 
                     # self.f_planes[]
 
@@ -623,11 +573,9 @@ class MyComponent(component):
                     xaxis = Vector3d.CrossProduct(zaxis, yaxis)
 
                     # orient x-axis towards first edge index
-                    if (origin + xaxis).DistanceToSquared(
-                        self.f_planes[self.e_f[i][0]].Origin
-                    ) < (origin - xaxis).DistanceToSquared(
-                        self.f_planes[self.e_f[i][0]].Origin
-                    ):
+                    if (origin + xaxis).DistanceToSquared(self.f_planes[self.e_f[i][0]].Origin) < (
+                        origin - xaxis
+                    ).DistanceToSquared(self.f_planes[self.e_f[i][0]].Origin):
                         xaxis *= -1
 
                     # Incase insertion vectors are given
@@ -644,11 +592,9 @@ class MyComponent(component):
                         xaxis_ = self.insertion_vectors[i]
                         xaxis_.Transform(xform)
                         # print (xaxis_)
-                        if (Point3d.Origin + xaxis_).DistanceToSquared(
-                            Point3d.Origin + xaxis
-                        ) > (Point3d.Origin - xaxis_).DistanceToSquared(
-                            Point3d.Origin + xaxis
-                        ):
+                        if (Point3d.Origin + xaxis_).DistanceToSquared(Point3d.Origin + xaxis) > (
+                            Point3d.Origin - xaxis_
+                        ).DistanceToSquared(Point3d.Origin + xaxis):
                             xaxis_ *= -1
                         xaxis = xaxis_
 
@@ -685,15 +631,11 @@ class MyComponent(component):
                             self.divisions = int(self.edge_divisions[0])
                         else:
                             self.divisions = int(self.edge_divisions[i])
-                    pts = self.interpolate_points(
-                        edge_line.From, edge_line.To, self.divisions, False
-                    )
+                    pts = self.interpolate_points(edge_line.From, edge_line.To, self.divisions, False)
                     #            print(self.divisions)
                     #            print(edge_line.Length)
 
-                    self.e90_multiple_planes[i] = [
-                        self.change_origin(self.e90_planes[i], pt) for pt in pts
-                    ]
+                    self.e90_multiple_planes[i] = [self.change_origin(self.e90_planes[i], pt) for pt in pts]
                     count = count + 1
 
             def polyline_from_planes(self, basePlane, sidePlanes, close=True):
@@ -721,15 +663,9 @@ class MyComponent(component):
                 self.e_polylines_index = []
 
                 for i in range(len(self.e90_multiple_planes)):
-                    self.e_polylines.append(
-                        [None] * (len(self.e90_multiple_planes[i]) * 2)
-                    )
-                    self.e_polylines_planes.append(
-                        [None] * len(self.e90_multiple_planes[i])
-                    )
-                    self.e_polylines_index.append(
-                        [None] * len(self.e90_multiple_planes[i])
-                    )
+                    self.e_polylines.append([None] * (len(self.e90_multiple_planes[i]) * 2))
+                    self.e_polylines_planes.append([None] * len(self.e90_multiple_planes[i]))
+                    self.e_polylines_index.append([None] * len(self.e90_multiple_planes[i]))
 
                     for j in range(len(self.e90_multiple_planes[i])):
                         if self.e90_multiple_planes[i][j] == Plane.Unset:
@@ -744,24 +680,16 @@ class MyComponent(component):
                                         self.e90_multiple_planes[i][j],
                                         self.rect_thickness * 0.5,
                                     ),
-                                    Interval(
-                                        -self.rect_width * 0.5, self.rect_width * 0.5
-                                    ),
-                                    Interval(
-                                        -self.rect_height * 0.5, self.rect_height * 0.5
-                                    ),
+                                    Interval(-self.rect_width * 0.5, self.rect_width * 0.5),
+                                    Interval(-self.rect_height * 0.5, self.rect_height * 0.5),
                                 )
                                 rect1 = Rectangle3d(
                                     self.move_plane_by_axis(
                                         self.e90_multiple_planes[i][j],
                                         self.rect_thickness * -0.5,
                                     ),
-                                    Interval(
-                                        -self.rect_width * 0.5, self.rect_width * 0.5
-                                    ),
-                                    Interval(
-                                        -self.rect_height * 0.5, self.rect_height * 0.5
-                                    ),
+                                    Interval(-self.rect_width * 0.5, self.rect_width * 0.5),
+                                    Interval(-self.rect_height * 0.5, self.rect_height * 0.5),
                                 )
                                 self.e_polylines[i][j * 2 + 0] = rect0.ToPolyline()
                                 self.e_polylines[i][j * 2 + 1] = rect1.ToPolyline()
@@ -841,10 +769,7 @@ class MyComponent(component):
                                 # Step 2: Translate polyline type1_0 by ZAxis * rect_thickness to create type1_1
                                 type1_1 = Polyline(type1_0)
                                 type1_1.Transform(
-                                    Transform.Translation(
-                                        self.e90_multiple_planes[i][j].ZAxis
-                                        * self.rect_thickness
-                                    )
+                                    Transform.Translation(self.e90_multiple_planes[i][j].ZAxis * self.rect_thickness)
                                 )
 
                                 # Step 3: Assign type1_0 and type1_1 to corresponding variables in the e_polylines array
@@ -855,13 +780,9 @@ class MyComponent(component):
                                 self.e90_multiple_planes[i][j],
                                 self.rect_thickness * 0.5,
                             )
-                            self.e_polylines_index[i][j] = "{}-{}_{}".format(
-                                self.e_f[i][0], self.e_f[i][1], j
-                            )
+                            self.e_polylines_index[i][j] = "{}-{}_{}".format(self.e_f[i][0], self.e_f[i][1], j)
 
-            def outline_from_face_edge_corner(
-                self, face_plane, edge_planes, bise_planes, T=1, tolerance=0.1
-            ):
+            def outline_from_face_edge_corner(self, face_plane, edge_planes, bise_planes, T=1, tolerance=0.1):
                 polyline = Rhino.Geometry.Polyline()
 
                 if T == 2:
@@ -869,48 +790,28 @@ class MyComponent(component):
                         plane = edge_planes[i]
                         plane1 = edge_planes[(i + 1) % len(edge_planes)]
                         if (
-                            Rhino.Geometry.Vector3d.VectorAngle(
-                                plane.ZAxis, plane1.ZAxis
-                            )
-                            > -0.01
-                            and Rhino.Geometry.Vector3d.VectorAngle(
-                                plane.ZAxis, plane1.ZAxis
-                            )
-                            < 0.01
+                            Rhino.Geometry.Vector3d.VectorAngle(plane.ZAxis, plane1.ZAxis) > -0.01
+                            and Rhino.Geometry.Vector3d.VectorAngle(plane.ZAxis, plane1.ZAxis) < 0.01
                         ):
                             edge_planes[(i + 1) % len(edge_planes)] = plane
                             continue
 
-                        if (
-                            Rhino.Geometry.Vector3d.VectorAngle(
-                                plane.XAxis, plane1.XAxis
-                            )
-                            < tolerance
-                        ):
+                        if Rhino.Geometry.Vector3d.VectorAngle(plane.XAxis, plane1.XAxis) < tolerance:
                             vector3d = Rhino.Geometry.Vector3d(plane.XAxis)
                             vector3d.Rotate(math.pi / 2, plane.YAxis)
-                            plane1 = Rhino.Geometry.Plane(
-                                bise_planes[i].Origin, vector3d, plane.YAxis
-                            )
+                            plane1 = Rhino.Geometry.Plane(bise_planes[i].Origin, vector3d, plane.YAxis)
 
                             # edge_planes[(i + 1) % len(edge_planes)] = plane
 
-                        result, line = Rhino.Geometry.Intersect.Intersection.PlanePlane(
-                            plane, plane1
-                        )
-                        result, t = Rhino.Geometry.Intersect.Intersection.LinePlane(
-                            line, face_plane
-                        )
+                        result, line = Rhino.Geometry.Intersect.Intersection.PlanePlane(plane, plane1)
+                        result, t = Rhino.Geometry.Intersect.Intersection.LinePlane(line, face_plane)
                         polyline.Add(line.PointAt(t))
 
                     polyline.Add(polyline[0])
                     # Rhino.RhinoDoc.ActiveDoc.Objects.AddPolyline(polyline)
                 else:
                     for j in range(len(bise_planes)):
-                        (
-                            result,
-                            p,
-                        ) = Rhino.Geometry.Intersect.Intersection.PlanePlanePlane(
+                        (result, p,) = Rhino.Geometry.Intersect.Intersection.PlanePlanePlane(
                             face_plane, bise_planes[j], edge_planes[j]
                         )
                         polyline.Add(p)
@@ -936,9 +837,7 @@ class MyComponent(component):
                     return polyline
 
                 p = Rhino.Geometry.Polyline()
-                points = Rhino.Geometry.Polyline(
-                    polyline.GetRange(0, polyline.Count - 1)
-                )
+                points = Rhino.Geometry.Polyline(polyline.GetRange(0, polyline.Count - 1))
 
                 for i in range(points.Count):
                     curr = i
@@ -947,14 +846,10 @@ class MyComponent(component):
 
                     v0 = points[prev] - points[curr]
                     v1 = points[next] - points[curr]
-                    angle = Rhino.Geometry.Vector3d.VectorAngle(
-                        v0, v1, Rhino.Geometry.Vector3d.CrossProduct(v0, v1)
-                    )
+                    angle = Rhino.Geometry.Vector3d.VectorAngle(v0, v1, Rhino.Geometry.Vector3d.CrossProduct(v0, v1))
 
                     if flags[i] and angle < math.pi * 0.5:
-                        value_ = rhino_util.MathUtil.RemapNumbers(
-                            angle, 0, math.pi * 0.5, value, value * 0.1
-                        )
+                        value_ = rhino_util.MathUtil.RemapNumbers(angle, 0, math.pi * 0.5, value, value * 0.1)
                         v0.Unitize()
                         v1.Unitize()
                         v0 *= value_
@@ -981,28 +876,20 @@ class MyComponent(component):
                         self.f_polylines.append([None, None])
 
                         self.f_polylines[i][0] = self.outline_from_face_edge_corner(
-                            self.move_plane_by_axis(
-                                self.f_planes[i], face_thickness * -0.5
-                            ),
+                            self.move_plane_by_axis(self.f_planes[i], face_thickness * -0.5),
                             self.fe_planes[i],
                             self.bi_planes[i],
                             2,
                         )
                         self.f_polylines[i][1] = self.outline_from_face_edge_corner(
-                            self.move_plane_by_axis(
-                                self.f_planes[i], face_thickness * 0.5
-                            ),
+                            self.move_plane_by_axis(self.f_planes[i], face_thickness * 0.5),
                             self.fe_planes[i],
                             self.bi_planes[i],
                             2,
                         )
 
                         self.f_polylines_planes.append(
-                            [
-                                self.move_plane_by_axis(
-                                    self.f_planes[i], self.face_thickness * 0.5
-                                )
-                            ]
+                            [self.move_plane_by_axis(self.f_planes[i], self.face_thickness * 0.5)]
                         )
 
                         self.f_polylines_index.append([str(i)])
@@ -1039,9 +926,7 @@ class MyComponent(component):
                                 self.face_positions[j] + self.face_thickness * 0.5,
                             )
                             self.f_polylines_index[i][j] = (
-                                str(i)
-                                if len(self.face_positions) == 1
-                                else "{0}-{1}".format(i, j)
+                                str(i) if len(self.face_positions) == 1 else "{0}-{1}".format(i, j)
                             )
 
                 # Chamfer
@@ -1066,21 +951,16 @@ class MyComponent(component):
         ###############################################################################
 
         m = _mesh
-        face_positions = _face_positions if len(_face_positions) is not 0 else [0]
+        face_positions = _face_positions if _face_positions else [0]
         face_thickness = _face_thickness if _face_thickness is not None else 1
-        divisions = _divisions if len(_divisions) is not 0 else [2]
-        division_len = _division_len if len(_division_len) is not 0 else [15]
-        edge_vectors = _edge_vectors if len(_edge_vectors) is not 0 else []
-        rect_width = _rect_width if _rect_width is not 0 else 10
-        rect_height = _rect_height if _rect_height is not 0 else 10
-        rect_thickness = _rect_thickness if _rect_thickness is not 0 else 11
-        projection = _projection if len(_projection) else []
-
+        divisions = _divisions if _divisions else [2]
+        division_len = _division_len if _division_len else [15]
+        edge_vectors = _edge_vectors if _edge_vectors else []
+        rect_width = _rect_width if _rect_width else 10
+        rect_height = _rect_height if _rect_height else 10
+        rect_thickness = _rect_thickness if _rect_thickness else 11
+        projection = _projection if _projection else []
         chamfer = 0
-        #            DA.GetData(10, ref chamfer);
-        #
-        #            List<Plane> cut_planes = new List<Plane>();
-        #            DA.GetDataList(11, cut_planes);
 
         ###############################################################################
         # run code
@@ -1100,12 +980,6 @@ class MyComponent(component):
             projection,
         )
 
-        """
-        if (cut_planes.Count > 0)
-        {
-            rhino_util.PolylineUtil.CutMesh_FoldedPlates(ref vda.f_polylines, cut_planes);
-        }
-        """
         ###############################################################################
         # user output
         ###############################################################################
@@ -1119,19 +993,13 @@ class MyComponent(component):
 
         for i in range(len(vda.e_polylines)):
             if len(vda.e_polylines[i]) > 0:
-                data_tree_e.AddRange(
-                    vda.e_polylines[i], Grasshopper.Kernel.Data.GH_Path(i)
-                )
+                data_tree_e.AddRange(vda.e_polylines[i], Grasshopper.Kernel.Data.GH_Path(i))
         for i in range(len(vda.e_polylines_planes)):
             if vda.e_polylines_planes[i][0] is not None:
-                data_tree_e_pl.AddRange(
-                    vda.e_polylines_planes[i], Grasshopper.Kernel.Data.GH_Path(i)
-                )
+                data_tree_e_pl.AddRange(vda.e_polylines_planes[i], Grasshopper.Kernel.Data.GH_Path(i))
         for i in range(len(vda.e_polylines_index)):
             if vda.e_polylines_index[i][0] is not None:
-                data_tree_e_id.AddRange(
-                    vda.e_polylines_index[i], Grasshopper.Kernel.Data.GH_Path(i)
-                )
+                data_tree_e_id.AddRange(vda.e_polylines_index[i], Grasshopper.Kernel.Data.GH_Path(i))
 
         _f = data_tree_f
         _f_pl = th.list_to_tree(vda.f_polylines_planes)

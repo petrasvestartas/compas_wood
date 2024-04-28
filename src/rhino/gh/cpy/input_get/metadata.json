@@ -50,7 +50,7 @@
                 "description": "polyline pairs",
                 "optional": false,
                 "sourceCount": 0,
-                "graft": true
+                "graft": false
             },
             {
                 "name": "_plines_1",
@@ -58,7 +58,7 @@
                 "description": "polyline pairs",
                 "optional": false,
                 "sourceCount": 0,
-                "graft": true
+                "graft": false
             },
             {
                 "name": "_lines",
@@ -96,6 +96,14 @@
                 "name": "_adjacency",
                 "nickname": "_adjacency",
                 "description": "connectivity between elements and their faces",
+                "optional": false,
+                "sourceCount": 0,
+                "graft": false
+            },
+            {
+                "name": "_cut_types",
+                "nickname": "_cut_types",
+                "description": "fabrication type",
                 "optional": false,
                 "sourceCount": 0,
                 "graft": false
