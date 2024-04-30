@@ -10,6 +10,7 @@ This component does nothing useful, it's only a kitchen sink (but in python3) ex
     Returns:
         result: The sum of all three values.
 """
+
 from ghpythonlib.componentbase import executingcomponent as component
 
 import System

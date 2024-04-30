@@ -1,4 +1,5 @@
 """get connection zones from polylines and indices of neighboring elements"""
+
 from ghpythonlib.componentbase import executingcomponent as component
 import System
 from ghpythonlib import treehelpers

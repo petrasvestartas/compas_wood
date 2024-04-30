@@ -811,7 +811,10 @@ class MyComponent(component):
                     # Rhino.RhinoDoc.ActiveDoc.Objects.AddPolyline(polyline)
                 else:
                     for j in range(len(bise_planes)):
-                        (result, p,) = Rhino.Geometry.Intersect.Intersection.PlanePlanePlane(
+                        (
+                            result,
+                            p,
+                        ) = Rhino.Geometry.Intersect.Intersection.PlanePlanePlane(
                             face_plane, bise_planes[j], edge_planes[j]
                         )
                         polyline.Add(p)

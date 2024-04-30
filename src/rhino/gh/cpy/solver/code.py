@@ -119,7 +119,7 @@ class connections_zones(component):
             w_output_types,
             to_double1(input_joint_volume_parameters),
             [],
-            []
+            [],
             # to_point2(input_custom_joints),
             # to_int1(input_custom_joints_types),
         )

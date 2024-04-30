@@ -1,7 +1,7 @@
 from wood_nano import GLOBALS
 
 
-class Globals:
+class Globals(object):
     """Class to access global variables of the wood_nano library using class instance wood_globals:
 
     >>> from compas_wood.binding import wood_globals
@@ -89,6 +89,13 @@ class Globals:
         Joinery polylines for custom base female joints.
 
     """
+
+    def __new__(cls):
+
+        if not hasattr(cls, "instance"):
+            cls.instance = super(Globals, cls).__new__(cls)
+
+        return cls.instance
 
     @property
     def clipper_scale(cls):
