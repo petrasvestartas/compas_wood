@@ -2,7 +2,7 @@ from compas_wood.binding import read_xml_polylines
 import compas_wood
 import os
 
-dataset_index = 0
+dataset_index = 3
 module_path = os.path.dirname(compas_wood.__file__)
 foldername = os.path.join(module_path, "datasets")
 foldername = os.path.join(module_path, "datasets") + os.sep
