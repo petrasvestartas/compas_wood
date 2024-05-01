@@ -9,7 +9,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
     <link rel="icon" href="../_static/compas.ico" type="image/x-icon">
-    <title>binding_test &#8212; compas_wood</title>
+    <title>binding_beam_volumes_side &#8212; compas_wood</title>
   
   
   
@@ -53,15 +53,15 @@
     <script src="../_static/design-tabs.js"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'examples/binding_test';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'examples/binding_beam_volumes_side';</script>
     <script>
         DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://raw.githubusercontent.com/petrasvestartas/compas_wood/gh-pages/versions.json';
         DOCUMENTATION_OPTIONS.theme_switcher_version_match = 'latest';
         </script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="API Reference" href="../api.html" />
-    <link rel="prev" title="binding_rtree" href="binding_rtree.html" />
+    <link rel="next" title="binding_closed_mesh_from_polylines" href="binding_closed_mesh_from_polylines.html" />
+    <link rel="prev" title="binding_beam_volumes_multiple" href="binding_beam_volumes_multiple.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -499,7 +499,7 @@ document.write(`
 <li class="toctree-l2"><a class="reference internal" href="binding_beam_volumes_cross.html">binding_beam_volumes_cross</a></li>
 <li class="toctree-l2"><a class="reference internal" href="binding_beam_volumes_frame.html">binding_beam_volumes_frame</a></li>
 <li class="toctree-l2"><a class="reference internal" href="binding_beam_volumes_multiple.html">binding_beam_volumes_multiple</a></li>
-<li class="toctree-l2"><a class="reference internal" href="binding_beam_volumes_side.html">binding_beam_volumes_side</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">binding_beam_volumes_side</a></li>
 <li class="toctree-l2"><a class="reference internal" href="binding_closed_mesh_from_polylines.html">binding_closed_mesh_from_polylines</a></li>
 <li class="toctree-l2"><a class="reference internal" href="binding_get_connection_zones.html">binding_get_connection_zones</a></li>
 <li class="toctree-l2"><a class="reference internal" href="binding_globals.html">binding_globals</a></li>
@@ -507,7 +507,7 @@ document.write(`
 <li class="toctree-l2"><a class="reference internal" href="binding_read_xml_polylines.html">binding_read_xml_polylines</a></li>
 <li class="toctree-l2"><a class="reference internal" href="binding_read_xml_polylines_and_properties.html">binding_read_xml_polylines_and_properties</a></li>
 <li class="toctree-l2"><a class="reference internal" href="binding_rtree.html">binding_rtree</a></li>
-<li class="toctree-l2 current active"><a class="current reference internal" href="#">binding_test</a></li>
+<li class="toctree-l2"><a class="reference internal" href="binding_test.html">binding_test</a></li>
 </ul>
 </li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../api.html">API Reference</a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-6"><i class="fa-solid fa-chevron-down"></i></label><ul>
@@ -565,7 +565,7 @@ document.write(`
     
     <li class="breadcrumb-item"><a href="../examples.html" class="nav-link">Examples</a></li>
     
-    <li class="breadcrumb-item active" aria-current="page">binding_test</li>
+    <li class="breadcrumb-item active" aria-current="page">binding_beam_volumes_side</li>
   </ul>
 </nav>
 </div>
@@ -582,15 +582,90 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article" role="main">
                   
-  <section id="binding-test">
-<h1>binding_test</h1>
+  <section id="binding-beam-volumes-side">
+<h1>binding_beam_volumes_side</h1>
 <figure class="figure align-default">
-<img alt="../_images/binding_test.png" class="figure-img img-fluid" src="../_images/binding_test.png" />
+<img alt="../_images/binding_beam_volumes_side.png" class="figure-img img-fluid" src="../_images/binding_beam_volumes_side.png" />
 </figure>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">compas_wood.binding</span> <span class="kn">import</span> <span class="n">test</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">compas.geometry</span> <span class="kn">import</span> <span class="n">Polyline</span>
+<span class="kn">from</span> <span class="nn">compas_wood.binding</span> <span class="kn">import</span> <span class="n">beam_volumes</span>
 
 
-<span class="n">test</span><span class="p">()</span>
+<span class="n">input_polylines</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">Polyline</span><span class="p">([</span>
+        <span class="p">[</span><span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+        <span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+    <span class="p">]),</span>
+    <span class="n">Polyline</span><span class="p">([</span>
+        <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+        <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
+    <span class="p">]),</span>
+<span class="p">]</span>
+<span class="n">input_polylines_segment_radii</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">input_polylines</span><span class="p">)):</span>
+    <span class="n">input_polyline_segment_radii</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">input_polylines</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">points</span><span class="p">)):</span>
+        <span class="n">input_polyline_segment_radii</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">input_polylines_segment_radii</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">input_polyline_segment_radii</span><span class="p">)</span>
+
+<span class="n">input_polylines_segment_direction</span> <span class="o">=</span> <span class="p">[]</span>
+
+
+<span class="n">index_polylines</span><span class="p">,</span> <span class="n">index_polylines_segment</span><span class="p">,</span> <span class="n">distance</span><span class="p">,</span> <span class="n">point_pairs</span><span class="p">,</span> <span class="n">volume_pairs</span><span class="p">,</span> <span class="n">joints_areas</span><span class="p">,</span> <span class="n">joints_types</span> <span class="o">=</span> <span class="n">beam_volumes</span><span class="p">(</span>
+        <span class="n">input_polylines</span><span class="p">,</span>
+        <span class="n">input_polylines_segment_radii</span><span class="p">,</span>
+        <span class="n">input_polylines_segment_direction</span><span class="p">,</span>
+        <span class="n">input_allowed_types_per_polyline</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+        <span class="n">input_min_distance</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+        <span class="n">input_volume_length</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+        <span class="n">input_cross_or_side_to_end</span><span class="o">=</span><span class="mf">1.01</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">compas_viewer</span> <span class="kn">import</span> <span class="n">Viewer</span>
+    <span class="kn">from</span> <span class="nn">compas.geometry</span> <span class="kn">import</span> <span class="n">Scale</span>
+    <span class="kn">from</span> <span class="nn">compas.geometry</span> <span class="kn">import</span> <span class="n">Polygon</span>
+
+    <span class="n">colors</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="mi">10</span><span class="p">:</span> <span class="p">(</span><span class="mi">255</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>  <span class="c1"># Side-to-side rotated</span>
+        <span class="mi">11</span><span class="p">:</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>  <span class="c1"># Side-to-side out-of-plane</span>
+        <span class="mi">12</span><span class="p">:</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">255</span><span class="p">),</span>  <span class="c1"># Side-to-side in-plane</span>
+        <span class="mi">13</span><span class="p">:</span> <span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">),</span>  <span class="c1"># Side-to-side in-plane</span>
+        <span class="mi">20</span><span class="p">:</span> <span class="p">(</span><span class="mi">255</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">150</span><span class="p">),</span>  <span class="c1"># Top-to-side</span>
+        <span class="mi">30</span><span class="p">:</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">200</span><span class="p">,</span> <span class="mi">255</span><span class="p">)</span>  <span class="c1"># Cross</span>
+    <span class="p">}</span>
+
+    <span class="n">viewer</span> <span class="o">=</span> <span class="n">Viewer</span><span class="p">(</span><span class="n">show_grid</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">rendermode</span><span class="o">=</span><span class="s1">&#39;lighted&#39;</span><span class="p">)</span>
+    <span class="n">scale</span> <span class="o">=</span> <span class="mf">1e-0</span>
+
+    <span class="k">for</span> <span class="n">polyline</span> <span class="ow">in</span> <span class="n">input_polylines</span><span class="p">:</span>
+        <span class="n">polyline</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">Scale</span><span class="o">.</span><span class="n">from_factors</span><span class="p">([</span><span class="n">scale</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">scale</span><span class="p">]))</span>
+        <span class="n">viewer</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">polyline</span><span class="p">,</span> <span class="n">show_points</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">lineswidth</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">linecolor</span><span class="o">=</span><span class="p">(</span><span class="mi">150</span><span class="p">,</span> <span class="mi">150</span><span class="p">,</span> <span class="mi">150</span><span class="p">))</span>
+
+    <span class="k">for</span> <span class="nb">id</span><span class="p">,</span> <span class="n">p</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">point_pairs</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">point</span> <span class="ow">in</span> <span class="n">p</span><span class="p">:</span>
+            <span class="n">point</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">Scale</span><span class="o">.</span><span class="n">from_factors</span><span class="p">([</span><span class="n">scale</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">scale</span><span class="p">]))</span>
+            <span class="n">viewer</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">point</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">pointcolor</span><span class="o">=</span><span class="n">colors</span><span class="p">[</span><span class="n">joints_types</span><span class="p">[</span><span class="nb">id</span><span class="p">]])</span>
+
+    <span class="k">for</span> <span class="n">volume</span> <span class="ow">in</span> <span class="n">volume_pairs</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">polyline</span> <span class="ow">in</span> <span class="n">volume</span><span class="p">:</span>
+            <span class="n">polyline</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">Scale</span><span class="o">.</span><span class="n">from_factors</span><span class="p">([</span><span class="n">scale</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">scale</span><span class="p">]))</span>
+
+            <span class="n">viewer</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">polyline</span><span class="p">,</span> <span class="n">show_points</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">lineswidth</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">linecolor</span><span class="o">=</span><span class="p">(</span><span class="mi">150</span><span class="p">,</span> <span class="mi">150</span><span class="p">,</span> <span class="mi">150</span><span class="p">))</span>
+
+    <span class="k">for</span> <span class="nb">id</span><span class="p">,</span> <span class="n">joint_area</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">joints_areas</span><span class="p">):</span>
+        <span class="n">joint_area</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">Scale</span><span class="o">.</span><span class="n">from_factors</span><span class="p">([</span><span class="n">scale</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">scale</span><span class="p">]))</span>
+
+        <span class="n">viewer</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Polygon</span><span class="p">(</span><span class="n">joint_area</span><span class="o">.</span><span class="n">points</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span><span class="o">.</span><span class="n">to_mesh</span><span class="p">(),</span>
+                         <span class="n">show_points</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                         <span class="n">show_lines</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                         <span class="n">facecolor</span><span class="o">=</span><span class="n">colors</span><span class="p">[</span><span class="n">joints_types</span><span class="p">[</span><span class="nb">id</span><span class="p">]])</span>
+
+    <span class="n">viewer</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;compas_viewer is not installed.&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </section>
