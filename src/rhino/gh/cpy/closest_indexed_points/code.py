@@ -1,28 +1,9 @@
 from ghpythonlib.componentbase import executingcomponent as component
-import Grasshopper, GhPython
-import System
-import Rhino
-import rhinoscriptsyntax as rs
-
-"""Provides a scripting component.
-    Inputs:
-        x: The x script variable
-        y: The y script variable
-    Output:
-        a: The a output variable"""
-
-__author__ = "petra"
-__version__ = "2023.04.04"
-
-import Rhino.Geometry
-from Rhino.Geometry import RTree
-from Rhino.Geometry import BoundingBox
-from Rhino.Geometry import Sphere
-from Rhino.Geometry import Vector3d
-from Rhino.Geometry import Point3d
-from Rhino.Geometry import Polyline
-from Rhino.Geometry import Line
 import Grasshopper
+import Rhino
+import Rhino.Geometry
+from Rhino.Geometry import Sphere
+from Rhino.Geometry import Polyline
 import ghpythonlib.treehelpers as th
 
 
@@ -88,8 +69,6 @@ class MyComponent(component):
             rtree.Insert(segments_dictionary[i][3], i)
 
         # call_backs of rtree
-        hit_count = 0
-
         def search_callback(sender, rtree_event_args):
             data_by_reference.append(rtree_event_args.Id)
 

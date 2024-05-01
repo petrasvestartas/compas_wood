@@ -1,10 +1,6 @@
-"""generate joints between elements"""
 from ghpythonlib.componentbase import executingcomponent as component
-import Grasshopper, GhPython
 import System
 import Rhino
-import rhinoscriptsyntax as rs
-from Rhino.Geometry import Polyline, Point3d
 
 
 class MyComponent(component):

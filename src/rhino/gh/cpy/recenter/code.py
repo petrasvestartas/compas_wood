@@ -1,10 +1,3 @@
-__author__ = "petras vestartas"
-__version__ = "2023.03.22"
-
-"""
-Move curves to to the origin
-"""
-
 from ghpythonlib.componentbase import executingcomponent as component
 import Rhino
 import Grasshopper
@@ -13,7 +6,7 @@ import Grasshopper
 class xml_recenter_component(component):
     def RunScript(self, _geo, _scale):
 
-        scale = _scale if _scale != None else 1
+        scale = _scale if _scale is not None else 1
 
         if _geo.AllData().Count == 0:
             return

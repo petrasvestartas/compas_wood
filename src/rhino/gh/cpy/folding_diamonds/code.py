@@ -1,11 +1,9 @@
-from ghpythonlib.componentbase import executingcomponent as component
+from ghpythonlib.componentbase import executingcomponent as component  # noqa: E402
 import Rhino.Geometry as RhinoGeometry
-import math
 from ghpythonlib import treehelpers
 import Grasshopper
 import Rhino
 import System
-import math
 
 
 class case_3_folded_plates:
@@ -61,7 +59,7 @@ class case_3_folded_plates:
 
         self._surface = surface
 
-        if self._surface == None:
+        if self._surface is None:
             crv = RhinoGeometry.Arc(
                 RhinoGeometry.Point3d(-100, 0, 0),
                 RhinoGeometry.Point3d(0, 0, 100),
@@ -70,15 +68,15 @@ class case_3_folded_plates:
             self._surface = RhinoGeometry.Extrusion.Create(crv, 300, False).ToNurbsSurface()
             self._surface = self._surface.Transpose()
 
-        self._u_divisions = u_divisions if u_divisions != None else 5
-        self._v_divisions = v_divisions if v_divisions != None else 2
+        self._u_divisions = u_divisions if u_divisions is not None else 5
+        self._v_divisions = v_divisions if v_divisions is not None else 2
         self._base_planes = list(base_planes) if base_planes else []
 
         # Run
         self.diamond_subdivision()
 
         self._has_ngons = self._mesh.Ngons.Count > 0
-        self._face_thickness = thickness if thickness != None else 1.4
+        self._face_thickness = thickness if thickness is not None else 1.4
         self._chamfer = chamfer if chamfer else 0
         self._face_positions = [0] if not face_positions else face_positions
 
@@ -97,7 +95,6 @@ class case_3_folded_plates:
         # Main Parameters
         #####################################################################################
         self._mesh = RhinoGeometry.Mesh()
-        flags = []
 
         if self._u_divisions < 1:
             self._u_divisions = 1
@@ -137,12 +134,10 @@ class case_3_folded_plates:
                 p4 = self._surface.PointAt(sum_step_u + step_u * 0.5, sum_step_v + step_v * 1.5)
                 p5 = self._surface.PointAt(sum_step_u + step_u * 0.5, sum_step_v + step_v * 0.5)
                 p6 = self._surface.PointAt(sum_step_u + step_u * 0.5, sum_step_v - step_v * 0.5)
-                p7 = (p5 + p6) / 2
-                p8 = (p4 + p5) / 2
 
                 if j == 0:
                     #####################################################################################
-                    ## start triangles
+                    # start triangles
                     #####################################################################################
                     p9 = self._surface.PointAt(sum_step_u + step_u * 0.5, interval1.T0)
                     line = RhinoGeometry.Line(p5, p6)
@@ -288,7 +283,6 @@ class case_3_folded_plates:
         else:
             self._f = self._mesh.Faces.Count
 
-            empty_list = []
             self._f_v = []
             for i in range(self._mesh.Faces.Count):
                 self._f_v.append([])
@@ -347,9 +341,9 @@ class case_3_folded_plates:
         ####################################################################################################
         # Plane between two Planes
         ####################################################################################################
-        result, l = RhinoGeometry.Intersect.Intersection.PlanePlane(plane0, plane1)
-        result, t = RhinoGeometry.Intersect.Intersection.LinePlane(l, plane0)
-        centerDihedral = l.PointAt(t)
+        result, line = RhinoGeometry.Intersect.Intersection.PlanePlane(plane0, plane1)
+        result, t = RhinoGeometry.Intersect.Intersection.LinePlane(line, plane0)
+        centerDihedral = line.PointAt(t)
 
         ####################################################################################################
         # Convert ZAxis to lines, cant it be done on origin
@@ -364,7 +358,7 @@ class case_3_folded_plates:
             plane0.ZAxis.IsParallelTo(plane1.ZAxis, 0.01) == 0
             and plane0.Origin.DistanceToSquared(plane1.Origin) > 0.001
         ):
-            ##########################################################################################3##########
+            ####################################################################################################
             # Intersect two lines to get center
             ####################################################################################################
             result, t0, t1 = RhinoGeometry.Intersect.Intersection.LineLine(angleLine0, angleLine1)
@@ -381,7 +375,7 @@ class case_3_folded_plates:
             ####################################################################################################
             # Compute Plane
             ####################################################################################################
-            dihedralPlane = RhinoGeometry.Plane(centerDihedral, l.Direction, v0 + v1)
+            dihedralPlane = RhinoGeometry.Plane(centerDihedral, line.Direction, v0 + v1)
 
             return dihedralPlane
         else:
@@ -486,7 +480,6 @@ class case_3_folded_plates:
         return RhinoGeometry.Plane(plane.Origin + plane.ZAxis * distance, plane.XAxis, plane.YAxis)
 
     def get_face_polylines(self):
-        zero_layer = len(self._face_positions) == 0
 
         self._f_polylines_index = []  # new string[f][]
         self._f_polylines_planes = []  # new Plane[f][]
@@ -552,17 +545,17 @@ class case_3_folded_plates:
         p = RhinoGeometry.Polyline()
 
         if value < 0:
-            for l in lines:
-                l_ = RhinoGeometry.Line(l.From, l.To)
+            for line in lines:
+                l_ = RhinoGeometry.Line(line.From, line.To)
 
                 l_.Extend(-abs(value), -abs(value))
                 lShorter = l_
                 p.Add(lShorter.From)
                 p.Add(lShorter.To)
         else:
-            for l in lines:
-                p.Add(l.PointAt(value))
-                p.Add(l.PointAt(1 - value))
+            for line in lines:
+                p.Add(line.PointAt(value))
+                p.Add(line.PointAt(1 - value))
 
         p.Add(p[0])
 
@@ -570,15 +563,14 @@ class case_3_folded_plates:
 
     def get_insertion_vectors(self):
         for i in range(self._f):
-            if self._flags[i] == False:
+            if self._flags[i] is False:
                 vec = self._f_polylines[i][0][2] - self._f_polylines[i][0][0]
                 vec.Unitize()
                 vec *= 10
 
                 for j in range(3):
                     mid = (self._f_polylines[i][0][j] + self._f_polylines[i][0][(j + 1) % 3]) * 0.5
-                    l = RhinoGeometry.Line(mid, vec)
-                    self._insertion_lines.append(l)
+                    self._insertion_lines.append(RhinoGeometry.Line(mid, vec))
 
         # chamfer
         if self._chamfer > 0.000001:
@@ -599,29 +591,22 @@ class case_3_folded_plates_component(component):
         face_positions: System.Collections.Generic.List[float],
     ):
 
-        try:
-
-            mtsj = case_3_folded_plates(
-                surface,
-                u_divisions,
-                v_divisions,
-                base_planes,
-                thickness,
-                chamfer,
-                face_positions,
-            )
-            self.mesh = mtsj._mesh
-            polylines_tree = Grasshopper.DataTree[RhinoGeometry.Polyline]()
-            for i in range(0, len(mtsj._f_polylines)):
-                for j in range(0, len(mtsj._f_polylines[i])):
-                    polylines_tree.Add(mtsj._f_polylines[i][j], Grasshopper.Kernel.Data.GH_Path(i))
-            self.plates = polylines_tree
-            self.insertion = mtsj._insertion_lines
-            self.adjacency = treehelpers.list_to_tree(mtsj._adjacency)
-            self.flags = mtsj._flags
-            return self.mesh, self.plates, self.insertion, self.adjacency, self.flags
-        except Exception as e:
-            import traceback
-
-            # Catch any exception and print the traceback
-            traceback.print_exc()
+        mtsj = case_3_folded_plates(
+            surface,
+            u_divisions,
+            v_divisions,
+            base_planes,
+            thickness,
+            chamfer,
+            face_positions,
+        )
+        self.mesh = mtsj._mesh
+        polylines_tree = Grasshopper.DataTree[RhinoGeometry.Polyline]()
+        for i in range(0, len(mtsj._f_polylines)):
+            for j in range(0, len(mtsj._f_polylines[i])):
+                polylines_tree.Add(mtsj._f_polylines[i][j], Grasshopper.Kernel.Data.GH_Path(i))
+        self.plates = polylines_tree
+        self.insertion = mtsj._insertion_lines
+        self.adjacency = treehelpers.list_to_tree(mtsj._adjacency)
+        self.flags = mtsj._flags
+        return self.mesh, self.plates, self.insertion, self.adjacency, self.flags

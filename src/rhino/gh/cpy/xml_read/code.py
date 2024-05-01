@@ -1,32 +1,26 @@
-__author__ = "petras vestartas"
-__version__ = "2023.03.28"
-
-"""
-Read polylines and cutting types from xml file
-"""
-from ghpythonlib.componentbase import executingcomponent as component
+from ghpythonlib.componentbase import executingcomponent as component  # noqa: E402
+import Grasshopper as gh
+import Rhino.Geometry as rg
 import clr
 
 clr.AddReference("System.Xml")
-import System.Xml
-import Grasshopper as gh
-import Rhino.Geometry as rg
+import System.Xml  # noqa: E402
 
 
 class write_component(component):
     def RunScript(self, _path):
 
-        if _path == None:
+        if _path is None:
             return False
-        #############################################################################################################################################
-        ##Load document
-        #############################################################################################################################################
+        ################################################################################################################
+        # Load document
+        ################################################################################################################
         doc = System.Xml.XmlDocument()
         doc.Load(_path)
 
-        #############################################################################################################################################
-        ##Start document
-        #############################################################################################################################################
+        ################################################################################################################
+        # Start document
+        ################################################################################################################
         polylines_tree = gh.DataTree[rg.Polyline]()
         types_tree = gh.DataTree[str]()
 
@@ -62,11 +56,5 @@ class write_component(component):
                 for node_0 in node.ChildNodes:
                     types_tree.Add((node_0.ChildNodes[0].InnerText), gh.Kernel.Data.GH_Path(group_count_b))
                 group_count_b = group_count_b + 1
-
-        #############################################################################################################################################
-        # Close document
-        #############################################################################################################################################
-        __plines = polylines_tree
-        __types = types_tree
 
         return polylines_tree, types_tree

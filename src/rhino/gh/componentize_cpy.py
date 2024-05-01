@@ -5,7 +5,9 @@ import os
 import re
 import sys
 import tempfile
-import urllib.request, urllib.parse, urllib.error
+import urllib.request
+import urllib.parse
+import urllib.error
 import zipfile
 from io import BytesIO
 
@@ -119,7 +121,7 @@ def validate_source_bundle(source):
     if data["exposure"] not in EXPOSURE["valid"]:
         raise ValueError("Invalid exposure value. Accepted values are {}".format(sorted(EXPOSURE["valid"])))
 
-    ghpython = data.get("ghpython")
+    ghpython = data.get("ghpython")  # noqa: F841
 
     if r'"""' not in python_code:
         python_code = r'"""{}"""{}{}'.format(

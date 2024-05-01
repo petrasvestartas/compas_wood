@@ -1,8 +1,6 @@
 from ghpythonlib.componentbase import executingcomponent as component
-import Grasshopper, GhPython
-import System
+import Grasshopper
 import Rhino
-import rhinoscriptsyntax as rs
 
 
 class MyComponent(component):

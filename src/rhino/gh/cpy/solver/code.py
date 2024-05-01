@@ -81,7 +81,7 @@ class connections_zones(component):
             for i in range(0, len(_scale)):
                 input_scale[i] = _scale[i]
 
-        input_output_type = _get if _get != None else 4
+        input_output_type = _get if _get is not None else 4
 
         input_joint_volume_parameters = [0, 0, 0]
 
@@ -119,7 +119,7 @@ class connections_zones(component):
             w_output_types,
             to_double1(input_joint_volume_parameters),
             [],
-            []
+            [],
             # to_point2(input_custom_joints),
             # to_int1(input_custom_joints_types),
         )

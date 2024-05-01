@@ -1,17 +1,8 @@
-__author__ = "petras vestartas"
-__version__ = "2023.03.28"
-
-"""
-Write polylines to xml file
-"""
-
 from ghpythonlib.componentbase import executingcomponent as component
 import clr
-import Rhino
-import Grasshopper
 
 clr.AddReference("System.Xml")
-import System.Xml
+import System.Xml  # noqa: E402
 
 
 class write_component(component):
@@ -37,7 +28,7 @@ class write_component(component):
         xmlWriter.WriteEndElement()
 
     def RunScript(self, _plines, _path):
-        if _path == None or _plines.AllData().Count == 0:
+        if _path is None or _plines.AllData().Count == 0:
             return False
         ##########################################################################
         # Create document

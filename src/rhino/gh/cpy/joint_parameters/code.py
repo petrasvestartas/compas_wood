@@ -1,19 +1,4 @@
-"""
-Do something silly in python3.
-
-This component does nothing useful, it's only a kitchen sink (but in python3) example showing most available options.
-
-    Args:
-        x: X value
-        y: Y value
-        z: Z value
-    Returns:
-        result: The sum of all three values.
-"""
 from ghpythonlib.componentbase import executingcomponent as component
-
-import System
-import math
 
 
 class joint_parameters_component(component):

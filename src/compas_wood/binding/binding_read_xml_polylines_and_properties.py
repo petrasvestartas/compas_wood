@@ -12,7 +12,7 @@ from compas.geometry import Vector
 
 def read_xml_polylines_and_properties(
     foldername="/home/petras/brg/2_code/wood_nano/src/wood/cmake/src/wood/dataset/",
-    filename_of_dataset="type_plates_name_cross_vda_hexshell_reciprocal",
+    filename_of_dataset="type_plates_name_top_to_side_and_side_to_side_outofplane_annen_grid_small",
     scale=1e-2,
 ):
     """Read polylines from XML file with attributes:
@@ -56,8 +56,8 @@ def read_xml_polylines_and_properties(
     input_adjacency = int1()
 
     wood_nano_read_xml_polylines_and_properties(
-        "/home/petras/brg/2_code/wood_nano/src/wood/cmake/src/wood/dataset/",
-        "type_plates_name_top_to_side_and_side_to_side_outofplane_annen_grid_small",
+        foldername,
+        filename_of_dataset,
         input_polyline_pairs_coord,
         input_insertion_vectors_coord,
         input_joints_types,
