@@ -90,8 +90,6 @@ def get_connection_zones(
         w_output_plines,
         w_output_types,
         to_double1(input_joint_volume_parameters),
-        to_point2(input_custom_joints),
-        to_int1(input_custom_joints_types),
     )
 
     return from_point3(w_output_plines), from_cut_type2(w_output_types)
