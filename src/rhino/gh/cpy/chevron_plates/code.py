@@ -1,16 +1,10 @@
 from ghpythonlib.componentbase import executingcomponent as component
-import Grasshopper, GhPython
 import System
-import Rhino
-import rhinoscriptsyntax as rs
 import Rhino
 import Rhino.Geometry
-from Rhino.Geometry import Surface, Mesh, MeshFace, Point3d, Point3f, Vector3d, Plane, Line, BoundingBox
+from Rhino.Geometry import Mesh, MeshFace, Point3d, Point3f, Vector3d, Plane, Line, BoundingBox
 import math
-import System
 from collections import OrderedDict
-import Grasshopper
-from System.Drawing import Color
 from compas_wood.datastructures import WoodData
 
 
@@ -48,7 +42,7 @@ class Chevron:
         self, mesh, edge_rotation=1, edge_offset=0.5, box_height=760, top_plate_inlet=80, plate_thickness=40, ortho=True
     ):
 
-        if mesh == None:
+        if mesh is None:
             return
         self.mesh = mesh  # assuming DuplicateMesh() is a method in Rhino or some other external library
         self.mesh.Flip(True, True, True)
@@ -99,12 +93,8 @@ class Chevron:
         half_v = DomV.T1 * 0.5
         StepU = (DomU.T1 - DomU.T0) / u_divisions
         baseStepV = v_division_dist
-        maxStepV = 2500
-        Delta = maxStepV - baseStepV
 
         totalV = DomV[1] - DomV[0]
-        rem = (totalV / 2) - ((maxStepV / 2) + baseStepV + Delta)
-        stepV = rem / baseStepV
 
         # Iterate number strips of the NURBS
         ctU = 0
@@ -215,7 +205,6 @@ class Chevron:
             ctU += StepU
 
         # Create Mesh
-        # print(v)
         self.mesh = Mesh()
         for point in v:
             self.mesh.Vertices.Add(point)
@@ -226,7 +215,7 @@ class Chevron:
         return self.mesh
 
     def get_mesh_face_edges(self, f, flag):
-        edge_id = self.mesh.TopologyEdges.GetEdgesForFace(f)
+        # edge_id = self.mesh.TopologyEdges.GetEdgesForFace(f)
         ids = [0, 1] if flag else [1, 2]
         return ids
 
@@ -483,9 +472,9 @@ class Chevron:
 
     def dihedral_plane(self, plane0, plane1):
         # Plane between two Planes
-        result, l = Rhino.Geometry.Intersect.Intersection.PlanePlane(plane0, plane1)
-        result, t = Rhino.Geometry.Intersect.Intersection.LinePlane(l, plane0)
-        centerDihedral = l.PointAt(t)
+        result, line = Rhino.Geometry.Intersect.Intersection.PlanePlane(plane0, plane1)
+        result, t = Rhino.Geometry.Intersect.Intersection.LinePlane(line, plane0)
+        centerDihedral = line.PointAt(t)
 
         # Convert ZAxis to lines, cant it be done on origin
         angleLine0 = self.to_line(plane0.ZAxis, plane0.Origin)
@@ -504,7 +493,7 @@ class Chevron:
             v1.Unitize()
 
             # Compute Plane
-            dihedralPlane = Rhino.Geometry.Plane(centerDihedral, l.Direction, v0 + v1)
+            dihedralPlane = Rhino.Geometry.Plane(centerDihedral, line.Direction, v0 + v1)
 
             return dihedralPlane
         else:
@@ -657,7 +646,6 @@ class Chevron:
             v = [self.mesh.Faces[f].A, self.mesh.Faces[f].B, self.mesh.Faces[f].C, self.mesh.Faces[f].D]
             v0_0 = v[e[0]]
             v0_1 = v[(e[0] + 1) % 4]
-            v1_0 = v[e[1]]
             v1_1 = v[(e[1] + 1) % 4]
 
             dir0 = self.mesh.Vertices[v0_1] - self.mesh.Vertices[v0_0]
@@ -723,7 +711,7 @@ class Chevron:
         ##############################################################################
         # Adjacency
         ##############################################################################
-        unique_key = set()
+
         # Box adjacency
         counter = 0
         for o in self.f_e.items():
@@ -824,7 +812,7 @@ class Chevron:
             counter += 1
 
     def run(self):
-        if self.mesh == None:
+        if self.mesh is None:
             print("Mesh is not given")
             return
         self.stripper()
@@ -844,9 +832,6 @@ class MyComponent(component):
     polylines = []
 
     def DrawViewportWires(self, args):
-
-        is_selected = False
-
         col = args.WireColour
         line_weight = args.DefaultCurveThickness
 
@@ -879,12 +864,12 @@ class MyComponent(component):
         # ==============================================================================
         # clear input
         # ==============================================================================
-        bbox = Rhino.Geometry.BoundingBox.Unset
-        lines = []
-        insertion_vectors_current = []
-        joint_per_face_current_text_entity = []
-        polylines = []
-        if _mesh == None:
+        self.bbox = Rhino.Geometry.BoundingBox.Unset
+        self.lines = []
+        self.insertion_vectors_current = []
+        self.joint_per_face_current_text_entity = []
+        self.polylines = []
+        if _mesh is None:
             return
         ##############################################################################
         # Output

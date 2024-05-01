@@ -1,24 +1,10 @@
-"""combine different data sets into one list for a faster data transder between grasshopper wires"""
-
 from ghpythonlib.componentbase import executingcomponent as component
-import Grasshopper, GhPython
-
-__author__ = "petras"
-__version__ = "2023.04.02"
-
-
-import System
+import Grasshopper
 import Rhino
-import rhinoscriptsyntax as rs
 import ghpythonlib.treehelpers as th
-from Rhino.Geometry import Polyline
 from Rhino.Geometry import Vector3d
 from Rhino.Geometry import Plane
-import compas_wood
-from compas_wood.binding import test
 from compas_wood.datastructures import WoodData
-
-# r: compas
 
 
 class MyComponent(component):

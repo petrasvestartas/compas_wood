@@ -16,7 +16,7 @@ class connections_zones(component):
         polyline = Rhino.Geometry.Polyline()
         result, polyline1 = curve.TryGetPolyline()
 
-        if result == False:
+        if result is False:
 
             nurbsCurve = curve.ToNurbsCurve()
             point3dArray = []
@@ -58,7 +58,7 @@ class connections_zones(component):
         # user input
         ###############################################################################
 
-        flag = len(curves0) is not 0 if True else len(curves1) != 0
+        flag = len(curves0) != 0 if True else len(curves1) != 0
         if flag:
 
             curves = []
@@ -91,7 +91,7 @@ class connections_zones(component):
         length = -1.0
         border_id = -1
         count = 0
-        numArray = []
+
         for curve in curves0:
             diagonal = curve.GetBoundingBox(True).Diagonal
             temp_length = diagonal.Length

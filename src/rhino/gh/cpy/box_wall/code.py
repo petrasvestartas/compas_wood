@@ -12,9 +12,9 @@ class MyComponent(component):
         _inlay_1: bool,
         _skipped: System.Collections.Generic.List[int],
     ):
-        if _mesh == None:
+        if _mesh is None:
             return
-        if _offset == None:
+        if _offset is None:
             _offset = 1
 
         def get_ngon_polylines(mesh):
@@ -71,10 +71,6 @@ class MyComponent(component):
 
         def get_ngon_planes(mesh):
             p = [None] * mesh.Ngons.Count
-
-            b = get_ngons_boundaries(mesh)
-            pts = get_ngons_boundaries_point3d(mesh, b)
-
             for i in range(mesh.Ngons.Count):
                 p[i] = Rhino.Geometry.Plane(get_ngon_center(mesh, i), get_ngon_normal(mesh, i))
             return p
@@ -181,10 +177,6 @@ class MyComponent(component):
                 if inlay_1 and i == 1:
                     base_plane = move_plane_by_axis(base_plane, -offset * 2)
                     base_plane_offset = move_plane_by_axis(base_plane_offset, -offset * 2)
-
-                # shift to right
-                # adjacent_planes_offset.insert(0, adjacent_planes_offset.pop())#adjacent_planes_offset.append(adjacent_planes_offset.pop(0))
-                # adjacent_planes_offset.insert(0, adjacent_planes_offset.pop())#adjacent_planes_offset.append(adjacent_planes_offset.pop(0))
 
                 # perform intersection
                 if not_skipped_faces[i]:

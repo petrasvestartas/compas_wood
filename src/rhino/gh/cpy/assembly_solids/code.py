@@ -4,21 +4,11 @@ __author__ = "petras"
 __version__ = "2023.04.13"
 
 from ghpythonlib.componentbase import executingcomponent as component
-import Grasshopper, GhPython
 import System
 import Rhino
-import rhinoscriptsyntax as rs
-
-
-import rhinoscriptsyntax as rs
-import Rhino.Geometry as rg
 from Rhino.Geometry import BoundingBox
 from Rhino.Geometry import Point3d
-from Rhino.Geometry import Plane
-from Rhino.Geometry import Polyline
-from Rhino.Geometry import Vector3d
 from Rhino.Geometry import Line
-from Rhino.Geometry import TextEntity
 from Rhino.Geometry import Transform
 from System.Drawing import Color
 import math
@@ -48,9 +38,6 @@ class MyComponent(component):
         return self.bbox
 
     def display_insersion_sequence(self, _geos, _lines, _t):
-
-        text_size = 50
-        line_scale = 300
 
         ###############################################################################
         # input

@@ -1,13 +1,9 @@
-from ghpythonlib.componentbase import executingcomponent as component
-import Grasshopper, GhPython
-import System
+from ghpythonlib.componentbase import executingcomponent as component  # noqa: E402
 import Rhino
 from Rhino.Geometry import (
     Brep,
-    Curve,
     Polyline,
     Plane,
-    Vector3d,
     Point3d,
     Rectangle3d,
     Interval,
@@ -123,8 +119,4 @@ class MyComponent(component):
             _brep = brep
             _plines = rects
 
-        # _brep = Rhino.Geometry.Brep.CreatePipe(_crv, [_radius], False, Rhino.Geometry.PipeCapMode.Flat, False, 0, 0.01)
-        # print(_brep)
-
-        # return outputs if you have them; here I try it for you:
         return (_brep, _plines)

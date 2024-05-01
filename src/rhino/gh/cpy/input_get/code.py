@@ -1,16 +1,7 @@
-"""unwrap element data to polylines, insertion vectors, joint types and etc"""
-
 from ghpythonlib.componentbase import executingcomponent as component
-import Grasshopper, GhPython
-import System
-
-__author__ = "petras"
-__version__ = "2023.04.02"
-
+import Grasshopper
 import ghpythonlib.treehelpers as th
-from Rhino.Geometry import Polyline
 import Rhino
-import rhinoscriptsyntax as rs
 
 
 class MyComponent(component):
@@ -24,7 +15,7 @@ class MyComponent(component):
         _plines_0 = Grasshopper.DataTree[Rhino.Geometry.Curve]()
         _plines_1 = Grasshopper.DataTree[Rhino.Geometry.Curve]()
         _lines = Grasshopper.DataTree[Rhino.Geometry.Curve]()
-        if split == False:
+        if split is False:
             for i in range(len(_data.plines_with_joints)):
                 for j in range(len(_data.plines_with_joints[i])):
                     _plines_0.Add(_data.plines_with_joints[i][j].ToNurbsCurve(), Grasshopper.Kernel.Data.GH_Path(i))

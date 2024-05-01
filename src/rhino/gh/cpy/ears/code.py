@@ -1,25 +1,14 @@
-"""get joints ids and connections areas between elements"""
-
-__author__ = "petras vestartas"
-__version__ = "2023.04.01"
-
-
-from ghpythonlib.componentbase import executingcomponent as component
-
-import System
+from ghpythonlib.componentbase import executingcomponent as component  # noqa: E402
 import Rhino
 from Rhino.Geometry import Polyline
 from Rhino.Geometry import Plane
-from Rhino.Geometry import Point3d
 from Rhino.Geometry import Vector3d
 from Rhino.Geometry import Line
 from Rhino.Geometry import Transform
 from Rhino.Geometry import Arc
 from Rhino.Geometry import Brep
-from Rhino.Geometry import Curve
 import math
 import Grasshopper
-from ghpythonlib import treehelpers
 
 
 class Ears(component):
@@ -106,30 +95,30 @@ class Ears(component):
         closed = x[0].DistanceToSquared(x[len(x) - 1]) < 0.0001
 
         for i in range(len(offset_planes)):
-            result, l = Rhino.Geometry.Intersect.Intersection.PlanePlane(
+            result, line = Rhino.Geometry.Intersect.Intersection.PlanePlane(
                 offset_planes[(len(offset_planes) + (i - 1)) % len(offset_planes)], offset_planes[i]
             )
-            result, types_of_notches_per_point = Rhino.Geometry.Intersect.Intersection.LinePlane(l, fit_plane0)
-            offset_polyline0.Add(l.PointAt(types_of_notches_per_point))
-            result, types_of_notches_per_point = Rhino.Geometry.Intersect.Intersection.LinePlane(l, fit_plane1)
-            offset_polyline1.Add(l.PointAt(types_of_notches_per_point))
+            result, types_of_notches_per_point = Rhino.Geometry.Intersect.Intersection.LinePlane(line, fit_plane0)
+            offset_polyline0.Add(line.PointAt(types_of_notches_per_point))
+            result, types_of_notches_per_point = Rhino.Geometry.Intersect.Intersection.LinePlane(line, fit_plane1)
+            offset_polyline1.Add(line.PointAt(types_of_notches_per_point))
 
-        if closed == False:
+        if closed is False:
 
-            l = Line.Unset
-            result, l = Rhino.Geometry.Intersect.Intersection.PlanePlane(fit_plane0, offset_planes[0])
-            offset_polyline0.Insert(0, l.ClosestPoint(x[0], False))
-            result, l = Rhino.Geometry.Intersect.Intersection.PlanePlane(
+            line = Line.Unset
+            result, line = Rhino.Geometry.Intersect.Intersection.PlanePlane(fit_plane0, offset_planes[0])
+            offset_polyline0.Insert(0, line.ClosestPoint(x[0], False))
+            result, line = Rhino.Geometry.Intersect.Intersection.PlanePlane(
                 fit_plane0, offset_planes[len(offset_planes) - 1]
             )
-            offset_polyline0.Add(l.ClosestPoint(x[len(x) - 1], False))
+            offset_polyline0.Add(line.ClosestPoint(x[len(x) - 1], False))
 
-            result, l = Rhino.Geometry.Intersect.Intersection.PlanePlane(fit_plane1, offset_planes[0])
-            offset_polyline1.Insert(0, l.ClosestPoint(y[0], False))
-            result, l = Rhino.Geometry.Intersect.Intersection.PlanePlane(
+            result, line = Rhino.Geometry.Intersect.Intersection.PlanePlane(fit_plane1, offset_planes[0])
+            offset_polyline1.Insert(0, line.ClosestPoint(y[0], False))
+            result, line = Rhino.Geometry.Intersect.Intersection.PlanePlane(
                 fit_plane1, offset_planes[len(offset_planes) - 1]
             )
-            offset_polyline1.Add(l.ClosestPoint(y[len(y) - 1], False))
+            offset_polyline1.Add(line.ClosestPoint(y[len(y) - 1], False))
         else:
             offset_polyline0.Add(offset_polyline0[0])
             offset_polyline1.Add(offset_polyline1[0])
@@ -225,7 +214,6 @@ class Ears(component):
         l0 = []
         l1 = []  # fillet
         l2 = []  # fillet
-        plines = []
         planes = []
 
         ###############################################################################
@@ -242,7 +230,6 @@ class Ears(component):
         ###############################################################################
         fillet = False
         R_ = _radius * 2 if types_of_notches_per_point[0] == 4 else _radius
-        notchStart = True
 
         for i in range(0, len(xA)):
 
@@ -252,19 +239,11 @@ class Ears(component):
             normal = Line(xA[i], xB[i])
             n = len(xA)
             next = (i + 1) % n
-            nextNext = (i + 2) % n
             prev = (((i - 1) % n) + n) % n
 
             p0a = xA[i]
             p1a = xA[next]
             p2a = xA[prev]
-            p3a = xA[nextNext]
-
-            p0b = xB[i]
-            p1b = xB[next]
-            p2b = xB[prev]
-            p3b = xB[nextNext]
-
             normal1 = Line(xA[next], xB[next])
             normal2 = Line(xA[prev], xB[prev])
 
@@ -272,7 +251,6 @@ class Ears(component):
             # Measure Concavity
             ###############################################################################
             cornera = Polyline([p2a, p0a, p1a])
-            cornerb = Polyline([p2b, p0b, p1b])
 
             cornera.Transform(Transform.PlaneToPlane(Plane(p0a, normal.Direction), Plane.WorldXY))
             nextEdge = cornera.SegmentAt(0).Direction
@@ -340,7 +318,6 @@ class Ears(component):
             pl0 = self.align_plane(normalPl, v0)
             pl1 = self.align_plane(normalPl, v1)
             extension0 = 0
-            extension1 = 0
             normalXAxis0 = Line(
                 local_cornera.SegmentAt(0).ClosestPoint(local_cornera_[1], False),
                 local_cornerb.SegmentAt(0).ClosestPoint(local_cornerb_[1], False),
@@ -361,8 +338,6 @@ class Ears(component):
             # TYPE B Notch -  Diaognal
             ###############################################################################
             bisectorDir = offset_distances[i]
-
-            pl2normalXAxis2Fillet = self.align_plane(normalPl, bisectorDir)
             length = bisectorDir.Length
             normalXAxis2 = Line(xA[i] + bisectorDir, xB[i] + bisectorDir)
 
@@ -371,7 +346,6 @@ class Ears(component):
             ###############################################################################
             bisectorDirFillet = pl0.XAxis * radius + pl1.XAxis * radius
             pl2 = self.align_plane(normalPl, bisectorDirFillet)
-            lengthFillet = bisectorDir.Length
             bisectorDirFillet *= -(length) / length
 
             normalXAxis2Fillet = Line(
@@ -484,12 +458,6 @@ class Ears(component):
 
             # Check direction of inclined cut, the check is made according to XY plane
             side_plane = Plane(xA[i], xB[i], xA[next])
-
-            mid_0 = 0.5 * (xA[i] + xA[next])
-            mid_1 = 0.5 * (xB[i] + xB[next])
-            segment = Line(xB[i], xB[next])
-
-            tool_direction = Line(mid_0, segment.ClosestPoint(mid_0, False))
             side_plane.Transform(to_xy)
 
             is_below.append(0)
@@ -589,7 +557,7 @@ class Ears(component):
         # It sorts these objects by the diagonal length of their bounding boxes in descending order.
 
         try:
-            # Creating a list of tuples, each containing the diagonal length and the corresponding objects from _p0 and _p1
+            # List of tuples, each containing the diagonal length and the corresponding objects from _p0 and _p1
             items_with_sizes = [(obj.GetBoundingBox(True).Diagonal.Length, obj, _p1[i]) for i, obj in enumerate(_p0)]
         except Exception as e:
             print(f"Error retrieving bounding box sizes: {str(e)}")
@@ -643,7 +611,6 @@ class Ears(component):
             notch_types = [0] * (len(plines0[i]) - 1)
             offset_distances = [Vector3d(0, 0, 0)] * (len(plines0[i]) - 1)
 
-            n = len(plines0[i]) - 1
             for j in range(len(plines0[i]) - 1):
 
                 l1 = Line(plines0_offset[i][j], plines1_offset[i][j])
@@ -768,13 +735,13 @@ class Ears(component):
 
         if _p0 and _p1:
 
-            if _p0 == None:
+            if _p0 is None:
                 return
 
-            if _p1 == None:
+            if _p1 is None:
                 return
 
-            if _notch_type == None:
+            if _notch_type is None:
                 return
 
             if _p0.DataCount is not _p1.DataCount:
@@ -818,7 +785,7 @@ class Ears(component):
                 offset0.AddRange(plines0, Grasshopper.Kernel.Data.GH_Path(i))
                 offset1.AddRange(plines1, Grasshopper.Kernel.Data.GH_Path(i))
                 planes.Add(Plane(plines0[0][0], planes0[0].ZAxis), Grasshopper.Kernel.Data.GH_Path(i))
-                notch_geo = []
+
                 if _union:
                     cut_curves0_temp, cut_curves1_temp, cut_extrusions_temp = self.get_notch_geometry(
                         _c0, _c1, notch_lines_nested, notch_lines_nested_corners, planes0, planes1, radius + 0.0000

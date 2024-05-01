@@ -109,7 +109,7 @@ def from_vector1(vector1):
     vectors = []
     for i in range(len(vector1)):
         vec = vector1[i]
-        vectors.append(Vector(vec[0], vec[1], vec[2]))
+        vectors.append(Vector3d(vec[0], vec[1], vec[2]))
     return vectors
 
 

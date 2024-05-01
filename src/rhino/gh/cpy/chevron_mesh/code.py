@@ -1,12 +1,8 @@
-"""create a quad mesh by subdividing surface from two ends"""
-
 from ghpythonlib.componentbase import executingcomponent as component
-import Grasshopper, GhPython
-import System
-import rhinoscriptsyntax as rs
 import Rhino
 import Rhino.Geometry
-from Rhino.Geometry import Surface, Mesh, MeshFace, Point3d, Point3f, Vector3d
+from Rhino.Geometry import Mesh, MeshFace, Point3f
+import math
 
 
 class Chevron:
@@ -42,7 +38,7 @@ class Chevron:
     def __init__(
         self, mesh, edge_rotation=1, edge_offset=0.5, box_height=760, top_plate_inlet=80, plate_thickness=40, ortho=True
     ):
-        if mesh == None:
+        if mesh is None:
             return
         self.mesh = mesh.DuplicateMesh()  # assuming DuplicateMesh() is a method in Rhino or some other external library
         self.mesh.Flip(True, True, True)
@@ -86,20 +82,13 @@ class Chevron:
         half_v = DomV.T1 * 0.5
         StepU = (DomU.T1 - DomU.T0) / u_divisions
         baseStepV = v_division_dist
-        maxStepV = 2500
-        Delta = maxStepV - baseStepV
 
         totalV = DomV[1] - DomV[0]
-        rem = (totalV / 2) - ((maxStepV / 2) + baseStepV + Delta)
-        stepV = rem / baseStepV
 
         # Iterate number strips of the NURBS
         ctU = 0
-        #        print(s.Domain(0))
-        #        print(s.Domain(1))
-        #        print(u_divisions)
         for j in range(u_divisions):
-            #            print(j)
+
             ctV = 0
             thresh = totalV / 2
             StepV1 = baseStepV

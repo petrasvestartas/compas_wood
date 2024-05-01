@@ -49,7 +49,7 @@ class connections_zones(component):
         if len(curves1) == 0:
             return
 
-        flag = len(curves0) is not 0 if True else len(curves1) != 0
+        flag = len(curves0) != 0 if True else len(curves1) != 0
         if flag:
             curves = []
             curves2 = []
