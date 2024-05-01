@@ -589,6 +589,18 @@ document.write(`
 </figure>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">compas_wood.binding</span> <span class="kn">import</span> <span class="n">read_xml_polylines_and_properties</span>
 <span class="kn">from</span> <span class="nn">compas.geometry</span> <span class="kn">import</span> <span class="n">Line</span>
+<span class="kn">import</span> <span class="nn">compas_wood</span>
+<span class="kn">import</span> <span class="nn">os</span>
+
+<span class="n">dataset_index</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">module_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">compas_wood</span><span class="o">.</span><span class="vm">__file__</span><span class="p">)</span>
+<span class="n">foldername</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">module_path</span><span class="p">,</span> <span class="s2">&quot;datasets&quot;</span><span class="p">)</span>
+<span class="n">foldername</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">module_path</span><span class="p">,</span> <span class="s2">&quot;datasets&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="n">os</span><span class="o">.</span><span class="n">sep</span>
+<span class="n">files</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">foldername</span><span class="p">)</span>
+
+<span class="n">file_names_without_extensions</span> <span class="o">=</span> <span class="p">[</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">file</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">files</span><span class="p">]</span>
+<span class="n">filename</span> <span class="o">=</span> <span class="n">file_names_without_extensions</span><span class="p">[</span><span class="n">dataset_index</span> <span class="o">%</span> <span class="nb">len</span><span class="p">(</span><span class="n">file_names_without_extensions</span><span class="p">)]</span>
+<span class="n">filename</span> <span class="o">=</span> <span class="s2">&quot;type_plates_name_top_to_side_and_side_to_side_outofplane_annen_grid_small&quot;</span>
 
 
 <span class="p">(</span>
@@ -597,9 +609,10 @@ document.write(`
     <span class="n">input_joints_types</span><span class="p">,</span>
     <span class="n">input_three_valence_element_indices_and_instruction</span><span class="p">,</span>
     <span class="n">input_adjacency</span><span class="p">,</span>
-<span class="p">)</span> <span class="o">=</span> <span class="n">read_xml_polylines_and_properties</span><span class="p">()</span>
+<span class="p">)</span> <span class="o">=</span> <span class="n">read_xml_polylines_and_properties</span><span class="p">(</span><span class="n">foldername</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span>
 
-
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;vectors_lists:&quot;</span><span class="p">,</span> <span class="n">vectors_lists</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
 
 <span class="k">try</span><span class="p">:</span>
     
