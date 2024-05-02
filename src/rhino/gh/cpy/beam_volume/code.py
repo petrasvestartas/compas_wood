@@ -1,4 +1,4 @@
-# r: compas_wood, compas
+# r: compas_wood, compas, wood_nano
 import Rhino
 import Grasshopper
 import ghpythonlib.treehelpers as th

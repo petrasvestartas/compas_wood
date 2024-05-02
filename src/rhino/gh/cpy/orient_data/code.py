@@ -1,4 +1,4 @@
-# r: compas_wood, compas
+# r: compas_wood, compas, wood_nano
 from Rhino.Geometry import Polyline
 from Rhino.Geometry import Transform
 from Rhino.Geometry import Vector3d

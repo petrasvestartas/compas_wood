@@ -75,7 +75,7 @@ We use [Grasshopper Componentizer](https://github.com/compas-dev/compas-actions.
 
 1. Build components
 
-        invoke build-ghuser-components
+        invoke build-ghuser-componentspip
 
 2. Install components on Rhino
 
