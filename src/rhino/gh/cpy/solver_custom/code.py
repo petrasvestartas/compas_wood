@@ -8,6 +8,7 @@ from wood_nano.conversions_python import to_int2
 from wood_nano.conversions_python import to_int1
 from wood_nano.conversions_python import to_double1
 from wood_nano.conversions_python import from_cut_type2
+from compas_wood.conversions_rhino import to_point1
 from compas_wood.conversions_rhino import to_point2
 from compas_wood.conversions_rhino import to_vector2
 from compas_wood.conversions_rhino import from_point3
@@ -34,17 +35,15 @@ class connections_zones(component):
     def get_ClippingBox(self):
         return self.bbox
 
-    def RunScript(
-        self,
-        _data,
-        _joint_p: System.Collections.Generic.List[float],
-        _scale: System.Collections.Generic.List[float],
-        _extension: System.Collections.Generic.List[float],
-        _find: int,
-        _get: int,
-        _custom_joints: System.Collections.Generic.List[Rhino.Geometry.Polyline],
-        _custom_types: System.Collections.Generic.List[int],
-    ):
+    def RunScript(self,
+            _data,
+            _joint_p: System.Collections.Generic.IList[float],
+            _scale: System.Collections.Generic.IList[float],
+            _extension: System.Collections.Generic.IList[float],
+            _find: int,
+            _get: int,
+            _custom_joints: System.Collections.Generic.IList[Rhino.Geometry.Polyline],
+            _custom_types: System.Collections.Generic.IList[int]):
 
         # ==============================================================================
         # clear input
@@ -123,7 +122,8 @@ class connections_zones(component):
                     -69: [],
                 }
                 for i in range(len(_custom_joints)):
-                    custom_joints_dict[_custom_types[i]].append(_custom_joints[i])
+                    polyline = to_point1(_custom_joints[i])
+                    custom_joints_dict[_custom_types[i]].append(polyline)
 
                 for key, value in custom_joints_dict.items():
                     if key == 9:

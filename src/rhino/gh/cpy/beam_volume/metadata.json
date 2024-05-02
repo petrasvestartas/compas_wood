@@ -56,20 +56,6 @@
                 "simplify": false
             },
             {
-                "name": "_parallel_tolerance",
-                "nickname": "_parallel_tolerance",
-                "description": "angle tolerance that defines the detection of end beams",
-                "optional": true,
-                "allowTreeAccess": true,
-                "showTypeHints": true,
-                "scriptParamAccess": "item",
-                "wireDisplay": "faint",
-                "sourceCount": 0,
-                "typeHintID": "float",
-                "reverse": false,
-                "simplify": false
-            },
-            {
                 "name": "_cross_or_toptoside",
                 "nickname": "_cross_or_toptoside",
                 "description": "switch between half lap or top-to-side joint volume generation",
@@ -79,7 +65,7 @@
                 "scriptParamAccess": "item",
                 "wireDisplay": "faint",
                 "sourceCount": 0,
-                "typeHintID": "bool",
+                "typeHintID": "float",
                 "reverse": false,
                 "simplify": false
             },
@@ -101,9 +87,57 @@
         ],
         "outputParameters": [
             {
-                "name": "_volumes",
-                "nickname": "_volumes",
-                "description": "pair of rectangles that represent the beam volume around the joint",
+                "name": "_index_polylines",
+                "nickname": "_index_polylines",
+                "description": "indices of polylines axes",
+                "optional": false,
+                "sourceCount": 0,
+                "graft": false
+            },
+            {
+                "name": "_index_polylines_segment",
+                "nickname": "_index_polylines_segment",
+                "description": "indices of polylines segements",
+                "optional": false,
+                "sourceCount": 0,
+                "graft": false
+            },
+            {
+                "name": "_distance",
+                "nickname": "_distance",
+                "description": "distance between points",
+                "optional": false,
+                "sourceCount": 0,
+                "graft": false
+            },
+            {
+                "name": "_point_pairs",
+                "nickname": "_point_pairs",
+                "description": "closest point pairs",
+                "optional": false,
+                "sourceCount": 0,
+                "graft": false
+            },
+            {
+                "name": "_volume_pairs",
+                "nickname": "_volume_pairs",
+                "description": "rectangle pairs representing elements",
+                "optional": false,
+                "sourceCount": 0,
+                "graft": false
+            },
+            {
+                "name": "_joints_areas",
+                "nickname": "_joints_areas",
+                "description": "joint areas between volumes",
+                "optional": false,
+                "sourceCount": 0,
+                "graft": false
+            },
+            {
+                "name": "_joints_types",
+                "nickname": "_joints_types",
+                "description": "joints types from interface condition",
                 "optional": false,
                 "sourceCount": 0,
                 "graft": false
@@ -112,14 +146,6 @@
                 "name": "_pipes",
                 "nickname": "_pipes",
                 "description": "if _create_pipes input is set to True the circles are lofted and outputted here",
-                "optional": false,
-                "sourceCount": 0,
-                "graft": false
-            },
-            {
-                "name": "_group_id",
-                "nickname": "_group_id",
-                "description": "grouping of beam volumes",
                 "optional": false,
                 "sourceCount": 0,
                 "graft": false
