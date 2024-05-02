@@ -1,5 +1,4 @@
-"""get connection zones from polylines and indices of neighboring elements"""
-
+# r: compas_wood, compas
 from ghpythonlib.componentbase import executingcomponent as component
 import System
 from ghpythonlib import treehelpers

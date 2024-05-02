@@ -1,3 +1,4 @@
+# r: compas_wood, compas
 from ghpythonlib.componentbase import executingcomponent as component  # noqa: E402
 import Rhino
 from Rhino.Geometry import (

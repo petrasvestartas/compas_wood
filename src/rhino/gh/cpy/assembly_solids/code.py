@@ -1,8 +1,3 @@
-"""display assembly sequence"""
-
-__author__ = "petras"
-__version__ = "2023.04.13"
-
 from ghpythonlib.componentbase import executingcomponent as component
 import System
 import Rhino
