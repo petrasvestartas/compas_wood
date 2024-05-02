@@ -27,7 +27,6 @@ class connections_zones(component):
     def DrawViewportWires(self, args):
         col = args.WireColour
         line_weight = args.DefaultCurveThickness
-        print(self.polylines)
         for polylines_list in self.polylines:
             for polyline in polylines_list:
                 args.Display.DrawPolyline(polyline, col, line_weight)
@@ -127,13 +126,8 @@ class connections_zones(component):
                     custom_joints_dict[_custom_types[i]].append(_custom_joints[i])
 
                 for key, value in custom_joints_dict.items():
-
                     if key == 9:
-                        # print(to_point2.__module__)
-                        # print(to_point2(value))
                         wood_globals.custom_joints_ss_e_ip_male = value
-
-                        # print(wood_globals.custom_joints_ss_e_ip_male)
                     elif key == -9:
                         wood_globals.custom_joints_ss_e_ip_female = value
                     elif key == 19:
@@ -161,10 +155,9 @@ class connections_zones(component):
                     elif key == -69:
                         wood_globals.custom_joints_b_female = value
 
-        # print(type(wood_globals.custom_joints_ss_e_ip_male[0]))
-        from wood_nano import GLOBALS
+        wood_globals.face_to_face_side_to_side_joints_rotated_joint_as_average = False
+        wood_globals.face_to_face_side_to_side_joints_all_treated_as_rotated =  False
 
-        print(GLOBALS.CUSTOM_JOINTS_SS_E_IP_MALE[0][0][2])
         wood_nano_get_connection_zones(
             to_point2(input_polyline_pairs),
             to_vector2(input_insertion_vectors),
@@ -177,16 +170,10 @@ class connections_zones(component):
             int(input_output_type),
             w_output_plines,
             w_output_types,
-            to_double1(input_joint_volume_parameters),
-            [],
-            [],
-            # to_point2(input_custom_joints),
-            # to_int1(input_custom_joints_types),
+            to_double1(input_joint_volume_parameters)
         )
 
         self.polylines = from_point3(w_output_plines)
-        print(w_output_plines)
-        print(w_output_types)
 
         return WoodData(
             plines=_data.plines,

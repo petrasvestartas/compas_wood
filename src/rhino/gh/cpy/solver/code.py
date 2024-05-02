@@ -1,5 +1,3 @@
-# r: compas_wood
-
 from ghpythonlib.componentbase import executingcomponent as component
 import Rhino
 import System
@@ -29,7 +27,6 @@ class connections_zones(component):
     def DrawViewportWires(self, args):
         col = args.WireColour
         line_weight = args.DefaultCurveThickness
-        print(self.polylines)
         for polylines_list in self.polylines:
             for polyline in polylines_list:
                 args.Display.DrawPolyline(polyline, col, line_weight)
@@ -37,15 +34,13 @@ class connections_zones(component):
     def get_ClippingBox(self):
         return self.bbox
 
-    def RunScript(
-        self,
-        _data,
-        _joint_p: System.Collections.Generic.List[float],
-        _scale: System.Collections.Generic.List[float],
-        _extension: System.Collections.Generic.List[float],
-        _find: int,
-        _get: int,
-    ):
+    def RunScript(self,
+            _data,
+            _joint_p: System.Collections.Generic.IList[float],
+            _scale: System.Collections.Generic.IList[float],
+            _extension: System.Collections.Generic.IList[float],
+            _find: int,
+            _get: int):
 
         # ==============================================================================
         # clear input
@@ -70,7 +65,6 @@ class connections_zones(component):
                     self.bbox.Union(pline.BoundingBox)
 
         input_insertion_vectors = _data.insertion_vectors
-
         input_joint_types = _data.joints_per_face
         input_three_valence_element_indices_and_instruction = _data.three_valence
 
@@ -92,8 +86,10 @@ class connections_zones(component):
                     input_joint_volume_parameters.append(i * 10)
 
         input_adjacency = _data.adjacency
-
         joint_parameters = wood_globals.joints_parameters_and_types
+        wood_globals.face_to_face_side_to_side_joints_rotated_joint_as_average = False
+        wood_globals.face_to_face_side_to_side_joints_all_treated_as_rotated =  False
+
 
         if _joint_p:
             for i in range(0, len(_joint_p), 3):
@@ -118,14 +114,9 @@ class connections_zones(component):
             w_output_plines,
             w_output_types,
             to_double1(input_joint_volume_parameters),
-            [],
-            [],
-            # to_point2(input_custom_joints),
-            # to_int1(input_custom_joints_types),
         )
 
         self.polylines = from_point3(w_output_plines)
-
         return WoodData(
             plines=_data.plines,
             insertion_vectors=_data.insertion_vectors,
