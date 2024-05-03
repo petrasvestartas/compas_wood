@@ -15,3 +15,8 @@ Rhino
 Examples:
 
 - `Grasshopper <https://github.com/petrasvestartas/compas_wood/tree/main/src/rhino/gh/examples>`_
+
+
+.. figure:: /_images/grasshopper_installation.gif
+     :figclass: figure
+     :class: figure-img img-fluid
