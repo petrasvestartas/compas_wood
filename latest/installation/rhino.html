@@ -9,7 +9,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
     <link rel="icon" href="../_static/compas.ico" type="image/x-icon">
-    <title>binding_beam_volumes_frame &#8212; compas_wood</title>
+    <title>Rhino &#8212; compas_wood</title>
   
   
   
@@ -53,15 +53,15 @@
     <script src="../_static/design-tabs.js"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'examples/binding_beam_volumes_frame';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'installation/rhino';</script>
     <script>
         DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://raw.githubusercontent.com/petrasvestartas/compas_wood/gh-pages/versions.json';
         DOCUMENTATION_OPTIONS.theme_switcher_version_match = 'latest';
         </script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="binding_beam_volumes_multiple" href="binding_beam_volumes_multiple.html" />
-    <link rel="prev" title="binding_beam_volumes_cross" href="binding_beam_volumes_cross.html" />
+    <link rel="next" title="Tutorial" href="../tutorial.html" />
+    <link rel="prev" title="Pip" href="pip.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -158,7 +158,7 @@
                     </li>
                 
 
-                    <li class="nav-item">
+                    <li class="nav-item current active">
                       <a class="nav-link nav-internal" href="../installation.html">
                         Installation
                       </a>
@@ -172,7 +172,7 @@
                     </li>
                 
 
-                    <li class="nav-item current active">
+                    <li class="nav-item">
                       <a class="nav-link nav-internal" href="../examples.html">
                         Examples
                       </a>
@@ -342,7 +342,7 @@ document.write(`
                     </li>
                 
 
-                    <li class="nav-item">
+                    <li class="nav-item current active">
                       <a class="nav-link nav-internal" href="../installation.html">
                         Installation
                       </a>
@@ -356,7 +356,7 @@ document.write(`
                     </li>
                 
 
-                    <li class="nav-item current active">
+                    <li class="nav-item">
                       <a class="nav-link nav-internal" href="../examples.html">
                         Examples
                       </a>
@@ -475,10 +475,10 @@ document.write(`
     <div class="bd-toc-item navbar-nav active">
         <ul class="current nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../index.html">Introduction</a></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../installation.html">Installation</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul>
-<li class="toctree-l2"><a class="reference internal" href="../installation/conda.html">Conda</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../installation/pip.html">Pip</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../installation/rhino.html">Rhino</a></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="../installation.html">Installation</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="conda.html">Conda</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pip.html">Pip</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">Rhino</a></li>
 </ul>
 </li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../tutorial.html">Tutorial</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-2"><i class="fa-solid fa-chevron-down"></i></label><ul>
@@ -496,19 +496,19 @@ document.write(`
 </li>
 </ul>
 </li>
-<li class="toctree-l1 current active has-children"><a class="reference internal" href="../examples.html">Examples</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-5"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="binding_beam_volumes_cross.html">binding_beam_volumes_cross</a></li>
-<li class="toctree-l2 current active"><a class="current reference internal" href="#">binding_beam_volumes_frame</a></li>
-<li class="toctree-l2"><a class="reference internal" href="binding_beam_volumes_multiple.html">binding_beam_volumes_multiple</a></li>
-<li class="toctree-l2"><a class="reference internal" href="binding_beam_volumes_side.html">binding_beam_volumes_side</a></li>
-<li class="toctree-l2"><a class="reference internal" href="binding_closed_mesh_from_polylines.html">binding_closed_mesh_from_polylines</a></li>
-<li class="toctree-l2"><a class="reference internal" href="binding_get_connection_zones.html">binding_get_connection_zones</a></li>
-<li class="toctree-l2"><a class="reference internal" href="binding_globals.html">binding_globals</a></li>
-<li class="toctree-l2"><a class="reference internal" href="binding_joints.html">binding_joints</a></li>
-<li class="toctree-l2"><a class="reference internal" href="binding_read_xml_polylines.html">binding_read_xml_polylines</a></li>
-<li class="toctree-l2"><a class="reference internal" href="binding_read_xml_polylines_and_properties.html">binding_read_xml_polylines_and_properties</a></li>
-<li class="toctree-l2"><a class="reference internal" href="binding_rtree.html">binding_rtree</a></li>
-<li class="toctree-l2"><a class="reference internal" href="binding_test.html">binding_test</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../examples.html">Examples</a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-5"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../examples/binding_beam_volumes_cross.html">binding_beam_volumes_cross</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../examples/binding_beam_volumes_frame.html">binding_beam_volumes_frame</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../examples/binding_beam_volumes_multiple.html">binding_beam_volumes_multiple</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../examples/binding_beam_volumes_side.html">binding_beam_volumes_side</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../examples/binding_closed_mesh_from_polylines.html">binding_closed_mesh_from_polylines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../examples/binding_get_connection_zones.html">binding_get_connection_zones</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../examples/binding_globals.html">binding_globals</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../examples/binding_joints.html">binding_joints</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../examples/binding_read_xml_polylines.html">binding_read_xml_polylines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../examples/binding_read_xml_polylines_and_properties.html">binding_read_xml_polylines_and_properties</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../examples/binding_rtree.html">binding_rtree</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../examples/binding_test.html">binding_test</a></li>
 </ul>
 </li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../api.html">API Reference</a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-6"><i class="fa-solid fa-chevron-down"></i></label><ul>
@@ -564,9 +564,9 @@ document.write(`
       </a>
     </li>
     
-    <li class="breadcrumb-item"><a href="../examples.html" class="nav-link">Examples</a></li>
+    <li class="breadcrumb-item"><a href="../installation.html" class="nav-link">Installation</a></li>
     
-    <li class="breadcrumb-item active" aria-current="page">binding_beam_volumes_frame</li>
+    <li class="breadcrumb-item active" aria-current="page">Rhino</li>
   </ul>
 </nav>
 </div>
@@ -583,109 +583,20 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article" role="main">
                   
-  <section id="binding-beam-volumes-frame">
-<h1>binding_beam_volumes_frame</h1>
-<figure class="figure align-default">
-<img alt="../_images/binding_beam_volumes_frame.png" class="figure-img img-fluid" src="../_images/binding_beam_volumes_frame.png" />
-</figure>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">compas.geometry</span> <span class="kn">import</span> <span class="n">Polyline</span>
-<span class="kn">from</span> <span class="nn">compas_wood.binding</span> <span class="kn">import</span> <span class="n">beam_volumes</span>
-
-
-<span class="n">input_polylines</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="n">Polyline</span><span class="p">([</span>
-        <span class="p">[</span><span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
-        <span class="p">[</span><span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
-    <span class="p">]),</span>
-    <span class="n">Polyline</span><span class="p">([</span>
-        <span class="p">[</span><span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
-        <span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
-    <span class="p">]),</span>
-    <span class="n">Polyline</span><span class="p">([</span>
-        <span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
-        <span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
-    <span class="p">]),</span>
-    <span class="n">Polyline</span><span class="p">([</span>
-        <span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
-        <span class="p">[</span><span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
-    <span class="p">]),</span>
-<span class="p">]</span>
-
-
-<span class="n">input_polylines_segment_radii</span> <span class="o">=</span> <span class="p">[]</span>
-
-<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">input_polylines</span><span class="p">)):</span>
-    <span class="n">input_polyline_segment_radii</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">input_polylines</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">points</span><span class="p">)):</span>
-        <span class="n">input_polyline_segment_radii</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mf">0.2</span><span class="p">)</span>
-    <span class="n">input_polylines_segment_radii</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">input_polyline_segment_radii</span><span class="p">)</span>
-
-<span class="n">input_polylines_segment_direction</span> <span class="o">=</span> <span class="p">[]</span>
-<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">input_polylines</span><span class="p">)):</span>
-    <span class="n">input_polyline_segment_direction</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">input_polylines</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">points</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>
-        <span class="n">input_polyline_segment_direction</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
-    <span class="n">input_polylines_segment_direction</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">input_polyline_segment_direction</span><span class="p">)</span>
-
-
-<span class="n">index_polylines</span><span class="p">,</span> <span class="n">index_polylines_segment</span><span class="p">,</span> <span class="n">distance</span><span class="p">,</span> <span class="n">point_pairs</span><span class="p">,</span> <span class="n">volume_pairs</span><span class="p">,</span> <span class="n">joints_areas</span><span class="p">,</span> <span class="n">joints_types</span> <span class="o">=</span> <span class="n">beam_volumes</span><span class="p">(</span>
-        <span class="n">input_polylines</span><span class="p">,</span>
-        <span class="n">input_polylines_segment_radii</span><span class="p">,</span>
-        <span class="n">input_polylines_segment_direction</span><span class="p">,</span>
-        <span class="n">input_allowed_types_per_polyline</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
-        <span class="n">input_min_distance</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
-        <span class="n">input_volume_length</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
-        <span class="n">input_cross_or_side_to_end</span><span class="o">=</span><span class="mf">2.01</span><span class="p">,</span>
-<span class="p">)</span>
-
-
-
-<span class="k">try</span><span class="p">:</span>
-    <span class="kn">from</span> <span class="nn">compas_viewer</span> <span class="kn">import</span> <span class="n">Viewer</span>
-    <span class="kn">from</span> <span class="nn">compas.geometry</span> <span class="kn">import</span> <span class="n">Scale</span>
-    <span class="kn">from</span> <span class="nn">compas.geometry</span> <span class="kn">import</span> <span class="n">Polygon</span>
-
-    <span class="n">colors</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="mi">10</span><span class="p">:</span> <span class="p">(</span><span class="mi">255</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>  <span class="c1"># Side-to-side rotated</span>
-        <span class="mi">11</span><span class="p">:</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>  <span class="c1"># Side-to-side out-of-plane</span>
-        <span class="mi">12</span><span class="p">:</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">255</span><span class="p">),</span>  <span class="c1"># Side-to-side in-plane</span>
-        <span class="mi">13</span><span class="p">:</span> <span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">),</span>  <span class="c1"># Side-to-side in-plane</span>
-        <span class="mi">20</span><span class="p">:</span> <span class="p">(</span><span class="mi">255</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">150</span><span class="p">),</span>  <span class="c1"># Top-to-side</span>
-        <span class="mi">30</span><span class="p">:</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">200</span><span class="p">,</span> <span class="mi">255</span><span class="p">)</span>  <span class="c1"># Cross</span>
-    <span class="p">}</span>
-
-    <span class="n">viewer</span> <span class="o">=</span> <span class="n">Viewer</span><span class="p">(</span><span class="n">show_grid</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">rendermode</span><span class="o">=</span><span class="s1">&#39;lighted&#39;</span><span class="p">)</span>
-    <span class="n">scale</span> <span class="o">=</span> <span class="mf">1e-0</span>
-
-    <span class="k">for</span> <span class="n">polyline</span> <span class="ow">in</span> <span class="n">input_polylines</span><span class="p">:</span>
-        <span class="n">polyline</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">Scale</span><span class="o">.</span><span class="n">from_factors</span><span class="p">([</span><span class="n">scale</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">scale</span><span class="p">]))</span>
-        <span class="n">viewer</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">polyline</span><span class="p">,</span> <span class="n">show_points</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">lineswidth</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">linecolor</span><span class="o">=</span><span class="p">(</span><span class="mi">150</span><span class="p">,</span> <span class="mi">150</span><span class="p">,</span> <span class="mi">150</span><span class="p">))</span>
-
-    <span class="k">for</span> <span class="nb">id</span><span class="p">,</span> <span class="n">p</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">point_pairs</span><span class="p">):</span>
-        <span class="k">for</span> <span class="n">point</span> <span class="ow">in</span> <span class="n">p</span><span class="p">:</span>
-            <span class="n">point</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">Scale</span><span class="o">.</span><span class="n">from_factors</span><span class="p">([</span><span class="n">scale</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">scale</span><span class="p">]))</span>
-            <span class="n">viewer</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">point</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">pointcolor</span><span class="o">=</span><span class="n">colors</span><span class="p">[</span><span class="n">joints_types</span><span class="p">[</span><span class="nb">id</span><span class="p">]])</span>
-
-    <span class="k">for</span> <span class="n">volume</span> <span class="ow">in</span> <span class="n">volume_pairs</span><span class="p">:</span>
-        <span class="k">for</span> <span class="n">polyline</span> <span class="ow">in</span> <span class="n">volume</span><span class="p">:</span>
-            <span class="n">polyline</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">Scale</span><span class="o">.</span><span class="n">from_factors</span><span class="p">([</span><span class="n">scale</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">scale</span><span class="p">]))</span>
-
-            <span class="n">viewer</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">polyline</span><span class="p">,</span> <span class="n">show_points</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">lineswidth</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">linecolor</span><span class="o">=</span><span class="p">(</span><span class="mi">150</span><span class="p">,</span> <span class="mi">150</span><span class="p">,</span> <span class="mi">150</span><span class="p">))</span>
-
-    <span class="k">for</span> <span class="nb">id</span><span class="p">,</span> <span class="n">joint_area</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">joints_areas</span><span class="p">):</span>
-        <span class="n">joint_area</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">Scale</span><span class="o">.</span><span class="n">from_factors</span><span class="p">([</span><span class="n">scale</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">scale</span><span class="p">]))</span>
-
-        <span class="n">viewer</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Polygon</span><span class="p">(</span><span class="n">joint_area</span><span class="o">.</span><span class="n">points</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span><span class="o">.</span><span class="n">to_mesh</span><span class="p">(),</span>
-                         <span class="n">show_points</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                         <span class="n">show_lines</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                         <span class="n">facecolor</span><span class="o">=</span><span class="n">colors</span><span class="p">[</span><span class="n">joints_types</span><span class="p">[</span><span class="nb">id</span><span class="p">]])</span>
-
-    <span class="n">viewer</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
-
-<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;compas_viewer is not installed.&quot;</span><span class="p">)</span>
+  <section id="rhino">
+<h1>Rhino</h1>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>open<span class="w"> </span>Rhino8
+<span class="k">in</span><span class="w"> </span>the<span class="w"> </span>Rhino<span class="w"> </span>command-line<span class="w"> </span>type:<span class="w"> </span>PackageManager
+<span class="k">in</span><span class="w"> </span>the<span class="w"> </span>PackageManger<span class="w"> </span>search<span class="w"> </span><span class="k">for</span><span class="w"> </span>a<span class="w"> </span>compas_wood<span class="w"> </span>package
+click<span class="w"> </span>button<span class="w"> </span>install
+restart<span class="w"> </span>Rhino8
+open<span class="w"> </span>Grasshopper
 </pre></div>
 </div>
+<p>Examples:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://github.com/petrasvestartas/compas_wood/tree/main/src/rhino/gh/examples">Grasshopper</a></p></li>
+</ul>
 </section>
 
 
