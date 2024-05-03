@@ -1,0 +1,9 @@
+---
+name: compas_wood
+version: 2.1.0
+authors:
+- Petras Vestartas
+description: >
+  Timber Joinery Design and Fabrication
+url: https://petrasvestartas.github.io/compas_wood/latest
+icon: icon.png
