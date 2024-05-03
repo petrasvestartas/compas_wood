@@ -1,28 +1,28 @@
-# r: compas_wood, compas, wood_nano
+"""match data tree of beam-nodes component with the output of the solver"""
 from ghpythonlib.componentbase import executingcomponent as component
-import Grasshopper
+import Grasshopper, GhPython
+import System
 import Rhino
 
 
 class MyComponent(component):
-    def RunScript(self, _geometry, _group_id):
+    def RunScript(self,
+            _geometry: Grasshopper.DataTree[Rhino.Geometry.GeometryBase],
+            _group_id: Grasshopper.DataTree[int]):
 
         tree_temp = Grasshopper.DataTree[Rhino.Geometry.GeometryBase]()
 
-        # flatten to the first index
+        # flatten to the first index to bring lofted cuts to a single joint
         for i in range(_geometry.BranchCount):
             path = _geometry.Paths[i]
             tree_temp.AddRange(_geometry.Branch(i), Grasshopper.Kernel.Data.GH_Path(path.Indices[0]))
 
         # group
         tree = Grasshopper.DataTree[Rhino.Geometry.GeometryBase]()
-        for i in range(_group_id.BranchCount):
-            for j in _group_id.Branch(i):
-                path = Grasshopper.Kernel.Data.GH_Path(j)
-                if tree_temp.PathExists(path):
-                    tree.AddRange(tree_temp.Branch(path), _group_id.Paths[i])
-        # output
-        _result = tree
+        all_indices = _group_id.AllData()
 
-        # return outputs if you have them; here I try it for you:
-        return _result
+        for i, element_idx in enumerate(all_indices):
+            path = Grasshopper.Kernel.Data.GH_Path(element_idx)
+            tree.AddRange(tree_temp.Branch(i), path)
+
+        return tree
