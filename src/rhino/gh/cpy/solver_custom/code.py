@@ -1,4 +1,4 @@
-# r: compas_wood, compas, wood_nano
+
 from ghpythonlib.componentbase import executingcomponent as component
 import Rhino
 import System
@@ -155,9 +155,6 @@ class connections_zones(component):
                         wood_globals.custom_joints_b_male = value
                     elif key == -69:
                         wood_globals.custom_joints_b_female = value
-
-        wood_globals.face_to_face_side_to_side_joints_rotated_joint_as_average = False
-        wood_globals.face_to_face_side_to_side_joints_all_treated_as_rotated =  False
 
         wood_nano_get_connection_zones(
             to_point2(input_polyline_pairs),

@@ -1,8 +1,3 @@
-"""get joints ids and connections areas between elements"""
-
-__author__ = "petras vestartas"
-__version__ = "2024.04.25"
-
 from ghpythonlib.componentbase import executingcomponent as component
 import Rhino
 import Rhino.Geometry

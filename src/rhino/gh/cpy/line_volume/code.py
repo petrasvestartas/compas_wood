@@ -1,6 +1,7 @@
-# r: compas_wood, compas, wood_nano
+
 from ghpythonlib.componentbase import executingcomponent as component  # noqa: E402
 import Rhino
+import System
 from Rhino.Geometry import (
     Brep,
     Polyline,

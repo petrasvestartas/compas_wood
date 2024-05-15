@@ -1,4 +1,6 @@
-# r: compas_wood, compas, wood_nano
+
+import System
+import Rhino
 from ghpythonlib.componentbase import executingcomponent as component
 
 

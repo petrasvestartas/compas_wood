@@ -1,4 +1,3 @@
-# r: compas_wood, compas, wood_nano
 from ghpythonlib.componentbase import executingcomponent as component
 import System
 from ghpythonlib import treehelpers

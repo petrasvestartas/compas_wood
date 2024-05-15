@@ -9,6 +9,7 @@ from Rhino.Geometry import Arc
 from Rhino.Geometry import Brep
 import math
 import Grasshopper
+import System
 
 
 class Ears(component):

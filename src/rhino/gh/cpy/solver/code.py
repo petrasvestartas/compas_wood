@@ -1,4 +1,4 @@
-# r: compas_wood, compas, wood_nano
+
 from ghpythonlib.componentbase import executingcomponent as component
 import Rhino
 import System
@@ -88,8 +88,6 @@ class connections_zones(component):
 
         input_adjacency = _data.adjacency
         joint_parameters = wood_globals.joints_parameters_and_types
-        wood_globals.face_to_face_side_to_side_joints_rotated_joint_as_average = False
-        wood_globals.face_to_face_side_to_side_joints_all_treated_as_rotated =  False
 
 
         if _joint_p:

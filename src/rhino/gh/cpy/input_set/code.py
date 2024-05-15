@@ -1,4 +1,4 @@
-# r: compas_wood, compas, wood_nano
+
 from ghpythonlib.componentbase import executingcomponent as component
 import Grasshopper
 import Rhino
@@ -6,6 +6,7 @@ import ghpythonlib.treehelpers as th
 from Rhino.Geometry import Vector3d
 from Rhino.Geometry import Plane
 from compas_wood.datastructures import WoodData
+import System
 
 
 class MyComponent(component):

@@ -2,6 +2,7 @@ from ghpythonlib.componentbase import executingcomponent as component  # noqa: E
 import Grasshopper as gh
 import Rhino.Geometry as rg
 import clr
+import System
 
 clr.AddReference("System.Xml")
 import System.Xml  # noqa: E402

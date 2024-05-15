@@ -3,6 +3,7 @@ import Rhino
 import Rhino.Geometry
 from Rhino.Geometry import Mesh, MeshFace, Point3f
 import math
+import System
 
 
 class Chevron:

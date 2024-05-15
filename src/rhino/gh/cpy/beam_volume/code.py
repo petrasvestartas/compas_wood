@@ -1,4 +1,3 @@
-# r: compas_wood, compas, wood_nano
 import Rhino
 import Grasshopper
 import ghpythonlib.treehelpers as th
@@ -19,6 +18,7 @@ from wood_nano import double2
 from wood_nano import point2
 from wood_nano import point3
 from wood_nano import cut_type2
+import System
 
 class BeamVolume(component):
     def beam_volumes(self,

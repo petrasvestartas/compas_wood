@@ -1,0 +1,20 @@
+{
+    "name": "install",
+    "nickname": "install",
+    "description": "install compas_wood",
+    "category": "compas_wood",
+    "subcategory": "_install_",
+    "exposure": 16,
+    "instanceGuid": "6F2965A4-50E5-4883-AEF9-DDE4D2D990E2",
+    "ghpython": {
+        "hideOutput": true,
+        "hideInput": true,
+        "isAdvancedMode": true,
+        "marshalOutGuids": true,
+        "iconDisplay": 2,
+        "inputParameters": [
+        ],
+        "outputParameters": [
+        ]
+    }
+}

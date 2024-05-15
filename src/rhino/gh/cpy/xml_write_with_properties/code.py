@@ -1,4 +1,5 @@
 from ghpythonlib.componentbase import executingcomponent as component
+import System
 import clr
 
 clr.AddReference("System.Xml")

@@ -1,5 +1,6 @@
 from ghpythonlib.componentbase import executingcomponent as component
 import Rhino
+import System
 import Grasshopper
 
 
