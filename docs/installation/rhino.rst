@@ -10,6 +10,8 @@ Rhino
     click button install
     restart Rhino8
     open Grasshopper
+    drag and drop install component
+    try examples from the food4Rhino page
 
 
 Examples:
