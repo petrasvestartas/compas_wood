@@ -89,3 +89,11 @@ Releases follow the [semver](https://semver.org/spec/v2.0.0.html) versioning con
 1. Create a new release
 
         invoke release major
+
+
+
+
+# Star History
+
+[![Star History Chart](https://api.star-history.com/svg?repos=petrasvestartas/compas_wood&type=Date.svg)](https://star-history.com/#petrasvestartas/compas_wood&Date)
+
