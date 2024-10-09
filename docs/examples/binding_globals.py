@@ -1,7 +1,7 @@
 from compas_wood.binding import wood_globals
 
 # Property used in get_connection_zones function.
-# Pacakge compas_wood relies on extensive joinery library.
+# Package compas_wood relies on extensive joinery library.
 # This parameter helps to choose a specific joint parameters.
 # 300, 0.5, 3,   // 1-9 ss_e_ip (side-to-side edge in-plane)
 # 450, 0.64, 15, // 10-19 ss_e_op (side-to-side edge out-of-plane)

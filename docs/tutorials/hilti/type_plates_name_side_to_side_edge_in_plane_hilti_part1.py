@@ -29,7 +29,8 @@ try:
     from compas_viewer import Viewer
     from compas.geometry import Scale
 
-    viewer = Viewer(show_grid=False, rendermode='ghosted')
+    viewer = Viewer(show_grid=False, show_gridz=False, rendermode='ghosted')
+    viewer.config.renderer.show_grid=False
     scale = 1e-2
 
     for polylines in polylines_lists:

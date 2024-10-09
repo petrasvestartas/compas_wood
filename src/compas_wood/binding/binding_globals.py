@@ -177,9 +177,9 @@ class Globals(object):
 
     @joint_volume_extension.setter
     def joint_volume_extension(cls, value):
-        from wood_nano.conversions_python import to_int1
+        from wood_nano.conversions_python import to_double1
 
-        GLOBALS.JOINT_VOLUME_EXTENSION = to_int1(value)
+        GLOBALS.JOINT_VOLUME_EXTENSION = to_double1(value)
 
     @property
     def output_geometry_type(cls):

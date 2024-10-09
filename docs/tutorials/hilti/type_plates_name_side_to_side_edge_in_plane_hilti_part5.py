@@ -4,6 +4,7 @@ from compas_wood.binding import mesh_boolean_difference_from_polylines
 from compas_wood.binding import read_xml_polylines
 from compas.datastructures import Mesh
 from compas_wood.binding import wood_globals
+from compas import json_dump
 
 # Hard code mesh.
 vertices = [
@@ -81,16 +82,16 @@ polylines_lists, output_types = get_connection_zones(
 
 # Create meshes.
 meshes = mesh_boolean_difference_from_polylines(polylines_lists)
+json_dump(meshes, 'data/json_dump/type_plates_name_side_to_side_edge_inplane_hilti_part5.json')
 
 # Vizualize.
-
 try:
     from compas_viewer import Viewer
     from compas.geometry import Scale
 
     viewer = Viewer(show_grid=False, rendermode='lighted')
     scale = 1e-2
-
+    
     for polylines in polylines_lists:
         for polyline in polylines:
             polyline.transform(Scale.from_factors([scale, scale, scale]))
@@ -99,6 +100,8 @@ try:
     for mesh in meshes:
         mesh.transform(Scale.from_factors([scale, scale, scale]))
         viewer.scene.add(mesh, show_points=False, show_lines=False, hide_coplanaredges=False)
+        
+    
 
     viewer.show()
 except ImportError:
