@@ -2,7 +2,6 @@
 import Rhino
 import System
 import System.IO
-import compas_wood
 from compas_wood.binding import read_xml_polylines
 import os
 from wood_rui import add_polylines, wood_rui_globals, BooleanForm
@@ -59,7 +58,7 @@ def load_data_set(path: str = "C://brg//2_code//compas_wood//src//rhino//plugin/
     """
 
     # Get filenames from the path:
-    module_path: str = path#os.path.dirname(compas_wood.__file__)
+    module_path: str = path  # os.path.dirname(compas_wood.__file__)
     print("Data-sets are located in the shared folder:\n" + module_path)
     foldername: str = module_path + os.sep
     files: List[str] = os.listdir(foldername)
@@ -78,6 +77,7 @@ def load_data_set(path: str = "C://brg//2_code//compas_wood//src//rhino//plugin/
             polylines = read_xml_polylines(foldername, value[0])
             wood_rui_globals[value[0]]["polylines"] = polylines
             add_polylines(polylines, value[0])
+            Rhino.RhinoDoc.ActiveDoc.Views.ActiveView.Redraw()  # 0 ms
 
     return file_names_without_extensions
 

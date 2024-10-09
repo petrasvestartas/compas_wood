@@ -5,21 +5,22 @@ class Globals(object):
     _instances = {}
     scale = [1.0, 1.0, 1.0]  # temporary parameter that must go from compas_wood.binding import wood_globals
     search_type = 0  # temporary parameter that must go from compas_wood.binding import wood_globals
-    extension = [0.0, 0.0, 0.0]  # temporary parameter that must go from compas_wood.binding import wood_globals
+    joint_volume_extension = [0.0, 0.0, 0.0]  # temporary parameter that must go from compas_wood.binding import wood_globals
 
     def __new__(cls, plugin_name="compas_wood"):
         """Ensure that only one instance per plugin exists."""
         if plugin_name not in cls._instances:
             print("Creating new instance for plugin: {}".format(plugin_name))
-            instance = super(Globals, cls).__new__(cls)
-            # Initialize the plugin-specific globals storage
-            instance.plugin_name = plugin_name
-            instance.dataset = {}
-            instance.init_data("default")  # Call init_data on the instance
-
-            cls._instances[plugin_name] = instance
-
+            cls._instances[plugin_name] = super(Globals, cls).__new__(cls)
         return cls._instances[plugin_name]
+
+    def __init__(self, plugin_name="compas_wood"):
+        """Initialize the plugin-specific globals storage."""
+        if not hasattr(self, 'initialized'):  # Ensure initialization happens only once
+            self.plugin_name = plugin_name
+            self.dataset = {}
+            self.initialized = True
+            self.reset()
 
     def init_data(self, name):
 
@@ -39,6 +40,7 @@ class Globals(object):
             "three_valence": [],  # INPUT special dataset for annen and vidy
             "three_valence_guid": [],
             "adjacency": [],  # INPUT only filled for special dataset like annen, where computation time is important
+            "three_valence_element_indices_and_instruction": [],  # INPUT special dataset for annen and vidy
             "planes": [],
             "planes_guid": [],
             "flags": [],
@@ -70,7 +72,7 @@ class Globals(object):
         self.init_data("default")
         self.scale = [1.0, 1.0, 1.0]  # temporary parameter that must go from compas_wood.binding import wood_globals
         self.search_type = 0  # temporary parameter that must go from compas_wood.binding import wood_globals
-        self.extension = [
+        self.joint_volume_extension = [
             0.0,
             0.0,
             0.0,

@@ -12,18 +12,18 @@ from wood_rui import wood_rui_globals, add_polylines, add_mesh, add_insertion_li
 class dataset_folded_plates:
     def __init__(
         self,
-        dataset_name : str,
+        dataset_name: str,
         surface: Rhino.Geometry.Surface,
         u_divisions: int,
         v_divisions: int,
         base_planes: System.Collections.Generic.List[Rhino.Geometry.Plane],
         thickness: float,
         chamfer: float,
-        face_positions: System.Collections.Generic.List[float]
+        face_positions: System.Collections.Generic.List[float],
     ):
 
         # Diamond Subdivision
-        self._dataset_name = dataset_name # type str
+        self._dataset_name = dataset_name  # type str
         self._mesh = Rhino.Geometry.Mesh()  # type Mesh
 
         self._flags = []  # List<bool>
@@ -585,28 +585,25 @@ class dataset_folded_plates:
             for i in range(self._f):
                 for j in range(2):
                     self._f_polylines[i][j] = self.chamfer_polyline(self._f_polylines[i][j], -self._chamfer)
-    
 
     def create_dataset(self):
 
-        
         add_mesh(self._mesh, self._dataset_name)
         flat_list_of_polylines = []
         for i in range(0, len(self._f_polylines)):
             for j in range(0, len(self._f_polylines[i])):
                 flat_list_of_polylines.append(self._f_polylines[i][j])
-        add_polylines(flat_list_of_polylines , self._dataset_name)
+        add_polylines(flat_list_of_polylines, self._dataset_name)
         add_insertion_lines(self._insertion_lines, self._dataset_name)
         add_adjacency(self._adjacency, self._dataset_name)
         add_flags(self._flags, self._dataset_name)
-        Rhino.RhinoDoc.ActiveDoc.Views.Redraw() # 10-12ms
-        Rhino.RhinoDoc.ActiveDoc.Views.ActiveView.Redraw() # 0 ms
-
+        # Rhino.RhinoDoc.ActiveDoc.Views.Redraw()  # 10-12ms
+        Rhino.RhinoDoc.ActiveDoc.Views.ActiveView.Redraw()  # 0 ms
 
 
 def get_base_planes() -> Tuple[Optional[List[rg.Plane]], rc.Result]:
     base_planes: List[rg.Plane] = []
-    
+
     # Create a GetObject instance to select multiple curves
     go: ric.GetObject = ric.GetObject()
     go.SetCommandPrompt("Select multiple rectangle curves")
@@ -637,8 +634,9 @@ def get_base_planes() -> Tuple[Optional[List[rg.Plane]], rc.Result]:
 
     if not base_planes:
         return None, rc.Result.Failure
-    
+
     return base_planes, rc.Result.Success
+
 
 def command_line_input(dataset_name) -> rc.Result:
     # Create an instance of GetOption to define options in one line
@@ -649,11 +647,11 @@ def command_line_input(dataset_name) -> rc.Result:
     surface: Optional[rg.Surface] = None
     u_divisions: ric.OptionInteger = ric.OptionInteger(5)  # Default value 5
     v_divisions: ric.OptionInteger = ric.OptionInteger(2)  # Default value 2
-    thickness: ric.OptionDouble = ric.OptionDouble(4)  # Default value 1.4
-    chamfer: ric.OptionDouble = ric.OptionDouble(3)  # Default value 0.0
+    thickness: ric.OptionDouble = ric.OptionDouble(1.4)  # Default value 1.4
+    chamfer: ric.OptionDouble = ric.OptionDouble(6)  # Default value 0.0
     face_positions: List[float] = [0.0]  # Default list with a single value 0.0
     base_planes: List[Rhino.Geometry.Plane] = []
-    
+
     # Add options to the GetOption instance with custom names
     get_options.AddOption("select_surface")  # New option to select surface
     get_options.AddOptionInteger("u_divisions", u_divisions)
@@ -671,15 +669,15 @@ def command_line_input(dataset_name) -> rc.Result:
     def update():
         dataset_folded_plates(
             dataset_name,
-            surface, 
-            u_divisions.CurrentValue, 
-            v_divisions.CurrentValue, 
+            surface,
+            u_divisions.CurrentValue,
+            v_divisions.CurrentValue,
             base_planes,
-            thickness.CurrentValue, 
-            chamfer.CurrentValue, 
-            face_positions  # Pass face_positions to the UI
+            thickness.CurrentValue,
+            chamfer.CurrentValue,
+            face_positions,  # Pass face_positions to the UI
         )
-        
+
     update()  # Run once to see the code input
 
     while True:
@@ -690,7 +688,7 @@ def command_line_input(dataset_name) -> rc.Result:
             return rc.Result.Cancel  # Exit the loop
 
         if res == Rhino.Input.GetResult.Option:
-           
+
             if get_options.OptionIndex() == 1:  # 'select_surface'
                 # Step A: Select a surface
                 go: ric.GetObject = ric.GetObject()
@@ -699,13 +697,13 @@ def command_line_input(dataset_name) -> rc.Result:
                 go.EnablePreSelect(True, True)
                 go.DeselectAllBeforePostSelect = False
                 go.SubObjectSelect = False
-                
+
                 if go.Get() != Rhino.Input.GetResult.Object:
                     return go.CommandResult()
-                
+
                 surface_ref = go.Object(0)
                 surface: Optional[rg.Surface] = surface_ref.Surface()
-                
+
                 if not surface:
                     print("No surface selected.")
                     return rc.Result.Failure
@@ -717,10 +715,10 @@ def command_line_input(dataset_name) -> rc.Result:
                 print("You have chosen to get base planes.")
                 # Call get_base_planes() immediately when option is selected
                 base_planes, result = get_base_planes()
-                
+
                 if result != rc.Result.Success:
                     return result
-                
+
                 print("Base planes selected:", len(base_planes) if base_planes else 0)
                 update()
                 continue
@@ -732,12 +730,12 @@ def command_line_input(dataset_name) -> rc.Result:
                 if gp.Get() != Rhino.Input.GetResult.String:
                     print("No input provided for face positions.")
                     return rc.Result.Failure
-                
+
                 input_str = gp.StringResult()
 
                 try:
                     # Convert the input string to a list of floats
-                    face_positions = [float(val.strip()) for val in input_str.split(',')]
+                    face_positions = [float(val.strip()) for val in input_str.split(",")]
                     print("Face positions:", face_positions)
                 except ValueError:
                     print("Invalid input. Please enter valid numbers separated by commas.")
@@ -760,7 +758,6 @@ def command_line_input(dataset_name) -> rc.Result:
                 return
             else:
                 update()
-
 
     # Do something with the inputs (you can apply further operations here)
     return rc.Result.Success
