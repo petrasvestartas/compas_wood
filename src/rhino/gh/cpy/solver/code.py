@@ -1,4 +1,3 @@
-
 from ghpythonlib.componentbase import executingcomponent as component
 import Rhino
 import System
@@ -35,13 +34,15 @@ class connections_zones(component):
     def get_ClippingBox(self):
         return self.bbox
 
-    def RunScript(self,
-            _data,
-            _joint_p: System.Collections.Generic.IList[float],
-            _scale: System.Collections.Generic.IList[float],
-            _extension: System.Collections.Generic.IList[float],
-            _find: int,
-            _get: int):
+    def RunScript(
+        self,
+        _data,
+        _joint_p: System.Collections.Generic.IList[float],
+        _scale: System.Collections.Generic.IList[float],
+        _extension: System.Collections.Generic.IList[float],
+        _find: int,
+        _get: int,
+    ):
 
         # ==============================================================================
         # clear input
@@ -88,7 +89,6 @@ class connections_zones(component):
 
         input_adjacency = _data.adjacency
         joint_parameters = wood_globals.joints_parameters_and_types
-
 
         if _joint_p:
             for i in range(0, len(_joint_p), 3):

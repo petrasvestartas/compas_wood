@@ -40,6 +40,7 @@ class AboutForm:
     def show(self):
         self.dialog.ShowDialog(Rhino.UI.RhinoEtoApp.MainWindow)
 
+
 class NamedValuesForm(Eto.Forms.Dialog[bool]):
     """Eto form for displaying and editing named values.
 
@@ -57,6 +58,17 @@ class NamedValuesForm(Eto.Forms.Dialog[bool]):
         The width of the form window.
     height : int, optional
         The height of the form window.
+
+    Attributes
+    ----------
+    attributes : list[tuple[str, str]]
+        The list of names and values as tuples.
+
+    Returns
+    -------
+    bool
+        True if the user clicked OK, False if the user clicked Cancel.
+
     """
 
     def __init__(
@@ -141,8 +153,6 @@ class NamedValuesForm(Eto.Forms.Dialog[bool]):
             return "\\" in value or "/" in value
         return False
 
-
-    
     def on_ok(self, sender, event):
         try:
             # Reset the attribute list with the updated values from the table
@@ -155,15 +165,137 @@ class NamedValuesForm(Eto.Forms.Dialog[bool]):
                     try:
                         # If value is a string and looks like a path, keep it as a string
                         if isinstance(value, str) and self.is_valid_path(value):
-                            # print(f"Value '{value}' recognized as a valid path format.")
                             pass  # Do nothing, keep value as a string
                         else:
                             # Attempt to evaluate non-path values
                             value = ast.literal_eval(value)
-                    except Exception as e:
-                        # If evaluation fails, keep it as a string and print an error for debugging
-                        print(f"Error evaluating value '{value}': {e}")
+                    except (ValueError, SyntaxError):  # Catch specific literal eval errors
+                        # print(f"Error evaluating value '{value}', keeping it as string.")
+                        # If eval fails, we keep it as a string
+                        pass
                 self.attributes.append((name, value))  # Store as tuple
+        except Exception as e:
+            print(e)
+            self.Close(False)
+        self.Close(True)
+
+    def on_cancel(self, sender, event):
+        self.Close(False)
+
+    def show(self):
+        return self.ShowModal(Rhino.UI.RhinoEtoApp.MainWindow)
+
+
+class BooleanForm(Eto.Forms.Dialog[bool]):
+    """Eto form for displaying and editing named values using boolean toggles.
+
+    Parameters
+    ----------
+    names : list[str]
+        The names of the values.
+    values: list[bool]
+        The values as booleans.
+    title : str, optional
+        The title of the form window.
+    width : int, optional
+        The width of the form window.
+    height : int, optional
+        The height of the form window.
+
+    Attributes
+    ----------
+    attributes : list[tuple[str, bool]]
+        The list of names and boolean values as tuples.
+
+    Returns
+    -------
+    bool
+        True if the user clicked OK, False if the user clicked Cancel.
+    """
+
+    def __init__(
+        self,
+        names,  # type: list[str]
+        values,  # type: list[bool]
+        title="Boolean Form",  # type: str
+        width=600,  # type: int
+        height=800,  # type: int
+    ):
+        # type: (...) -> None
+        super().__init__()
+
+        # Store as a list of tuples (allowing duplicates)
+        self.attributes = list(zip(names, values))
+        self.names = names
+        self.values = values
+
+        self.Title = title
+        self.Padding = Eto.Drawing.Padding(0)
+        self.Resizable = True
+        self.MinimumSize = Eto.Drawing.Size(0.5 * width, 0.5 * height)
+        self.ClientSize = Eto.Drawing.Size(width, height)
+
+        # Create the table (GridView)
+        self.table = table = Eto.Forms.GridView()
+        table.ShowHeader = True
+
+        # First column: Names (not editable)
+        name_column = Eto.Forms.GridColumn()
+        name_column.HeaderText = "Name"
+        name_column.Editable = False
+        name_column.DataCell = Eto.Forms.TextBoxCell(0)  # Display names as text
+        table.Columns.Add(name_column)
+
+        # Second column: Values as boolean toggle (editable)
+        value_column = Eto.Forms.GridColumn()
+        value_column.HeaderText = "Value"
+        value_column.Editable = True
+        value_column.DataCell = Eto.Forms.CheckBoxCell(1)  # Display values as checkbox
+        table.Columns.Add(value_column)
+
+        # Populate the table with names and boolean values
+        collection = []
+        for name, value in zip(self.names, self.values):
+            item = Eto.Forms.GridItem()
+            item.Values = (name, value)  # Set name and boolean value
+            collection.append(item)
+        table.DataStore = collection
+
+        # Layout for the form
+        layout = Eto.Forms.DynamicLayout()
+        layout.BeginVertical(Eto.Drawing.Padding(0, 0, 0, 0), Eto.Drawing.Size(0, 0), True, True)
+        layout.AddRow(table)
+        layout.EndVertical()
+        layout.BeginVertical(Eto.Drawing.Padding(12, 18, 12, 24), Eto.Drawing.Size(6, 0), False, False)
+        layout.AddRow(None, self.ok, self.cancel)
+        layout.EndVertical()
+
+        self.Content = layout
+
+    @property
+    def ok(self):
+        self.DefaultButton = Eto.Forms.Button()
+        self.DefaultButton.Text = "OK"
+        self.DefaultButton.Click += self.on_ok
+        return self.DefaultButton
+
+    @property
+    def cancel(self):
+        self.AbortButton = Eto.Forms.Button()
+        self.AbortButton.Text = "Cancel"
+        self.AbortButton.Click += self.on_cancel
+        return self.AbortButton
+
+    def on_ok(self, sender, event):
+        try:
+            # Reset the attribute list with updated values from the table
+            self.attributes = []
+            for row in self.table.DataStore:
+                name = row.GetValue(0)
+                value = row.GetValue(1)
+
+                # Store name and boolean value as tuple
+                self.attributes.append((name, bool(value)))
         except Exception as e:
             print(e)
             self.Close(False)

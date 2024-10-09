@@ -1,9 +1,10 @@
 """Write a data tree of polylines to an xml file."""
+
 import System
 from ghpythonlib.componentbase import executingcomponent as component
 import clr
-import Grasshopper
 import Rhino
+import Grasshopper
 
 clr.AddReference("System.Xml")
 import System.Xml  # noqa: E402
@@ -31,9 +32,7 @@ class write_component(component):
 
         xmlWriter.WriteEndElement()
 
-    def RunScript(self,
-            _plines: Grasshopper.DataTree[Rhino.Geometry.Polyline],
-            _path: str):
+    def RunScript(self, _plines: Grasshopper.DataTree[Rhino.Geometry.Polyline], _path: str):
         if _path is None or _plines.AllData().Count == 0:
             return False
         ##########################################################################

@@ -3,4 +3,5 @@
 
 from wood_nano import test
 
-test()
+if __name__ == "__main__":
+    test()

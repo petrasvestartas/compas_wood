@@ -1,4 +1,3 @@
-
 from ghpythonlib.componentbase import executingcomponent as component
 import Rhino
 import System
@@ -36,15 +35,17 @@ class connections_zones(component):
     def get_ClippingBox(self):
         return self.bbox
 
-    def RunScript(self,
-            _data,
-            _joint_p: System.Collections.Generic.IList[float],
-            _scale: System.Collections.Generic.IList[float],
-            _extension: System.Collections.Generic.IList[float],
-            _find: int,
-            _get: int,
-            _custom_joints: System.Collections.Generic.IList[Rhino.Geometry.Polyline],
-            _custom_types: System.Collections.Generic.IList[int]):
+    def RunScript(
+        self,
+        _data,
+        _joint_p: System.Collections.Generic.IList[float],
+        _scale: System.Collections.Generic.IList[float],
+        _extension: System.Collections.Generic.IList[float],
+        _find: int,
+        _get: int,
+        _custom_joints: System.Collections.Generic.IList[Rhino.Geometry.Polyline],
+        _custom_types: System.Collections.Generic.IList[int],
+    ):
 
         # ==============================================================================
         # clear input
@@ -168,7 +169,7 @@ class connections_zones(component):
             int(input_output_type),
             w_output_plines,
             w_output_types,
-            to_double1(input_joint_volume_parameters)
+            to_double1(input_joint_volume_parameters),
         )
 
         self.polylines = from_point3(w_output_plines)
