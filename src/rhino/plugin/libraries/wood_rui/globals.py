@@ -29,6 +29,10 @@ class Globals(object):
         self.dataset[name] = {
             "mesh": None,  # INPUT meshes that are good inputs for generating polylines
             "mesh_guid": None,
+            "surface": None,  # INPUT surface that is good for generating meshes
+            "surface_guid": None,
+            "axes": None,  # INPUT axis that is good for generating polylines
+            "axes_guid": None,
             "polylines": [],  # INPUT top and bottom outlines of a plate
             "polylines_guid": [],
             "insertion_lines": [],  # USER lines for direction of a joint
@@ -55,6 +59,8 @@ class Globals(object):
         from System.Drawing import Color
         from .layer import ensure_layer_exists as create_layer
         create_layer(self.plugin_name, name, "mesh", Color.Black)
+        create_layer(self.plugin_name, name, "surface", Color.Black)
+        create_layer(self.plugin_name, name, "axes", Color.Black)
         create_layer(self.plugin_name, name, "polylines", Color.Red)
         create_layer(self.plugin_name, name, "insertion", Color.Blue)
         create_layer(self.plugin_name, name, "joint_types", Color.Gray)

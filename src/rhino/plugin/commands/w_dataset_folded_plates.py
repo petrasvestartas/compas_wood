@@ -764,6 +764,5 @@ def command_line_input(dataset_name) -> rc.Result:
 
 if __name__ == "__main__":
     dataset_name = "folded_plates"
-    
     wood_rui_globals.init_data(dataset_name)
     command_line_input(dataset_name)
