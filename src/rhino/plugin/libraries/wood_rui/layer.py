@@ -3,6 +3,7 @@ import System
 from .globals import wood_rui_globals  # Import the singleton instance
 from typing import *
 from System.Drawing import Color  # Import Color from System.Drawing
+from Rhino import RhinoMath
 
 
 def ensure_layer_exists(data_name: str, type_name: str, color: Color = None):
@@ -65,3 +66,43 @@ def delete_objects_in_layer(layer_index):
         objects = Rhino.RhinoDoc.ActiveDoc.Objects.FindByLayer(child_layer)
         for obj in objects:
             Rhino.RhinoDoc.ActiveDoc.Objects.Delete(obj, True)
+
+
+def get_objects_by_layer(layer_name, debug=False):
+    """ Get Rhino objects by layer name.
+    
+    Parameters
+    ----------
+    layer_name : str
+        The name of the layer to search for objects.
+    """
+    
+    # Find objects by the layer name
+    layer_index = Rhino.RhinoDoc.ActiveDoc.Layers.FindByFullPath(layer_name, RhinoMath.UnsetIntIndex)
+    layer = None
+    if layer_index != RhinoMath.UnsetIntIndex: 
+        layer = Rhino.RhinoDoc.ActiveDoc.Layers[layer_index]
+    else:
+        layer = Rhino.RhinoDoc.ActiveDoc.Layers.FindName(layer_name)
+    if layer is None:
+        print(f"Layer not found: {layer_name}")
+        return
+    
+    print("get_objects_by_layer: ", layer)
+    
+    
+    rhino_objects = Rhino.RhinoDoc.ActiveDoc.Objects.FindByLayer(layer)
+    
+    # Check if objects are found
+    if rhino_objects is None:
+        print(f"No objects found on layer: {layer_name}")
+        return
+    
+    # Iterate through the found objects and print their details
+    if debug:
+        for obj in rhino_objects:
+            if obj:
+                # Example: print object ID and type
+                print(f"Object ID: {obj.Id}, Object Type: {obj.ObjectType}")
+    
+    return rhino_objects

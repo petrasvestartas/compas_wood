@@ -587,7 +587,6 @@ class dataset_folded_plates:
                     self._f_polylines[i][j] = self.chamfer_polyline(self._f_polylines[i][j], -self._chamfer)
 
     def create_dataset(self):
-
         add_mesh(self._mesh, self._dataset_name)
         flat_list_of_polylines = []
         for i in range(0, len(self._f_polylines)):
@@ -765,5 +764,6 @@ def command_line_input(dataset_name) -> rc.Result:
 
 if __name__ == "__main__":
     dataset_name = "folded_plates"
+    
     wood_rui_globals.init_data(dataset_name)
     command_line_input(dataset_name)

@@ -2,7 +2,7 @@ import Rhino
 import Rhino.Input
 import Rhino.DocObjects
 from typing import List, Tuple, Dict, Any
-from wood_rui import wood_rui_globals
+from wood_rui import wood_rui_globals, get_objects_by_layer
 
 def closest_lines(dataset_name: str, lines: List[Rhino.Geometry.Line]) -> None:
     """
@@ -90,16 +90,17 @@ def closest_lines(dataset_name: str, lines: List[Rhino.Geometry.Line]) -> None:
 
 def command_line_input() -> Tuple[str, List[Rhino.Geometry.Line]]:
     """
-    Loads datasets and selects lines based on user input from the command line.
-
+    Automatically selects all lines from the nested layer "compas_wood > selected_case_name > insertion".
+    
     Returns
     -------
     Tuple[str, List[Rhino.Geometry.Line]]
         Selected dataset name and list of lines.
     """
-    
-    # Create an instance of GetOption to define options
-    get_options: Rhino.Input.Custom.GetOption = Rhino.Input.Custom.GetOption()
+
+    # Define base and target layer names
+    base_layer_name = "compas_wood"
+    child_layer_name = "insertion"  # Changed from 'joint_types' to 'insertion'
 
     # Populate options from wood_rui_globals.datasets.keys()
     case_names: List[str] = list(wood_rui_globals.dataset.keys())
@@ -108,54 +109,50 @@ def command_line_input() -> Tuple[str, List[Rhino.Geometry.Line]]:
         Rhino.RhinoApp.WriteLine("\nATTENTION: First create geometry, set joint parameters, and then run the solver.\n")
         return Rhino.Commands.Result.Cancel, []
 
-    get_options.AddOption("select_lines")
-
+    # Create an instance of GetOption to allow the user to select a case
+    get_options: Rhino.Input.Custom.GetOption = Rhino.Input.Custom.GetOption()
     for case_name in case_names:
         get_options.AddOption(case_name)
 
-    Rhino.RhinoApp.WriteLine("\n─ Select a case and lines. Hit 'Enter' when done. ─")
-    get_options.SetCommandPrompt("Select a case or lines.")
+    Rhino.RhinoApp.WriteLine("\n─ Select a case. Hit 'Enter' when done. ─")
+    get_options.SetCommandPrompt("Select a case.")
 
     selected_case_name: str = ""
-    selected_lines: List[Rhino.Geometry.Line] = []
 
+    # Get user's case selection
     while True:
         res = get_options.Get()
 
         if res == Rhino.Input.GetResult.Nothing or res == Rhino.Input.GetResult.Cancel:
             if not selected_case_name:
-                selected_case_name = case_names[0]
-            Rhino.RhinoApp.WriteLine("Selection completed.")
+                selected_case_name = case_names[0]  # Default to the first case if none is selected
+            Rhino.RhinoApp.WriteLine(f"Case selected: {selected_case_name}")
             break
 
         if res == Rhino.Input.GetResult.Option:
             option_name: str = get_options.Option().EnglishName
-
-            if option_name == "select_lines":
-                Rhino.RhinoApp.WriteLine("\n─ Select the lines. Press Enter when done. ─")
-                go = Rhino.Input.Custom.GetObject()
-                go.SetCommandPrompt("Select lines")
-                go.GeometryFilter = Rhino.DocObjects.ObjectType.Curve
-                go.SubObjectSelect = False
-                go.EnablePreSelect(True, True)
-                go.GetMultiple(1, 0)
-
-                if go.CommandResult() != Rhino.Commands.Result.Success:
-                    Rhino.RhinoApp.WriteLine("Failed to select lines.")
-                    continue
-
-                for i in range(go.ObjectCount):
-                    obj_ref = go.Object(i)
-                    curve = obj_ref.Curve()
-                    if curve:
-                        selected_lines.append(Rhino.Geometry.Line(curve.PointAtStart, curve.PointAtEnd))
-
-                Rhino.RhinoApp.WriteLine(f"Total lines selected: {len(selected_lines)}")
-
-            elif option_name in case_names:
+            if option_name in case_names:
                 selected_case_name = option_name
                 Rhino.RhinoApp.WriteLine(f"Case selected: {selected_case_name}")
+                break
 
+    # Construct full layer path: "compas_wood > selected_case_name > insertion"
+    full_layer_name = f"{base_layer_name}::{selected_case_name}::{child_layer_name}"
+
+    # Use FindByLayer to get all objects in the target layer
+    layer_objects = get_objects_by_layer(full_layer_name)
+
+    selected_lines: List[Rhino.Geometry.Line] = []
+
+    # Iterate through all curves on the desired layer and convert to Rhino lines
+    if layer_objects:
+        for obj in layer_objects:
+            if isinstance(obj.Geometry, Rhino.Geometry.Curve):
+                curve = obj.Geometry
+                if isinstance(curve, Rhino.Geometry.LineCurve):  # Only process if it's a line curve
+                    selected_lines.append(Rhino.Geometry.Line(curve.PointAtStart, curve.PointAtEnd))
+
+    Rhino.RhinoApp.WriteLine(f"Total lines found on layer '{full_layer_name}': {len(selected_lines)}")
     return selected_case_name, selected_lines
 
 

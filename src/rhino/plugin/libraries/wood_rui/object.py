@@ -27,6 +27,8 @@ def add_polylines(polylines: List[Rhino.Geometry.Polyline], data_name: str):
         Name of dataset.
 
     """
+    
+    print("add_polylines", data_name)
 
     layer_index = ensure_layer_exists(data_name, "polylines", Color.Red)
 
@@ -38,11 +40,12 @@ def add_polylines(polylines: List[Rhino.Geometry.Polyline], data_name: str):
                 obj = Rhino.RhinoDoc.ActiveDoc.Objects.Find(obj_guid)
                 if obj:
                     obj.Attributes.LayerIndex = layer_index
-                    obj.CommitChanges()
+                    
                     polyline_guids.append(obj_guid)
                     obj.Attributes.SetUserString("element_id", str(int(idx*0.5)))
                     obj.Attributes.SetUserString("dataset", data_name)
                     obj.Attributes.SetUserString("type", "polylines")
+                    obj.CommitChanges()
                 else:
                     print(obj_guid, obj)
             else:
@@ -52,10 +55,14 @@ def add_polylines(polylines: List[Rhino.Geometry.Polyline], data_name: str):
         delete_objects(wood_rui_globals[data_name]["polylines_guid"])
     wood_rui_globals[data_name]["polylines_guid"] = polyline_guids
     wood_rui_globals[data_name]["polylines"] = polylines
+    
+    layer_index_dots = ensure_layer_exists(data_name, "joint_types", Color.Gray)
 
 
 def add_insertion_lines(lines, data_name):
     """Add a list of polylines to the specified layer and return their GUIDs."""
+    
+    print("insertion_lines", data_name)
 
     layer_index = ensure_layer_exists(data_name, "insertion", Color.Blue)
 
@@ -64,10 +71,11 @@ def add_insertion_lines(lines, data_name):
         obj_guid = Rhino.RhinoDoc.ActiveDoc.Objects.AddLine(line)
         obj = Rhino.RhinoDoc.ActiveDoc.Objects.Find(obj_guid)
         obj.Attributes.LayerIndex = layer_index
-        obj.CommitChanges()
+        
         line_guids.append(obj_guid)
         obj.Attributes.SetUserString("dataset", data_name)
         obj.Attributes.SetUserString("type", "insertion")
+        obj.CommitChanges()
 
     if "insertion_guid" in wood_rui_globals[data_name]:
         delete_objects(wood_rui_globals[data_name]["insertion_guid"])
@@ -78,7 +86,9 @@ def add_insertion_lines(lines, data_name):
 def add_mesh(mesh, data_name):
     """Add a mesh to the specified layer and return the mesh's GUID."""
 
-    layer_index = ensure_layer_exists(data_name, "mesh")
+    print("add_mesh", data_name)
+    
+    layer_index = ensure_layer_exists(data_name, "mesh", Color.Black)
 
     if wood_rui_globals[data_name]["mesh_guid"] is not None:
         # Replace the mesh
@@ -97,10 +107,16 @@ def add_mesh(mesh, data_name):
 
 
 def add_adjacency(four_indices_face_face_edge_edge, data_name):
+    
+    print("add_adjacency", data_name)
+    
     wood_rui_globals[data_name]["adjacency"] = four_indices_face_face_edge_edge
 
 
 def add_flags(flags, data_name):
+    
+    print("add_flags", data_name)
+    
     wood_rui_globals[data_name]["flags"] = flags
 
 
@@ -111,6 +127,8 @@ def add_joinery(joinery: List[List[Rhino.Geometry.Polyline]], data_name: str) ->
     :param joinery: A list of lists of polylines to add to Rhino.
     :param data_name: The name of the case to be used for layer and group management.
     """
+    
+    print("add_joinery", data_name)
 
     # Use wood_rui_globals.plugin_name as the top-level layer
     plugin_name = wood_rui_globals.plugin_name
@@ -132,10 +150,11 @@ def add_joinery(joinery: List[List[Rhino.Geometry.Polyline]], data_name: str) ->
             obj_guid = Rhino.RhinoDoc.ActiveDoc.Objects.AddPolyline(polyline)
             obj = Rhino.RhinoDoc.ActiveDoc.Objects.Find(obj_guid)
             obj.Attributes.LayerIndex = layer_index  # Assign to the specified layer
-            obj.CommitChanges()  # Commit the changes to the object's attributes
+            
             group_guids.append(obj_guid)  # Collect the GUID for this polyline
             obj.Attributes.SetUserString("dataset", data_name)
             obj.Attributes.SetUserString("type", "joinery")
+            obj.CommitChanges()  # Commit the changes to the object's attributes
 
         # If the group contains polylines, group them together in Rhino
         if group_guids:
@@ -153,3 +172,19 @@ def add_joinery(joinery: List[List[Rhino.Geometry.Polyline]], data_name: str) ->
 
     # Hide all child layers except the 'joinery' layer
     # hide_non_joinery_layers(plugin_name, data_name, "joinery")
+
+def add_joint_type(joints_per_face: List[List[int]], data_name: str) -> None:
+    
+    wood_rui_globals[data_name]["joints_per_face"] = joints_per_face
+      
+ 
+    polylines_guid = wood_rui_globals[data_name]["polylines_guid"]
+    for idx, (obj_guid1, obj_guid2) in enumerate(zip(polylines_guid[0::2], polylines_guid[1::2])):
+        for obj_guid in (obj_guid1, obj_guid2):
+            obj = Rhino.RhinoDoc.ActiveDoc.Objects.Find(obj_guid)
+            if obj:
+                for idy, joints_type in enumerate(joints_per_face[idx]):
+                    obj.Attributes.SetUserString("joints_per_face_"+str(idy), str(joints_type))
+                obj.CommitChanges()
+            else:
+                print(obj_guid, obj)
