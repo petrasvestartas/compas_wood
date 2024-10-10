@@ -112,15 +112,36 @@ def add_mesh(mesh, data_name):
 def add_adjacency(four_indices_face_face_edge_edge, data_name):
     
     print("add_adjacency", data_name)
-    
     wood_rui_globals[data_name]["adjacency"] = four_indices_face_face_edge_edge
 
+    Rhino.RhinoDoc.ActiveDoc.Views.ActiveView.Redraw()  # 0 ms
 
 def add_flags(flags, data_name):
     
     print("add_flags", data_name)
-    
     wood_rui_globals[data_name]["flags"] = flags
+
+def add_insertion_vectors(insertion_vectors, data_name):
+    
+    print("insertion_vectors", data_name)
+    wood_rui_globals[data_name]["insertion_vectors"] = insertion_vectors
+    
+    polylines_guid = wood_rui_globals[data_name]["polylines_guid"]
+    for idx, (obj_guid1, obj_guid2) in enumerate(zip(polylines_guid[0::2], polylines_guid[1::2])):
+        for obj_guid in (obj_guid1, obj_guid2):
+            obj = Rhino.RhinoDoc.ActiveDoc.Objects.Find(obj_guid)
+            if obj:
+                for idy, joints_type in enumerate(insertion_vectors[idx]):
+                    obj.Attributes.SetUserString("insertion_vectors"+str(idy), str(joints_type))
+                obj.CommitChanges()
+            else:
+                print(obj_guid, obj)
+    Rhino.RhinoDoc.ActiveDoc.Views.ActiveView.Redraw()  # 0 ms
+
+def add_three_valence(three_valence, data_name):
+    
+    print("three_valence", data_name)
+    wood_rui_globals[data_name]["three_valence"] = three_valence
 
 
 def add_joinery(joinery: List[List[Rhino.Geometry.Polyline]], data_name: str) -> None:
