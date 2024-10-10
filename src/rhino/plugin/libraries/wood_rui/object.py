@@ -1,6 +1,6 @@
 import Rhino
-from .globals import wood_rui_globals  # Import the singleton instance
-from .layer import ensure_layer_exists
+from .globals import wood_rui_globals
+from .layer import ensure_layer_exists  # Import the singleton instance
 from System.Drawing import Color
 from typing import *
 
@@ -30,7 +30,7 @@ def add_polylines(polylines: List[Rhino.Geometry.Polyline], data_name: str):
     
     print("add_polylines", data_name)
 
-    layer_index = ensure_layer_exists(data_name, "polylines", Color.Red)
+    layer_index = ensure_layer_exists("compas_wood", data_name, "polylines", Color.Red)
 
     polyline_guids = []
     for idx, polyline in enumerate(polylines):
@@ -56,7 +56,8 @@ def add_polylines(polylines: List[Rhino.Geometry.Polyline], data_name: str):
     wood_rui_globals[data_name]["polylines_guid"] = polyline_guids
     wood_rui_globals[data_name]["polylines"] = polylines
     
-    layer_index_dots = ensure_layer_exists(data_name, "joint_types", Color.Gray)
+    layer_index_dots = ensure_layer_exists("compas_wood", data_name, "joint_types", Color.Gray)
+    Rhino.RhinoDoc.ActiveDoc.Views.ActiveView.Redraw()  # 0 ms
 
 
 def add_insertion_lines(lines, data_name):
@@ -64,7 +65,7 @@ def add_insertion_lines(lines, data_name):
     
     print("insertion_lines", data_name)
 
-    layer_index = ensure_layer_exists(data_name, "insertion", Color.Blue)
+    layer_index = ensure_layer_exists("compas_wood", data_name, "insertion", Color.Blue)
 
     line_guids = []
     for line in lines:
@@ -81,6 +82,7 @@ def add_insertion_lines(lines, data_name):
         delete_objects(wood_rui_globals[data_name]["insertion_guid"])
     wood_rui_globals[data_name]["insertion_guid"] = line_guids
     wood_rui_globals[data_name]["insertion"] = lines
+    Rhino.RhinoDoc.ActiveDoc.Views.ActiveView.Redraw()  # 0 ms
 
 
 def add_mesh(mesh, data_name):
@@ -88,7 +90,7 @@ def add_mesh(mesh, data_name):
 
     print("add_mesh", data_name)
     
-    layer_index = ensure_layer_exists(data_name, "mesh", Color.Black)
+    layer_index = ensure_layer_exists("compas_wood", data_name, "mesh", Color.Black)
 
     if wood_rui_globals[data_name]["mesh_guid"] is not None:
         # Replace the mesh
@@ -104,6 +106,7 @@ def add_mesh(mesh, data_name):
         obj.CommitChanges()
 
     return wood_rui_globals[data_name]["mesh_guid"]
+    Rhino.RhinoDoc.ActiveDoc.Views.ActiveView.Redraw()  # 0 ms
 
 
 def add_adjacency(four_indices_face_face_edge_edge, data_name):
@@ -134,7 +137,7 @@ def add_joinery(joinery: List[List[Rhino.Geometry.Polyline]], data_name: str) ->
     plugin_name = wood_rui_globals.plugin_name
 
     # Ensure the layer exists or create it under the plugin layer
-    layer_index = ensure_layer_exists(data_name, "joinery", Color.Black)
+    layer_index = ensure_layer_exists("compas_wood", data_name, "joinery", Color.Black)
 
     # Prepare to store all the GUIDs of added objects
     joinery_guids = []
@@ -172,6 +175,8 @@ def add_joinery(joinery: List[List[Rhino.Geometry.Polyline]], data_name: str) ->
 
     # Hide all child layers except the 'joinery' layer
     # hide_non_joinery_layers(plugin_name, data_name, "joinery")
+    Rhino.RhinoDoc.ActiveDoc.Views.ActiveView.Redraw()  # 0 ms
+
 
 def add_joint_type(joints_per_face: List[List[int]], data_name: str) -> None:
     
@@ -188,3 +193,50 @@ def add_joint_type(joints_per_face: List[List[int]], data_name: str) -> None:
                 obj.CommitChanges()
             else:
                 print(obj_guid, obj)
+    Rhino.RhinoDoc.ActiveDoc.Views.ActiveView.Redraw()  # 0 ms
+
+
+def add_loft_brep(breps, data_name):
+    """Add a list of lofted polylines with holes as breps to the specified layer and return their GUIDs."""
+    
+    print("loft", data_name)
+
+    layer_index = ensure_layer_exists("compas_wood", data_name, "loft", Color.Black)
+
+    brep_guids = []
+    for brep in breps:
+        obj_guid = Rhino.RhinoDoc.ActiveDoc.Objects.AddBrep(brep)
+        obj = Rhino.RhinoDoc.ActiveDoc.Objects.Find(obj_guid)
+        obj.Attributes.LayerIndex = layer_index
+        brep_guids.append(obj_guid)
+        obj.Attributes.SetUserString("dataset", data_name)
+        obj.CommitChanges()
+
+    if "loft_guid" in wood_rui_globals[data_name]:
+        delete_objects(wood_rui_globals[data_name]["loft_guid"])
+    wood_rui_globals[data_name]["loft_guid"] = brep_guids
+    wood_rui_globals[data_name]["loft"] = breps
+    Rhino.RhinoDoc.ActiveDoc.Views.ActiveView.Redraw()  # 0 ms
+
+
+def add_loft_mesh(meshes, data_name):
+    """Add a list of lofted polylines with holes as meshes to the specified layer and return their GUIDs."""
+    
+    print("loft", data_name)
+
+    layer_index = ensure_layer_exists("compas_wood", data_name, "loft", Color.Black)
+
+    mesh_guids = []
+    for mesh in meshes:
+        obj_guid = Rhino.RhinoDoc.ActiveDoc.Objects.AddMesh(mesh)
+        obj = Rhino.RhinoDoc.ActiveDoc.Objects.Find(obj_guid)
+        obj.Attributes.LayerIndex = layer_index
+        mesh_guids.append(obj_guid)
+        obj.Attributes.SetUserString("dataset", data_name)
+        obj.CommitChanges()
+
+    if "loft_guid" in wood_rui_globals[data_name]:
+        delete_objects(wood_rui_globals[data_name]["loft_guid"])
+    wood_rui_globals[data_name]["loft_guid"] = mesh_guids
+    wood_rui_globals[data_name]["loft"] = meshes
+    Rhino.RhinoDoc.ActiveDoc.Views.ActiveView.Redraw()  # 0 ms

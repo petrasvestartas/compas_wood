@@ -1,12 +1,11 @@
 import Rhino
 import System
-from .globals import wood_rui_globals  # Import the singleton instance
 from typing import *
 from System.Drawing import Color  # Import Color from System.Drawing
 from Rhino import RhinoMath
 
 
-def ensure_layer_exists(data_name: str, type_name: str, color: Color = None):
+def ensure_layer_exists(plugin_name: str, data_name: str, type_name: str, color: Color = None):
     """Ensure that the plugin_name layer, data_name sublayer, and type_name sublayer exist, and return the type layer index.
 
     If delete_existing is True, delete all objects from the specified layers if they exist.
@@ -19,17 +18,17 @@ def ensure_layer_exists(data_name: str, type_name: str, color: Color = None):
         The name of the type sub-sub-layer.
 
     """
-
+    
     # Check if the parent (plugin) layer exists
-    plugin_layer_index = Rhino.RhinoDoc.ActiveDoc.Layers.FindByFullPath(wood_rui_globals.plugin_name, True)
+    plugin_layer_index = Rhino.RhinoDoc.ActiveDoc.Layers.FindByFullPath(plugin_name, True)
     if plugin_layer_index < 0:
         # Create the parent layer if it doesn't exist
         plugin_layer_index = Rhino.RhinoDoc.ActiveDoc.Layers.Add(
-            wood_rui_globals.plugin_name, System.Drawing.Color.Black
+            plugin_name, System.Drawing.Color.Black
         )
 
     # Now create the full path for the case (second-level) layer
-    case_layer_name = wood_rui_globals.plugin_name + "::" + data_name
+    case_layer_name = plugin_name + "::" + data_name
     case_layer_index = Rhino.RhinoDoc.ActiveDoc.Layers.FindByFullPath(case_layer_name, True)
     if case_layer_index < 0:
         # Create the case layer under the plugin layer

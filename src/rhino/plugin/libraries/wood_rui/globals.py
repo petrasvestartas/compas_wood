@@ -1,3 +1,5 @@
+
+
 class Globals(object):
     """Singleton class with dictionary-like access for global variables per plugin."""
 
@@ -44,13 +46,19 @@ class Globals(object):
             "planes": [],
             "planes_guid": [],
             "flags": [],
-            "interfaces": [],  # OUTPUT polygons where two faces of a plate have a common area
-            "interfaces_guid": [],
             "joinery": [],  # OUTPUT geometry related to joints
             "joinery_guid": [],
             "loft": [],  # OUTPUT lofted geometry
             "loft_guid": [],
         }
+        
+        from System.Drawing import Color
+        from .layer import ensure_layer_exists as create_layer
+        create_layer(self.plugin_name, name, "mesh", Color.Black)
+        create_layer(self.plugin_name, name, "polylines", Color.Red)
+        create_layer(self.plugin_name, name, "insertion", Color.Blue)
+        create_layer(self.plugin_name, name, "joint_types", Color.Gray)
+        create_layer(self.plugin_name, name, "loft", Color.Black)
 
     def __getitem__(self, key):
         return self.dataset[key]
