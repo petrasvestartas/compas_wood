@@ -36,10 +36,9 @@ def project_curves_to_plane(curves: List[Rhino.Geometry.Curve]) -> List[Rhino.Ge
         curves_projected.append(curve_projected)
     return curves_projected
 
+
 def loft_polylines_with_holes(
-    curves0: List[Rhino.Geometry.Polyline],
-    curves1: List[Rhino.Geometry.Polyline] = None,
-    color: Optional[Color] = None
+    curves0: List[Rhino.Geometry.Polyline], curves1: List[Rhino.Geometry.Polyline] = None, color: Optional[Color] = None
 ) -> Optional[Rhino.Geometry.Brep]:
     """
     Creates a lofted Brep between two sets of polylines, handling holes if necessary.
@@ -162,6 +161,7 @@ def loft_polylines_with_holes(
 
     return solid
 
+
 def command_line_input() -> (str, str):
     """
     Gets user input for selecting a dataset from wood_rui_globals and a data type.
@@ -229,17 +229,17 @@ if __name__ == "__main__":
             polylines0 = []
             polylines1 = []
             for j in range(0, len(wood_rui_globals[dataset_name][type_name][i]), 2):
-                pline0 = wood_rui_globals[dataset_name][type_name][i][j+0]
-                pline1 = wood_rui_globals[dataset_name][type_name][i][j+1]
+                pline0 = wood_rui_globals[dataset_name][type_name][i][j + 0]
+                pline1 = wood_rui_globals[dataset_name][type_name][i][j + 1]
                 polylines0.append(pline0)
                 polylines1.append(pline1)
             brep = loft_polylines_with_holes(polylines0, polylines1)
             breps.append(brep)
     elif type_name == "polylines":
-            for i in range(0, len(wood_rui_globals[dataset_name][type_name]), 2):
-                polylines0 = [wood_rui_globals[dataset_name][type_name][i+0]]
-                polylines1 = [wood_rui_globals[dataset_name][type_name][i+1]]
-                brep = loft_polylines_with_holes(polylines0, polylines1)
-                breps.append(brep)
+        for i in range(0, len(wood_rui_globals[dataset_name][type_name]), 2):
+            polylines0 = [wood_rui_globals[dataset_name][type_name][i + 0]]
+            polylines1 = [wood_rui_globals[dataset_name][type_name][i + 1]]
+            brep = loft_polylines_with_holes(polylines0, polylines1)
+            breps.append(brep)
 
     add_loft_brep(breps, dataset_name)

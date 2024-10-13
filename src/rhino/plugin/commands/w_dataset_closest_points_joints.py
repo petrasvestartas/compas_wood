@@ -7,16 +7,13 @@ from wood_rui import wood_rui_globals, ensure_layer_exists, get_objects_by_layer
 import ast
 
 
-def closest_points(
-        dataset_name: str,
-        points: List[Rhino.Geometry.Point3d],
-        points_ids : List[int]) -> None:
-        # _polylines: Grasshopper.DataTree[Rhino.Geometry.Curve],
-        # _points: Grasshopper.DataTree[Rhino.Geometry.Point3d],
-        # _joint_types: Grasshopper.DataTree[int]
+def closest_points(dataset_name: str, points: List[Rhino.Geometry.Point3d], points_ids: List[int]) -> None:
+    # _polylines: Grasshopper.DataTree[Rhino.Geometry.Curve],
+    # _points: Grasshopper.DataTree[Rhino.Geometry.Point3d],
+    # _joint_types: Grasshopper.DataTree[int]
 
     """component iterates polyline edges and assigns index based on the point list and their type RTree search
-    
+
     Match the closest lines from the selected dataset to the input lines and update
     the insertion vectors.
 
@@ -69,7 +66,7 @@ def closest_points(
     # call_backs of rtree
     def search_callback(sender, rtree_event_args):
         data_by_reference.append(rtree_event_args.Id)
-    
+
     # perform search
     for i in range(len(points)):
         data_by_reference = []
@@ -84,7 +81,6 @@ def closest_points(
     wood_rui_globals[dataset_name]["joints_per_face"]
     add_joint_type(joint_types, dataset_name)
 
-    
     # _polylines_out = polylines_out
     # _joints_types_out = th.list_to_tree(joint_types)
 
@@ -169,7 +165,6 @@ def command_line_input() -> Tuple[str, List[Rhino.Geometry.Point3d], List[int]]:
 
     Rhino.RhinoApp.WriteLine(f"Total text dots found on layer '{full_layer_name}': {len(selected_points)}")
     return selected_case_name, selected_points, selected_values
-
 
 
 if __name__ == "__main__":

@@ -153,6 +153,8 @@ class NamedValuesForm(Eto.Forms.Dialog[bool]):
             return "\\" in value or "/" in value
         return False
 
+
+
     def on_ok(self, sender, event):
         try:
             # Reset the attribute list with the updated values from the table
@@ -169,8 +171,12 @@ class NamedValuesForm(Eto.Forms.Dialog[bool]):
                         else:
                             # Attempt to evaluate non-path values
                             value = ast.literal_eval(value)
+                            # Check if the evaluated value is a list of lists
+                            if isinstance(value, list) and all(isinstance(i, list) for i in value):
+                                print("List of lists detected", type(value), value)
+                            else:
+                                print("Not a list of lists", type(value), value)
                     except (ValueError, SyntaxError):  # Catch specific literal eval errors
-                        # print(f"Error evaluating value '{value}', keeping it as string.")
                         # If eval fails, we keep it as a string
                         pass
                 self.attributes.append((name, value))  # Store as tuple

@@ -4,7 +4,7 @@ import System
 import System.IO
 from compas_wood.binding import read_xml_polylines
 import os
-from wood_rui import add_polylines, wood_rui_globals, BooleanForm
+from wood_rui import add_polylines, wood_rui_globals, BooleanForm, generalized_input_method
 from wood_nano import read_xml_polylines as wood_nano_read_xml_polylines
 from wood_nano import double2
 from typing import *
@@ -47,7 +47,7 @@ def read_xml_polylines(
     return polylines
 
 
-def load_data_set(path: str = "C://brg//2_code//compas_wood//src//rhino//plugin//shared//datasets"):
+def load_data_set(): # path: str = "C://brg//2_code//compas_wood//src//rhino//plugin//shared//datasets"
     """Load datasets from xml files.
 
     Parameters
@@ -56,6 +56,12 @@ def load_data_set(path: str = "C://brg//2_code//compas_wood//src//rhino//plugin/
         Foldername.
 
     """
+
+    guid = System.Guid("D0647BA8-EEE5-4C18-AB3E-03A95F119654")
+    plugin_file: str = Rhino.PlugIns.PlugIn.PathFromId(guid)
+    plugin_path: str = System.IO.Path.GetDirectoryName(plugin_file)
+    path: str = System.IO.Path.Combine(plugin_path, "shared")
+    # load_data_set(data_sets)
 
     # Get filenames from the path:
     module_path: str = path  # os.path.dirname(compas_wood.__file__)
@@ -81,11 +87,27 @@ def load_data_set(path: str = "C://brg//2_code//compas_wood//src//rhino//plugin/
 
     return file_names_without_extensions
 
+def my_callback(name_value_type, dataset_name):
+
+    if len(input_dict["polylines"][0])>0:
+        dataset_name = "default"
+        wood_rui_globals.init_data(dataset_name)
+        add_polylines(input_dict["polylines"][0],dataset_name)
+
+
+
 
 if __name__ == "__main__":
 
-    guid = System.Guid("D0647BA8-EEE5-4C18-AB3E-03A95F119654")
-    plugin_file: str = Rhino.PlugIns.PlugIn.PathFromId(guid)
-    plugin_path: str = System.IO.Path.GetDirectoryName(plugin_file)
-    data_sets: str = System.IO.Path.Combine(plugin_path, "shared")
-    load_data_set(data_sets)
+
+
+    # Define the input dictionary based on your initial dataset
+    input_dict = {
+        "library": (load_data_set, Callable),                       # Default value for weld radius (float)
+        "polylines": ([], List[Rhino.Geometry.Polyline]),  # Default value for polylines (list of polylines)
+    }
+
+    # Call the generalized input method with the dataset name and input dictionary
+    dataset_name = "default"
+    generalized_input_method(dataset_name, input_dict, my_callback)
+

@@ -36,6 +36,7 @@ def to_polyline_from_cp(curve):
 
     return polyline
 
+
 def sort_set_of_points(points_to_sort, guide_points):
     """Sort one array of point by an another point array
 
@@ -81,6 +82,7 @@ def sort_set_of_points(points_to_sort, guide_points):
     #    points_to_sort_new.append(points_to_sort[i])
 
     return points_to_sort_ids
+
 
 def loft_polylines_with_holes(curves0, curves1):
     """Loft polylines with holes
@@ -204,8 +206,12 @@ def loft_polylines_with_holes(curves0, curves1):
             mesh.Faces.AddFace(
                 topologyVertices.I, topologyVertices.J, topologyVertices.J + count, topologyVertices.I + count
             )
-
+    
     mesh.UnifyNormals()
+    mesh.Unweld(0.01, True)
+    return mesh
+
+    
     mesh.Ngons.AddPlanarNgons(Rhino.RhinoDoc.ActiveDoc.ModelAbsoluteTolerance * 1, 3, 1, True)
     # return mesh
     ###############################################################################
@@ -240,8 +246,6 @@ def loft_polylines_with_holes(curves0, curves1):
     unwelded_ngon_mesh.RebuildNormals()
     # unwelded_ngon_mesh.Ngons.Clear()
     return unwelded_ngon_mesh
-
-
 
 
 def command_line_input() -> (str, str):
@@ -311,18 +315,18 @@ if __name__ == "__main__":
             polylines0 = []
             polylines1 = []
             for j in range(0, len(wood_rui_globals[dataset_name][type_name][i]), 2):
-                pline0 = wood_rui_globals[dataset_name][type_name][i][j+0]
-                pline1 = wood_rui_globals[dataset_name][type_name][i][j+1]
+                pline0 = wood_rui_globals[dataset_name][type_name][i][j + 0]
+                pline1 = wood_rui_globals[dataset_name][type_name][i][j + 1]
                 polylines0.append(pline0.ToNurbsCurve())
                 polylines1.append(pline1.ToNurbsCurve())
             mesh = loft_polylines_with_holes(polylines0, polylines1)
             meshes.append(mesh)
 
     elif type_name == "polylines":
-            for i in range(0, len(wood_rui_globals[dataset_name][type_name]), 2):
-                polylines0 = [wood_rui_globals[dataset_name][type_name][i+0].ToNurbsCurve()]
-                polylines1 = [wood_rui_globals[dataset_name][type_name][i+1].ToNurbsCurve()]
-                mesh = loft_polylines_with_holes(polylines0, polylines1)
-                meshes.append(mesh)
+        for i in range(0, len(wood_rui_globals[dataset_name][type_name]), 2):
+            polylines0 = [wood_rui_globals[dataset_name][type_name][i + 0].ToNurbsCurve()]
+            polylines1 = [wood_rui_globals[dataset_name][type_name][i + 1].ToNurbsCurve()]
+            mesh = loft_polylines_with_holes(polylines0, polylines1)
+            meshes.append(mesh)
 
     add_loft_mesh(meshes, dataset_name)

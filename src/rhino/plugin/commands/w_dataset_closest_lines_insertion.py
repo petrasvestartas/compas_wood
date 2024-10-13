@@ -4,6 +4,7 @@ import Rhino.DocObjects
 from typing import List, Tuple, Dict, Any
 from wood_rui import wood_rui_globals, get_objects_by_layer
 
+
 def closest_lines(dataset_name: str, lines: List[Rhino.Geometry.Line]) -> None:
     """
     Match the closest lines from the selected dataset to the input lines and update
@@ -16,7 +17,7 @@ def closest_lines(dataset_name: str, lines: List[Rhino.Geometry.Line]) -> None:
     lines : List[Rhino.Geometry.Line]
         List of lines to compare against the polylines in the dataset.
     """
-    
+
     # Convert polylines to pairs
     polylines: List[List[Any]] = []  # This will hold the list of lists
 
@@ -33,7 +34,7 @@ def closest_lines(dataset_name: str, lines: List[Rhino.Geometry.Line]) -> None:
     segments_dictionary: Dict[int, List[Any]] = {}
     vectors: List[List[Rhino.Geometry.Vector3d]] = []
     count: int = 0
-    
+
     # Populate segments dictionary and initialize vectors
     for i in range(len(polylines)):
         vectors.append([Rhino.Geometry.Vector3d.Zero] * (polylines[i][0].SegmentCount + 2))
@@ -70,7 +71,7 @@ def closest_lines(dataset_name: str, lines: List[Rhino.Geometry.Line]) -> None:
 
     # Store the insertion vectors in the global data structure
     wood_rui_globals[dataset_name]["insertion_vectors"] = vectors
-    print("Number of insertion vectors: ", len(wood_rui_globals[dataset_name]["insertion_vectors"]))
+    print("Number of plates with set insertion: ", len(wood_rui_globals[dataset_name]["insertion_vectors"]))
 
     # Update Rhino object attributes
     polylines_guid_list = wood_rui_globals[dataset_name]["polylines_guid"]
@@ -91,7 +92,7 @@ def closest_lines(dataset_name: str, lines: List[Rhino.Geometry.Line]) -> None:
 def command_line_input() -> Tuple[str, List[Rhino.Geometry.Line]]:
     """
     Automatically selects all lines from the nested layer "compas_wood > selected_case_name > insertion".
-    
+
     Returns
     -------
     Tuple[str, List[Rhino.Geometry.Line]]
@@ -149,8 +150,7 @@ def command_line_input() -> Tuple[str, List[Rhino.Geometry.Line]]:
         for obj in layer_objects:
             if isinstance(obj.Geometry, Rhino.Geometry.Curve):
                 curve = obj.Geometry
-                if isinstance(curve, Rhino.Geometry.LineCurve):  # Only process if it's a line curve
-                    selected_lines.append(Rhino.Geometry.Line(curve.PointAtStart, curve.PointAtEnd))
+                selected_lines.append(Rhino.Geometry.Line(curve.PointAtStart, curve.PointAtEnd))
 
     Rhino.RhinoApp.WriteLine(f"Total lines found on layer '{full_layer_name}': {len(selected_lines)}")
     return selected_case_name, selected_lines

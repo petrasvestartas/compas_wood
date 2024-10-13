@@ -4,11 +4,14 @@ from wood_rui import wood_rui_globals, NamedValuesForm  # Import the singleton i
 from compas_wood.binding import wood_globals
 
 if __name__ == "__main__":
-    
+
     # Define the parameters
     parameters: Tuple[str, Any] = [
         ("SEARCH TYPE", " "),  # 0
-        ("(0 - side-to-side, 1 - cross, 2 - both)", wood_rui_globals.search_type),  # temporary parameter that must go from compas_wood.binding import wood_globals
+        (
+            "(0 - side-to-side, 1 - cross, 2 - both)",
+            wood_rui_globals.search_type,
+        ),  # temporary parameter that must go from compas_wood.binding import wood_globals
         (" ", " "),  # 2
         ("OUTPUT TYPE", " "),  # 3
         (
@@ -17,47 +20,65 @@ if __name__ == "__main__":
         ),  # 4
         (" ", " "),  # 5
         ("SCALE", " "),  # 6
-        ("x-axis", wood_rui_globals.scale[0]),  # 7 temporary parameter that must go from compas_wood.binding import wood_globals
-        ("y-axis", wood_rui_globals.scale[1]),  # 8 temporary parameter that must go from compas_wood.binding import wood_globals
-        ("z-axis", wood_rui_globals.scale[2]),  # 9 temporary parameter that must go from compas_wood.binding import wood_globals
+        (
+            "x-axis",
+            wood_rui_globals.scale[0],
+        ),  # 7 temporary parameter that must go from compas_wood.binding import wood_globals
+        (
+            "y-axis",
+            wood_rui_globals.scale[1],
+        ),  # 8 temporary parameter that must go from compas_wood.binding import wood_globals
+        (
+            "z-axis",
+            wood_rui_globals.scale[2],
+        ),  # 9 temporary parameter that must go from compas_wood.binding import wood_globals
         (" ", " "),  # 10
         ("EXTENSION", " "),  # 11
-        ("x-axis", wood_rui_globals.joint_volume_extension[0]),  # 12 temporary parameter that must go from compas_wood.binding import wood_globals
-        ("y-axis", wood_rui_globals.joint_volume_extension[1]),  # 13 temporary parameter that must go from compas_wood.binding import wood_globals
-        ("z-axis", wood_rui_globals.joint_volume_extension[2]),  # 14 temporary parameter that must go from compas_wood.binding import wood_globals
+        (
+            "x-axis",
+            wood_rui_globals.joint_volume_extension[0],
+        ),  # 12 temporary parameter that must go from compas_wood.binding import wood_globals
+        (
+            "y-axis",
+            wood_rui_globals.joint_volume_extension[1],
+        ),  # 13 temporary parameter that must go from compas_wood.binding import wood_globals
+        (
+            "z-axis",
+            wood_rui_globals.joint_volume_extension[2],
+        ),  # 14 temporary parameter that must go from compas_wood.binding import wood_globals
         (" ", " "),  # 15
         ("SIDE-TO-SIDE EDGE IN-PLANE", " "),  # 16
-        ("division length (0-n)", wood_globals.joints_parameters_and_types[0]),  # 17
+        ("division length (x>0)", wood_globals.joints_parameters_and_types[0]),  # 17
         ("parameter (0-1)", wood_globals.joints_parameters_and_types[1]),  # 18
         ("type (1-9)", wood_globals.joints_parameters_and_types[2]),  # 19
         (" ", " "),  # 20
         ("SIDE-TO-SIDE EDGE OUT-OF-PLANE", " "),  # 21
-        ("division length (10-n)", wood_globals.joints_parameters_and_types[3]),  # 22
+        ("division length (x>0)", wood_globals.joints_parameters_and_types[3]),  # 22
         ("parameter (0-1)", wood_globals.joints_parameters_and_types[4]),  # 23
         ("type (10-19)", wood_globals.joints_parameters_and_types[5]),  # 24
         (" ", " "),  # 25
         ("TOP-TO-SIDE EDGE PLANE", " "),  # 26
-        ("division length (20-n)", wood_globals.joints_parameters_and_types[6]),  # 27
+        ("division length (x>0)", wood_globals.joints_parameters_and_types[6]),  # 27
         ("parameter (0-1)", wood_globals.joints_parameters_and_types[7]),  # 28
         ("type (20-29)", wood_globals.joints_parameters_and_types[8]),  # 29
         (" ", " "),  # 30
         ("CROSS CUTTING IN-PLANE", " "),  # 31
-        ("division length (30-n)", wood_globals.joints_parameters_and_types[9]),  # 32
+        ("division length (x>0)", wood_globals.joints_parameters_and_types[9]),  # 32
         ("parameter (0-1)", wood_globals.joints_parameters_and_types[10]),  # 33
         ("type (30-39)", wood_globals.joints_parameters_and_types[11]),  # 34
         (" ", " "),  # 35
         ("TOP-TO-TOP EDGE PLANE", " "),  # 36
-        ("division length (40-n)", wood_globals.joints_parameters_and_types[12]),  # 37
+        ("division length (x>0)", wood_globals.joints_parameters_and_types[12]),  # 37
         ("parameter (0-1)", wood_globals.joints_parameters_and_types[13]),  # 38
         ("type (40-49)", wood_globals.joints_parameters_and_types[14]),  # 39
         (" ", " "),  # 40
         ("SIDE-TO-SIDE EDGE ROTATED", " "),  # 41
-        ("division length (50-n)", wood_globals.joints_parameters_and_types[15]),  # 42
+        ("division length (x>0)", wood_globals.joints_parameters_and_types[15]),  # 42
         ("parameter (0-1)", wood_globals.joints_parameters_and_types[16]),  # 43
         ("type (50-59)", wood_globals.joints_parameters_and_types[17]),  # 44
         (" ", " "),  # 45
         ("BOUNDARY", " "),  # 46
-        ("division length (60-n)", wood_globals.joints_parameters_and_types[18]),  # 47
+        ("division length (x>0)", wood_globals.joints_parameters_and_types[18]),  # 47
         ("parameter (0-1)", wood_globals.joints_parameters_and_types[19]),  # 48
         ("type (60-69)", wood_globals.joints_parameters_and_types[20]),  # 49
         (" ", " "),  # 50
@@ -84,6 +105,8 @@ if __name__ == "__main__":
             wood_globals.face_to_face_side_to_side_joints_dihedral_angle,
         ),  # 63
         ("limit_min_joint_length", wood_globals.limit_min_joint_length),  # 64
+        ("three_valence", wood_rui_globals.three_valence),  # 65
+        ("adjacency", wood_rui_globals.adjacency),  # 66
     ]
 
     # Extract names and values separately
@@ -139,6 +162,25 @@ if __name__ == "__main__":
         wood_globals.face_to_face_side_to_side_joints_dihedral_angle = form.attributes[63][1]
         wood_globals.limit_min_joint_length = form.attributes[64][1]
 
-    wood_rui_globals.scale = [form.attributes[7][1], form.attributes[8][1], form.attributes[9][1]]  # temporary parameter that must go from compas_wood.binding import wood_globals
-    wood_rui_globals.search_type = form.attributes[1][1]  # temporary parameter that must go from compas_wood.binding import wood_globals
-    wood_rui_globals.joint_volume_extension = [form.attributes[12][1], form.attributes[13][1], form.attributes[14][1]]  # temporary parameter that must go from compas_wood.binding import wood_globals
+    wood_rui_globals.scale = [
+        form.attributes[7][1],
+        form.attributes[8][1],
+        form.attributes[9][1],
+    ]  # temporary parameter that must go from compas_wood.binding import wood_globals
+    wood_rui_globals.search_type = form.attributes[1][
+        1
+    ]  # temporary parameter that must go from compas_wood.binding import wood_globals
+    wood_rui_globals.joint_volume_extension = [
+        form.attributes[12][1],
+        form.attributes[13][1],
+        form.attributes[14][1],
+    ]  # temporary parameter that must go from compas_wood.binding import wood_globals
+
+    wood_rui_globals.scale = [
+        form.attributes[7][1],
+        form.attributes[8][1],
+        form.attributes[9][1],
+    ]  # temporary parameter that must go from compas_wood.binding import wood_globals
+
+    wood_rui_globals.three_valence = form.attributes[65][1] # temporary parameter that must go from compas_wood.binding import wood_globals
+    wood_rui_globals.adjacency = form.attributes[66][1] # temporary parameter that must go from compas_wood.binding import wood_globals

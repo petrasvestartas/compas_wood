@@ -1,5 +1,3 @@
-
-
 class Globals(object):
     """Singleton class with dictionary-like access for global variables per plugin."""
 
@@ -7,7 +5,14 @@ class Globals(object):
     _instances = {}
     scale = [1.0, 1.0, 1.0]  # temporary parameter that must go from compas_wood.binding import wood_globals
     search_type = 0  # temporary parameter that must go from compas_wood.binding import wood_globals
-    joint_volume_extension = [0.0, 0.0, 0.0]  # temporary parameter that must go from compas_wood.binding import wood_globals
+    joint_volume_extension = [
+        0.0,
+        0.0,
+        0.0,
+    ]  # temporary parameter that must go from compas_wood.binding import wood_globals
+    three_valence = []  # temporary parameter that must go from compas_wood.binding import wood_globals
+    adjacency = []  # temporary parameter that must go from compas_wood.binding import wood_globals
+
 
     def __new__(cls, plugin_name="compas_wood"):
         """Ensure that only one instance per plugin exists."""
@@ -18,13 +23,27 @@ class Globals(object):
 
     def __init__(self, plugin_name="compas_wood"):
         """Initialize the plugin-specific globals storage."""
-        if not hasattr(self, 'initialized'):  # Ensure initialization happens only once
+        if not hasattr(self, "initialized"):  # Ensure initialization happens only once
             self.plugin_name = plugin_name
             self.dataset = {}
             self.initialized = True
             self.reset()
 
     def init_data(self, name):
+        
+        from System.Drawing import Color
+        from .layer import ensure_layer_exists as create_layer
+
+        create_layer(self.plugin_name, name, "mesh", Color.Black, True)
+        create_layer(self.plugin_name, name, "surface", Color.Black, True)
+        create_layer(self.plugin_name, name, "axes", Color.Black, True)
+        create_layer(self.plugin_name, name, "polylines", Color.DodgerBlue, True)
+        create_layer(self.plugin_name, name, "insertion", Color.Blue, True)
+        create_layer(self.plugin_name, name, "joint_types", Color.MediumVioletRed, True)
+        create_layer(self.plugin_name, name, "loft", Color.Black, True)
+        
+        if name in self.dataset:
+            return
 
         self.dataset[name] = {
             "mesh": None,  # INPUT meshes that are good inputs for generating polylines
@@ -55,16 +74,10 @@ class Globals(object):
             "loft": [],  # OUTPUT lofted geometry
             "loft_guid": [],
         }
+
+
         
-        from System.Drawing import Color
-        from .layer import ensure_layer_exists as create_layer
-        create_layer(self.plugin_name, name, "mesh", Color.Black)
-        create_layer(self.plugin_name, name, "surface", Color.Black)
-        create_layer(self.plugin_name, name, "axes", Color.Black)
-        create_layer(self.plugin_name, name, "polylines", Color.Red)
-        create_layer(self.plugin_name, name, "insertion", Color.Blue)
-        create_layer(self.plugin_name, name, "joint_types", Color.Gray)
-        create_layer(self.plugin_name, name, "loft", Color.Black)
+        
 
     def __getitem__(self, key):
         return self.dataset[key]
@@ -91,6 +104,8 @@ class Globals(object):
             0.0,
             0.0,
         ]  # temporary parameter that must go from compas_wood.binding import wood_globals
+        self.three_valence = []  # temporary parameter that must go from compas_wood.binding import wood_globals
+        self.adjacency = []  # temporary parameter that must go from compas_wood.binding import wood_globals
         print("Globals instance has been reset.")
 
     def __repr__(self):

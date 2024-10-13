@@ -1,5 +1,15 @@
 import Rhino
-from wood_rui import wood_rui_globals, ensure_layer_exists,  add_polylines, add_mesh, add_insertion_lines, add_adjacency, add_insertion_vectors, add_three_valence, add_joint_type
+from wood_rui import (
+    wood_rui_globals,
+    ensure_layer_exists,
+    add_polylines,
+    add_mesh,
+    add_insertion_lines,
+    add_adjacency,
+    add_insertion_vectors,
+    add_three_valence,
+    add_joint_type,
+)
 from Rhino.Geometry import Mesh, MeshFace, Point3f, Plane, Vector3d, Point3d, Line
 import System
 import math
@@ -8,37 +18,40 @@ import Rhino.Input.Custom as ric
 import Rhino.Commands as rc
 from typing import *
 
+
 def import_step_file(step_file_path, new_layer_name):
-    
+
     # Step 5: Ensure the new layer exists
     layer_index = ensure_layer_exists("compas_wood", "annen", "surface")
     objects_in_layer = [obj for obj in Rhino.RhinoDoc.ActiveDoc.Objects if obj.Attributes.LayerIndex == layer_index]
     if objects_in_layer:
-        print(f"Layer '{new_layer_name}' is not empty. Skipping import. \nUse surfaces from layer: compas_wood > annen > surface.")
+        print(
+            f"Layer '{new_layer_name}' is not empty. Skipping import. \nUse surfaces from layer: compas_wood > annen > surface."
+        )
         return None
-    
+
     # Step 1: Get the current object count before importing
     before_import_objects = [obj.Id for obj in Rhino.RhinoDoc.ActiveDoc.Objects]
-    
+
     # Step 2: Use RhinoCommon to import the .STEP file via command
     import_command = '-_Import "{}" _Enter _Pause'.format(step_file_path)
     Rhino.RhinoApp.RunScript(import_command, False)
-    
+
     # Step 3: Get the new object count after importing
     after_import_objects = [obj.Id for obj in Rhino.RhinoDoc.ActiveDoc.Objects]
-    
+
     # Step 4: Identify newly imported objects by comparing the IDs
     new_object_ids = set(after_import_objects) - set(before_import_objects)
     if new_object_ids:
         last_imported_objects = [Rhino.RhinoDoc.ActiveDoc.Objects.FindId(obj_id) for obj_id in new_object_ids]
-        
+
         # Step 6: Change the layer of each imported object
         for obj in last_imported_objects:
             obj.Attributes.LayerIndex = layer_index
             obj.CommitChanges()
             # Unselect the object explicitly
             obj.Select(False)
-        
+
         # Ensure that no objects remain selected
         Rhino.RhinoDoc.ActiveDoc.Objects.UnselectAll()
         Rhino.RhinoDoc.ActiveDoc.Views.Redraw()
@@ -46,12 +59,13 @@ def import_step_file(step_file_path, new_layer_name):
         print(f"Successfully imported {len(last_imported_objects)} object(s) to layer '{new_layer_name}':")
         for obj in last_imported_objects:
             print(f"Object ID: {obj.Id}, Type: {obj.ObjectType}")
-            
+
         return last_imported_objects
-    
+
     else:
         print("No objects were imported.")
         return None
+
 
 class Chevron:
     # User inputs
@@ -741,6 +755,7 @@ class Chevron:
         add_three_valence(self.three_valence, dataset_name)
         add_adjacency(self.adjacency, dataset_name)
 
+
         # _data = WoodData(
         #     chevron.plines,
         #     chevron.insertion_vectors,
@@ -750,7 +765,6 @@ class Chevron:
         #     planes,
         # )
         # _dir = chevron.box_insertion_lines
-
 
     def chevron_grid(self, dataset_name, s, u_divisions=4, v_division_dist=900, shift=0.5, scale=0.05799):
         if s is None:
@@ -888,8 +902,6 @@ class Chevron:
         mesh.Weld(100)
         mesh.RebuildNormals()
 
-
-
         add_mesh(mesh, dataset_name)
         # flat_list_of_polylines = []
         # for i in range(0, len(self._f_polylines)):
@@ -902,6 +914,7 @@ class Chevron:
         # # Rhino.RhinoDoc.ActiveDoc.Views.Redraw()  # 10-12ms
         # Rhino.RhinoDoc.ActiveDoc.Views.ActiveView.Redraw()  # 0 ms
         return mesh
+
 
 def command_line_input_mesh_subdivision(dataset_name) -> rc.Result:
     # Create an instance of GetOption to define options
@@ -919,7 +932,7 @@ def command_line_input_mesh_subdivision(dataset_name) -> rc.Result:
     get_options.AddOption("select_surface")  # New option to select surface
 
     Rhino.RhinoApp.WriteLine("\n─ Select a surface before entering other parameters for the mesh. ─")
-    get_options.SetCommandPrompt("Select surface.")
+    get_options.SetCommandPrompt("Sub-menu 1 : mesh.")
 
     def update():
         chevron = Chevron(None)
@@ -991,11 +1004,11 @@ def command_line_input_mesh_params(dataset_name) -> rc.Result:
 
     # Define default values for the input parameters
     # mesh: Optional[rg.Mesh] = None
-    edge_rotation: ric.OptionInteger = ric.OptionInteger(1)      # Default value 1
-    edge_offset: ric.OptionDouble = ric.OptionDouble(0.5)        # Default value 0.5
-    box_height: ric.OptionDouble = ric.OptionDouble(760)         # Default value 760
-    top_plate_inlet: ric.OptionDouble = ric.OptionDouble(80)     # Default value 80
-    plate_thickness: ric.OptionDouble = ric.OptionDouble(40)     # Default value 40
+    edge_rotation: ric.OptionInteger = ric.OptionInteger(1)  # Default value 1
+    edge_offset: ric.OptionDouble = ric.OptionDouble(0.5)  # Default value 0.5
+    box_height: ric.OptionDouble = ric.OptionDouble(760)  # Default value 760
+    top_plate_inlet: ric.OptionDouble = ric.OptionDouble(80)  # Default value 80
+    plate_thickness: ric.OptionDouble = ric.OptionDouble(40)  # Default value 40
     ortho: ric.OptionToggle = ric.OptionToggle(True, "No", "Yes")  # Default value True
 
     # Add options to the GetOption instance with custom names
@@ -1007,18 +1020,18 @@ def command_line_input_mesh_params(dataset_name) -> rc.Result:
     get_options.AddOptionToggle("ortho", ortho)
 
     Rhino.RhinoApp.WriteLine("\n─ Select a mesh and input parameters for edge and plate configuration. ─")
-    get_options.SetCommandPrompt("Select mesh and input parameters.")
+    get_options.SetCommandPrompt("Sub-menu 2 : plates.")
 
     def update():
         chevron_polylines = Chevron(
-            wood_rui_globals[dataset_name]["mesh"], 
-            edge_rotation.CurrentValue, 
-            edge_offset.CurrentValue, 
-            box_height.CurrentValue, 
-            top_plate_inlet.CurrentValue, 
-            plate_thickness.CurrentValue, 
-            ortho.CurrentValue
-            )
+            wood_rui_globals[dataset_name]["mesh"],
+            edge_rotation.CurrentValue,
+            edge_offset.CurrentValue,
+            box_height.CurrentValue,
+            top_plate_inlet.CurrentValue,
+            plate_thickness.CurrentValue,
+            ortho.CurrentValue,
+        )
         chevron_polylines.run(dataset_name)
 
     update()  # Run once to display the initial values
@@ -1048,7 +1061,6 @@ def command_line_input_mesh_params(dataset_name) -> rc.Result:
         update()  # Display the final values
     return rc.Result.Success
 
-
     # def RunScript(self,
     #         _mesh: Rhino.Geometry.Mesh,
     #         _edge_rotation: float,
@@ -1057,7 +1069,6 @@ def command_line_input_mesh_params(dataset_name) -> rc.Result:
     #         _top_plate_inlet: float,
     #         _plate_thickness: float,
     #         _ortho: bool):
-
 
     #     ##############################################################################
     #     # Output
@@ -1074,7 +1085,6 @@ def command_line_input_mesh_params(dataset_name) -> rc.Result:
     #         planes,
     #     )
     #     _dir = chevron.box_insertion_lines
-
 
 
 if __name__ == "__main__":
