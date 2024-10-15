@@ -28,7 +28,7 @@ optional_requirements = {}
 
 setup(
     name="compas_wood",
-    version="2.1.0",
+    version="2.2.0",
     description="timber joinery generation",
     long_description=long_description,
     long_description_content_type="text/markdown",
@@ -60,7 +60,7 @@ setup(
     include_package_data=True,
     zip_safe=False,
     install_requires=requirements,
-    python_requires=">=3.8",
+    python_requires=">=3.9",
     extras_require=optional_requirements,
     entry_points={
         "console_scripts": [],
