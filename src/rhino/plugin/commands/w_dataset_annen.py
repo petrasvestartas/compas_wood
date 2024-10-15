@@ -1,3 +1,5 @@
+#! python3
+# venv: timber_connections
 import Rhino
 from wood_rui import (
     wood_rui_globals,

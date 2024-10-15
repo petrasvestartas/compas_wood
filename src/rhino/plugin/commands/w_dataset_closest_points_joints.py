@@ -1,3 +1,5 @@
+#! python3
+# venv: timber_connections
 import Rhino
 import Rhino.Input
 import Rhino.DocObjects

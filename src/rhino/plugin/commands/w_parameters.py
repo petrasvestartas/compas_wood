@@ -1,4 +1,5 @@
 #! python3
+# venv: timber_connections
 from typing import *
 from wood_rui import wood_rui_globals, NamedValuesForm  # Import the singleton instance
 from compas_wood.binding import wood_globals

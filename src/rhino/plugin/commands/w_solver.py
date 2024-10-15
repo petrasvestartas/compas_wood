@@ -1,4 +1,5 @@
 #! python3
+# venv: timber_connections
 import Rhino
 import Rhino.Input.Custom as ric
 from wood_rui import wood_rui_globals, add_joinery
