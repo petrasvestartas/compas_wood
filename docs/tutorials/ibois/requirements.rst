@@ -29,9 +29,3 @@ Rhino Plugin Installation
 
     There should be no errors, otherwise, write a message to petrasvestartas@gmail.com with your Rhino version number and operating system version (e.g., Windows 11 or Mac with Intel or M chip). Include a screenshot of the error message.
 
-.. figure:: ./test.jpg
-    :figclass: figure
-    :class: figure-img img-fluid
-
-.. literalinclude:: ./test.py
-   :language: python
