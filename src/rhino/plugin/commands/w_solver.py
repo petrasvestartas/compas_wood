@@ -13,8 +13,7 @@ from compas_wood.conversions_rhino import to_point2
 from compas_wood.conversions_rhino import to_vector2
 from compas_wood.conversions_rhino import from_point3
 from compas_wood.binding import wood_globals
-from compas_wood.datastructures import WoodData
-from typing import List, Dict, Any
+from typing import List
 
 
 def command_line_input() -> str:
@@ -62,28 +61,42 @@ def solver(dataset_name: str) -> None:
     w_output_types: wood_nano_cut_type2 = wood_nano_cut_type2()
 
     adjacency_flat_list: List[int] = []
-    adjacency_data: List[List[int]] = wood_rui_globals[dataset_name]["adjacency"] if wood_rui_globals[dataset_name]["adjacency"] else wood_rui_globals.adjacency
-    
+    adjacency_data: List[List[int]] = (
+        wood_rui_globals[dataset_name]["adjacency"]
+        if wood_rui_globals[dataset_name]["adjacency"]
+        else wood_rui_globals.adjacency
+    )
+
     for sublist in adjacency_data:
         for item in sublist:
             adjacency_flat_list.append(item)
 
-      
         # print(wood_rui_globals[dataset_name]["joints_per_face"])
         # print(wood_rui_globals[dataset_name]["three_valence"])
 
-    
     # select the three valence depending on the dataset dictionary property or the global property
-    three_valence = wood_rui_globals[dataset_name]["three_valence"] if wood_rui_globals[dataset_name]["three_valence"] else wood_rui_globals.three_valence
-    three_valence = wood_rui_globals[dataset_name]["three_valence"] if wood_rui_globals[dataset_name]["three_valence"] else wood_rui_globals.three_valence
+    three_valence = (
+        wood_rui_globals[dataset_name]["three_valence"]
+        if wood_rui_globals[dataset_name]["three_valence"]
+        else wood_rui_globals.three_valence
+    )
+    three_valence = (
+        wood_rui_globals[dataset_name]["three_valence"]
+        if wood_rui_globals[dataset_name]["three_valence"]
+        else wood_rui_globals.three_valence
+    )
 
     print(wood_rui_globals[dataset_name]["polylines"])
-        
+
     wood_nano_get_connection_zones(
         to_point2(wood_rui_globals[dataset_name]["polylines"]),
         to_vector2(wood_rui_globals[dataset_name]["insertion_vectors"]),
-        to_int2(wood_rui_globals[dataset_name]["joints_per_face"]), # to_int2(wood_rui_globals[dataset_name]["joints_dots"]),
-        to_int2(three_valence),# to_int2(wood_rui_globals[dataset_name]["three_valence_element_indices_and_instruction"]),
+        to_int2(
+            wood_rui_globals[dataset_name]["joints_per_face"]
+        ),  # to_int2(wood_rui_globals[dataset_name]["joints_dots"]),
+        to_int2(
+            three_valence
+        ),  # to_int2(wood_rui_globals[dataset_name]["three_valence_element_indices_and_instruction"]),
         to_int1(adjacency_flat_list),
         to_double1(wood_globals.joints_parameters_and_types),
         int(wood_rui_globals.search_type),
@@ -94,8 +107,6 @@ def solver(dataset_name: str) -> None:
         to_double1(wood_rui_globals.joint_volume_extension),
     )
 
-    
-    
     add_joinery(from_point3(w_output_plines), dataset_name)
     print(wood_rui_globals[dataset_name]["joinery"])
 
@@ -109,7 +120,7 @@ def solver(dataset_name: str) -> None:
     number_added_polylines: int = 0
     for i in range(len(wood_rui_globals[dataset_name]["joinery"])):
         number_added_polylines += len(wood_rui_globals[dataset_name]["joinery"][i])
-    
+
     if number_added_polylines == len(wood_rui_globals[dataset_name]["joinery_guid"]):
         counter: int = 0
         for i, output_type in enumerate(w_output_types):

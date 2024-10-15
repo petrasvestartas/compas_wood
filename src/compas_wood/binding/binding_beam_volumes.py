@@ -15,8 +15,6 @@ from wood_nano import point2
 from wood_nano import point3
 from wood_nano import cut_type2
 
-# from wood_nano.conversions_python import from_cut_type2
-
 
 def beam_volumes(
     input_polyline_axes,

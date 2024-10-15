@@ -2,22 +2,24 @@ import Rhino
 import typing
 from typing import *
 
+
 # General handler for string input
 def handle_string_input(option_name: str) -> str:
     go = Rhino.Input.Custom.GetString()
     go.SetCommandPrompt(f"Enter value for {option_name}")
-    
+
     if go.Get() != Rhino.Input.GetResult.String:
         Rhino.RhinoApp.WriteLine("Nothing is selected, returning to main menu.")
         return None
 
     return go.StringResult()
 
+
 # General handler for list of numbers input
 def handle_numbers_input(option_name: str) -> List[float]:
     go = Rhino.Input.Custom.GetString()
     go.SetCommandPrompt(f"Enter {option_name} as comma-separated values (e.g., 0.0, 1.0, 2.5)")
-    
+
     if go.Get() != Rhino.Input.GetResult.String:
         Rhino.RhinoApp.WriteLine("Nothing is selected, returning to main menu.")
         return []
@@ -29,11 +31,12 @@ def handle_numbers_input(option_name: str) -> List[float]:
         Rhino.RhinoApp.WriteLine("Invalid input. Please enter valid numbers separated by commas.")
         return []
 
+
 # General handler for list of integers input
 def handle_integers_input(option_name: str) -> List[int]:
     go = Rhino.Input.Custom.GetString()
     go.SetCommandPrompt(f"Enter {option_name} as comma-separated integers (e.g., 1, 2, 3)")
-    
+
     if go.Get() != Rhino.Input.GetResult.String:
         Rhino.RhinoApp.WriteLine("Nothing is selected, returning to main menu.")
         return []
@@ -44,6 +47,7 @@ def handle_integers_input(option_name: str) -> List[int]:
     except ValueError:
         Rhino.RhinoApp.WriteLine("Invalid input. Please enter valid integers separated by commas.")
         return []
+
 
 # General handler for polylines input
 def handle_polylines_input(option_name: str) -> List[Rhino.Geometry.Polyline]:
@@ -67,6 +71,7 @@ def handle_polylines_input(option_name: str) -> List[Rhino.Geometry.Polyline]:
         return polylines
     return []
 
+
 # General handler for lines input
 def handle_lines_input(option_name: str) -> List[Rhino.Geometry.Line]:
     go = Rhino.Input.Custom.GetObject()
@@ -85,9 +90,17 @@ def handle_lines_input(option_name: str) -> List[Rhino.Geometry.Line]:
 
 
 # Main method that processes input types based on the input dictionary
-def generalized_input_method(dataset_name: str, input_dict: Dict[str, Tuple[Union[float, int, List[float], List[int], List[Rhino.Geometry.Line], List[Rhino.Geometry.Polyline]], type]], callback = None) -> None:
+def generalized_input_method(
+    dataset_name: str,
+    input_dict: Dict[
+        str,
+        Tuple[
+            Union[float, int, List[float], List[int], List[Rhino.Geometry.Line], List[Rhino.Geometry.Polyline]], type
+        ],
+    ],
+    callback=None,
+) -> None:
     get_options = Rhino.Input.Custom.GetOption()
-    
 
     # Dynamically add options based on the input dictionary
     dict_options = {}
@@ -108,7 +121,7 @@ def generalized_input_method(dataset_name: str, input_dict: Dict[str, Tuple[Unio
             get_options.AddOptionInteger(option_name, dict_options[option_name])
         elif value_type is bool:
             print(option_name, "bool")
-            dict_options[option_name] =  Rhino.Input.Custom.OptionToggle(default_value, "Yes", "No")
+            dict_options[option_name] = Rhino.Input.Custom.OptionToggle(default_value, "Yes", "No")
             print(dict_options[option_name].CurrentValue)
             dict_values[option_name] = dict_options[option_name].CurrentValue
             get_options.AddOptionToggle(option_name, dict_options[option_name])
@@ -130,7 +143,6 @@ def generalized_input_method(dataset_name: str, input_dict: Dict[str, Tuple[Unio
 
     # Run external method to update geometry each time the input is changed.
     callback(input_dict, dataset_name)
-
 
     # Command prompt
     get_options.SetCommandPrompt("Select input method and options.")
@@ -182,4 +194,3 @@ def generalized_input_method(dataset_name: str, input_dict: Dict[str, Tuple[Unio
 
     # Final output and return success
     return Rhino.Commands.Result.Success
-

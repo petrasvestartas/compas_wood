@@ -206,12 +206,11 @@ def loft_polylines_with_holes(curves0, curves1):
             mesh.Faces.AddFace(
                 topologyVertices.I, topologyVertices.J, topologyVertices.J + count, topologyVertices.I + count
             )
-    
+
     mesh.UnifyNormals()
     mesh.Unweld(0.01, True)
     return mesh
 
-    
     mesh.Ngons.AddPlanarNgons(Rhino.RhinoDoc.ActiveDoc.ModelAbsoluteTolerance * 1, 3, 1, True)
     # return mesh
     ###############################################################################

@@ -8,7 +8,7 @@
   "id": "d0647ba8-eee5-4c18-ab3e-03a95f119654",
   "identity": {
     "name": "compas_wood",
-    "version": "2.0.11",
+    "version": "2.2.1",
     "publisher": {
       "email": "petrasvestartas@gmail.com",
       "name": "Petras Vestartas",
@@ -33,11 +33,21 @@
           "width": 24,
           "height": 24
         },
+        "dark": {
+          "bytes": "iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAOwgAADsIBFShKgAAAABhJREFUSEvtwQEBAAAAgiD/r64hQAAAXA0JGAAB0AJbXgAAAABJRU5ErkJggg==",
+          "width": 24,
+          "height": 24
+        },
         "icoData": "AAABAAEAGBgAAAEAIAAfAQAAFgAAAIlQTkcNChoKAAAADUlIRFIAAAAYAAAAGAgGAAAA4Hc9\u002BAAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsIAAA7CARUoSoAAAADBSURBVEhL7ZX/CcJADIWjEziKIziKmzmKI\u002BgoOkHNixdIQ/Ojf1QQ\u002BsHj2vJdHpSDOxDRxNmM41g3Yy8o\u002BUnB\u002B/vYYo0LxD9zXhwc1yxw4F7NtyzqC1XJTGaqEu8LUcmizEQlkS/4klRmfEnlC1rSkpkLJ/VPY7VAjIav8cV96EODG6frw4Er/66zCcP1X1e\u002BDofb2mSHV74djpSbloZrvO\u002BHI7MXRDch9/Eti/X98Cm60Z5jjU6SJ/T3K7Pk3wuIPj11gHAs893CAAAAAElFTkSuQmCC"
       },
       "categoryIcon": {
         "light": {
           "bytes": "iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAOwgAADsIBFShKgAAAAIVJREFUOE\u002Blj4ENgDAIBBnDEdx/GUdwjMoTSfD7GlGSS9o/QGte4ycy7CDDDjLsYBsFFbidsgq8LedBSbjVUUvSR/GSi/TiJeyjcomUXlgiPUQWRJU4P/lw\u002BLXalIVGfO3OI4OLN3FTDueb2ecw3NQE6rDyOQympioZ5S\u002BXL8iwgwxfYuMA5ya/QW/AdOsAAAAASUVORK5CYII=",
+          "width": 16,
+          "height": 16
+        },
+        "dark": {
+          "bytes": "iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAOwgAADsIBFShKgAAAABNJREFUOE9jGAWjYBSMAjBgYAAABBAAAadEfGMAAAAASUVORK5CYII=",
           "width": 16,
           "height": 16
         }
@@ -384,13 +394,13 @@
       }
     },
     {
-      "id": "e985b8cc-cd06-4ba3-99a3-69607789a669",
+      "id": "e1582709-4c30-4546-b87a-1dd26c08f329",
       "language": {
         "id": "mcneel.pythonnet.python",
         "version": "3.9.10"
       },
-      "title": "w_dataset_beam",
-      "uri": "commands/w_dataset_beam.py",
+      "title": "w_dataset_beam_volume",
+      "uri": "commands/w_dataset_beam_volume.py",
       "image": {
         "light": {
           "type": "svg",
@@ -611,6 +621,10 @@
     {
       "id": "7aa84ef0-1c33-40db-ba47-b8df7250d86b",
       "uri": "shared/datasets/type_plates_name_vda_floor_1.xml"
+    },
+    {
+      "id": "779323f8-71e8-445c-aac1-69080e8b3441",
+      "uri": "shared/datasets/annen.stp"
     }
   ]
 }

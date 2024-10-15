@@ -2,15 +2,12 @@ import Rhino
 import Rhino.Input
 import Rhino.DocObjects
 import System
-from typing import List, Tuple, Dict, Any
-from wood_rui import wood_rui_globals, ensure_layer_exists, get_objects_by_layer, add_joint_type
+from typing import List, Tuple, Any
+from wood_rui import wood_rui_globals, get_objects_by_layer, add_joint_type
 import ast
 
 
 def closest_points(dataset_name: str, points: List[Rhino.Geometry.Point3d], points_ids: List[int]) -> None:
-    # _polylines: Grasshopper.DataTree[Rhino.Geometry.Curve],
-    # _points: Grasshopper.DataTree[Rhino.Geometry.Point3d],
-    # _joint_types: Grasshopper.DataTree[int]
 
     """component iterates polyline edges and assigns index based on the point list and their type RTree search
 

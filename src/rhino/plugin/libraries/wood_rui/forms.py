@@ -153,8 +153,6 @@ class NamedValuesForm(Eto.Forms.Dialog[bool]):
             return "\\" in value or "/" in value
         return False
 
-
-
     def on_ok(self, sender, event):
         try:
             # Reset the attribute list with the updated values from the table

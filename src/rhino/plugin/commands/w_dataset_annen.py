@@ -4,7 +4,6 @@ from wood_rui import (
     ensure_layer_exists,
     add_polylines,
     add_mesh,
-    add_insertion_lines,
     add_adjacency,
     add_insertion_vectors,
     add_three_valence,
@@ -755,7 +754,6 @@ class Chevron:
         add_three_valence(self.three_valence, dataset_name)
         add_adjacency(self.adjacency, dataset_name)
 
-
         # _data = WoodData(
         #     chevron.plines,
         #     chevron.insertion_vectors,
@@ -1094,13 +1092,14 @@ if __name__ == "__main__":
 
     # ToDo: use uncomment and try the code below to access the shared folder:
     # Step 1: import geometry from step file if layer "surface" is empty
-    # guid = System.Guid("D0647BA8-EEE5-4C18-AB3E-03A95F119654")
-    # plugin_file: str = Rhino.PlugIns.PlugIn.PathFromId(guid)
-    # plugin_path: str = System.IO.Path.GetDirectoryName(plugin_file)
-    # data_sets: str = System.IO.Path.Combine(plugin_path, "shared")
-    # step_file_path = System.IO.Path.Combine(data_sets, "annen.stp")
+    guid = System.Guid("D0647BA8-EEE5-4C18-AB3E-03A95F119654")
+    plugin_file: str = Rhino.PlugIns.PlugIn.PathFromId(guid)
+    plugin_path: str = System.IO.Path.GetDirectoryName(plugin_file)
+    data_sets: str = System.IO.Path.Combine(plugin_path, "shared")
+    step_file_path = System.IO.Path.Combine(data_sets, "annen.stp")
+    print(step_file_path)
 
-    step_file_path = r"C:\brg\2_code\compas_wood\src\rhino\plugin\shared\datasets\annen.stp"
+    # step_file_path = r"C:\brg\2_code\compas_wood\src\rhino\plugin\shared\datasets\annen.stp"
     new_layer_name = "compas_wood::annen::surface"
     imported_objects = import_step_file(step_file_path, new_layer_name)
 

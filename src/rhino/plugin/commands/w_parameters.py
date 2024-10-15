@@ -182,5 +182,9 @@ if __name__ == "__main__":
         form.attributes[9][1],
     ]  # temporary parameter that must go from compas_wood.binding import wood_globals
 
-    wood_rui_globals.three_valence = form.attributes[65][1] # temporary parameter that must go from compas_wood.binding import wood_globals
-    wood_rui_globals.adjacency = form.attributes[66][1] # temporary parameter that must go from compas_wood.binding import wood_globals
+    wood_rui_globals.three_valence = form.attributes[65][
+        1
+    ]  # temporary parameter that must go from compas_wood.binding import wood_globals
+    wood_rui_globals.adjacency = form.attributes[66][
+        1
+    ]  # temporary parameter that must go from compas_wood.binding import wood_globals

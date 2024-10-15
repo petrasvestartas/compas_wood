@@ -4,7 +4,7 @@ import Rhino.DocObjects
 from typing import *
 from wood_rui import wood_rui_globals, add_loft_brep
 from System.Drawing import Color
-import System
+from compas_wood.binding import wood_globals
 
 
 def project_curves_to_plane(curves: List[Rhino.Geometry.Curve]) -> List[Rhino.Geometry.Curve]:
@@ -102,9 +102,15 @@ def loft_polylines_with_holes(
     # Convert Polylines to NurbsCurve
     ###############################################################################
     for i in range(len(curves0)):
+        # skip lines
+        if curves0[i].Count < 3:
+            return
         curves0[i] = curves0[i].ToNurbsCurve()
 
     for i in range(len(curves1)):
+        # skip lines
+        if curves1[i].Count < 3:
+            return
         curves1[i] = curves1[i].ToNurbsCurve()
 
     ###############################################################################
@@ -112,10 +118,18 @@ def loft_polylines_with_holes(
     ###############################################################################
 
     curves0 = project_curves_to_plane(curves0)
-    brep_0 = Rhino.Geometry.Brep.CreatePlanarBreps(curves0, Rhino.RhinoDoc.ActiveDoc.ModelAbsoluteTolerance)[0]
-
     curves1 = project_curves_to_plane(curves1)
-    brep_1 = Rhino.Geometry.Brep.CreatePlanarBreps(curves1, Rhino.RhinoDoc.ActiveDoc.ModelAbsoluteTolerance)[0]
+
+    breps_0 = Rhino.Geometry.Brep.CreatePlanarBreps(curves0, Rhino.RhinoDoc.ActiveDoc.ModelAbsoluteTolerance)
+    if not breps_0:
+        return
+
+    breps_1 = Rhino.Geometry.Brep.CreatePlanarBreps(curves1, Rhino.RhinoDoc.ActiveDoc.ModelAbsoluteTolerance)
+    if not breps_1:
+        return
+
+    brep_0 = breps_0[0]
+    brep_1 = breps_1[0]
 
     ###############################################################################
     # Create lofts
@@ -157,7 +171,7 @@ def loft_polylines_with_holes(
             if i < 2:
                 solid.Faces[i].PerFaceColor = Color.LightGray  # Color.LightGray
             else:
-                solid.Faces[i].PerFaceColor = Color.DeepPink
+                solid.Faces[i].PerFaceColor = Color.DodgerBlue
 
     return solid
 
@@ -222,24 +236,58 @@ if __name__ == "__main__":
 
     dataset_name, type_name = command_line_input()
 
-    breps = []
-
+    lists_breps = []
+    element_ids = []
     if type_name == "joinery":
-        for i in range(len(wood_rui_globals[dataset_name][type_name])):
-            polylines0 = []
-            polylines1 = []
-            for j in range(0, len(wood_rui_globals[dataset_name][type_name][i]), 2):
-                pline0 = wood_rui_globals[dataset_name][type_name][i][j + 0]
-                pline1 = wood_rui_globals[dataset_name][type_name][i][j + 1]
-                polylines0.append(pline0)
-                polylines1.append(pline1)
-            brep = loft_polylines_with_holes(polylines0, polylines1)
-            breps.append(brep)
+
+        # check if type is polyline or just lofts
+        are_plates: bool = wood_globals.output_geometry_type == 4
+
+        # for types in wood_rui_globals[dataset_name][type_name]:
+        #     print("___", types)
+        #     for curr_type in types:
+        #         if curr_type == 'edge_insertion' or curr_type == 'hole' or curr_type == 'insert_between_multiple_edges':
+        #             are_plates = True
+        #             print("are_plates")
+        #             break
+        #     if are_plates:
+        #         break
+
+        if are_plates:
+
+            for i in range(len(wood_rui_globals[dataset_name][type_name])):
+                polylines0 = []
+                polylines1 = []
+                for j in range(0, len(wood_rui_globals[dataset_name][type_name][i]), 2):
+                    pline0 = wood_rui_globals[dataset_name][type_name][i][j + 0]
+                    pline1 = wood_rui_globals[dataset_name][type_name][i][j + 1]
+                    polylines0.append(pline0)
+                    polylines1.append(pline1)
+
+                brep = loft_polylines_with_holes(polylines0, polylines1)
+                lists_breps.append([brep])
+                element_ids.append(i)
+
+        else:
+
+            for i in range(len(wood_rui_globals[dataset_name][type_name])):
+                breps = []
+                for j in range(0, len(wood_rui_globals[dataset_name][type_name][i]), 2):
+                    pline0 = wood_rui_globals[dataset_name][type_name][i][j + 0]
+                    pline1 = wood_rui_globals[dataset_name][type_name][i][j + 1]
+                    brep = loft_polylines_with_holes([pline0], [pline1])
+                    if brep:
+                        breps.append(brep)
+                lists_breps.append(breps)
+                element_ids.append(i)
+
     elif type_name == "polylines":
         for i in range(0, len(wood_rui_globals[dataset_name][type_name]), 2):
             polylines0 = [wood_rui_globals[dataset_name][type_name][i + 0]]
             polylines1 = [wood_rui_globals[dataset_name][type_name][i + 1]]
             brep = loft_polylines_with_holes(polylines0, polylines1)
-            breps.append(brep)
+            if brep:
+                lists_breps.append([brep])
+                element_ids.append(i)
 
-    add_loft_brep(breps, dataset_name)
+    add_loft_brep(lists_breps, dataset_name, element_ids)

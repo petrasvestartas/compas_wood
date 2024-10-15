@@ -13,7 +13,6 @@ class Globals(object):
     three_valence = []  # temporary parameter that must go from compas_wood.binding import wood_globals
     adjacency = []  # temporary parameter that must go from compas_wood.binding import wood_globals
 
-
     def __new__(cls, plugin_name="compas_wood"):
         """Ensure that only one instance per plugin exists."""
         if plugin_name not in cls._instances:
@@ -30,18 +29,18 @@ class Globals(object):
             self.reset()
 
     def init_data(self, name):
-        
+
         from System.Drawing import Color
         from .layer import ensure_layer_exists as create_layer
 
         create_layer(self.plugin_name, name, "mesh", Color.Black, True)
         create_layer(self.plugin_name, name, "surface", Color.Black, True)
-        create_layer(self.plugin_name, name, "axes", Color.Black, True)
+        create_layer(self.plugin_name, name, "axes", Color.DodgerBlue, True)
         create_layer(self.plugin_name, name, "polylines", Color.DodgerBlue, True)
         create_layer(self.plugin_name, name, "insertion", Color.Blue, True)
         create_layer(self.plugin_name, name, "joint_types", Color.MediumVioletRed, True)
         create_layer(self.plugin_name, name, "loft", Color.Black, True)
-        
+
         if name in self.dataset:
             return
 
@@ -74,10 +73,6 @@ class Globals(object):
             "loft": [],  # OUTPUT lofted geometry
             "loft_guid": [],
         }
-
-
-        
-        
 
     def __getitem__(self, key):
         return self.dataset[key]

@@ -12,6 +12,7 @@ from .object import (
     add_loft_mesh,
     add_insertion_vectors,
     add_three_valence,
+    add_axes,
 )
 from .globals import wood_rui_globals
 from .forms import NamedValuesForm, BooleanForm
@@ -36,5 +37,6 @@ __all__ = [
     "add_three_valence",
     "NamedValuesForm",
     "BooleanForm",
-    "generalized_input_method"
+    "generalized_input_method",
+    "add_axes",
 ]

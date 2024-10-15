@@ -47,7 +47,7 @@ def read_xml_polylines(
     return polylines
 
 
-def load_data_set(): # path: str = "C://brg//2_code//compas_wood//src//rhino//plugin//shared//datasets"
+def load_data_set():  # path: str = "C://brg//2_code//compas_wood//src//rhino//plugin//shared//datasets"
     """Load datasets from xml files.
 
     Parameters
@@ -87,27 +87,23 @@ def load_data_set(): # path: str = "C://brg//2_code//compas_wood//src//rhino//pl
 
     return file_names_without_extensions
 
+
 def my_callback(name_value_type, dataset_name):
 
-    if len(input_dict["polylines"][0])>0:
+    if len(input_dict["polylines"][0]) > 0:
         dataset_name = "default"
         wood_rui_globals.init_data(dataset_name)
-        add_polylines(input_dict["polylines"][0],dataset_name)
-
-
+        add_polylines(input_dict["polylines"][0], dataset_name)
 
 
 if __name__ == "__main__":
 
-
-
     # Define the input dictionary based on your initial dataset
     input_dict = {
-        "library": (load_data_set, Callable),                       # Default value for weld radius (float)
+        "library": (load_data_set, Callable),  # Default value for weld radius (float)
         "polylines": ([], List[Rhino.Geometry.Polyline]),  # Default value for polylines (list of polylines)
     }
 
     # Call the generalized input method with the dataset name and input dictionary
     dataset_name = "default"
     generalized_input_method(dataset_name, input_dict, my_callback)
-

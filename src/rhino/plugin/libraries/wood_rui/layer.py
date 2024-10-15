@@ -5,7 +5,9 @@ from System.Drawing import Color  # Import Color from System.Drawing
 from Rhino import RhinoMath
 
 
-def ensure_layer_exists(plugin_name: str, data_name: str, type_name: str, color: Color = None, delete_existing: bool = False) -> int:
+def ensure_layer_exists(
+    plugin_name: str, data_name: str, type_name: str, color: Color = None, delete_existing: bool = False
+) -> int:
     """Ensure that the plugin_name layer, data_name sublayer, and type_name sublayer exist, and return the type layer index.
 
     If delete_existing is True, delete all objects from the specified layers if they exist.
@@ -46,7 +48,7 @@ def ensure_layer_exists(plugin_name: str, data_name: str, type_name: str, color:
         type_layer.ParentLayerId = Rhino.RhinoDoc.ActiveDoc.Layers[case_layer_index].Id
         type_layer.Color = color if color else System.Drawing.Color.Black
         type_layer_index = Rhino.RhinoDoc.ActiveDoc.Layers.Add(type_layer)
-    
+
     if delete_existing:
         delete_objects_in_layer(type_layer_index)
 
