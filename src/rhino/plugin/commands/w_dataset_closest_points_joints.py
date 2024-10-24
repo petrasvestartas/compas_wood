@@ -10,7 +10,6 @@ import ast
 
 
 def closest_points(dataset_name: str, points: List[Rhino.Geometry.Point3d], points_ids: List[int]) -> None:
-
     """component iterates polyline edges and assigns index based on the point list and their type RTree search
 
     Match the closest lines from the selected dataset to the input lines and update
