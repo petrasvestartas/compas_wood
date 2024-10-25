@@ -3,6 +3,7 @@ from compas.geometry import Point
 from compas.geometry import Line
 from compas.geometry import Plane
 from compas.geometry import Frame
+from compas.geometry import Box
 from compas.geometry import Transformation
 from compas.geometry import intersection_segment_plane
 from compas.geometry import Polygon
@@ -14,9 +15,10 @@ from compas_wood.binding import wood_globals
 from pathlib import Path
 from compas import json_dump
 from compas_wood.binding import closed_mesh_from_polylines
+from compas_snippets.viewer_iterative import run, add_geometry
 
 
-def cut_polygon_with_plane(polygon, plane, tolerance=1e-3):
+def cut_polygon_with_plane(_polygon, plane, tolerance=1e-3):
     """ Cut a polygon with a plane.
     Originally implemented from NGon library: https://github.com/petrasvestartas/NGon/blob/8a52b39728732a0b20f9bc80879cd7de692b5d7a/Ngon/NGonsCore/NGonsCore/NGonGeometryUtil.cs#L12"""
   
@@ -24,6 +26,8 @@ def cut_polygon_with_plane(polygon, plane, tolerance=1e-3):
     
     # for p in polygon:
     #     print(p)
+    
+    polygon = _polygon.copy()
         
     frame = Frame.from_plane(plane) if isinstance(plane, Plane) else plane
 
@@ -117,11 +121,13 @@ def cut_polygon_with_plane(polygon, plane, tolerance=1e-3):
 
                 polygons_culled.append(Polygon(cut_polyline_part.points))
                 
-        print(polygons_culled)
-        for p in polygons_culled[0]:
-            print(*p)
+        # print(polygons_culled)
+        # for p in polygons_culled[0]:
+        #     print(*p)
 
-    return polygons_culled
+    points = polygons_culled[0].points
+    points.append(points[0])
+    return Polyline(points)
 
 # Read polylines from an exrernal file, in this case compas_wood xml dataset.
 xml_polylines = read_xml_polylines(
@@ -154,38 +160,73 @@ for polylines in polylines_lists:
     new_polyline_lists.append(new_polylines)
 polylines_lists = new_polyline_lists
 
-wood_globals.face_to_face_side_to_side_joints_rotated_joint_as_average = True
-wood_globals.face_to_face_side_to_side_joints_all_treated_as_rotated = True
+# wood_globals.face_to_face_side_to_side_joints_rotated_joint_as_average = True
+# wood_globals.face_to_face_side_to_side_joints_all_treated_as_rotated = True
 
-polylines_lists, output_types = get_connection_zones(
-    input_polyline_pairs=xml_polylines,
-    input_joint_parameters_and_types=[1500, 1.0, 53],
-    input_output_type=3)
+# polylines_lists, output_types = get_connection_zones(
+#     input_polyline_pairs=xml_polylines,
+#     input_joint_parameters_and_types=[1500, 1.0, 53],
+#     input_output_type=3)
 
 
 # Remove duplicate polylines - bug in the code.
 
-for polylines in polylines_lists:
-    new_polylines = []
-    for polyline in polylines:
-        if polyline not in new_polylines:
-            new_polylines.append(polyline)
-            if len(new_polylines) == 2:
-                new_polyline_lists.append(list(new_polylines))
-                new_polylines.clear()
+# for polylines in polylines_lists:
+#     new_polylines = []
+#     for polyline in polylines:
+#         if polyline not in new_polylines:
+#             new_polylines.append(polyline)
+#             if len(new_polylines) == 2:
+#                 new_polyline_lists.append(list(new_polylines))
+#                 new_polylines.clear()
                 
     # split new_polylines into two polylines
-
-    
+geometry = []
 polylines_lists = new_polyline_lists
 
+def cut_polygons_with_planes(polygons, planes, geometry):
+    cut_polygons = []
+    for i, polygon in enumerate(polygons):
+        cut_polygon = None
+        for plane in planes[i]:
+            cut_polygon = cut_polygon_with_plane(polygon, plane)
+        if cut_polygon:
+            if len(cut_polygon) > 2:
+                cut_polygons.append(cut_polygon)
+    geometry.extend(cut_polygons)
+    return cut_polygons
+    
 
-meshes = []
+polygons = [
+    polylines_lists[0][0],
+    polylines_lists[0][1],
+    polylines_lists[0][0],
+]
+
+planes = [
+    [Plane(Point(3505,4000,10), [1, 0, 0])],
+    [Plane(Point(3505,4000,10), [1, 0, 0])],
+    [Plane(Point(3505,4000,10), [-1, 0, 0]), Plane(Point(3205,4000,10), [1, 0, 0]) ]
+]
+cut_polygons_with_planes(polygons, planes, geometry)
+
+print(geometry)
 
 
-for plines in polylines_lists:
-    mesh = closed_mesh_from_polylines(plines)
-    meshes.append(mesh)
+
+
+# plane = Plane(Point(3505,4000,10), [-1, 0, 0])
+# geometry.append(cut_polygon_with_plane(polylines_lists[0][0], plane))
+# geometry.append(cut_polygon_with_plane(polylines_lists[0][1], plane))
+
+
+
+# meshes = []
+
+
+# for plines in polylines_lists:
+#     mesh = closed_mesh_from_polylines(plines)
+#     meshes.append(mesh)
 
 
 # Create meshes.
@@ -197,25 +238,36 @@ for plines in polylines_lists:
 # Vizualize.
 
 try:
+    pass
+    
+    # flatten all the geometry
+    
 
-    from compas_viewer import Viewer
-    from compas.geometry import Scale
+    geometry.append(polylines_lists)
+    add_geometry(geometry)
 
-    viewer = Viewer(show_grid=False, rendermode='ghosted')
-    scale = 1e-2
 
-    for i, polylines in enumerate(polylines_lists):
-        # if(i == 1):
-        for polyline in polylines:
-            polyline.transform(Scale.from_factors([scale, scale, scale]))
-            viewer.scene.add(polyline, show_points=False, line_width=2, linecolor=(255, 0, 100))
-            # break
+    # run()
+    # print(polylines_lists[0])
+    
+    # from compas_viewer import Viewer
+    # from compas.geometry import Scale
 
-    # print(meshes[0])
-    for i, mesh in enumerate(meshes):
-            mesh.transform(Scale.from_factors([scale, scale, scale]))
-            viewer.scene.add(mesh, show_points=False, hide_coplanaredges=True, lineswidth=2, linecolor=(0, 0, 0))
-    viewer.show()
+    # viewer = Viewer(show_grid=False, rendermode='ghosted')
+    # scale = 1e-2
+
+    # for i, polylines in enumerate(polylines_lists):
+    #     # if(i == 1):
+    #     for polyline in polylines:
+    #         polyline.transform(Scale.from_factors([scale, scale, scale]))
+    #         viewer.scene.add(polyline, show_points=False, line_width=2, linecolor=(255, 0, 100))
+    #         # break
+
+    # # print(meshes[0])
+    # for i, mesh in enumerate(meshes):
+    #         mesh.transform(Scale.from_factors([scale, scale, scale]))
+    #         viewer.scene.add(mesh, show_points=False, hide_coplanaredges=True, lineswidth=2, linecolor=(0, 0, 0))
+    # viewer.show()
 
 except ImportError:
     print("compas_viewer is not installed.")
