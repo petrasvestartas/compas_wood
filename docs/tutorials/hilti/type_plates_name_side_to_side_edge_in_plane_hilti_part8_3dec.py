@@ -129,7 +129,9 @@ def cut_polygon_with_plane(_polygon, plane, tolerance=1e-3):
     points.append(points[0])
     return Polyline(points)
 
+######################################################################################
 # Read polylines from an exrernal file, in this case compas_wood xml dataset.
+######################################################################################
 xml_polylines = read_xml_polylines(
     foldername= str(Path.cwd() / "src/compas_wood/datasets/") + '/',
     filename='type_plates_name_side_to_side_edge_inplane_hilti_square_shell',
@@ -139,137 +141,84 @@ xml_polylines = read_xml_polylines(
 
 xml_polylines.reverse()
 
+######################################################################################
 # Create joints.
+######################################################################################
 wood_globals.face_to_face_side_to_side_joints_rotated_joint_as_average = False
 wood_globals.face_to_face_side_to_side_joints_all_treated_as_rotated = False
 new_polyline_lists = []
 
-polylines_lists, output_types = get_connection_zones(
+polylines_lists, output_types, polylines_lists_cleaned = get_connection_zones(
     input_polyline_pairs=xml_polylines,
     input_joint_parameters_and_types=[1500, 1.0, 6],
-    input_output_type=4)
+    input_output_type=4,
+    remove_duplicate_polylines = True)
 
 
-# Remove duplicate polylines - bug in the code.
+wood_globals.face_to_face_side_to_side_joints_rotated_joint_as_average = True
+wood_globals.face_to_face_side_to_side_joints_all_treated_as_rotated = True
 
-for polylines in polylines_lists:
-    new_polylines = []
-    for polyline in polylines:
-        if polyline not in new_polylines:
-            new_polylines.append(polyline)
-    new_polyline_lists.append(new_polylines)
-polylines_lists = new_polyline_lists
+polylines_lists_connectors, output_types_connectors, polylines_lists_connector_cleaned = get_connection_zones(
+    input_polyline_pairs=xml_polylines,
+    input_joint_parameters_and_types=[1500, 1.0, 53],
+    input_output_type=3,
+    remove_duplicate_polylines = True)
 
-# wood_globals.face_to_face_side_to_side_joints_rotated_joint_as_average = True
-# wood_globals.face_to_face_side_to_side_joints_all_treated_as_rotated = True
-
-# polylines_lists, output_types = get_connection_zones(
-#     input_polyline_pairs=xml_polylines,
-#     input_joint_parameters_and_types=[1500, 1.0, 53],
-#     input_output_type=3)
+######################################################################################
+# Cut Polylines with planes.
+######################################################################################
 
 
-# Remove duplicate polylines - bug in the code.
-
-# for polylines in polylines_lists:
-#     new_polylines = []
-#     for polyline in polylines:
-#         if polyline not in new_polylines:
-#             new_polylines.append(polyline)
-#             if len(new_polylines) == 2:
-#                 new_polyline_lists.append(list(new_polylines))
-#                 new_polylines.clear()
-                
-    # split new_polylines into two polylines
 geometry = []
-polylines_lists = new_polyline_lists
 
-def cut_polygons_with_planes(polygons, planes, geometry):
+def cut_polygons_with_planes(polylines_lists, indices, planes_lists, geometry):
     cut_polygons = []
-    for i, polygon in enumerate(polygons):
-        cut_polygon = None
-        for plane in planes[i]:
-            cut_polygon = cut_polygon_with_plane(polygon, plane)
-        if cut_polygon:
-            if len(cut_polygon) > 2:
-                cut_polygons.append(cut_polygon)
-    geometry.extend(cut_polygons)
-    return cut_polygons
-    
+    for index in range(len(indices)):
+        polygons = [polylines_lists[indices[index]][0],polylines_lists[indices[index]][1]]
+        planes = planes_lists[index]
 
-polygons = [
-    polylines_lists[0][0],
-    polylines_lists[0][1],
-    polylines_lists[0][0],
-]
+        for polygon in polygons:
+            cut_polygon = polygon.copy()
+            for plane in planes:
+                cut_polygon = cut_polygon_with_plane(cut_polygon, plane)
+            if cut_polygon:
+                if len(cut_polygon) > 2:
+                    geometry.append(cut_polygon)
+    return cut_polygons
+
+indices = [0, 0]
 
 planes = [
     [Plane(Point(3505,4000,10), [1, 0, 0])],
-    [Plane(Point(3505,4000,10), [1, 0, 0])],
     [Plane(Point(3505,4000,10), [-1, 0, 0]), Plane(Point(3205,4000,10), [1, 0, 0]) ]
 ]
-cut_polygons_with_planes(polygons, planes, geometry)
+cut_polygons_with_planes(polylines_lists_cleaned, indices, planes, geometry)
+geometry.append(polylines_lists_cleaned) # Add the original polylines to the geometry
 
-print(geometry)
-
-
-
-
-# plane = Plane(Point(3505,4000,10), [-1, 0, 0])
-# geometry.append(cut_polygon_with_plane(polylines_lists[0][0], plane))
-# geometry.append(cut_polygon_with_plane(polylines_lists[0][1], plane))
-
+######################################################################################
+# Mesh Polylines.
+######################################################################################
 
 
 # meshes = []
-
-
 # for plines in polylines_lists:
 #     mesh = closed_mesh_from_polylines(plines)
 #     meshes.append(mesh)
 
-
-# Create meshes.
 # meshes = mesh_boolean_difference_from_polylines(polylines_lists)
 
-# # Serialize meshes.
+######################################################################################
+# Serialize
+######################################################################################
+
 # json_dump(meshes, 'data/json_dump/type_plates_name_side_to_side_edge_inplane_hilti_part6.json')
 
-# Vizualize.
+######################################################################################
+# Vizualize
+######################################################################################
 
-try:
-    pass
-    
-    # flatten all the geometry
-    
-
-    geometry.append(polylines_lists)
-    add_geometry(geometry)
+add_geometry(geometry)
+run()
 
 
-    # run()
-    # print(polylines_lists[0])
-    
-    # from compas_viewer import Viewer
-    # from compas.geometry import Scale
-
-    # viewer = Viewer(show_grid=False, rendermode='ghosted')
-    # scale = 1e-2
-
-    # for i, polylines in enumerate(polylines_lists):
-    #     # if(i == 1):
-    #     for polyline in polylines:
-    #         polyline.transform(Scale.from_factors([scale, scale, scale]))
-    #         viewer.scene.add(polyline, show_points=False, line_width=2, linecolor=(255, 0, 100))
-    #         # break
-
-    # # print(meshes[0])
-    # for i, mesh in enumerate(meshes):
-    #         mesh.transform(Scale.from_factors([scale, scale, scale]))
-    #         viewer.scene.add(mesh, show_points=False, hide_coplanaredges=True, lineswidth=2, linecolor=(0, 0, 0))
-    # viewer.show()
-
-except ImportError:
-    print("compas_viewer is not installed.")
-    
     
