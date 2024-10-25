@@ -615,6 +615,7 @@ document.write(`
     <span class="n">input_joint_volume_parameters</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
     <span class="n">input_custom_joints</span><span class="o">=</span><span class="p">[],</span>
     <span class="n">input_custom_joints_types</span><span class="o">=</span><span class="p">[],</span>
+    <span class="n">remove_duplicate_polylines</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Get connection zones for the given input parameters.</span>
@@ -647,7 +648,9 @@ document.write(`
 <span class="sd">        Custom joints.</span>
 <span class="sd">    input_custom_joints_types : list[int], optional</span>
 <span class="sd">        Custom joints types.</span>
-<span class="sd">    input_face_to_face_side_to_side_joints_rotated_joint_as_average : bool, optional</span>
+<span class="sd">    remove_duplicate_polylines : bool, optional</span>
+<span class="sd">        Remove duplicate polylines.</span>
+
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -682,7 +685,21 @@ document.write(`
         <span class="n">to_double1</span><span class="p">(</span><span class="n">input_joint_volume_parameters</span><span class="p">),</span>
     <span class="p">)</span>
 
-    <span class="k">return</span> <span class="n">from_point3</span><span class="p">(</span><span class="n">w_output_plines</span><span class="p">),</span> <span class="n">from_cut_type2</span><span class="p">(</span><span class="n">w_output_types</span><span class="p">)</span></div>
+    <span class="n">polylines_lists</span> <span class="o">=</span> <span class="n">from_point3</span><span class="p">(</span><span class="n">w_output_plines</span><span class="p">)</span>
+    <span class="n">output_types</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">w_output_types</span><span class="p">)</span>
+
+    <span class="n">new_polyline_lists</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">if</span> <span class="n">remove_duplicate_polylines</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">polylines</span> <span class="ow">in</span> <span class="n">polylines_lists</span><span class="p">:</span>
+            <span class="n">new_polylines</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">polyline</span> <span class="ow">in</span> <span class="n">polylines</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">polyline</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">new_polylines</span><span class="p">:</span>
+                    <span class="n">new_polylines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">polyline</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">new_polylines</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+                        <span class="n">new_polyline_lists</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">new_polylines</span><span class="p">))</span>
+                        <span class="n">new_polylines</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+
+    <span class="k">return</span> <span class="n">polylines_lists</span><span class="p">,</span> <span class="n">output_types</span><span class="p">,</span> <span class="n">new_polyline_lists</span></div>
 
 </pre></div>
 
