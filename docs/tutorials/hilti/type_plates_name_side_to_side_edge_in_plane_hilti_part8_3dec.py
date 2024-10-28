@@ -168,7 +168,7 @@ polylines_lists_connectors, output_types_connectors, polylines_lists_connector_c
 # Cut Polylines with planes.
 ######################################################################################
 
-
+geometry_serialization = {}
 geometry = []
 
 def cut_polygons_with_planes(polylines_lists, indices, planes_lists, geometry):
@@ -186,39 +186,162 @@ def cut_polygons_with_planes(polylines_lists, indices, planes_lists, geometry):
                     geometry.append(cut_polygon)
     return cut_polygons
 
-indices = [0, 0]
 
-planes = [
-    [Plane(Point(3505,4000,10), [1, 0, 0])],
-    [Plane(Point(3505,4000,10), [-1, 0, 0]), Plane(Point(3205,4000,10), [1, 0, 0]) ]
+
+main_planes = [
+    
+    
+    Plane(Point(-3510+990+1010+990+1040+990+1010+990,4000,10), [1, 0, 0]), # 0
+    Plane(Point(-3510+990+1010+990+1040+990+1010,4000,10), [1, 0, 0]), # 1
+    Plane(Point(-3510+990+1010+990+1040+990,4000,10), [1, 0, 0]), # 2
+    Plane(Point(-3510+990+1010+990+1040,4000,10), [1, 0, 0]), # 3
+    Plane(Point(-3510+990+1010+990,4000,10), [1, 0, 0]), # 4
+    Plane(Point(-3510+990+1010,4000,10), [1, 0, 0]), # 5
+    Plane(Point(-3510+990,4000,10), [1, 0, 0]), # 6
+    Plane(Point(-3510,4000,10), [1, 0, 0]), # 7
+
+    Plane(Point(4000, -3510+990+1010+990+1040+990+1010+990,10), [0, 1, 0]), # 8
+    Plane(Point(4000, -3510+990+1010+990+1040+990+1010,10),[0, 1, 0]), # 9
+    Plane(Point(4000, -3510+990+1010+990+1040+990,10),[0, 1, 0]), # 10
+    Plane(Point(4000, -3510+990+1010+990+1040,10), [0, 1, 0]), # 11
+    Plane(Point(4000, -3510+990+1010+990,10), [0, 1, 0]), # 12
+    Plane(Point(4000, -3510+990+1010,10),[0, 1, 0]), # 13
+    Plane(Point(4000, -3510+990,10), [0, 1, 0]), # 14
+    Plane(Point(4000, -3510,10), [0, 1, 0]), # 15
+    
+
 ]
-cut_polygons_with_planes(polylines_lists_cleaned, indices, planes, geometry)
+
+base_instruction = [
+    #    0   1   2   3   4   5   6   7
+    [0,  1,  0,  0,  0,  0,  0,  0,  0,
+         1,  0,  0,  0,  0,  0,  0,  0],
+    [0, -1,  1,  0,  0,  0,  0,  0,  0,
+         1,  0,  0,  0,  0,  0,  0,  0],
+    [0,  0, -1,  0,  0,  0,  0,  0,  0,
+         1,  0,  0,  0,  0,  0,  0,  0],
+
+    [0,  1,  0,  0,  0,  0,  0,  0,  0,
+         -1,  1,  0,  0,  0,  0,  0,  0],
+    [0,  -1,  1,  0,  0,  0,  0,  0,  0,
+         -1,  1,  0,  0,  0,  0,  0,  0],
+    [0,  0,  -1,  0,  0,  0,  0,  0,  0,
+         -1,  1,  0,  0,  0,  0,  0,  0],
+    
+    [0,   1,  0,  0,  0,  0,  0,  0,  0,
+         0,  -1,  0,  0,  0,  0,  0,  0],
+    [0,  -1,  1,  0,  0,  0,  0,  0,  0,
+         0,  -1,  0,  0,  0,  0,  0,  0],
+    [0,  0,  -1,  0,  0,  0,  0,  0,  0,
+         0,  -1,  0,  0,  0,  0,  0,  0],
+]
+
+instructions = []
+
+counter = 0
+geometry_serialization["groups"] = []
+for i in range(4):
+    for j in range(4):
+        
+        id = i+(4*j)
+        
+        if i==0 and j==0:
+            instructions.extend(base_instruction)
+        else:
+            for instruction in base_instruction:
+                temp = list(instruction)
+                temp[0] = id
+                for k in range(i):
+                    temp.insert(1, 0)
+                    temp.insert(1, 0)
+                    temp.pop(9)
+                    temp.pop(9)
+                for k in range(j):
+                    temp.insert(1+8, 0)
+                    temp.insert(1+8, 0)
+                    temp.pop(9+8)
+                    temp.pop(9+8)
+                instructions.append(temp)
+        group_id = id*9
+        geometry_serialization["groups"].append([group_id, group_id+1, group_id+2, group_id+3, group_id+4, group_id+5, group_id+6, group_id+7, group_id+8])
+
+geometry_serialization["corners"] = [0, 33, 110, 143]     
+            
+
+indices = []
+planes = []
+
+
+for instruction in instructions:
+    
+    
+    mesh_id = []
+
+    for i in range(len(instruction)):
+        if i == 0:
+            indices.append(instruction[0])
+            planes.append([])
+        else:
+            id = i-1
+            if instruction[i] == 1:
+                planes[-1].append(main_planes[id])
+            elif instruction[i] == -1:
+                flipped_plane = Plane(main_planes[id].point, [-x for x in main_planes[id].normal])
+                planes[-1].append(flipped_plane)
+       
+
+boxes = []
+for p in main_planes:
+    boxes.append(Box(200, 2, 2, Frame.from_plane(p)))
+# geometry.extend(boxes)
+cut_polylines = []
+cut_polygons_with_planes(polylines_lists_cleaned, indices, planes, cut_polylines)
+geometry.extend(cut_polylines)
 geometry.append(polylines_lists_cleaned) # Add the original polylines to the geometry
+
+
 
 ######################################################################################
 # Mesh Polylines.
 ######################################################################################
 
 
-# meshes = []
-# for plines in polylines_lists:
-#     mesh = closed_mesh_from_polylines(plines)
-#     meshes.append(mesh)
+meshes_panels = []
+counter = 0
+for i in range(0, len(cut_polylines), 2):
+    mesh = closed_mesh_from_polylines([cut_polylines[i], cut_polylines[i+1]])
+    mesh.name = "mesh_panel_" + str(counter)
+    counter = counter + 1
+    meshes_panels.append(mesh)
 
+geometry.extend(meshes_panels)
 # meshes = mesh_boolean_difference_from_polylines(polylines_lists)
+geometry_serialization["meshes_panels"] = meshes_panels
+######################################################################################
+# Mesh Connectors.
+######################################################################################
 
+meshes_connectors = []
+for polylines in polylines_lists_connectors:
+    for i in range(0, len(polylines), 2):
+        pair = [polylines[i], polylines[i+1]]
+        mesh = closed_mesh_from_polylines(pair)
+        meshes_connectors.append(mesh)
+geometry.extend(meshes_connectors)
+geometry_serialization["meshes_connectors"] = meshes_connectors
 ######################################################################################
 # Serialize
 ######################################################################################
 
-# json_dump(meshes, 'data/json_dump/type_plates_name_side_to_side_edge_inplane_hilti_part6.json')
+
+json_dump(geometry_serialization, 'data/json_dump/timber_shell_connectors.json')
 
 ######################################################################################
 # Vizualize
 ######################################################################################
 
 add_geometry(geometry)
-run()
+# run()
 
 
     
