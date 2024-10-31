@@ -5,17 +5,21 @@ from compas.geometry import Plane
 from compas.geometry import Frame
 from compas.geometry import Box
 from compas.geometry import Transformation
+from compas.geometry import Reflection
 from compas.geometry import intersection_segment_plane
 from compas.geometry import Polygon
+from compas.geometry import Box
 from compas.geometry import Scale
+from compas.geometry import Vector
+from compas.geometry import distance_point_point
 from compas_wood.binding import get_connection_zones
 from compas_wood.binding import mesh_boolean_difference_from_polylines
 from compas_wood.binding import read_xml_polylines
 from compas_wood.binding import wood_globals
 from pathlib import Path
-from compas import json_dump
+from compas import json_dump, json_load
 from compas_wood.binding import closed_mesh_from_polylines
-from compas_snippets.viewer_iterative import run, add_geometry
+from compas_snippets.viewer_live import ViewerLive
 
 
 def cut_polygon_with_plane(_polygon, plane, tolerance=1e-3):
@@ -171,7 +175,7 @@ polylines_lists_connectors, output_types_connectors, polylines_lists_connector_c
 geometry_serialization = {}
 geometry = []
 
-def cut_polygons_with_planes(polylines_lists, indices, planes_lists, geometry):
+def cut_polygons_with_planes(polylines_lists, indices, planes_lists, out_geometry):
     cut_polygons = []
     for index in range(len(indices)):
         polygons = [polylines_lists[indices[index]][0],polylines_lists[indices[index]][1]]
@@ -183,7 +187,15 @@ def cut_polygons_with_planes(polylines_lists, indices, planes_lists, geometry):
                 cut_polygon = cut_polygon_with_plane(cut_polygon, plane)
             if cut_polygon:
                 if len(cut_polygon) > 2:
-                    geometry.append(cut_polygon)
+                    
+                    points = [cut_polygon.points[0]]
+                    
+                    for i in range(1, len(cut_polygon.points)):
+                        distance = distance_point_point(points[-1], cut_polygon.points[i])
+                        if distance > 0.1:
+                            points.append(cut_polygon.points[i])
+                    
+                    out_geometry.append(Polyline(points))
     return cut_polygons
 
 
@@ -265,7 +277,7 @@ for i in range(4):
         group_id = id*9
         geometry_serialization["groups"].append([group_id, group_id+1, group_id+2, group_id+3, group_id+4, group_id+5, group_id+6, group_id+7, group_id+8])
 
-geometry_serialization["corners"] = [0, 33, 110, 143]     
+
             
 
 indices = []
@@ -296,10 +308,8 @@ for p in main_planes:
 # geometry.extend(boxes)
 cut_polylines = []
 cut_polygons_with_planes(polylines_lists_cleaned, indices, planes, cut_polylines)
-geometry.extend(cut_polylines)
-geometry.append(polylines_lists_cleaned) # Add the original polylines to the geometry
-
-
+# geometry.extend(cut_polylines)
+# geometry.append(polylines_lists_cleaned) # Add the original polylines to the geometry
 
 ######################################################################################
 # Mesh Polylines.
@@ -310,13 +320,86 @@ meshes_panels = []
 counter = 0
 for i in range(0, len(cut_polylines), 2):
     mesh = closed_mesh_from_polylines([cut_polylines[i], cut_polylines[i+1]])
+    mesh.weld(1)
     mesh.name = "mesh_panel_" + str(counter)
     counter = counter + 1
     meshes_panels.append(mesh)
 
+
 geometry.extend(meshes_panels)
 # meshes = mesh_boolean_difference_from_polylines(polylines_lists)
 geometry_serialization["meshes_panels"] = meshes_panels
+
+
+######################################################################################
+# Foundational Corners.
+######################################################################################
+
+corners = [0, 33, 110, 143]
+meshes_corners = []
+corner_point_ids = [[1, 2, 2, 3],[0, 1, 1, 2],[0, 1, 1,  2],[1, 2, 2, 3]]
+for i, corner in enumerate(corners):
+        corner_0 = cut_polylines[corner*2+0].copy()
+        corner_1 = cut_polylines[corner*2+1].copy()
+        
+        corner_0.name = "corner_" + str(corner) + "_0"
+        corner_1.name = "corner_" + str(corner) + "_1"
+
+            
+        # Side 1
+        offset_vector_0 : Vector = Vector.cross(
+            corner_0[corner_point_ids[i][1]] - corner_0[corner_point_ids[i][0]],
+            corner_0[corner_point_ids[i][1]] - corner_1[corner_point_ids[i][1]]      
+        )
+        offset_vector_0.unitize()
+        offset_vector_0.scale(250)
+
+
+        polyline0: Polyline  = Polyline([
+            corner_0[corner_point_ids[i][0]],
+            corner_0[corner_point_ids[i][1]],
+            corner_1[corner_point_ids[i][1]],
+            corner_1[corner_point_ids[i][0]],
+            corner_0[corner_point_ids[i][1]]
+        ])
+        
+        
+        # Side 2
+        polyline1: Polyline  = Polyline([
+            corner_0[corner_point_ids[i][2]],
+            corner_0[corner_point_ids[i][3]],
+            corner_1[corner_point_ids[i][3]],
+            corner_1[corner_point_ids[i][2]],
+            corner_0[corner_point_ids[i][2]]
+        ])
+        
+        offset_vector_1 : Vector = Vector.cross(
+            corner_0[corner_point_ids[i][3]] - corner_0[corner_point_ids[i][2]],
+            corner_0[corner_point_ids[i][3]] - corner_1[corner_point_ids[i][3]]      
+        )
+        offset_vector_1.unitize()
+        offset_vector_1.scale(250)
+        
+   
+        
+ 
+        
+        mesh0 = closed_mesh_from_polylines([polyline0, polyline0.translated(offset_vector_0)])
+        mesh1 = closed_mesh_from_polylines([polyline1, polyline1.translated(offset_vector_1)])
+        mesh0.weld(1)
+        mesh1.weld(1)
+        meshes_corners.append(mesh0)
+        meshes_corners.append(mesh1)
+
+        
+        geometry.append(polyline0)
+        geometry.append(polyline1)
+        
+        
+
+geometry.extend(meshes_corners)
+geometry_serialization["corners"] = meshes_corners# [0, 33, 110, 143]     
+
 ######################################################################################
 # Mesh Connectors.
 ######################################################################################
@@ -324,24 +407,29 @@ geometry_serialization["meshes_panels"] = meshes_panels
 meshes_connectors = []
 for polylines in polylines_lists_connectors:
     for i in range(0, len(polylines), 2):
+        polylines[i].points.reverse()
+        polylines[i+1].points.reverse()
         pair = [polylines[i], polylines[i+1]]
         mesh = closed_mesh_from_polylines(pair)
+        mesh.weld(1)
         meshes_connectors.append(mesh)
 geometry.extend(meshes_connectors)
 geometry_serialization["meshes_connectors"] = meshes_connectors
+
 ######################################################################################
 # Serialize
 ######################################################################################
-
-
+import compas
+print(compas.__version__)
 json_dump(geometry_serialization, 'data/json_dump/timber_shell_connectors.json')
-
+json_load = json_load('data/json_dump/timber_shell_connectors.json')
 ######################################################################################
 # Vizualize
 ######################################################################################
 
-add_geometry(geometry)
-# run()
+
+# ViewerLive.run()
+# ViewerLive.add(geometry,True)
 
 
     
