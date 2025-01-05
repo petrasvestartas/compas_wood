@@ -27,7 +27,7 @@
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
 
-    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../../_static/css/compas.css?v=617b33e2" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../../../_static/tabs.css?v=4c969af8" />
@@ -492,6 +492,8 @@ document.write(`
 </ul>
 </li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="../../../tutorials/ibois.html">IBOIS</a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-5"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/ibois/opennest.html">2D Nesting Plugin Installation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/ibois/program.html">Program</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../tutorials/ibois/requirements.html">Requirements</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../tutorials/ibois/tutorials.html">Tutorials</a></li>
 </ul>
@@ -586,12 +588,12 @@ document.write(`
                 <article class="bd-article" role="main">
                   
   <h1>Source code for compas_wood.binding.binding_globals</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">wood_nano</span> <span class="kn">import</span> <span class="n">GLOBALS</span>
+<span></span><span class="kn">from</span><span class="w"> </span><span class="nn">wood_nano</span><span class="w"> </span><span class="kn">import</span> <span class="n">GLOBALS</span>
 
 
 <div class="viewcode-block" id="Globals">
 <a class="viewcode-back" href="../../../api/compas_wood.binding.html#compas_wood.binding.Globals">[docs]</a>
-<span class="k">class</span> <span class="nc">Globals</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Globals</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Class to access global variables of the wood_nano library using class instance wood_globals:</span>
 
 <span class="sd">    &gt;&gt;&gt; from compas_wood.binding import wood_globals</span>
@@ -680,7 +682,7 @@ document.write(`
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
 
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="s2">&quot;instance&quot;</span><span class="p">):</span>
             <span class="bp">cls</span><span class="o">.</span><span class="n">instance</span> <span class="o">=</span> <span class="nb">super</span><span class="p">(</span><span class="n">Globals</span><span class="p">,</span> <span class="bp">cls</span><span class="p">)</span><span class="o">.</span><span class="fm">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span>
@@ -688,312 +690,312 @@ document.write(`
         <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">instance</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">clipper_scale</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">clipper_scale</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">GLOBALS</span><span class="o">.</span><span class="n">CLIPPER_SCALE</span>
 
     <span class="nd">@clipper_scale</span><span class="o">.</span><span class="n">setter</span>
-    <span class="k">def</span> <span class="nf">clipper_scale</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">clipper_scale</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
         <span class="n">GLOBALS</span><span class="o">.</span><span class="n">CLIPPER_SCALE</span> <span class="o">=</span> <span class="n">value</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">clipper_area</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">clipper_area</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">GLOBALS</span><span class="o">.</span><span class="n">CLIPPER_AREA</span>
 
     <span class="nd">@clipper_area</span><span class="o">.</span><span class="n">setter</span>
-    <span class="k">def</span> <span class="nf">clipper_area</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">clipper_area</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
         <span class="n">GLOBALS</span><span class="o">.</span><span class="n">CLIPPER_AREA</span> <span class="o">=</span> <span class="n">value</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">distance</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">distance</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">GLOBALS</span><span class="o">.</span><span class="n">DISTANCE</span>
 
     <span class="nd">@distance</span><span class="o">.</span><span class="n">setter</span>
-    <span class="k">def</span> <span class="nf">distance</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">distance</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
         <span class="n">GLOBALS</span><span class="o">.</span><span class="n">DISTANCE</span> <span class="o">=</span> <span class="n">value</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">distance_squared</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">distance_squared</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">GLOBALS</span><span class="o">.</span><span class="n">DISTANCE_SQUARED</span>
 
     <span class="nd">@distance_squared</span><span class="o">.</span><span class="n">setter</span>
-    <span class="k">def</span> <span class="nf">distance_squared</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">distance_squared</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
         <span class="n">GLOBALS</span><span class="o">.</span><span class="n">DISTANCE_SQUARED</span> <span class="o">=</span> <span class="n">value</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">angle</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">angle</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">GLOBALS</span><span class="o">.</span><span class="n">ANGLE</span>
 
     <span class="nd">@angle</span><span class="o">.</span><span class="n">setter</span>
-    <span class="k">def</span> <span class="nf">angle</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">angle</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
         <span class="n">GLOBALS</span><span class="o">.</span><span class="n">ANGLE</span> <span class="o">=</span> <span class="n">value</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">path_and_file_for_joints</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">path_and_file_for_joints</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">GLOBALS</span><span class="o">.</span><span class="n">PATH_AND_FILE_FOR_JOINTS</span>
 
     <span class="nd">@path_and_file_for_joints</span><span class="o">.</span><span class="n">setter</span>
-    <span class="k">def</span> <span class="nf">path_and_file_for_joints</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">path_and_file_for_joints</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
         <span class="n">GLOBALS</span><span class="o">.</span><span class="n">PATH_AND_FILE_FOR_JOINTS</span> <span class="o">=</span> <span class="n">value</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">data_set_input_folder</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">data_set_input_folder</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">GLOBALS</span><span class="o">.</span><span class="n">DATA_SET_INPUT_FOLDER</span>
 
     <span class="nd">@data_set_input_folder</span><span class="o">.</span><span class="n">setter</span>
-    <span class="k">def</span> <span class="nf">data_set_input_folder</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">data_set_input_folder</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
         <span class="n">GLOBALS</span><span class="o">.</span><span class="n">DATA_SET_INPUT_FOLDER</span> <span class="o">=</span> <span class="n">value</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">data_set_output_file</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">data_set_output_file</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">GLOBALS</span><span class="o">.</span><span class="n">DATA_SET_OUTPUT_FILE</span>
 
     <span class="nd">@data_set_output_file</span><span class="o">.</span><span class="n">setter</span>
-    <span class="k">def</span> <span class="nf">data_set_output_file</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">data_set_output_file</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
         <span class="n">GLOBALS</span><span class="o">.</span><span class="n">DATA_SET_OUTPUT_FILE</span> <span class="o">=</span> <span class="n">value</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">data_set_output_database</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">data_set_output_database</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">GLOBALS</span><span class="o">.</span><span class="n">DATA_SET_OUTPUT_DATABASE</span>
 
     <span class="nd">@data_set_output_database</span><span class="o">.</span><span class="n">setter</span>
-    <span class="k">def</span> <span class="nf">data_set_output_database</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">data_set_output_database</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
         <span class="n">GLOBALS</span><span class="o">.</span><span class="n">DATA_SET_OUTPUT_DATABASE</span> <span class="o">=</span> <span class="n">value</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">joint_volume_extension</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
-        <span class="kn">from</span> <span class="nn">wood_nano.conversions_python</span> <span class="kn">import</span> <span class="n">from_int1</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">joint_volume_extension</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">wood_nano.conversions_python</span><span class="w"> </span><span class="kn">import</span> <span class="n">from_int1</span>
 
         <span class="k">return</span> <span class="n">from_int1</span><span class="p">(</span><span class="n">GLOBALS</span><span class="o">.</span><span class="n">JOINT_VOLUME_EXTENSION</span><span class="p">)</span>
 
     <span class="nd">@joint_volume_extension</span><span class="o">.</span><span class="n">setter</span>
-    <span class="k">def</span> <span class="nf">joint_volume_extension</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
-        <span class="kn">from</span> <span class="nn">wood_nano.conversions_python</span> <span class="kn">import</span> <span class="n">to_double1</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">joint_volume_extension</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">wood_nano.conversions_python</span><span class="w"> </span><span class="kn">import</span> <span class="n">to_double1</span>
 
         <span class="n">GLOBALS</span><span class="o">.</span><span class="n">JOINT_VOLUME_EXTENSION</span> <span class="o">=</span> <span class="n">to_double1</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">output_geometry_type</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">output_geometry_type</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">GLOBALS</span><span class="o">.</span><span class="n">OUTPUT_GEOMETRY_TYPE</span>
 
     <span class="nd">@output_geometry_type</span><span class="o">.</span><span class="n">setter</span>
-    <span class="k">def</span> <span class="nf">output_geometry_type</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">output_geometry_type</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
         <span class="n">GLOBALS</span><span class="o">.</span><span class="n">OUTPUT_GEOMETRY_TYPE</span> <span class="o">=</span> <span class="n">value</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">face_to_face_side_to_side_joints_all_treated_as_rotated</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">face_to_face_side_to_side_joints_all_treated_as_rotated</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">GLOBALS</span><span class="o">.</span><span class="n">FACE_TO_FACE_SIDE_TO_SIDE_JOINTS_ALL_TREATED_AS_ROTATED</span>
 
     <span class="nd">@face_to_face_side_to_side_joints_all_treated_as_rotated</span><span class="o">.</span><span class="n">setter</span>
-    <span class="k">def</span> <span class="nf">face_to_face_side_to_side_joints_all_treated_as_rotated</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">face_to_face_side_to_side_joints_all_treated_as_rotated</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
         <span class="n">GLOBALS</span><span class="o">.</span><span class="n">FACE_TO_FACE_SIDE_TO_SIDE_JOINTS_ALL_TREATED_AS_ROTATED</span> <span class="o">=</span> <span class="n">value</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">face_to_face_side_to_side_joints_rotated_joint_as_average</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">face_to_face_side_to_side_joints_rotated_joint_as_average</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">GLOBALS</span><span class="o">.</span><span class="n">FACE_TO_FACE_SIDE_TO_SIDE_JOINTS_ROTATED_JOINT_AS_AVERAGE</span>
 
     <span class="nd">@face_to_face_side_to_side_joints_rotated_joint_as_average</span><span class="o">.</span><span class="n">setter</span>
-    <span class="k">def</span> <span class="nf">face_to_face_side_to_side_joints_rotated_joint_as_average</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">face_to_face_side_to_side_joints_rotated_joint_as_average</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
         <span class="n">GLOBALS</span><span class="o">.</span><span class="n">FACE_TO_FACE_SIDE_TO_SIDE_JOINTS_ROTATED_JOINT_AS_AVERAGE</span> <span class="o">=</span> <span class="n">value</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">face_to_face_side_to_side_joints_dihedral_angle</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">face_to_face_side_to_side_joints_dihedral_angle</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">GLOBALS</span><span class="o">.</span><span class="n">FACE_TO_FACE_SIDE_TO_SIDE_JOINTS_DIHEDRAL_ANGLE</span>
 
     <span class="nd">@face_to_face_side_to_side_joints_dihedral_angle</span><span class="o">.</span><span class="n">setter</span>
-    <span class="k">def</span> <span class="nf">face_to_face_side_to_side_joints_dihedral_angle</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">face_to_face_side_to_side_joints_dihedral_angle</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
         <span class="n">GLOBALS</span><span class="o">.</span><span class="n">FACE_TO_FACE_SIDE_TO_SIDE_JOINTS_DIHEDRAL_ANGLE</span> <span class="o">=</span> <span class="n">value</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">limit_min_joint_length</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">limit_min_joint_length</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">GLOBALS</span><span class="o">.</span><span class="n">LIMIT_MIN_JOINT_LENGTH</span>
 
     <span class="nd">@limit_min_joint_length</span><span class="o">.</span><span class="n">setter</span>
-    <span class="k">def</span> <span class="nf">limit_min_joint_length</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">limit_min_joint_length</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
         <span class="n">GLOBALS</span><span class="o">.</span><span class="n">LIMIT_MIN_JOINT_LENGTH</span> <span class="o">=</span> <span class="n">value</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">existing_types</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
-        <span class="kn">from</span> <span class="nn">wood_nano.conversions_python</span> <span class="kn">import</span> <span class="n">from_string1</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">existing_types</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">wood_nano.conversions_python</span><span class="w"> </span><span class="kn">import</span> <span class="n">from_string1</span>
 
         <span class="k">return</span> <span class="n">from_string1</span><span class="p">(</span><span class="n">GLOBALS</span><span class="o">.</span><span class="n">EXISTING_TYPES</span><span class="p">)</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">joints_parameters_and_types</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
-        <span class="kn">from</span> <span class="nn">wood_nano.conversions_python</span> <span class="kn">import</span> <span class="n">from_double1</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">joints_parameters_and_types</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">wood_nano.conversions_python</span><span class="w"> </span><span class="kn">import</span> <span class="n">from_double1</span>
 
         <span class="k">return</span> <span class="n">from_double1</span><span class="p">(</span><span class="n">GLOBALS</span><span class="o">.</span><span class="n">JOINTS_PARAMETERS_AND_TYPES</span><span class="p">)</span>
 
     <span class="nd">@joints_parameters_and_types</span><span class="o">.</span><span class="n">setter</span>
-    <span class="k">def</span> <span class="nf">joints_parameters_and_types</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
-        <span class="kn">from</span> <span class="nn">wood_nano.conversions_python</span> <span class="kn">import</span> <span class="n">to_double1</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">joints_parameters_and_types</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">wood_nano.conversions_python</span><span class="w"> </span><span class="kn">import</span> <span class="n">to_double1</span>
 
         <span class="n">GLOBALS</span><span class="o">.</span><span class="n">JOINTS_PARAMETERS_AND_TYPES</span> <span class="o">=</span> <span class="n">to_double1</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">custom_joints_ss_e_ip_male</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
-        <span class="kn">from</span> <span class="nn">compas_wood.conversions_compas</span> <span class="kn">import</span> <span class="n">from_point2</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">custom_joints_ss_e_ip_male</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">compas_wood.conversions_compas</span><span class="w"> </span><span class="kn">import</span> <span class="n">from_point2</span>
 
         <span class="k">return</span> <span class="n">from_point2</span><span class="p">(</span><span class="n">GLOBALS</span><span class="o">.</span><span class="n">CUSTOM_JOINTS_SS_E_IP_MALE</span><span class="p">)</span>
 
     <span class="nd">@custom_joints_ss_e_ip_male</span><span class="o">.</span><span class="n">setter</span>
-    <span class="k">def</span> <span class="nf">custom_joints_ss_e_ip_male</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
-        <span class="kn">from</span> <span class="nn">compas_wood.conversions_compas</span> <span class="kn">import</span> <span class="n">to_point2</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">custom_joints_ss_e_ip_male</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">compas_wood.conversions_compas</span><span class="w"> </span><span class="kn">import</span> <span class="n">to_point2</span>
 
         <span class="n">GLOBALS</span><span class="o">.</span><span class="n">CUSTOM_JOINTS_SS_E_IP_MALE</span> <span class="o">=</span> <span class="n">to_point2</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">custom_joints_ss_e_ip_female</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
-        <span class="kn">from</span> <span class="nn">compas_wood.conversions_compas</span> <span class="kn">import</span> <span class="n">from_point2</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">custom_joints_ss_e_ip_female</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">compas_wood.conversions_compas</span><span class="w"> </span><span class="kn">import</span> <span class="n">from_point2</span>
 
         <span class="k">return</span> <span class="n">from_point2</span><span class="p">(</span><span class="n">GLOBALS</span><span class="o">.</span><span class="n">CUSTOM_JOINTS_SS_E_IP_FEMALE</span><span class="p">)</span>
 
     <span class="nd">@custom_joints_ss_e_ip_female</span><span class="o">.</span><span class="n">setter</span>
-    <span class="k">def</span> <span class="nf">custom_joints_ss_e_ip_female</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
-        <span class="kn">from</span> <span class="nn">compas_wood.conversions_compas</span> <span class="kn">import</span> <span class="n">to_point2</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">custom_joints_ss_e_ip_female</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">compas_wood.conversions_compas</span><span class="w"> </span><span class="kn">import</span> <span class="n">to_point2</span>
 
         <span class="n">GLOBALS</span><span class="o">.</span><span class="n">CUSTOM_JOINTS_SS_E_IP_FEMALE</span> <span class="o">=</span> <span class="n">to_point2</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">custom_joints_ss_e_op_male</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
-        <span class="kn">from</span> <span class="nn">compas_wood.conversions_compas</span> <span class="kn">import</span> <span class="n">from_point2</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">custom_joints_ss_e_op_male</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">compas_wood.conversions_compas</span><span class="w"> </span><span class="kn">import</span> <span class="n">from_point2</span>
 
         <span class="k">return</span> <span class="n">from_point2</span><span class="p">(</span><span class="n">GLOBALS</span><span class="o">.</span><span class="n">CUSTOM_JOINTS_SS_E_OP_MALE</span><span class="p">)</span>
 
     <span class="nd">@custom_joints_ss_e_op_male</span><span class="o">.</span><span class="n">setter</span>
-    <span class="k">def</span> <span class="nf">custom_joints_ss_e_op_male</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
-        <span class="kn">from</span> <span class="nn">compas_wood.conversions_compas</span> <span class="kn">import</span> <span class="n">to_point2</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">custom_joints_ss_e_op_male</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">compas_wood.conversions_compas</span><span class="w"> </span><span class="kn">import</span> <span class="n">to_point2</span>
 
         <span class="n">GLOBALS</span><span class="o">.</span><span class="n">CUSTOM_JOINTS_SS_E_OP_MALE</span> <span class="o">=</span> <span class="n">to_point2</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">custom_joints_ss_e_op_female</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
-        <span class="kn">from</span> <span class="nn">compas_wood.conversions_compas</span> <span class="kn">import</span> <span class="n">from_point2</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">custom_joints_ss_e_op_female</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">compas_wood.conversions_compas</span><span class="w"> </span><span class="kn">import</span> <span class="n">from_point2</span>
 
         <span class="k">return</span> <span class="n">from_point2</span><span class="p">(</span><span class="n">GLOBALS</span><span class="o">.</span><span class="n">CUSTOM_JOINTS_SS_E_OP_FEMALE</span><span class="p">)</span>
 
     <span class="nd">@custom_joints_ss_e_op_female</span><span class="o">.</span><span class="n">setter</span>
-    <span class="k">def</span> <span class="nf">custom_joints_ss_e_op_female</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
-        <span class="kn">from</span> <span class="nn">compas_wood.conversions_compas</span> <span class="kn">import</span> <span class="n">to_point2</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">custom_joints_ss_e_op_female</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">compas_wood.conversions_compas</span><span class="w"> </span><span class="kn">import</span> <span class="n">to_point2</span>
 
         <span class="n">GLOBALS</span><span class="o">.</span><span class="n">CUSTOM_JOINTS_SS_E_OP_FEMALE</span> <span class="o">=</span> <span class="n">to_point2</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">custom_joints_ts_e_p_male</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
-        <span class="kn">from</span> <span class="nn">compas_wood.conversions_compas</span> <span class="kn">import</span> <span class="n">from_point2</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">custom_joints_ts_e_p_male</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">compas_wood.conversions_compas</span><span class="w"> </span><span class="kn">import</span> <span class="n">from_point2</span>
 
         <span class="k">return</span> <span class="n">from_point2</span><span class="p">(</span><span class="n">GLOBALS</span><span class="o">.</span><span class="n">CUSTOM_JOINTS_TS_E_P_MALE</span><span class="p">)</span>
 
     <span class="nd">@custom_joints_ts_e_p_male</span><span class="o">.</span><span class="n">setter</span>
-    <span class="k">def</span> <span class="nf">custom_joints_ts_e_p_male</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
-        <span class="kn">from</span> <span class="nn">compas_wood.conversions_compas</span> <span class="kn">import</span> <span class="n">to_point2</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">custom_joints_ts_e_p_male</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">compas_wood.conversions_compas</span><span class="w"> </span><span class="kn">import</span> <span class="n">to_point2</span>
 
         <span class="n">GLOBALS</span><span class="o">.</span><span class="n">CUSTOM_JOINTS_TS_E_P_MALE</span> <span class="o">=</span> <span class="n">to_point2</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">custom_joints_ts_e_p_female</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
-        <span class="kn">from</span> <span class="nn">compas_wood.conversions_compas</span> <span class="kn">import</span> <span class="n">from_point2</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">custom_joints_ts_e_p_female</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">compas_wood.conversions_compas</span><span class="w"> </span><span class="kn">import</span> <span class="n">from_point2</span>
 
         <span class="k">return</span> <span class="n">from_point2</span><span class="p">(</span><span class="n">GLOBALS</span><span class="o">.</span><span class="n">CUSTOM_JOINTS_TS_E_P_FEMALE</span><span class="p">)</span>
 
     <span class="nd">@custom_joints_ts_e_p_female</span><span class="o">.</span><span class="n">setter</span>
-    <span class="k">def</span> <span class="nf">custom_joints_ts_e_p_female</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
-        <span class="kn">from</span> <span class="nn">compas_wood.conversions_compas</span> <span class="kn">import</span> <span class="n">to_point2</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">custom_joints_ts_e_p_female</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">compas_wood.conversions_compas</span><span class="w"> </span><span class="kn">import</span> <span class="n">to_point2</span>
 
         <span class="n">GLOBALS</span><span class="o">.</span><span class="n">CUSTOM_JOINTS_TS_E_P_FEMALE</span> <span class="o">=</span> <span class="n">to_point2</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">custom_joints_cr_c_ip_male</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
-        <span class="kn">from</span> <span class="nn">compas_wood.conversions_compas</span> <span class="kn">import</span> <span class="n">from_point2</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">custom_joints_cr_c_ip_male</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">compas_wood.conversions_compas</span><span class="w"> </span><span class="kn">import</span> <span class="n">from_point2</span>
 
         <span class="k">return</span> <span class="n">from_point2</span><span class="p">(</span><span class="n">GLOBALS</span><span class="o">.</span><span class="n">CUSTOM_JOINTS_CR_C_IP_MALE</span><span class="p">)</span>
 
     <span class="nd">@custom_joints_cr_c_ip_male</span><span class="o">.</span><span class="n">setter</span>
-    <span class="k">def</span> <span class="nf">custom_joints_cr_c_ip_male</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
-        <span class="kn">from</span> <span class="nn">compas_wood.conversions_compas</span> <span class="kn">import</span> <span class="n">to_point2</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">custom_joints_cr_c_ip_male</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">compas_wood.conversions_compas</span><span class="w"> </span><span class="kn">import</span> <span class="n">to_point2</span>
 
         <span class="n">GLOBALS</span><span class="o">.</span><span class="n">CUSTOM_JOINTS_CR_C_IP_MALE</span> <span class="o">=</span> <span class="n">to_point2</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">custom_joints_cr_c_ip_female</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
-        <span class="kn">from</span> <span class="nn">compas_wood.conversions_compas</span> <span class="kn">import</span> <span class="n">from_point2</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">custom_joints_cr_c_ip_female</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">compas_wood.conversions_compas</span><span class="w"> </span><span class="kn">import</span> <span class="n">from_point2</span>
 
         <span class="k">return</span> <span class="n">from_point2</span><span class="p">(</span><span class="n">GLOBALS</span><span class="o">.</span><span class="n">CUSTOM_JOINTS_CR_C_IP_FEMALE</span><span class="p">)</span>
 
     <span class="nd">@custom_joints_cr_c_ip_female</span><span class="o">.</span><span class="n">setter</span>
-    <span class="k">def</span> <span class="nf">custom_joints_cr_c_ip_female</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
-        <span class="kn">from</span> <span class="nn">compas_wood.conversions_compas</span> <span class="kn">import</span> <span class="n">to_point2</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">custom_joints_cr_c_ip_female</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">compas_wood.conversions_compas</span><span class="w"> </span><span class="kn">import</span> <span class="n">to_point2</span>
 
         <span class="n">GLOBALS</span><span class="o">.</span><span class="n">CUSTOM_JOINTS_CR_C_IP_FEMALE</span> <span class="o">=</span> <span class="n">to_point2</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">custom_joints_tt_e_p_male</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
-        <span class="kn">from</span> <span class="nn">compas_wood.conversions_compas</span> <span class="kn">import</span> <span class="n">from_point2</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">custom_joints_tt_e_p_male</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">compas_wood.conversions_compas</span><span class="w"> </span><span class="kn">import</span> <span class="n">from_point2</span>
 
         <span class="k">return</span> <span class="n">from_point2</span><span class="p">(</span><span class="n">GLOBALS</span><span class="o">.</span><span class="n">CUSTOM_JOINTS_TT_E_P_MALE</span><span class="p">)</span>
 
     <span class="nd">@custom_joints_tt_e_p_male</span><span class="o">.</span><span class="n">setter</span>
-    <span class="k">def</span> <span class="nf">custom_joints_tt_e_p_male</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
-        <span class="kn">from</span> <span class="nn">compas_wood.conversions_compas</span> <span class="kn">import</span> <span class="n">to_point2</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">custom_joints_tt_e_p_male</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">compas_wood.conversions_compas</span><span class="w"> </span><span class="kn">import</span> <span class="n">to_point2</span>
 
         <span class="n">GLOBALS</span><span class="o">.</span><span class="n">CUSTOM_JOINTS_TT_E_P_MALE</span> <span class="o">=</span> <span class="n">to_point2</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">custom_joints_tt_e_p_female</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
-        <span class="kn">from</span> <span class="nn">compas_wood.conversions_compas</span> <span class="kn">import</span> <span class="n">from_point2</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">custom_joints_tt_e_p_female</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">compas_wood.conversions_compas</span><span class="w"> </span><span class="kn">import</span> <span class="n">from_point2</span>
 
         <span class="k">return</span> <span class="n">from_point2</span><span class="p">(</span><span class="n">GLOBALS</span><span class="o">.</span><span class="n">CUSTOM_JOINTS_TT_E_P_FEMALE</span><span class="p">)</span>
 
     <span class="nd">@custom_joints_tt_e_p_female</span><span class="o">.</span><span class="n">setter</span>
-    <span class="k">def</span> <span class="nf">custom_joints_tt_e_p_female</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
-        <span class="kn">from</span> <span class="nn">compas_wood.conversions_compas</span> <span class="kn">import</span> <span class="n">to_point2</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">custom_joints_tt_e_p_female</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">compas_wood.conversions_compas</span><span class="w"> </span><span class="kn">import</span> <span class="n">to_point2</span>
 
         <span class="n">GLOBALS</span><span class="o">.</span><span class="n">CUSTOM_JOINTS_TT_E_P_FEMALE</span> <span class="o">=</span> <span class="n">to_point2</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">custom_joints_ss_e_r_male</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
-        <span class="kn">from</span> <span class="nn">compas_wood.conversions_compas</span> <span class="kn">import</span> <span class="n">from_point2</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">custom_joints_ss_e_r_male</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">compas_wood.conversions_compas</span><span class="w"> </span><span class="kn">import</span> <span class="n">from_point2</span>
 
         <span class="k">return</span> <span class="n">from_point2</span><span class="p">(</span><span class="n">GLOBALS</span><span class="o">.</span><span class="n">CUSTOM_JOINTS_SS_E_R_MALE</span><span class="p">)</span>
 
     <span class="nd">@custom_joints_ss_e_r_male</span><span class="o">.</span><span class="n">setter</span>
-    <span class="k">def</span> <span class="nf">custom_joints_ss_e_r_male</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
-        <span class="kn">from</span> <span class="nn">compas_wood.conversions_compas</span> <span class="kn">import</span> <span class="n">to_point2</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">custom_joints_ss_e_r_male</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">compas_wood.conversions_compas</span><span class="w"> </span><span class="kn">import</span> <span class="n">to_point2</span>
 
         <span class="n">GLOBALS</span><span class="o">.</span><span class="n">CUSTOM_JOINTS_SS_E_R_MALE</span> <span class="o">=</span> <span class="n">to_point2</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">custom_joints_ss_e_r_female</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
-        <span class="kn">from</span> <span class="nn">compas_wood.conversions_compas</span> <span class="kn">import</span> <span class="n">from_point2</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">custom_joints_ss_e_r_female</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">compas_wood.conversions_compas</span><span class="w"> </span><span class="kn">import</span> <span class="n">from_point2</span>
 
         <span class="k">return</span> <span class="n">from_point2</span><span class="p">(</span><span class="n">GLOBALS</span><span class="o">.</span><span class="n">CUSTOM_JOINTS_SS_E_R_FEMALE</span><span class="p">)</span>
 
     <span class="nd">@custom_joints_ss_e_r_female</span><span class="o">.</span><span class="n">setter</span>
-    <span class="k">def</span> <span class="nf">custom_joints_ss_e_r_female</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
-        <span class="kn">from</span> <span class="nn">compas_wood.conversions_compas</span> <span class="kn">import</span> <span class="n">to_point2</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">custom_joints_ss_e_r_female</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">compas_wood.conversions_compas</span><span class="w"> </span><span class="kn">import</span> <span class="n">to_point2</span>
 
         <span class="n">GLOBALS</span><span class="o">.</span><span class="n">CUSTOM_JOINTS_SS_E_R_FEMALE</span> <span class="o">=</span> <span class="n">to_point2</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">custom_joints_b_male</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
-        <span class="kn">from</span> <span class="nn">compas_wood.conversions_compas</span> <span class="kn">import</span> <span class="n">from_point2</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">custom_joints_b_male</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">compas_wood.conversions_compas</span><span class="w"> </span><span class="kn">import</span> <span class="n">from_point2</span>
 
         <span class="k">return</span> <span class="n">from_point2</span><span class="p">(</span><span class="n">GLOBALS</span><span class="o">.</span><span class="n">CUSTOM_JOINTS_B_MALE</span><span class="p">)</span>
 
     <span class="nd">@custom_joints_b_male</span><span class="o">.</span><span class="n">setter</span>
-    <span class="k">def</span> <span class="nf">custom_joints_b_male</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
-        <span class="kn">from</span> <span class="nn">compas_wood.conversions_compas</span> <span class="kn">import</span> <span class="n">to_point2</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">custom_joints_b_male</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">compas_wood.conversions_compas</span><span class="w"> </span><span class="kn">import</span> <span class="n">to_point2</span>
 
         <span class="n">GLOBALS</span><span class="o">.</span><span class="n">CUSTOM_JOINTS_B_MALE</span> <span class="o">=</span> <span class="n">to_point2</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">custom_joints_b_female</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
-        <span class="kn">from</span> <span class="nn">compas_wood.conversions_compas</span> <span class="kn">import</span> <span class="n">from_point2</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">custom_joints_b_female</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">compas_wood.conversions_compas</span><span class="w"> </span><span class="kn">import</span> <span class="n">from_point2</span>
 
         <span class="k">return</span> <span class="n">from_point2</span><span class="p">(</span><span class="n">GLOBALS</span><span class="o">.</span><span class="n">CUSTOM_JOINTS_B_FEMALE</span><span class="p">)</span>
 
     <span class="nd">@custom_joints_b_female</span><span class="o">.</span><span class="n">setter</span>
-    <span class="k">def</span> <span class="nf">custom_joints_b_female</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
-        <span class="kn">from</span> <span class="nn">compas_wood.conversions_compas</span> <span class="kn">import</span> <span class="n">to_point2</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">custom_joints_b_female</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">compas_wood.conversions_compas</span><span class="w"> </span><span class="kn">import</span> <span class="n">to_point2</span>
 
         <span class="n">GLOBALS</span><span class="o">.</span><span class="n">CUSTOM_JOINTS_B_FEMALE</span> <span class="o">=</span> <span class="n">to_point2</span><span class="p">(</span><span class="n">value</span><span class="p">)</span></div>
 

@@ -27,7 +27,7 @@
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
 
-    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../../_static/css/compas.css?v=617b33e2" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../../../_static/tabs.css?v=4c969af8" />
@@ -492,6 +492,8 @@ document.write(`
 </ul>
 </li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="../../../tutorials/ibois.html">IBOIS</a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-5"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/ibois/opennest.html">2D Nesting Plugin Installation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/ibois/program.html">Program</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../tutorials/ibois/requirements.html">Requirements</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../tutorials/ibois/tutorials.html">Tutorials</a></li>
 </ul>
@@ -586,18 +588,18 @@ document.write(`
                 <article class="bd-article" role="main">
                   
   <h1>Source code for compas_wood.binding.binding_closed_mesh_from_polylines</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">wood_nano</span> <span class="kn">import</span> <span class="n">closed_mesh_from_polylines</span> <span class="k">as</span> <span class="n">wood_nano_closed_mesh_from_polylines</span>
-<span class="kn">from</span> <span class="nn">wood_nano</span> <span class="kn">import</span> <span class="n">point1</span>
-<span class="kn">from</span> <span class="nn">wood_nano</span> <span class="kn">import</span> <span class="n">vector1</span>
-<span class="kn">from</span> <span class="nn">wood_nano</span> <span class="kn">import</span> <span class="n">int2</span>
-<span class="kn">from</span> <span class="nn">compas_wood.conversions_compas</span> <span class="kn">import</span> <span class="n">to_point2</span>
-<span class="kn">from</span> <span class="nn">compas.geometry</span> <span class="kn">import</span> <span class="n">Polyline</span>
-<span class="kn">from</span> <span class="nn">compas.datastructures</span> <span class="kn">import</span> <span class="n">Mesh</span>
+<span></span><span class="kn">from</span><span class="w"> </span><span class="nn">wood_nano</span><span class="w"> </span><span class="kn">import</span> <span class="n">closed_mesh_from_polylines</span> <span class="k">as</span> <span class="n">wood_nano_closed_mesh_from_polylines</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">wood_nano</span><span class="w"> </span><span class="kn">import</span> <span class="n">point1</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">wood_nano</span><span class="w"> </span><span class="kn">import</span> <span class="n">vector1</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">wood_nano</span><span class="w"> </span><span class="kn">import</span> <span class="n">int2</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">compas_wood.conversions_compas</span><span class="w"> </span><span class="kn">import</span> <span class="n">to_point2</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">compas.geometry</span><span class="w"> </span><span class="kn">import</span> <span class="n">Polyline</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">compas.datastructures</span><span class="w"> </span><span class="kn">import</span> <span class="n">Mesh</span>
 
 
 <div class="viewcode-block" id="closed_mesh_from_polylines">
 <a class="viewcode-back" href="../../../api/compas_wood.binding.html#compas_wood.binding.closed_mesh_from_polylines">[docs]</a>
-<span class="k">def</span> <span class="nf">closed_mesh_from_polylines</span><span class="p">(</span><span class="n">input_polyline_pairs</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">closed_mesh_from_polylines</span><span class="p">(</span><span class="n">input_polyline_pairs</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Get closed mesh from polylines, where the first two polylines are the top and bottom polylines,</span>
 <span class="sd">    and the rest are the holes.</span>
@@ -634,10 +636,10 @@ document.write(`
 
     <span class="n">mesh</span> <span class="o">=</span> <span class="n">closed_mesh_from_polylines</span><span class="p">(</span><span class="n">polylines</span><span class="p">)</span>
 
-    <span class="kn">import</span> <span class="nn">sys</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
 
     <span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span> <span class="o">&gt;=</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">9</span><span class="p">):</span>
-        <span class="kn">from</span> <span class="nn">compas_viewer</span> <span class="kn">import</span> <span class="n">Viewer</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">compas_viewer</span><span class="w"> </span><span class="kn">import</span> <span class="n">Viewer</span>
 
         <span class="n">viewer</span> <span class="o">=</span> <span class="n">Viewer</span><span class="p">()</span>
 

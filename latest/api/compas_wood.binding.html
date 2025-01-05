@@ -28,7 +28,7 @@
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
 
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../_static/css/compas.css?v=617b33e2" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../_static/tabs.css?v=4c969af8" />
@@ -499,6 +499,8 @@ document.write(`
 </ul>
 </li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="../tutorials/ibois.html">IBOIS</a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-5"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../tutorials/ibois/opennest.html">2D Nesting Plugin Installation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../tutorials/ibois/program.html">Program</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../tutorials/ibois/requirements.html">Requirements</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../tutorials/ibois/tutorials.html">Tutorials</a></li>
 </ul>
@@ -602,7 +604,7 @@ document.write(`
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">compas_wood.binding.</span></span><span class="sig-name descname"><span class="pre">Globals</span></span><a class="reference internal" href="../_modules/compas_wood/binding/binding_globals.html#Globals"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>Class to access global variables of the wood_nano library using class instance wood_globals:</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">compas_wood.binding</span> <span class="kn">import</span> <span class="n">wood_globals</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">compas_wood.binding</span><span class="w"> </span><span class="kn">import</span> <span class="n">wood_globals</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">wood_globals</span><span class="o">.</span><span class="n">distance_squared</span> <span class="o">=</span> <span class="mi">10</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">wood_globals</span><span class="o">.</span><span class="n">face_to_face_side_to_side_joints_rotated_joint_as_average</span> <span class="o">=</span> <span class="kc">True</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">wood_globals</span><span class="o">.</span><span class="n">face_to_face_side_to_side_joints_all_treated_as_rotated</span> <span class="o">=</span> <span class="kc">True</span>
