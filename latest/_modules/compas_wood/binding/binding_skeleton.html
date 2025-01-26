@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>compas_wood.binding.binding_get_connection_zones &#8212; compas_wood</title>
+    <title>compas_wood.binding.binding_skeleton &#8212; compas_wood</title>
   
   
   
@@ -52,7 +52,7 @@
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
-    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/compas_wood/binding/binding_get_connection_zones';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/compas_wood/binding/binding_skeleton';</script>
     <script>
         DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://raw.githubusercontent.com/petrasvestartas/compas_wood/gh-pages/versions.json';
         DOCUMENTATION_OPTIONS.theme_switcher_version_match = 'latest';
@@ -571,7 +571,7 @@ document.write(`
     
     <li class="breadcrumb-item"><a href="../../index.html" class="nav-link">Module code</a></li>
     
-    <li class="breadcrumb-item active" aria-current="page">compas_wood.binding.binding_get_connection_zones</li>
+    <li class="breadcrumb-item active" aria-current="page">compas_wood.binding.binding_skeleton</li>
   </ul>
 </nav>
 </div>
@@ -588,121 +588,69 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article" role="main">
                   
-  <h1>Source code for compas_wood.binding.binding_get_connection_zones</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span><span class="w"> </span><span class="nn">wood_nano</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_connection_zones</span> <span class="k">as</span> <span class="n">wood_nano_get_connection_zones</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">wood_nano</span><span class="w"> </span><span class="kn">import</span> <span class="n">cut_type2</span> <span class="k">as</span> <span class="n">wood_nano_cut_type2</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">wood_nano</span><span class="w"> </span><span class="kn">import</span> <span class="n">point3</span> <span class="k">as</span> <span class="n">wood_nano_point3</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">wood_nano.conversions_python</span><span class="w"> </span><span class="kn">import</span> <span class="n">to_int2</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">wood_nano.conversions_python</span><span class="w"> </span><span class="kn">import</span> <span class="n">to_int1</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">wood_nano.conversions_python</span><span class="w"> </span><span class="kn">import</span> <span class="n">to_double1</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">wood_nano.conversions_python</span><span class="w"> </span><span class="kn">import</span> <span class="n">from_cut_type2</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">compas_wood.conversions_compas</span><span class="w"> </span><span class="kn">import</span> <span class="n">to_point2</span>
+  <h1>Source code for compas_wood.binding.binding_skeleton</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span><span class="w"> </span><span class="nn">wood_nano</span><span class="w"> </span><span class="kn">import</span> <span class="n">beam_skeleton</span> <span class="k">as</span> <span class="n">wood_nano_beam_skeleton</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">wood_nano</span><span class="w"> </span><span class="kn">import</span> <span class="n">mesh_skeleton</span> <span class="k">as</span> <span class="n">wood_nano_mesh_skeleton</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">compas_wood.conversions_compas</span><span class="w"> </span><span class="kn">import</span> <span class="n">to_point1</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">compas_wood.conversions_compas</span><span class="w"> </span><span class="kn">import</span> <span class="n">to_vector2</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">compas_wood.conversions_compas</span><span class="w"> </span><span class="kn">import</span> <span class="n">from_point2</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">compas_wood.conversions_compas</span><span class="w"> </span><span class="kn">import</span> <span class="n">from_point1</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">compas_wood.conversions_compas</span><span class="w"> </span><span class="kn">import</span> <span class="n">from_point3</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">compas_wood.binding</span><span class="w"> </span><span class="kn">import</span> <span class="n">wood_globals</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">math</span><span class="w"> </span><span class="kn">import</span> <span class="n">floor</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">wood_nano.conversions_python</span><span class="w"> </span><span class="kn">import</span> <span class="n">to_double1</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">wood_nano.conversions_python</span><span class="w"> </span><span class="kn">import</span> <span class="n">to_int1</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">wood_nano.conversions_python</span><span class="w"> </span><span class="kn">import</span> <span class="n">from_int1</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">wood_nano.conversions_python</span><span class="w"> </span><span class="kn">import</span> <span class="n">from_int2</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">wood_nano.conversions_python</span><span class="w"> </span><span class="kn">import</span> <span class="n">from_double1</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">wood_nano.conversions_python</span><span class="w"> </span><span class="kn">import</span> <span class="n">from_double2</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">wood_nano</span><span class="w"> </span><span class="kn">import</span> <span class="n">int1</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">wood_nano</span><span class="w"> </span><span class="kn">import</span> <span class="n">int2</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">wood_nano</span><span class="w"> </span><span class="kn">import</span> <span class="n">double1</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">wood_nano</span><span class="w"> </span><span class="kn">import</span> <span class="n">double2</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">wood_nano</span><span class="w"> </span><span class="kn">import</span> <span class="n">point1</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">wood_nano</span><span class="w"> </span><span class="kn">import</span> <span class="n">point2</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">wood_nano</span><span class="w"> </span><span class="kn">import</span> <span class="n">point3</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">wood_nano</span><span class="w"> </span><span class="kn">import</span> <span class="n">cut_type2</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">compas.datastructures</span><span class="w"> </span><span class="kn">import</span> <span class="n">Mesh</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">compas.geometry</span><span class="w"> </span><span class="kn">import</span> <span class="n">Polyline</span>
 
 
-<div class="viewcode-block" id="get_connection_zones">
-<a class="viewcode-back" href="../../../api/compas_wood.binding.html#compas_wood.binding.get_connection_zones">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">get_connection_zones</span><span class="p">(</span>
-    <span class="n">input_polyline_pairs</span><span class="p">,</span>
-    <span class="n">input_insertion_vectors</span><span class="o">=</span><span class="p">[],</span>
-    <span class="n">input_joint_types</span><span class="o">=</span><span class="p">[],</span>
-    <span class="n">input_three_valence_element_indices_and_instruction</span><span class="o">=</span><span class="p">[],</span>
-    <span class="n">input_adjacency</span><span class="o">=</span><span class="p">[],</span>
-    <span class="n">input_joint_parameters_and_types</span><span class="o">=</span><span class="p">[],</span>
-    <span class="n">input_search_type</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
-    <span class="n">input_scale</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
-    <span class="n">input_output_type</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
-    <span class="n">input_joint_volume_parameters</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
-    <span class="n">input_custom_joints</span><span class="o">=</span><span class="p">[],</span>
-    <span class="n">input_custom_joints_types</span><span class="o">=</span><span class="p">[],</span>
-    <span class="n">remove_duplicate_polylines</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-<span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Get connection zones for the given input parameters.</span>
+<div class="viewcode-block" id="beam_skeleton">
+<a class="viewcode-back" href="../../../api/compas_wood.binding.html#compas_wood.binding.beam_skeleton">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">beam_skeleton</span><span class="p">(</span><span class="n">mesh</span><span class="p">:</span> <span class="n">Mesh</span><span class="p">,</span> <span class="n">divisions</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">number_of_neighbours</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">extend_ends</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">Polyline</span><span class="p">,</span> <span class="nb">list</span><span class="p">[</span><span class="nb">float</span><span class="p">]]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Get central axis of a mesh whose geometry is closed to a beam.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    input_polyline_pairs : list[list[compas.geometry.Polyline]]</span>
-<span class="sd">        List of polylines that represents the timber elements.</span>
-<span class="sd">    input_insertion_vectors : list[compas.geometry.Vector], optional</span>
-<span class="sd">        List of insertion vectors.</span>
-<span class="sd">    input_joint_types : list[int], optional</span>
-<span class="sd">        List of joint types.</span>
-<span class="sd">    input_three_valence_element_indices_and_instruction : list[int], optional</span>
-<span class="sd">        List of three valence element indices and instruction.</span>
-<span class="sd">    input_adjacency : list[int], optional</span>
-<span class="sd">        List of adjacency.</span>
-<span class="sd">    input_joint_parameters_and_types : list[float], optional</span>
-<span class="sd">        List of joint parameters and types.</span>
-<span class="sd">    input_search_type : int, optional</span>
-<span class="sd">        Search type.</span>
-<span class="sd">    input_scale : list[float], optional</span>
-<span class="sd">        Scale.</span>
-<span class="sd">    input_output_type : int, optional</span>
-<span class="sd">        Output type.</span>
-<span class="sd">    input_joint_volume_parameters : list[float], optional</span>
-<span class="sd">        Joint volume parameters.</span>
-<span class="sd">    input_face_to_face_side_to_side_joints_all_treated_as_rotated : bool, optional</span>
-<span class="sd">        Face to face side to side joints all treated as rotated.</span>
-<span class="sd">    input_custom_joints : list[compas.geometry.Point], optional</span>
-<span class="sd">        Custom joints.</span>
-<span class="sd">    input_custom_joints_types : list[int], optional</span>
-<span class="sd">        Custom joints types.</span>
-<span class="sd">    remove_duplicate_polylines : bool, optional</span>
-<span class="sd">        Remove duplicate polylines.</span>
-
+<span class="sd">    mesh : :class:`compas.datastructures.Mesh`</span>
+<span class="sd">        The mesh to get the central axis from.</span>
+<span class="sd">    divisions : int, optional</span>
+<span class="sd">        Central axis is subdivded in this number of points.</span>
+<span class="sd">    number_of_neighbours : int, optional</span>
+<span class="sd">        The distance value for each polyline point is calculated based on the average distance to this number of neighbours.</span>
+<span class="sd">    extend_ends : bool, optional</span>
+<span class="sd">        Whether to extend the ends of the central axis to the mesh using Ray-Mesh Intersection.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">    list[list[compas.geometry.Polyline]]</span>
-<span class="sd">        List of polylines that represents the timber elements.</span>
-<span class="sd">    list[wood_nano.CutType2]</span>
-<span class="sd">        List of cut types.</span>
+<span class="sd">    tuple[ :class:`compas.geometry.Polyline`, list[float]]</span>
+<span class="sd">        The central axis of the beam and the distances of the points to the mesh.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="n">joint_parameters</span> <span class="o">=</span> <span class="n">wood_globals</span><span class="o">.</span><span class="n">joints_parameters_and_types</span>
-    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">input_joint_parameters_and_types</span><span class="p">),</span> <span class="mi">3</span><span class="p">):</span>
-        <span class="n">insertion_id</span> <span class="o">=</span> <span class="n">floor</span><span class="p">(</span><span class="n">input_joint_parameters_and_types</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">2</span><span class="p">]</span> <span class="o">/</span> <span class="mi">10</span><span class="p">)</span>
-        <span class="n">joint_parameters</span><span class="p">[</span><span class="n">insertion_id</span> <span class="o">*</span> <span class="mi">3</span> <span class="o">+</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">input_joint_parameters_and_types</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">0</span><span class="p">]</span>
-        <span class="n">joint_parameters</span><span class="p">[</span><span class="n">insertion_id</span> <span class="o">*</span> <span class="mi">3</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">input_joint_parameters_and_types</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
-        <span class="n">joint_parameters</span><span class="p">[</span><span class="n">insertion_id</span> <span class="o">*</span> <span class="mi">3</span> <span class="o">+</span> <span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">input_joint_parameters_and_types</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">2</span><span class="p">]</span>
+    <span class="n">mesh_copy</span><span class="p">:</span> <span class="n">Mesh</span> <span class="o">=</span> <span class="n">mesh</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="n">v</span><span class="p">,</span> <span class="n">f</span> <span class="o">=</span> <span class="n">mesh_copy</span><span class="o">.</span><span class="n">to_vertices_and_faces</span><span class="p">(</span><span class="n">triangulated</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">input_vertices</span> <span class="o">=</span> <span class="n">to_double1</span><span class="p">([</span><span class="n">item</span> <span class="k">for</span> <span class="n">sublist</span> <span class="ow">in</span> <span class="n">v</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">sublist</span><span class="p">])</span>
+    <span class="n">input_faces</span> <span class="o">=</span> <span class="n">to_int1</span><span class="p">([</span><span class="n">item</span> <span class="k">for</span> <span class="n">sublist</span> <span class="ow">in</span> <span class="n">f</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">sublist</span><span class="p">])</span>
 
-    <span class="n">w_output_plines</span> <span class="o">=</span> <span class="n">wood_nano_point3</span><span class="p">()</span>
-    <span class="n">w_output_types</span> <span class="o">=</span> <span class="n">wood_nano_cut_type2</span><span class="p">()</span>
-
-    <span class="n">wood_nano_get_connection_zones</span><span class="p">(</span>
-        <span class="n">to_point2</span><span class="p">(</span><span class="n">input_polyline_pairs</span><span class="p">),</span>
-        <span class="n">to_vector2</span><span class="p">(</span><span class="n">input_insertion_vectors</span><span class="p">),</span>
-        <span class="n">to_int2</span><span class="p">(</span><span class="n">input_joint_types</span><span class="p">),</span>
-        <span class="n">to_int2</span><span class="p">(</span><span class="n">input_three_valence_element_indices_and_instruction</span><span class="p">),</span>
-        <span class="n">to_int1</span><span class="p">(</span><span class="n">input_adjacency</span><span class="p">),</span>
-        <span class="n">to_double1</span><span class="p">(</span><span class="n">joint_parameters</span><span class="p">),</span>
-        <span class="nb">int</span><span class="p">(</span><span class="n">input_search_type</span><span class="p">),</span>
-        <span class="n">to_double1</span><span class="p">(</span><span class="n">input_scale</span><span class="p">),</span>
-        <span class="nb">int</span><span class="p">(</span><span class="n">input_output_type</span><span class="p">),</span>
-        <span class="n">w_output_plines</span><span class="p">,</span>
-        <span class="n">w_output_types</span><span class="p">,</span>
-        <span class="n">to_double1</span><span class="p">(</span><span class="n">input_joint_volume_parameters</span><span class="p">),</span>
+    <span class="n">output_polyline</span> <span class="o">=</span> <span class="n">point1</span><span class="p">()</span>
+    <span class="n">output_distances</span> <span class="o">=</span> <span class="n">double1</span><span class="p">()</span>
+    <span class="n">wood_nano_beam_skeleton</span><span class="p">(</span>
+        <span class="n">input_vertices</span><span class="p">,</span> <span class="n">input_faces</span><span class="p">,</span> <span class="n">output_polyline</span><span class="p">,</span> <span class="n">output_distances</span><span class="p">,</span> <span class="n">divisions</span><span class="p">,</span> <span class="n">number_of_neighbours</span><span class="p">,</span> <span class="n">extend_ends</span>
     <span class="p">)</span>
 
-    <span class="n">polylines_lists</span> <span class="o">=</span> <span class="n">from_point3</span><span class="p">(</span><span class="n">w_output_plines</span><span class="p">)</span>
-    <span class="n">output_types</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">w_output_types</span><span class="p">)</span>
+    <span class="n">polyline</span> <span class="o">=</span> <span class="n">from_point1</span><span class="p">(</span><span class="n">output_polyline</span><span class="p">)</span>
+    <span class="n">distances</span> <span class="o">=</span> <span class="n">from_double1</span><span class="p">(</span><span class="n">output_distances</span><span class="p">)</span>
 
-    <span class="n">new_polyline_lists</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="k">if</span> <span class="n">remove_duplicate_polylines</span><span class="p">:</span>
-        <span class="k">for</span> <span class="n">polylines</span> <span class="ow">in</span> <span class="n">polylines_lists</span><span class="p">:</span>
-            <span class="n">new_polylines</span> <span class="o">=</span> <span class="p">[]</span>
-            <span class="k">for</span> <span class="n">polyline</span> <span class="ow">in</span> <span class="n">polylines</span><span class="p">:</span>
-                <span class="k">if</span> <span class="n">polyline</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">new_polylines</span><span class="p">:</span>
-                    <span class="n">new_polylines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">polyline</span><span class="p">)</span>
-                    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">new_polylines</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
-                        <span class="n">new_polyline_lists</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">new_polylines</span><span class="p">))</span>
-                        <span class="n">new_polylines</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
-
-    <span class="k">return</span> <span class="n">polylines_lists</span><span class="p">,</span> <span class="n">output_types</span><span class="p">,</span> <span class="n">new_polyline_lists</span></div>
+    <span class="k">return</span> <span class="n">polyline</span><span class="p">,</span> <span class="n">distances</span></div>
 
 </pre></div>
 

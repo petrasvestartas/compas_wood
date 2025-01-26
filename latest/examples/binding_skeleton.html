@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="icon" href="../_static/compas.ico" type="image/x-icon">
-    <title>binding_test &#8212; compas_wood</title>
+    <title>binding_skeleton &#8212; compas_wood</title>
   
   
   
@@ -53,15 +53,15 @@
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'examples/binding_test';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'examples/binding_skeleton';</script>
     <script>
         DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://raw.githubusercontent.com/petrasvestartas/compas_wood/gh-pages/versions.json';
         DOCUMENTATION_OPTIONS.theme_switcher_version_match = 'latest';
         </script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="API Reference" href="../api.html" />
-    <link rel="prev" title="binding_skeleton" href="binding_skeleton.html" />
+    <link rel="next" title="binding_test" href="binding_test.html" />
+    <link rel="prev" title="binding_rtree" href="binding_rtree.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -515,8 +515,8 @@ document.write(`
 <li class="toctree-l2"><a class="reference internal" href="binding_read_xml_polylines.html">binding_read_xml_polylines</a></li>
 <li class="toctree-l2"><a class="reference internal" href="binding_read_xml_polylines_and_properties.html">binding_read_xml_polylines_and_properties</a></li>
 <li class="toctree-l2"><a class="reference internal" href="binding_rtree.html">binding_rtree</a></li>
-<li class="toctree-l2"><a class="reference internal" href="binding_skeleton.html">binding_skeleton</a></li>
-<li class="toctree-l2 current active"><a class="current reference internal" href="#">binding_test</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">binding_skeleton</a></li>
+<li class="toctree-l2"><a class="reference internal" href="binding_test.html">binding_test</a></li>
 </ul>
 </li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../api.html">API Reference</a><input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-7"><i class="fa-solid fa-chevron-down"></i></label><ul>
@@ -574,7 +574,7 @@ document.write(`
     
     <li class="breadcrumb-item"><a href="../examples.html" class="nav-link">Examples</a></li>
     
-    <li class="breadcrumb-item active" aria-current="page">binding_test</li>
+    <li class="breadcrumb-item active" aria-current="page">binding_skeleton</li>
   </ul>
 </nav>
 </div>
@@ -591,15 +591,37 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article" role="main">
                   
-  <section id="binding-test">
-<h1>binding_test</h1>
+  <section id="binding-skeleton">
+<h1>binding_skeleton</h1>
 <figure class="figure align-default">
-<img alt="../_images/binding_test.png" class="figure-img img-fluid" src="../_images/binding_test.png" />
+<img alt="../_images/binding_skeleton.png" class="figure-img img-fluid" src="../_images/binding_skeleton.png" />
 </figure>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">compas_wood.binding</span><span class="w"> </span><span class="kn">import</span> <span class="n">test</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">compas_wood.binding</span><span class="w"> </span><span class="kn">import</span> <span class="n">beam_skeleton</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">compas.datastructures</span><span class="w"> </span><span class="kn">import</span> <span class="n">Mesh</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">compas_viewer</span><span class="w"> </span><span class="kn">import</span> <span class="n">Viewer</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">compas.geometry</span><span class="w"> </span><span class="kn">import</span> <span class="n">Frame</span><span class="p">,</span> <span class="n">Plane</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">compas.geometry</span><span class="w"> </span><span class="kn">import</span> <span class="n">Polygon</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">compas.geometry</span><span class="w"> </span><span class="kn">import</span> <span class="n">Transformation</span>
+
+<span class="n">file_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s2">&quot;data/beam_skeleton_sample_0.ply&quot;</span><span class="p">)</span>
+<span class="n">mesh</span> <span class="o">=</span> <span class="n">Mesh</span><span class="o">.</span><span class="n">from_ply</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span>
+<span class="n">polyline</span><span class="p">,</span> <span class="n">distances</span> <span class="o">=</span> <span class="n">beam_skeleton</span><span class="p">(</span><span class="n">mesh</span><span class="p">,</span> <span class="n">divisions</span><span class="o">=</span><span class="mi">7</span><span class="p">,</span> <span class="n">number_of_neighbours</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">extend_ends</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
 
-<span class="n">test</span><span class="p">()</span>
+<span class="c1"># Visualize the result</span>
+<span class="n">s</span> <span class="o">=</span> <span class="mf">0.01</span>
+<span class="n">viewer</span> <span class="o">=</span> <span class="n">Viewer</span><span class="p">()</span>
+<span class="n">viewer</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">mesh</span><span class="o">.</span><span class="n">scaled</span><span class="p">(</span><span class="n">s</span><span class="p">),</span> <span class="n">show_faces</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">show_lines</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">opacity</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+<span class="n">viewer</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">polyline</span><span class="o">.</span><span class="n">scaled</span><span class="p">(</span><span class="n">s</span><span class="p">),</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">linecolor</span><span class="o">=</span><span class="p">(</span><span class="mi">255</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">polyline</span><span class="p">)):</span>
+    <span class="n">a</span> <span class="o">=</span> <span class="n">i</span>
+    <span class="n">b</span> <span class="o">=</span> <span class="n">i</span><span class="o">+</span><span class="mi">1</span> <span class="k">if</span> <span class="n">i</span><span class="o">+</span><span class="mi">1</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">polyline</span><span class="p">)</span> <span class="k">else</span> <span class="n">i</span><span class="o">-</span><span class="mi">1</span>
+    <span class="n">direction</span> <span class="o">=</span> <span class="n">polyline</span><span class="p">[</span><span class="n">b</span><span class="p">]</span> <span class="o">-</span> <span class="n">polyline</span><span class="p">[</span><span class="n">a</span><span class="p">]</span>
+    <span class="n">polygon</span> <span class="o">=</span> <span class="n">Polygon</span><span class="o">.</span><span class="n">from_sides_and_radius_xy</span><span class="p">(</span><span class="mi">25</span><span class="p">,</span> <span class="n">distances</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+    <span class="n">polygon</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">Transformation</span><span class="o">.</span><span class="n">from_frame</span><span class="p">(</span><span class="n">Frame</span><span class="o">.</span><span class="n">from_plane</span><span class="p">(</span><span class="n">Plane</span><span class="p">(</span><span class="n">polyline</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">direction</span><span class="p">))))</span>
+    <span class="n">viewer</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">polygon</span><span class="o">.</span><span class="n">scaled</span><span class="p">(</span><span class="n">s</span><span class="p">),</span> <span class="n">facecolor</span><span class="o">=</span><span class="p">(</span><span class="mi">255</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">linecolor</span><span class="o">=</span><span class="p">(</span><span class="mi">255</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+<span class="n">viewer</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
 </section>

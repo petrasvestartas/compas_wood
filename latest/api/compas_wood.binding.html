@@ -519,6 +519,7 @@ document.write(`
 <li class="toctree-l2"><a class="reference internal" href="../examples/binding_read_xml_polylines.html">binding_read_xml_polylines</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../examples/binding_read_xml_polylines_and_properties.html">binding_read_xml_polylines_and_properties</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../examples/binding_rtree.html">binding_rtree</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../examples/binding_skeleton.html">binding_skeleton</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../examples/binding_test.html">binding_test</a></li>
 </ul>
 </li>
@@ -680,6 +681,32 @@ document.write(`
 <dt><strong>custom_joints_b_male</strong><span class="classifier">list[Polyline], default []</span></dt><dd><p>Joinery polylines for custom base male joints.</p>
 </dd>
 <dt><strong>custom_joints_b_female</strong><span class="classifier">list[Polyline], default []</span></dt><dd><p>Joinery polylines for custom base female joints.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="compas_wood.binding.beam_skeleton">
+<span class="sig-prename descclassname"><span class="pre">compas_wood.binding.</span></span><span class="sig-name descname"><span class="pre">beam_skeleton</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mesh</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">divisions</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">number_of_neighbours</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extend_ends</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/compas_wood/binding/binding_skeleton.html#beam_skeleton"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Get central axis of a mesh whose geometry is closed to a beam.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl>
+<dt><strong>mesh</strong><span class="classifier"><a class="reference external" href="https://compas.dev/compas/latest/api/compas.datastructures.Mesh.html#compas.datastructures.Mesh" title="(in COMPAS vlatest)"><code class="xref py py-class docutils literal notranslate"><span class="pre">compas.datastructures.Mesh</span></code></a></span></dt><dd><p>The mesh to get the central axis from.</p>
+</dd>
+<dt><strong>divisions</strong><span class="classifier">int, optional</span></dt><dd><p>Central axis is subdivded in this number of points.</p>
+</dd>
+<dt><strong>number_of_neighbours</strong><span class="classifier">int, optional</span></dt><dd><p>The distance value for each polyline point is calculated based on the average distance to this number of neighbours.</p>
+</dd>
+<dt><strong>extend_ends</strong><span class="classifier">bool, optional</span></dt><dd><p>Whether to extend the ends of the central axis to the mesh using Ray-Mesh Intersection.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>tuple[ <a class="reference external" href="https://compas.dev/compas/latest/api/generated/compas.geometry.Polyline.html" title="(in COMPAS vlatest)"><code class="xref py py-class docutils literal notranslate"><span class="pre">compas.geometry.Polyline</span></code></a>, list[float]]</dt><dd><p>The central axis of the beam and the distances of the points to the mesh.</p>
 </dd>
 </dl>
 </dd>
@@ -919,6 +946,7 @@ Polyline pairs means the top and bottom polylines of plates.</p>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#compas_wood.binding.Globals"><code class="docutils literal notranslate"><span class="pre">Globals</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#compas_wood.binding.beam_skeleton"><code class="docutils literal notranslate"><span class="pre">beam_skeleton()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#compas_wood.binding.closed_mesh_from_polylines"><code class="docutils literal notranslate"><span class="pre">closed_mesh_from_polylines()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#compas_wood.binding.get_connection_zones"><code class="docutils literal notranslate"><span class="pre">get_connection_zones()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#compas_wood.binding.joints"><code class="docutils literal notranslate"><span class="pre">joints()</span></code></a></li>
