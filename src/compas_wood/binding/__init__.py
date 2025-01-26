@@ -8,6 +8,7 @@ from .binding_closed_mesh_from_polylines import closed_mesh_from_polylines
 from .binding_joints import joints
 from .binding_mesh_boolean_difference_from_polylines import mesh_boolean_difference_from_polylines
 from .binding_beam_volumes import beam_volumes
+from .binding_skeleton import beam_skeleton
 
 __all__ = [
     "wood_globals",
@@ -21,4 +22,5 @@ __all__ = [
     "joints",
     "mesh_boolean_difference_from_polylines",
     "beam_volumes",
+    "beam_skeleton",
 ]

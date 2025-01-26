@@ -1,4 +1,3 @@
-
 from ghpythonlib.componentbase import executingcomponent as component
 import Grasshopper
 import Rhino

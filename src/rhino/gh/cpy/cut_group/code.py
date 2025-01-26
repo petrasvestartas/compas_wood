@@ -1,4 +1,5 @@
 """match data tree of beam-nodes component with the output of the solver"""
+
 from ghpythonlib.componentbase import executingcomponent as component
 import Grasshopper, GhPython
 import System
@@ -6,9 +7,9 @@ import Rhino
 
 
 class MyComponent(component):
-    def RunScript(self,
-            _geometry: Grasshopper.DataTree[Rhino.Geometry.GeometryBase],
-            _group_id: Grasshopper.DataTree[int]):
+    def RunScript(
+        self, _geometry: Grasshopper.DataTree[Rhino.Geometry.GeometryBase], _group_id: Grasshopper.DataTree[int]
+    ):
 
         tree_temp = Grasshopper.DataTree[Rhino.Geometry.GeometryBase]()
 

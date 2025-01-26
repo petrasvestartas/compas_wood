@@ -1,4 +1,3 @@
-
 from ghpythonlib.componentbase import executingcomponent as component  # noqa: E402
 import Rhino
 import System

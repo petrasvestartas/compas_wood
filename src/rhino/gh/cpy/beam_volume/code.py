@@ -20,8 +20,10 @@ from wood_nano import point3
 from wood_nano import cut_type2
 import System
 
+
 class BeamVolume(component):
-    def beam_volumes(self,
+    def beam_volumes(
+        self,
         input_polyline_axes,
         input_polylines_segment_radii,
         input_polylines_segment_direction,
@@ -82,19 +84,22 @@ class BeamVolume(component):
             from_int1(joints_types),
         )
 
-    def RunScript(self,
-            _circles: Grasshopper.DataTree[Rhino.Geometry.Circle],
-            _length_of_box: float,
-            _distance_tolerance: float,
-            _cross_or_toptoside: float,
-            _create_pipes: bool):
+    def RunScript(
+        self,
+        _circles: Grasshopper.DataTree[Rhino.Geometry.Circle],
+        _length_of_box: float,
+        _distance_tolerance: float,
+        _cross_or_toptoside: float,
+        _create_pipes: bool,
+    ):
 
-        if _circles is None: return
+        if _circles is None:
+            return
         length_of_box = _length_of_box if _length_of_box else 1
         distance_tolerance = _distance_tolerance if _distance_tolerance else 10
-        cross_or_top_to_side= _cross_or_toptoside if _cross_or_toptoside else 0.91
+        cross_or_top_to_side = _cross_or_toptoside if _cross_or_toptoside else 0.91
         create_pipes = _create_pipes if _create_pipes else False
-        
+
         # Initialize outputs
         input_polylines = []
         input_polylines_segment_radii = []
@@ -104,7 +109,7 @@ class BeamVolume(component):
         # Processing each branch which represents a polyline
         for i in range(_circles.BranchCount):
             points = []
-            radii= []
+            radii = []
             normals = []
             parameters = []
             for index, circle in enumerate(_circles.Branch(i)):
@@ -119,38 +124,58 @@ class BeamVolume(component):
             input_polylines_segment_radii.append(radii)
             # input_polylines_segment_direction.append(normals)
 
-            if(create_pipes):
+            if create_pipes:
                 curves = []
-                for j in range (_circles.Branch(i).Count):
+                for j in range(_circles.Branch(i).Count):
                     curves.append(_circles.Branch(i)[j].ToNurbsCurve())
 
-                brep = Rhino.Geometry.Brep.CreateFromLoft(curves, Rhino.Geometry.Point3d.Unset, Rhino.Geometry.Point3d.Unset, Rhino.Geometry.LoftType.Loose, False)[0]
+                brep = Rhino.Geometry.Brep.CreateFromLoft(
+                    curves,
+                    Rhino.Geometry.Point3d.Unset,
+                    Rhino.Geometry.Point3d.Unset,
+                    Rhino.Geometry.LoftType.Loose,
+                    False,
+                )[0]
                 brep = brep.CapPlanarHoles(Rhino.RhinoDoc.ActiveDoc.ModelAbsoluteTolerance)
-                
+
                 faces = []
                 for j in range(brep.Faces.Count):
                     faces.append(brep.Faces[j].DuplicateFace(False))
-                
-                brep = Rhino.Geometry.Brep.JoinBreps(
-                    faces, Rhino.RhinoDoc.ActiveDoc.ModelAbsoluteTolerance*10
-                )[0]
-                
+
+                brep = Rhino.Geometry.Brep.JoinBreps(faces, Rhino.RhinoDoc.ActiveDoc.ModelAbsoluteTolerance * 10)[0]
+
                 if brep:
                     brep.Faces.SplitKinkyFaces(Rhino.RhinoMath.DefaultAngleTolerance, True)
-                    
-                    if (Rhino.Geometry.BrepSolidOrientation.Inward is  brep.SolidOrientation):
-                        brep.Flip();
+
+                    if Rhino.Geometry.BrepSolidOrientation.Inward is brep.SolidOrientation:
+                        brep.Flip()
                 _pipes.append(brep)
 
-        
-        _index_polylines, _index_polylines_segment, _distance, _point_pairs, _volume_pairs, _joints_areas, _joints_types = self.beam_volumes(
-                input_polylines,
-                input_polylines_segment_radii,
-                input_polylines_segment_direction,
-                input_allowed_types_per_polyline=[1],
-                input_min_distance=distance_tolerance,
-                input_volume_length=length_of_box,
-                input_cross_or_side_to_end=cross_or_top_to_side,
+        (
+            _index_polylines,
+            _index_polylines_segment,
+            _distance,
+            _point_pairs,
+            _volume_pairs,
+            _joints_areas,
+            _joints_types,
+        ) = self.beam_volumes(
+            input_polylines,
+            input_polylines_segment_radii,
+            input_polylines_segment_direction,
+            input_allowed_types_per_polyline=[1],
+            input_min_distance=distance_tolerance,
+            input_volume_length=length_of_box,
+            input_cross_or_side_to_end=cross_or_top_to_side,
         )
 
-        return  th.list_to_tree(_index_polylines), th.list_to_tree( _index_polylines_segment), th.list_to_tree(_distance), th.list_to_tree(_point_pairs), th.list_to_tree( _volume_pairs), th.list_to_tree( _joints_areas), th.list_to_tree( _joints_types), th.list_to_tree( _pipes)
+        return (
+            th.list_to_tree(_index_polylines),
+            th.list_to_tree(_index_polylines_segment),
+            th.list_to_tree(_distance),
+            th.list_to_tree(_point_pairs),
+            th.list_to_tree(_volume_pairs),
+            th.list_to_tree(_joints_areas),
+            th.list_to_tree(_joints_types),
+            th.list_to_tree(_pipes),
+        )

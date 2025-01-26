@@ -1,4 +1,3 @@
-
 from ghpythonlib.componentbase import executingcomponent as component
 import Grasshopper
 import Rhino
@@ -8,6 +7,7 @@ from Rhino.Geometry import Vector3d
 from Rhino.Geometry import Polyline
 import ghpythonlib.treehelpers as th
 import System
+
 
 class MyComponent(component):
     def RunScript(

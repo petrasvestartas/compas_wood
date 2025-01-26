@@ -1,4 +1,3 @@
-
 import System
 import Rhino
 from ghpythonlib.componentbase import executingcomponent as component
