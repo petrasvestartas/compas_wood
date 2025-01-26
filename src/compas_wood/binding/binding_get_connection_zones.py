@@ -25,6 +25,7 @@ def get_connection_zones(
     input_joint_volume_parameters=[0, 0, 0],
     input_custom_joints=[],
     input_custom_joints_types=[],
+    remove_duplicate_polylines=False,
 ):
     """
     Get connection zones for the given input parameters.
@@ -57,7 +58,9 @@ def get_connection_zones(
         Custom joints.
     input_custom_joints_types : list[int], optional
         Custom joints types.
-    input_face_to_face_side_to_side_joints_rotated_joint_as_average : bool, optional
+    remove_duplicate_polylines : bool, optional
+        Remove duplicate polylines.
+
 
     Returns
     -------
@@ -92,4 +95,18 @@ def get_connection_zones(
         to_double1(input_joint_volume_parameters),
     )
 
-    return from_point3(w_output_plines), from_cut_type2(w_output_types)
+    polylines_lists = from_point3(w_output_plines)
+    output_types = list(w_output_types)
+
+    new_polyline_lists = []
+    if remove_duplicate_polylines:
+        for polylines in polylines_lists:
+            new_polylines = []
+            for polyline in polylines:
+                if polyline not in new_polylines:
+                    new_polylines.append(polyline)
+                    if len(new_polylines) == 2:
+                        new_polyline_lists.append(list(new_polylines))
+                        new_polylines.clear()
+
+    return polylines_lists, output_types, new_polyline_lists

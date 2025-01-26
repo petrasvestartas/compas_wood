@@ -3,10 +3,11 @@ from compas_wood.binding import get_connection_zones
 from compas_wood.binding import mesh_boolean_difference_from_polylines
 from compas_wood.binding import read_xml_polylines
 from compas_wood.binding import wood_globals
+from pathlib import Path
 
 # Read polylines from an exrernal file, in this case compas_wood xml dataset.
 xml_polylines = read_xml_polylines(
-    foldername="/home/petras/brg/2_code/wood_nano/src/wood/cmake/src/wood/dataset/",
+    foldername= str(Path.cwd() / "src/compas_wood/datasets/") + '/',
     filename='type_plates_name_side_to_side_edge_inplane_hilti',
     scale=1e0
 )

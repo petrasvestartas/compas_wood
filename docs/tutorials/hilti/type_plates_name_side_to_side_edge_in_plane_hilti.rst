@@ -67,13 +67,6 @@ Heaxagonel shell:
 
 .. literalinclude:: ./type_plates_name_side_to_side_edge_in_plane_hilti_part3.py
    :language: python
-   :lines: 1-33
-
-Vizualize...
-
-.. literalinclude:: ./type_plates_name_side_to_side_edge_in_plane_hilti_part3.py
-   :language: python
-   :lines: 34-
 
 
 .. figure:: ./type_plates_name_side_to_side_edge_in_plane_hilti_part3_1.png
