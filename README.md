@@ -97,3 +97,6 @@ Releases follow the [semver](https://semver.org/spec/v2.0.0.html) versioning con
 
 [![Star History Chart](https://api.star-history.com/svg?repos=petrasvestartas/compas_wood&type=Date.svg)](https://star-history.com/#petrasvestartas/compas_wood&Date)
 
+# Local Rhino Install
+
+C:\Users\petras\.rhinocode\py39-rh8\python.exe -m pip install -e .

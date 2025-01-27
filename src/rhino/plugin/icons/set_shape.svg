@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #dbdbdb;
+      }
+
+      .cls-1, .cls-2 {
+        stroke: #000;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+
+      .cls-3 {
+        isolation: isolate;
+      }
+
+      .cls-4 {
+        mix-blend-mode: multiply;
+      }
+    </style>
+  </defs>
+  <g class="cls-3">
+    <g id="Layer_2" data-name="Layer 2">
+      <rect class="cls-1" x="2.86" y="8.69" width="20.84" height="7.62" transform="translate(31.43 10.8) rotate(131.39)"/>
+      <rect class="cls-4" x="-.44" y="6.1" width="15.49" height="2.27" transform="translate(17.57 6.53) rotate(131.4)"/>
+      <polygon class="cls-2" points="11.37 15.01 14.64 15.01 14.64 11.7 18.68 11.7 18.68 15.01 21.95 15.01 21.95 18.95 18.68 18.95 18.68 22.28 14.64 22.28 14.64 18.95 11.37 18.95 11.37 15.01"/>
+    </g>
+  </g>
+</svg>
