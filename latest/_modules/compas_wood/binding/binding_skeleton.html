@@ -591,25 +591,14 @@ document.write(`
   <h1>Source code for compas_wood.binding.binding_skeleton</h1><div class="highlight"><pre>
 <span></span><span class="kn">from</span><span class="w"> </span><span class="nn">wood_nano</span><span class="w"> </span><span class="kn">import</span> <span class="n">beam_skeleton</span> <span class="k">as</span> <span class="n">wood_nano_beam_skeleton</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">wood_nano</span><span class="w"> </span><span class="kn">import</span> <span class="n">mesh_skeleton</span> <span class="k">as</span> <span class="n">wood_nano_mesh_skeleton</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">compas_wood.conversions_compas</span><span class="w"> </span><span class="kn">import</span> <span class="n">to_point1</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">compas_wood.conversions_compas</span><span class="w"> </span><span class="kn">import</span> <span class="n">to_vector2</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">compas_wood.conversions_compas</span><span class="w"> </span><span class="kn">import</span> <span class="n">from_point2</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">compas_wood.conversions_compas</span><span class="w"> </span><span class="kn">import</span> <span class="n">from_point1</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">compas_wood.conversions_compas</span><span class="w"> </span><span class="kn">import</span> <span class="n">from_point3</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">wood_nano.conversions_python</span><span class="w"> </span><span class="kn">import</span> <span class="n">to_double1</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">wood_nano.conversions_python</span><span class="w"> </span><span class="kn">import</span> <span class="n">to_int1</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">wood_nano.conversions_python</span><span class="w"> </span><span class="kn">import</span> <span class="n">from_int1</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">wood_nano.conversions_python</span><span class="w"> </span><span class="kn">import</span> <span class="n">from_int2</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">wood_nano.conversions_python</span><span class="w"> </span><span class="kn">import</span> <span class="n">from_double1</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">wood_nano.conversions_python</span><span class="w"> </span><span class="kn">import</span> <span class="n">from_double2</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">wood_nano</span><span class="w"> </span><span class="kn">import</span> <span class="n">int1</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">wood_nano</span><span class="w"> </span><span class="kn">import</span> <span class="n">int2</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">wood_nano</span><span class="w"> </span><span class="kn">import</span> <span class="n">double1</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">wood_nano</span><span class="w"> </span><span class="kn">import</span> <span class="n">double2</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">wood_nano</span><span class="w"> </span><span class="kn">import</span> <span class="n">point1</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">wood_nano</span><span class="w"> </span><span class="kn">import</span> <span class="n">point2</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">wood_nano</span><span class="w"> </span><span class="kn">import</span> <span class="n">point3</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">wood_nano</span><span class="w"> </span><span class="kn">import</span> <span class="n">cut_type2</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">compas.datastructures</span><span class="w"> </span><span class="kn">import</span> <span class="n">Mesh</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">compas.geometry</span><span class="w"> </span><span class="kn">import</span> <span class="n">Polyline</span>
 
@@ -651,6 +640,36 @@ document.write(`
     <span class="n">distances</span> <span class="o">=</span> <span class="n">from_double1</span><span class="p">(</span><span class="n">output_distances</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">polyline</span><span class="p">,</span> <span class="n">distances</span></div>
+
+
+
+<div class="viewcode-block" id="mesh_skeleton">
+<a class="viewcode-back" href="../../../api/compas_wood.binding.html#compas_wood.binding.mesh_skeleton">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">mesh_skeleton</span><span class="p">(</span><span class="n">mesh</span><span class="p">:</span> <span class="n">Mesh</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">Polyline</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Get the skeleton of a mesh.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    mesh : :class:`compas.datastructures.Mesh`</span>
+<span class="sd">        The mesh to get the skeleton from.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    list[ :class:`compas.geometry.Polyline`]</span>
+<span class="sd">        The skeleton of the mesh.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">mesh_copy</span><span class="p">:</span> <span class="n">Mesh</span> <span class="o">=</span> <span class="n">mesh</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="n">v</span><span class="p">,</span> <span class="n">f</span> <span class="o">=</span> <span class="n">mesh_copy</span><span class="o">.</span><span class="n">to_vertices_and_faces</span><span class="p">(</span><span class="n">triangulated</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">input_vertices</span> <span class="o">=</span> <span class="n">to_double1</span><span class="p">([</span><span class="n">item</span> <span class="k">for</span> <span class="n">sublist</span> <span class="ow">in</span> <span class="n">v</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">sublist</span><span class="p">])</span>
+    <span class="n">input_faces</span> <span class="o">=</span> <span class="n">to_int1</span><span class="p">([</span><span class="n">item</span> <span class="k">for</span> <span class="n">sublist</span> <span class="ow">in</span> <span class="n">f</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">sublist</span><span class="p">])</span>
+
+    <span class="n">output_polylines</span> <span class="o">=</span> <span class="n">point2</span><span class="p">()</span>
+    <span class="n">wood_nano_mesh_skeleton</span><span class="p">(</span><span class="n">input_vertices</span><span class="p">,</span> <span class="n">input_faces</span><span class="p">,</span> <span class="n">output_polylines</span><span class="p">)</span>
+
+    <span class="n">polylines</span> <span class="o">=</span> <span class="n">from_point2</span><span class="p">(</span><span class="n">output_polylines</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">polylines</span></div>
 
 </pre></div>
 

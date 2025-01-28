@@ -830,6 +830,26 @@ This is the very first step in the process of creating a timber structure - dete
 </dd></dl>
 
 <dl class="py function">
+<dt class="sig sig-object py" id="compas_wood.binding.mesh_skeleton">
+<span class="sig-prename descclassname"><span class="pre">compas_wood.binding.</span></span><span class="sig-name descname"><span class="pre">mesh_skeleton</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mesh</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/compas_wood/binding/binding_skeleton.html#mesh_skeleton"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Get the skeleton of a mesh.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl>
+<dt><strong>mesh</strong><span class="classifier"><a class="reference external" href="https://compas.dev/compas/latest/api/compas.datastructures.Mesh.html#compas.datastructures.Mesh" title="(in COMPAS vlatest)"><code class="xref py py-class docutils literal notranslate"><span class="pre">compas.datastructures.Mesh</span></code></a></span></dt><dd><p>The mesh to get the skeleton from.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>list[ <a class="reference external" href="https://compas.dev/compas/latest/api/generated/compas.geometry.Polyline.html" title="(in COMPAS vlatest)"><code class="xref py py-class docutils literal notranslate"><span class="pre">compas.geometry.Polyline</span></code></a>]</dt><dd><p>The skeleton of the mesh.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="compas_wood.binding.read_xml_polylines">
 <span class="sig-prename descclassname"><span class="pre">compas_wood.binding.</span></span><span class="sig-name descname"><span class="pre">read_xml_polylines</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">foldername</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'/home/petras/brg/2_code/wood_nano/src/wood/cmake/src/wood/dataset/'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'type_plates_name_cross_vda_hexshell_reciprocal'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scale</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/compas_wood/binding/binding_read_xml_polylines.html#read_xml_polylines"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><p>Read polylines from XML file.</p>
@@ -951,6 +971,7 @@ Polyline pairs means the top and bottom polylines of plates.</p>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#compas_wood.binding.get_connection_zones"><code class="docutils literal notranslate"><span class="pre">get_connection_zones()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#compas_wood.binding.joints"><code class="docutils literal notranslate"><span class="pre">joints()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#compas_wood.binding.mesh_boolean_difference_from_polylines"><code class="docutils literal notranslate"><span class="pre">mesh_boolean_difference_from_polylines()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#compas_wood.binding.mesh_skeleton"><code class="docutils literal notranslate"><span class="pre">mesh_skeleton()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#compas_wood.binding.read_xml_polylines"><code class="docutils literal notranslate"><span class="pre">read_xml_polylines()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#compas_wood.binding.read_xml_polylines_and_properties"><code class="docutils literal notranslate"><span class="pre">read_xml_polylines_and_properties()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#compas_wood.binding.rtree"><code class="docutils literal notranslate"><span class="pre">rtree()</span></code></a></li>
