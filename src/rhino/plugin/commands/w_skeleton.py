@@ -33,7 +33,7 @@ def my_callback(string_to_tuplesofitemsandtypes, dataset_name):
         z_axis = polyline[polyline.Count-1] - polyline[0]
         plane = Plane(polyline[polyline.Count-1], z_axis)
         x_axis = plane.XAxis
-        polyline.Add(polyline[polyline.Count-1] + x_axis)
+        polyline.Add(polyline[polyline.Count-1] + x_axis*0.1)
         plane_xy = Plane.WorldXY
         plane = Plane(polyline[polyline.Count-1], x_axis, Rhino.Geometry.Vector3d.CrossProduct(x_axis, z_axis))
         xform = Rhino.Geometry.Transform.PlaneToPlane(plane, plane_xy)
