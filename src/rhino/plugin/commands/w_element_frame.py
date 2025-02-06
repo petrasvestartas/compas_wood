@@ -128,5 +128,5 @@ def TestGetObjectFrame():
 
 if __name__ == "__main__":
 
-    TestGetObjectFrame()
+    retrieve_plane_from_object()
 

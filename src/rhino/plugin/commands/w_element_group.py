@@ -2,6 +2,7 @@
 # venv: timber_connections
 
 import Rhino
+import System
 
 def find_valid_groups():
     """Finds groups in Rhino that contain exactly two objects, where one is a polyline with three points.
@@ -254,18 +255,115 @@ def select_group_tree():
         print_inferred_tree(tree, root, group_dict)
     
 
+def get_object_frame():
+    object_type = Rhino.DocObjects.ObjectType.Mesh
+    rc, objrefs = Rhino.Input.RhinoGet.GetMultipleObjects("Select meshes", False, object_type)
+    if rc != Rhino.Commands.Result.Success:
+        return
+
+    for objref in objrefs:
+        obj = objref.Object()
+        if obj:
+            # Define points
+            p0 = obj.Attributes.ObjectFrame().Origin
+            p1 = obj.Attributes.ObjectFrame().Origin + obj.Attributes.ObjectFrame().XAxis * 5
+            p2 = obj.Attributes.ObjectFrame().Origin + obj.Attributes.ObjectFrame().YAxis * 5
+            p3 = obj.Attributes.ObjectFrame().Origin + obj.Attributes.ObjectFrame().ZAxis * 5
+
+            # Create lines
+            line_x = Rhino.Geometry.Line(p0, p1)
+            line_y = Rhino.Geometry.Line(p0, p2)
+            line_z = Rhino.Geometry.Line(p0, p3)
+
+            # Create attributes for colors
+            attr_x = Rhino.DocObjects.ObjectAttributes()
+            attr_x.ObjectColor = System.Drawing.Color.Red
+            attr_x.ColorSource = Rhino.DocObjects.ObjectColorSource.ColorFromObject
+
+            attr_y = Rhino.DocObjects.ObjectAttributes()
+            attr_y.ObjectColor = System.Drawing.Color.Green
+            attr_y.ColorSource = Rhino.DocObjects.ObjectColorSource.ColorFromObject
+
+            attr_z = Rhino.DocObjects.ObjectAttributes()
+            attr_z.ObjectColor = System.Drawing.Color.Blue
+            attr_z.ColorSource = Rhino.DocObjects.ObjectColorSource.ColorFromObject
+
+            # Add lines with attributes
+            id0 = Rhino.RhinoDoc.ActiveDoc.Objects.AddLine(line_x, attr_x)
+            id1 = Rhino.RhinoDoc.ActiveDoc.Objects.AddLine(line_y, attr_y)
+            id2 = Rhino.RhinoDoc.ActiveDoc.Objects.AddLine(line_z, attr_z)
+            ids = [id0, id1, id2]
+
+            # Group all arrows
+            if all(ids):
+                group_index = Rhino.RhinoDoc.ActiveDoc.Groups.Add()
+                for arrow_id in ids:
+                    Rhino.RhinoDoc.ActiveDoc.Groups.AddToGroup(group_index, arrow_id)
+
+            # Redraw the document to reflect changes
+            Rhino.RhinoDoc.ActiveDoc.Views.Redraw()
+            print(obj.Attributes.ObjectFrame())
+
+def vizualize_group_plane(geometry_planes):
+
+
+    for geometry_plane in geometry_planes:
+
+        # Define points
+        plane = geometry_plane[1]
+        p0 = plane.Origin
+        p1 = plane.Origin + plane.XAxis * 5
+        p2 = plane.Origin + plane.YAxis * 5
+        p3 = plane.Origin + plane.ZAxis * 5
+
+        # Create lines
+        line_x = Rhino.Geometry.Line(p0, p1)
+        line_y = Rhino.Geometry.Line(p0, p2)
+        line_z = Rhino.Geometry.Line(p0, p3)
+
+        # Create attributes for colors
+        attr_x = Rhino.DocObjects.ObjectAttributes()
+        attr_x.ObjectColor = System.Drawing.Color.Red
+        attr_x.ColorSource = Rhino.DocObjects.ObjectColorSource.ColorFromObject
+
+        attr_y = Rhino.DocObjects.ObjectAttributes()
+        attr_y.ObjectColor = System.Drawing.Color.Green
+        attr_y.ColorSource = Rhino.DocObjects.ObjectColorSource.ColorFromObject
+
+        attr_z = Rhino.DocObjects.ObjectAttributes()
+        attr_z.ObjectColor = System.Drawing.Color.Blue
+        attr_z.ColorSource = Rhino.DocObjects.ObjectColorSource.ColorFromObject
+
+        # Add lines with attributes
+        id0 = Rhino.RhinoDoc.ActiveDoc.Objects.AddLine(line_x, attr_x)
+        id1 = Rhino.RhinoDoc.ActiveDoc.Objects.AddLine(line_y, attr_y)
+        id2 = Rhino.RhinoDoc.ActiveDoc.Objects.AddLine(line_z, attr_z)
+        ids = [id0, id1, id2]
+
+        # Group all arrows
+        if all(ids):
+            group_index = Rhino.RhinoDoc.ActiveDoc.Groups.Add()
+            for arrow_id in ids:
+                Rhino.RhinoDoc.ActiveDoc.Groups.AddToGroup(group_index, arrow_id)
+
+        # Redraw the document to reflect changes
+        Rhino.RhinoDoc.ActiveDoc.Views.Redraw()
+
+
+        # Collect information from user strings
+        string_dictionary = geometry_plane[0].Attributes.GetUserStrings()
+        T = Rhino.Geometry.Transform.PlaneToPlane(Rhino.Geometry.Plane.WorldXY, plane)
+        for key in string_dictionary:
+            if "feature" in key:
+                value = string_dictionary[key]  # GetValues returns a list of values for the key
+                brep = Rhino.Geometry.Brep.FromJSON(value)
+                brep.Transform(T)
+                Rhino.RhinoDoc.ActiveDoc.Objects.AddBrep(brep)
+
+        print(plane)
 
 if __name__ == "__main__":
-    # select_group_tree()
-    print(select_and_find_valid_groups())
+    geometry_planes = select_and_find_valid_groups()
+    vizualize_group_plane(geometry_planes)
 
 
-    
-    # for obj, plane in results:
-    #     print(f"Object ID: {obj.Id}, Computed Plane: {plane}")
-
-
-# if __name__ == "__main__":
-#     results = find_valid_groups()
-#     for obj, plane in results:
-#         print(f"Object ID: {obj.Id}, Computed Plane: {plane}")
