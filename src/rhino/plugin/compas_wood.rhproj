@@ -510,13 +510,31 @@
       "uri": "commands/w_element_frame.py"
     },
     {
-      "id": "2fcdf5f4-cad8-427d-b378-5cd956510c16",
+      "id": "6848cb05-3b64-42bb-9d2b-11900c78efd0",
       "language": {
         "id": "mcneel.pythonnet.python",
         "version": "3.9.10"
       },
-      "title": "w_element_group",
-      "uri": "commands/w_element_group.py"
+      "title": "w_element_features",
+      "uri": "commands/w_element_features.py"
+    },
+    {
+      "id": "14d9ddaa-8a10-4542-a445-73346e2fff4f",
+      "language": {
+        "id": "mcneel.pythonnet.python",
+        "version": "3.9.10"
+      },
+      "title": "w_element_geometry",
+      "uri": "commands/w_element_geometry.py"
+    },
+    {
+      "id": "9b5ccd9f-47db-4be2-a434-a717737b568a",
+      "language": {
+        "id": "mcneel.pythonnet.python",
+        "version": "3.9.10"
+      },
+      "title": "w_element_orient",
+      "uri": "commands/w_element_orient.py"
     }
   ],
   "resources": [
