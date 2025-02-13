@@ -13,7 +13,9 @@ def my_callback(string_to_tuplesofitemsandtypes, dataset_name):
 
     if not string_to_tuplesofitemsandtypes["geometry"][0]:
         return
+
     print(string_to_tuplesofitemsandtypes["features"][0])
+
     add_element(
         # layer
         layer_name = "unknown",

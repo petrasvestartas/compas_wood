@@ -492,13 +492,13 @@
       }
     },
     {
-      "id": "3a55fcfd-6301-49b8-b771-bac67f1f21cc",
+      "id": "9cf95851-e163-431d-84b4-31d46557d231",
       "language": {
         "id": "mcneel.pythonnet.python",
         "version": "3.9.10"
       },
-      "title": "w_element",
-      "uri": "commands/w_element.py"
+      "title": "w_element_from_brep",
+      "uri": "commands/w_element_from_brep.py"
     },
     {
       "id": "de9bb393-5ae7-40f7-a566-47bf4f68b6af",
@@ -519,13 +519,13 @@
       "uri": "commands/w_element_features.py"
     },
     {
-      "id": "14d9ddaa-8a10-4542-a445-73346e2fff4f",
+      "id": "f2183bb9-2adc-409a-982b-fee9716e02d8",
       "language": {
         "id": "mcneel.pythonnet.python",
         "version": "3.9.10"
       },
-      "title": "w_element_geometry",
-      "uri": "commands/w_element_geometry.py"
+      "title": "w_element_replace_geometry",
+      "uri": "commands/w_element_replace_geometry.py"
     },
     {
       "id": "9b5ccd9f-47db-4be2-a434-a717737b568a",
@@ -535,6 +535,33 @@
       },
       "title": "w_element_orient",
       "uri": "commands/w_element_orient.py"
+    },
+    {
+      "id": "9cdccce0-dd40-44cd-9bfc-a08bfa592f24",
+      "language": {
+        "id": "mcneel.pythonnet.python",
+        "version": "3.9.10"
+      },
+      "title": "w_element_boolean_difference",
+      "uri": "commands/w_element_boolean_difference.py"
+    },
+    {
+      "id": "d1849263-d42b-4cfb-9299-901572f3efdd",
+      "language": {
+        "id": "mcneel.pythonnet.python",
+        "version": "3.9.10"
+      },
+      "title": "w_element_from_mesh",
+      "uri": "commands/w_element_from_mesh.py"
+    },
+    {
+      "id": "44fc638b-0719-4548-b1eb-597424a5c43f",
+      "language": {
+        "id": "mcneel.pythonnet.python",
+        "version": "3.9.10"
+      },
+      "title": "w_element_axis",
+      "uri": "commands/w_element_axis.py"
     }
   ],
   "resources": [
