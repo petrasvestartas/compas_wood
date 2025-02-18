@@ -228,9 +228,10 @@ def my_callback(
 ):
 
     input_polyline_axes = name_value_type["polyline_axes"][0]
-
     input_radii = name_value_type["polylines_segment_radii"][0]
     input_polylines_segment_direction = name_value_type["polylines_segment_direction"][0]
+
+
     input_allowed_types_per_polyline = name_value_type["allowed_types_per_polyline"][0]
     input_min_distance = name_value_type["min_distance"][0]
     input_volume_length = name_value_type["volume_length"][0]
@@ -258,6 +259,13 @@ def my_callback(
         for j in range(input_polyline_axes[i].SegmentCount):
             input_polyline_segment_direction.append(Vector3d(0, 1, 0))
         input_polylines_segment_direction.append(input_polyline_segment_direction)
+    
+
+    print("___________________")
+    print(input_polyline_axes)
+    print(input_polylines_segment_radii)
+    print(input_polylines_segment_direction)
+    print("___________________")
 
     index_polylines = int2()
     index_polylines_segment = int2()

@@ -15,7 +15,7 @@ try:
     from compas_viewer import Viewer
 
     viewer = Viewer()
-    viewer.add(mesh, show_faces=True, show_edges=True, show_points=False)
+    viewer.scene.add(mesh, show_faces=True, show_edges=True, show_points=False)
     viewer.show()
 
 except ImportError:

@@ -58,7 +58,7 @@ polylines =[
 ]
 
 # generate joints
-output_polylines, output_types = get_connection_zones(
+polylines_lists, output_types, new_polyline_lists = get_connection_zones(
     polylines,
     [],
     [],
@@ -79,7 +79,7 @@ try:
     scale = 1e-1
     scale_transform = Scale.from_factors([scale, scale, scale])
     viewer = Viewer(show_grid=False)
-    for polylines in output_polylines:
+    for polylines in polylines_lists:
         for polyline in polylines:
             polyline.transform(scale_transform)
             viewer.scene.add(Polyline(polyline), show_points=False)

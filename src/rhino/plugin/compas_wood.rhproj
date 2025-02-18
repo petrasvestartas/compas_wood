@@ -562,6 +562,33 @@
       },
       "title": "w_element_axis",
       "uri": "commands/w_element_axis.py"
+    },
+    {
+      "id": "a234de4a-bc6c-46b8-a48d-2b582d3e1e95",
+      "language": {
+        "id": "mcneel.pythonnet.python",
+        "version": "3.9.10"
+      },
+      "title": "w_element_joint",
+      "uri": "commands/w_element_joint.py"
+    },
+    {
+      "id": "9ceceafc-3117-493e-868b-0244392ee7f1",
+      "language": {
+        "id": "mcneel.pythonnet.python",
+        "version": "3.9.10"
+      },
+      "title": "w_element_find_joints",
+      "uri": "commands/w_element_find_joints.py"
+    },
+    {
+      "id": "1d4e4e51-215a-4626-a20e-fa1b5e0dacce",
+      "language": {
+        "id": "mcneel.pythonnet.python",
+        "version": "3.9.10"
+      },
+      "title": "w_element_find_volumes",
+      "uri": "commands/w_element_find_volumes.py"
     }
   ],
   "resources": [
