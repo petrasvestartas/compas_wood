@@ -12,18 +12,21 @@ import System
 def my_callback(string_to_tuplesofitemsandtypes, dataset_name):
 
 
+
     polylines = []
     distances = []
     meshes = []
     transforms = []
 
-    for mesh in string_to_tuplesofitemsandtypes["meshes"][0]:
+    for mesh in string_to_tuplesofitemsandtypes["meshes"]:
+        
+        # polyline = mesh_skeleton(mesh)
 
         polyline, distance = beam_skeleton(
             mesh,
-            string_to_tuplesofitemsandtypes["divisions"][0],
-            string_to_tuplesofitemsandtypes["nearest_neighbors"][0],
-            string_to_tuplesofitemsandtypes["extend_end"][0])
+            string_to_tuplesofitemsandtypes["divisions"],
+            string_to_tuplesofitemsandtypes["nearest_neighbors"],
+            string_to_tuplesofitemsandtypes["extend_end"])
         polylines.append(polyline)
         distances.append(distance)
         meshes.append(mesh)
