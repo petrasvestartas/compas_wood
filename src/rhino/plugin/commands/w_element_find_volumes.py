@@ -159,13 +159,22 @@ def my_callback(
     # The volumes are written as user strings on the rhino geometry object.
     ######################################################################
     elements_volumes = [[] for _ in input_elements]
+    elements_volumes_indices = [[] for _ in input_elements]
+    elements_volumes_neighbours = [[] for _ in input_elements]
 
+    count = 0
     for i in range(0, len(group_indices), 4):
         elements_volumes[group_indices[i]].extend(output_volume_pairs_flat[i:i+2])
         elements_volumes[group_indices[i+2]].extend(output_volume_pairs_flat[i+2:i+4])
+        elements_volumes_indices[group_indices[i]].append(int(i*0.5))
+        elements_volumes_indices[group_indices[i+2]].append(int(i*0.5)+1)
+        elements_volumes_neighbours[group_indices[i]].append([int(i*0.5)+1, -1])
+        elements_volumes_neighbours[group_indices[i+2]].append([int(i*0.5), -1])
 
-    for element, volumes in zip(input_elements, elements_volumes):
+    for element, volumes, pair_index, pair_neighbour in zip(input_elements, elements_volumes, elements_volumes_indices, elements_volumes_neighbours):
         element.pair_polyline = volumes
+        element.pair_indices = pair_index
+        element.pair_neighbours = pair_neighbour
 
     ######################################################################
     # Set element indices:
