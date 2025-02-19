@@ -16,11 +16,9 @@ def my_callback(input_dict, dataset_name):
     elements : list[Element] = input_dict["elements"]
 
     for idx, element in enumerate(elements):
-        axes = element.axes
-        axes_curves = []
-        for axis in axes:
-            axes_curves.append(axis.ToNurbsCurve())
-        add_sub_layer(element.geometry_plane[0], "axes", axes_curves, [System.Drawing.Color.Red], idx==0)
+        scale = max(0.01,input_dict["scale"])
+        plane_axes : list[Rhino.Geometry.NurbsCurve] = element.plane_axes(scale)
+        add_sub_layer(element.geometry_plane[0], "plane", plane_axes, [System.Drawing.Color.Red, System.Drawing.Color.Green, System.Drawing.Color.Blue], idx==0)
         
 
 if __name__ == "__main__":
@@ -30,6 +28,7 @@ if __name__ == "__main__":
 
     input_dict = {
         "elements" : ([], List[Element]),
+        "scale" : (200, float),
     }
 
    # Call the generalized input method with the dataset name and input dictionary

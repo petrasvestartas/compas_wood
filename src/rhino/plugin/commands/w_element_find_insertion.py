@@ -39,7 +39,7 @@ def my_callback(
     if len(input_elements) == 0:
         print("Attention: no elements selected.")
         return
-    return
+
     ######################################################################
     # input_polyline_pairs
     # Parameter: polylines - flat list of polylines
@@ -69,7 +69,9 @@ def my_callback(
     for group_id, element in enumerate(input_elements):
         for volume in element.volumes:
             ir_insertion.append(element.joint_types)
-   
+
+    print(ir_insertion)
+    
     iw_insertion : wood_nano.wood_nano_ext.vector2 = to_vector2(ir_insertion)
 
     ######################################################################
@@ -77,19 +79,19 @@ def my_callback(
     # joints_per_face - lists of joint types
     # [[0, 0, 20, 20, 20, 20], [0, 0, 20, 20, 20, 20] ... ]
     ######################################################################
-    ir_joint_types = []
-    for group_id, element in enumerate(input_elements):
-        ir_joint_types.append(element.joint_types)
+    # for group_id, element in enumerate(input_elements):
+    #     if element.element_type == "plate":
+    #         for volume in element.volumes:
+    #             number_of_faces : int = volume[0].Count+1
+    #             current_insertion_vector = [Rhino.Geometry.Vector3d(0, 0, 0)] * number_of_faces
+    #             ir_insertion.append(current_insertion_vector)
 
-    iw_joint_types : wood_nano.wood_nano_ext.int2 = to_int2(ir_joint_types)
 
     ######################################################################
     # input_three_valence_element_indices_and_instruction
-    # could it be set from global attributes?
+    # three_valence
     # [[0], [0, 2, 4, 2], [1, 2, 5, 2], [0, 3, 36, 3], ... ]
     ######################################################################
-    ir_three_valence = []
-    iw_three_valence : wood_nano.wood_nano_ext.int2 = to_int2(ir_three_valence)
 
     ######################################################################
     # input_adjacency
@@ -98,17 +100,6 @@ def my_callback(
     # For example: [0, 2, -1, -1, 0, 3, -1, -1, 1, 2, -1, -1 ... ]
     # If the adjacency is empty, it is computed in the solver.
     ######################################################################
-    adjacency = set()
-    for group_id, element in enumerate(input_elements):
-        for neighbour in element.neighbours:
-            a = [group_id, -1]
-            b = neighbour
-            if group_id > b[0]:
-                a, b = b, a
-            pair = (a[0], b[0], a[1], b[1])
-            adjacency.add(pair)
-    print(adjacency)
-
 
     ######################################################################
     # input_joint_parameters_and_types

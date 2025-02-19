@@ -2,48 +2,47 @@
 # venv: timber_connections
 
 import Rhino
+import Rhino.Input
+import Rhino.DocObjects
+from typing import *
+from wood_rui import wood_rui_globals, generalized_input_method, Element, add_sub_layer
 import System
 
-from wood_rui import (
-    select_and_find_valid_groups, polyline_obj_to_plane, add_sub_layer
-)
+def my_callback(input_dict, dataset_name):
 
-def get_features(geometry_planes):
+    if not input_dict["element"]:
+        return
 
-    for geometry_plane in geometry_planes:
+    for idx, element in enumerate(input_dict["element"]):
 
-        # Collect information from user strings
-        string_dictionary = geometry_plane[0].Attributes.GetUserStrings()
-        T = Rhino.Geometry.Transform.PlaneToPlane(Rhino.Geometry.Plane.WorldXY, polyline_obj_to_plane(geometry_plane[1]))
+        if len(input_dict["replace"])>0:
+            element.features = input_dict["replace"]
 
-        print(string_dictionary)
-        geometries = []
-        for key in string_dictionary:
-            if "feature" in key:
-                value = string_dictionary[key]  # GetValues returns a list of values for the key
-                geometry = Rhino.Geometry.GeometryBase.FromJSON(value)
-                geometry.Transform(T)
-                geometries.append(geometry)
-        add_sub_layer(geometry_plane[0], "features", geometries, [System.Drawing.Color.FromArgb(0,0,255)], False)
+        if len(input_dict["add"])>0:
+            features = element.features
+            features.extend(input_dict["add"])
+            element.features = features
 
-        # Redraw the document to reflect changes
-        Rhino.RhinoDoc.ActiveDoc.Views.Redraw()
+        if input_dict["get"]:
+            add_sub_layer(element.geometry_plane[0], "features", element.features, [System.Drawing.Color.FromArgb(0,0,255)], idx==0)
+        
+        if input_dict["clear"]:
+            element.clear_features()
 
-def remove_features():
-    pass
-
-def add_features():
-    pass
-
-def update_features():
-    pass
 
 if __name__ == "__main__":
-    geometry_planes = select_and_find_valid_groups("Elements")
 
+    dataset_name = "beam"
+    wood_rui_globals.init_data(dataset_name)
 
+    input_dict = {
+        "element" : ([], List[Element]),
+        "add" : ([], List[Rhino.Geometry.Brep]),
+        "replace" : ([], List[Rhino.Geometry.Brep]),
+        "get" : (False, bool),
+        "clear" : (False, bool),
+    }
 
-
-    get_features(geometry_planes)
-
+   # Call the generalized input method with the dataset name and input dictionary
+    generalized_input_method(dataset_name, input_dict, my_callback, False, True)
 

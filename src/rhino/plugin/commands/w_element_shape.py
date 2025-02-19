@@ -16,11 +16,7 @@ def my_callback(input_dict, dataset_name):
     elements : list[Element] = input_dict["elements"]
 
     for idx, element in enumerate(elements):
-        axes = element.axes
-        axes_curves = []
-        for axis in axes:
-            axes_curves.append(axis.ToNurbsCurve())
-        add_sub_layer(element.geometry_plane[0], "axes", axes_curves, [System.Drawing.Color.Red], idx==0)
+        element.shape = input_dict["shape"][idx%len(input_dict["shape"])]
         
 
 if __name__ == "__main__":
@@ -30,7 +26,8 @@ if __name__ == "__main__":
 
     input_dict = {
         "elements" : ([], List[Element]),
+        "shape" : ([], List[Rhino.Geometry.Brep]),
     }
 
    # Call the generalized input method with the dataset name and input dictionary
-    generalized_input_method(dataset_name, input_dict, my_callback, False, True)
+    generalized_input_method(dataset_name, input_dict, my_callback, False, False)

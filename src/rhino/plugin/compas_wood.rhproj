@@ -501,13 +501,13 @@
       "uri": "commands/w_element_from_brep.py"
     },
     {
-      "id": "de9bb393-5ae7-40f7-a566-47bf4f68b6af",
+      "id": "be006dd1-3268-4eea-b9fa-36fb86c4a697",
       "language": {
         "id": "mcneel.pythonnet.python",
         "version": "3.9.10"
       },
-      "title": "w_element_frame",
-      "uri": "commands/w_element_frame.py"
+      "title": "w_element_plane",
+      "uri": "commands/w_element_plane.py"
     },
     {
       "id": "6848cb05-3b64-42bb-9d2b-11900c78efd0",
@@ -519,13 +519,13 @@
       "uri": "commands/w_element_features.py"
     },
     {
-      "id": "f2183bb9-2adc-409a-982b-fee9716e02d8",
+      "id": "377df88d-e131-45fb-8a3a-e713ec9b7f92",
       "language": {
         "id": "mcneel.pythonnet.python",
         "version": "3.9.10"
       },
-      "title": "w_element_replace_geometry",
-      "uri": "commands/w_element_replace_geometry.py"
+      "title": "w_element_shape",
+      "uri": "commands/w_element_shape.py"
     },
     {
       "id": "9b5ccd9f-47db-4be2-a434-a717737b568a",
@@ -537,13 +537,13 @@
       "uri": "commands/w_element_orient.py"
     },
     {
-      "id": "9cdccce0-dd40-44cd-9bfc-a08bfa592f24",
+      "id": "6a160d0e-fceb-4d11-a792-b5c18031d1d7",
       "language": {
         "id": "mcneel.pythonnet.python",
         "version": "3.9.10"
       },
-      "title": "w_element_boolean_difference",
-      "uri": "commands/w_element_boolean_difference.py"
+      "title": "w_element_boolean",
+      "uri": "commands/w_element_boolean.py"
     },
     {
       "id": "d1849263-d42b-4cfb-9299-901572f3efdd",
@@ -589,6 +589,24 @@
       },
       "title": "w_element_find_volumes",
       "uri": "commands/w_element_find_volumes.py"
+    },
+    {
+      "id": "45f81505-9ad6-48e7-9e55-c1d60c27ddf7",
+      "language": {
+        "id": "mcneel.pythonnet.python",
+        "version": "3.9.10"
+      },
+      "title": "w_element_find_insertion",
+      "uri": "commands/w_element_find_insertion.py"
+    },
+    {
+      "id": "4af9f518-8123-473d-bbfc-cf02f2594f15",
+      "language": {
+        "id": "mcneel.pythonnet.python",
+        "version": "3.9.10"
+      },
+      "title": "w_element_find_joints_types",
+      "uri": "commands/w_element_find_joints_types.py"
     }
   ],
   "resources": [

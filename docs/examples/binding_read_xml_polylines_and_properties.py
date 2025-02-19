@@ -22,7 +22,9 @@ filename = "type_plates_name_top_to_side_and_side_to_side_outofplane_annen_grid_
     input_adjacency,
 ) = read_xml_polylines_and_properties(foldername, filename)
 
-print("vectors_lists:", vectors_lists)
+
+# print("polylines:", polylines)
+print("input_three_valence_element_indices_and_instruction:", input_three_valence_element_indices_and_instruction)
 print(filename)
 
 try:

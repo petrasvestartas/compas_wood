@@ -26,7 +26,6 @@ def my_callback(
     input_use_eccentricities_to_scale_joints=True,
 ):
 
-
     input_elements = name_value_type["elements"]
 
     if len(input_elements) == 0:
@@ -35,7 +34,16 @@ def my_callback(
 
     input_polyline_axes = Element.get_first_axes(input_elements)
     input_polylines_segment_radii = Element.get_first_radii(input_elements)
-    input_polylines_segment_direction = Element.get_first_insertion(input_elements) if name_value_type["find_insertion"] else []
+
+    # use orientation of the beam
+    input_polylines_segment_direction = []
+    if not name_value_type["find_insertion"]: 
+        for element in input_elements:
+            axis = element.plane.XAxis
+            vectors = []
+            for j in range(len(element.axes[0])-1):
+                vectors.append(axis)
+            input_polylines_segment_direction.append(vectors)
 
     input_allowed_types_per_polyline = name_value_type["allowed_types_per_polyline"]
     input_min_distance = name_value_type["min_distance"]
@@ -157,7 +165,7 @@ def my_callback(
         elements_volumes[group_indices[i+2]].extend(output_volume_pairs_flat[i+2:i+4])
 
     for element, volumes in zip(input_elements, elements_volumes):
-        element.volumes = volumes
+        element.pair_polyline = volumes
 
     ######################################################################
     # Set element indices:
@@ -182,7 +190,7 @@ def my_callback(
     # Add element volumes:
     # [[[Rhino.Geometry.Polyline, Rhino.Geometry.Polyline], ...]] to Rhino.
     ######################################################################
-    polylines = [e.volumes for e in input_elements]
+    polylines = [e.pair_polyline for e in input_elements]
     add_polylines(polylines, "model", "joint_volumes")
         
 
@@ -197,7 +205,7 @@ if __name__ == "__main__":
         "min_distance": (100, float),  # Default value for min distance (float)
         "volume_length": (500, float),  # Default value for volume length (float)
         "cross_or_side_to_end": (0.91, float),  # Default value for cross or side to end (float)
-        "find_insertion" : (False, bool)  # if the find direction is used the beam volumes are computed orthogonal to one another, else beam directions are used
+        "find_insertion" : (True, bool)  # if the find direction is used the beam volumes are computed orthogonal to one another, else beam directions are used
         # "flip_male": (1, int),  # Default value for flip
         # "compute_joints": (False, bool),  # Default value for compute joints
         # "division_distance": (150, float),  # Default value for division distance
