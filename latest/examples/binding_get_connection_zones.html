@@ -625,7 +625,7 @@ document.write(`
 <span class="p">]</span>
 
 <span class="c1"># generate joints</span>
-<span class="n">output_polylines</span><span class="p">,</span> <span class="n">output_types</span> <span class="o">=</span> <span class="n">get_connection_zones</span><span class="p">(</span>
+<span class="n">polylines_lists</span><span class="p">,</span> <span class="n">output_types</span><span class="p">,</span> <span class="n">new_polyline_lists</span> <span class="o">=</span> <span class="n">get_connection_zones</span><span class="p">(</span>
     <span class="n">data_sets_plates</span><span class="o">.</span><span class="n">annen_small_polylines</span><span class="p">(),</span>
     <span class="n">data_sets_plates</span><span class="o">.</span><span class="n">annen_small_edge_directions</span><span class="p">(),</span>
     <span class="n">data_sets_plates</span><span class="o">.</span><span class="n">annen_small_edge_joints</span><span class="p">(),</span>
@@ -646,7 +646,7 @@ document.write(`
     <span class="n">scale</span> <span class="o">=</span> <span class="mf">1e-3</span>
     <span class="n">scale_transform</span> <span class="o">=</span> <span class="n">Scale</span><span class="o">.</span><span class="n">from_factors</span><span class="p">([</span><span class="n">scale</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">scale</span><span class="p">])</span>
     <span class="n">viewer</span> <span class="o">=</span> <span class="n">Viewer</span><span class="p">(</span><span class="n">show_grid</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-    <span class="k">for</span> <span class="n">polylines</span> <span class="ow">in</span> <span class="n">output_polylines</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">polylines</span> <span class="ow">in</span> <span class="n">polylines_lists</span><span class="p">:</span>
         <span class="k">for</span> <span class="n">polyline</span> <span class="ow">in</span> <span class="n">polylines</span><span class="p">:</span>
             <span class="n">polyline</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">scale_transform</span><span class="p">)</span>
             <span class="n">viewer</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Polyline</span><span class="p">(</span><span class="n">polyline</span><span class="p">),</span> <span class="n">show_points</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
