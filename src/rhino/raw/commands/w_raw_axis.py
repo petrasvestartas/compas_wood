@@ -8,7 +8,6 @@ from wood_rui import add_sub_layer
 from System.Drawing import Color
 
 
-
 def callback(selection: dict[str, any], name: str):
     if not selection["elements"]:
         return

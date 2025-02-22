@@ -17,7 +17,7 @@ def callback(selection: dict[str, any], name: str):
 
     for idx, element in enumerate(selection["elements"]):
         element.shape = selection["shape"][idx % num_shapes]  # Cycle through shapes
-    
+
     return
 
 

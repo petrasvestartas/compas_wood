@@ -457,6 +457,15 @@
           }
         }
       }
+    },
+    {
+      "id": "c81fe87b-dfb4-45e2-9350-64e8b4c56b79",
+      "language": {
+        "id": "mcneel.pythonnet.python",
+        "version": "3.9.10"
+      },
+      "title": "w_raw_custom_joints",
+      "uri": "commands/w_raw_custom_joints.py"
     }
   ]
 }

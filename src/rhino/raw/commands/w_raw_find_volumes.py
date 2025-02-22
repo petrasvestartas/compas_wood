@@ -225,15 +225,15 @@ def callback(
 
 if __name__ == "__main__":
     selection_types: dict[str, tuple] = {
-        "elements": ([], List[Element]),
+        "elements": ([], list[Element]),
         "allowed_types_per_polyline": (
             [-1],
-            List[int],
+            list[int],
         ),  # Default value for types (list of ints)
         "min_distance": (100, float),  # Default value for min distance (float)
         "volume_length": (500, float),  # Default value for volume length (float)
         "cross_or_side_to_end": (
-            0.91,
+            0.75,
             float,
         ),  # Default value for cross or side to end (float)
         "find_insertion": (

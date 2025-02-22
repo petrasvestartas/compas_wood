@@ -11,7 +11,6 @@ import System
 
 
 def callback(selection: dict[str, any], name: str):
-
     # Just axis without radii
     if not selection["simplify"]:
         for mesh in selection["meshes"]:
@@ -20,7 +19,7 @@ def callback(selection: dict[str, any], name: str):
                 Rhino.RhinoDoc.ActiveDoc.Objects.AddPolyline(polyline)
         return
 
-    # Try to simplify an axis 
+    # Try to simplify an axis
 
     polylines = []
     distances = []
@@ -28,7 +27,6 @@ def callback(selection: dict[str, any], name: str):
     transforms = []
 
     for mesh in selection["meshes"]:
-
         polyline = None
         polylines = []
 
@@ -60,11 +58,9 @@ def callback(selection: dict[str, any], name: str):
 
 
 if __name__ == "__main__":
-
-
     input_dict = {
         "meshes": ([], list[Rhino.Geometry.Mesh]),
-        "simplify" : (False, bool),
+        "simplify": (False, bool),
         "divisions": (10, int),
         "nearest_neighbors": (10, int),
         "extend_end": (True, bool),

@@ -191,14 +191,6 @@ def callback(selection: dict[str, any], name: str):
     iw_joint_volume_extension = to_double1(ir_joint_volume_extension)
 
     ######################################################################
-    # input_custom_joints
-    ######################################################################
-
-    ######################################################################
-    # input_custom_joints_types
-    ######################################################################
-
-    ######################################################################
     # output
     ######################################################################
     ow_polylines: wood_nano_point3 = wood_nano_point3()
@@ -244,7 +236,11 @@ def callback(selection: dict[str, any], name: str):
                 polyline1 = polylines[j + 1]
                 fab_type = types[int(j * 0.5)]
 
-                if fab_type != "drill" and wood_rui_globals.dowel_radius > 0.01:
+                print(polyline0.Count)
+                print(polyline1.Count)
+                print(fab_type)
+
+                if fab_type != "drill" and polyline0.Count != 2:
                     brep = Element.loft_polylines_with_holes(
                         [polyline0.ToNurbsCurve()],
                         [polyline1.ToNurbsCurve()],
@@ -252,7 +248,7 @@ def callback(selection: dict[str, any], name: str):
                     )
                     # Rhino.RhinoDoc.ActiveDoc.Objects.AddBrep(brep)
                     grouped_breps[index_to_group[count][0]].append(brep)
-                else:
+                elif wood_rui_globals.dowel_radius > 0.01:
                     plane = Rhino.Geometry.Plane(
                         polyline0[0], polyline0.SegmentAt(0).Direction
                     )

@@ -35,6 +35,7 @@ def callback(selection: dict[str, any], name: str):
 
     return
 
+
 if __name__ == "__main__":
     selection_types: dict[str, tuple] = {
         "element": ([], list[Element]),
