@@ -1,14 +1,14 @@
 from compas_wood.binding import get_connection_zones
-from compas.geometry import Polyline
+from compas.geometry import Polyline, Point, Rotation, Frame
 from compas_wood import data_sets_plates
-
+import math
 
 # joinery parameters
 division_length = 300
 joint_parameters = [
     100,
     0.5,
-    5,
+    4,
     division_length * 1.5,
     0.65,
     10,
@@ -57,6 +57,16 @@ polylines =[
     ])
 ]
 
+
+# Rotate polyline 180 degrees to check if it has any influence on the results
+point = Point(37, 79, 0)
+axis = [1, 0, 0]
+angle = math.pi
+T = Rotation.from_axis_and_angle(axis, angle, point)
+polylines[2].transform(T)
+polylines[3].transform(T)
+
+
 # generate joints
 polylines_lists, output_types, new_polyline_lists = get_connection_zones(
     polylines,
@@ -67,7 +77,7 @@ polylines_lists, output_types, new_polyline_lists = get_connection_zones(
     joint_parameters,
     0,
     [1, 1, 1],
-    3,
+    2,
 )
 
 
@@ -82,7 +92,13 @@ try:
     for polylines in polylines_lists:
         for polyline in polylines:
             polyline.transform(scale_transform)
-            viewer.scene.add(Polyline(polyline), show_points=False)
+            viewer.scene.add(polyline, show_points=False)
+            viewer.scene.add(polyline[0])
+    
+    viewer.scene.add(point.transformed(scale_transform)) 
+
+
+    viewer.scene.add(polylines)
 
     viewer.show()
 

@@ -1,8 +1,9 @@
+# flags: python.reloadEngine
 #! python3
 # venv: timber_connections
 import Rhino
 import typing
-from wood_rui import wood_rui_globals, add_mesh, add_polylines
+from wood_rui import wood_rui_globals, add_mesh, add_polylines_dataset, process_input
 from typing import List, Dict, Tuple, Union
 from Rhino.Geometry import (
     Mesh,
@@ -1220,196 +1221,20 @@ def MeshFromPolylines(polylines, weld=1, triangulation=0):
     return mesh
 
 
-# General handler for string input
-def handle_string_input(option_name: str) -> str:
-    go = Rhino.Input.Custom.GetString()
-    go.SetCommandPrompt(f"Enter value for {option_name}")
+def callback(selection: dict[str, any], dataset_name: str):
 
-    if go.Get() != Rhino.Input.GetResult.String:
-        Rhino.RhinoApp.WriteLine("Nothing is selected, returning to main menu.")
-        return None
-
-    return go.StringResult()
-
-
-# General handler for list of numbers input
-def handle_numbers_input(option_name: str) -> List[float]:
-    go = Rhino.Input.Custom.GetString()
-    go.SetCommandPrompt(f"Enter {option_name} as comma-separated values (e.g., 0.0, 1.0, 2.5)")
-
-    if go.Get() != Rhino.Input.GetResult.String:
-        Rhino.RhinoApp.WriteLine("Nothing is selected, returning to main menu.")
-        return []
-
-    input_str = go.StringResult()
-    try:
-        return [float(val.strip()) for val in input_str.split(",")]
-    except ValueError:
-        Rhino.RhinoApp.WriteLine("Invalid input. Please enter valid numbers separated by commas.")
-        return []
-
-
-# General handler for list of integers input
-def handle_integers_input(option_name: str) -> List[int]:
-    go = Rhino.Input.Custom.GetString()
-    go.SetCommandPrompt(f"Enter {option_name} as comma-separated integers (e.g., 1, 2, 3)")
-
-    if go.Get() != Rhino.Input.GetResult.String:
-        Rhino.RhinoApp.WriteLine("Nothing is selected, returning to main menu.")
-        return []
-
-    input_str = go.StringResult()
-    try:
-        return [int(val.strip()) for val in input_str.split(",")]
-    except ValueError:
-        Rhino.RhinoApp.WriteLine("Invalid input. Please enter valid integers separated by commas.")
-        return []
-
-
-# General handler for polylines input
-def handle_polylines_input(option_name: str) -> List[Rhino.Geometry.Polyline]:
-    go = Rhino.Input.Custom.GetObject()
-    go.SetCommandPrompt(f"Select {option_name}")
-    go.GeometryFilter = Rhino.DocObjects.ObjectType.Curve  # Filter to curves
-    go.EnablePreSelect(True, True)
-    go.SubObjectSelect = False
-    go.DeselectAllBeforePostSelect = False
-    res = go.GetMultiple(1, 0)
-
-    if go.CommandResult() == Rhino.Commands.Result.Success:
-        selected_curves = [go.Object(i).Curve() for i in range(go.ObjectCount) if go.Object(i).Curve()]
-        polylines = []
-        for curve in selected_curves:
-            result, polyline = curve.TryGetPolyline()
-            if result:
-                polylines.append(polyline)
-            else:
-                Rhino.RhinoApp.WriteLine("One of the selected curves could not be converted to a polyline.")
-        return polylines
-    return []
-
-
-# General handler for lines input
-def handle_lines_input(option_name: str) -> List[Rhino.Geometry.Line]:
-    go = Rhino.Input.Custom.GetObject()
-    go.SetCommandPrompt(f"Select {option_name}")
-    go.GeometryFilter = Rhino.DocObjects.ObjectType.Curve  # Filter to curves
-    go.EnablePreSelect(True, True)
-    go.SubObjectSelect = False
-    go.DeselectAllBeforePostSelect = False
-    res = go.GetMultiple(1, 0)
-
-    if go.CommandResult() == Rhino.Commands.Result.Success:
-        selected_curves = [go.Object(i).Curve() for i in range(go.ObjectCount) if go.Object(i).Curve()]
-        lines = [Rhino.Geometry.Line(c.PointAtStart, c.PointAtEnd) for c in selected_curves]
-        return lines
-    return []
-
-
-# Main method that processes input types based on the input dictionary
-def generalized_input_method(
-    dataset_name: str,
-    input_dict: Dict[
-        str,
-        Tuple[
-            Union[float, int, List[float], List[int], List[Rhino.Geometry.Line], List[Rhino.Geometry.Polyline]], type
-        ],
-    ],
-    callback=None,
-) -> None:
-    get_options = Rhino.Input.Custom.GetOption()
-
-    # Dynamically add options based on the input dictionary
-    dict_options = {}
-    dict_values = {}
-    for option_name, (default_value, value_type) in input_dict.items():
-
-        # print(option_name, value_type)
-        if value_type is float:
-            print(option_name, "float")
-            dict_options[option_name] = Rhino.Input.Custom.OptionDouble(default_value)  # float
-            dict_values[option_name] = dict_options[option_name].CurrentValue
-            get_options.AddOptionDouble(option_name, dict_options[option_name])
-        elif value_type is int:
-            print(option_name, "int")
-            dict_options[option_name] = Rhino.Input.Custom.OptionInteger(default_value)  # int
-            dict_values[option_name] = dict_options[option_name].CurrentValue
-            get_options.AddOptionInteger(option_name, dict_options[option_name])
-        elif value_type is typing.List[float]:  # List of floats
-            print(option_name, "list float")
-            get_options.AddOption(option_name)
-        elif value_type is typing.List[int]:  # List of ints
-            print(option_name, "list int")
-            get_options.AddOption(option_name)
-        elif value_type is typing.List[Rhino.Geometry.Line]:  # List of lines
-            print(option_name, "list line")
-            get_options.AddOption(option_name)
-        elif value_type is typing.List[Rhino.Geometry.Polyline]:  # List of polylines
-            print(option_name, "list polyline")
-            get_options.AddOption(option_name)
-
-    # Run external method to update geometry each time the input is changed.
-    callback(input_dict, dataset_name)
-
-    # Command prompt
-    get_options.SetCommandPrompt("Select input method and options.")
-
-    done = False
-    while not done:
-        # Get the result from the option dialog
-        res = get_options.Get()
-
-        # If an option is selected
-        if res == Rhino.Input.GetResult.Option:
-            option_name = get_options.Option().EnglishName
-            input_type = input_dict[option_name][1]
-
-            if input_type is float or input_type is int:
-                input_dict[option_name] = (dict_options[option_name].CurrentValue, input_type)
-            elif input_type is typing.List[float]:
-                result = handle_numbers_input(option_name)
-                if result:
-                    input_dict[option_name] = (result, input_type)
-                    Rhino.RhinoApp.WriteLine(f"Selected numbers for {option_name}: {result}")
-            elif input_type is typing.List[int]:
-                result = handle_numbers_input(option_name)
-                if result:
-                    input_dict[option_name] = (result, input_type)
-                    Rhino.RhinoApp.WriteLine(f"Selected integers for {option_name}: {result}")
-            elif input_type is typing.List[Rhino.Geometry.Line]:  # List of Line
-                result = handle_lines_input(option_name)
-                if result:
-                    input_dict[option_name] = (result, input_type)
-                    Rhino.RhinoApp.WriteLine(f"Selected lines for {option_name}: {len(result)} lines selected.")
-            elif input_type is typing.List[Rhino.Geometry.Polyline]:  # List of Polyline
-                result = handle_polylines_input(option_name)
-                if result:
-                    input_dict[option_name] = (result, input_type)
-                    Rhino.RhinoApp.WriteLine(f"Selected lines for {option_name}: {len(result)} polylines selected.")
-
-            # Run external method to update geometry each time the input is changed.
-            callback(input_dict, dataset_name)
-
-        elif res == Rhino.Input.GetResult.Nothing or res == Rhino.Input.GetResult.Cancel:
-            Rhino.RhinoApp.WriteLine("No option selected or operation canceled. Exiting...")
-            done = True  # Exit the loop by setting done to True
-
-    # Final output and return success
-    return Rhino.Commands.Result.Success
-
-
-def my_callback(name_value_type, dataset_name):
+    
 
     mesh = wood_rui_globals[dataset_name]["mesh"]
-    print()
+    
 
-    if mesh is None or len(name_value_type["polylines"][0]) == 0:
+    if mesh is None or len(selection["polylines"]) == 0:
         print("Mesh default dataset is created.")
-        mesh = MeshFromPolylines(polylines=default_dataset(), weld=name_value_type["weld_radius"][0])
+        mesh = MeshFromPolylines(polylines=default_dataset(), weld=selection["weld_radius"])
         add_mesh(mesh, dataset_name)
     else:
-        print("Number of polylines: ", len(name_value_type["polylines"][0]))
-        mesh = MeshFromPolylines(polylines=name_value_type["polylines"][0], weld=name_value_type["weld_radius"][0])
+        print("Number of polylines: ", len(selection["polylines"]))
+        mesh = MeshFromPolylines(polylines=selection["polylines"], weld=selection["weld_radius"])
         add_mesh(mesh, dataset_name)
 
     if mesh.IsValid is not True:
@@ -1420,32 +1245,32 @@ def my_callback(name_value_type, dataset_name):
     # user input
     ###############################################################################
     m = wood_rui_globals[dataset_name]["mesh"]  # mesh
+    print(m.Vertices.Count, m.IsValid)
     face_positions = (
-        name_value_type["face_positions"][0] if name_value_type["face_positions"][0] else [0]
+        selection["face_positions"] if selection["face_positions"] else [0]
     )  # offset of panels as a list
     face_thickness = (
-        name_value_type["face_thickness"][0] if name_value_type["face_thickness"][0] is not None else 1
+        selection["face_thickness"] if selection["face_thickness"] is not None else 1
     )  # thickness of a panels
     divisions = (
-        [name_value_type["divisions"][0]] if name_value_type["divisions"][0] else [2]
+        [selection["divisions"]] if selection["divisions"] else [2]
     )  # number of connector per mesh edge
-    print(name_value_type["division_length"][0])
     division_length = [
-        name_value_type["division_length"][0]
+        selection["division_length"]
     ]  # if the value is 0, the division are used, elsewise this parameter is used for edge length division
     edge_vectors = (
-        name_value_type["edge_vectors"][0] if name_value_type["edge_vectors"][0] else []
+        selection["edge_vectors"] if selection["edge_vectors"] else []
     )  # list of selected lines
     connector_width = (
-        name_value_type["connector_width"][0] if name_value_type["connector_width"][0] else 10
+        selection["connector_width"] if selection["connector_width"] else 10
     )  # width of a connector
     connector_height = (
-        name_value_type["connector_height"][0] if name_value_type["connector_height"][0] else 10
+        selection["connector_height"] if selection["connector_height"] else 10
     )  # height of a connector
     connector_thickness = (
-        name_value_type["connector_thickness"][0] if name_value_type["connector_thickness"][0] else 11
+        selection["connector_thickness"] if selection["connector_thickness"] else 11
     )  # thickness of a connector
-    # chamfer = name_value_type["chamfer"][0] if name_value_type["chamfer"][0] else 0 # thickness of a connector
+    # chamfer = selection["chamfer"] if selection["chamfer"] else 0 # thickness of a connector
 
     ###############################################################################
     # run code
@@ -1478,28 +1303,20 @@ def my_callback(name_value_type, dataset_name):
         if len(vda.e_polylines[i]) > 0:
             polylines.extend(vda.e_polylines[i])
 
-    add_polylines(polylines, dataset_name)
-
-    # for i in range(len(vda.e_polylines_planes)):
-    #     if vda.e_polylines_planes[i][0] is not None:
-    #         data_tree_e_pl.AddRange(vda.e_polylines_planes[i], Grasshopper.Kernel.Data.GH_Path(i))
-    # for i in range(len(vda.e_polylines_index)):
-    #     if vda.e_polylines_index[i][0] is not None:
-    #         data_tree_e_id.AddRange(vda.e_polylines_index[i], Grasshopper.Kernel.Data.GH_Path(i))
-    # _f_pl = th.list_to_tree(vda.f_polylines_planes)
-    # _f_id = th.list_to_tree(vda.f_polylines_index)
-
+    add_polylines_dataset(polylines, dataset_name)
 
 if __name__ == "__main__":
+
     dataset_name = "cross_connections"
     wood_rui_globals.init_data(dataset_name)
 
+
     # Define the input dictionary based on your initial dataset
-    input_dict = {
-        "polylines": ([], List[Rhino.Geometry.Polyline]),  # Default value for polylines (list of polylines)
+    selection_types = {
+        "polylines": ([], list[Rhino.Geometry.Polyline]),  # Default value for polylines (list of polylines)
         "weld_radius": (1.0, float),  # Default value for weld radius (float)
-        "edge_vectors": ([], List[Rhino.Geometry.Line]),  # Default value for edge vectors (list of lines)
-        "face_positions": ([], List[float]),  # Default value for face positions (list of floats)
+        "edge_vectors": ([], list[Rhino.Geometry.Line]),  # Default value for edge vectors (list of lines)
+        "face_positions": ([], list[float]),  # Default value for face positions (list of floats)
         "face_thickness": (2.0, float),  # Default value for face thickness (float)
         "divisions": (2, int),  # Default value for divisions (list of integers)
         "division_length": (15.0, float),  # Default value for division length (list of floats)
@@ -1509,5 +1326,4 @@ if __name__ == "__main__":
         # "chamfer": (0, int),                               # Default value for chamfer (int)
     }
 
-    # Call the generalized input method with the dataset name and input dictionary
-    generalized_input_method(dataset_name, input_dict, my_callback)
+    process_input(selection_types, callback, dataset_name=dataset_name)

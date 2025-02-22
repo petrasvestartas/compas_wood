@@ -1,3 +1,4 @@
+# flags: python.reloadEngine
 #! python3
 # venv: timber_connections
 import Rhino
@@ -9,7 +10,7 @@ from wood_rui import wood_rui_globals, get_objects_by_layer, add_joint_type
 import ast
 
 
-def closest_points(dataset_name: str, points: List[Rhino.Geometry.Point3d], points_ids: List[int]) -> None:
+def closest_points(dataset_name: str, points: List[Rhino.Geometry.Point3d], points_ids: List[int], tolerance) -> None:
     """component iterates polyline edges and assigns index based on the point list and their type RTree search
 
     Match the closest lines from the selected dataset to the input lines and update
@@ -50,7 +51,7 @@ def closest_points(dataset_name: str, points: List[Rhino.Geometry.Point3d], poin
         for j in range(len(polylines[i])):
             for k in range(polylines[i][j].SegmentCount):
                 bbox = polylines[i][j].SegmentAt(k).BoundingBox
-                bbox.Inflate(0.02)
+                bbox.Inflate(tolerance)
                 segments_dictionary[count] = [i, j, k, bbox, polylines[i][j].SegmentAt(k)]
                 count = count + 1
 
@@ -70,9 +71,10 @@ def closest_points(dataset_name: str, points: List[Rhino.Geometry.Point3d], poin
         data_by_reference = []
         if rtree.Search(Rhino.Geometry.Sphere(points[i], 0), search_callback, data_by_reference):
             for j in data_by_reference:
-                if points[i].DistanceToSquared(segments_dictionary[j][4].ClosestPoint(points[i], True)) < 0.001:
+                if points[i].DistanceToSquared(segments_dictionary[j][4].ClosestPoint(points[i], True)) < tolerance:
                     joint_types[segments_dictionary[j][0]][segments_dictionary[j][2] + 2] = points_ids[i]
 
+    print(joint_types)
     ###############################################################################
     # Output
     ###############################################################################
@@ -169,4 +171,4 @@ if __name__ == "__main__":
 
     selected_case_name, selected_points, selected_values = command_line_input()
     if selected_case_name and selected_points and selected_values:
-        closest_points(selected_case_name, selected_points, selected_values)
+        closest_points(selected_case_name, selected_points, selected_values, Rhino.RhinoDoc.ActiveDoc.ModelAbsoluteTolerance*20)

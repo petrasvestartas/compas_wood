@@ -1,10 +1,11 @@
+# flags: python.reloadEngine
 #! python3
 # venv: timber_connections
 import Rhino
 from wood_rui import (
     wood_rui_globals,
     ensure_layer_exists,
-    add_polylines,
+    add_polylines_dataset,
     add_mesh,
     add_adjacency,
     add_insertion_vectors,
@@ -750,7 +751,7 @@ class Chevron:
         self.get_plates()
         self.get_joinery_solver_output()
 
-        add_polylines(self.plines, dataset_name)
+        add_polylines_dataset(self.plines, dataset_name)
         add_insertion_vectors(self.insertion_vectors, dataset_name)
         add_joint_type(self.joints_per_face, dataset_name)
         add_three_valence(self.three_valence, dataset_name)

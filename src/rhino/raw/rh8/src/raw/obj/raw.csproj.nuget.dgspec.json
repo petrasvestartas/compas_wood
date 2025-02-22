@@ -1,0 +1,71 @@
+{
+  "format": 1,
+  "restore": {
+    "C:\\brg\\2_code\\compas_wood\\src\\rhino\\raw\\rh8\\src\\raw\\raw.csproj": {}
+  },
+  "projects": {
+    "C:\\brg\\2_code\\compas_wood\\src\\rhino\\raw\\rh8\\src\\raw\\raw.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\brg\\2_code\\compas_wood\\src\\rhino\\raw\\rh8\\src\\raw\\raw.csproj",
+        "projectName": "raw",
+        "projectPath": "C:\\brg\\2_code\\compas_wood\\src\\rhino\\raw\\rh8\\src\\raw\\raw.csproj",
+        "packagesPath": "C:\\Users\\petras\\.nuget\\packages\\",
+        "outputPath": "C:\\brg\\2_code\\compas_wood\\src\\rhino\\raw\\rh8\\src\\raw\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\petras\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net48"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net48": {
+            "targetAlias": "net48",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        }
+      },
+      "frameworks": {
+        "net48": {
+          "targetAlias": "net48",
+          "dependencies": {
+            "Grasshopper": {
+              "target": "Package",
+              "version": "[8.*, )"
+            },
+            "Microsoft.CSharp": {
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[4.7.0, )"
+            },
+            "Microsoft.NETFramework.ReferenceAssemblies.net48": {
+              "target": "Package",
+              "version": "[1.0.3, )"
+            },
+            "RhinoCommon": {
+              "target": "Package",
+              "version": "[8.*, )"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.301\\RuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}

@@ -1,3 +1,4 @@
+# flags: python.reloadEngine
 #! python3
 # venv: timber_connections
 import Rhino
@@ -7,7 +8,7 @@ import Rhino.Commands as rc
 import System
 from typing import List, Optional, Tuple
 from typing import *
-from wood_rui import wood_rui_globals, add_polylines, add_mesh, add_insertion_lines, add_adjacency, add_flags
+from wood_rui import wood_rui_globals, add_polylines_dataset, add_mesh, add_insertion_lines, add_adjacency, add_flags
 
 
 class dataset_folded_plates:
@@ -593,7 +594,7 @@ class dataset_folded_plates:
         for i in range(0, len(self._f_polylines)):
             for j in range(0, len(self._f_polylines[i])):
                 flat_list_of_polylines.append(self._f_polylines[i][j])
-        add_polylines(flat_list_of_polylines, self._dataset_name)
+        add_polylines_dataset(flat_list_of_polylines, self._dataset_name)
         add_insertion_lines(self._insertion_lines, self._dataset_name)
         add_adjacency(self._adjacency, self._dataset_name)
         add_flags(self._flags, self._dataset_name)

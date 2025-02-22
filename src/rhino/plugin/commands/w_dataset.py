@@ -1,3 +1,4 @@
+# flags: python.reloadEngine
 #! python3
 # venv: timber_connections
 import Rhino
@@ -5,7 +6,7 @@ import System
 import System.IO
 from compas_wood.binding import read_xml_polylines
 import os
-from wood_rui import add_polylines, wood_rui_globals, BooleanForm, generalized_input_method
+from wood_rui import add_polylines_dataset, wood_rui_globals, BooleanForm, process_input
 from wood_nano import read_xml_polylines as wood_nano_read_xml_polylines
 from wood_nano import double2
 from typing import *
@@ -83,28 +84,29 @@ def load_data_set():  # path: str = "C://brg//2_code//compas_wood//src//rhino//p
             wood_rui_globals.init_data(value[0])
             polylines = read_xml_polylines(foldername, value[0])
             wood_rui_globals[value[0]]["polylines"] = polylines
-            add_polylines(polylines, value[0])
+            add_polylines_dataset(polylines, value[0])
             Rhino.RhinoDoc.ActiveDoc.Views.ActiveView.Redraw()  # 0 ms
 
     return file_names_without_extensions
 
 
-def my_callback(name_value_type, dataset_name):
+def callback(selection: dict[str, any], dataset_name: str):
 
-    if len(input_dict["polylines"][0]) > 0:
+    if len(selection["polylines"]) > 0:
         dataset_name = "default"
         wood_rui_globals.init_data(dataset_name)
-        add_polylines(input_dict["polylines"][0], dataset_name)
+        add_polylines_dataset(selection["polylines"], dataset_name)
 
 
 if __name__ == "__main__":
 
+    dataset_name = "default"
+
     # Define the input dictionary based on your initial dataset
-    input_dict = {
-        "library": (load_data_set, Callable),  # Default value for weld radius (float)
-        "polylines": ([], List[Rhino.Geometry.Polyline]),  # Default value for polylines (list of polylines)
+    selection_types = {
+        "selection_types": (load_data_set, Callable),  # Default value for weld radius (float)
+        "polylines": ([], list[Rhino.Geometry.Polyline]),  # Default value for polylines (list of polylines)
     }
 
     # Call the generalized input method with the dataset name and input dictionary
-    dataset_name = "default"
-    generalized_input_method(dataset_name, input_dict, my_callback)
+    process_input(selection_types, callback, dataset_name = dataset_name)

@@ -1,3 +1,4 @@
+# flags: python.reloadEngine
 #! python3
 # venv: timber_connections
 import Rhino
@@ -87,8 +88,6 @@ def solver(dataset_name: str) -> None:
         else wood_rui_globals.three_valence
     )
 
-    print(wood_rui_globals[dataset_name]["polylines"])
-
     wood_nano_get_connection_zones(
         to_point2(wood_rui_globals[dataset_name]["polylines"]),
         to_vector2(wood_rui_globals[dataset_name]["insertion_vectors"]),
@@ -109,7 +108,6 @@ def solver(dataset_name: str) -> None:
     )
 
     add_joinery(from_point3(w_output_plines), dataset_name)
-    print(wood_rui_globals[dataset_name]["joinery"])
 
     # Add joint types if the output type is 3
     is_output_type_3: bool = int(wood_globals.output_geometry_type) == 3

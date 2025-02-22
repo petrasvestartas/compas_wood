@@ -1,3 +1,4 @@
+# flags: python.reloadEngine
 #! python3
 # venv: timber_connections
 import Rhino
@@ -7,7 +8,7 @@ from typing import List, Tuple, Dict, Any
 from wood_rui import wood_rui_globals, get_objects_by_layer
 
 
-def closest_lines(dataset_name: str, lines: List[Rhino.Geometry.Line]) -> None:
+def closest_lines(dataset_name: str, lines: List[Rhino.Geometry.Line], tolerance) -> None:
     """
     Match the closest lines from the selected dataset to the input lines and update
     the insertion vectors.
@@ -43,7 +44,7 @@ def closest_lines(dataset_name: str, lines: List[Rhino.Geometry.Line]) -> None:
         for j in range(len(polylines[i])):
             for k in range(polylines[i][j].SegmentCount):
                 bbox = polylines[i][j].SegmentAt(k).BoundingBox
-                bbox.Inflate(0.02)
+                bbox.Inflate(tolerance)
                 segments_dictionary[count] = [i, j, k, bbox, polylines[i][j].SegmentAt(k)]
                 count += 1
 
@@ -61,14 +62,14 @@ def closest_lines(dataset_name: str, lines: List[Rhino.Geometry.Line]) -> None:
         data_by_reference: List[int] = []
         if rtree.Search(Rhino.Geometry.Sphere(lines[i].From, 0), search_callback, data_by_reference):
             for j in data_by_reference:
-                if lines[i].From.DistanceToSquared(segments_dictionary[j][4].ClosestPoint(lines[i].From, True)) < 0.001:
+                if lines[i].From.DistanceToSquared(segments_dictionary[j][4].ClosestPoint(lines[i].From, True)) < tolerance:
                     vectors[segments_dictionary[j][0]][segments_dictionary[j][2] + 2] = lines[i].Direction
 
     for i in range(len(lines)):
         data_by_reference: List[int] = []
         if rtree.Search(Rhino.Geometry.Sphere(lines[i].To, 0), search_callback, data_by_reference):
             for j in data_by_reference:
-                if lines[i].To.DistanceToSquared(segments_dictionary[j][4].ClosestPoint(lines[i].To, True)) < 0.001:
+                if lines[i].To.DistanceToSquared(segments_dictionary[j][4].ClosestPoint(lines[i].To, True)) < tolerance:
                     vectors[segments_dictionary[j][0]][segments_dictionary[j][2] + 2] = -lines[i].Direction
 
     # Store the insertion vectors in the global data structure
@@ -161,4 +162,4 @@ def command_line_input() -> Tuple[str, List[Rhino.Geometry.Line]]:
 if __name__ == "__main__":
     selected_case_name, selected_lines = command_line_input()
     if selected_case_name and selected_lines:
-        closest_lines(selected_case_name, selected_lines)
+        closest_lines(selected_case_name, selected_lines, Rhino.RhinoDoc.ActiveDoc.ModelAbsoluteTolerance*20)

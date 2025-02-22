@@ -1,3 +1,4 @@
+# flags: python.reloadEngine
 #! python3
 # venv: timber_connections
 import Rhino
@@ -244,16 +245,6 @@ if __name__ == "__main__":
 
         # check if type is polyline or just lofts
         are_plates: bool = wood_globals.output_geometry_type == 4
-
-        # for types in wood_rui_globals[dataset_name][type_name]:
-        #     print("___", types)
-        #     for curr_type in types:
-        #         if curr_type == 'edge_insertion' or curr_type == 'hole' or curr_type == 'insert_between_multiple_edges':
-        #             are_plates = True
-        #             print("are_plates")
-        #             break
-        #     if are_plates:
-        #         break
 
         if are_plates:
 

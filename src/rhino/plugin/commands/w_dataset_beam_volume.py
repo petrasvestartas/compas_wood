@@ -1,3 +1,4 @@
+# flags: python.reloadEngine
 #! python3
 # venv: timber_connections
 from wood_nano import beam_volumes as wood_nano_beam_volumes
