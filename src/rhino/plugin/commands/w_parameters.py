@@ -1,4 +1,3 @@
-# flags: python.reloadEngine
 #! python3
 # venv: timber_connections
 from typing import *
@@ -6,7 +5,6 @@ from wood_rui import wood_rui_globals, NamedValuesForm  # Import the singleton i
 from compas_wood.binding import wood_globals
 
 if __name__ == "__main__":
-
     # Define the parameters
     parameters: Tuple[str, Any] = [
         ("SEARCH TYPE", " "),  # 0
@@ -109,6 +107,8 @@ if __name__ == "__main__":
         ("limit_min_joint_length", wood_globals.limit_min_joint_length),  # 64
         ("three_valence", wood_rui_globals.three_valence),  # 65
         ("adjacency", wood_rui_globals.adjacency),  # 66
+        ("dowel_radius", wood_rui_globals.dowel_radius),  # 67
+        ("loft", wood_rui_globals.loft),  # 68
     ]
 
     # Extract names and values separately
@@ -148,7 +148,11 @@ if __name__ == "__main__":
         ]
 
         wood_globals.joints_parameters_and_types = joint_parameters
-        wood_globals.joint_volume_extension = [form.attributes[12][1], form.attributes[13][1], form.attributes[14][1]]
+        wood_globals.joint_volume_extension = [
+            form.attributes[12][1],
+            form.attributes[13][1],
+            form.attributes[14][1],
+        ]
         wood_globals.output_geometry_type = form.attributes[4][1]
         wood_globals.clipper_scale = form.attributes[52][1]
         wood_globals.clipper_area = form.attributes[53][1]
@@ -159,9 +163,15 @@ if __name__ == "__main__":
         wood_globals.data_set_input_folder = form.attributes[58][1]
         wood_globals.data_set_output_file = form.attributes[59][1]
         wood_globals.data_set_output_database = form.attributes[60][1]
-        wood_globals.face_to_face_side_to_side_joints_all_treated_as_rotated = form.attributes[61][1]
-        wood_globals.face_to_face_side_to_side_joints_rotated_joint_as_average = form.attributes[62][1]
-        wood_globals.face_to_face_side_to_side_joints_dihedral_angle = form.attributes[63][1]
+        wood_globals.face_to_face_side_to_side_joints_all_treated_as_rotated = (
+            form.attributes[61][1]
+        )
+        wood_globals.face_to_face_side_to_side_joints_rotated_joint_as_average = (
+            form.attributes[62][1]
+        )
+        wood_globals.face_to_face_side_to_side_joints_dihedral_angle = form.attributes[
+            63
+        ][1]
         wood_globals.limit_min_joint_length = form.attributes[64][1]
 
     wood_rui_globals.scale = [
@@ -188,5 +198,13 @@ if __name__ == "__main__":
         1
     ]  # temporary parameter that must go from compas_wood.binding import wood_globals
     wood_rui_globals.adjacency = form.attributes[66][
+        1
+    ]  # temporary parameter that must go from compas_wood.binding import wood_globals
+
+    wood_rui_globals.dowel_radius = form.attributes[67][
+        1
+    ]  # temporary parameter that must go from compas_wood.binding import wood_globals
+
+    wood_rui_globals.loft = form.attributes[68][
         1
     ]  # temporary parameter that must go from compas_wood.binding import wood_globals

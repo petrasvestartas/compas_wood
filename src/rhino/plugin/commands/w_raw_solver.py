@@ -221,6 +221,9 @@ def callback(selection: dict[str, any], name: str):
     polylines_lists: list[list[Rhino.Geometry.Polyline]] = from_point3(ow_polylines)
     fab_types: list[list[int]] = from_cut_type2(ow_fab_types)
 
+    print(polylines_lists)
+    print(fab_types)
+
     ######################################################################
     # Loft the output and add it to elements as features
     # index_to_group[count] = (group_id, pair_id)

@@ -1,6 +1,6 @@
 #! python3
 # venv: timber_connections
-# r: wood-nano==0.1.1, compas-wood==2.3.0, compas==2.4.3, wood-rui==0.1.0, shapely, compas_model==6.0.1
+# r: wood-nano==0.2.0, compas-wood==2.4.0, compas==2.4.3, wood-rui==0.2.0
 
 from wood_nano import test
 

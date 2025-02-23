@@ -1,4 +1,3 @@
-# flags: python.reloadEngine
 #! python3
 # venv: timber_connections
 import Rhino

@@ -18,6 +18,7 @@ def callback(selection: dict[str, any], name: str):
         selection["distance"],
         selection["display_plane"],
         selection["display_line"],
+        selection["intersection"],
     )
 
     ####################################################################################################
@@ -93,6 +94,7 @@ if __name__ == "__main__":
         "display_plane": (False, bool),
         "display_line": (False, bool),
         "display_features": (False, bool),
+        "intersection" : (False, bool),
         "replace_or_extend_features": (True, bool),
     }
 
