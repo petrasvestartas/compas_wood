@@ -6,4 +6,39 @@ Example demonstrating beam volume generation with side joints.
   ![Beam Volumes Side](binding_beam_volumes_side.png){ loading=lazy style="max-height: 400px" }
 </figure>
 
-See the full example in `docs/examples/binding_beam_volumes_side.py`.
+```python
+from compas.geometry import Polyline
+from compas_wood.binding import beam_volumes
+
+
+input_polylines = [
+    Polyline([
+        [-5, 0, 0],
+        [5, 0, 0]
+    ]),
+    Polyline([
+        [0, -5, 1],
+        [0, 5, 1]
+    ]),
+]
+input_polylines_segment_radii = []
+
+for i in range(len(input_polylines)):
+    input_polyline_segment_radii = []
+    for j in range(len(input_polylines[i].points)):
+        input_polyline_segment_radii.append(1)
+    input_polylines_segment_radii.append(input_polyline_segment_radii)
+
+input_polylines_segment_direction = []
+
+
+index_polylines, index_polylines_segment, distance, point_pairs, volume_pairs, joints_areas, joints_types = beam_volumes(
+        input_polylines,
+        input_polylines_segment_radii,
+        input_polylines_segment_direction,
+        input_allowed_types_per_polyline=[-1],
+        input_min_distance=2,
+        input_volume_length=5,
+        input_cross_or_side_to_end=1.01,
+)
+```
