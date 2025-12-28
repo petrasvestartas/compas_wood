@@ -1,15 +1,26 @@
+# Development tools
 attrs >=17.4
 black ==24.3.0
 bump2version >=1.0.1
 check-manifest >=0.36
-compas_invocations
-doc8
 flake8
 invoke >=0.14
 isort
-sphinx_compas2_theme
-nbsphinx
 twine
 wheel
+
+# Core dependencies
+compas
 wood-nano
+
+# Documentation (MkDocs) - matching compas_model
+markdown-callouts
+mike
+mkdocs >=1.6
+mkdocs-autorefs >=1.4
+mkdocs-material >=9.5
+mkdocstrings[python]
+pydantic >=2.10
+
+# Install package in editable mode
 -e .

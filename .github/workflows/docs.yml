@@ -4,81 +4,50 @@ on:
   push:
     branches:
       - main
-    tags:
-      - 'v*'
   pull_request:
     branches:
       - main
 
+permissions:
+  contents: write
+
 jobs:
-  build:
+  deploy:
     name: build and deploy docs
-    runs-on: windows-latest
-    defaults:
-      run:
-        shell: bash -l {0}
-    steps:
-      - uses: actions/checkout@v2
-
-      - uses: conda-incubator/setup-miniconda@v2.0.0
-        with:
-          miniconda-version: "latest"
-          activate-environment: wood
-          channels: conda-forge
-          python-version: 3.9.10
-
-      - name: install Sphinx and nbsphinx
-        run: |
-          conda install compas
-          pip install -r requirements-dev.txt
-          pip install nbsphinx
-
-      - name: build (windows)
-        run: |
-          invoke docs
-
-      - uses: compas-dev/compas-actions.docs@v1.3.0
-        id: docs
-        with:
-          dest: deploy
-          build_to_subfolder: true
-          install_dependencies: false
-          build_docs: false
-
-      - name: Deploy docs
-        if: success() && steps.docs.outputs.commit_type != 'pull'
-        uses: crazy-max/ghaction-github-pages@v2
-        with:
-          target_branch: gh-pages
-          build_dir: deploy
-          keep_history: true
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-    outputs:
-      commit_type: ${{ steps.docs.outputs.commit_type }}
-      current_version: ${{ steps.docs.outputs.current_version }}
-
-  docVersions:
-    needs: build
-    if: needs.build.outputs.commit_type == 'tag'
-    name: update doc versions
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-        with:
-          ref: gh-pages
+      - uses: actions/checkout@v4
 
-      - uses: compas-dev/compas-actions.docversions@v1.3.0
-        with:
-          current_version: ${{ needs.build.outputs.current_version }}
+      - name: Configure Git Credentials
+        run: |
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
 
-      - name: Deploy docs
-        if: success()
-        uses: crazy-max/ghaction-github-pages@v2
+      - uses: actions/setup-python@v5
         with:
-          target_branch: gh-pages
-          build_dir: ./
-          keep_history: false
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          python-version: 3.x
+
+      - run: echo "cache_id=$(date --utc '+%V')" >> $GITHUB_ENV
+
+      - uses: actions/cache@v4
+        with:
+          key: mkdocs-material-${{ env.cache_id }}
+          path: .cache
+          restore-keys: |
+            mkdocs-material-
+
+      - name: Install dependencies
+        run: |
+          pip install mkdocs-material
+          pip install mkdocstrings[python]
+          pip install markdown-callouts
+          pip install compas
+          pip install wood-nano
+          pip install -e .
+
+      - name: Build documentation
+        run: mkdocs build
+
+      - name: Deploy documentation
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: mkdocs gh-deploy --force

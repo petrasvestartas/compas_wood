@@ -2,12 +2,19 @@ from wood_nano import GLOBALS
 
 
 class Globals(object):
-    """Class to access global variables of the wood_nano library using class instance wood_globals:
+    """Class to access global variables of the wood_nano library.
 
-    >>> from compas_wood.binding import wood_globals
-    >>> wood_globals.distance_squared = 10
-    >>> wood_globals.face_to_face_side_to_side_joints_rotated_joint_as_average = True
-    >>> wood_globals.face_to_face_side_to_side_joints_all_treated_as_rotated = True
+    Use the class instance ``wood_globals`` to access and modify global parameters.
+
+    Examples
+    --------
+    ```python
+    from compas_wood.binding import wood_globals
+
+    wood_globals.distance_squared = 10
+    wood_globals.face_to_face_side_to_side_joints_rotated_joint_as_average = True
+    wood_globals.face_to_face_side_to_side_joints_all_treated_as_rotated = True
+    ```
 
     Attributes
     ----------
