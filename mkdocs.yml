@@ -11,6 +11,9 @@ extra:
   version:
     provider: mike
 
+extra_css:
+  - assets/css/custom.css
+
 theme:
   name: material
   palette:
