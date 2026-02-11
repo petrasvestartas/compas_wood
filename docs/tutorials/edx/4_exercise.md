@@ -1,5 +1,10 @@
 # Exercise
 
+## Solutions
+
+- [user_objects.zip](user_objects.zip) — Grasshopper user objects to install in Rhino8. Unzip and drag and drop all of the on Grasshopper canvas.
+- [examples.zip](examples.zip) — Grasshopper files with solved connections.
+
 ## Explanation
 
 - Download the files [4_exercise.3dm](4_exercise.3dm).
@@ -14,7 +19,6 @@
 ![Exercise 2](4_exercise2.png)
 *Fig. 4.2 The St. Loup Chapel and Vidy theater*
 
-## Solutions
+## Note
 
-- [user_objects.zip](user_objects.zip) — Grasshopper user objects to install in Rhino. Unzip and drag and drop all of the on Grasshopper canvas.
-- [examples.zip](examples.zip) — Grasshopper files with solved connections.
+Next versions of compas_wood is developed as Rhino plugin.
