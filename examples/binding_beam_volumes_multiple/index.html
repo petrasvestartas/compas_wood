@@ -1,0 +1,2003 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://github.com/petrasvestartas/compas_wood/examples/binding_beam_volumes_multiple/">
+      
+      
+        <link rel="prev" href="../binding_beam_volumes_frame/">
+      
+      
+        <link rel="next" href="../binding_beam_volumes_side/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../public/favicon.ico">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.1">
+    
+    
+      
+        <title>Beam Volumes Multiple - COMPAS Wood</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/_mkdocstrings.css">
+    
+      <link rel="stylesheet" href="../../assets/css/custom.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#beam-volumes-multiple" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      <div data-md-color-scheme="default" data-md-component="outdated" hidden>
+        
+      </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="https://petrasvestartas.github.io/compas_wood/" title="COMPAS Wood" class="md-header__button md-logo" aria-label="COMPAS Wood" data-md-component="logo">
+      
+  <img src="../../assets/images/compas_icon_white.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            COMPAS Wood
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Beam Volumes Multiple
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m14.3 16-.7-2h-3.2l-.7 2H7.8L11 7h2l3.2 9zM20 8.69V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12zm-9.15 3.96h2.3L12 9z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="blue" data-md-color-accent="light-blue"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_2" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="blue" data-md-color-accent="light-blue"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_2">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/petrasvestartas/compas_wood/" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    petrasvestartas/compas_wood
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="https://petrasvestartas.github.io/compas_wood/" title="COMPAS Wood" class="md-nav__button md-logo" aria-label="COMPAS Wood" data-md-component="logo">
+      
+  <img src="../../assets/images/compas_icon_white.png" alt="logo">
+
+    </a>
+    COMPAS Wood
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/petrasvestartas/compas_wood/" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    petrasvestartas/compas_wood
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Introduction
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../installation/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Installation
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2" id="__nav_2_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Installation
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../installation/pip/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Pip
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../installation/conda/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Conda
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../installation/rhino/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Rhino
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../installation/uv/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    UV
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../tutorials/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tutorials
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_3" id="__nav_3_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Tutorials
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3_2" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../tutorials/edx/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    EdX Course
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_3_2" id="__nav_3_2_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    EdX Course
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorials/edx/1_introduction/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Introduction
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorials/edx/2_geometrical_generation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Geometrical Generation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorials/edx/3_joinery_methods/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Joinery Methods
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorials/edx/4_exercise/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Exercise
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorials/edx/5_conclusion/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Conclusion
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorials/hilti/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Hilti
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3_4" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../tutorials/ibois/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    IBOIS
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_3_4" id="__nav_3_4_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    IBOIS
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorials/ibois/opennest/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    2D Nesting Plugin
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorials/ibois/program/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Program
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorials/ibois/requirements/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Requirements
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorials/ibois/tutorials/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Rhino 8 Tutorials
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Examples
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4" id="__nav_4_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Examples
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../binding_beam_volumes_cross/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Beam Volumes Cross
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../binding_beam_volumes_frame/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Beam Volumes Frame
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Beam Volumes Multiple
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../binding_beam_volumes_side/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Beam Volumes Side
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../binding_closed_mesh_from_polylines/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Closed Mesh
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../binding_get_connection_zones/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Connection Zones
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../binding_globals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Globals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../binding_joints/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Joints
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../binding_read_xml_polylines/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Read XML Polylines
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../binding_read_xml_polylines_and_properties/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Read XML Properties
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../binding_rtree/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    RTree
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../binding_skeleton/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Skeleton
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../binding_test/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Test
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reference
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/compas_wood.binding/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    compas_wood.binding
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Other
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Other
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../license/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    License
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../citation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Citation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="beam-volumes-multiple">Beam Volumes Multiple<a class="headerlink" href="#beam-volumes-multiple" title="Permanent link">¤</a></h1>
+<p>Example demonstrating beam volume generation with multiple beams.</p>
+<figure>
+  <img alt="Beam Volumes Multiple" loading="lazy" src="../binding_beam_volumes_multiple.png" style="max-height: 400px" />
+</figure>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">compas.geometry</span><span class="w"> </span><span class="kn">import</span> <span class="n">Polyline</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">compas_wood.binding</span><span class="w"> </span><span class="kn">import</span> <span class="n">beam_volumes</span>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="n">input_polylines</span> <span class="o">=</span> <span class="p">[</span>
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>    <span class="n">Polyline</span><span class="p">([</span>
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>        <span class="p">[</span><span class="mf">297.037012066934</span><span class="p">,</span> <span class="mf">126.422271499885</span><span class="p">,</span> <span class="o">-</span><span class="mf">178.188030913779</span><span class="p">],</span>
+</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>        <span class="p">[</span><span class="mf">321.489409568039</span><span class="p">,</span> <span class="mf">169.111942318764</span><span class="p">,</span> <span class="o">-</span><span class="mf">186.869036108803</span><span class="p">],</span>
+</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>        <span class="p">[</span><span class="mf">345.941807069144</span><span class="p">,</span> <span class="mf">211.801613137642</span><span class="p">,</span> <span class="o">-</span><span class="mf">195.550041303827</span><span class="p">],</span>
+</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>        <span class="p">[</span><span class="mf">370.394204570249</span><span class="p">,</span> <span class="mf">254.491283956521</span><span class="p">,</span> <span class="o">-</span><span class="mf">204.231046498851</span><span class="p">]</span>
+</span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>    <span class="p">]),</span>
+</span><span id="__span-0-12"><a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>    <span class="n">Polyline</span><span class="p">([</span>
+</span><span id="__span-0-13"><a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>        <span class="p">[</span><span class="mf">182.634858082301</span><span class="p">,</span> <span class="mf">98.7137182074149</span><span class="p">,</span> <span class="o">-</span><span class="mf">78.306080246581</span><span class="p">],</span>
+</span><span id="__span-0-14"><a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>        <span class="p">[</span><span class="mf">211.235396578459</span><span class="p">,</span> <span class="mf">105.640856530532</span><span class="p">,</span> <span class="o">-</span><span class="mf">103.27656791338</span><span class="p">],</span>
+</span><span id="__span-0-15"><a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>        <span class="p">[</span><span class="mf">239.835935074617</span><span class="p">,</span> <span class="mf">112.56799485365</span><span class="p">,</span> <span class="o">-</span><span class="mf">128.24705558018</span><span class="p">],</span>
+</span><span id="__span-0-16"><a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>        <span class="p">[</span><span class="mf">268.436473570776</span><span class="p">,</span> <span class="mf">119.495133176767</span><span class="p">,</span> <span class="o">-</span><span class="mf">153.217543246979</span><span class="p">],</span>
+</span><span id="__span-0-17"><a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>        <span class="p">[</span><span class="mf">297.037012066934</span><span class="p">,</span> <span class="mf">126.422271499885</span><span class="p">,</span> <span class="o">-</span><span class="mf">178.188030913779</span><span class="p">]</span>
+</span><span id="__span-0-18"><a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>    <span class="p">]),</span>
+</span><span id="__span-0-19"><a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a>    <span class="n">Polyline</span><span class="p">([</span>
+</span><span id="__span-0-20"><a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a>        <span class="p">[</span><span class="o">-</span><span class="mf">125.19241232501</span><span class="p">,</span> <span class="mf">107.875422065027</span><span class="p">,</span> <span class="o">-</span><span class="mf">39.2649958323028</span><span class="p">],</span>
+</span><span id="__span-0-21"><a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a>        <span class="p">[</span><span class="o">-</span><span class="mf">75.705277009549</span><span class="p">,</span> <span class="mf">107.25372412331</span><span class="p">,</span> <span class="o">-</span><span class="mf">42.5192301219386</span><span class="p">],</span>
+</span><span id="__span-0-22"><a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a>        <span class="p">[</span><span class="o">-</span><span class="mf">26.8203151230943</span><span class="p">,</span> <span class="mf">105.243836458838</span><span class="p">,</span> <span class="o">-</span><span class="mf">50.6895979092208</span><span class="p">],</span>
+</span><span id="__span-0-23"><a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a>        <span class="p">[</span><span class="mf">21.1131439030443</span><span class="p">,</span> <span class="mf">102.043760643015</span><span class="p">,</span> <span class="o">-</span><span class="mf">63.0656900444498</span><span class="p">],</span>
+</span><span id="__span-0-24"><a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a>        <span class="p">[</span><span class="mf">67.9151143837992</span><span class="p">,</span> <span class="mf">97.8400491497485</span><span class="p">,</span> <span class="o">-</span><span class="mf">78.9813305497922</span><span class="p">],</span>
+</span><span id="__span-0-25"><a id="__codelineno-0-25" name="__codelineno-0-25" href="#__codelineno-0-25"></a>        <span class="p">[</span><span class="mf">113.521085871532</span><span class="p">,</span> <span class="mf">92.7952640964856</span><span class="p">,</span> <span class="o">-</span><span class="mf">97.8579657684805</span><span class="p">],</span>
+</span><span id="__span-0-26"><a id="__codelineno-0-26" name="__codelineno-0-26" href="#__codelineno-0-26"></a>        <span class="p">[</span><span class="mf">157.936920791687</span><span class="p">,</span> <span class="mf">87.0452505103035</span><span class="p">,</span> <span class="o">-</span><span class="mf">119.213391744547</span><span class="p">],</span>
+</span><span id="__span-0-27"><a id="__codelineno-0-27" name="__codelineno-0-27" href="#__codelineno-0-27"></a>        <span class="p">[</span><span class="mf">201.207350715535</span><span class="p">,</span> <span class="mf">80.7012045875338</span><span class="p">,</span> <span class="o">-</span><span class="mf">142.653744283013</span><span class="p">]</span>
+</span><span id="__span-0-28"><a id="__codelineno-0-28" name="__codelineno-0-28" href="#__codelineno-0-28"></a>    <span class="p">]),</span>
+</span><span id="__span-0-29"><a id="__codelineno-0-29" name="__codelineno-0-29" href="#__codelineno-0-29"></a>    <span class="n">Polyline</span><span class="p">([</span>
+</span><span id="__span-0-30"><a id="__codelineno-0-30" name="__codelineno-0-30" href="#__codelineno-0-30"></a>        <span class="p">[</span><span class="o">-</span><span class="mf">10.3599318150342</span><span class="p">,</span> <span class="mf">38.7282123158674</span><span class="p">,</span> <span class="o">-</span><span class="mf">287.206518566188</span><span class="p">],</span>
+</span><span id="__span-0-31"><a id="__codelineno-0-31" name="__codelineno-0-31" href="#__codelineno-0-31"></a>        <span class="p">[</span><span class="o">-</span><span class="mf">31.7764187502288</span><span class="p">,</span> <span class="mf">49.1160173176098</span><span class="p">,</span> <span class="o">-</span><span class="mf">249.870793280387</span><span class="p">],</span>
+</span><span id="__span-0-32"><a id="__codelineno-0-32" name="__codelineno-0-32" href="#__codelineno-0-32"></a>        <span class="p">[</span><span class="o">-</span><span class="mf">46.147480668278</span><span class="p">,</span> <span class="mf">60.3975803199585</span><span class="p">,</span> <span class="o">-</span><span class="mf">209.510751764339</span><span class="p">],</span>
+</span><span id="__span-0-33"><a id="__codelineno-0-33" name="__codelineno-0-33" href="#__codelineno-0-33"></a>        <span class="p">[</span><span class="o">-</span><span class="mf">54.662795188934</span><span class="p">,</span> <span class="mf">72.1419219251921</span><span class="p">,</span> <span class="o">-</span><span class="mf">167.63145233557</span><span class="p">],</span>
+</span><span id="__span-0-34"><a id="__codelineno-0-34" name="__codelineno-0-34" href="#__codelineno-0-34"></a>        <span class="p">[</span><span class="o">-</span><span class="mf">58.5361339307107</span><span class="p">,</span> <span class="mf">84.0926783823342</span><span class="p">,</span> <span class="o">-</span><span class="mf">125.117457662038</span><span class="p">],</span>
+</span><span id="__span-0-35"><a id="__codelineno-0-35" name="__codelineno-0-35" href="#__codelineno-0-35"></a>        <span class="p">[</span><span class="o">-</span><span class="mf">58.7606503977529</span><span class="p">,</span> <span class="mf">96.1110401814458</span><span class="p">,</span> <span class="o">-</span><span class="mf">82.4406121991002</span><span class="p">],</span>
+</span><span id="__span-0-36"><a id="__codelineno-0-36" name="__codelineno-0-36" href="#__codelineno-0-36"></a>        <span class="p">[</span><span class="o">-</span><span class="mf">56.0905042124202</span><span class="p">,</span> <span class="mf">108.124674519414</span><span class="p">,</span> <span class="o">-</span><span class="mf">39.8417855305585</span><span class="p">],</span>
+</span><span id="__span-0-37"><a id="__codelineno-0-37" name="__codelineno-0-37" href="#__codelineno-0-37"></a>        <span class="p">[</span><span class="o">-</span><span class="mf">51.0879024066377</span><span class="p">,</span> <span class="mf">120.096820292103</span><span class="p">,</span> <span class="mf">2.56039219002248</span><span class="p">],</span>
+</span><span id="__span-0-38"><a id="__codelineno-0-38" name="__codelineno-0-38" href="#__codelineno-0-38"></a>        <span class="p">[</span><span class="o">-</span><span class="mf">44.1738209609492</span><span class="p">,</span> <span class="mf">132.009588674272</span><span class="p">,</span> <span class="mf">44.7113106559208</span><span class="p">],</span>
+</span><span id="__span-0-39"><a id="__codelineno-0-39" name="__codelineno-0-39" href="#__codelineno-0-39"></a>    <span class="p">]),</span>
+</span><span id="__span-0-40"><a id="__codelineno-0-40" name="__codelineno-0-40" href="#__codelineno-0-40"></a>
+</span><span id="__span-0-41"><a id="__codelineno-0-41" name="__codelineno-0-41" href="#__codelineno-0-41"></a>    <span class="n">Polyline</span><span class="p">([</span>
+</span><span id="__span-0-42"><a id="__codelineno-0-42" name="__codelineno-0-42" href="#__codelineno-0-42"></a>        <span class="p">[</span><span class="o">-</span><span class="mf">188.240159298455</span><span class="p">,</span> <span class="mf">75.8808592794907</span><span class="p">,</span> <span class="o">-</span><span class="mf">151.530383786316</span><span class="p">],</span>
+</span><span id="__span-0-43"><a id="__codelineno-0-43" name="__codelineno-0-43" href="#__codelineno-0-43"></a>        <span class="p">[</span><span class="o">-</span><span class="mf">145.963074583616</span><span class="p">,</span> <span class="mf">73.7325840014969</span><span class="p">,</span> <span class="o">-</span><span class="mf">160.05232439351</span><span class="p">],</span>
+</span><span id="__span-0-44"><a id="__codelineno-0-44" name="__codelineno-0-44" href="#__codelineno-0-44"></a>        <span class="p">[</span><span class="o">-</span><span class="mf">103.685989868776</span><span class="p">,</span> <span class="mf">71.5843087235031</span><span class="p">,</span> <span class="o">-</span><span class="mf">168.574265000704</span><span class="p">],</span>
+</span><span id="__span-0-45"><a id="__codelineno-0-45" name="__codelineno-0-45" href="#__codelineno-0-45"></a>        <span class="p">[</span><span class="o">-</span><span class="mf">61.4089051539373</span><span class="p">,</span> <span class="mf">69.4360334455093</span><span class="p">,</span> <span class="o">-</span><span class="mf">177.096205607898</span><span class="p">],</span>
+</span><span id="__span-0-46"><a id="__codelineno-0-46" name="__codelineno-0-46" href="#__codelineno-0-46"></a>        <span class="p">[</span><span class="o">-</span><span class="mf">19.1318204390981</span><span class="p">,</span> <span class="mf">67.2877581675155</span><span class="p">,</span> <span class="o">-</span><span class="mf">185.618146215092</span><span class="p">],</span>
+</span><span id="__span-0-47"><a id="__codelineno-0-47" name="__codelineno-0-47" href="#__codelineno-0-47"></a>        <span class="p">[</span><span class="mf">23.1452642757411</span><span class="p">,</span> <span class="mf">65.1394828895218</span><span class="p">,</span> <span class="o">-</span><span class="mf">194.140086822286</span><span class="p">],</span>
+</span><span id="__span-0-48"><a id="__codelineno-0-48" name="__codelineno-0-48" href="#__codelineno-0-48"></a>    <span class="p">]),</span>
+</span><span id="__span-0-49"><a id="__codelineno-0-49" name="__codelineno-0-49" href="#__codelineno-0-49"></a>
+</span><span id="__span-0-50"><a id="__codelineno-0-50" name="__codelineno-0-50" href="#__codelineno-0-50"></a>    <span class="n">Polyline</span><span class="p">([</span>
+</span><span id="__span-0-51"><a id="__codelineno-0-51" name="__codelineno-0-51" href="#__codelineno-0-51"></a>        <span class="p">[</span><span class="o">-</span><span class="mf">96.6199846476256</span><span class="p">,</span> <span class="mf">90.1021988025274</span><span class="p">,</span> <span class="o">-</span><span class="mf">110.227043500606</span><span class="p">],</span>
+</span><span id="__span-0-52"><a id="__codelineno-0-52" name="__codelineno-0-52" href="#__codelineno-0-52"></a>        <span class="p">[</span><span class="o">-</span><span class="mf">48.9174102895825</span><span class="p">,</span> <span class="mf">87.3983183807673</span><span class="p">,</span> <span class="o">-</span><span class="mf">111.648442107134</span><span class="p">],</span>
+</span><span id="__span-0-53"><a id="__codelineno-0-53" name="__codelineno-0-53" href="#__codelineno-0-53"></a>        <span class="p">[</span><span class="o">-</span><span class="mf">1.21483593153943</span><span class="p">,</span> <span class="mf">84.6944379590072</span><span class="p">,</span> <span class="o">-</span><span class="mf">113.069840713663</span><span class="p">],</span>
+</span><span id="__span-0-54"><a id="__codelineno-0-54" name="__codelineno-0-54" href="#__codelineno-0-54"></a>        <span class="p">[</span><span class="mf">46.4877384265037</span><span class="p">,</span> <span class="mf">81.9905575372471</span><span class="p">,</span> <span class="o">-</span><span class="mf">114.491239320191</span><span class="p">],</span>
+</span><span id="__span-0-55"><a id="__codelineno-0-55" name="__codelineno-0-55" href="#__codelineno-0-55"></a>        <span class="p">[</span><span class="mf">94.1903127845467</span><span class="p">,</span> <span class="mf">79.286677115487</span><span class="p">,</span> <span class="o">-</span><span class="mf">115.91263792672</span><span class="p">],</span>
+</span><span id="__span-0-56"><a id="__codelineno-0-56" name="__codelineno-0-56" href="#__codelineno-0-56"></a>    <span class="p">]),</span>
+</span><span id="__span-0-57"><a id="__codelineno-0-57" name="__codelineno-0-57" href="#__codelineno-0-57"></a>
+</span><span id="__span-0-58"><a id="__codelineno-0-58" name="__codelineno-0-58" href="#__codelineno-0-58"></a>    <span class="n">Polyline</span><span class="p">([</span>
+</span><span id="__span-0-59"><a id="__codelineno-0-59" name="__codelineno-0-59" href="#__codelineno-0-59"></a>        <span class="p">[</span><span class="mf">132.972124919423</span><span class="p">,</span> <span class="mf">138.449055887252</span><span class="p">,</span> <span class="mf">86.074977722597</span><span class="p">],</span>
+</span><span id="__span-0-60"><a id="__codelineno-0-60" name="__codelineno-0-60" href="#__codelineno-0-60"></a>        <span class="p">[</span><span class="mf">167.267793637183</span><span class="p">,</span> <span class="mf">134.152861891673</span><span class="p">,</span> <span class="mf">62.679797641331</span><span class="p">],</span>
+</span><span id="__span-0-61"><a id="__codelineno-0-61" name="__codelineno-0-61" href="#__codelineno-0-61"></a>        <span class="p">[</span><span class="mf">201.563462354943</span><span class="p">,</span> <span class="mf">129.856667896093</span><span class="p">,</span> <span class="mf">39.2846175600651</span><span class="p">],</span>
+</span><span id="__span-0-62"><a id="__codelineno-0-62" name="__codelineno-0-62" href="#__codelineno-0-62"></a>        <span class="p">[</span><span class="mf">235.859131072703</span><span class="p">,</span> <span class="mf">125.560473900514</span><span class="p">,</span> <span class="mf">15.8894374787991</span><span class="p">],</span>
+</span><span id="__span-0-63"><a id="__codelineno-0-63" name="__codelineno-0-63" href="#__codelineno-0-63"></a>    <span class="p">]),</span>
+</span><span id="__span-0-64"><a id="__codelineno-0-64" name="__codelineno-0-64" href="#__codelineno-0-64"></a>
+</span><span id="__span-0-65"><a id="__codelineno-0-65" name="__codelineno-0-65" href="#__codelineno-0-65"></a>    <span class="n">Polyline</span><span class="p">([</span>
+</span><span id="__span-0-66"><a id="__codelineno-0-66" name="__codelineno-0-66" href="#__codelineno-0-66"></a>        <span class="p">[</span><span class="mf">129.410585091899</span><span class="p">,</span> <span class="mf">71.8669625143157</span><span class="p">,</span> <span class="o">-</span><span class="mf">172.501597971961</span><span class="p">],</span>
+</span><span id="__span-0-67"><a id="__codelineno-0-67" name="__codelineno-0-67" href="#__codelineno-0-67"></a>        <span class="p">[</span><span class="mf">151.870897769568</span><span class="p">,</span> <span class="mf">83.1961266976715</span><span class="p">,</span> <span class="o">-</span><span class="mf">132.75167444875</span><span class="p">],</span>
+</span><span id="__span-0-68"><a id="__codelineno-0-68" name="__codelineno-0-68" href="#__codelineno-0-68"></a>        <span class="p">[</span><span class="mf">174.331210447238</span><span class="p">,</span> <span class="mf">94.5252908810273</span><span class="p">,</span> <span class="o">-</span><span class="mf">93.0017509255386</span><span class="p">],</span>
+</span><span id="__span-0-69"><a id="__codelineno-0-69" name="__codelineno-0-69" href="#__codelineno-0-69"></a>        <span class="p">[</span><span class="mf">196.791523124907</span><span class="p">,</span> <span class="mf">105.854455064383</span><span class="p">,</span> <span class="o">-</span><span class="mf">53.2518274023273</span><span class="p">],</span>
+</span><span id="__span-0-70"><a id="__codelineno-0-70" name="__codelineno-0-70" href="#__codelineno-0-70"></a>        <span class="p">[</span><span class="mf">219.251835802577</span><span class="p">,</span> <span class="mf">117.183619247739</span><span class="p">,</span> <span class="o">-</span><span class="mf">13.5019038791161</span><span class="p">],</span>
+</span><span id="__span-0-71"><a id="__codelineno-0-71" name="__codelineno-0-71" href="#__codelineno-0-71"></a>        <span class="p">[</span><span class="mf">241.712148480247</span><span class="p">,</span> <span class="mf">128.512783431095</span><span class="p">,</span> <span class="mf">26.2480196440951</span><span class="p">],</span>
+</span><span id="__span-0-72"><a id="__codelineno-0-72" name="__codelineno-0-72" href="#__codelineno-0-72"></a>        <span class="p">[</span><span class="mf">264.172461157916</span><span class="p">,</span> <span class="mf">139.84194761445</span><span class="p">,</span> <span class="mf">65.9979431673064</span><span class="p">],</span>
+</span><span id="__span-0-73"><a id="__codelineno-0-73" name="__codelineno-0-73" href="#__codelineno-0-73"></a>    <span class="p">]),</span>
+</span><span id="__span-0-74"><a id="__codelineno-0-74" name="__codelineno-0-74" href="#__codelineno-0-74"></a>
+</span><span id="__span-0-75"><a id="__codelineno-0-75" name="__codelineno-0-75" href="#__codelineno-0-75"></a>    <span class="n">Polyline</span><span class="p">([</span>
+</span><span id="__span-0-76"><a id="__codelineno-0-76" name="__codelineno-0-76" href="#__codelineno-0-76"></a>        <span class="p">[</span><span class="mf">164.938767042065</span><span class="p">,</span> <span class="mf">160.473718227021</span><span class="p">,</span> <span class="mf">163.598974047964</span><span class="p">],</span>
+</span><span id="__span-0-77"><a id="__codelineno-0-77" name="__codelineno-0-77" href="#__codelineno-0-77"></a>        <span class="p">[</span><span class="mf">147.837376054901</span><span class="p">,</span> <span class="mf">149.074854470926</span><span class="p">,</span> <span class="mf">123.488214523064</span><span class="p">],</span>
+</span><span id="__span-0-78"><a id="__codelineno-0-78" name="__codelineno-0-78" href="#__codelineno-0-78"></a>        <span class="p">[</span><span class="mf">131.218069322568</span><span class="p">,</span> <span class="mf">137.625923389656</span><span class="p">,</span> <span class="mf">83.1894892076615</span><span class="p">],</span>
+</span><span id="__span-0-79"><a id="__codelineno-0-79" name="__codelineno-0-79" href="#__codelineno-0-79"></a>        <span class="p">[</span><span class="mf">115.06311204992</span><span class="p">,</span> <span class="mf">126.130413515365</span><span class="p">,</span> <span class="mf">42.715559558341</span><span class="p">],</span>
+</span><span id="__span-0-80"><a id="__codelineno-0-80" name="__codelineno-0-80" href="#__codelineno-0-80"></a>        <span class="p">[</span><span class="mf">99.3556294473208</span><span class="p">,</span> <span class="mf">114.591526704951</span><span class="p">,</span> <span class="mf">2.07815097714067</span><span class="p">],</span>
+</span><span id="__span-0-81"><a id="__codelineno-0-81" name="__codelineno-0-81" href="#__codelineno-0-81"></a>        <span class="p">[</span><span class="mf">84.0795669982659</span><span class="p">,</span> <span class="mf">103.012205524298</span><span class="p">,</span> <span class="o">-</span><span class="mf">38.7119491181474</span><span class="p">],</span>
+</span><span id="__span-0-82"><a id="__codelineno-0-82" name="__codelineno-0-82" href="#__codelineno-0-82"></a>        <span class="p">[</span><span class="mf">69.2196466793098</span><span class="p">,</span> <span class="mf">91.3951546375981</span><span class="p">,</span> <span class="o">-</span><span class="mf">79.6448144234582</span><span class="p">],</span>
+</span><span id="__span-0-83"><a id="__codelineno-0-83" name="__codelineno-0-83" href="#__codelineno-0-83"></a>        <span class="p">[</span><span class="mf">54.7613339074588</span><span class="p">,</span> <span class="mf">79.7428674496858</span><span class="p">,</span> <span class="o">-</span><span class="mf">120.71128445365</span><span class="p">],</span>
+</span><span id="__span-0-84"><a id="__codelineno-0-84" name="__codelineno-0-84" href="#__codelineno-0-84"></a>        <span class="p">[</span><span class="mf">40.6907906778078</span><span class="p">,</span> <span class="mf">68.0576389813056</span><span class="p">,</span> <span class="o">-</span><span class="mf">161.902917836579</span><span class="p">],</span>
+</span><span id="__span-0-85"><a id="__codelineno-0-85" name="__codelineno-0-85" href="#__codelineno-0-85"></a>        <span class="p">[</span><span class="mf">26.9948513423117</span><span class="p">,</span> <span class="mf">56.3415940716198</span><span class="p">,</span> <span class="o">-</span><span class="mf">203.2118916656</span><span class="p">],</span>
+</span><span id="__span-0-86"><a id="__codelineno-0-86" name="__codelineno-0-86" href="#__codelineno-0-86"></a>    <span class="p">]),</span>
+</span><span id="__span-0-87"><a id="__codelineno-0-87" name="__codelineno-0-87" href="#__codelineno-0-87"></a>
+</span><span id="__span-0-88"><a id="__codelineno-0-88" name="__codelineno-0-88" href="#__codelineno-0-88"></a>    <span class="n">Polyline</span><span class="p">([</span>
+</span><span id="__span-0-89"><a id="__codelineno-0-89" name="__codelineno-0-89" href="#__codelineno-0-89"></a>        <span class="p">[</span><span class="mf">114.821035246594</span><span class="p">,</span> <span class="mf">198.058111884719</span><span class="p">,</span> <span class="mf">106.829580839264</span><span class="p">],</span>
+</span><span id="__span-0-90"><a id="__codelineno-0-90" name="__codelineno-0-90" href="#__codelineno-0-90"></a>        <span class="p">[</span><span class="mf">139.879901144329</span><span class="p">,</span> <span class="mf">179.26591505587</span><span class="p">,</span> <span class="mf">135.214277443614</span><span class="p">],</span>
+</span><span id="__span-0-91"><a id="__codelineno-0-91" name="__codelineno-0-91" href="#__codelineno-0-91"></a>        <span class="p">[</span><span class="mf">164.938767042065</span><span class="p">,</span> <span class="mf">160.473718227021</span><span class="p">,</span> <span class="mf">163.598974047964</span><span class="p">],</span>
+</span><span id="__span-0-92"><a id="__codelineno-0-92" name="__codelineno-0-92" href="#__codelineno-0-92"></a>        <span class="p">[</span><span class="mf">189.9976329398</span><span class="p">,</span> <span class="mf">141.681521398171</span><span class="p">,</span> <span class="mf">191.983670652314</span><span class="p">],</span>
+</span><span id="__span-0-93"><a id="__codelineno-0-93" name="__codelineno-0-93" href="#__codelineno-0-93"></a>        <span class="p">[</span><span class="mf">215.056498837535</span><span class="p">,</span> <span class="mf">122.889324569322</span><span class="p">,</span> <span class="mf">220.368367256664</span><span class="p">],</span>
+</span><span id="__span-0-94"><a id="__codelineno-0-94" name="__codelineno-0-94" href="#__codelineno-0-94"></a>    <span class="p">]),</span>
+</span><span id="__span-0-95"><a id="__codelineno-0-95" name="__codelineno-0-95" href="#__codelineno-0-95"></a>
+</span><span id="__span-0-96"><a id="__codelineno-0-96" name="__codelineno-0-96" href="#__codelineno-0-96"></a>    <span class="n">Polyline</span><span class="p">([</span>
+</span><span id="__span-0-97"><a id="__codelineno-0-97" name="__codelineno-0-97" href="#__codelineno-0-97"></a>        <span class="p">[</span><span class="mf">264.172461157916</span><span class="p">,</span> <span class="mf">139.84194761445</span><span class="p">,</span> <span class="mf">65.9979431673064</span><span class="p">],</span>
+</span><span id="__span-0-98"><a id="__codelineno-0-98" name="__codelineno-0-98" href="#__codelineno-0-98"></a>        <span class="p">[</span><span class="mf">312.86620413861</span><span class="p">,</span> <span class="mf">146.859577749078</span><span class="p">,</span> <span class="mf">57.3169379722823</span><span class="p">],</span>
+</span><span id="__span-0-99"><a id="__codelineno-0-99" name="__codelineno-0-99" href="#__codelineno-0-99"></a>        <span class="p">[</span><span class="mf">361.559947119303</span><span class="p">,</span> <span class="mf">153.877207883706</span><span class="p">,</span> <span class="mf">48.6359327772582</span><span class="p">],</span>
+</span><span id="__span-0-100"><a id="__codelineno-0-100" name="__codelineno-0-100" href="#__codelineno-0-100"></a>        <span class="p">[</span><span class="mf">410.253690099997</span><span class="p">,</span> <span class="mf">160.894838018334</span><span class="p">,</span> <span class="mf">39.954927582234</span><span class="p">],</span>
+</span><span id="__span-0-101"><a id="__codelineno-0-101" name="__codelineno-0-101" href="#__codelineno-0-101"></a>    <span class="p">]),</span>
+</span><span id="__span-0-102"><a id="__codelineno-0-102" name="__codelineno-0-102" href="#__codelineno-0-102"></a>
+</span><span id="__span-0-103"><a id="__codelineno-0-103" name="__codelineno-0-103" href="#__codelineno-0-103"></a>    <span class="n">Polyline</span><span class="p">([</span>
+</span><span id="__span-0-104"><a id="__codelineno-0-104" name="__codelineno-0-104" href="#__codelineno-0-104"></a>        <span class="p">[</span><span class="mf">13.7562673016774</span><span class="p">,</span> <span class="mf">164.804159616155</span><span class="p">,</span> <span class="mf">178.132387775678</span><span class="p">],</span>
+</span><span id="__span-0-105"><a id="__codelineno-0-105" name="__codelineno-0-105" href="#__codelineno-0-105"></a>        <span class="p">[</span><span class="mf">31.0555420852146</span><span class="p">,</span> <span class="mf">160.035948344655</span><span class="p">,</span> <span class="mf">140.217407062733</span><span class="p">],</span>
+</span><span id="__span-0-106"><a id="__codelineno-0-106" name="__codelineno-0-106" href="#__codelineno-0-106"></a>        <span class="p">[</span><span class="mf">42.5288946455757</span><span class="p">,</span> <span class="mf">155.666866376768</span><span class="p">,</span> <span class="mf">100.123423196389</span><span class="p">],</span>
+</span><span id="__span-0-107"><a id="__codelineno-0-107" name="__codelineno-0-107" href="#__codelineno-0-107"></a>        <span class="p">[</span><span class="mf">46.7750711952287</span><span class="p">,</span> <span class="mf">151.895205966801</span><span class="p">,</span> <span class="mf">58.5935066719183</span><span class="p">],</span>
+</span><span id="__span-0-108"><a id="__codelineno-0-108" name="__codelineno-0-108" href="#__codelineno-0-108"></a>        <span class="p">[</span><span class="mf">42.9566247038049</span><span class="p">,</span> <span class="mf">148.911475312983</span><span class="p">,</span> <span class="mf">16.9636577178732</span><span class="p">],</span>
+</span><span id="__span-0-109"><a id="__codelineno-0-109" name="__codelineno-0-109" href="#__codelineno-0-109"></a>        <span class="p">[</span><span class="mf">31.3140030201931</span><span class="p">,</span> <span class="mf">146.81417226681</span><span class="p">,</span> <span class="o">-</span><span class="mf">23.2519859176756</span><span class="p">],</span>
+</span><span id="__span-0-110"><a id="__codelineno-0-110" name="__codelineno-0-110" href="#__codelineno-0-110"></a>    <span class="p">]),</span>
+</span><span id="__span-0-111"><a id="__codelineno-0-111" name="__codelineno-0-111" href="#__codelineno-0-111"></a><span class="p">]</span>
+</span><span id="__span-0-112"><a id="__codelineno-0-112" name="__codelineno-0-112" href="#__codelineno-0-112"></a>
+</span><span id="__span-0-113"><a id="__codelineno-0-113" name="__codelineno-0-113" href="#__codelineno-0-113"></a>
+</span><span id="__span-0-114"><a id="__codelineno-0-114" name="__codelineno-0-114" href="#__codelineno-0-114"></a><span class="n">input_polylines_segment_radii</span> <span class="o">=</span> <span class="p">[]</span>
+</span><span id="__span-0-115"><a id="__codelineno-0-115" name="__codelineno-0-115" href="#__codelineno-0-115"></a>
+</span><span id="__span-0-116"><a id="__codelineno-0-116" name="__codelineno-0-116" href="#__codelineno-0-116"></a><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">input_polylines</span><span class="p">)):</span>
+</span><span id="__span-0-117"><a id="__codelineno-0-117" name="__codelineno-0-117" href="#__codelineno-0-117"></a>    <span class="n">input_polyline_segment_radii</span> <span class="o">=</span> <span class="p">[]</span>
+</span><span id="__span-0-118"><a id="__codelineno-0-118" name="__codelineno-0-118" href="#__codelineno-0-118"></a>    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">input_polylines</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">points</span><span class="p">)):</span>
+</span><span id="__span-0-119"><a id="__codelineno-0-119" name="__codelineno-0-119" href="#__codelineno-0-119"></a>        <span class="n">input_polyline_segment_radii</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+</span><span id="__span-0-120"><a id="__codelineno-0-120" name="__codelineno-0-120" href="#__codelineno-0-120"></a>    <span class="n">input_polylines_segment_radii</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">input_polyline_segment_radii</span><span class="p">)</span>
+</span><span id="__span-0-121"><a id="__codelineno-0-121" name="__codelineno-0-121" href="#__codelineno-0-121"></a>
+</span><span id="__span-0-122"><a id="__codelineno-0-122" name="__codelineno-0-122" href="#__codelineno-0-122"></a><span class="n">input_polylines_segment_direction</span> <span class="o">=</span> <span class="p">[]</span>
+</span><span id="__span-0-123"><a id="__codelineno-0-123" name="__codelineno-0-123" href="#__codelineno-0-123"></a><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">input_polylines</span><span class="p">)):</span>
+</span><span id="__span-0-124"><a id="__codelineno-0-124" name="__codelineno-0-124" href="#__codelineno-0-124"></a>    <span class="n">input_polyline_segment_direction</span> <span class="o">=</span> <span class="p">[]</span>
+</span><span id="__span-0-125"><a id="__codelineno-0-125" name="__codelineno-0-125" href="#__codelineno-0-125"></a>    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">input_polylines</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">points</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+</span><span id="__span-0-126"><a id="__codelineno-0-126" name="__codelineno-0-126" href="#__codelineno-0-126"></a>        <span class="n">input_polyline_segment_direction</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
+</span><span id="__span-0-127"><a id="__codelineno-0-127" name="__codelineno-0-127" href="#__codelineno-0-127"></a>    <span class="n">input_polylines_segment_direction</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">input_polyline_segment_direction</span><span class="p">)</span>
+</span><span id="__span-0-128"><a id="__codelineno-0-128" name="__codelineno-0-128" href="#__codelineno-0-128"></a>
+</span><span id="__span-0-129"><a id="__codelineno-0-129" name="__codelineno-0-129" href="#__codelineno-0-129"></a>
+</span><span id="__span-0-130"><a id="__codelineno-0-130" name="__codelineno-0-130" href="#__codelineno-0-130"></a><span class="n">index_polylines</span><span class="p">,</span> <span class="n">index_polylines_segment</span><span class="p">,</span> <span class="n">distance</span><span class="p">,</span> <span class="n">point_pairs</span><span class="p">,</span> <span class="n">volume_pairs</span><span class="p">,</span> <span class="n">joints_areas</span><span class="p">,</span> <span class="n">joints_types</span> <span class="o">=</span> <span class="n">beam_volumes</span><span class="p">(</span>
+</span><span id="__span-0-131"><a id="__codelineno-0-131" name="__codelineno-0-131" href="#__codelineno-0-131"></a>        <span class="n">input_polylines</span><span class="p">,</span>
+</span><span id="__span-0-132"><a id="__codelineno-0-132" name="__codelineno-0-132" href="#__codelineno-0-132"></a>        <span class="n">input_polylines_segment_radii</span><span class="p">,</span>
+</span><span id="__span-0-133"><a id="__codelineno-0-133" name="__codelineno-0-133" href="#__codelineno-0-133"></a>        <span class="n">input_polylines_segment_direction</span><span class="p">,</span>
+</span><span id="__span-0-134"><a id="__codelineno-0-134" name="__codelineno-0-134" href="#__codelineno-0-134"></a>        <span class="n">input_allowed_types_per_polyline</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+</span><span id="__span-0-135"><a id="__codelineno-0-135" name="__codelineno-0-135" href="#__codelineno-0-135"></a>        <span class="n">input_min_distance</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
+</span><span id="__span-0-136"><a id="__codelineno-0-136" name="__codelineno-0-136" href="#__codelineno-0-136"></a>        <span class="n">input_volume_length</span><span class="o">=</span><span class="mi">75</span><span class="p">,</span>
+</span><span id="__span-0-137"><a id="__codelineno-0-137" name="__codelineno-0-137" href="#__codelineno-0-137"></a>        <span class="n">input_cross_or_side_to_end</span><span class="o">=</span><span class="mf">0.91</span><span class="p">,</span>
+</span><span id="__span-0-138"><a id="__codelineno-0-138" name="__codelineno-0-138" href="#__codelineno-0-138"></a><span class="p">)</span>
+</span></code></pre></div>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Footer" >
+        
+          
+          <a href="../binding_beam_volumes_frame/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Beam Volumes Frame">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              <div class="md-ellipsis">
+                Beam Volumes Frame
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../binding_beam_volumes_side/" class="md-footer__link md-footer__link--next" aria-label="Next: Beam Volumes Side">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              <div class="md-ellipsis">
+                Beam Volumes Side
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Copyright &copy; 2017 - 2025, Petras Vestartas
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["content.code.copy", "content.footnote.tooltips", "navigation.expand", "navigation.footer", "navigation.indexes", "navigation.sections", "navigation.top", "search.highlight", "search.suggest", "toc.follow"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"provider": "mike"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>
