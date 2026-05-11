@@ -10,5 +10,5 @@ Workshop materials for timber plate joinery and 2D nesting using **compas_wood**
 ## Contents
 
 - [Plugin Installation](installation.md)
-- [compas_wood](compas_wood.md)
+- [compas_wood](joints.md)
 - [OpenNest](opennest.md)
