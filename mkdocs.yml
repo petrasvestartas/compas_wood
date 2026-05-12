@@ -156,6 +156,11 @@ nav:
           - Exercise: tutorials/edx/4_exercise.md
           - Conclusion: tutorials/edx/5_conclusion.md
       - Hilti: tutorials/hilti/index.md
+      - HSLU:
+          - tutorials/hslu/index.md
+          - Plugin Installation: tutorials/hslu/installation.md
+          - compas_wood: tutorials/hslu/joints.md
+          - OpenNest: tutorials/hslu/opennest.md
       - IBOIS:
           - tutorials/ibois/index.md
           - 2D Nesting Plugin: tutorials/ibois/opennest.md
