@@ -49,7 +49,7 @@ def compute(step=DEFAULT_STEP, search_type=SEARCH_FACE_TO_FACE):
         orientations="both",
         max_pairs=6,
         min_face_area=5000.0,
-        slab_faces_min_area=5000.0,
+        slab_faces_min_area=1500.0,
     )
     elements, joints = model.solve(search_type=int(search_type))
     contacts = model.contacts_by_source(joints)

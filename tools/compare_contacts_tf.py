@@ -69,7 +69,7 @@ def compute(step=DEFAULT_STEP, truth=DEFAULT_TRUTH, search_type=SEARCH_FACE_TO_F
             orientations="both",
             max_pairs=6,
             min_face_area=5000.0,
-            slab_faces_min_area=5000.0,
+            slab_faces_min_area=1500.0,
         )
     _, joints = model.solve(search_type=int(search_type))
     detected = model.contacts_by_source(joints)
@@ -88,7 +88,7 @@ def compute(step=DEFAULT_STEP, truth=DEFAULT_TRUTH, search_type=SEARCH_FACE_TO_F
             solid_to_truth[f"solid_{si}"] = best
 
     detected_truth_pairs = set()
-    for (sa, sb), joint in detected.items():
+    for (sa, sb, _k), joint in detected.items():
         ta, tb = solid_to_truth.get(sa), solid_to_truth.get(sb)
         if ta is not None and tb is not None:
             detected_truth_pairs.add(tuple(sorted((ta, tb))))
