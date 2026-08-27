@@ -19,10 +19,13 @@ from __future__ import annotations
 import warnings
 
 from compas.colors import Color
+from compas.datastructures import Mesh
 from compas.geometry import Box
 from compas.geometry import Frame
+from compas.geometry import Polygon
 from compas.geometry import Polyline
 from compas.geometry import bounding_box
+from compas.geometry import earclip_polygon
 
 # (rgb255, default visibility) - parity with plugin_rhino w_solver_joinery_solver._LAYER_DEFS.
 LAYERS: dict[str, tuple[tuple[int, int, int], bool]] = {
@@ -49,6 +52,20 @@ def _closed(polyline: Polyline) -> Polyline:
     if len(points) < 2 or points[0] == points[-1]:
         return polyline
     return Polyline(list(points) + [points[0]])
+
+
+def area_mesh(polyline: Polyline) -> Mesh | None:
+    """Filled surface for a closed planar polygon outline; None when it cannot be triangulated."""
+    points = list(polyline.points)
+    if len(points) >= 2 and points[0].distance_to_point(points[-1]) < 1e-9:
+        points = points[:-1]
+    if len(points) < 3:
+        return None
+    try:
+        triangles = earclip_polygon(Polygon(points))
+    except Exception:
+        return None
+    return Mesh.from_vertices_and_faces(points, triangles)
 
 
 def add_joinery(
@@ -91,7 +108,6 @@ def add_joinery(
             name="mesh",
             facecolor=PLATE_FACE,
             linecolor=mesh_line,
-            show_lines=False,
             show=draw_meshes,
         )
         for k, pl in enumerate(el.top_outlines):
@@ -104,7 +120,10 @@ def add_joinery(
     line = _layer_color("JointLines")
     for j, jt in enumerate(joints):
         grp = scene.add_group(name=f"joint_{j}", parent=root)
-        if len(jt.area.points) >= 2:
+        filled = area_mesh(jt.area)
+        if filled is not None:
+            scene.add(filled, parent=grp, name="area", facecolor=area, show=show_areas)
+        elif len(jt.area.points) >= 2:
             scene.add(_closed(jt.area), parent=grp, name="area", linecolor=area, show=show_areas)
         for v, vol in enumerate(jt.volumes):
             if len(vol.points) >= 2:
@@ -136,7 +155,6 @@ def add_plate_model(scene, model, *, show_meshes: bool = True, name: str = "Plat
                 name="mesh",
                 facecolor=PLATE_FACE,
                 linecolor=mesh_line,
-                show_lines=False,
                 show=show_meshes,
             )
         for label, pl in (("bot", plate.bottom), ("top", plate.top)):

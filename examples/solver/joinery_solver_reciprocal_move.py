@@ -55,7 +55,7 @@ def draw(scene, results):
     for pid in sorted(model.plates):
         mesh = model.plates[pid].mesh
         if mesh is not None:
-            scene.add(mesh, parent=stock, name=f"beam_{pid}", facecolor=PLATE_FACE, show_lines=False, show=False)
+            scene.add(mesh, parent=stock, name=f"beam_{pid}", facecolor=PLATE_FACE, show=False)
     return root
 
 

@@ -61,7 +61,7 @@ def test_add_joinery_group_tree(solved):
         assert node["kwargs"]["show"] is False  # draw_meshes defaults to hidden
         assert isinstance(node["kwargs"]["facecolor"], Color)
         assert isinstance(node["kwargs"]["linecolor"], Color)
-        assert node["kwargs"]["show_lines"] is False
+        assert "show_lines" not in node["kwargs"]  # default black edges stay on
 
     hidden = [n for n in geoms if n["kwargs"].get("name", "").split("_")[0] in ("area", "vol", "line")]
     assert hidden

@@ -100,12 +100,17 @@ def draw(scene, results):
     stock = scene.add_group(name="Breps", parent=root)
     for i, brep in enumerate(breps):
         mesh, _ = brep.to_viewmesh()
-        add_shell(scene, mesh, name=f"brep_{i}", parent=stock, show_lines=False)
+        add_shell(scene, mesh, name=f"brep_{i}", parent=stock)
     red = Color(0.9, 0.1, 0.1)
     contacts = scene.add_group(name="Contacts", parent=root)
+    from compas_wood.viewer import area_mesh
+
     for joint in joints:
-        if len(joint.area.points) >= 2:
-            a, b = joint.element_ids
+        a, b = joint.element_ids
+        filled = area_mesh(joint.area)
+        if filled is not None:
+            scene.add(filled, parent=contacts, name=f"contact_{a}_{b}", facecolor=red)
+        elif len(joint.area.points) >= 2:
             scene.add(joint.area, parent=contacts, name=f"contact_{a}_{b}", linecolor=red, lineswidth=3)
     return root
 

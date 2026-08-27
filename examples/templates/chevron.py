@@ -73,7 +73,7 @@ def draw(scene, results):
     for i, (el, mesh) in enumerate(zip(results["elements"], results["loft_meshes"])):
         grp = scene.add_group(name=f"plate_{i}", parent=root)
         m = unweld_mesh(mesh) if results["explode"] else mesh
-        scene.add(m, parent=grp, name="mesh", facecolor=PLATE_FACE, show_lines=False)
+        scene.add(m, parent=grp, name="mesh", facecolor=PLATE_FACE)
         scene.add(el.top, parent=grp, name="top", linecolor=OUTLINE)
         scene.add(el.bottom, parent=grp, name="bot", linecolor=OUTLINE)
     return root
