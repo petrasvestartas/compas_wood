@@ -378,24 +378,15 @@ class PlateModel(Data):
         plate = self.plates[int(plate_id)]
         return plate.name if plate.name else str(plate.plate_id)
 
-    def contacts_by_source(self, joints, cluster_tol: float = 50.0) -> dict:
-        """Deduplicate JointResults per DISTINCT interface of each source-solid pair.
+    def contacts_by_source(self, joints) -> dict:
+        """Deduplicate JointResults per source-solid pair.
 
         Multi-pair / dual-orientation representations report the same physical
         contact several times and can report self-contacts between two
-        representations of one solid. Joints are grouped by sorted source pair
-        and clustered by their area centroid (``cluster_tol``, model units):
-        one joint - the largest - survives per physical interface, so a
-        connector touching a rib on several faces keeps one patch per face.
-
-        Returns
-        -------
-        dict
-            ``{(source_a, source_b, k): JointResult}`` with ``k`` numbering the
-            distinct interfaces of that pair.
+        representations of one solid; this groups joints by sorted source pair,
+        drops self-pairs, and keeps the largest-area joint per pair.
         """
         from compas.geometry import area_polygon
-        from compas.geometry import centroid_points
 
         best: dict = {}
         for joint in joints:
@@ -403,26 +394,14 @@ class PlateModel(Data):
             sa, sb = self.source_of(a), self.source_of(b)
             if sa == sb:
                 continue
-            pts = joint.area.points[:-1] if len(joint.area.points) > 1 else joint.area.points
-            if not pts:
-                continue
-            c = centroid_points(pts)
-            cell = tuple(int(round(x / cluster_tol)) for x in c)
-            key = tuple(sorted((sa, sb))) + (cell,)
+            key = tuple(sorted((sa, sb)))
             try:
-                area = abs(area_polygon(pts))
+                area = abs(area_polygon(joint.area.points[:-1] or joint.area.points))
             except Exception:
                 area = 0.0
             if key not in best or area > best[key][0]:
                 best[key] = (area, joint)
-        out: dict = {}
-        counter: dict = {}
-        for key, (_area, joint) in best.items():
-            pair = key[:2]
-            k = counter.get(pair, 0)
-            counter[pair] = k + 1
-            out[(pair[0], pair[1], k)] = joint
-        return out
+        return {key: joint for key, (area, joint) in best.items()}
 
     # ------------------------------------------------------------------
     # Solver

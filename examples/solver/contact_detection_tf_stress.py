@@ -44,7 +44,7 @@ def compute(step=DEFAULT_STEP, search_type=SEARCH_BOTH, angle_tol_deg=30.0, area
             orientations="both",
             max_pairs=6,
             min_face_area=5000.0,
-            slab_faces_min_area=1500.0,
+            slab_faces_min_area=5000.0,
         )
     t_extract = time.perf_counter() - t0
     sources = {plate.name for plate in model.plates.values()}
