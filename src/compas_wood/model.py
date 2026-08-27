@@ -275,6 +275,7 @@ class PlateModel(Data):
         pairs: str = "best",
         orientations: str = "single",
         max_pairs: int = 3,
+        min_face_area: float = 0.0,
         slab_faces_min_area: float | None = None,
         slab_offset: float = 2.0,
     ) -> "PlateModel":
@@ -310,6 +311,7 @@ class PlateModel(Data):
                 area_ratio=area_ratio,
                 min_pair_fraction=min_pair_fraction,
                 max_pairs=max_pairs if pairs == "all" else 1,
+                min_face_area=min_face_area,
             )
             if not face_pairs:
                 if not skip_invalid:

@@ -48,6 +48,7 @@ def compute(step=DEFAULT_STEP, search_type=SEARCH_FACE_TO_FACE):
         pairs="all",
         orientations="both",
         max_pairs=6,
+        min_face_area=5000.0,
         slab_faces_min_area=5000.0,
     )
     elements, joints = model.solve(search_type=int(search_type))
@@ -69,6 +70,7 @@ def draw(scene, results):
     root = scene.add_group(name="ContactDetection")
     stock = scene.add_group(name="Breps", parent=root)
     for i, brep in enumerate(breps):
+        # patches sit between mating faces: untick the Breps group in the sidebar to reveal them
         scene.add(brep, parent=stock, name=f"brep_{i}")
     red = Color(0.9, 0.1, 0.1)
     contacts = scene.add_group(name="Contacts", parent=root)
@@ -78,7 +80,7 @@ def draw(scene, results):
         if filled is not None:
             scene.add(filled, parent=contacts, name=f"contact_{a}_{b}", facecolor=red, show_lines=False)
         if len(joint.area.points) >= 2:
-            scene.add(joint.area, parent=contacts, name=f"outline_{a}_{b}", linecolor=red, lineswidth=2)
+            scene.add(joint.area, parent=contacts, name=f"outline_{a}_{b}", linecolor=Color(0, 0, 0), lineswidth=2)
     return root
 
 

@@ -48,8 +48,13 @@ def plate_pairs(
     area_ratio: float = 0.99,
     min_pair_fraction: float = 0.0,
     max_pairs: int = 3,
+    min_face_area: float = 0.0,
 ):
     """ALL disjoint opposing planar face pairs of a prismatic solid, largest first.
+
+    ``min_face_area`` (model units squared) drops pairs of small faces outright -
+    the cap faces of fastener rods (screws, dowels; ~2000 mm2 in the compas_tf
+    model) fall under it while real plate faces are tens of thousands.
 
     A plate yields one pair; a box column yields up to three (one per axis) so
     contacts on every side can be searched. ``min_pair_fraction`` rejects pairs
@@ -65,6 +70,8 @@ def plate_pairs(
             if planar[i][3].dot(planar[j][3]) > cos_limit:
                 continue
             ai, aj = planar[i][4], planar[j][4]
+            if min(ai, aj) < min_face_area:
+                continue
             if min(ai, aj) < area_ratio * max(ai, aj):
                 continue
             candidates.append((min(ai, aj), i, j))

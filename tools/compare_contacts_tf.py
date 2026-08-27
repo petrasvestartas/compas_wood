@@ -68,6 +68,7 @@ def compute(step=DEFAULT_STEP, truth=DEFAULT_TRUTH, search_type=SEARCH_FACE_TO_F
             pairs="all",
             orientations="both",
             max_pairs=6,
+            min_face_area=5000.0,
             slab_faces_min_area=5000.0,
         )
     _, joints = model.solve(search_type=int(search_type))
@@ -126,6 +127,7 @@ def draw(scene, results):
     root = scene.add_group(name="ContactComparison")
     stock = scene.add_group(name="Breps", parent=root)
     for i, solid in enumerate(solids):
+        # patches sit between mating faces: untick the Breps group in the sidebar to reveal them
         scene.add(solid, parent=stock, name=f"brep_{i}")
 
     red = Color(0.9, 0.1, 0.1)
@@ -135,7 +137,7 @@ def draw(scene, results):
         if filled is not None:
             scene.add(filled, parent=found, name="contact", facecolor=red, show_lines=False)
         if len(joint.area.points) >= 2:
-            scene.add(joint.area, parent=found, name="contact_outline", linecolor=red, lineswidth=2)
+            scene.add(joint.area, parent=found, name="contact_outline", linecolor=Color(0, 0, 0), lineswidth=2)
 
     yellow = Color(1.0, 0.8, 0.0)
     miss = scene.add_group(name="MISSING", parent=root)
