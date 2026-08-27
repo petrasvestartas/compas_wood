@@ -1,7 +1,8 @@
 """Contact DETECTION on Brep solids - no joinery generation.
 
-The input Breps are drawn untouched (grey); the only geometry added is one RED
-closed polygon per detected contact (``JointResult.area``). The solver's joint
+The input Breps are drawn untouched AS BREPS (native compas_occt OCCBrepObject -
+true B-rep edges, no display triangulation); the only geometry added is one RED
+filled polygon per detected contact (``JointResult.area``). The solver's joint
 classification (type codes) is printed to the console but no cut geometry is
 displayed - this mirrors what compas_tf's ``compute_contacts_wood`` consumes:
 the contact interface polygons, nothing more.
@@ -27,9 +28,6 @@ which loads 237 solids, keeps the 145 plate-like ones, and finds their contacts.
 The displayed meshes are the solver's carved lofts; the uncut source Breps sit hidden
 under a "Stock" group.
 
-Source Breps are drawn as grey meshes via ``brep.to_viewmesh()`` (compas_occt OCCBrep also offers
-``to_tesselation`` - same signature and return - and ``to_meshes``; ``to_viewmesh`` is used here
-because it returns one merged mesh plus boundary polylines).
 """
 
 from __future__ import annotations
@@ -94,13 +92,12 @@ def draw(scene, results):
     breps, _, _, joints = results
     from compas.colors import Color
 
-    from compas_wood.viewer import add_shell
+    from compas_wood.viewer import PLATE_FACE
 
     root = scene.add_group(name="ContactDetection")
     stock = scene.add_group(name="Breps", parent=root)
     for i, brep in enumerate(breps):
-        mesh, _ = brep.to_viewmesh()
-        add_shell(scene, mesh, name=f"brep_{i}", parent=stock)
+        scene.add(brep, parent=stock, name=f"brep_{i}", facecolor=PLATE_FACE)
     red = Color(0.9, 0.1, 0.1)
     contacts = scene.add_group(name="Contacts", parent=root)
     from compas_wood.viewer import area_mesh
@@ -126,7 +123,7 @@ def main(view=True, config="cross", step=None, search_type=None):
         viewer = Viewer()
         draw(viewer.scene, results)
         breps = results[0]
-        zoom_to(viewer, aabbs(*(brep.to_viewmesh()[0] for brep in breps)))
+        zoom_to(viewer, aabbs(*breps))
         viewer.show()
     else:
         from compas_wood.viewer import NullScene
