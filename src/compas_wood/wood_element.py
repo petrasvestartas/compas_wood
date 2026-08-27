@@ -2,9 +2,24 @@
 
 from compas.datastructures import Mesh
 from compas.geometry import Polyline
-
 from wood_nano import _joinery_solver
-from compas_wood.convert import mesh_from_cpp, polyline_from_cpp
+from wood_nano import _wood_element
+
+from compas_wood.convert import mesh_from_cpp
+from compas_wood.convert import polyline_from_cpp
+
+
+def unweld_mesh(mesh: Mesh) -> Mesh:
+    """Return a copy of mesh with per-face vertex copies (flat shading).
+
+    Computation delegated to C++ (``_wood_element.unweld_mesh_dict``); compas
+    meshes carry no CDT triangulation, so per-face triangle lists are empty.
+    """
+    verts, faces = mesh.to_vertices_and_faces()
+    verts = [[float(x), float(y), float(z)] for x, y, z in verts]
+    faces = [list(map(int, f)) for f in faces]
+    face_tris = [[] for _ in faces]
+    return mesh_from_cpp(_wood_element.unweld_mesh_dict(verts, faces, face_tris))
 
 
 class WoodElement:
@@ -25,24 +40,21 @@ class WoodElement:
     def thickness(self) -> float:
         return float(self._el.thickness)
 
-    def loft_mesh(self) -> Mesh:
+    def loft_mesh(self, unwelded: bool = False) -> Mesh:
         # C++ guarantees unified winding + outward normals (unify_winding +
         # orient_outward in the binding), so the previous pure-Python
         # unify_cycles / centroid / flip_cycles pass - three full-mesh Python
-        # traversals of geometry math per element - is gone.
-        return mesh_from_cpp(self._el.loft_mesh())
+        # traversals of geometry math per element - is gone. unwelded=True
+        # duplicates vertices per face in C++ (unweld_loft_mesh).
+        return mesh_from_cpp(self._el.unweld_loft_mesh() if unwelded else self._el.loft_mesh())
 
 
 class JoineryElement:
     """Merged plate element returned by the joinery solver."""
 
     def __init__(self, data: dict):
-        self.top_outlines: list[Polyline] = [
-            polyline_from_cpp(pts) for pts in data["top_outlines"]
-        ]
-        self.bottom_outlines: list[Polyline] = [
-            polyline_from_cpp(pts) for pts in data["bottom_outlines"]
-        ]
+        self.top_outlines: list[Polyline] = [polyline_from_cpp(pts) for pts in data["top_outlines"]]
+        self.bottom_outlines: list[Polyline] = [polyline_from_cpp(pts) for pts in data["bottom_outlines"]]
         # None unless solve_joinery ran with include_loft_mesh=True; kept so
         # an eagerly computed loft is not recomputed on first access.
         self._mesh_data = data.get("loft_mesh")

@@ -1,8 +1,10 @@
+from compas.geometry import Frame
+from compas.geometry import Polyline
+from wood_nano._connectors import make_default_vda_mesh
+from wood_nano._connectors import make_vda_mesh
 
-from compas.geometry import Frame, Polyline
-
-from wood_nano._connectors import make_default_vda_mesh, make_vda_mesh
-from compas_wood.convert import frame_from_cpp, polyline_from_cpp
+from compas_wood.convert import frame_from_cpp
+from compas_wood.convert import polyline_from_cpp
 
 
 def connectors_elements(
@@ -30,26 +32,22 @@ def connectors_elements(
     tuple of six parallel nested lists
         ``(f_polylines, f_frames, f_index, e_polylines, e_frames, e_index)``
     """
-    fp  = list(face_positions)  or [0.0]
-    ed  = list(edge_divisions)  or [2]
+    fp = list(face_positions) or [0.0]
+    ed = list(edge_divisions) or [2]
     edl = list(edge_division_len)
     ils = list(insertion_lines)
 
     if mesh is None:
-        raw = make_default_vda_mesh(face_thickness, fp, ed, edl, ils,
-                                    rect_width, rect_height, rect_thickness)
+        raw = make_default_vda_mesh(face_thickness, fp, ed, edl, ils, rect_width, rect_height, rect_thickness)
     else:
         verts, faces = mesh
-        raw = make_vda_mesh(verts, faces, face_thickness, fp, ed, edl, ils,
-                            rect_width, rect_height, rect_thickness)
+        raw = make_vda_mesh(verts, faces, face_thickness, fp, ed, edl, ils, rect_width, rect_height, rect_thickness)
 
     f_polylines = [[polyline_from_cpp(pl) for pl in row] for row in raw.f_polylines]
-    f_frames    = [[frame_from_cpp(pl) if pl is not None else None
-                    for pl in row] for row in raw.f_polylines_planes]
-    f_index     = [list(row) for row in raw.f_polylines_index]
+    f_frames = [[frame_from_cpp(pl) if pl is not None else None for pl in row] for row in raw.f_polylines_planes]
+    f_index = [list(row) for row in raw.f_polylines_index]
     e_polylines = [[polyline_from_cpp(pl) for pl in row] for row in raw.e_polylines]
-    e_frames    = [[frame_from_cpp(pl) if pl is not None else None
-                    for pl in row] for row in raw.e_polylines_planes]
-    e_index     = [list(row) for row in raw.e_polylines_index]
+    e_frames = [[frame_from_cpp(pl) if pl is not None else None for pl in row] for row in raw.e_polylines_planes]
+    e_index = [list(row) for row in raw.e_polylines_index]
 
     return f_polylines, f_frames, f_index, e_polylines, e_frames, e_index

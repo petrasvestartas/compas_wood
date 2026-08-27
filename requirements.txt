@@ -1,0 +1,4 @@
+# PyPI wheels of wood_nano may lag behind this version - if pip cannot
+# resolve it, build from source: https://github.com/petrasvestartas/wood_nano
+wood_nano >=1.0.29
+compas >=2.0

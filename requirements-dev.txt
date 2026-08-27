@@ -1,0 +1,10 @@
+attrs >=17.4
+build
+bump-my-version
+compas_invocations2
+invoke >=0.14
+# Direct, not transitive: `invoke test` needs pytest on PATH.
+pytest
+ruff
+twine
+wheel

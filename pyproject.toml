@@ -1,0 +1,129 @@
+[build-system]
+requires = ["setuptools>=77.0"]
+build-backend = "setuptools.build_meta"
+
+# ============================================================================
+# project info
+# ============================================================================
+
+[project]
+name = "compas_wood"
+description = "COMPAS-friendly interface to the wood_nano timber joinery kernel."
+keywords = []
+authors = [
+    { name = "Petras Vestartas", email = "petrasvestartas@gmail.com" },
+]
+license = "MIT"
+license-files = ["LICENSE"]
+readme = "README.md"
+requires-python = ">=3.12"
+dynamic = ['dependencies', 'optional-dependencies', 'version']
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Topic :: Scientific/Engineering",
+    "Operating System :: Unix",
+    "Operating System :: POSIX",
+    "Operating System :: Microsoft :: Windows",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+]
+
+[project.urls]
+Homepage = "https://petrasvestartas.github.io/compas_wood"
+Documentation = "https://petrasvestartas.github.io/compas_wood"
+Repository = "https://github.com/petrasvestartas/compas_wood"
+Changelog = "https://github.com/petrasvestartas/compas_wood/blob/main/CHANGELOG.md"
+Issues = "https://github.com/petrasvestartas/compas_wood/issues"
+
+# ============================================================================
+# setuptools config
+# ============================================================================
+
+[tool.setuptools]
+package-dir = { "" = "src" }
+include-package-data = true
+zip-safe = false
+
+[tool.setuptools.dynamic]
+version = { attr = "compas_wood.__version__" }
+dependencies = { file = "requirements.txt" }
+optional-dependencies = { dev = { file = "requirements-dev.txt" }, docs = { file = "requirements-docs.txt" }, viewer = { file = "requirements-viewer.txt" }, brep = { file = "requirements-brep.txt" } }
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+# ============================================================================
+# replace pytest.ini
+# ============================================================================
+
+[tool.pytest.ini_options]
+minversion = "6.0"
+testpaths = ["tests"]
+python_files = ["test_*.py", "*_test.py", "test.py"]
+addopts = [
+    "-ra",
+    "--strict-markers",
+    "--doctest-glob=*.rst",
+    "--tb=short",
+    "--import-mode=importlib",
+]
+doctest_optionflags = [
+    "NORMALIZE_WHITESPACE",
+    "IGNORE_EXCEPTION_DETAIL",
+    "ALLOW_UNICODE",
+    "ALLOW_BYTES",
+    "NUMBER",
+]
+
+# ============================================================================
+# replace bumpversion.cfg
+# ============================================================================
+
+[tool.bumpversion]
+current_version = "3.0.0"
+message = "Bump version to {new_version}"
+commit = true
+tag = true
+
+[[tool.bumpversion.files]]
+filename = "src/compas_wood/__init__.py"
+search = "{current_version}"
+replace = "{new_version}"
+
+[[tool.bumpversion.files]]
+filename = "CHANGELOG.md"
+search = "Unreleased"
+replace = "[{new_version}] {now:%Y-%m-%d}"
+
+# ============================================================================
+# replace setup.cfg
+# ============================================================================
+
+[tool.ruff]
+line-length = 120
+indent-width = 4
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "I"]
+
+[tool.ruff.lint.per-file-ignores]
+"__init__.py" = ["I001"]
+"tests/*" = ["I001"]
+"tasks.py" = ["I001"]
+
+[tool.ruff.lint.isort]
+force-single-line = true
+known-first-party = ["compas_wood"]
+
+[tool.ruff.lint.pydocstyle]
+convention = "numpy"
+
+[tool.ruff.lint.pycodestyle]
+max-doc-length = 120
+
+[tool.ruff.format]
+docstring-code-format = true
+docstring-code-line-length = "dynamic"

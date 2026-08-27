@@ -5,7 +5,8 @@ and produce compas types — no session_py intermediate.
 """
 
 from compas.datastructures import Mesh
-from compas.geometry import Frame, Polyline
+from compas.geometry import Frame
+from compas.geometry import Polyline
 
 
 def mesh_from_cpp(data: dict) -> Mesh:

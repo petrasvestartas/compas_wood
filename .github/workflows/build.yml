@@ -1,0 +1,30 @@
+# CI requires wood_nano>=1.0.30 wheels on PyPI (cp312-abi3); until published expect red -
+# local dev installs wood_nano from source.
+name: build
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    if: "!contains(github.event.pull_request.labels.*.name, 'docs-only')"
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        python: ["3.12", "3.13"]
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - run: pip install -e .
+      - run: pip install -r requirements-dev.txt
+      - run: invoke lint
+      - run: pytest

@@ -1,0 +1,10 @@
+# Optional: the viewer used by the examples. compas_wood never imports it at
+# module level (compas_wood.viewer imports it lazily inside functions), so the
+# library works without it - only the drawing does not.
+#
+# Kept out of requirements.txt because pyproject feeds that file into the
+# package metadata, and an optional GUI dependency has no business being a
+# hard requirement of a geometry library.
+#
+#   pip install -r requirements-viewer.txt
+compas_viewer

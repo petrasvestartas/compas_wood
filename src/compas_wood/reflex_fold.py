@@ -1,8 +1,8 @@
-
 from compas.datastructures import Mesh
 from compas.geometry import Polyline
+from wood_nano._reflex_fold import make_default_reflex_fold
+from wood_nano._reflex_fold import make_reflex_fold
 
-from wood_nano._reflex_fold import make_default_reflex_fold, make_reflex_fold
 from compas_wood.convert import mesh_from_cpp
 from compas_wood.wood_element import WoodElement
 

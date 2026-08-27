@@ -1,8 +1,8 @@
-
 from compas.datastructures import Mesh
 from compas.geometry import Polyline
+from wood_nano._translation_shell import make_default_translation_shell
+from wood_nano._translation_shell import make_translation_shell
 
-from wood_nano._translation_shell import make_default_translation_shell, make_translation_shell
 from compas_wood.convert import mesh_from_cpp
 from compas_wood.wood_element import WoodElement
 

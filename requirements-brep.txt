@@ -1,0 +1,2 @@
+# Optional Brep backend for compas_wood.brep (OCCT lofts and booleans).
+compas_occt

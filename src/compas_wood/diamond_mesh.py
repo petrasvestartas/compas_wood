@@ -1,21 +1,18 @@
-
 from pathlib import Path
-
-from compas.datastructures import Mesh
-
-from wood_nano._diamond_mesh import (
-    make_default_diamond_mesh,
-    make_diamond_mesh_annen,
-    make_diamond_mesh_from_surface,
-)
-from compas_wood.convert import mesh_from_cpp
-from compas_wood.wood_element import WoodElement
 
 # Resolve through the installed wood_nano package rather than a sibling
 # directory walk: the two packages need not share an install root
 # (editable vs wheel), and __file__-relative cross-package paths are
 # this project's documented wheel-breaking pattern.
 import wood_nano as _wood_nano
+from compas.datastructures import Mesh
+from wood_nano._diamond_mesh import make_default_diamond_mesh
+from wood_nano._diamond_mesh import make_diamond_mesh_annen
+from wood_nano._diamond_mesh import make_diamond_mesh_from_surface
+
+from compas_wood.convert import mesh_from_cpp
+from compas_wood.wood_element import WoodElement
+
 _DATA_DIR = Path(_wood_nano.__file__).parent / "data"
 
 
@@ -62,6 +59,6 @@ def diamond_mesh_elements_from_surface(
 ) -> tuple[Mesh, list[WoodElement]]:
     """Diamond-pattern triangular mesh + plate elements from a user-supplied NURBS surface."""
     dm = make_diamond_mesh_from_surface(
-        pts, knots_u, knots_v, degree_u, degree_v, n_u, n_v,
-        u_div, v_div, thickness, chamfer, chamfer_angle)
+        pts, knots_u, knots_v, degree_u, degree_v, n_u, n_v, u_div, v_div, thickness, chamfer, chamfer_angle
+    )
     return mesh_from_cpp(dm.mesh), [WoodElement(e) for e in dm.elements]

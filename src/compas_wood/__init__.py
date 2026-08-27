@@ -39,8 +39,22 @@ from compas_wood.joinery_solver import (
     SEARCH_FACE_TO_FACE,
     SEARCH_CROSS_JOINT,
     SEARCH_BOTH,
+    SEARCH_OPTIONS,
+    JOINT_PARAMS_DEFAULTS,
+    JOINT_VOLUME_EXT_DEFAULT,
+    FAMILY_LABELS,
 )
-from compas_wood.wood_element import WoodElement, JoineryElement, JointResult
+from compas_wood.wood_element import WoodElement, JoineryElement, JointResult, unweld_mesh
+from compas_wood.loft import loft
+from compas_wood.datasets import DATASETS_DIR, list_datasets, load_dataset
+from compas_wood.model import Plate, PlateModel
+from compas_wood.assign_vectors import (
+    assign_joint_types,
+    assign_insertion_vectors,
+    match_points_to_plate_edges,
+    insertion_vectors_from_lines,
+)
+from compas_wood.brep import plate_faces, outline_from_face, brep_outlines, plate_from_brep
 
 # Reserved for a future compas_viewer scene-object registration module
 # (compas_wood.scene). Empty on purpose: nothing is registered in 3.0.
@@ -69,4 +83,23 @@ __all__ = [
     "WoodElement",
     "JoineryElement",
     "JointResult",
+    "SEARCH_OPTIONS",
+    "JOINT_PARAMS_DEFAULTS",
+    "JOINT_VOLUME_EXT_DEFAULT",
+    "FAMILY_LABELS",
+    "unweld_mesh",
+    "loft",
+    "DATASETS_DIR",
+    "list_datasets",
+    "load_dataset",
+    "Plate",
+    "PlateModel",
+    "assign_joint_types",
+    "assign_insertion_vectors",
+    "match_points_to_plate_edges",
+    "insertion_vectors_from_lines",
+    "plate_faces",
+    "outline_from_face",
+    "brep_outlines",
+    "plate_from_brep",
 ]

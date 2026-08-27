@@ -70,6 +70,8 @@ nosetests.xml
 coverage.xml
 *.cover
 .hypothesis/
+.pytest_cache/
+.ruff_cache/
 
 # Translations
 *.mo
@@ -94,9 +96,6 @@ target/
 
 # Jupyter Notebook
 .ipynb_checkpoints
-
-# pyenv
-.python-version
 
 # celery beat schedule file
 celerybeat-schedule
