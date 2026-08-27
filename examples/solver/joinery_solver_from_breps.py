@@ -1,4 +1,10 @@
-"""Brep contact detection through the joinery solver.
+"""Contact DETECTION on Brep solids - no joinery generation.
+
+The input Breps are drawn untouched (grey); the only geometry added is one RED
+closed polygon per detected contact (``JointResult.area``). The solver's joint
+classification (type codes) is printed to the console but no cut geometry is
+displayed - this mirrors what compas_tf's ``compute_contacts_wood`` consumes:
+the contact interface polygons, nothing more.
 
 :meth:`compas_wood.PlateModel.from_breps` converts each Brep solid's top/bottom plate faces to
 outline polylines (:func:`compas_wood.brep_outlines`, compas_occt backend), so wood_nano
@@ -85,15 +91,23 @@ def compute(config="cross", step=None, search_type=None):
 
 
 def draw(scene, results):
-    breps, _, elements, joints = results
-    from compas_wood.viewer import add_joinery
+    breps, _, _, joints = results
+    from compas.colors import Color
+
     from compas_wood.viewer import add_shell
 
-    grp = scene.add_group(name="Stock")
+    root = scene.add_group(name="ContactDetection")
+    stock = scene.add_group(name="Breps", parent=root)
     for i, brep in enumerate(breps):
         mesh, _ = brep.to_viewmesh()
-        add_shell(scene, mesh, name=f"brep_{i}", parent=grp, show=False)
-    return add_joinery(scene, elements, joints, draw_meshes=True, show_volumes=True, name="JoinerySolver")
+        add_shell(scene, mesh, name=f"brep_{i}", parent=stock, show_lines=False)
+    red = Color(0.9, 0.1, 0.1)
+    contacts = scene.add_group(name="Contacts", parent=root)
+    for joint in joints:
+        if len(joint.area.points) >= 2:
+            a, b = joint.element_ids
+            scene.add(joint.area, parent=contacts, name=f"contact_{a}_{b}", linecolor=red, lineswidth=3)
+    return root
 
 
 def main(view=True, config="cross", step=None, search_type=None):
