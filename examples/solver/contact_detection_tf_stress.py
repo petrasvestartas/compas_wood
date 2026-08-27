@@ -23,7 +23,7 @@ from compas_wood import PlateModel
 DEFAULT_STEP = "C:/brg/compas_tf/data/cantilevers_baked_model.stp"
 
 
-def compute(step=DEFAULT_STEP, search_type=SEARCH_BOTH, angle_tol_deg=16.0, area_ratio=0.25):
+def compute(step=DEFAULT_STEP, search_type=SEARCH_BOTH, angle_tol_deg=30.0, area_ratio=0.25):
     if not Path(step).exists():
         raise FileNotFoundError(f"STEP file not found: {step}")
     t0 = time.perf_counter()
@@ -42,6 +42,8 @@ def compute(step=DEFAULT_STEP, search_type=SEARCH_BOTH, angle_tol_deg=16.0, area
             min_pair_fraction=0.2,
             pairs="all",
             orientations="both",
+            max_pairs=6,
+            slab_faces_min_area=5000.0,
         )
     t_extract = time.perf_counter() - t0
     sources = {plate.name for plate in model.plates.values()}
@@ -88,7 +90,7 @@ def draw(scene, results):
     return root
 
 
-def main(view=True, step=DEFAULT_STEP, search_type=SEARCH_BOTH, angle_tol_deg=16.0, area_ratio=0.25):
+def main(view=True, step=DEFAULT_STEP, search_type=SEARCH_BOTH, angle_tol_deg=30.0, area_ratio=0.25):
     results = compute(step=step, search_type=search_type, angle_tol_deg=angle_tol_deg, area_ratio=area_ratio)
     if view:
         from compas_viewer import Viewer

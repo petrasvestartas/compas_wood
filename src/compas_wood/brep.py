@@ -69,13 +69,18 @@ def plate_pairs(
                 continue
             candidates.append((min(ai, aj), i, j))
     candidates.sort(key=lambda c: c[0], reverse=True)
-    total = sum(float(face.area) for face in brep.faces)
+    # min_pair_fraction gates the SOLID, not every pair: a curved-dominated
+    # solid (screw, dowel) has no dominant pair at all, but a legitimate plate
+    # may still need its smaller secondary pairs to expose a touching face.
+    if min_pair_fraction > 0.0 and candidates:
+        total = sum(float(face.area) for face in brep.faces)
+        _s, bi, bj = candidates[0]
+        if (planar[bi][4] + planar[bj][4]) < min_pair_fraction * total:
+            return []
     used = set()
     pairs = []
     for _score, i, j in candidates:
         if i in used or j in used or len(pairs) >= max_pairs:
-            continue
-        if min_pair_fraction > 0.0 and (planar[i][4] + planar[j][4]) < min_pair_fraction * total:
             continue
         used.add(i)
         used.add(j)

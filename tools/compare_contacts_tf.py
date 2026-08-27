@@ -62,11 +62,13 @@ def compute(step=DEFAULT_STEP, truth=DEFAULT_TRUTH, search_type=SEARCH_FACE_TO_F
         model = PlateModel.from_breps(
             solids,
             skip_invalid=True,
-            angle_tol_deg=16.0,
+            angle_tol_deg=30.0,
             area_ratio=0.25,
             min_pair_fraction=0.2,
             pairs="all",
             orientations="both",
+            max_pairs=6,
+            slab_faces_min_area=5000.0,
         )
     _, joints = model.solve(search_type=int(search_type))
     detected = model.contacts_by_source(joints)
@@ -91,10 +93,26 @@ def compute(step=DEFAULT_STEP, truth=DEFAULT_TRUTH, search_type=SEARCH_FACE_TO_F
             detected_truth_pairs.add(tuple(sorted((ta, tb))))
 
     missing = {pair: truth_map[pair] for pair in truth_map if pair not in detected_truth_pairs}
+
+    def _aabb_gap(s1, s2):
+        b1, b2 = s1.aabb, s2.aabb
+        g = -1e12
+        for k, sz1, sz2 in ((0, b1.xsize, b2.xsize), (1, b1.ysize, b2.ysize), (2, b1.zsize, b2.zsize)):
+            low1, high1 = b1.frame.point[k] - sz1 / 2, b1.frame.point[k] + sz1 / 2
+            low2, high2 = b2.frame.point[k] - sz2 / 2, b2.frame.point[k] + sz2 / 2
+            g = max(g, low1 - high2, low2 - high1)
+        return g
+
+    truth_to_solid = {ti: si for si, ti in ((int(k.split("_")[1]), v) for k, v in solid_to_truth.items())}
     print(
         f"compare_contacts_tf: truth {len(truth_map)} pairs | detected (plate-plate) "
-        f"{len(detected_truth_pairs & set(truth_map))} | MISSING {len(missing)}: {sorted(missing)}"
+        f"{len(detected_truth_pairs & set(truth_map))} | MISSING {len(missing)}:"
     )
+    for pair in sorted(missing):
+        sa, sb = truth_to_solid.get(pair[0]), truth_to_solid.get(pair[1])
+        gap = _aabb_gap(solids[sa], solids[sb]) if sa is not None and sb is not None else float("nan")
+        note = "design-only: carved solids DO NOT TOUCH" if gap > 0.5 else "should touch - real miss"
+        print(f"  {pair}: carved gap {gap:6.1f} mm  ({note})")
     return solids, list(detected.values()), missing, centers
 
 

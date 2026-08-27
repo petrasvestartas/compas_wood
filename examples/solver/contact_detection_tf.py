@@ -42,11 +42,13 @@ def compute(step=DEFAULT_STEP, search_type=SEARCH_FACE_TO_FACE):
     model = PlateModel.from_breps(
         breps,
         skip_invalid=True,
-        angle_tol_deg=16.0,
+        angle_tol_deg=30.0,
         area_ratio=0.25,
         min_pair_fraction=0.2,
         pairs="all",
         orientations="both",
+        max_pairs=6,
+        slab_faces_min_area=5000.0,
     )
     elements, joints = model.solve(search_type=int(search_type))
     contacts = model.contacts_by_source(joints)

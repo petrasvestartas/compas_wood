@@ -275,11 +275,23 @@ class PlateModel(Data):
         pairs: str = "best",
         orientations: str = "single",
         max_pairs: int = 3,
+        slab_faces_min_area: float | None = None,
+        slab_offset: float = 2.0,
     ) -> "PlateModel":
         """One search plate per solid (``pairs="best"``), or one per opposing
         face pair (``pairs="all"``, up to 3 - box columns get all sides
         searched). ``Plate.name`` records the source solid as ``"solid_<i>"``
-        so multi-pair contacts can be deduplicated per solid pair."""
+        so multi-pair contacts can be deduplicated per solid pair.
+
+        ``slab_faces_min_area`` additionally represents EVERY planar face of at
+        least that area as a thin virtual slab (the face ring plus a copy
+        shifted ``slab_offset`` into the solid), so contacts on faces without
+        an opposing partner - carved pockets, wedge flanks - are searchable
+        too (measured on the compas_tf floor: ring pairs alone find 464/488
+        ground-truth contacts, ring pairs + slabs find every physically
+        touching one)."""
+        from compas_wood.brep import _planar_faces
+        from compas_wood.brep import outline_from_face
         from compas_wood.brep import plate_from_brep
         from compas_wood.brep import plate_pairs
 
@@ -332,6 +344,29 @@ class PlateModel(Data):
                     )
                     model.plates[pid] = flipped
                     pid += 1
+            if slab_faces_min_area is not None:
+                for face, _plane, _raw, outward, area in _planar_faces(brep):
+                    if area < slab_faces_min_area:
+                        continue
+                    try:
+                        ring, _holes = outline_from_face(face)
+                    except ValueError:
+                        continue
+                    shifted = Polyline(
+                        [
+                            [
+                                pt[0] - outward[0] * slab_offset,
+                                pt[1] - outward[1] * slab_offset,
+                                pt[2] - outward[2] * slab_offset,
+                            ]
+                            for pt in ring.points
+                        ]
+                    )
+                    model.plates[pid] = Plate(pid, shifted, ring, name=f"solid_{i}")
+                    pid += 1
+                    if orientations == "both":
+                        model.plates[pid] = Plate(pid, ring, shifted, name=f"solid_{i}")
+                        pid += 1
         if skipped:
             warnings.warn(f"from_breps: skipped {skipped} non-plate solid(s) of {len(breps)}.", stacklevel=2)
         return model
