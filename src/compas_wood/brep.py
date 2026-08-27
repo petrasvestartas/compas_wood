@@ -29,7 +29,80 @@ _MIN_SEGMENTS = 4
 _MAX_SEGMENTS = 512
 
 
-def plate_faces(brep, tol: float = 1e-6, angle_tol_deg: float = 0.5, area_ratio: float = 0.99):
+def _planar_faces(brep):
+    planar = []
+    for face in brep.faces:
+        if not face.is_plane:
+            continue
+        plane = face.to_plane()
+        raw = Vector(*plane.normal).unitized()
+        outward = raw * -1.0 if int(face.orientation) == _REVERSED else raw
+        planar.append((face, plane, raw, outward, float(face.area)))
+    return planar
+
+
+def plate_pairs(
+    brep,
+    tol: float = 1e-6,
+    angle_tol_deg: float = 0.5,
+    area_ratio: float = 0.99,
+    min_pair_fraction: float = 0.0,
+    max_pairs: int = 3,
+):
+    """ALL disjoint opposing planar face pairs of a prismatic solid, largest first.
+
+    A plate yields one pair; a box column yields up to three (one per axis) so
+    contacts on every side can be searched. ``min_pair_fraction`` rejects pairs
+    whose combined area is below that fraction of the total surface area - a
+    curved-dominated solid (screw, dowel, cylinder) then yields no pairs at
+    all. Returns a list of ``(bottom_face, top_face)``.
+    """
+    planar = _planar_faces(brep)
+    cos_limit = -cos(radians(max(angle_tol_deg, 1e-9)))
+    candidates = []
+    for i in range(len(planar)):
+        for j in range(i + 1, len(planar)):
+            if planar[i][3].dot(planar[j][3]) > cos_limit:
+                continue
+            ai, aj = planar[i][4], planar[j][4]
+            if min(ai, aj) < area_ratio * max(ai, aj):
+                continue
+            candidates.append((min(ai, aj), i, j))
+    candidates.sort(key=lambda c: c[0], reverse=True)
+    total = sum(float(face.area) for face in brep.faces)
+    used = set()
+    pairs = []
+    for _score, i, j in candidates:
+        if i in used or j in used or len(pairs) >= max_pairs:
+            continue
+        if min_pair_fraction > 0.0 and (planar[i][4] + planar[j][4]) < min_pair_fraction * total:
+            continue
+        used.add(i)
+        used.add(j)
+        pairs.append(_order_pair(planar[i], planar[j]))
+    return pairs
+
+
+def _order_pair(pi, pj):
+    face_i, plane_i, raw_i, _, _ = pi
+    face_j, plane_j, raw_j, outward_j, _ = pj
+    d = Vector(*plane_j.point) - Vector(*plane_i.point)
+    away_i = raw_i.dot(d) < 0.0
+    away_j = raw_j.dot(d) > 0.0
+    if away_i and not away_j:
+        return face_i, face_j
+    if away_j and not away_i:
+        return face_j, face_i
+    return (face_j, face_i) if outward_j.dot(d) > 0.0 else (face_i, face_j)
+
+
+def plate_faces(
+    brep,
+    tol: float = 1e-6,
+    angle_tol_deg: float = 0.5,
+    area_ratio: float = 0.99,
+    min_pair_fraction: float = 0.0,
+):
     """Find the two opposing plate faces of a plate-like Brep solid.
 
     Among planar faces, picks the largest pair whose outward normals are
@@ -44,48 +117,22 @@ def plate_faces(brep, tol: float = 1e-6, angle_tol_deg: float = 0.5, area_ratio:
     ValueError
         If no pair of near-parallel planar faces passes the tolerances.
     """
-    planar = []
-    for face in brep.faces:
-        if not face.is_plane:
-            continue
-        plane = face.to_plane()
-        raw = Vector(*plane.normal).unitized()
-        outward = raw * -1.0 if int(face.orientation) == _REVERSED else raw
-        planar.append((face, plane, raw, outward, float(face.area)))
-
-    if len(planar) < 2:
-        raise ValueError(f"Not a plate-like solid: {len(planar)} planar face(s), need an opposing pair.")
-
-    cos_limit = -cos(radians(max(angle_tol_deg, 1e-9)))
-    best = None
-    for i in range(len(planar)):
-        for j in range(i + 1, len(planar)):
-            if planar[i][3].dot(planar[j][3]) > cos_limit:
-                continue
-            ai, aj = planar[i][4], planar[j][4]
-            if min(ai, aj) < area_ratio * max(ai, aj):
-                continue
-            if best is None or min(ai, aj) > best[0]:
-                best = (min(ai, aj), i, j)
-
-    if best is None:
+    if len(_planar_faces(brep)) < 2:
+        raise ValueError("Not a plate-like solid: fewer than 2 planar faces, need an opposing pair.")
+    pairs = plate_pairs(
+        brep,
+        tol=tol,
+        angle_tol_deg=angle_tol_deg,
+        area_ratio=area_ratio,
+        min_pair_fraction=min_pair_fraction,
+        max_pairs=1,
+    )
+    if not pairs:
         raise ValueError(
             "Not a plate-like solid: no pair of parallel planar faces with matching area "
-            f"among {len(planar)} planar faces."
+            "passes the tolerances (or the solid is curved-dominated)."
         )
-
-    face_i, plane_i, raw_i, _, _ = planar[best[1]]
-    face_j, plane_j, raw_j, outward_j, _ = planar[best[2]]
-    # d has only a normal component that matters: plane_i and plane_j are parallel.
-    d = Vector(*plane_j.point) - Vector(*plane_i.point)
-    away_i = raw_i.dot(d) < 0.0
-    away_j = raw_j.dot(d) > 0.0
-    if away_i and not away_j:
-        return face_i, face_j
-    if away_j and not away_i:
-        return face_j, face_i
-    # Raw normals do not distinguish (both away or both toward): use outward normals.
-    return (face_j, face_i) if outward_j.dot(d) > 0.0 else (face_i, face_j)
+    return pairs[0]
 
 
 def outline_from_face(face, deflection: float | None = None) -> tuple[Polyline, list[Polyline]]:
@@ -101,6 +148,8 @@ def brep_outlines(
     deflection: float | None = None,
     angle_tol_deg: float = 0.5,
     area_ratio: float = 0.99,
+    min_pair_fraction: float = 0.0,
+    faces=None,
 ):
     """Bottom/top outlines, hole outlines, and thickness of a plate-like Brep.
 
@@ -113,7 +162,11 @@ def brep_outlines(
     tuple[Polyline, Polyline, list[Polyline], list[Polyline], float]
         (bottom, top, holes_bottom, holes_top, thickness)
     """
-    bottom_face, top_face = plate_faces(brep, tol, angle_tol_deg=angle_tol_deg, area_ratio=area_ratio)
+    if faces is None:
+        faces = plate_faces(
+            brep, tol, angle_tol_deg=angle_tol_deg, area_ratio=area_ratio, min_pair_fraction=min_pair_fraction
+        )
+    bottom_face, top_face = faces
     bottom, holes_bottom = outline_from_face(bottom_face, deflection)
     top, holes_top = outline_from_face(top_face, deflection)
 
@@ -123,8 +176,42 @@ def brep_outlines(
     thickness = abs(normal_b.dot(Vector(*plane_t.point) - Vector(*plane_b.point)))
 
     top = _align_ring(bottom, top)
+    bottom, top, holes_bottom, holes_top = _enforce_winding(bottom, top, holes_bottom, holes_top)
     holes_bottom, holes_top = _pair_holes(holes_bottom, holes_top)
     return bottom, top, holes_bottom, holes_top, thickness
+
+
+def _newell(points) -> Vector:
+    n = [0.0, 0.0, 0.0]
+    m = len(points)
+    for i in range(m):
+        p, q = points[i], points[(i + 1) % m]
+        n[0] += (p[1] - q[1]) * (p[2] + q[2])
+        n[1] += (p[2] - q[2]) * (p[0] + q[0])
+        n[2] += (p[0] - q[0]) * (p[1] + q[1])
+    return Vector(*n)
+
+
+def _reversed_ring(polyline: Polyline) -> Polyline:
+    return Polyline(list(reversed(polyline.points)))
+
+
+def _enforce_winding(bottom, top, holes_bottom, holes_top):
+    """wood convention (measured 145/145 on the compas_tf plates): the bottom
+    ring winds so its Newell normal points TOWARD the top; otherwise the
+    solver sees inward side faces and face-to-face detection silently fails."""
+    pb, pt = bottom.points, top.points
+    ring = pb[:-1] if len(pb) > 1 and pb[0] == pb[-1] else pb
+    cb = Vector(*[sum(c) / len(pb) for c in zip(*pb)])
+    ct = Vector(*[sum(c) / len(pt) for c in zip(*pt)])
+    if _newell(ring).dot(ct - cb) >= 0.0:
+        return bottom, top, holes_bottom, holes_top
+    return (
+        _reversed_ring(bottom),
+        _reversed_ring(top),
+        [_reversed_ring(h) for h in holes_bottom],
+        [_reversed_ring(h) for h in holes_top],
+    )
 
 
 def plate_from_brep(
@@ -134,14 +221,23 @@ def plate_from_brep(
     deflection: float | None = None,
     angle_tol_deg: float = 0.5,
     area_ratio: float = 0.99,
+    min_pair_fraction: float = 0.0,
+    faces=None,
+    name: str | None = None,
 ):
     """Build a :class:`compas_wood.model.Plate` from a plate-like Brep solid."""
     from compas_wood.model import Plate
 
     bottom, top, holes_bottom, holes_top, _ = brep_outlines(
-        brep, tol=tol, deflection=deflection, angle_tol_deg=angle_tol_deg, area_ratio=area_ratio
+        brep,
+        tol=tol,
+        deflection=deflection,
+        angle_tol_deg=angle_tol_deg,
+        area_ratio=area_ratio,
+        min_pair_fraction=min_pair_fraction,
+        faces=faces,
     )
-    return Plate(plate_id, bottom, top, mesh=None, holes_bottom=holes_bottom, holes_top=holes_top)
+    return Plate(plate_id, bottom, top, mesh=None, holes_bottom=holes_bottom, holes_top=holes_top, name=name)
 
 
 # ----------------------------------------------------------------------

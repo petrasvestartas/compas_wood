@@ -34,24 +34,34 @@ def compute(step=DEFAULT_STEP, search_type=SEARCH_BOTH, angle_tol_deg=16.0, area
     t0 = time.perf_counter()
     with warnings.catch_warnings():
         warnings.simplefilter("ignore")
-        model = PlateModel.from_breps(solids, skip_invalid=True, angle_tol_deg=angle_tol_deg, area_ratio=area_ratio)
+        model = PlateModel.from_breps(
+            solids,
+            skip_invalid=True,
+            angle_tol_deg=angle_tol_deg,
+            area_ratio=area_ratio,
+            min_pair_fraction=0.2,
+            pairs="all",
+            orientations="both",
+        )
     t_extract = time.perf_counter() - t0
+    sources = {plate.name for plate in model.plates.values()}
 
     t0 = time.perf_counter()
     elements, joints = model.solve(search_type=int(search_type))
+    contacts = model.contacts_by_source(joints)
     t_solve = time.perf_counter() - t0
 
-    histogram = Counter(joint.joint_type for joint in joints)
+    histogram = Counter(joint.joint_type for joint in contacts.values())
     print(
         f"contact_detection_tf_stress [{step}]:\n"
         f"  load    {len(solids):4d} solids            {t_load:6.2f}s\n"
-        f"  extract {len(model.plates):4d} plates "
-        f"({len(solids) - len(model.plates)} skipped)  {t_extract:6.2f}s\n"
-        f"  solve   {len(joints):4d} contacts           {t_solve:6.2f}s  "
+        f"  extract {len(model.plates):4d} search plates from {len(sources)} solids "
+        f"({len(solids) - len(sources)} rejected: curved/no pair)  {t_extract:6.2f}s\n"
+        f"  solve   {len(contacts):4d} contacts           {t_solve:6.2f}s  "
         f"(search={SEARCH_OPTIONS[int(search_type)]})\n"
         f"  types   {dict(sorted(histogram.items()))}"
     )
-    return solids, model, elements, joints
+    return solids, model, elements, list(contacts.values())
 
 
 def draw(scene, results):

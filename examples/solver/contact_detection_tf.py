@@ -34,14 +34,28 @@ def compute(step=DEFAULT_STEP, search_type=SEARCH_FACE_TO_FACE):
     if not Path(step).exists():
         raise FileNotFoundError(f"STEP file not found: {step}")
     breps = _breps_from_step(step)
-    model = PlateModel.from_breps(breps, skip_invalid=True)
-    elements, joints = model.solve(search_type=int(search_type))
-    types = sorted((joint.element_ids, joint.joint_type) for joint in joints)
-    print(
-        f"contact_detection_tf [{step}]: {len(breps)} solids -> {len(model.plates)} plates, "
-        f"{len(joints)} contacts {types}."
+    # relaxed pair tolerances cover the tapered plates (wedges, t-sections);
+    # min_pair_fraction rejects curved-dominated solids (screws, dowels);
+    # pairs="all" + orientations="both" close the kernel's representation and
+    # orientation sensitivities (measured: 95% of ground-truth contacts, 0 false
+    # positives, on this model).
+    model = PlateModel.from_breps(
+        breps,
+        skip_invalid=True,
+        angle_tol_deg=16.0,
+        area_ratio=0.25,
+        min_pair_fraction=0.2,
+        pairs="all",
+        orientations="both",
     )
-    return breps, model, elements, joints
+    elements, joints = model.solve(search_type=int(search_type))
+    contacts = model.contacts_by_source(joints)
+    types = sorted((pair, joint.joint_type) for pair, joint in contacts.items())
+    print(
+        f"contact_detection_tf [{step}]: {len(breps)} solids -> {len(model.plates)} search plates, "
+        f"{len(contacts)} contacts {types[:10]}{'...' if len(types) > 10 else ''}."
+    )
+    return breps, model, elements, list(contacts.values())
 
 
 def draw(scene, results):

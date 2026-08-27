@@ -271,26 +271,100 @@ class PlateModel(Data):
         skip_invalid: bool = False,
         angle_tol_deg: float = 0.5,
         area_ratio: float = 0.99,
+        min_pair_fraction: float = 0.0,
+        pairs: str = "best",
+        orientations: str = "single",
+        max_pairs: int = 3,
     ) -> "PlateModel":
+        """One search plate per solid (``pairs="best"``), or one per opposing
+        face pair (``pairs="all"``, up to 3 - box columns get all sides
+        searched). ``Plate.name`` records the source solid as ``"solid_<i>"``
+        so multi-pair contacts can be deduplicated per solid pair."""
         from compas_wood.brep import plate_from_brep
+        from compas_wood.brep import plate_pairs
 
+        if pairs not in ("best", "all"):
+            raise ValueError(f'pairs must be "best" or "all", got {pairs!r}.')
+        if orientations not in ("single", "both"):
+            raise ValueError(f'orientations must be "single" or "both", got {orientations!r}.')
         model = cls()
         skipped = 0
         pid = 0
-        for brep in breps:
-            try:
-                plate = plate_from_brep(brep, pid, tol=tol, angle_tol_deg=angle_tol_deg, area_ratio=area_ratio)
-            except ValueError:
-                # non-plate solid (dowel, cylinder, connector) - only tolerated when asked
+        for i, brep in enumerate(breps):
+            face_pairs = plate_pairs(
+                brep,
+                tol=tol,
+                angle_tol_deg=angle_tol_deg,
+                area_ratio=area_ratio,
+                min_pair_fraction=min_pair_fraction,
+                max_pairs=max_pairs if pairs == "all" else 1,
+            )
+            if not face_pairs:
                 if not skip_invalid:
-                    raise
+                    raise ValueError(f"solid {i}: not plate-like (no usable opposing planar face pair).")
                 skipped += 1
                 continue
-            model.plates[int(plate.plate_id)] = plate
-            pid += 1
+            for fp in face_pairs:
+                try:
+                    plate = plate_from_brep(brep, pid, tol=tol, faces=fp, name=f"solid_{i}")
+                except ValueError:
+                    if not skip_invalid:
+                        raise
+                    continue
+                # wood builds side faces from paired ring segments: unequal counts
+                # make the kernel emit an empty element - drop the pair instead.
+                if len(plate.bottom.points) != len(plate.top.points):
+                    continue
+                model.plates[int(plate.plate_id)] = plate
+                pid += 1
+                # measured on the compas_tf floor: the kernel's face matching is
+                # orientation-sensitive, and adding the flipped ring pair
+                # recovers contacts the single orientation misses (444 -> 460
+                # of 488 ground-truth pairs).
+                if orientations == "both":
+                    flipped = Plate(
+                        pid,
+                        plate.top,
+                        plate.bottom,
+                        holes_bottom=plate.holes_top,
+                        holes_top=plate.holes_bottom,
+                        name=plate.name,
+                    )
+                    model.plates[pid] = flipped
+                    pid += 1
         if skipped:
             warnings.warn(f"from_breps: skipped {skipped} non-plate solid(s) of {len(breps)}.", stacklevel=2)
         return model
+
+    def source_of(self, plate_id: int) -> str:
+        """Source tag of a plate (``"solid_<i>"`` for from_breps plates; falls back to the id)."""
+        plate = self.plates[int(plate_id)]
+        return plate.name if plate.name else str(plate.plate_id)
+
+    def contacts_by_source(self, joints) -> dict:
+        """Deduplicate JointResults per source-solid pair.
+
+        Multi-pair / dual-orientation representations report the same physical
+        contact several times and can report self-contacts between two
+        representations of one solid; this groups joints by sorted source pair,
+        drops self-pairs, and keeps the largest-area joint per pair.
+        """
+        from compas.geometry import area_polygon
+
+        best: dict = {}
+        for joint in joints:
+            a, b = joint.element_ids
+            sa, sb = self.source_of(a), self.source_of(b)
+            if sa == sb:
+                continue
+            key = tuple(sorted((sa, sb)))
+            try:
+                area = abs(area_polygon(joint.area.points[:-1] or joint.area.points))
+            except Exception:
+                area = 0.0
+            if key not in best or area > best[key][0]:
+                best[key] = (area, joint)
+        return {key: joint for key, (area, joint) in best.items()}
 
     # ------------------------------------------------------------------
     # Solver
