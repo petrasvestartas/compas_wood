@@ -1,15 +1,8 @@
-"""Contact DETECTION on Brep solids - no joinery generation.
-
-The input Breps are drawn untouched AS BREPS (native compas_occt OCCBrepObject -
-true B-rep edges, no display triangulation); the only geometry added is one RED
-filled polygon per detected contact (``JointResult.area``). The solver's joint
-classification (type codes) is printed to the console but no cut geometry is
-displayed - this mirrors what compas_tf's ``compute_contacts_wood`` consumes:
-the contact interface polygons, nothing more.
+"""Joinery generation on plate-like Brep solids.
 
 :meth:`compas_wood.PlateModel.from_breps` converts each Brep solid's top/bottom plate faces to
 outline polylines (:func:`compas_wood.brep_outlines`, compas_occt backend), so wood_nano
-face-to-face / cross detection runs on Brep geometry.
+face-to-face / cross detection and joinery generation run on Brep geometry.
 
 Configs (built with ``compas.geometry.Brep.from_box``):
 
@@ -17,17 +10,11 @@ Configs (built with ``compas.geometry.Brep.from_box``):
 - ``"stack"``: two stacked overlapping slabs (SEARCH_FACE_TO_FACE, top-to-top family 40-49)
 - ``"corner"``: an L of two plates meeting at an edge (SEARCH_FACE_TO_FACE, top-to-side family 20-29)
 
-``step=PATH`` loads Brep solids from a STEP file via ``compas.geometry.Brep.from_step`` instead
-(searched with SEARCH_BOTH unless ``search_type`` is given). Non-plate solids (dowels,
-cylinders, connectors) are skipped with a warning. Real-world demo on the compas_tf floor::
+The displayed meshes are the solver's carved lofts; the untouched source Breps sit hidden
+under a "Stock" group (native OCC Brep display - toggle it on to compare).
 
-    python examples/solver/joinery_solver_from_breps.py --step C:/brg/compas_tf/data/cantilevers_baked_model.stp
-
-which loads 237 solids, keeps the 145 plate-like ones, and finds their contacts.
-
-The displayed meshes are the solver's carved lofts; the uncut source Breps sit hidden
-under a "Stock" group.
-
+For contact DETECTION ONLY on the compas_tf floor model, see ``contact_detection_tf.py``
+and ``contact_detection_tf_stress.py``.
 """
 
 from __future__ import annotations
@@ -36,10 +23,8 @@ from compas.geometry import Box
 from compas.geometry import Brep
 from compas.geometry import Frame
 
-from compas_wood import SEARCH_BOTH
 from compas_wood import SEARCH_CROSS_JOINT
 from compas_wood import SEARCH_FACE_TO_FACE
-from compas_wood import SEARCH_OPTIONS
 from compas_wood import PlateModel
 
 # config -> (boxes, search_type); 2000 x 200-400 x 40 mm plate-like solids.
@@ -59,61 +44,37 @@ CONFIGS = {
 }
 
 
-def _breps_from_step(path) -> list:
-    brep = Brep.from_step(str(path))
-    solids = getattr(brep, "solids", None) or []
-    return list(solids) if len(solids) > 1 else [brep]
+def compute(config="cross", search_type=None):
+    if config not in CONFIGS:
+        raise ValueError(f"config must be one of {sorted(CONFIGS)}, got {config!r}.")
+    boxes, default_search = CONFIGS[config]
+    breps = [Brep.from_box(box) for box in boxes]
+    search_type = default_search if search_type is None else int(search_type)
 
-
-def compute(config="cross", step=None, search_type=None):
-    if step is not None:
-        breps = _breps_from_step(step)
-        search_type = SEARCH_BOTH if search_type is None else int(search_type)
-        source = str(step)
-    else:
-        if config not in CONFIGS:
-            raise ValueError(f"config must be one of {sorted(CONFIGS)}, got {config!r}.")
-        boxes, default_search = CONFIGS[config]
-        breps = [Brep.from_box(box) for box in boxes]
-        search_type = default_search if search_type is None else int(search_type)
-        source = config
-
-    model = PlateModel.from_breps(breps, skip_invalid=step is not None)
+    model = PlateModel.from_breps(breps)
     elements, joints = model.solve(search_type=search_type)
     types = sorted((joint.element_ids, joint.joint_type) for joint in joints)
     print(
-        f"joinery_solver_from_breps [{source}]: {len(breps)} breps -> {len(model.plates)} plates, "
+        f"joinery_solver_from_breps [{config}]: {len(breps)} breps -> {len(model.plates)} plates, "
         f"{len(elements)} elements, {len(joints)} joints {types}."
     )
     return breps, model, elements, joints
 
 
 def draw(scene, results):
-    breps, _, _, joints = results
-    from compas.colors import Color
-
+    breps, _, elements, joints = results
     from compas_wood.viewer import PLATE_FACE
+    from compas_wood.viewer import add_joinery
 
-    root = scene.add_group(name="ContactDetection")
-    stock = scene.add_group(name="Breps", parent=root)
+    root = add_joinery(scene, elements, joints, draw_meshes=True, show_volumes=True, name="JoinerySolver")
+    stock = scene.add_group(name="Stock", parent=root)
     for i, brep in enumerate(breps):
-        scene.add(brep, parent=stock, name=f"brep_{i}", facecolor=PLATE_FACE)
-    red = Color(0.9, 0.1, 0.1)
-    contacts = scene.add_group(name="Contacts", parent=root)
-    from compas_wood.viewer import area_mesh
-
-    for joint in joints:
-        a, b = joint.element_ids
-        filled = area_mesh(joint.area)
-        if filled is not None:
-            scene.add(filled, parent=contacts, name=f"contact_{a}_{b}", facecolor=red)
-        elif len(joint.area.points) >= 2:
-            scene.add(joint.area, parent=contacts, name=f"contact_{a}_{b}", linecolor=red, lineswidth=3)
+        scene.add(brep, parent=stock, name=f"brep_{i}", facecolor=PLATE_FACE, show=False)
     return root
 
 
-def main(view=True, config="cross", step=None, search_type=None):
-    results = compute(config=config, step=step, search_type=search_type)
+def main(view=True, config="cross", search_type=None):
+    results = compute(config=config, search_type=search_type)
     if view:
         from compas_viewer import Viewer
 
@@ -122,8 +83,7 @@ def main(view=True, config="cross", step=None, search_type=None):
 
         viewer = Viewer()
         draw(viewer.scene, results)
-        breps = results[0]
-        zoom_to(viewer, aabbs(*breps))
+        zoom_to(viewer, aabbs(*results[0]))
         viewer.show()
     else:
         from compas_wood.viewer import NullScene
@@ -135,10 +95,7 @@ def main(view=True, config="cross", step=None, search_type=None):
 if __name__ == "__main__":
     import argparse
 
-    parser = argparse.ArgumentParser(description="Run the joinery solver on plate-like Breps.")
+    parser = argparse.ArgumentParser(description="Generate joinery on plate-like Breps.")
     parser.add_argument("config", nargs="?", default="cross", choices=sorted(CONFIGS))
-    parser.add_argument("--step", default=None, help="load Brep solids from a STEP file instead")
-    parser.add_argument("--search-type", default=None, choices=SEARCH_OPTIONS)
     args = parser.parse_args()
-    search = None if args.search_type is None else SEARCH_OPTIONS.index(args.search_type)
-    main(config=args.config, step=args.step, search_type=search)
+    main(config=args.config)

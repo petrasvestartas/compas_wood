@@ -264,7 +264,14 @@ class PlateModel(Data):
         return model
 
     @classmethod
-    def from_breps(cls, breps, tol: float = 1e-6, skip_invalid: bool = False) -> "PlateModel":
+    def from_breps(
+        cls,
+        breps,
+        tol: float = 1e-6,
+        skip_invalid: bool = False,
+        angle_tol_deg: float = 0.5,
+        area_ratio: float = 0.99,
+    ) -> "PlateModel":
         from compas_wood.brep import plate_from_brep
 
         model = cls()
@@ -272,7 +279,7 @@ class PlateModel(Data):
         pid = 0
         for brep in breps:
             try:
-                plate = plate_from_brep(brep, pid, tol=tol)
+                plate = plate_from_brep(brep, pid, tol=tol, angle_tol_deg=angle_tol_deg, area_ratio=area_ratio)
             except ValueError:
                 # non-plate solid (dowel, cylinder, connector) - only tolerated when asked
                 if not skip_invalid:

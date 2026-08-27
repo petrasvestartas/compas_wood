@@ -27,6 +27,14 @@ OVERRIDES = {
 NEEDS_OCCT = {
     "templates/brep_outlines.py",
     "solver/joinery_solver_from_breps.py",
+    "solver/contact_detection_tf.py",
+    "solver/contact_detection_tf_stress.py",
+}
+
+# Examples that read an external file and are skipped when it is absent.
+NEEDS_FILE = {
+    "solver/contact_detection_tf.py": "C:/brg/compas_tf/data/cantilevers_baked_model.stp",
+    "solver/contact_detection_tf_stress.py": "C:/brg/compas_tf/data/cantilevers_baked_model.stp",
 }
 
 VIEWER_IMPORT = re.compile(r"^(?:from|import)\s+compas_viewer", re.MULTILINE)
@@ -61,6 +69,8 @@ def test_example_runs_headless(path):
     rel = rel_id(path)
     if rel in NEEDS_OCCT:
         pytest.importorskip("compas_occt")
+    if rel in NEEDS_FILE and not Path(NEEDS_FILE[rel]).exists():
+        pytest.skip(f"external file missing: {NEEDS_FILE[rel]}")
     module = load_module(path)
     result = module.main(view=False, **OVERRIDES.get(rel, {}))
     assert result

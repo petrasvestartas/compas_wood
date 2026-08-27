@@ -16,6 +16,7 @@ Facts this module relies on (verified against compas_occt):
 from math import acos
 from math import ceil
 from math import cos
+from math import radians
 from math import sin
 
 from compas.geometry import Point
@@ -28,18 +29,20 @@ _MIN_SEGMENTS = 4
 _MAX_SEGMENTS = 512
 
 
-def plate_faces(brep, tol: float = 1e-6):
+def plate_faces(brep, tol: float = 1e-6, angle_tol_deg: float = 0.5, area_ratio: float = 0.99):
     """Find the two opposing plate faces of a plate-like Brep solid.
 
-    Among planar faces, picks the anti-parallel-normal pair with matching area
-    (relative ``tol``) and the largest area. Returns ``(bottom_face, top_face)``
-    where bottom is the face whose surface plane normal points away from the
-    other face.
+    Among planar faces, picks the largest pair whose outward normals are
+    anti-parallel within ``angle_tol_deg`` and whose areas satisfy
+    ``min/max >= area_ratio``. The defaults accept prismatic plates only;
+    tapered plates (wedges, t-sections) need e.g. ``angle_tol_deg=16,
+    area_ratio=0.25``. Returns ``(bottom_face, top_face)`` where bottom is the
+    face whose surface plane normal points away from the other face.
 
     Raises
     ------
     ValueError
-        If no pair of parallel planar faces with matching area exists.
+        If no pair of near-parallel planar faces passes the tolerances.
     """
     planar = []
     for face in brep.faces:
@@ -53,13 +56,14 @@ def plate_faces(brep, tol: float = 1e-6):
     if len(planar) < 2:
         raise ValueError(f"Not a plate-like solid: {len(planar)} planar face(s), need an opposing pair.")
 
+    cos_limit = -cos(radians(max(angle_tol_deg, 1e-9)))
     best = None
     for i in range(len(planar)):
         for j in range(i + 1, len(planar)):
-            if planar[i][3].dot(planar[j][3]) > -1.0 + max(tol, 1e-12):
+            if planar[i][3].dot(planar[j][3]) > cos_limit:
                 continue
             ai, aj = planar[i][4], planar[j][4]
-            if abs(ai - aj) > tol * max(ai, aj):
+            if min(ai, aj) < area_ratio * max(ai, aj):
                 continue
             if best is None or min(ai, aj) > best[0]:
                 best = (min(ai, aj), i, j)
@@ -91,7 +95,13 @@ def outline_from_face(face, deflection: float | None = None) -> tuple[Polyline, 
     return outer, holes
 
 
-def brep_outlines(brep, tol: float = 1e-6, deflection: float | None = None):
+def brep_outlines(
+    brep,
+    tol: float = 1e-6,
+    deflection: float | None = None,
+    angle_tol_deg: float = 0.5,
+    area_ratio: float = 0.99,
+):
     """Bottom/top outlines, hole outlines, and thickness of a plate-like Brep.
 
     The top outer ring and each top hole ring are rotated/reversed to match the
@@ -103,7 +113,7 @@ def brep_outlines(brep, tol: float = 1e-6, deflection: float | None = None):
     tuple[Polyline, Polyline, list[Polyline], list[Polyline], float]
         (bottom, top, holes_bottom, holes_top, thickness)
     """
-    bottom_face, top_face = plate_faces(brep, tol)
+    bottom_face, top_face = plate_faces(brep, tol, angle_tol_deg=angle_tol_deg, area_ratio=area_ratio)
     bottom, holes_bottom = outline_from_face(bottom_face, deflection)
     top, holes_top = outline_from_face(top_face, deflection)
 
@@ -117,11 +127,20 @@ def brep_outlines(brep, tol: float = 1e-6, deflection: float | None = None):
     return bottom, top, holes_bottom, holes_top, thickness
 
 
-def plate_from_brep(brep, plate_id: int, tol: float = 1e-6, deflection: float | None = None):
+def plate_from_brep(
+    brep,
+    plate_id: int,
+    tol: float = 1e-6,
+    deflection: float | None = None,
+    angle_tol_deg: float = 0.5,
+    area_ratio: float = 0.99,
+):
     """Build a :class:`compas_wood.model.Plate` from a plate-like Brep solid."""
     from compas_wood.model import Plate
 
-    bottom, top, holes_bottom, holes_top, _ = brep_outlines(brep, tol=tol, deflection=deflection)
+    bottom, top, holes_bottom, holes_top, _ = brep_outlines(
+        brep, tol=tol, deflection=deflection, angle_tol_deg=angle_tol_deg, area_ratio=area_ratio
+    )
     return Plate(plate_id, bottom, top, mesh=None, holes_bottom=holes_bottom, holes_top=holes_top)
 
 
