@@ -20,6 +20,7 @@ import warnings
 
 from compas.colors import Color
 from compas.geometry import Box
+from compas.geometry import Frame
 from compas.geometry import Polyline
 from compas.geometry import bounding_box
 
@@ -197,7 +198,12 @@ def aabbs(*geometries) -> list[Box]:
                 pass
         points = getattr(g, "points", None)
         if points:
-            boxes.append(Box.from_bounding_box(bounding_box([[p[0], p[1], p[2]] for p in points])))
+            bb = bounding_box([[p[0], p[1], p[2]] for p in points])
+            lo, hi = bb[0], bb[6]
+            # Box.from_bounding_box unitizes a zero-length axis (planar outlines) - build with padded sizes
+            sizes = [max(hi[i] - lo[i], 1e-9) for i in range(3)]
+            center = [(lo[i] + hi[i]) / 2.0 for i in range(3)]
+            boxes.append(Box(*sizes, frame=Frame(center, [1, 0, 0], [0, 1, 0])))
     return boxes
 
 
