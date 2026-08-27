@@ -58,7 +58,7 @@ def compute(
     return model, elements, joints
 
 
-def draw(scene, results, draw_meshes=False):
+def draw(scene, results, draw_meshes=True):
     _, elements, joints = results
     from compas_wood.viewer import add_joinery
 
@@ -71,7 +71,7 @@ def main(
     search_type="face_to_face",
     joint_params=None,
     joint_volume_ext=None,
-    draw_meshes=False,
+    draw_meshes=True,
     plate_ids=None,
 ):
     results = compute(
@@ -105,6 +105,6 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Run the joinery solver on a PlateModel.")
     parser.add_argument("--model", default=None, help="path to a PlateModel JSON (default: built-in translation shell)")
     parser.add_argument("--search-type", default="face_to_face", choices=SEARCH_OPTIONS)
-    parser.add_argument("--draw-meshes", action="store_true")
+    parser.add_argument("--draw-meshes", action=argparse.BooleanOptionalAction, default=True)
     args = parser.parse_args()
     main(model=args.model, search_type=args.search_type, draw_meshes=args.draw_meshes)

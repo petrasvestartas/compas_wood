@@ -264,13 +264,25 @@ class PlateModel(Data):
         return model
 
     @classmethod
-    def from_breps(cls, breps, tol: float = 1e-6) -> "PlateModel":
+    def from_breps(cls, breps, tol: float = 1e-6, skip_invalid: bool = False) -> "PlateModel":
         from compas_wood.brep import plate_from_brep
 
         model = cls()
-        for i, brep in enumerate(breps):
-            plate = plate_from_brep(brep, i, tol=tol)
+        skipped = 0
+        pid = 0
+        for brep in breps:
+            try:
+                plate = plate_from_brep(brep, pid, tol=tol)
+            except ValueError:
+                # non-plate solid (dowel, cylinder, connector) - only tolerated when asked
+                if not skip_invalid:
+                    raise
+                skipped += 1
+                continue
             model.plates[int(plate.plate_id)] = plate
+            pid += 1
+        if skipped:
+            warnings.warn(f"from_breps: skipped {skipped} non-plate solid(s) of {len(breps)}.", stacklevel=2)
         return model
 
     # ------------------------------------------------------------------

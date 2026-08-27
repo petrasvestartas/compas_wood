@@ -11,7 +11,15 @@ Configs (built with ``compas.geometry.Brep.from_box``):
 - ``"corner"``: an L of two plates meeting at an edge (SEARCH_FACE_TO_FACE, top-to-side family 20-29)
 
 ``step=PATH`` loads Brep solids from a STEP file via ``compas.geometry.Brep.from_step`` instead
-(searched with SEARCH_BOTH unless ``search_type`` is given).
+(searched with SEARCH_BOTH unless ``search_type`` is given). Non-plate solids (dowels,
+cylinders, connectors) are skipped with a warning. Real-world demo on the compas_tf floor::
+
+    python examples/solver/joinery_solver_from_breps.py --step C:/brg/compas_tf/data/cantilevers_baked_model.stp
+
+which loads 237 solids, keeps the 145 plate-like ones, and finds their contacts.
+
+The displayed meshes are the solver's carved lofts; the uncut source Breps sit hidden
+under a "Stock" group.
 
 Source Breps are drawn as grey meshes via ``brep.to_viewmesh()`` (compas_occt OCCBrep also offers
 ``to_tesselation`` - same signature and return - and ``to_meshes``; ``to_viewmesh`` is used here
@@ -27,6 +35,7 @@ from compas.geometry import Frame
 from compas_wood import SEARCH_BOTH
 from compas_wood import SEARCH_CROSS_JOINT
 from compas_wood import SEARCH_FACE_TO_FACE
+from compas_wood import SEARCH_OPTIONS
 from compas_wood import PlateModel
 
 # config -> (boxes, search_type); 2000 x 200-400 x 40 mm plate-like solids.
@@ -65,7 +74,7 @@ def compute(config="cross", step=None, search_type=None):
         search_type = default_search if search_type is None else int(search_type)
         source = config
 
-    model = PlateModel.from_breps(breps)
+    model = PlateModel.from_breps(breps, skip_invalid=step is not None)
     elements, joints = model.solve(search_type=search_type)
     types = sorted((joint.element_ids, joint.joint_type) for joint in joints)
     print(
@@ -80,11 +89,11 @@ def draw(scene, results):
     from compas_wood.viewer import add_joinery
     from compas_wood.viewer import add_shell
 
-    grp = scene.add_group(name="SourceBreps")
+    grp = scene.add_group(name="Stock")
     for i, brep in enumerate(breps):
         mesh, _ = brep.to_viewmesh()
-        add_shell(scene, mesh, name=f"brep_{i}", parent=grp)
-    return add_joinery(scene, elements, joints, show_volumes=True, name="JoinerySolver")
+        add_shell(scene, mesh, name=f"brep_{i}", parent=grp, show=False)
+    return add_joinery(scene, elements, joints, draw_meshes=True, show_volumes=True, name="JoinerySolver")
 
 
 def main(view=True, config="cross", step=None, search_type=None):
@@ -113,5 +122,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Run the joinery solver on plate-like Breps.")
     parser.add_argument("config", nargs="?", default="cross", choices=sorted(CONFIGS))
     parser.add_argument("--step", default=None, help="load Brep solids from a STEP file instead")
+    parser.add_argument("--search-type", default=None, choices=SEARCH_OPTIONS)
     args = parser.parse_args()
-    main(config=args.config, step=args.step)
+    search = None if args.search_type is None else SEARCH_OPTIONS.index(args.search_type)
+    main(config=args.config, step=args.step, search_type=search)
