@@ -47,15 +47,15 @@ def compute(
 
 def draw(scene, results):
     model, elements, joints = results
-    from compas_wood.viewer import PLATE_FACE
     from compas_wood.viewer import add_joinery
+    from compas_wood.viewer import add_solid
 
     root = add_joinery(scene, elements, joints, draw_meshes=True, name="ReciprocalRotation")
     stock = scene.add_group(name="Stock", parent=root)
     for pid in sorted(model.plates):
         mesh = model.plates[pid].mesh
         if mesh is not None:
-            scene.add(mesh, parent=stock, name=f"beam_{pid}", facecolor=PLATE_FACE, show=False)
+            add_solid(scene, mesh, parent=stock, name=f"beam_{pid}", show=False)
     return root
 
 

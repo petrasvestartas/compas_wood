@@ -83,9 +83,9 @@ def draw(scene, results):
         a, b = joint.element_ids
         filled = area_mesh(joint.area)
         if filled is not None:
-            scene.add(filled, parent=contacts, name=f"contact_{a}_{b}", facecolor=red)
-        elif len(joint.area.points) >= 2:
-            scene.add(joint.area, parent=contacts, name=f"contact_{a}_{b}", linecolor=red, lineswidth=3)
+            scene.add(filled, parent=contacts, name=f"contact_{a}_{b}", facecolor=red, show_lines=False)
+        if len(joint.area.points) >= 2:
+            scene.add(joint.area, parent=contacts, name=f"outline_{a}_{b}", linecolor=red, lineswidth=2)
     print(f"  draw    {len(joints):4d} patches            {time.perf_counter() - t0:6.2f}s")
     return root
 

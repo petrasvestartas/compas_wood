@@ -8,6 +8,7 @@ from compas.colors import Color
 
 from compas_wood import PlateModel
 from compas_wood import connectors_elements
+from compas_wood.viewer import add_solid
 
 FACE_COLOR = Color(0.3, 0.6, 0.9)
 EDGE_COLOR = Color(0.9, 0.5, 0.1)
@@ -45,7 +46,7 @@ def draw(scene, results):
         color = FACE_COLOR if plate.plate_type == "face" else EDGE_COLOR
         grp = scene.add_group(name=f"{plate.plate_type}_{pid}", parent=root)
         if plate.mesh is not None:
-            scene.add(plate.mesh, parent=grp, name="mesh", facecolor=color)
+            add_solid(scene, plate.mesh, parent=grp, name="mesh", edgecolor=color)
         scene.add(plate.bottom, parent=grp, name="bot", linecolor=color)
         scene.add(plate.top, parent=grp, name="top", linecolor=color)
     return root

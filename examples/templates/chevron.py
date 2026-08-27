@@ -12,8 +12,8 @@ from compas_wood import PlateModel
 from compas_wood import chevron_elements
 from compas_wood import chevron_elements_annen
 from compas_wood import unweld_mesh
-from compas_wood.viewer import PLATE_FACE
 from compas_wood.viewer import add_shell
+from compas_wood.viewer import add_solid
 
 OUTLINE = Color(0 / 255, 120 / 255, 220 / 255)
 
@@ -73,7 +73,12 @@ def draw(scene, results):
     for i, (el, mesh) in enumerate(zip(results["elements"], results["loft_meshes"])):
         grp = scene.add_group(name=f"plate_{i}", parent=root)
         m = unweld_mesh(mesh) if results["explode"] else mesh
-        scene.add(m, parent=grp, name="mesh", facecolor=PLATE_FACE)
+        add_solid(
+            scene,
+            m,
+            parent=grp,
+            name="mesh",
+        )
         scene.add(el.top, parent=grp, name="top", linecolor=OUTLINE)
         scene.add(el.bottom, parent=grp, name="bot", linecolor=OUTLINE)
     return root

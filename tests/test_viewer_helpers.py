@@ -60,8 +60,11 @@ def test_add_joinery_group_tree(solved):
     for node in mesh_nodes:
         assert node["kwargs"]["show"] is False  # draw_meshes defaults to hidden
         assert isinstance(node["kwargs"]["facecolor"], Color)
-        assert isinstance(node["kwargs"]["linecolor"], Color)
-        assert "show_lines" not in node["kwargs"]  # default black edges stay on
+        assert node["kwargs"]["show_lines"] is False  # shaded, no triangulation wires
+    # real solid edges live in one graph node per mesh, not in triangulation wires
+    edge_nodes = [n for n in geoms if str(n["kwargs"].get("name", "")).endswith("_edges")]
+    assert len(edge_nodes) == len(elements)
+    assert all(isinstance(n["kwargs"]["linecolor"], Color) for n in edge_nodes)
 
     hidden = [n for n in geoms if n["kwargs"].get("name", "").split("_")[0] in ("area", "vol", "line")]
     assert hidden
@@ -97,7 +100,7 @@ def test_add_plate_model(solved):
     mesh_nodes = [n for n in geoms if n["kwargs"].get("name") == "mesh"]
     assert len(mesh_nodes) == 1
     assert mesh_nodes[0]["kwargs"]["show"] is True
-    outline_names = sorted(n["kwargs"]["name"] for n in geoms if n["kwargs"].get("name") != "mesh")
+    outline_names = sorted(n["kwargs"]["name"] for n in geoms if n["kwargs"].get("name") not in ("mesh", "mesh_edges"))
     assert outline_names == ["bot", "bot", "top", "top"]
 
 

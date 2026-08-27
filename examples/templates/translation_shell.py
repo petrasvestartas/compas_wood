@@ -6,8 +6,8 @@ cross_section/profile = None uses the kernel's built-in arch.
 from compas.colors import Color
 
 from compas_wood import translation_shell_elements
-from compas_wood.viewer import PLATE_FACE
 from compas_wood.viewer import add_shell
+from compas_wood.viewer import add_solid
 
 OUTLINE = Color(0 / 255, 120 / 255, 220 / 255)
 
@@ -36,7 +36,12 @@ def draw(scene, results):
     for i, el in enumerate(results["elements"]):
         grp = scene.add_group(name=f"plate_{i}", parent=root)
         mesh = el.loft_mesh(unwelded=results["explode"])
-        scene.add(mesh, parent=grp, name="mesh", facecolor=PLATE_FACE)
+        add_solid(
+            scene,
+            mesh,
+            parent=grp,
+            name="mesh",
+        )
         scene.add(el.top, parent=grp, name="top", linecolor=OUTLINE)
         scene.add(el.bottom, parent=grp, name="bot", linecolor=OUTLINE)
     return root

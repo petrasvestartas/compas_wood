@@ -3,7 +3,7 @@
 from compas.colors import Color
 
 from compas_wood import translation_shell_elements
-from compas_wood.viewer import PLATE_FACE
+from compas_wood.viewer import add_solid
 
 OUTLINE = Color(0 / 255, 120 / 255, 220 / 255)
 
@@ -17,7 +17,7 @@ def draw(scene, results):
     root = scene.add_group(name="Hello")
     for i, el in enumerate(results["elements"]):
         grp = scene.add_group(name=f"plate_{i}", parent=root)
-        scene.add(el.loft_mesh(), parent=grp, name="mesh", facecolor=PLATE_FACE)
+        add_solid(scene, el.loft_mesh(), parent=grp, name="mesh")
         scene.add(el.top, parent=grp, name="top", linecolor=OUTLINE)
         scene.add(el.bottom, parent=grp, name="bot", linecolor=OUTLINE)
     return root

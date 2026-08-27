@@ -133,16 +133,17 @@ def draw(scene, results):
     for joint in detected_joints:
         filled = area_mesh(joint.area)
         if filled is not None:
-            scene.add(filled, parent=found, name="contact", facecolor=red)
+            scene.add(filled, parent=found, name="contact", facecolor=red, show_lines=False)
+        if len(joint.area.points) >= 2:
+            scene.add(joint.area, parent=found, name="contact_outline", linecolor=red, lineswidth=2)
 
     yellow = Color(1.0, 0.8, 0.0)
     miss = scene.add_group(name="MISSING", parent=root)
     for (a, b), joint in sorted(missing.items()):
         filled = area_mesh(joint.area)
         if filled is not None:
-            scene.add(filled, parent=miss, name=f"missing_{a}_{b}", facecolor=yellow, linecolor=yellow)
-        else:
-            scene.add(joint.area, parent=miss, name=f"missing_{a}_{b}", linecolor=yellow, lineswidth=5)
+            scene.add(filled, parent=miss, name=f"missing_{a}_{b}", facecolor=yellow, show_lines=False)
+        scene.add(joint.area, parent=miss, name=f"missing_outline_{a}_{b}", linecolor=yellow, lineswidth=4)
         scene.add(
             Line(centers[a], centers[b]),
             parent=miss,

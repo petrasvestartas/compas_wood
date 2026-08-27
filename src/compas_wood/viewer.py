@@ -19,6 +19,7 @@ from __future__ import annotations
 import warnings
 
 from compas.colors import Color
+from compas.datastructures import Graph
 from compas.datastructures import Mesh
 from compas.geometry import Box
 from compas.geometry import Frame
@@ -68,6 +69,59 @@ def area_mesh(polyline: Polyline) -> Mesh | None:
     return Mesh.from_vertices_and_faces(points, triangles)
 
 
+def edges_graph(mesh: Mesh, coplanar_dot: float = 0.999) -> Graph | None:
+    """Boundary + crease edges of a mesh as one Graph - the real solid edges,
+    without the triangulation wires of earclipped caps."""
+    graph = Graph()
+    used = set()
+    for u, v in mesh.edges():
+        f1, f2 = mesh.edge_faces((u, v))
+        if f1 is not None and f2 is not None:
+            n1, n2 = mesh.face_normal(f1), mesh.face_normal(f2)
+            if n1[0] * n2[0] + n1[1] * n2[1] + n1[2] * n2[2] > coplanar_dot:
+                continue
+        for k in (u, v):
+            if k not in used:
+                x, y, z = mesh.vertex_coordinates(k)
+                graph.add_node(k, x=x, y=y, z=z)
+                used.add(k)
+        graph.add_edge(u, v)
+    return graph if graph.number_of_edges() else None
+
+
+def add_solid(
+    scene,
+    mesh: Mesh,
+    *,
+    parent=None,
+    name: str = "mesh",
+    facecolor: Color | None = None,
+    edgecolor: Color | None = None,
+    show: bool = True,
+):
+    """Shaded mesh without triangulation wires, plus its real (boundary/crease)
+    edges as one graph object."""
+    node = scene.add(
+        mesh,
+        parent=parent,
+        name=name,
+        facecolor=facecolor if facecolor is not None else PLATE_FACE,
+        show_lines=False,
+        show=show,
+    )
+    graph = edges_graph(mesh)
+    if graph is not None:
+        scene.add(
+            graph,
+            parent=parent,
+            name=f"{name}_edges",
+            linecolor=edgecolor if edgecolor is not None else Color(0, 0, 0),
+            show_points=False,
+            show=show,
+        )
+    return node
+
+
 def add_joinery(
     scene,
     elements,
@@ -102,14 +156,7 @@ def add_joinery(
     outline = _layer_color("CutOutlines")
     for i, el in enumerate(elements):
         grp = scene.add_group(name=f"elem_{i}", parent=root)
-        scene.add(
-            el.loft_mesh(),
-            parent=grp,
-            name="mesh",
-            facecolor=PLATE_FACE,
-            linecolor=mesh_line,
-            show=draw_meshes,
-        )
+        add_solid(scene, el.loft_mesh(), parent=grp, name="mesh", edgecolor=mesh_line, show=draw_meshes)
         for k, pl in enumerate(el.top_outlines):
             scene.add(_closed(pl), parent=grp, name=f"top_{k}", linecolor=outline)
         for k, pl in enumerate(el.bottom_outlines):
@@ -122,9 +169,9 @@ def add_joinery(
         grp = scene.add_group(name=f"joint_{j}", parent=root)
         filled = area_mesh(jt.area)
         if filled is not None:
-            scene.add(filled, parent=grp, name="area", facecolor=area, show=show_areas)
-        elif len(jt.area.points) >= 2:
-            scene.add(_closed(jt.area), parent=grp, name="area", linecolor=area, show=show_areas)
+            scene.add(filled, parent=grp, name="area", facecolor=area, show_lines=False, show=show_areas)
+        if len(jt.area.points) >= 2:
+            scene.add(_closed(jt.area), parent=grp, name="area_outline", linecolor=area, show=show_areas)
         for v, vol in enumerate(jt.volumes):
             if len(vol.points) >= 2:
                 scene.add(_closed(vol), parent=grp, name=f"vol_{v}", linecolor=volume, show=show_volumes)
@@ -149,14 +196,7 @@ def add_plate_model(scene, model, *, show_meshes: bool = True, name: str = "Plat
         plate = model.plates[pid]
         grp = scene.add_group(name=f"{plate.plate_type}_{plate.plate_id}", parent=root)
         if plate.mesh is not None:
-            scene.add(
-                plate.mesh,
-                parent=grp,
-                name="mesh",
-                facecolor=PLATE_FACE,
-                linecolor=mesh_line,
-                show=show_meshes,
-            )
+            add_solid(scene, plate.mesh, parent=grp, name="mesh", edgecolor=mesh_line, show=show_meshes)
         for label, pl in (("bot", plate.bottom), ("top", plate.top)):
             if pl is not None and len(pl.points) >= 2:
                 scene.add(_closed(pl), parent=grp, name=label, linecolor=outline)
@@ -168,9 +208,16 @@ def add_plate_model(scene, model, *, show_meshes: bool = True, name: str = "Plat
 
 
 def add_shell(scene, shell_mesh, name: str = "shell", **kwargs):
-    """Add the reference shell mesh - grey faces unless overridden via kwargs."""
-    kwargs.setdefault("facecolor", PLATE_FACE)
-    return scene.add(shell_mesh, name=name, **kwargs)
+    """Add the reference shell mesh - grey faces, real edges only."""
+    parent = kwargs.pop("parent", None)
+    return add_solid(
+        scene,
+        shell_mesh,
+        parent=parent,
+        name=name,
+        facecolor=kwargs.pop("facecolor", None),
+        show=kwargs.pop("show", True),
+    )
 
 
 def add_tags(scene, items, name: str = "dots", **kwargs):
