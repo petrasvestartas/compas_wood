@@ -1,5 +1,5 @@
 <div class="wood-viewer">
-<iframe src="../../assets/viewer/index.html?scene=scenes/assign_insertion_direction.toml"
+<iframe src="../../assets/viewer/index.html?scene=scenes/assign_insertion_direction.json"
         title="Insertion vectors assigned to plate edges from drawn lines in session_viewer" loading="lazy"></iframe>
 </div>
 

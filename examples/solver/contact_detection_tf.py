@@ -17,20 +17,12 @@ from compas_wood.session_scene import publish
 from compas_wood.viewer import area_mesh
 
 
-def _compas_tf_file(relative: str) -> str:
-    """Locate a data file in a compas_tf checkout.
+# The one input this example needs is a STEP file of the floor - not a checkout of
+# the project it came from. Point COMPAS_WOOD_STEP at your own copy, or drop the
+# file in ./data next to this script.
+STEP = os.environ.get("COMPAS_WOOD_STEP") or "data/cantilevers_baked_model.stp"
 
-    The repo lives at a different path on every machine, so honour
-    ``COMPAS_TF_DIR`` (repo root) first and fall back to the known checkouts.
-    """
-    roots = [os.environ.get("COMPAS_TF_DIR"), "C:/brg/compas_tf", Path.home() / "code/code_py/compas_tf"]
-    for root in roots:
-        if root and (Path(root) / relative).is_file():
-            return str(Path(root) / relative)
-    return str(Path("C:/brg/compas_tf") / relative)
-
-
-step = _compas_tf_file("data/cantilevers_baked_model.stp")
+step = str(Path(STEP))
 search_type = SEARCH_FACE_TO_FACE
 
 brep = Brep.from_step(step)

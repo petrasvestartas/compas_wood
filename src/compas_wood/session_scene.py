@@ -20,6 +20,7 @@ lie about what the solver produced.
 
 from __future__ import annotations
 
+import json
 import warnings
 from pathlib import Path
 
@@ -304,9 +305,14 @@ def scene_dir(explicit: str | Path | None = None) -> Path:
 def publish(scene: SessionScene, name: str, directory: str | Path | None = None) -> Path:
     """Write ``scene`` and a one-item manifest for it, and return the manifest path.
 
-    The layout is the viewer's own: ``pb/<name>.pb`` next to ``scenes/<name>.toml``,
+    The layout is the viewer's own: ``pb/<name>.pb`` next to ``scenes/<name>.json``,
     both under the asset root, so the manifest's ``file`` entry and the viewer's
     ``?scene=`` argument are just paths under that root.
+
+    JSON, not TOML: the viewer reads a manifest with ``serde_json``, and nothing
+    on the Rust side ever parsed TOML. Writing ``.toml`` here produced files the
+    viewer fetched, failed to parse, and then panicked on - every example page
+    showed an empty canvas.
 
     No placement is written. A manifest item with neither ``at`` nor ``xform``
     gets an auto-grid slot from the viewer, which is what a single-item scene
@@ -315,11 +321,10 @@ def publish(scene: SessionScene, name: str, directory: str | Path | None = None)
     root = scene_dir(directory)
     pb_path = scene.save(root / "pb" / f"{name}.pb")
 
-    manifest = root / "scenes" / f"{name}.toml"
+    manifest = root / "scenes" / f"{name}.json"
     manifest.parent.mkdir(parents=True, exist_ok=True)
     manifest.write_text(
-        f'# Written by compas_wood.session_scene.publish - regenerate, do not hand-edit.\nname = "{name}"\n\n'
-        f'[[items]]\nfile = "pb/{pb_path.name}"\nname = "{name}"\n',
+        json.dumps({"name": name, "items": [{"file": f"pb/{pb_path.name}", "name": name}]}, indent=2) + "\n",
         encoding="utf-8",
     )
     return manifest
@@ -327,4 +332,4 @@ def publish(scene: SessionScene, name: str, directory: str | Path | None = None)
 
 def viewer_url(name: str, base: str = "http://localhost:8770") -> str:
     """The URL that shows the scene :func:`publish` wrote under ``name``."""
-    return f"{base}/index.html?scene=scenes/{name}.toml"
+    return f"{base}/index.html?scene=scenes/{name}.json"

@@ -1,5 +1,5 @@
 <div class="wood-viewer">
-<iframe src="../../assets/viewer/index.html?scene=scenes/chevron.toml"
+<iframe src="../../assets/viewer/index.html?scene=scenes/chevron.json"
         title="Chevron shell template of folded plate boxes in session_viewer" loading="lazy"></iframe>
 </div>
 

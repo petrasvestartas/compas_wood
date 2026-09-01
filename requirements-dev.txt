@@ -2,9 +2,6 @@ attrs >=17.4
 build
 bump-my-version
 compas_invocations2
-# The kernel behind the docs' runnable code cells (tools/play.py).
-jupyter-server
-ipykernel
 invoke >=0.14
 # Direct, not transitive: `invoke test` needs pytest on PATH.
 pytest

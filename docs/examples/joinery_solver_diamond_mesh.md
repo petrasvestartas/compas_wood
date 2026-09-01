@@ -1,5 +1,5 @@
 <div class="wood-viewer">
-<iframe src="../../assets/viewer/index.html?scene=scenes/joinery_solver_diamond_mesh.toml"
+<iframe src="../../assets/viewer/index.html?scene=scenes/joinery_solver_diamond_mesh.json"
         title="Diamond mesh shell with out-of-plane joints in session_viewer" loading="lazy"></iframe>
 </div>
 

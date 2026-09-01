@@ -1,5 +1,5 @@
 <div class="wood-viewer">
-<iframe src="../../assets/viewer/index.html?scene=scenes/joinery_solver.toml"
+<iframe src="../../assets/viewer/index.html?scene=scenes/joinery_solver.json"
         title="Generic joinery solver on the translation shell in session_viewer" loading="lazy"></iframe>
 </div>
 

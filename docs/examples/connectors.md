@@ -1,5 +1,5 @@
 <div class="wood-viewer">
-<iframe src="../../assets/viewer/index.html?scene=scenes/connectors.toml"
+<iframe src="../../assets/viewer/index.html?scene=scenes/connectors.json"
         title="Connectors template with blue face plates and orange edge connectors in session_viewer" loading="lazy"></iframe>
 </div>
 

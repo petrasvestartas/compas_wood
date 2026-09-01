@@ -1,5 +1,5 @@
 <div class="wood-viewer">
-<iframe src="../../assets/viewer/index.html?scene=scenes/joinery_solver_from_breps.toml"
+<iframe src="../../assets/viewer/index.html?scene=scenes/joinery_solver_from_breps.json"
         title="Carved joinery generated from two crossing Brep plates in session_viewer" loading="lazy"></iframe>
 </div>
 

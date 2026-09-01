@@ -1,5 +1,5 @@
 <div class="wood-viewer">
-<iframe src="../../assets/viewer/index.html?scene=scenes/joinery_solver_connectivity.toml"
+<iframe src="../../assets/viewer/index.html?scene=scenes/joinery_solver_connectivity.json"
         title="Connectivity example model in session_viewer" loading="lazy"></iframe>
 </div>
 

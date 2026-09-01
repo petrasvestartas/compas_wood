@@ -1,5 +1,5 @@
 <div class="wood-viewer">
-<iframe src="../../assets/viewer/index.html?scene=scenes/joinery_solver_chevron.toml"
+<iframe src="../../assets/viewer/index.html?scene=scenes/joinery_solver_chevron.json"
         title="Chevron shell joinery driven by generator joint data in session_viewer" loading="lazy"></iframe>
 </div>
 

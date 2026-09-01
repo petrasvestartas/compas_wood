@@ -1,5 +1,7 @@
 """The session_viewer backend: conversion, nesting, and what it writes."""
 
+import json
+
 import pytest
 import session_py
 from compas.colors import Color
@@ -69,15 +71,19 @@ def test_publish_writes_manifest_beside_the_scene(tmp_path):
     scene.add(Polyline([[0, 0, 0], [1, 0, 0]]), name="line")
     manifest = publish(scene, "demo", tmp_path)
 
-    assert manifest == tmp_path / "scenes" / "demo.toml"
+    assert manifest == tmp_path / "scenes" / "demo.json"
     assert (tmp_path / "pb" / "demo.pb").exists()
+
+    # JSON, because the viewer parses manifests with serde_json and never read TOML.
+    written = json.loads(manifest.read_text())
+    assert written["name"] == "demo"
     # The manifest's file entry is the path the viewer fetches, relative to the
     # asset root - not an absolute path, which would not resolve in the browser.
-    assert 'file = "pb/demo.pb"' in manifest.read_text()
+    assert written["items"] == [{"file": "pb/demo.pb", "name": "demo"}]
 
 
 def test_viewer_url_points_at_the_manifest():
-    assert viewer_url("demo").endswith("index.html?scene=scenes/demo.toml")
+    assert viewer_url("demo").endswith("index.html?scene=scenes/demo.json")
 
 
 def test_merge_coplanar_faces_makes_one_polygon():

@@ -1,5 +1,5 @@
 <div class="wood-viewer">
-<iframe src="../../assets/viewer/index.html?scene=scenes/reciprocal_move.toml"
+<iframe src="../../assets/viewer/index.html?scene=scenes/reciprocal_move.json"
         title="Translation-based reciprocal frame on a dome in session_viewer" loading="lazy"></iframe>
 </div>
 

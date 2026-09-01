@@ -9,9 +9,30 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+* The built `session_viewer` app is committed under `docs/assets/viewer/`, so a docs
+  deploy no longer depends on a checkout of the `petrasvestartas/session` repo. Its
+  `README.md` carries the rebuild recipe.
+* `invoke scenes` (`tools/build_scenes.py`) as the documented docs asset step.
+
 ### Changed
 
+* Scene manifests are written as JSON, not TOML. The viewer parses them with
+  `serde_json` and never read TOML, so every example page fetched a manifest the
+  viewer could not parse and rendered nothing.
+* The embedded viewer reads `?scene=` from the page URL. Upstream it hard-codes
+  `scenes/drawings.json`, so all 22 example pages asked for their own scene and got
+  none of it.
+* The contact-detection examples take a STEP file (`COMPAS_WOOD_STEP`, or `data/`)
+  instead of hunting for a `compas_tf` checkout at three hard-coded paths.
+* The docs workflow also builds on `dev`.
+
 ### Removed
+
+* The Thebe live-cell integration (`docs/assets/js/thebe-init.js`, `tools/play.py`,
+  `invoke play`, and the `jupyter-server`/`ipykernel` dev requirements). It pointed
+  every reader's browser at a Jupyter server on `127.0.0.1:8888`, which exists only
+  on the machine that started it; on the published site it could never connect.
+  Live execution returns via Pyodide, which needs no server.
 
 ## [3.0.0] 2026-08-27
 

@@ -4,7 +4,7 @@
 
 /* The heading, over the model in the corner. The viewer fills the window, so a
    heading in the normal flow would push it out of view; it is moved in here by
-   thebe-init.js. pointer-events: none so it never blocks an orbit drag. */
+   viewer-init.js. pointer-events: none so it never blocks an orbit drag. */
 .wood-title {
   position: absolute;
   top: 0.2rem;
@@ -60,80 +60,14 @@
   .wood-drawer { width: 100%; }
 }
 
-/* ---- Thebe's cell, fitted to the theme --------------------------------- */
-
-.thebe-cell {
-  display: flex;
-  flex-direction: column;
+/* The listing, moved into the drawer by viewer-init.js. Material's own
+   .highlight block is reused as-is, so the copy button and theming come free;
+   it only needs to stop reserving the page margins it had in the flow. */
+.wood-drawer .highlight {
   margin: 0;
-}
-
-/* Thebe renders its controls AFTER the editor; with the editor at full file
-   height that puts "run" a screen below the line you are editing. */
-.thebe-controls {
-  order: -1;
-  position: sticky;
-  top: 0;
-  z-index: 2;
-  display: flex;
-  align-items: center;
-  gap: 0.4rem;
-  padding: 0.35rem 0.5rem;
-  /* OPAQUE: Material's --md-*-lightest tokens are translucent, so the code
-     scrolled visibly through the bar. */
-  background: var(--md-default-bg-color);
-  border: 1px solid var(--md-default-fg-color--lightest);
-  border-bottom: 0;
   font-size: 0.66rem;
 }
 
-.thebe-button {
-  padding: 0.2rem 0.7rem;
-  border: 0;
-  border-radius: 0.15rem;
-  background: var(--md-primary-fg-color);
-  color: var(--md-primary-bg-color);
-  font-size: 0.66rem;
-  font-weight: 700;
-  line-height: 1.6;
-  cursor: pointer;
-}
-
-.thebe-button:hover { opacity: 0.85; }
-
-/* Only "run" is the common action; the rest are secondary. */
-.thebe-button:not(.thebe-run-button) {
-  background: transparent;
-  color: var(--md-default-fg-color--light);
-  font-weight: 400;
-}
-
-.thebe-cell .CodeMirror {
-  height: auto;
-  font-size: 0.66rem;
-  border: 1px solid var(--md-default-fg-color--lightest);
-}
-
-/* No inner scroll area: the drawer scrolls, so the wheel never has to choose. */
-.thebe-cell .CodeMirror-scroll {
-  max-height: none;
-  overflow-y: hidden !important;   /* CodeMirror sets this inline */
-}
-
-.thebe-output {
-  padding: 0.4rem 0.6rem;
-  background: var(--md-code-bg-color);
-  font-size: 0.66rem;
-  overflow-x: auto;
-}
-
-.thebe-status-field { font-size: 0.62rem; }
-
-/* Shown only when a run left the page's scene untouched - see thebe-init.js. */
-.wood-stale-warning {
-  margin: 0.4rem 0 0;
-  padding: 0.5rem 0.7rem;
-  border-left: 0.15rem solid #d33;
-  background: var(--md-code-bg-color);
-  font-size: 0.64rem;
+.wood-drawer .highlight pre {
+  margin: 0;
 }

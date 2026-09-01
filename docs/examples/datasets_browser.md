@@ -1,5 +1,5 @@
 <div class="wood-viewer">
-<iframe src="../../assets/viewer/index.html?scene=scenes/datasets_browser.toml"
+<iframe src="../../assets/viewer/index.html?scene=scenes/datasets_browser.json"
         title="A solved wood_nano dataset from the browser in session_viewer" loading="lazy"></iframe>
 </div>
 

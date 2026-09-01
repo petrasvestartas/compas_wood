@@ -1,5 +1,5 @@
 <div class="wood-viewer">
-<iframe src="../../assets/viewer/index.html?scene=scenes/brep_outlines.toml"
+<iframe src="../../assets/viewer/index.html?scene=scenes/brep_outlines.json"
         title="Brep outline extraction from a plate solid with a hole in session_viewer" loading="lazy"></iframe>
 </div>
 

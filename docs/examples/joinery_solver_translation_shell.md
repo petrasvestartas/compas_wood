@@ -1,5 +1,5 @@
 <div class="wood-viewer">
-<iframe src="../../assets/viewer/index.html?scene=scenes/joinery_solver_translation_shell.toml"
+<iframe src="../../assets/viewer/index.html?scene=scenes/joinery_solver_translation_shell.json"
         title="Translation shell with finger joints in session_viewer" loading="lazy"></iframe>
 </div>
 

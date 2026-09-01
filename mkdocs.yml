@@ -14,15 +14,19 @@ dev_addr: 127.0.0.1:8001
 extra:
   homepage: https://petrasvestartas.github.io/compas_wood
 
+# docs/assets/viewer/ is the committed session_viewer build. Its README documents how
+# that artefact is produced and is for contributors, not readers; mkdocs would
+# otherwise try to render it as a page at the URL the viewer's own index.html owns.
+exclude_docs: |
+  assets/viewer/README.md
+
 extra_css:
   - assets/css/viewer.css
   - assets/css/nav.css
   - assets/css/editor.css
-  - https://cdn.jsdelivr.net/npm/thebe@0.9.3/lib/thebe.css
 
 extra_javascript:
-  - https://cdn.jsdelivr.net/npm/thebe@0.9.3/lib/index.js
-  - assets/js/thebe-init.js
+  - assets/js/viewer-init.js
 
 theme:
   name: material

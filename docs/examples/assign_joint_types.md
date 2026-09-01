@@ -1,5 +1,5 @@
 <div class="wood-viewer">
-<iframe src="../../assets/viewer/index.html?scene=scenes/assign_joint_types.toml"
+<iframe src="../../assets/viewer/index.html?scene=scenes/assign_joint_types.json"
         title="Joint types assigned to plate edges from tagged points in session_viewer" loading="lazy"></iframe>
 </div>
 

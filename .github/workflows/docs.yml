@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - dev
 
 permissions:
   contents: write
@@ -31,9 +32,8 @@ jobs:
       - run: pip install -r requirements-docs.txt
       # The Brep backend: the contact-detection examples need it to build a scene.
       - run: pip install -r requirements-brep.txt
-      # Writes docs/assets/viewer: one .pb + manifest per example, plus the
-      # viewer app itself when SESSION_VIEWER_DIST points at a session_viewer
-      # build. Without that variable the scenes are still written and the pages
-      # embed a placeholder instead of a 3D frame.
+      # The viewer APP is committed (docs/assets/viewer/*.html|js|wasm), so there is
+      # nothing to fetch here. This runs every example for real and writes the
+      # geometry each page loads: docs/assets/viewer/pb/*.pb + scenes/*.json.
       - run: python tools/build_scenes.py
       - run: mkdocs gh-deploy --force

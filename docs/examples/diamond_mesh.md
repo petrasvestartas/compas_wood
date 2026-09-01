@@ -1,5 +1,5 @@
 <div class="wood-viewer">
-<iframe src="../../assets/viewer/index.html?scene=scenes/diamond_mesh.toml"
+<iframe src="../../assets/viewer/index.html?scene=scenes/diamond_mesh.json"
         title="Diamond mesh template of triangular plates on an arch in session_viewer" loading="lazy"></iframe>
 </div>
 

@@ -1,12 +1,13 @@
 """Write every example's scene for session_viewer, into one asset tree.
 
 Replaces the old ``view_all_examples`` / ``screenshot_examples`` pair. There is
-no desktop viewer to open a window per example any more: each example is run
-with ``view=True`` and its :class:`~compas_wood.session_scene.SessionScene` is
-serialised, so the output is an asset tree the WASM viewer can fetch::
+no desktop viewer to open a window per example any more: importing an example
+runs it and ends in ``publish()``, which serialises its
+:class:`~compas_wood.session_scene.SessionScene`, so the output is an asset tree
+the WASM viewer can fetch::
 
     <out>/pb/<example>.pb        the geometry
-    <out>/scenes/<example>.toml  the manifest, loaded as ?scene=scenes/<example>.toml
+    <out>/scenes/<example>.json  the manifest, loaded as ?scene=scenes/<example>.json
 
 Usage::
 
@@ -27,42 +28,38 @@ ROOT = Path(__file__).resolve().parent.parent
 EXAMPLES_DIR = ROOT / "examples"
 DEFAULT_OUT = ROOT / "docs" / "assets" / "viewer"
 
-# The built WASM app (trunk build --release output of the session_viewer crate).
-# Not vendored in this repo: it is ~7.7 MB of build artefact from another
-# project, so it is copied in at docs-build time from a checkout of
-# https://github.com/petrasvestartas/session
-DEFAULT_VIEWER_DIST = Path(
-    os.environ.get("SESSION_VIEWER_DIST", Path.home() / "code/code_rust/session/session_viewer/dist")
-)
+# The built WASM app (index.html + .js + .wasm) is COMMITTED under docs/assets/viewer,
+# so the docs build has nothing to fetch and a deploy is reproducible. Rebuilding it is
+# a deliberate act - see docs/assets/viewer/README.md for the recipe - and
+# SESSION_VIEWER_DIST still points this script at a fresh trunk build when you do.
+VIEWER_DIST = os.environ.get("SESSION_VIEWER_DIST")
 
-# Examples that read the compas_tf STEP export, which is not in this repo.
+# Examples that read a STEP model of the compas_tf timber floor. The file is not in
+# this repo (it belongs to that project), so these two are skipped unless it is on hand.
 NEEDS_STEP = {
     "solver/contact_detection_tf.py",
     "solver/contact_detection_tf_stress.py",
 }
-STEP_RELATIVE = "data/cantilevers_baked_model.stp"
+STEP_DEFAULT = "data/cantilevers_baked_model.stp"
 
 
-def compas_tf_step():
-    """Same lookup the contact-detection examples do, so they skip together."""
-    roots = [os.environ.get("COMPAS_TF_DIR"), "C:/brg/compas_tf", Path.home() / "code/code_py/compas_tf"]
-    for root in roots:
-        if root and (Path(root) / STEP_RELATIVE).is_file():
-            return Path(root) / STEP_RELATIVE
-    return None
+def step_file():
+    """The STEP the contact-detection examples read, or None - same rule they use."""
+    path = Path(os.environ.get("COMPAS_WOOD_STEP") or STEP_DEFAULT)
+    return path if path.is_file() else None
 
 
 def copy_viewer_app(dist: Path, out_dir: Path) -> bool:
-    """Copy the viewer's own files (index.html + js + wasm) next to the scenes.
+    """Refresh the committed viewer app from a fresh trunk build.
 
     Only the app is copied - ``dist/pb`` and ``dist/scenes`` are the session
-    project's demo assets, and this tree supplies its own.
+    project's demo assets, and this tree supplies its own. A no-op unless
+    SESSION_VIEWER_DIST is set: the normal build reuses what is committed.
     """
     import shutil
 
     if not dist.is_dir():
-        print(f"viewer app not copied: {dist} does not exist (set SESSION_VIEWER_DIST)")
-        _write_placeholder(out_dir)
+        print(f"viewer app: {dist} does not exist, keeping the committed one")
         return False
     out_dir.mkdir(parents=True, exist_ok=True)
 
@@ -82,28 +79,6 @@ def copy_viewer_app(dist: Path, out_dir: Path) -> bool:
             copied += 1
     print(f"viewer app: copied {copied} file(s) from {dist}")
     return True
-
-
-def _write_placeholder(out_dir: Path) -> None:
-    """Stand in for the viewer app when no build of it was available.
-
-    The docs pages embed the viewer by URL, so without this the iframes would
-    just 404 and the reader would be left staring at a blank frame with no idea
-    why. The scenes themselves are still written and still downloadable.
-    """
-    out_dir.mkdir(parents=True, exist_ok=True)
-    (out_dir / "index.html").write_text(
-        "<!DOCTYPE html>\n"
-        '<html lang="en"><head><meta charset="utf-8"><title>Viewer not bundled</title>\n'
-        "<style>body{font:1rem/1.5 system-ui;margin:0;display:grid;place-items:center;"
-        "height:100vh;background:#111;color:#eee;text-align:center}a{color:#6cf}</style>\n"
-        "</head><body><div><p><strong>The 3D viewer was not bundled with these docs.</strong></p>\n"
-        "<p>The scene is still here - run the viewer locally to see it:<br>\n"
-        '<a href="https://github.com/petrasvestartas/session">session_viewer</a></p>\n'
-        "</div></body></html>\n",
-        encoding="utf-8",
-    )
-    print(f"wrote a placeholder index.html in {out_dir}")
 
 
 def load_module(path: Path):
@@ -128,8 +103,8 @@ def main(out_dir: Path = DEFAULT_OUT) -> int:
     for path in paths:
         rel = path.relative_to(EXAMPLES_DIR).as_posix()
         try:
-            if rel in NEEDS_STEP and compas_tf_step() is None:
-                skipped.append((rel, f"compas_tf checkout not found ({STEP_RELATIVE})"))
+            if rel in NEEDS_STEP and step_file() is None:
+                skipped.append((rel, f"STEP model not found (set COMPAS_WOOD_STEP, default {STEP_DEFAULT})"))
                 continue
             load_module(path)
             # A flat example publishes on import - loading it is the whole job.
@@ -138,7 +113,8 @@ def main(out_dir: Path = DEFAULT_OUT) -> int:
             failed.append((rel, f"{type(exc).__name__}: {exc}"))
             traceback.print_exc()
 
-    copy_viewer_app(DEFAULT_VIEWER_DIST, out_dir)
+    if VIEWER_DIST:
+        copy_viewer_app(Path(VIEWER_DIST), out_dir)
 
     print(f"\nwrote {len(written)} scene(s) to {out_dir}")
     for rel, why in skipped:

@@ -25,19 +25,15 @@ def serve(ctx):
     ctx.run("mkdocs serve")
 
 
-@task(help={"port": "Port to serve on.", "build": "False to reuse the existing site/ build."})
-def play(ctx, port=8787, build=True):
-    """Build the docs and serve them with live, runnable code cells.
+@task(help={"out": "Where to write the viewer asset tree."})
+def scenes(ctx, out="docs/assets/viewer"):
+    """Run every example and write its geometry for the embedded viewer.
 
-    Starts a Jupyter kernel and a static server for site/. The pages turn each
-    example into a Thebe cell against that kernel, and swap the viewer's
-    geometry when a scene file changes. Unlike `serve`, nothing watches the
-    source tree - a rewritten scene must not trigger a rebuild that reloads the
-    page and discards what you were typing.
+    One `pb/<example>.pb` plus a `scenes/<example>.json` manifest per example,
+    which is what the iframes on the example pages load. Required before
+    `docs`/`serve`, and the step CI runs before deploying.
     """
-    if build:
-        ctx.run("mkdocs build")
-    ctx.run(f"python tools/play.py --port {port}", pty=True)
+    ctx.run(f"python tools/build_scenes.py {out}", pty=True)
 
 
 ns = Collection(
@@ -47,7 +43,7 @@ ns = Collection(
     style.format,
     docs,
     serve,
-    play,
+    scenes,
     tests.test,
     tests.testdocs,
     tests.testcodeblocks,

@@ -1,0 +1,86 @@
+# Patch applied to the session_viewer sources before building docs/assets/viewer.
+#
+# Base: petrasvestartas/session --
+#   src/       from session_viewer/docs/34h_colors_widths/src
+#   the rest   from session_viewer/ (Cargo.toml, Cargo.lock, Trunk.toml, index.html)
+#
+# Apply with `patch -p0` from the staged crate root. README.md here has the full recipe
+# and explains why the base is a lesson snapshot rather than session_viewer/src.
+
+--- src/state.rs
++++ src/state.rs
+@@ -17,6 +17,43 @@
+ // scene is a text edit in assets/scenes/, not a rebuild (app/scene.rs).
+ const DEMO_SCENE_URL: &str = "scenes/drawings.json";
+ 
++/// The manifest to load: `?scene=` from the page URL, else [`DEMO_SCENE_URL`].
++///
++/// One build of this app serves every documentation page, and each page wants its own geometry
++/// (`?scene=scenes/hello.json`). Hard-coding the manifest meant every embed showed the same
++/// drawing set, so the docs asked for a scene the viewer never read.
++///
++/// The value is a path under the app's own directory and is used verbatim as a fetch URL, so it
++/// is restricted to a relative `scenes/<name>.json`: no scheme, no host, no `..`. A hostile
++/// `?scene=` would otherwise point the fetch at another origin, and `RequestMode::SameOrigin`
++/// would merely turn that into a silent blank canvas rather than a refusal.
++fn scene_url() -> String {
++    let fallback = || DEMO_SCENE_URL.to_string();
++    let Some(window) = web_sys::window() else { return fallback() };
++    let Ok(search) = window.location().search() else { return fallback() };
++
++    // No URLSearchParams: the one parameter is worth less than the web-sys feature it costs.
++    let raw = search.trim_start_matches('?').split('&').find_map(|pair| pair.strip_prefix("scene="));
++    let Some(raw) = raw else { return fallback() };
++
++    // Percent-decode, so `scenes%2Fhello.json` behaves like the plain form.
++    let value = js_sys::decode_uri_component(raw)
++        .ok()
++        .and_then(|s| s.as_string())
++        .unwrap_or_else(|| raw.to_string());
++
++    let looks_local = value.starts_with("scenes/")
++        && value.ends_with(".json")
++        && !value.contains("..")
++        && !value.contains("://");
++    if looks_local {
++        value
++    } else {
++        log::warn!("ignoring ?scene={value}: expected a relative scenes/<name>.json");
++        fallback()
++    }
++}
++
+ pub struct State {
+     pub window: Arc<Window>,
+     pub gpu: Gpu,
+@@ -30,9 +67,10 @@
+         // Total timing around the loop
+         let t0 = now_ms();
+ 
+-        let manifest_bytes = persistence::fetch_bytes(DEMO_SCENE_URL).await.unwrap_or_default();
++        let scene_url = scene_url();
++        let manifest_bytes = persistence::fetch_bytes(&scene_url).await.unwrap_or_default();
+         let manifest = Manifest::parse(&manifest_bytes)
+-            .unwrap_or_else(|| panic!("cannot read the scene manifest at {DEMO_SCENE_URL}"));
++            .unwrap_or_else(|| panic!("cannot read the scene manifest at {scene_url}"));
+         log::info!("scene '{}': {} items", manifest.name, manifest.items.len());
+ 
+         let mut files: Vec<(_, Xform)> = Vec::new();
+--- index.html
++++ index.html
+@@ -14,11 +14,10 @@
+ </head>
+ <body>
+   <link data-trunk rel="rust" data-target-name="session_viewer" data-wasm-opt="0"/>
+-  <!-- Build-time: Trunk copies the whole assets tree into dist/, preserving the layout, so a
+-       runtime URL is just the path under assets/ ("pb/draw_pf_he.pb", "scenes/drawings.json").
+-       EVERYTHING the viewer can load lives under assets/ - nothing is fetched from anywhere else. -->
+-   <link data-trunk rel="copy-dir" href="assets/pb" data-target-path="pb"/>
+-   <link data-trunk rel="copy-dir" href="assets/scenes" data-target-path="scenes"/>
++  <!-- No copy-dir here, unlike the session repo's own index.html: this build is the viewer
++       APP only. compas_wood writes its own pb/ and scenes/ next to these files
++       (tools/build_scenes.py), so baking in the session demo assets would ship megabytes of
++       drawings the docs never load. -->
+   <canvas id="canvas"></canvas>
+   <!-- Message telling that Webgpu is not available. -->
+   <script>

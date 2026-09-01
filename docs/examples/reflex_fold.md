@@ -1,5 +1,5 @@
 <div class="wood-viewer">
-<iframe src="../../assets/viewer/index.html?scene=scenes/reflex_fold.toml"
+<iframe src="../../assets/viewer/index.html?scene=scenes/reflex_fold.json"
         title="Reflex fold template with alternating folded plates in session_viewer" loading="lazy"></iframe>
 </div>
 

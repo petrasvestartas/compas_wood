@@ -30,20 +30,17 @@ NEEDS_STEP = {
     "solver/contact_detection_tf.py",
     "solver/contact_detection_tf_stress.py",
 }
-STEP_RELATIVE = "data/cantilevers_baked_model.stp"
+STEP_DEFAULT = "data/cantilevers_baked_model.stp"
 
 # compas_viewer is gone: examples draw into a SessionScene and write a .pb for
 # session_viewer. Any import of it is a regression.
 VIEWER_IMPORT = re.compile(r"(?:from|import)\s+compas_viewer")
 
 
-def compas_tf_step() -> Path | None:
+def step_file() -> Path | None:
     """Same lookup the two contact-detection examples do, so they skip together."""
-    roots = [os.environ.get("COMPAS_TF_DIR"), "C:/brg/compas_tf", Path.home() / "code/code_py/compas_tf"]
-    for root in roots:
-        if root and (Path(root) / STEP_RELATIVE).is_file():
-            return Path(root) / STEP_RELATIVE
-    return None
+    path = Path(os.environ.get("COMPAS_WOOD_STEP") or STEP_DEFAULT)
+    return path if path.is_file() else None
 
 
 def example_files():
@@ -75,15 +72,15 @@ def test_example_runs_and_publishes(path, tmp_path, monkeypatch):
     rel = rel_id(path)
     if rel in NEEDS_OCCT:
         pytest.importorskip("compas_occt")
-    if rel in NEEDS_STEP and compas_tf_step() is None:
-        pytest.skip(f"compas_tf checkout not found (looking for {STEP_RELATIVE})")
+    if rel in NEEDS_STEP and step_file() is None:
+        pytest.skip(f"STEP model not found (set COMPAS_WOOD_STEP, default {STEP_DEFAULT})")
 
     monkeypatch.setenv("COMPAS_WOOD_SCENE_DIR", str(tmp_path))
     load_module(path)
 
     # Every example ends in publish(), so a scene and its manifest must exist.
     assert list((tmp_path / "pb").glob("*.pb")), f"{rel}: no scene written"
-    assert list((tmp_path / "scenes").glob("*.toml")), f"{rel}: no manifest written"
+    assert list((tmp_path / "scenes").glob("*.json")), f"{rel}: no manifest written"
 
 
 @pytest.mark.parametrize("path", EXAMPLES, ids=IDS)
