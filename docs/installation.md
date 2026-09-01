@@ -13,19 +13,38 @@ This pulls in [compas](https://compas.dev) and the compiled
 
 | Extra | Installs | Use it for |
 |-------|----------|------------|
-| `viewer` | [compas_viewer](https://github.com/compas-dev/compas_viewer) | Drawing the examples with `compas_wood.viewer` |
 | `brep` | [compas_occt](https://github.com/petrasvestartas/compas_occt) | The optional `compas_wood.brep` backend (Brep to outline pairs) |
 | `dev` | pytest, ruff, invoke, build tooling | Working on compas_wood itself |
 | `docs` | mkdocs, mkdocs-material, mkdocstrings | Building this documentation |
 
 ```bash
-pip install compas_wood[viewer]
-pip install compas_wood[viewer,brep]
+pip install compas_wood[brep]
 pip install compas_wood[dev,docs]
 ```
 
-The library never imports the viewer or the Brep backend at module level, so
-the base install stays lean.
+The library never imports the Brep backend at module level, so the base
+install stays lean.
+
+## Viewing the examples
+
+Examples do not open a desktop window. `main(view=True)` writes the scene as
+protobuf plus a manifest (see
+[`compas_wood.session_scene`](api/compas_wood.session_scene.md)) and prints a
+URL; you open that in
+[session_viewer](https://github.com/petrasvestartas/session), a WebGPU viewer
+that runs in the browser. `session_py` is already a dependency of wood_nano,
+so writing scenes needs no extra install - only the viewer itself is separate.
+
+```bash
+python examples/solver/joinery_solver.py      # writes _scenes/pb + _scenes/scenes
+python -m http.server 8770 --directory _scenes
+```
+
+Then open the printed URL. WebGPU is required: recent Chrome, Edge, Firefox or
+Safari 18+. On Linux it is off by default - Chrome needs
+`--enable-features=Vulkan,DefaultANGLEVulkan,VulkanFromANGLE` (and
+`--ozone-platform=x11` on Wayland); Firefox needs `dom.webgpu.enabled` in
+`about:config`.
 
 ## Building wood_nano from source
 

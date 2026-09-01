@@ -28,6 +28,7 @@ YELLOW patches plus a yellow line connecting the two solids' centers.
 
 from __future__ import annotations
 
+import os
 import json
 import warnings
 from pathlib import Path
@@ -40,8 +41,22 @@ from compas_wood import SEARCH_FACE_TO_FACE
 from compas_wood import PlateModel
 from compas_wood import joinery_solver_elements
 
-DEFAULT_STEP = "C:/brg/compas_tf/data/cantilevers_baked_model.stp"
-DEFAULT_TRUTH = "C:/brg/compas_tf/data/plate_outlines_model_space.json"
+def _compas_tf_file(relative: str) -> str:
+    """Locate a data file in a compas_tf checkout.
+
+    The repo lives at a different path on every machine, so honour
+    ``COMPAS_TF_DIR`` (repo root) first and fall back to the known checkouts.
+    The historical Windows path is returned unchanged when nothing is found, so
+    the "not found" message still names a concrete file.
+    """
+    roots = [os.environ.get("COMPAS_TF_DIR"), "C:/brg/compas_tf", Path.home() / "code/code_py/compas_tf"]
+    for root in roots:
+        if root and (Path(root) / relative).is_file():
+            return str(Path(root) / relative)
+    return str(Path("C:/brg/compas_tf") / relative)
+
+DEFAULT_STEP = _compas_tf_file("data/cantilevers_baked_model.stp")
+DEFAULT_TRUTH = _compas_tf_file("data/plate_outlines_model_space.json")
 
 
 def compute(step=DEFAULT_STEP, truth=DEFAULT_TRUTH, search_type=SEARCH_FACE_TO_FACE):
@@ -159,15 +174,15 @@ def draw(scene, results):
 def main(view=True, step=DEFAULT_STEP, truth=DEFAULT_TRUTH, search_type=SEARCH_FACE_TO_FACE):
     results = compute(step=step, truth=truth, search_type=search_type)
     if view:
-        from compas_viewer import Viewer
+        from compas_wood.session_scene import SessionScene
+        from compas_wood.session_scene import publish
+        from compas_wood.session_scene import viewer_url
 
-        from compas_wood.viewer import aabbs
-        from compas_wood.viewer import zoom_to
-
-        viewer = Viewer()
-        draw(viewer.scene, results)
-        zoom_to(viewer, aabbs(*results[0]))
-        viewer.show()
+        scene_name = "compare_contacts_tf"
+        scene = SessionScene(scene_name)
+        draw(scene, results)
+        publish(scene, scene_name)
+        print(f"scene written - open {viewer_url(scene_name)}")
     else:
         from compas_wood.viewer import NullScene
 

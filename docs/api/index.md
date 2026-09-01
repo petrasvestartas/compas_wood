@@ -32,4 +32,5 @@ the pages below document them module by module.
 | [loft](compas_wood.loft.md) | Loft bottom+top polylines (with holes) into a closed mesh |
 | [convert](compas_wood.convert.md) | Raw C++ containers to compas geometry |
 | [datasets](compas_wood.datasets.md) | Named JSON datasets shipped with wood_nano |
-| [viewer](compas_wood.viewer.md) | compas_viewer drawing helpers mirroring the Rhino plugin's layer tree |
+| [session_scene](compas_wood.session_scene.md) | The session_viewer backend: build a scene, write it as protobuf |
+| [viewer](compas_wood.viewer.md) | Backend-agnostic drawing helpers mirroring the Rhino plugin's layer tree |

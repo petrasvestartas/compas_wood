@@ -1,8 +1,15 @@
-"""Smoke-run every example under examples/ headlessly (main(view=False)) with shrunk parameters."""
+"""Smoke-run every example.
+
+An example is a flat script: importing it builds the geometry, fills a scene and
+publishes it. So running the module IS the test - there is no main() to call and
+no parameters to pass. ``COMPAS_WOOD_SCENE_DIR`` is redirected to a tmp path so a
+test run never writes into the docs tree.
+"""
 
 from __future__ import annotations
 
 import importlib.util
+import os
 import re
 from pathlib import Path
 
@@ -10,20 +17,7 @@ import pytest
 
 EXAMPLES_DIR = Path(__file__).resolve().parent.parent / "examples"
 
-# Per-file kwargs passed to main(view=False, **overrides) to shrink heavy parameters.
-OVERRIDES = {
-    "templates/chevron.py": {"u_div": 2},
-    "templates/diamond_mesh.py": {"u_div": 2, "v_div": 2},
-    "templates/reciprocal_move.py": {"u_div": 3, "v_div": 3},
-    "templates/reciprocal_rotation.py": {"u_div": 3, "v_div": 3},
-    "solver/joinery_solver_chevron.py": {"u_div": 2},
-    "solver/joinery_solver_diamond_mesh.py": {"u_div": 2, "v_div": 2},
-    "solver/joinery_solver_reciprocal_move.py": {"nx": 3, "ny": 3},
-    "solver/joinery_solver_reciprocal_rotation.py": {"nx": 3, "ny": 3},
-    "solver/joinery_solver.py": {"plate_ids": list(range(8))},
-}
-
-# Examples whose compute path requires the compas_occt Brep backend.
+# Examples that need the compas_occt Brep backend.
 NEEDS_OCCT = {
     "templates/brep_outlines.py",
     "solver/joinery_solver_from_breps.py",
@@ -31,13 +25,25 @@ NEEDS_OCCT = {
     "solver/contact_detection_tf_stress.py",
 }
 
-# Examples that read an external file and are skipped when it is absent.
-NEEDS_FILE = {
-    "solver/contact_detection_tf.py": "C:/brg/compas_tf/data/cantilevers_baked_model.stp",
-    "solver/contact_detection_tf_stress.py": "C:/brg/compas_tf/data/cantilevers_baked_model.stp",
+# Examples that read the compas_tf STEP export, which is not in this repo.
+NEEDS_STEP = {
+    "solver/contact_detection_tf.py",
+    "solver/contact_detection_tf_stress.py",
 }
+STEP_RELATIVE = "data/cantilevers_baked_model.stp"
 
-VIEWER_IMPORT = re.compile(r"^(?:from|import)\s+compas_viewer", re.MULTILINE)
+# compas_viewer is gone: examples draw into a SessionScene and write a .pb for
+# session_viewer. Any import of it is a regression.
+VIEWER_IMPORT = re.compile(r"(?:from|import)\s+compas_viewer")
+
+
+def compas_tf_step() -> Path | None:
+    """Same lookup the two contact-detection examples do, so they skip together."""
+    roots = [os.environ.get("COMPAS_TF_DIR"), "C:/brg/compas_tf", Path.home() / "code/code_py/compas_tf"]
+    for root in roots:
+        if root and (Path(root) / STEP_RELATIVE).is_file():
+            return Path(root) / STEP_RELATIVE
+    return None
 
 
 def example_files():
@@ -65,18 +71,22 @@ def test_examples_found():
 
 
 @pytest.mark.parametrize("path", EXAMPLES, ids=IDS)
-def test_example_runs_headless(path):
+def test_example_runs_and_publishes(path, tmp_path, monkeypatch):
     rel = rel_id(path)
     if rel in NEEDS_OCCT:
         pytest.importorskip("compas_occt")
-    if rel in NEEDS_FILE and not Path(NEEDS_FILE[rel]).exists():
-        pytest.skip(f"external file missing: {NEEDS_FILE[rel]}")
-    module = load_module(path)
-    result = module.main(view=False, **OVERRIDES.get(rel, {}))
-    assert result
+    if rel in NEEDS_STEP and compas_tf_step() is None:
+        pytest.skip(f"compas_tf checkout not found (looking for {STEP_RELATIVE})")
+
+    monkeypatch.setenv("COMPAS_WOOD_SCENE_DIR", str(tmp_path))
+    load_module(path)
+
+    # Every example ends in publish(), so a scene and its manifest must exist.
+    assert list((tmp_path / "pb").glob("*.pb")), f"{rel}: no scene written"
+    assert list((tmp_path / "scenes").glob("*.toml")), f"{rel}: no manifest written"
 
 
 @pytest.mark.parametrize("path", EXAMPLES, ids=IDS)
-def test_no_module_level_viewer_import(path):
+def test_no_viewer_import(path):
     source = path.read_text(encoding="utf-8")
-    assert not VIEWER_IMPORT.search(source), f"{rel_id(path)}: compas_viewer imported at module level"
+    assert not VIEWER_IMPORT.search(source), f"{rel_id(path)}: compas_viewer is no longer a dependency"

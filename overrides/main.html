@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+<!--
+  A single strip of menus across the top, instead of Material's left navigation
+  and right table of contents.
+
+  Each top-level nav section becomes a <details>: the summary is the strip
+  button, the panel is its pages. <details> is used deliberately - it opens on
+  click and toggles without any script, so the menu works before (and without)
+  JavaScript. The script below only adds the two conveniences native <details>
+  has no opinion about: closing the others when one opens, and closing on a
+  click outside.
+-->
+
+{% block tabs %}
+  <script>
+    // The vertical scrollbar's width, for the full-bleed viewer in viewer.css:
+    // 100vw includes the scrollbar and an element's width does not, so a
+    // 100vw-wide child overflows a scrolling page by exactly this much.
+    (function () {
+      var setScrollbarWidth = function () {
+        var w = window.innerWidth - document.documentElement.clientWidth;
+        document.documentElement.style.setProperty("--sbw", Math.max(0, w) + "px");
+      };
+      // Runs from inside <body>, before the article exists - at that point the
+      // page has no vertical scrollbar yet and the difference measures 0. So
+      // measure again once the document is laid out, and on every resize.
+      setScrollbarWidth();
+      document.addEventListener("DOMContentLoaded", setScrollbarWidth);
+      window.addEventListener("load", setScrollbarWidth);
+      window.addEventListener("resize", setScrollbarWidth);
+    })();
+
+    (function () {
+      var strip = document.querySelector(".wood-strip");
+      if (!strip) return;
+      var menus = strip.querySelectorAll("details.wood-strip__item");
+      menus.forEach(function (d) {
+        d.addEventListener("toggle", function () {
+          if (!d.open) return;
+          menus.forEach(function (o) { if (o !== d) o.open = false; });
+        });
+      });
+      document.addEventListener("click", function (e) {
+        if (strip.contains(e.target)) return;
+        menus.forEach(function (d) { d.open = false; });
+      });
+    })();
+  </script>
+{% endblock %}
+
+<!-- Both sidebars are replaced by the strip above. -->
+{% block site_nav %}{% endblock %}

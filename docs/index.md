@@ -32,13 +32,14 @@ plates, joints = joinery_solver_elements(
     top_polylines=[e.top for e in elements],
 )
 
-# Optional: draw the result (pip install compas_wood[viewer]).
-from compas_viewer import Viewer
+# Write the result as a scene for session_viewer, and print its URL.
+from compas_wood.session_scene import SessionScene, publish, viewer_url
 from compas_wood.viewer import add_joinery
 
-viewer = Viewer()
-add_joinery(viewer.scene, plates, joints, draw_meshes=True)
-viewer.show()
+scene = SessionScene("quickstart")
+add_joinery(scene, plates, joints, draw_meshes=True)
+publish(scene, "quickstart")
+print(viewer_url("quickstart"))
 ```
 
 ## Where to go next
@@ -47,9 +48,9 @@ viewer.show()
   build-from-source route for `wood_nano`.
 - [Migration from 2.x](migration.md) - 3.0 is a clean break; the table there
   maps every removed 2.x function to its replacement.
-- [Examples](examples/templates.md) - the template generators, the
-  [joinery solver](examples/solver.md), and the
-  [Brep workflow](examples/breps.md).
+- [Examples](examples/hello.md) - the template generators, the
+  [joinery solver](examples/joinery_solver.md), and the
+  [contact detection](examples/brep_workflow.md).
 - [API Reference](api/index.md) - one page per module.
 
 ## Rhino / Grasshopper

@@ -14,8 +14,20 @@ dev_addr: 127.0.0.1:8001
 extra:
   homepage: https://petrasvestartas.github.io/compas_wood
 
+extra_css:
+  - assets/css/viewer.css
+  - assets/css/nav.css
+  - assets/css/editor.css
+  - https://cdn.jsdelivr.net/npm/thebe@0.9.3/lib/thebe.css
+
+extra_javascript:
+  - https://cdn.jsdelivr.net/npm/thebe@0.9.3/lib/index.js
+  - assets/js/thebe-init.js
+
 theme:
   name: material
+  # overrides/main.html replaces both sidebars with a top strip of menus.
+  custom_dir: overrides
   palette:
     - media: "(prefers-color-scheme)"
       toggle:
@@ -144,27 +156,53 @@ nav:
       - Installation: installation.md
       - Migration from 2.x: migration.md
   - Examples:
-      - Templates: examples/templates.md
-      - Joinery solver: examples/solver.md
-      - Breps: examples/breps.md
-  - API Reference:
-      - Overview: api/index.md
-      - compas_wood.assign_vectors: api/compas_wood.assign_vectors.md
-      - compas_wood.brep: api/compas_wood.brep.md
-      - compas_wood.chevron: api/compas_wood.chevron.md
-      - compas_wood.connectors: api/compas_wood.connectors.md
-      - compas_wood.convert: api/compas_wood.convert.md
-      - compas_wood.datasets: api/compas_wood.datasets.md
-      - compas_wood.diamond_mesh: api/compas_wood.diamond_mesh.md
-      - compas_wood.joinery_solver: api/compas_wood.joinery_solver.md
-      - compas_wood.loft: api/compas_wood.loft.md
-      - compas_wood.model: api/compas_wood.model.md
-      - compas_wood.reciprocal_move: api/compas_wood.reciprocal_move.md
-      - compas_wood.reciprocal_rotation: api/compas_wood.reciprocal_rotation.md
-      - compas_wood.reflex_fold: api/compas_wood.reflex_fold.md
-      - compas_wood.translation_shell: api/compas_wood.translation_shell.md
-      - compas_wood.viewer: api/compas_wood.viewer.md
-      - compas_wood.wood_element: api/compas_wood.wood_element.md
+      - Contact detection:
+          - Brep workflow: examples/brep_workflow.md
+          - Brep outlines: examples/brep_outlines.md
+          - Joinery solver from Breps: examples/joinery_solver_from_breps.md
+          - Contact detection on the compas_tf floor: examples/contact_detection_tf.md
+          - Contact detection stress test: examples/contact_detection_tf_stress.md
+      - Joinery:
+          - Solver parameters: examples/joinery_parameters.md
+          - Templates:
+              - Hello: examples/hello.md
+              - Translation shell: examples/translation_shell.md
+              - Reflex fold: examples/reflex_fold.md
+              - Chevron: examples/chevron.md
+              - Diamond mesh: examples/diamond_mesh.md
+              - Connectors: examples/connectors.md
+              - Reciprocal move: examples/reciprocal_move.md
+              - Reciprocal rotation: examples/reciprocal_rotation.md
+          - Solver:
+              - Joinery solver: examples/joinery_solver.md
+              - Translation shell joinery: examples/joinery_solver_translation_shell.md
+              - Chevron joinery: examples/joinery_solver_chevron.md
+              - Diamond mesh joinery: examples/joinery_solver_diamond_mesh.md
+              - Reciprocal frame (translation) joinery: examples/joinery_solver_reciprocal_move.md
+              - Reciprocal frame (rotation) joinery: examples/joinery_solver_reciprocal_rotation.md
+              - Connectivity table: examples/joinery_solver_connectivity.md
+              - Assign joint types: examples/assign_joint_types.md
+              - Assign insertion direction: examples/assign_insertion_direction.md
+              - Datasets browser: examples/datasets_browser.md
   - About:
       - Changelog: changelog.md
       - License: license.md
+      - API Reference:
+          - Overview: api/index.md
+          - compas_wood.assign_vectors: api/compas_wood.assign_vectors.md
+          - compas_wood.brep: api/compas_wood.brep.md
+          - compas_wood.chevron: api/compas_wood.chevron.md
+          - compas_wood.connectors: api/compas_wood.connectors.md
+          - compas_wood.convert: api/compas_wood.convert.md
+          - compas_wood.datasets: api/compas_wood.datasets.md
+          - compas_wood.diamond_mesh: api/compas_wood.diamond_mesh.md
+          - compas_wood.joinery_solver: api/compas_wood.joinery_solver.md
+          - compas_wood.loft: api/compas_wood.loft.md
+          - compas_wood.model: api/compas_wood.model.md
+          - compas_wood.reciprocal_move: api/compas_wood.reciprocal_move.md
+          - compas_wood.reciprocal_rotation: api/compas_wood.reciprocal_rotation.md
+          - compas_wood.reflex_fold: api/compas_wood.reflex_fold.md
+          - compas_wood.translation_shell: api/compas_wood.translation_shell.md
+          - compas_wood.session_scene: api/compas_wood.session_scene.md
+          - compas_wood.viewer: api/compas_wood.viewer.md
+          - compas_wood.wood_element: api/compas_wood.wood_element.md

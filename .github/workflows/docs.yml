@@ -19,7 +19,7 @@ jobs:
           git config user.email 41898282+github-actions[bot]@users.noreply.github.com
       - uses: actions/setup-python@v5
         with:
-          python-version: '3.12'
+          python-version: '3.13'
       - run: echo "cache_id=$(date --utc '+%V')" >> $GITHUB_ENV
       - uses: actions/cache@v4
         with:
@@ -29,4 +29,11 @@ jobs:
             mkdocs-material-
       - run: pip install .
       - run: pip install -r requirements-docs.txt
+      # The Brep backend: the contact-detection examples need it to build a scene.
+      - run: pip install -r requirements-brep.txt
+      # Writes docs/assets/viewer: one .pb + manifest per example, plus the
+      # viewer app itself when SESSION_VIEWER_DIST points at a session_viewer
+      # build. Without that variable the scenes are still written and the pages
+      # embed a placeholder instead of a 3D frame.
+      - run: python tools/build_scenes.py
       - run: mkdocs gh-deploy --force

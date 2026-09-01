@@ -49,7 +49,7 @@ zip-safe = false
 [tool.setuptools.dynamic]
 version = { attr = "compas_wood.__version__" }
 dependencies = { file = "requirements.txt" }
-optional-dependencies = { dev = { file = "requirements-dev.txt" }, docs = { file = "requirements-docs.txt" }, viewer = { file = "requirements-viewer.txt" }, brep = { file = "requirements-brep.txt" } }
+optional-dependencies = { dev = { file = "requirements-dev.txt" }, docs = { file = "requirements-docs.txt" }, brep = { file = "requirements-brep.txt" } }
 
 [tool.setuptools.packages.find]
 where = ["src"]

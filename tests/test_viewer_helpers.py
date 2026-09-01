@@ -1,7 +1,6 @@
 import pytest
 from compas.colors import Color
 from compas.geometry import Box
-from compas.geometry import Frame
 from compas.geometry import Polyline
 
 from compas_wood import PlateModel
@@ -13,7 +12,6 @@ from compas_wood.viewer import add_joinery
 from compas_wood.viewer import add_plate_model
 from compas_wood.viewer import add_tags
 from compas_wood.viewer import aabbs
-from compas_wood.viewer import zoom_to
 
 # Two vertical plates crossing at the origin: one cross joint.
 A_BOT = Polyline([[5, 0.5, -2], [-5, 0.5, -2], [-5, 0.5, 2], [5, 0.5, 2], [5, 0.5, -2]])
@@ -27,19 +25,6 @@ def solved():
     elements, joints = joinery_solver_elements([A_BOT, B_BOT], [A_TOP, B_TOP], search_type=SEARCH_CROSS_JOINT)
     assert len(elements) == 2 and len(joints) == 1
     return elements, joints
-
-
-class _Camera:
-    def __init__(self):
-        self.position = [-10.0, -10.0, 10.0]
-        self.target = [0.0, 0.0, 0.0]
-        self.scale = 1.0
-
-
-class _Viewer:
-    def __init__(self):
-        self.renderer = type("R", (), {})()
-        self.renderer.camera = _Camera()
 
 
 def test_add_joinery_group_tree(solved):
@@ -125,25 +110,3 @@ def test_aabbs_axis_aligned_planar_polyline():
     boxes = aabbs(Polyline([[0, 0, 0], [1, 0, 0], [1, 0, 1], [0, 0, 1]]))
     assert len(boxes) == 1
     assert boxes[0].xsize == 1 and boxes[0].zsize == 1
-
-
-def test_zoom_to_scale_and_target():
-    viewer = _Viewer()
-    box = Box(2, 4, 6, frame=Frame([10.0, 0.0, 0.0]))
-    zoom_to(viewer, [box], tightness=10.0)
-    camera = viewer.renderer.camera
-    diagonal = (2.0**2 + 4.0**2 + 6.0**2) ** 0.5
-    assert camera.scale == pytest.approx(diagonal / 10.0)
-    assert camera.target == pytest.approx([10.0, 0.0, 0.0])
-    view_len = (3 * 10.0**2) ** 0.5
-    expected = [10.0 - 10.0 / view_len * diagonal, -10.0 / view_len * diagonal, 10.0 / view_len * diagonal]
-    assert camera.position == pytest.approx(expected)
-
-
-def test_zoom_to_empty_is_noop():
-    viewer = _Viewer()
-    zoom_to(viewer, [])
-    camera = viewer.renderer.camera
-    assert camera.scale == 1.0
-    assert camera.target == [0.0, 0.0, 0.0]
-    assert camera.position == [-10.0, -10.0, 10.0]

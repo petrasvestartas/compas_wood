@@ -28,9 +28,12 @@ uv pip install .
 pip install compas_wood
 ```
 
-The `viewer` extra installs [compas_viewer](https://github.com/compas-dev/compas_viewer)
-for the examples; the library itself never imports it at module level. The
-`brep` extra installs `compas_occt` for the optional `compas_wood.brep` backend.
+The `brep` extra installs `compas_occt` for the optional `compas_wood.brep`
+backend; the library never imports it at module level.
+
+Examples write their scenes for
+[session_viewer](https://github.com/petrasvestartas/session), a WebGPU viewer
+that runs in the browser - there is no desktop viewer window.
 
 ## Quickstart
 
@@ -47,13 +50,14 @@ plates, joints = joinery_solver_elements(
     top_polylines=[e.top for e in elements],
 )
 
-# Optional: draw the result (pip install compas_wood[viewer]).
-from compas_viewer import Viewer
+# Write the result as a scene for session_viewer, and print its URL.
+from compas_wood.session_scene import SessionScene, publish, viewer_url
+from compas_wood.viewer import add_joinery
 
-viewer = Viewer()
-for plate in plates:
-    viewer.scene.add(plate.loft_mesh())
-viewer.show()
+scene = SessionScene("quickstart")
+add_joinery(scene, plates, joints, draw_meshes=True)
+publish(scene, "quickstart")
+print(viewer_url("quickstart"))
 ```
 
 More examples live in the `docs/examples` section of the

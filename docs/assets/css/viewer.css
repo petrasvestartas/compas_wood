@@ -1,0 +1,63 @@
+/* Embedded session_viewer frames.
+
+   The viewer is a WebGPU canvas sized to its own viewport, so it needs an
+   explicit height here - an iframe without one collapses to nothing.
+
+   No border, no radius, no background: the embed should look exactly like the
+   viewer does when run standalone with `trunk serve`. The viewer paints its own
+   (white) ground, so any chrome added here would show up as a frame that is not
+   part of the application.
+
+   NOTE: the iframe src in the pages is ../../assets/viewer/... - two levels.
+   mkdocs rewrites relative links written in Markdown, but not those inside raw
+   HTML, and use_directory_urls puts each page at examples/<name>/index.html.
+
+   loading="lazy" keeps a scene (megabytes of protobuf) off the critical path
+   until the reader scrolls near it. */
+
+/* Belt and braces for the full-bleed box below: if --sbw is ever stale (a
+   scrollbar appearing after the last measurement), the few pixels of overflow
+   are clipped rather than raising a horizontal scrollbar. `clip` and not
+   `hidden`, which would break the sticky menu strip. */
+html { overflow-x: clip; }
+
+.wood-viewer {
+  /* Full-bleed: break out of the centred article column so the canvas spans the
+     window. The article is a centred block, so shifting left by half the
+     viewport and back by half the element lands the box on the window's edge,
+     whatever width the column happens to be.
+
+     --sbw is the vertical scrollbar's width, measured in overrides/main.html.
+     It has to be subtracted because 100vw counts the scrollbar and the content
+     box does not, and that difference is enough overflow to raise a HORIZONTAL
+     scrollbar on a page that should never have one. Falls back to 0px, i.e.
+     plain 100vw, if the script never runs. */
+  --bleed: calc(100vw - var(--sbw, 0px));
+  position: relative;
+  left: 50%;
+  margin-left: calc(var(--bleed) / -2);
+  margin-right: calc(var(--bleed) / -2);
+  width: var(--bleed);
+  max-width: var(--bleed);
+}
+
+.wood-viewer > iframe {
+  display: block;
+  width: 100%;
+  /* Fills what is left of the window under the header and the menu strip, so
+     scrolling the viewer into view gives a full screen of model. */
+  height: calc(100vh - 4.8rem);
+  border: 0;
+}
+
+
+/* No focus ring on the canvas. Clicking into the viewer to orbit focuses the
+   iframe, and the browser then paints a black rectangle around it - which reads
+   as a window border drawn over the model. The frame is a viewport, not a
+   control, and it is reachable by keyboard either way, so the ring is noise.
+   `outline` alone is not enough: some engines draw the ring as a shadow. */
+.wood-viewer > iframe:focus,
+.wood-viewer > iframe:focus-visible {
+  outline: none;
+  box-shadow: none;
+}

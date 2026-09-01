@@ -25,6 +25,21 @@ def serve(ctx):
     ctx.run("mkdocs serve")
 
 
+@task(help={"port": "Port to serve on.", "build": "False to reuse the existing site/ build."})
+def play(ctx, port=8787, build=True):
+    """Build the docs and serve them with live, runnable code cells.
+
+    Starts a Jupyter kernel and a static server for site/. The pages turn each
+    example into a Thebe cell against that kernel, and swap the viewer's
+    geometry when a scene file changes. Unlike `serve`, nothing watches the
+    source tree - a rewritten scene must not trigger a rebuild that reloads the
+    page and discards what you were typing.
+    """
+    if build:
+        ctx.run("mkdocs build")
+    ctx.run(f"python tools/play.py --port {port}", pty=True)
+
+
 ns = Collection(
     _docs.help,
     style.check,
@@ -32,6 +47,7 @@ ns = Collection(
     style.format,
     docs,
     serve,
+    play,
     tests.test,
     tests.testdocs,
     tests.testcodeblocks,

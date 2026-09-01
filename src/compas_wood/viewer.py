@@ -1,17 +1,16 @@
-"""compas_viewer drawing helpers, mirroring the Rhino plugin's JoinerySolver layer tree.
+"""Drawing helpers, mirroring the Rhino plugin's JoinerySolver layer tree.
 
 :data:`LAYERS` is the plugin's ``_LAYER_DEFS`` (same names, colors, default
-visibility). Rhino's PlatesMesh black is a wire color; shaded parity in the
-viewer is grey faces + black lines, hence :data:`PLATE_FACE`.
+visibility). Rhino's PlatesMesh black is a wire color; shaded parity is grey
+faces + black lines, hence :data:`PLATE_FACE`.
 
-facecolor trap: a group handle's ``add`` is core compas ``Group.add``, which
-never sees compas_viewer's ``facecolor`` -> ``surfacecolor`` translation, so
-``facecolor=`` passed to a group handle is silently dropped. Everything here
-draws through ``scene.add(item, parent=group, facecolor=...)`` instead.
+These helpers are backend-agnostic: they only ever call ``scene.add`` and
+``scene.add_group``, so any object providing those two works. The two that ship
+are :class:`compas_wood.session_scene.SessionScene`, which writes a ``.pb`` for
+session_viewer, and :class:`NullScene`, the headless double used by tests/CI.
 
-No module-level compas_viewer import - the library works without the viewer
-extra. Only ``scene.add`` / ``scene.add_group`` are ever called, so
-:class:`NullScene` is a drop-in headless double for tests/CI.
+Everything draws through ``scene.add(item, parent=group, ...)`` rather than
+through a group handle, so per-object colors always reach the backend.
 """
 
 from __future__ import annotations
@@ -23,10 +22,9 @@ from compas.datastructures import Graph
 from compas.datastructures import Mesh
 from compas.geometry import Box
 from compas.geometry import Frame
-from compas.geometry import Polygon
+from compas.geometry import Point
 from compas.geometry import Polyline
 from compas.geometry import bounding_box
-from compas.geometry import earclip_polygon
 
 # (rgb255, default visibility) - parity with plugin_rhino w_solver_joinery_solver._LAYER_DEFS.
 LAYERS: dict[str, tuple[tuple[int, int, int], bool]] = {
@@ -55,18 +53,86 @@ def _closed(polyline: Polyline) -> Polyline:
     return Polyline(list(points) + [points[0]])
 
 
-def area_mesh(polyline: Polyline) -> Mesh | None:
-    """Filled surface for a closed planar polygon outline; None when it cannot be triangulated."""
-    points = list(polyline.points)
-    if len(points) >= 2 and points[0].distance_to_point(points[-1]) < 1e-9:
-        points = points[:-1]
-    if len(points) < 3:
+def area_mesh(polyline: Polyline, holes: list[Polyline] | None = None) -> Mesh | None:
+    """Filled surface for a closed planar outline, triangulated with CDT.
+
+    Contact areas and joint areas are arbitrary planar polygons - frequently
+    concave, sometimes with holes - and an ear-clipping fill gets those wrong:
+    it can put triangles outside the outline and it has no notion of a hole at
+    all. session_py's constrained Delaunay triangulation respects the outline
+    (and every hole) as constrained edges, so the fill is exactly the polygon.
+
+    ``RemeshCDT.triangulate`` works in x/y and ignores z, so the loops are first
+    projected onto their own plane; the returned indices address the untouched
+    3D points, so the mesh comes back in the original plane, not flattened.
+
+    Returns None when the outline cannot be triangulated (fewer than 3 distinct
+    points, or degenerate to a line).
+    """
+    from session_py import Point as SessionPoint
+    from session_py import Polyline as SessionPolyline
+    from session_py import RemeshCDT
+
+    def _open(loop) -> list:
+        pts = list(loop.points)
+        if len(pts) >= 2 and pts[0].distance_to_point(pts[-1]) < 1e-9:
+            pts = pts[:-1]
+        return pts
+
+    loops = [_open(polyline)] + [_open(h) for h in (holes or [])]
+    if len(loops[0]) < 3:
         return None
+
+    # Newell normal of the outer loop, then any two axes spanning its plane.
+    points = loops[0]
+    nx = ny = nz = 0.0
+    for i, a in enumerate(points):
+        b = points[(i + 1) % len(points)]
+        nx += (a[1] - b[1]) * (a[2] + b[2])
+        ny += (a[2] - b[2]) * (a[0] + b[0])
+        nz += (a[0] - b[0]) * (a[1] + b[1])
+    norm = (nx * nx + ny * ny + nz * nz) ** 0.5
+    if norm < 1e-12:  # collinear outline - no surface to fill
+        return None
+    normal = (nx / norm, ny / norm, nz / norm)
+
+    helper = (0.0, 0.0, 1.0) if abs(normal[2]) < 0.9 else (1.0, 0.0, 0.0)
+    ux = normal[1] * helper[2] - normal[2] * helper[1]
+    uy = normal[2] * helper[0] - normal[0] * helper[2]
+    uz = normal[0] * helper[1] - normal[1] * helper[0]
+    ulen = (ux * ux + uy * uy + uz * uz) ** 0.5
+    u = (ux / ulen, uy / ulen, uz / ulen)
+    v = (
+        normal[1] * u[2] - normal[2] * u[1],
+        normal[2] * u[0] - normal[0] * u[2],
+        normal[0] * u[1] - normal[1] * u[0],
+    )
+
+    origin = points[0]
+
+    def flatten(loop):
+        out = []
+        for p in loop:
+            d = (p[0] - origin[0], p[1] - origin[1], p[2] - origin[2])
+            out.append(
+                SessionPoint(
+                    d[0] * u[0] + d[1] * u[1] + d[2] * u[2],
+                    d[0] * v[0] + d[1] * v[1] + d[2] * v[2],
+                    0.0,
+                )
+            )
+        return SessionPolyline(out)
+
     try:
-        triangles = earclip_polygon(Polygon(points))
+        triangles = RemeshCDT.triangulate([flatten(loop) for loop in loops])
     except Exception:
         return None
-    return Mesh.from_vertices_and_faces(points, triangles)
+    if not triangles:
+        return None
+
+    # Indices address the flat [outer..., hole0..., ...] array, in input order.
+    flat = [p for loop in loops for p in loop]
+    return Mesh.from_vertices_and_faces(flat, [list(t) for t in triangles])
 
 
 def edges_graph(mesh: Mesh, coplanar_dot: float = 0.999) -> Graph | None:
@@ -143,7 +209,7 @@ def add_joinery(
 
     Parameters
     ----------
-    scene : :class:`compas_viewer.scene.ViewerScene` or :class:`NullScene`
+    scene : :class:`compas_wood.session_scene.SessionScene` or :class:`NullScene`
     elements : list[:class:`compas_wood.wood_element.JoineryElement`]
     joints : list[:class:`compas_wood.wood_element.JointResult`]
 
@@ -221,11 +287,14 @@ def add_shell(scene, shell_mesh, name: str = "shell", **kwargs):
 
 
 def add_tags(scene, items, name: str = "dots", **kwargs):
-    """Rhino TextDot parity: one camera-facing ``Tag`` per ``(text, position)`` pair.
+    """Rhino TextDot parity: one labelled marker per ``(text, position)`` pair.
 
-    Extra kwargs go to the ``Tag`` constructor (``color``, ``height``,
-    ``absolute_height``, ...). No-op with a warning on a :class:`NullScene`
-    or when compas_viewer is not installed - Tag is viewer-only geometry.
+    session_py has no text geometry, so each tag is written as a
+    :class:`compas.geometry.Point` *named* with its text - the label survives in
+    the viewer's object tree, which is where session_viewer surfaces names.
+    No-op with a warning on a :class:`NullScene`, which records nothing.
+
+    Extra kwargs are accepted and ignored (they were ``Tag`` styling).
 
     Returns
     -------
@@ -235,17 +304,12 @@ def add_tags(scene, items, name: str = "dots", **kwargs):
     if isinstance(scene, NullScene):
         warnings.warn("add_tags: NullScene cannot draw Tags - skipped.", stacklevel=2)
         return []
-    try:
-        from compas_viewer.scene import Tag
-    except Exception as exc:  # compas_viewer extra not installed
-        warnings.warn(f"add_tags: compas_viewer Tag unavailable ({exc}) - skipped.", stacklevel=2)
-        return []
     grp = scene.add_group(name=name)
-    return [scene.add(Tag(str(text), position, **kwargs), parent=grp) for text, position in items]
+    return [scene.add(Point(*position), parent=grp, name=str(text)) for text, position in items]
 
 
 def aabbs(*geometries) -> list[Box]:
-    """Bounding boxes for :func:`zoom_to` - Mesh via ``aabb()``, polylines via
+    """Axis-aligned bounding boxes - Mesh via ``aabb()``, polylines via
     point bounds (``Polyline.aabb()`` raises in compas 2.15). ``None`` skipped."""
     boxes: list[Box] = []
     for g in geometries:
@@ -270,53 +334,6 @@ def aabbs(*geometries) -> list[Box]:
             center = [(lo[i] + hi[i]) / 2.0 for i in range(3)]
             boxes.append(Box(*sizes, frame=Frame(center, [1, 0, 0], [0, 1, 0])))
     return boxes
-
-
-def zoom_to(viewer, boxes, tightness: float = 10.0):
-    """Aim the camera at the geometry, before ``viewer.show()``.
-
-    What the ``F`` key does - compas_viewer's ``zoom_selected`` - but computed
-    from geometry rather than from the scene objects, whose bounding boxes do
-    not exist until the renderer has run, so ``F`` cannot be pressed for you.
-
-    Needed on a model in millimetres. The camera starts at ``position``
-    ``[-10, -10, 10]`` with a ``far`` plane of ``1000``, and ``far`` is scaled by
-    ``camera.scale``, which starts at 1 - so on a 6015 mm building the whole
-    thing sits behind the far plane until something sets the scale.
-
-    Parameters
-    ----------
-    viewer : :class:`compas_viewer.Viewer`
-    boxes : sequence[:class:`compas.geometry.Box`]
-        The bounding boxes to frame - ``element.aabb`` for model elements,
-        ``brep.aabb`` for Breps. Empty leaves the camera alone.
-    tightness : float, optional
-        Divisor for the camera scale, as in ``zoom_selected``. Larger fills
-        more of the window.
-    """
-    corners = [point for box in boxes if box is not None for point in box.points]
-    if not corners:
-        return
-
-    low = [min(point[i] for point in corners) for i in range(3)]
-    high = [max(point[i] for point in corners) for i in range(3)]
-    diagonal = max(sum((high[i] - low[i]) ** 2 for i in range(3)) ** 0.5, 1.0)
-    center = [(low[i] + high[i]) / 2 for i in range(3)]
-
-    camera = viewer.renderer.camera
-    # scale drives near/far as well as pan speed, so it is what stops the model
-    # being clipped away.
-    camera.scale = diagonal / tightness
-
-    # Keep the direction the camera is already looking from and only move it -
-    # the view vector is position MINUS target, not target minus position. Using
-    # the latter is degenerate here: the default position sits almost on the
-    # origin, so on a model whose centre is 1.5 m up it points nearly straight
-    # down and the camera ends up underneath the building.
-    view = [camera.position[i] - camera.target[i] for i in range(3)]
-    length = sum(value**2 for value in view) ** 0.5 or 1.0
-    camera.target = center
-    camera.position = [center[i] + view[i] / length * diagonal for i in range(3)]
 
 
 class NullScene:

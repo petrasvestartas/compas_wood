@@ -1,121 +1,87 @@
-"""STRESS TEST: contact detection on ALL elements of the compas_tf floor model.
+"""Contact detection on the whole compas_tf floor, timed.
 
-Same detection-only display as ``contact_detection_tf.py``, but with relaxed plate
-extraction (``angle_tol_deg=16, area_ratio=0.25``) so the tapered wedges, t-sections
-and connector solids join the search too, and SEARCH_BOTH (face-to-face + cross).
-Every stage is timed and a joint-type histogram is printed. Solids that still have
-no usable planar face pair are reported and drawn but excluded from the search.
+Same detection as contact_detection_tf.py, but over every solid and with
+SEARCH_BOTH, printing where the time goes and which joint types come out.
 """
 
-from __future__ import annotations
-
+import os
 import time
 import warnings
 from collections import Counter
 from pathlib import Path
 
+from compas.colors import Color
 from compas.geometry import Brep
-
 from compas_wood import SEARCH_BOTH
-from compas_wood import SEARCH_OPTIONS
 from compas_wood import PlateModel
+from compas_wood.session_scene import SessionScene
+from compas_wood.session_scene import publish
+from compas_wood.viewer import area_mesh
 
-DEFAULT_STEP = "C:/brg/compas_tf/data/cantilevers_baked_model.stp"
+
+def _compas_tf_file(relative: str) -> str:
+    """Locate a data file in a compas_tf checkout.
+
+    The repo lives at a different path on every machine, so honour
+    ``COMPAS_TF_DIR`` (repo root) first and fall back to the known checkouts.
+    """
+    roots = [os.environ.get("COMPAS_TF_DIR"), "C:/brg/compas_tf", Path.home() / "code/code_py/compas_tf"]
+    for root in roots:
+        if root and (Path(root) / relative).is_file():
+            return str(Path(root) / relative)
+    return str(Path("C:/brg/compas_tf") / relative)
 
 
-def compute(step=DEFAULT_STEP, search_type=SEARCH_BOTH, angle_tol_deg=30.0, area_ratio=0.25):
-    if not Path(step).exists():
-        raise FileNotFoundError(f"STEP file not found: {step}")
-    t0 = time.perf_counter()
-    brep = Brep.from_step(str(step))
-    solids = list(getattr(brep, "solids", None) or [brep])
-    t_load = time.perf_counter() - t0
+step = _compas_tf_file("data/cantilevers_baked_model.stp")
+search_type = SEARCH_BOTH
+angle_tol_deg = 30.0
+area_ratio = 0.25
 
-    t0 = time.perf_counter()
-    with warnings.catch_warnings():
-        warnings.simplefilter("ignore")
-        model = PlateModel.from_breps(
-            solids,
-            skip_invalid=True,
-            angle_tol_deg=angle_tol_deg,
-            area_ratio=area_ratio,
-            min_pair_fraction=0.2,
-            pairs="all",
-            orientations="both",
-            max_pairs=6,
-            min_face_area=5000.0,
-            slab_faces_min_area=5000.0,
-        )
-    t_extract = time.perf_counter() - t0
-    sources = {plate.name for plate in model.plates.values()}
+t0 = time.perf_counter()
+brep = Brep.from_step(step)
+solids = list(getattr(brep, "solids", None) or [brep])
+t_load = time.perf_counter() - t0
 
-    t0 = time.perf_counter()
-    elements, joints = model.solve(search_type=int(search_type))
-    contacts = model.contacts_by_source(joints)
-    t_solve = time.perf_counter() - t0
-
-    histogram = Counter(joint.joint_type for joint in contacts.values())
-    print(
-        f"contact_detection_tf_stress [{step}]:\n"
-        f"  load    {len(solids):4d} solids            {t_load:6.2f}s\n"
-        f"  extract {len(model.plates):4d} search plates from {len(sources)} solids "
-        f"({len(solids) - len(sources)} rejected: curved/no pair)  {t_extract:6.2f}s\n"
-        f"  solve   {len(contacts):4d} contacts           {t_solve:6.2f}s  "
-        f"(search={SEARCH_OPTIONS[int(search_type)]})\n"
-        f"  types   {dict(sorted(histogram.items()))}"
+t0 = time.perf_counter()
+with warnings.catch_warnings():
+    warnings.simplefilter("ignore")
+    model = PlateModel.from_breps(
+        solids,
+        skip_invalid=True,
+        angle_tol_deg=angle_tol_deg,
+        area_ratio=area_ratio,
+        min_pair_fraction=0.2,
+        pairs="all",
+        orientations="both",
+        max_pairs=6,
+        min_face_area=5000.0,
+        slab_faces_min_area=5000.0,
     )
-    return solids, model, elements, list(contacts.values())
+t_extract = time.perf_counter() - t0
 
+t0 = time.perf_counter()
+elements, joints = model.solve(search_type=search_type)
+contacts = model.contacts_by_source(joints)
+t_solve = time.perf_counter() - t0
 
-def draw(scene, results):
-    solids, _, _, joints = results
-    from compas.colors import Color
+sources = {plate.name for plate in model.plates.values()}
+histogram = Counter(joint.joint_type for joint in contacts.values())
+print(f"  load    {len(solids):4d} solids          {t_load:6.2f}s")
+print(f"  extract {len(model.plates):4d} search plates from {len(sources)} solids  {t_extract:6.2f}s")
+print(f"  solve   {len(contacts):4d} contacts        {t_solve:6.2f}s")
+print(f"  types   {dict(sorted(histogram.items()))}")
 
-    from compas_wood.viewer import area_mesh
+RED = Color(0.9, 0.1, 0.1)
+BLACK = Color(0, 0, 0)
 
-    t0 = time.perf_counter()
-    root = scene.add_group(name="StressTest")
-    stock = scene.add_group(name="Breps", parent=root)
-    for i, solid in enumerate(solids):
-        # patches sit between mating faces: untick the Breps group in the sidebar to reveal them
-        scene.add(solid, parent=stock, name=f"brep_{i}")
-    red = Color(0.9, 0.1, 0.1)
-    contacts = scene.add_group(name="Contacts", parent=root)
-    for joint in joints:
-        a, b = joint.element_ids
-        filled = area_mesh(joint.area)
-        if filled is not None:
-            scene.add(filled, parent=contacts, name=f"contact_{a}_{b}", facecolor=red, show_lines=False)
-        if len(joint.area.points) >= 2:
-            scene.add(joint.area, parent=contacts, name=f"outline_{a}_{b}", linecolor=Color(0, 0, 0), lineswidth=2)
-    print(f"  draw    {len(joints):4d} patches            {time.perf_counter() - t0:6.2f}s")
-    return root
+scene = SessionScene("contact_detection_tf_stress")
+root = scene.add_group(name="Contacts")
+for joint in contacts.values():
+    a, b = joint.element_ids
+    filled = area_mesh(joint.area)
+    if filled is not None:
+        scene.add(filled, parent=root, name=f"contact_{a}_{b}", facecolor=RED, show_lines=False)
+    if len(joint.area.points) >= 2:
+        scene.add(joint.area, parent=root, name=f"outline_{a}_{b}", linecolor=BLACK)
 
-
-def main(view=True, step=DEFAULT_STEP, search_type=SEARCH_BOTH, angle_tol_deg=30.0, area_ratio=0.25):
-    results = compute(step=step, search_type=search_type, angle_tol_deg=angle_tol_deg, area_ratio=area_ratio)
-    if view:
-        from compas_viewer import Viewer
-
-        from compas_wood.viewer import aabbs
-        from compas_wood.viewer import zoom_to
-
-        viewer = Viewer()
-        draw(viewer.scene, results)
-        zoom_to(viewer, aabbs(*results[0]))
-        viewer.show()
-    else:
-        from compas_wood.viewer import NullScene
-
-        draw(NullScene(), results)
-    return results
-
-
-if __name__ == "__main__":
-    import argparse
-
-    parser = argparse.ArgumentParser(description="All-elements contact-detection stress test on a STEP model.")
-    parser.add_argument("step", nargs="?", default=DEFAULT_STEP)
-    parser.add_argument("--search-type", default="both", choices=SEARCH_OPTIONS)
-    args = parser.parse_args()
-    main(step=args.step, search_type=SEARCH_OPTIONS.index(args.search_type))
+publish(scene, "contact_detection_tf_stress")

@@ -1,0 +1,91 @@
+{#-
+  Material's header, with the section menus moved INTO it.
+
+  Upstream puts navigation in a second bar below the header (partials/tabs.html)
+  or in the left sidebar. Both are gone here: the menus are rendered inline in
+  md-header__inner, so the logo, the section menus, the search and the repo link
+  share ONE bar.
+
+  Kept in sync with material/templates/partials/header.html; only the block
+  marked below is ours.
+-#}
+{% set class = "md-header" %}
+<header class="{{ class }}" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="{{ lang.t('header') }}">
+    <a href="{{ config.extra.homepage | d(nav.homepage.url, true) | url }}" title="{{ config.site_name | e }}" class="md-header__button md-logo" aria-label="{{ config.site_name }}" data-md-component="logo">
+      {% include "partials/logo.html" %}
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      {% set icon = config.theme.icon.menu or "material/menu" %}
+      {% include ".icons/" ~ icon ~ ".svg" %}
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            {{ config.site_name }}
+          </span>
+        </div>
+      </div>
+    </div>
+
+    {# ---- ours: the section menus, inline in the header bar ---- #}
+    {% macro menu(items) %}
+      <ul class="wood-menu__list">
+        {% for item in items %}
+          {% if item.children %}
+            <li class="wood-menu__group">
+              <span class="wood-menu__label">{{ item.title }}</span>
+              {{ menu(item.children) }}
+            </li>
+          {% else %}
+            <li>
+              <a class="wood-menu__link{% if item.active %} wood-menu__link--active{% endif %}"
+                 href="{{ item.url | url }}">{{ item.title }}</a>
+            </li>
+          {% endif %}
+        {% endfor %}
+      </ul>
+    {% endmacro %}
+    <div class="wood-strip">
+      {% for item in nav %}
+        {% if item.children %}
+          <details class="wood-strip__item">
+            <summary class="wood-strip__button">{{ item.title }}</summary>
+            <div class="wood-menu">{{ menu(item.children) }}</div>
+          </details>
+        {% else %}
+          <a class="wood-strip__button" href="{{ item.url | url }}">{{ item.title }}</a>
+        {% endif %}
+      {% endfor %}
+    </div>
+    {# ---- end ours ---- #}
+
+    {% if config.theme.palette %}
+      {% if not config.theme.palette is mapping %}
+        {% include "partials/palette.html" %}
+      {% endif %}
+    {% endif %}
+    {% if not config.theme.palette is mapping %}
+      {% include "partials/javascripts/palette.html" %}
+    {% endif %}
+    {% if config.extra.alternate %}
+      {% include "partials/alternate.html" %}
+    {% endif %}
+    {% if "material/search" in config.plugins %}
+      {% set search = config.plugins["material/search"] | attr("config") %}
+      {% if search.enabled %}
+        <label class="md-header__button md-icon" for="__search">
+          {% set icon = config.theme.icon.search or "material/magnify" %}
+          {% include ".icons/" ~ icon ~ ".svg" %}
+        </label>
+        {% include "partials/search.html" %}
+      {% endif %}
+    {% endif %}
+    {% if config.repo_url %}
+      <div class="md-header__source">
+        {% include "partials/source.html" %}
+      </div>
+    {% endif %}
+  </nav>
+</header>
