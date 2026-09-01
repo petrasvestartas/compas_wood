@@ -1,0 +1,9 @@
+{
+  "name": "joinery_solver_translation_shell",
+  "items": [
+    {
+      "file": "pb/joinery_solver_translation_shell.pb",
+      "name": "joinery_solver_translation_shell"
+    }
+  ]
+}

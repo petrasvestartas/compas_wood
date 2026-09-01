@@ -1,0 +1,9 @@
+{
+  "name": "connectors",
+  "items": [
+    {
+      "file": "pb/connectors.pb",
+      "name": "connectors"
+    }
+  ]
+}

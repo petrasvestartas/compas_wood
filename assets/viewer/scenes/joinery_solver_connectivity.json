@@ -1,0 +1,9 @@
+{
+  "name": "joinery_solver_connectivity",
+  "items": [
+    {
+      "file": "pb/joinery_solver_connectivity.pb",
+      "name": "joinery_solver_connectivity"
+    }
+  ]
+}

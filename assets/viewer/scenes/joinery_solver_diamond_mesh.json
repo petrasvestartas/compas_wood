@@ -1,0 +1,9 @@
+{
+  "name": "joinery_solver_diamond_mesh",
+  "items": [
+    {
+      "file": "pb/joinery_solver_diamond_mesh.pb",
+      "name": "joinery_solver_diamond_mesh"
+    }
+  ]
+}

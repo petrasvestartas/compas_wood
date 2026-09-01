@@ -1,0 +1,9 @@
+{
+  "name": "translation_shell",
+  "items": [
+    {
+      "file": "pb/translation_shell.pb",
+      "name": "translation_shell"
+    }
+  ]
+}

@@ -1,0 +1,9 @@
+{
+  "name": "joinery_solver_reciprocal_rotation",
+  "items": [
+    {
+      "file": "pb/joinery_solver_reciprocal_rotation.pb",
+      "name": "joinery_solver_reciprocal_rotation"
+    }
+  ]
+}

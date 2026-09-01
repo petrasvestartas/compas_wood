@@ -1,0 +1,9 @@
+{
+  "name": "joinery_solver_reciprocal_move",
+  "items": [
+    {
+      "file": "pb/joinery_solver_reciprocal_move.pb",
+      "name": "joinery_solver_reciprocal_move"
+    }
+  ]
+}
