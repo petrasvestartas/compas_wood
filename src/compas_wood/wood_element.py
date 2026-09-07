@@ -77,6 +77,10 @@ class JointResult:
 
     def __init__(self, data: dict):
         self.element_ids: tuple[int, int] = tuple(data["el_ids"])
+        self.face_ids: tuple[int, int] = tuple(data.get("face_ids", (-1, -1)))
+        # Topology class of the underlying contact: -1 unknown, 0 side-side,
+        # 1 side-top, 2 top-top. Not the same vocabulary as joint_type.
+        self.contact_type: int = int(data.get("contact_type", -1))
         self.joint_type: int = int(data["joint_type"])
         self.area: Polyline = polyline_from_cpp(data["joint_area"])
         self.volumes: list[Polyline] = [polyline_from_cpp(pts) for pts in data["joint_volumes"]]
