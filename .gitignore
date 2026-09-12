@@ -155,3 +155,7 @@ docs/api/generated
 docs/assets/viewer/pb/
 docs/assets/viewer/scenes/
 _scenes/
+
+# Claude Code per-machine files
+.claude/settings.local.json
+CLAUDE.local.md
