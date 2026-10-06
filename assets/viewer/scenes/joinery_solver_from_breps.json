@@ -1,0 +1,9 @@
+{
+  "name": "joinery_solver_from_breps",
+  "items": [
+    {
+      "file": "pb/joinery_solver_from_breps.pb",
+      "name": "joinery_solver_from_breps"
+    }
+  ]
+}

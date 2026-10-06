@@ -1,0 +1,9 @@
+{
+  "name": "assign_insertion_direction",
+  "items": [
+    {
+      "file": "pb/assign_insertion_direction.pb",
+      "name": "assign_insertion_direction"
+    }
+  ]
+}

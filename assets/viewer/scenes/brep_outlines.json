@@ -1,0 +1,9 @@
+{
+  "name": "brep_outlines",
+  "items": [
+    {
+      "file": "pb/brep_outlines.pb",
+      "name": "brep_outlines"
+    }
+  ]
+}

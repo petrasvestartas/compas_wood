@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Session Viewer</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { background: #000; overflow: hidden; }
+    canvas { display: block; width: 100vw; height: 100vh; }
+    #no-webgpu { position:fixed; inset:0; background:#111; color:#eee;
+                 font:1rem system-ui; text-align:center; padding-top:40vh; }
+  </style>
+<link rel="modulepreload" href="./session_viewer-c46bb2a6b9bc577b.js" crossorigin="anonymous"><link rel="preload" href="./session_viewer-c46bb2a6b9bc577b_bg.wasm" crossorigin="anonymous" as="fetch" type="application/wasm"></head>
+<body>
+  
+<script type="module">
+import init, * as bindings from './session_viewer-c46bb2a6b9bc577b.js';
+const wasm = await init({ module_or_path: './session_viewer-c46bb2a6b9bc577b_bg.wasm' });
+
+
+window.wasmBindings = bindings;
+
+
+dispatchEvent(new CustomEvent("TrunkApplicationStarted", {detail: {wasm}}));
+
+</script>
+  <!-- No copy-dir here, unlike the session repo's own index.html: this build is the viewer
+       APP only. compas_wood writes its own pb/ and scenes/ next to these files
+       (tools/build_scenes.py), so baking in the session demo assets would ship megabytes of
+       drawings the docs never load. -->
+  <canvas id="canvas"></canvas>
+  <!-- Message telling that Webgpu is not available. -->
+  <script>
+    if (!navigator.gpu) {
+      document.body.insertAdjacentHTML("beforeend",
+        '<div id="no-webgpu">WebGPU required — use a recent Chrome, Edge, Firefox, or Safari 18+.</div>');
+    }
+  </script>
+</body>
+</html>

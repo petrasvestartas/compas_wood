@@ -1,0 +1,73 @@
+/* The viewer stage: shield, code triangle, and the drawer the code lives in. */
+
+.wood-viewer { position: relative; }
+
+/* The heading, over the model in the corner. The viewer fills the window, so a
+   heading in the normal flow would push it out of view; it is moved in here by
+   viewer-init.js. pointer-events: none so it never blocks an orbit drag. */
+.wood-title {
+  position: absolute;
+  top: 0.2rem;
+  left: 1rem;
+  z-index: 3;
+  margin: 0;
+  pointer-events: none;
+  font-size: 1.5rem;
+  line-height: 1.4;
+  color: var(--md-default-fg-color);
+}
+
+/* The viewer is always interactive - orbit, pan and zoom without clicking in
+   first. The code lives behind the corner triangle, so the page has nothing
+   below the fold that a captured wheel would keep you from reaching. */
+
+/* The corner triangle: a filled square clipped to a triangle, so the hit area
+   is the visible shape rather than a box around it. */
+.wood-code-toggle {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 2.2rem;
+  height: 2.2rem;
+  border: 0;
+  padding: 0;
+  background: #000;
+  clip-path: polygon(100% 0, 0 0, 100% 100%);
+  cursor: pointer;
+  z-index: 3;
+}
+
+.wood-code-toggle:hover { background: #333; }
+
+/* The code, over the model rather than a screen away from it - and over HALF
+   of it, so you can watch the geometry change while editing the numbers that
+   change it. It opens from the right, under the triangle that summons it. */
+.wood-drawer {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 50%;
+  z-index: 2;
+  overflow: auto;
+  padding: 0.6rem;
+  background: var(--md-default-bg-color);
+  border-left: 1px solid var(--md-default-fg-color--lightest);
+}
+
+/* Narrow screens have no half to spare. */
+@media screen and (max-width: 60em) {
+  .wood-drawer { width: 100%; }
+}
+
+/* The listing, moved into the drawer by viewer-init.js. Material's own
+   .highlight block is reused as-is, so the copy button and theming come free;
+   it only needs to stop reserving the page margins it had in the flow. */
+.wood-drawer .highlight {
+  margin: 0;
+  font-size: 0.66rem;
+}
+
+.wood-drawer .highlight pre {
+  margin: 0;
+}

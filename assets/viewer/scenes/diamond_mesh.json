@@ -1,0 +1,9 @@
+{
+  "name": "diamond_mesh",
+  "items": [
+    {
+      "file": "pb/diamond_mesh.pb",
+      "name": "diamond_mesh"
+    }
+  ]
+}

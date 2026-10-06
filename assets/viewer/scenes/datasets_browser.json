@@ -1,0 +1,9 @@
+{
+  "name": "datasets_browser",
+  "items": [
+    {
+      "file": "pb/datasets_browser.pb",
+      "name": "datasets_browser"
+    }
+  ]
+}

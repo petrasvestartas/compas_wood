@@ -1,0 +1,9 @@
+{
+  "name": "reciprocal_move",
+  "items": [
+    {
+      "file": "pb/reciprocal_move.pb",
+      "name": "reciprocal_move"
+    }
+  ]
+}
